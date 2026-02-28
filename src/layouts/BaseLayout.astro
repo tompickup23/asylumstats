@@ -126,6 +126,7 @@ const structuredData = [
     ))}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <SiteHeader />
     <div class="shell banner">
       <strong>Live build</strong>
@@ -134,7 +135,7 @@ const structuredData = [
         documented route or scheme link.
       </span>
     </div>
-    <main class="shell">
+    <main id="main-content" class="shell" tabindex="-1">
       <slot />
     </main>
     <footer class="shell footer">

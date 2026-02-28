@@ -46,6 +46,91 @@ const heroStats = [
     detail: "Public bodies, providers, and linked entities with trackable exposure."
   }
 ];
+const guidedPaths = [
+  {
+    kicker: "Pressure map",
+    title: "Start with places if you need to know where the load actually lands",
+    body: "The compare and place pages turn national asylum headlines into local authority pressure, pathway mix, and contingency exposure.",
+    href: "/compare",
+    cta: "Open compare"
+  },
+  {
+    kicker: "Secrecy gap",
+    title: "Start with hotels if you need named sites, ownership gaps, and visible unresolved chains",
+    body: "The hotel layer keeps current named sites, unnamed-only areas, and owner or operator evidence on one surface.",
+    href: "/hotels",
+    cta: "Open hotel tracker"
+  },
+  {
+    kicker: "Money trail",
+    title: "Start with spending if you need contract scope, tariff rows, and supplier exposure",
+    body: "The money ledger separates prime contracts, funding instructions, and scrutiny cost rows instead of flattening them into one fake spend total.",
+    href: "/spending",
+    cta: "Open money ledger"
+  },
+  {
+    kicker: "Source discipline",
+    title: "Start with sources and methodology if you need to know what the site will and will not publish",
+    body: "This product stays useful because route-specific evidence, local route relevance, and context-only research are kept separate.",
+    href: "/sources",
+    cta: "Open source ledger"
+  }
+];
+const freshnessCards = [
+  {
+    label: "Routes mart built",
+    value: routeDashboard.generatedAt,
+    detail: `Local snapshot ${localRouteLatest.snapshotDate}`,
+    href: "/routes"
+  },
+  {
+    label: "Hotel ledger built",
+    value: hotelLedger.generatedAt,
+    detail: `${hotelLedger.summary.currentNamedSites.toLocaleString()} current named sites tracked`,
+    href: "/hotels"
+  },
+  {
+    label: "Money ledger built",
+    value: moneyLedger.generatedAt,
+    detail: `${moneyLedger.summary.totalRecords.toLocaleString()} public money rows in scope`,
+    href: "/spending"
+  },
+  {
+    label: "Latest release logged",
+    value: releases[0]?.date,
+    detail: releases[0]?.title ?? "No release logged",
+    href: "/releases"
+  }
+];
+
+function formatUtcDate(iso: string | undefined): string {
+  if (!iso) {
+    return "n/a";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(new Date(iso));
+}
+
+function formatUtcDateTime(iso: string | undefined): string {
+  if (!iso) {
+    return "n/a";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short"
+  }).format(new Date(iso));
+}
 ---
 
 <BaseLayout
@@ -115,6 +200,75 @@ const heroStats = [
         </article>
       )}
     </aside>
+  </section>
+
+  <section class="section section-anchor" id="start-here">
+    <div class="section-head">
+      <div>
+        <h2>Start with the right surface</h2>
+        <p class="lede">
+          The site works best when readers pick the right layer first. Pressure, hotel secrecy, money, and source
+          rules answer different questions.
+        </p>
+      </div>
+      <a class="chip accent" href="/methodology">Why the scope rules matter</a>
+    </div>
+    <div class="guide-grid">
+      {guidedPaths.map((path) => (
+        <article class="guide-card">
+          <div class="chip-row">
+            <span class="chip accent">{path.kicker}</span>
+          </div>
+          <h3>{path.title}</h3>
+          <p>{path.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={path.href}>{path.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section section-anchor" id="freshness">
+    <article class="freshness-card">
+      <div class="section-head">
+        <div>
+          <h2>Freshness ledger</h2>
+          <p class="lede">
+            National chapters, local authority tables, hotel evidence, and money rows do not update on one timetable.
+          </p>
+        </div>
+      </div>
+      <div class="freshness-list">
+        {freshnessCards.map((item) => (
+          <div class="freshness-row">
+            <div>
+              <strong>{item.label}</strong>
+              <span class="tiny">{item.detail}</span>
+            </div>
+            <div class="freshness-meta">
+              <time datetime={item.value}>{item.value?.includes("T") ? formatUtcDateTime(item.value) : formatUtcDate(item.value)}</time>
+              <a class="source-pill" href={item.href}>Open</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </article>
+
+    <article class="editor-note">
+      <div class="chip-row">
+        <span class="chip accent">Editorial rule</span>
+      </div>
+      <h3>Do not let one update stream fake completeness</h3>
+      <p>
+        As of 28 February 2026, the national asylum chapters have already moved to the year ending December 2025,
+        while the latest public local-authority tables still sit on the year ending September 2025. The homepage keeps
+        that mismatch explicit so users do not mistake one fresh headline for a fully refreshed product.
+      </p>
+      <p class="tiny">
+        <a class="source-pill" href="/releases">Open release diary</a>
+      </p>
+    </article>
   </section>
 
   <section class="section">

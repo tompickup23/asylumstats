@@ -77,6 +77,16 @@ a {
     transform 180ms ease;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid rgba(125, 211, 252, 0.9);
+  outline-offset: 3px;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -99,6 +109,24 @@ textarea {
   z-index: 1;
   width: min(1220px, calc(100% - 2rem));
   margin: 0 auto;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 40;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #041019;
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 .site-header {
@@ -342,6 +370,15 @@ main {
   box-shadow: 0 16px 36px rgba(78, 228, 195, 0.18);
 }
 
+.hero-actions .chip:hover,
+.hero-actions .chip:focus-visible,
+.source-pill:hover,
+.source-pill:focus-visible,
+.chip[href]:hover,
+.chip[href]:focus-visible {
+  transform: translateY(-2px);
+}
+
 .hero-panel {
   display: grid;
   gap: 1rem;
@@ -445,6 +482,19 @@ main {
   backdrop-filter: blur(20px) saturate(160%);
 }
 
+.kpi-card:focus-within,
+.story-card:focus-within,
+.provider-card:focus-within,
+.place-card:focus-within,
+.metric-card:focus-within,
+.feature-card:focus-within,
+.timeline-card:focus-within,
+.panel:focus-within,
+.table-card:focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
 .kpi-card,
 .story-card,
 .provider-card,
@@ -516,6 +566,10 @@ main {
   margin-top: 2.4rem;
 }
 
+.section-anchor {
+  scroll-margin-top: 7rem;
+}
+
 .page-top {
   display: grid;
   gap: 1rem;
@@ -571,6 +625,118 @@ main {
 
 .feature-grid {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.guide-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.guide-card,
+.freshness-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: var(--shadow-soft);
+}
+
+.guide-card::before,
+.freshness-card::before {
+  content: "";
+  position: absolute;
+  inset: auto auto -3rem -3rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.12), transparent 72%);
+}
+
+.guide-card > *,
+.freshness-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.guide-card h3,
+.freshness-card h3 {
+  margin: 0.45rem 0 0.55rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.guide-card p,
+.freshness-card p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.freshness-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.freshness-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.freshness-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.freshness-row:last-child {
+  padding-bottom: 0;
+}
+
+.freshness-row strong {
+  display: block;
+  font-family: "Sora", sans-serif;
+  font-size: 0.98rem;
+  letter-spacing: -0.03em;
+}
+
+.freshness-row time,
+.freshness-row .tiny {
+  display: block;
+}
+
+.freshness-meta {
+  text-align: right;
+}
+
+.editor-note {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(255, 139, 97, 0.16);
+  border-radius: 24px;
+  background:
+    linear-gradient(125deg, rgba(255, 139, 97, 0.1), transparent 45%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.editor-note h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.editor-note p {
+  color: var(--muted);
+  line-height: 1.68;
 }
 
 .stat-tile,
@@ -1013,7 +1179,8 @@ tr:last-child td {
   .place-grid,
   .provider-grid,
   .metric-grid,
-  .feature-grid {
+  .feature-grid,
+  .guide-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1037,6 +1204,14 @@ tr:last-child td {
 
   .data-row-value {
     max-width: none;
+    text-align: left;
+  }
+
+  .freshness-row {
+    flex-direction: column;
+  }
+
+  .freshness-meta {
     text-align: left;
   }
 
