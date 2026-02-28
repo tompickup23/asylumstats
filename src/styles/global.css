@@ -516,6 +516,207 @@ main {
   margin-top: 2.4rem;
 }
 
+.page-top {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+  align-items: start;
+}
+
+.page-rail {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-pad {
+  padding: 1.25rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.section-head .lede {
+  max-width: 64ch;
+}
+
+.rail-title {
+  margin: 0.35rem 0 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.02;
+}
+
+.rail-copy {
+  margin-top: 0.6rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.stat-strip,
+.feature-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.stat-strip {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.stat-tile,
+.signal-card,
+.feature-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stat-tile,
+.signal-card {
+  padding: 1rem;
+}
+
+.stat-tile strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2.15rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.signal-list,
+.data-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.signal-card h3,
+.feature-card h3 {
+  margin: 0.4rem 0 0.55rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.signal-card.accent,
+.feature-card.accent {
+  border-color: rgba(125, 211, 252, 0.16);
+  background:
+    linear-gradient(145deg, rgba(18, 29, 52, 0.98), rgba(7, 12, 24, 0.96));
+}
+
+.feature-card {
+  padding: 1.35rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: -4rem;
+  right: -4rem;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.16), transparent 72%);
+}
+
+.feature-card.accent::before {
+  background: radial-gradient(circle, rgba(255, 139, 97, 0.14), transparent 72%);
+}
+
+.feature-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.data-list {
+  gap: 0.2rem;
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.data-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.data-row:last-child {
+  padding-bottom: 0;
+}
+
+.data-row > span:first-child {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.data-row-value {
+  max-width: 58%;
+  text-align: right;
+  font-family: "Sora", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.45;
+}
+
+.matrix-table {
+  min-width: 760px;
+}
+
+.matrix-table th,
+.matrix-table td {
+  min-width: 12rem;
+}
+
+.matrix-table th:first-child,
+.matrix-table td:first-child {
+  position: sticky;
+  left: 0;
+  min-width: 16rem;
+  background: rgba(6, 10, 20, 0.98);
+}
+
+.matrix-table th:first-child {
+  z-index: 2;
+}
+
+.matrix-table td:first-child {
+  z-index: 1;
+}
+
+.matrix-table td:first-child strong {
+  display: block;
+}
+
+.matrix-table td:first-child .tiny {
+  display: block;
+  margin-top: 0.25rem;
+}
+
 .section h2 {
   margin: 0;
   font-family: "Sora", sans-serif;
@@ -681,6 +882,10 @@ tr:last-child td {
   .hero-copy {
     min-height: auto;
   }
+
+  .page-top {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 900px) {
@@ -727,17 +932,37 @@ tr:last-child td {
     grid-template-columns: 1fr;
   }
 
+  .section-head {
+    align-items: flex-start;
+  }
+
   .kpi-grid,
   .story-grid,
   .place-grid,
   .provider-grid,
-  .metric-grid {
+  .metric-grid,
+  .feature-grid {
     grid-template-columns: 1fr;
   }
 
   .metric-bar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .data-row {
+    flex-direction: column;
+  }
+
+  .data-row-value {
+    max-width: none;
+    text-align: left;
+  }
+
+  .matrix-table th:first-child,
+  .matrix-table td:first-child {
+    position: static;
+    min-width: 0;
   }
 
   th,

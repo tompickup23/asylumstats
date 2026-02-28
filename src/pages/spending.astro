@@ -6,6 +6,22 @@ import { loadMoneyLedger } from "../lib/money-data";
 
 const moneyLedger = loadMoneyLedger();
 const topSuppliers = moneyLedger.supplierProfiles.slice(0, 8);
+type MoneyRecordWithValue = (typeof moneyLedger.records)[number] & { valueGbp: number };
+const highValueRecords = moneyLedger.records
+  .filter((record): record is MoneyRecordWithValue => typeof record.valueGbp === "number")
+  .sort((a, b) => b.valueGbp - a.valueGbp)
+  .slice(0, 3);
+const supplierWatchlist = [...moneyLedger.supplierProfiles]
+  .sort(
+    (a, b) =>
+      (b.publicContractValueGbp ?? 0) - (a.publicContractValueGbp ?? 0) ||
+      b.publicContractCount - a.publicContractCount ||
+      b.siteCount - a.siteCount
+  )
+  .slice(0, 4);
+const routeCoverage = [...moneyLedger.routeGroups].sort((a, b) => b.recordCount - a.recordCount);
+const recordTypeBreakdown = [...moneyLedger.recordTypeGroups].sort((a, b) => b.recordCount - a.recordCount);
+const primaryLead = moneyLedger.investigativeLeads[0];
 
 const recordTypeLabels: Record<string, string> = {
   prime_contract_scope: "Prime contract scope",
@@ -30,64 +46,126 @@ function formatMoney(value: number | null | undefined): string {
 ---
 
 <BaseLayout title="Spending | asylumstats">
-  <section class="page-head">
-    <span class="kicker">Spending and contracts</span>
-    <h1>Follow the migrants, follow the money, and keep the route labels honest.</h1>
-    <p>
-      The public money layer now has a real starter ledger behind it. It mixes prime contract scope, official funding
-      instructions, and scrutiny cost rows so the public can see where money is documented, where it is estimated, and
-      where the supplier chain still disappears into opacity.
-    </p>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Spending and contracts</span>
+      <h1>Follow the migrants, follow the money, and keep the route labels honest.</h1>
+      <p>
+        The public money layer now has a real starter ledger behind it. It mixes prime contract scope, official funding
+        instructions, and scrutiny cost rows so the public can see where money is documented, where it is estimated,
+        and where the supplier chain still disappears into opacity.
+      </p>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Money layer snapshot</span>
+        <p class="rail-copy">
+          The goal is not one spend total. It is to separate disclosed values, contractual control, and scrutiny
+          evidence clearly enough that the missing pieces stand out.
+        </p>
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">Ledger rows</span>
+            <strong>{moneyLedger.summary.totalRecords.toLocaleString()}</strong>
+            <p class="tiny">Contracts, tariffs, and scrutiny rows.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Rows with published values</span>
+            <strong>{moneyLedger.summary.rowsWithDisclosedValue.toLocaleString()}</strong>
+            <p class="tiny">Explicit GBP values only.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Route families covered</span>
+            <strong>{moneyLedger.summary.routeFamiliesCovered.toLocaleString()}</strong>
+            <p class="tiny">Distinct route families in the starter ledger.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Linked named sites</span>
+            <strong>{moneyLedger.summary.linkedNamedSites.toLocaleString()}</strong>
+            <p class="tiny">Visible hotels tied to money rows.</p>
+          </article>
+        </div>
+      </article>
+
+      {primaryLead && (
+        <article class="panel panel-pad">
+          <span class="tiny">Priority lead</span>
+          <h2 class="rail-title">{primaryLead.title}</h2>
+          <p class="rail-copy">{primaryLead.detail}</p>
+          <div class="chip-row">
+            <span class={`chip ${primaryLead.severity === "warning" ? "accent" : ""}`}>{primaryLead.severity}</span>
+            <a class="source-pill" href={primaryLead.sourceUrl}>Source</a>
+          </div>
+        </article>
+      )}
+    </aside>
   </section>
 
   <section class="section">
-    <h2>Public money-ledger snapshot</h2>
-    <div class="kpi-grid">
-      <article class="kpi-card">
-        <span class="tiny">Ledger rows</span>
-        <strong>{moneyLedger.summary.totalRecords.toLocaleString()}</strong>
-        <p class="tiny">Prime scope, tariffs, and scrutiny cost rows currently in the public starter ledger.</p>
-      </article>
-      <article class="kpi-card">
-        <span class="tiny">Rows with published values</span>
-        <strong>{moneyLedger.summary.rowsWithDisclosedValue.toLocaleString()}</strong>
-        <p class="tiny">Only rows with an explicit published GBP figure, not inferred place-level spend.</p>
-      </article>
-      <article class="kpi-card">
-        <span class="tiny">Suppliers or public bodies tracked</span>
-        <strong>{moneyLedger.summary.uniqueSuppliers.toLocaleString()}</strong>
-        <p class="tiny">Prime providers, hotel-linked entities, and official public-body funding recipients.</p>
-      </article>
-      <article class="kpi-card">
-        <span class="tiny">Named sites linked to money rows</span>
-        <strong>{moneyLedger.summary.linkedNamedSites.toLocaleString()}</strong>
-        <p class="tiny">Current visible hotels tied to at least one prime-provider or money-ledger row.</p>
-      </article>
+    <div class="section-head">
+      <div>
+        <h2>Where the public values already exist</h2>
+        <p class="lede">
+          The starter ledger already contains large public figures. They need clear route labels and context, not
+          flattening into one misleading spend total.
+        </p>
+      </div>
+      <span class="chip">{moneyLedger.summary.uniqueSuppliers.toLocaleString()} suppliers or public bodies tracked</span>
+    </div>
+    <div class="feature-grid">
+      {highValueRecords.map((record) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{recordTypeLabels[record.recordType] ?? record.recordType}</span>
+            {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
+          </div>
+          <h3>{record.title}</h3>
+          <p class="metric-value">{formatMoney(record.valueGbp)}</p>
+          <p class="lede">{record.periodLabel ?? "No period label recorded"}</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Buyer</span>
+              <span class="data-row-value">{record.buyerName}</span>
+            </div>
+            <div class="data-row">
+              <span>Supplier</span>
+              <span class="data-row-value">{record.supplierName ?? "No supplier entity published"}</span>
+            </div>
+            <div class="data-row">
+              <span>Scope</span>
+              <span class="data-row-value">{record.scopeClass}</span>
+            </div>
+          </div>
+          <p class="tiny">
+            <a class="source-pill" href={record.sourceUrl ?? "#"}>Source</a>
+          </p>
+        </article>
+      ))}
     </div>
   </section>
 
   <section class="split section">
-    <div class="panel" style="padding: 1.25rem;">
-      <h2>Scope rules</h2>
-      <div class="story-grid">
-        {asylumFinance.scopeRules.map((rule) => (
-          <article class="story-card">
+    <div class="panel panel-pad">
+      <h2>Route coverage</h2>
+      <div class="signal-list">
+        {routeCoverage.map((group) => (
+          <article class="signal-card">
             <div class="chip-row">
-              <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
-                {rule.label}
-              </span>
+              <span class="chip accent">{group.recordCount} rows</span>
+              <span class="chip">{group.rowsWithValue} with value</span>
             </div>
-            <p class="lede">{rule.description}</p>
+            <h3>{group.routeFamily}</h3>
           </article>
         ))}
       </div>
     </div>
 
-    <div class="panel" style="padding: 1.25rem;">
+    <div class="panel panel-pad">
       <h2>Ledger composition</h2>
-      <div class="story-grid">
-        {moneyLedger.recordTypeGroups.map((group) => (
-          <article class="story-card">
+      <div class="signal-list">
+        {recordTypeBreakdown.map((group) => (
+          <article class="signal-card accent">
             <div class="chip-row">
               <span class="chip accent">{group.recordCount} rows</span>
             </div>
@@ -95,17 +173,46 @@ function formatMoney(value: number | null | undefined): string {
           </article>
         ))}
       </div>
-      <div class="story-grid" style="margin-top: 1rem;">
-        {moneyLedger.routeGroups.map((group) => (
-          <article class="metric-card">
-            <p class="tiny">
-              <strong>{group.routeFamily}</strong>
-            </p>
-            <p class="tiny">{group.recordCount} rows</p>
-            <p class="tiny">{group.rowsWithValue} rows with published values</p>
-          </article>
-        ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Supplier and public-body watchlist</h2>
+        <p class="lede">
+          The watchlist combines visible hotel exposure, public contract rows, and any disclosed contract value already
+          in the starter ledger.
+        </p>
       </div>
+    </div>
+    <div class="feature-grid">
+      {supplierWatchlist.map((supplier) => (
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">{supplier.entityRole}</span>
+            {supplier.riskLevel && <span class="chip">{supplier.riskLevel}</span>}
+          </div>
+          <h3>{supplier.entityName}</h3>
+          <p class="metric-value">{supplier.publicContractCount.toLocaleString()}</p>
+          <p class="lede">Public money row{supplier.publicContractCount === 1 ? "" : "s"} tied to this profile.</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Linked sites</span>
+              <span class="data-row-value">{supplier.siteCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Published value</span>
+              <span class="data-row-value">{formatMoney(supplier.publicContractValueGbp)}</span>
+            </div>
+            <div class="data-row">
+              <span>Route families</span>
+              <span class="data-row-value">{supplier.routeFamilies.join(", ") || "none"}</span>
+            </div>
+          </div>
+          {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
+        </article>
+      ))}
     </div>
   </section>
 
@@ -172,7 +279,14 @@ function formatMoney(value: number | null | undefined): string {
   </section>
 
   <section class="section">
-    <h2>Supplier and public-body profiles</h2>
+    <div class="section-head">
+      <div>
+        <h2>Supplier and public-body profiles</h2>
+        <p class="lede">
+          The wider ledger still matters, even after the watchlist highlights the most legible supplier exposure.
+        </p>
+      </div>
+    </div>
     <div class="story-grid">
       {topSuppliers.map((supplier) => (
         <article class="story-card">
@@ -198,7 +312,14 @@ function formatMoney(value: number | null | undefined): string {
   </section>
 
   <section class="section">
-    <h2>Investigative leads already visible in the data</h2>
+    <div class="section-head">
+      <div>
+        <h2>Investigative leads already visible in the data</h2>
+        <p class="lede">
+          These are the clearest current gaps between what the public can map and what the system still withholds.
+        </p>
+      </div>
+    </div>
     <div class="story-grid">
       {moneyLedger.investigativeLeads.map((lead) => (
         <article class="story-card">
@@ -216,10 +337,18 @@ function formatMoney(value: number | null | undefined): string {
   </section>
 
   <section class="section">
-    <h2>Supplier layers to investigate next</h2>
-    <div class="story-grid">
+    <div class="section-head">
+      <div>
+        <h2>Supplier layers to investigate next</h2>
+        <p class="lede">
+          The next public gains come from pushing below the prime contract layer and making subcontractor visibility
+          publishable.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
       {moneyLedger.supplierLayers.map((layer) => (
-        <article class="story-card">
+        <article class="feature-card">
           <div class="chip-row">
             <span class={`chip ${layer.scope === "route_specific" ? "accent" : layer.scope === "local_route_relevant" ? "teal" : ""}`}>
               {layer.scope}
@@ -227,11 +356,17 @@ function formatMoney(value: number | null | undefined): string {
           </div>
           <h3>{layer.label}</h3>
           <p class="lede">{layer.description}</p>
-          <div class="chip-row" style="margin-top: 0.75rem;">
+          <div class="chip-row">
             {layer.examples.map((example) => (
               <span class="chip">{example}</span>
             ))}
           </div>
+          {layer.questions[0] && (
+            <article class="signal-card accent">
+              <span class="tiny">Question to answer next</span>
+              <h3>{layer.questions[0]}</h3>
+            </article>
+          )}
         </article>
       ))}
     </div>
@@ -253,36 +388,45 @@ function formatMoney(value: number | null | undefined): string {
     </div>
   </section>
 
-  <section class="section">
-    <h2>Current limits of the public money layer</h2>
-    <div class="story-grid">
-      {moneyLedger.limitations.map((item) => (
-        <article class="story-card">
-          <p class="lede">{item}</p>
-        </article>
-      ))}
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Scope and publish rules</h2>
+      <div class="signal-list">
+        {asylumFinance.scopeRules.map((rule) => (
+          <article class="signal-card">
+            <div class="chip-row">
+              <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
+                {rule.label}
+              </span>
+            </div>
+            <p class="tiny">{rule.description}</p>
+          </article>
+        ))}
+        {followMoney.publishRules.map((rule) => (
+          <article class="signal-card accent">
+            <span class="tiny">Publish rule</span>
+            <p class="tiny">{rule}</p>
+          </article>
+        ))}
+      </div>
     </div>
-  </section>
 
-  <section class="section">
-    <h2>Public publish rules for the money layer</h2>
-    <div class="story-grid">
-      {followMoney.publishRules.map((rule) => (
-        <article class="story-card">
-          <p class="lede">{rule}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Inclusion test</h2>
-    <div class="story-grid">
-      {asylumFinance.inclusionTests.map((rule) => (
-        <article class="story-card">
-          <p class="lede">{rule}</p>
-        </article>
-      ))}
+    <div class="panel panel-pad">
+      <h2>Inclusion test and current limits</h2>
+      <div class="signal-list">
+        {asylumFinance.inclusionTests.map((rule) => (
+          <article class="signal-card">
+            <span class="tiny">Inclusion test</span>
+            <p class="tiny">{rule}</p>
+          </article>
+        ))}
+        {moneyLedger.limitations.map((item) => (
+          <article class="signal-card accent">
+            <span class="tiny">Current limit</span>
+            <p class="tiny">{item}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 </BaseLayout>

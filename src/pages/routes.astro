@@ -3,67 +3,101 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadRouteDashboard } from "../lib/route-data";
 
 const routeDashboard = loadRouteDashboard();
+const routeSignalCards = routeDashboard.nationalCards.slice(0, 3);
+const featuredRoutes = [...routeDashboard.routeFamilies]
+  .sort((a, b) => b.latestValue - a.latestValue)
+  .slice(0, 3);
+const featuredRouteIds = new Set(featuredRoutes.map((route) => route.id));
+const remainingRoutes = routeDashboard.routeFamilies.filter((route) => !featuredRouteIds.has(route.id));
 const routeMaxValues = new Map(
   routeDashboard.routeFamilies.map((route) => [
     route.id,
     Math.max(...route.series.map((point) => point.value), 1)
   ])
 );
-const maxMethodValue = Math.max(
-  ...routeDashboard.illegalEntryMethodsLatestYear.map((row) => row.value),
-  1
-);
-const maxOutcomeValue = Math.max(
-  ...routeDashboard.smallBoatDecisionGroupsLatestYear.rows.map((row) => row.value),
-  1
-);
+const illegalMethods = [...routeDashboard.illegalEntryMethodsLatestYear].sort((a, b) => b.value - a.value);
+const decisionGroups = [...routeDashboard.smallBoatDecisionGroupsLatestYear.rows].sort((a, b) => b.value - a.value);
+const maxMethodValue = Math.max(...illegalMethods.map((row) => row.value), 1);
+const maxOutcomeValue = Math.max(...decisionGroups.map((row) => row.value), 1);
+const leadPressureMetric =
+  routeDashboard.topAreasByMetric.find((metric) => metric.metricId === "supportedAsylum") ??
+  routeDashboard.topAreasByMetric[0];
+const pressureLeader = leadPressureMetric?.rows[0];
+
+function formatCardValue(value: number, suffix?: string): string {
+  return suffix ? `${value}${suffix}` : value.toLocaleString();
+}
 ---
 
 <BaseLayout title="Routes | asylumstats">
-  <section class="page-head">
-    <span class="kicker">Routes and schemes</span>
-    <h1>Boat arrivals, asylum support, refugee schemes, family reunion, and Ukraine routes have to stay split.</h1>
-    <p>
-      This page now runs on official December 2025 route tables and the latest local-authority immigration-group
-      snapshot. It is the minimum viable answer to the central product rule: stop mixing incompatible routes and
-      schemes into one misleading number.
-    </p>
-  </section>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Routes and schemes</span>
+      <h1>Boat arrivals, asylum support, refugee schemes, family reunion, and Ukraine routes have to stay split.</h1>
+      <p>
+        This page now runs on official December 2025 route tables and the latest local-authority immigration-group
+        snapshot. The product rule is simple: stop mixing incompatible routes and schemes into one misleading number.
+      </p>
+    </section>
 
-  <section class="section">
-    <h2>National route snapshot</h2>
-    <div class="kpi-grid">
-      {routeDashboard.nationalCards.map((item) => (
-        <article class="kpi-card">
-          <span class="tiny">{item.label}</span>
-          <strong>{item.valueSuffix ? `${item.value}${item.valueSuffix}` : item.value.toLocaleString()}</strong>
-          <small>{item.period}</small>
-          <p class="tiny">{item.detail}</p>
-          <p class="tiny">
-            <a class="source-pill" href={item.sourceUrl}>Source</a>
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">National route signals</span>
+        <p class="rail-copy">
+          The core public mistake is not lack of data. It is the habit of collapsing asylum support, legal schemes,
+          and illegal entry routes into one emotional metric.
+        </p>
+        <div class="stat-strip">
+          {routeSignalCards.map((item) => (
+            <article class="stat-tile">
+              <span class="tiny">{item.label}</span>
+              <strong>{formatCardValue(item.value, item.valueSuffix)}</strong>
+              <p class="tiny">{item.period}</p>
+            </article>
+          ))}
+        </div>
+      </article>
+
+      {pressureLeader && (
+        <article class="panel panel-pad">
+          <span class="tiny">Local pressure leader</span>
+          <h2 class="rail-title">{pressureLeader.areaName}</h2>
+          <p class="rail-copy">
+            {pressureLeader.value.toLocaleString()} people on {leadPressureMetric.label.toLowerCase()} in the latest
+            official local snapshot.
           </p>
+          <div class="chip-row">
+            <span class="chip accent">{leadPressureMetric.label}</span>
+            <span class="chip">{pressureLeader.regionName}</span>
+          </div>
         </article>
-      ))}
-    </div>
+      )}
+    </aside>
   </section>
 
   <section class="section">
-    <h2>Route families</h2>
-    <div class="story-grid">
-      {routeDashboard.routeFamilies.map((route) => (
-        <article class="story-card">
+    <div class="section-head">
+      <div>
+        <h2>Where the split matters most</h2>
+        <p class="lede">
+          These route families are the fastest way to show why one-number storytelling breaks the public picture.
+        </p>
+      </div>
+      <span class="chip">{routeDashboard.routeFamilies.length} route families tracked</span>
+    </div>
+    <div class="feature-grid">
+      {featuredRoutes.map((route) => (
+        <article class="feature-card accent">
           <div class="chip-row">
             <span class="chip accent">{route.group}</span>
             <span class="chip">{route.latestPeriod}</span>
           </div>
           <h3>{route.label}</h3>
-          <p class="metric-value" style="font-size: 2rem;">{route.latestValue.toLocaleString()}</p>
-          <p class="tiny">{route.schemeStatus}</p>
+          <p class="metric-value">{route.latestValue.toLocaleString()}</p>
           <p class="lede">{route.note}</p>
-          <p class="tiny">Local breakdown: {route.localBreakdown}</p>
           {route.series.length > 1 && (
-            <div style="margin-top: 1rem;">
-              {route.series.slice(-6).map((point) => (
+            <div class="signal-list">
+              {route.series.slice(-4).map((point) => (
                 <div class="metric-bar">
                   <div style="min-width: 5rem;">
                     <strong>{point.periodLabel}</strong>
@@ -79,6 +113,16 @@ const maxOutcomeValue = Math.max(
               ))}
             </div>
           )}
+          <div class="data-list">
+            <div class="data-row">
+              <span>Scheme status</span>
+              <span class="data-row-value">{route.schemeStatus}</span>
+            </div>
+            <div class="data-row">
+              <span>Local breakdown</span>
+              <span class="data-row-value">{route.localBreakdown}</span>
+            </div>
+          </div>
           <p class="tiny">
             <a class="source-pill" href={route.sourceUrl}>Source</a>
           </p>
@@ -88,9 +132,10 @@ const maxOutcomeValue = Math.max(
   </section>
 
   <section class="split section">
-    <div class="panel" style="padding: 1.25rem;">
+    <div class="panel panel-pad">
       <h2>Illegal entry routes in the latest year</h2>
-      {routeDashboard.illegalEntryMethodsLatestYear.map((row) => (
+      <p class="lede">Different entry methods carry different operational and policy questions. They should not blur.</p>
+      {illegalMethods.map((row) => (
         <div class="metric-bar">
           <div style="min-width: 12rem;">
             <strong>{row.method}</strong>
@@ -103,10 +148,13 @@ const maxOutcomeValue = Math.max(
       ))}
     </div>
 
-    <div class="panel" style="padding: 1.25rem;">
+    <div class="panel panel-pad">
       <h2>Small-boat asylum decision groups</h2>
-      <p class="tiny">Arrival cohorts for {routeDashboard.smallBoatDecisionGroupsLatestYear.year}</p>
-      {routeDashboard.smallBoatDecisionGroupsLatestYear.rows.map((row) => (
+      <p class="lede">
+        Arrival cohorts for {routeDashboard.smallBoatDecisionGroupsLatestYear.year}. Decision outcomes need their own
+        view, not a single arrivals headline.
+      </p>
+      {decisionGroups.map((row) => (
         <div class="metric-bar">
           <div style="min-width: 11rem;">
             <strong>{row.outcomeGroup}</strong>
@@ -121,12 +169,51 @@ const maxOutcomeValue = Math.max(
   </section>
 
   <section class="section">
-    <h2>Local pressure leaders</h2>
+    <div class="section-head">
+      <div>
+        <h2>Full route family ledger</h2>
+        <p class="lede">
+          The remaining route families still matter, but they need calmer treatment once the high-volume public
+          confusion is made explicit.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {remainingRoutes.map((route) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{route.group}</span>
+            <span class="chip">{route.latestPeriod}</span>
+          </div>
+          <h3>{route.label}</h3>
+          <p class="metric-value">{route.latestValue.toLocaleString()}</p>
+          <p class="tiny">{route.schemeStatus}</p>
+          <p class="lede">{route.note}</p>
+          <p class="tiny">Local breakdown: {route.localBreakdown}</p>
+          <p class="tiny">
+            <a class="source-pill" href={route.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Local pressure leaders</h2>
+        <p class="lede">
+          National routes still resolve into local concentration. These tables show where specific pressures actually
+          land.
+        </p>
+      </div>
+      <span class="chip">{routeDashboard.localSnapshotDate} local snapshot</span>
+    </div>
     <div class="story-grid">
       {routeDashboard.topAreasByMetric.map((metric) => (
         <article class="story-card">
           <h3>{metric.label}</h3>
-          <div class="table-card" style="margin-top: 0.75rem;">
+          <div class="table-card">
             <table>
               <thead>
                 <tr>
@@ -150,7 +237,15 @@ const maxOutcomeValue = Math.max(
   </section>
 
   <section class="section">
-    <h2>Current limits</h2>
+    <div class="section-head">
+      <div>
+        <h2>Current limits</h2>
+        <p class="lede">
+          This is already publishable, but it is still a constrained read of the route system rather than a complete
+          public operating model.
+        </p>
+      </div>
+    </div>
     <div class="story-grid">
       {routeDashboard.limitations.map((item) => (
         <article class="story-card">
