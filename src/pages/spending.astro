@@ -1,0 +1,288 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import asylumFinance from "../data/live/asylum-finance.json";
+import followMoney from "../data/live/follow-money.json";
+import { loadMoneyLedger } from "../lib/money-data";
+
+const moneyLedger = loadMoneyLedger();
+const topSuppliers = moneyLedger.supplierProfiles.slice(0, 8);
+
+const recordTypeLabels = {
+  prime_contract_scope: "Prime contract scope",
+  funding_instruction: "Funding instruction",
+  scrutiny_estimate: "Scrutiny estimate",
+  cost_indicator: "Cost indicator",
+  local_response_contract: "Local response contract",
+  other: "Other"
+};
+
+function formatMoney(value) {
+  if (typeof value !== "number") {
+    return "Not disclosed / not normalized";
+  }
+
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: value >= 1000 ? 0 : 2
+  }).format(value);
+}
+---
+
+<BaseLayout title="Spending | asylumstats">
+  <section class="page-head">
+    <span class="kicker">Spending and contracts</span>
+    <h1>Follow the migrants, follow the money, and keep the route labels honest.</h1>
+    <p>
+      The public money layer now has a real starter ledger behind it. It mixes prime contract scope, official funding
+      instructions, and scrutiny cost rows so the public can see where money is documented, where it is estimated, and
+      where the supplier chain still disappears into opacity.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Public money-ledger snapshot</h2>
+    <div class="kpi-grid">
+      <article class="kpi-card">
+        <span class="tiny">Ledger rows</span>
+        <strong>{moneyLedger.summary.totalRecords.toLocaleString()}</strong>
+        <p class="tiny">Prime scope, tariffs, and scrutiny cost rows currently in the public starter ledger.</p>
+      </article>
+      <article class="kpi-card">
+        <span class="tiny">Rows with published values</span>
+        <strong>{moneyLedger.summary.rowsWithDisclosedValue.toLocaleString()}</strong>
+        <p class="tiny">Only rows with an explicit published GBP figure, not inferred place-level spend.</p>
+      </article>
+      <article class="kpi-card">
+        <span class="tiny">Suppliers or public bodies tracked</span>
+        <strong>{moneyLedger.summary.uniqueSuppliers.toLocaleString()}</strong>
+        <p class="tiny">Prime providers, hotel-linked entities, and official public-body funding recipients.</p>
+      </article>
+      <article class="kpi-card">
+        <span class="tiny">Named sites linked to money rows</span>
+        <strong>{moneyLedger.summary.linkedNamedSites.toLocaleString()}</strong>
+        <p class="tiny">Current visible hotels tied to at least one prime-provider or money-ledger row.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Scope rules</h2>
+      <div class="story-grid">
+        {asylumFinance.scopeRules.map((rule) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
+                {rule.label}
+              </span>
+            </div>
+            <p class="lede">{rule.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Ledger composition</h2>
+      <div class="story-grid">
+        {moneyLedger.recordTypeGroups.map((group) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{group.recordCount} rows</span>
+            </div>
+            <h3>{recordTypeLabels[group.recordType] ?? group.recordType}</h3>
+          </article>
+        ))}
+      </div>
+      <div class="story-grid" style="margin-top: 1rem;">
+        {moneyLedger.routeGroups.map((group) => (
+          <article class="metric-card">
+            <p class="tiny">
+              <strong>{group.routeFamily}</strong>
+            </p>
+            <p class="tiny">{group.recordCount} rows</p>
+            <p class="tiny">{group.rowsWithValue} rows with published values</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Current public ledger</h2>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Row</th>
+            <th>Route or scheme</th>
+            <th>Buyer / supplier</th>
+            <th>Value</th>
+            <th>Linked sites</th>
+          </tr>
+        </thead>
+        <tbody>
+          {moneyLedger.records.map((record) => (
+            <tr>
+              <td>
+                <strong>{record.title}</strong>
+                <div class="chip-row" style="margin-top: 0.5rem;">
+                  <span class="chip accent">{recordTypeLabels[record.recordType] ?? record.recordType}</span>
+                  <span class={`chip ${record.scopeClass === "route_specific" ? "accent" : record.scopeClass === "local_route_relevant" ? "teal" : ""}`}>
+                    {record.scopeClass}
+                  </span>
+                </div>
+                <div class="tiny" style="margin-top: 0.5rem;">
+                  <a class="source-pill" href={record.sourceUrl ?? "#"}>Source</a>
+                </div>
+              </td>
+              <td>
+                <div>{record.routeFamily ?? "Not route-specific"}</div>
+                {record.schemeLabel && <div class="tiny">{record.schemeLabel}</div>}
+                {record.periodLabel && <div class="tiny">{record.periodLabel}</div>}
+              </td>
+              <td>
+                <div><strong>{record.buyerName}</strong></div>
+                <div class="tiny">{record.supplierName ?? "No supplier entity published in row"}</div>
+                {record.supplierRole && <div class="tiny">{record.supplierRole}</div>}
+              </td>
+              <td>
+                <div>{formatMoney(record.valueGbp)}</div>
+                {record.valueKind && <div class="tiny">{record.valueKind}</div>}
+              </td>
+              <td>
+                {record.linkedSites.length > 0 ? (
+                  record.linkedSites.map((site) => (
+                    <div class="tiny" style="margin-bottom: 0.5rem;">
+                      <strong>{site.siteName}</strong>
+                      <div>{site.areaName}</div>
+                      <div>{site.entityCoverage}</div>
+                    </div>
+                  ))
+                ) : (
+                  <span class="tiny">No site link in starter ledger</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Supplier and public-body profiles</h2>
+    <div class="story-grid">
+      {topSuppliers.map((supplier) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{supplier.entityRole}</span>
+            <span class="chip">{supplier.riskLevel}</span>
+          </div>
+          <h3>{supplier.entityName}</h3>
+          <p class="lede">
+            {supplier.siteCount} linked site{supplier.siteCount === 1 ? "" : "s"} | {supplier.publicContractCount} public
+            money row{supplier.publicContractCount === 1 ? "" : "s"}
+          </p>
+          <p class="tiny">
+            Route families: {supplier.routeFamilies.join(", ") || "none"}
+          </p>
+          <p class="tiny">
+            Integrity signals: {supplier.integritySignalCount}
+          </p>
+          {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Investigative leads already visible in the data</h2>
+    <div class="story-grid">
+      {moneyLedger.investigativeLeads.map((lead) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class={`chip ${lead.severity === "warning" ? "accent" : ""}`}>{lead.severity}</span>
+          </div>
+          <h3>{lead.title}</h3>
+          <p class="lede">{lead.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={lead.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Supplier layers to investigate next</h2>
+    <div class="story-grid">
+      {moneyLedger.supplierLayers.map((layer) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class={`chip ${layer.scope === "route_specific" ? "accent" : layer.scope === "local_route_relevant" ? "teal" : ""}`}>
+              {layer.scope}
+            </span>
+          </div>
+          <h3>{layer.label}</h3>
+          <p class="lede">{layer.description}</p>
+          <div class="chip-row" style="margin-top: 0.75rem;">
+            {layer.examples.map((example) => (
+              <span class="chip">{example}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Integrity techniques adapted from AI DOGE</h2>
+    <div class="story-grid">
+      {followMoney.integrityTechniques.map((technique) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{technique.category}</span>
+          </div>
+          <h3>{technique.label}</h3>
+          <p class="lede">{technique.description}</p>
+          <p class="tiny">{technique.origin}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Current limits of the public money layer</h2>
+    <div class="story-grid">
+      {moneyLedger.limitations.map((item) => (
+        <article class="story-card">
+          <p class="lede">{item}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Public publish rules for the money layer</h2>
+    <div class="story-grid">
+      {followMoney.publishRules.map((rule) => (
+        <article class="story-card">
+          <p class="lede">{rule}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Inclusion test</h2>
+    <div class="story-grid">
+      {asylumFinance.inclusionTests.map((rule) => (
+        <article class="story-card">
+          <p class="lede">{rule}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

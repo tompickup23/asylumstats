@@ -1,0 +1,183 @@
+{
+  "generatedAt": "2026-02-28T15:35:43.214Z",
+  "bodyId": "lancashire_cc",
+  "sourceRepo": "tompickup23/lancashire",
+  "branch": "gh-pages",
+  "fetchedFileCount": 29,
+  "files": [
+    {
+      "relativePath": "budget_efficiency.json",
+      "sourcePath": "lancashirecc/data/budget_efficiency.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budget_efficiency.json",
+      "sizeBytes": 10555
+    },
+    {
+      "relativePath": "budget_insights.json",
+      "sourcePath": "lancashirecc/data/budget_insights.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budget_insights.json",
+      "sizeBytes": 3244
+    },
+    {
+      "relativePath": "budget_mapping.json",
+      "sourcePath": "lancashirecc/data/budget_mapping.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budget_mapping.json",
+      "sizeBytes": 570917
+    },
+    {
+      "relativePath": "budget_variance.json",
+      "sourcePath": "lancashirecc/data/budget_variance.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budget_variance.json",
+      "sizeBytes": 65655
+    },
+    {
+      "relativePath": "budgets_govuk.json",
+      "sourcePath": "lancashirecc/data/budgets_govuk.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budgets_govuk.json",
+      "sizeBytes": 675840
+    },
+    {
+      "relativePath": "budgets_summary.json",
+      "sourcePath": "lancashirecc/data/budgets_summary.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budgets_summary.json",
+      "sizeBytes": 14114
+    },
+    {
+      "relativePath": "budgets.json",
+      "sourcePath": "lancashirecc/data/budgets.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/budgets.json",
+      "sizeBytes": 20044
+    },
+    {
+      "relativePath": "proposed_budget.json",
+      "sourcePath": "lancashirecc/data/proposed_budget.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/proposed_budget.json",
+      "sizeBytes": 15467
+    },
+    {
+      "relativePath": "spending-2024-04.json",
+      "sourcePath": "lancashirecc/data/spending-2024-04.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-04.json",
+      "sizeBytes": 16216646
+    },
+    {
+      "relativePath": "spending-2024-05.json",
+      "sourcePath": "lancashirecc/data/spending-2024-05.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-05.json",
+      "sizeBytes": 16611852
+    },
+    {
+      "relativePath": "spending-2024-06.json",
+      "sourcePath": "lancashirecc/data/spending-2024-06.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-06.json",
+      "sizeBytes": 15292760
+    },
+    {
+      "relativePath": "spending-2024-07.json",
+      "sourcePath": "lancashirecc/data/spending-2024-07.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-07.json",
+      "sizeBytes": 14554707
+    },
+    {
+      "relativePath": "spending-2024-09.json",
+      "sourcePath": "lancashirecc/data/spending-2024-09.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-09.json",
+      "sizeBytes": 14085087
+    },
+    {
+      "relativePath": "spending-2024-10.json",
+      "sourcePath": "lancashirecc/data/spending-2024-10.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-10.json",
+      "sizeBytes": 15700387
+    },
+    {
+      "relativePath": "spending-2024-11.json",
+      "sourcePath": "lancashirecc/data/spending-2024-11.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-11.json",
+      "sizeBytes": 18723003
+    },
+    {
+      "relativePath": "spending-2024-12.json",
+      "sourcePath": "lancashirecc/data/spending-2024-12.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-12.json",
+      "sizeBytes": 14268817
+    },
+    {
+      "relativePath": "spending-2025-01.json",
+      "sourcePath": "lancashirecc/data/spending-2025-01.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-01.json",
+      "sizeBytes": 13876190
+    },
+    {
+      "relativePath": "spending-2025-02.json",
+      "sourcePath": "lancashirecc/data/spending-2025-02.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-02.json",
+      "sizeBytes": 17251701
+    },
+    {
+      "relativePath": "spending-2025-03.json",
+      "sourcePath": "lancashirecc/data/spending-2025-03.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-03.json",
+      "sizeBytes": 12357647
+    },
+    {
+      "relativePath": "spending-2025-04.json",
+      "sourcePath": "lancashirecc/data/spending-2025-04.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-04.json",
+      "sizeBytes": 9226288
+    },
+    {
+      "relativePath": "spending-2025-05.json",
+      "sourcePath": "lancashirecc/data/spending-2025-05.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-05.json",
+      "sizeBytes": 12634614
+    },
+    {
+      "relativePath": "spending-2025-06.json",
+      "sourcePath": "lancashirecc/data/spending-2025-06.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-06.json",
+      "sizeBytes": 16075506
+    },
+    {
+      "relativePath": "spending-2025-07.json",
+      "sourcePath": "lancashirecc/data/spending-2025-07.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-07.json",
+      "sizeBytes": 16007577
+    },
+    {
+      "relativePath": "spending-2025-08.json",
+      "sourcePath": "lancashirecc/data/spending-2025-08.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-08.json",
+      "sizeBytes": 17911334
+    },
+    {
+      "relativePath": "spending-2025-09.json",
+      "sourcePath": "lancashirecc/data/spending-2025-09.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-09.json",
+      "sizeBytes": 10292218
+    },
+    {
+      "relativePath": "spending-2025-10.json",
+      "sourcePath": "lancashirecc/data/spending-2025-10.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-10.json",
+      "sizeBytes": 8449422
+    },
+    {
+      "relativePath": "spending-2025-11.json",
+      "sourcePath": "lancashirecc/data/spending-2025-11.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-11.json",
+      "sizeBytes": 9261813
+    },
+    {
+      "relativePath": "spending-2025-12.json",
+      "sourcePath": "lancashirecc/data/spending-2025-12.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-12.json",
+      "sizeBytes": 11140506
+    },
+    {
+      "relativePath": "spending-index.json",
+      "sourcePath": "lancashirecc/data/spending-index.json",
+      "rawUrl": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-index.json",
+      "sizeBytes": 470631
+    }
+  ]
+}

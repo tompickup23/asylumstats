@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadRouteDashboard } from "../lib/route-data";
+
+const routeDashboard = loadRouteDashboard();
+const routeMaxValues = new Map(
+  routeDashboard.routeFamilies.map((route) => [
+    route.id,
+    Math.max(...route.series.map((point) => point.value), 1)
+  ])
+);
+const maxMethodValue = Math.max(
+  ...routeDashboard.illegalEntryMethodsLatestYear.map((row) => row.value),
+  1
+);
+const maxOutcomeValue = Math.max(
+  ...routeDashboard.smallBoatDecisionGroupsLatestYear.rows.map((row) => row.value),
+  1
+);
+---
+
+<BaseLayout title="Routes | asylumstats">
+  <section class="page-head">
+    <span class="kicker">Routes and schemes</span>
+    <h1>Boat arrivals, asylum support, refugee schemes, family reunion, and Ukraine routes have to stay split.</h1>
+    <p>
+      This page now runs on official December 2025 route tables and the latest local-authority immigration-group
+      snapshot. It is the minimum viable answer to the central product rule: stop mixing incompatible routes and
+      schemes into one misleading number.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>National route snapshot</h2>
+    <div class="kpi-grid">
+      {routeDashboard.nationalCards.map((item) => (
+        <article class="kpi-card">
+          <span class="tiny">{item.label}</span>
+          <strong>{item.valueSuffix ? `${item.value}${item.valueSuffix}` : item.value.toLocaleString()}</strong>
+          <small>{item.period}</small>
+          <p class="tiny">{item.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={item.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Route families</h2>
+    <div class="story-grid">
+      {routeDashboard.routeFamilies.map((route) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{route.group}</span>
+            <span class="chip">{route.latestPeriod}</span>
+          </div>
+          <h3>{route.label}</h3>
+          <p class="metric-value" style="font-size: 2rem;">{route.latestValue.toLocaleString()}</p>
+          <p class="tiny">{route.schemeStatus}</p>
+          <p class="lede">{route.note}</p>
+          <p class="tiny">Local breakdown: {route.localBreakdown}</p>
+          {route.series.length > 1 && (
+            <div style="margin-top: 1rem;">
+              {route.series.slice(-6).map((point) => (
+                <div class="metric-bar">
+                  <div style="min-width: 5rem;">
+                    <strong>{point.periodLabel}</strong>
+                  </div>
+                  <div class="metric-track">
+                    <div
+                      class="metric-fill"
+                      style={`width: ${(point.value / (routeMaxValues.get(route.id) || 1)) * 100}%`}
+                    ></div>
+                  </div>
+                  <div class="tiny">{point.value.toLocaleString()}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          <p class="tiny">
+            <a class="source-pill" href={route.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Illegal entry routes in the latest year</h2>
+      {routeDashboard.illegalEntryMethodsLatestYear.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 12rem;">
+            <strong>{row.method}</strong>
+            <div class="tiny">{row.value.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value / maxMethodValue) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Small-boat asylum decision groups</h2>
+      <p class="tiny">Arrival cohorts for {routeDashboard.smallBoatDecisionGroupsLatestYear.year}</p>
+      {routeDashboard.smallBoatDecisionGroupsLatestYear.rows.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 11rem;">
+            <strong>{row.outcomeGroup}</strong>
+            <div class="tiny">{row.value.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value / maxOutcomeValue) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Local pressure leaders</h2>
+    <div class="story-grid">
+      {routeDashboard.topAreasByMetric.map((metric) => (
+        <article class="story-card">
+          <h3>{metric.label}</h3>
+          <div class="table-card" style="margin-top: 0.75rem;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {metric.rows.slice(0, 8).map((row) => (
+                  <tr>
+                    <td>{row.areaName}</td>
+                    <td>{row.value.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Current limits</h2>
+    <div class="story-grid">
+      {routeDashboard.limitations.map((item) => (
+        <article class="story-card">
+          <p class="lede">{item}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

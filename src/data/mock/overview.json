@@ -1,0 +1,59 @@
+{
+  "updatedAt": "2026-02-28",
+  "hero": {
+    "kicker": "UK asylum and refugee accountability",
+    "title": "Split small boats, asylum support, refugee schemes, and hotel secrecy properly.",
+    "summary": "This prototype turns asylum and refugee data into an accountability product. It combines official statistics, route and scheme distinctions, cost scrutiny, and public hotel evidence so users can compare places, follow the money, and see where visibility stops."
+  },
+  "kpis": [
+    {
+      "label": "People on asylum support",
+      "value": "107,200",
+      "context": "End of Dec 2025",
+      "status": "official",
+      "sourceTitle": "Immigration system statistics, year ending December 2025",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
+    },
+    {
+      "label": "People in hotels",
+      "value": "31,000",
+      "context": "29% of supported people",
+      "status": "official",
+      "sourceTitle": "Immigration system statistics, year ending December 2025",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
+    },
+    {
+      "label": "Hotels in use",
+      "value": "197",
+      "context": "As of 5 Jan 2026",
+      "status": "official",
+      "sourceTitle": "Home Affairs Committee report on asylum accommodation",
+      "sourceUrl": "https://publications.parliament.uk/pa/cm5901/cmselect/cmhaff/541/report.html"
+    },
+    {
+      "label": "Daily hotel cost",
+      "value": "GBP 5.77m",
+      "context": "Average in 2024/25",
+      "status": "official",
+      "sourceTitle": "Home Office factsheet: asylum accommodation and support",
+      "sourceUrl": "https://homeofficemedia.blog.gov.uk/2025/06/12/factsheet-asylum-accommodation-and-support/"
+    }
+  ],
+  "angles": [
+    {
+      "title": "Hotels still drive the bill",
+      "body": "In the first seven months of 2024/25, hotels housed 35% of people in asylum accommodation but drove 76% of contract cost.",
+      "sourceUrl": "https://www.nao.org.uk/reports/investigation-into-asylum-accommodation/"
+    },
+    {
+      "title": "The hidden estate is part of the story",
+      "body": "The government publishes national hotel counts, but a full public named-site list still has to be assembled from councils, FOIs, and public documents.",
+      "sourceUrl": "https://publications.parliament.uk/pa/cm5901/cmselect/cmhaff/541/report.html"
+    },
+    {
+      "title": "Backlog pressure still feeds accommodation demand",
+      "body": "Around 64,000 people were still waiting for an initial decision at the end of December 2025.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+---
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/compare", label: "Compare" },
+  { href: "/routes", label: "Routes" },
+  { href: "/hotels", label: "Hotels" },
+  { href: "/spending", label: "Spending" },
+  { href: "/releases", label: "Releases" },
+  { href: "/sources", label: "Sources" },
+  { href: "/methodology", label: "Methodology" }
+];
+---
+
+<header class="site-header shell">
+  <a class="brand" href="/">
+    <span class="brand-mark">AS</span>
+    <span>asylumstats</span>
+  </a>
+
+  <nav class="site-nav" aria-label="Primary">
+    {navItems.map((item) => (
+      <a href={item.href}>{item.label}</a>
+    ))}
+  </nav>
+</header>

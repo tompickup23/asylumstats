@@ -1,0 +1,137 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import places from "../../data/mock/places.json";
+import areaSeries from "../../data/mock/area-series.json";
+import hotelSites from "../../data/mock/hotel-sites.json";
+import hotelSightings from "../../data/mock/hotel-sightings.json";
+
+export function getStaticPaths() {
+  return places.map((place) => ({
+    params: { code: place.code },
+    props: { place }
+  }));
+}
+
+const { place } = Astro.props;
+const rows = areaSeries.filter((row) => row.areaCode === place.code);
+const latestRow = rows[rows.length - 1];
+const maxValue = Math.max(...rows.map((row) => row.value), 1);
+const siteRows = hotelSites.filter((site) => site.areaCode === place.code);
+const sighting = hotelSightings.find((row) => row.areaCode === place.code);
+---
+
+<BaseLayout title={`${place.name} | asylumstats`}>
+  <section class="page-head">
+    <span class="kicker">{place.region}</span>
+    <h1>{place.name}</h1>
+    <p>{place.summary}</p>
+    <div class="chip-row">
+      <span class="chip">{place.type}</span>
+      <span class="chip teal">{place.peerGroup}</span>
+      <span class="chip accent">Latest support count {place.supportLatest.toLocaleString()}</span>
+    </div>
+  </section>
+
+  <section class="kpi-grid section">
+    <article class="kpi-card">
+      <span class="tiny">Supported people</span>
+      <strong>{place.supportLatest.toLocaleString()}</strong>
+      <small>{latestRow?.periodEnd ?? "Latest period"}</small>
+    </article>
+    <article class="kpi-card">
+      <span class="tiny">Rate per 10,000</span>
+      <strong>{place.ratePer10000}</strong>
+      <small>Prototype rate</small>
+    </article>
+    <article class="kpi-card">
+      <span class="tiny">Recent change</span>
+      <strong>{place.recentChangePct > 0 ? "+" : ""}{place.recentChangePct}%</strong>
+      <small>Latest quarter versus previous</small>
+    </article>
+    <article class="kpi-card">
+      <span class="tiny">Public hotel evidence</span>
+      <strong>{place.namedSiteCount + place.unnamedSiteCount}</strong>
+      <small>{place.namedSiteCount} named | {place.unnamedSiteCount} unnamed</small>
+    </article>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Support trend</h2>
+      {rows.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 9rem;">
+            <strong>{row.periodEnd}</strong>
+            <div class="tiny">{row.dataStatus}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value / maxValue) * 100}%`}></div>
+          </div>
+          <div class="tiny">{row.value.toLocaleString()}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>What stands out here</h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Pressure profile</h3>
+          <p class="lede">
+            {place.name} sits in the prototype as a <strong>{place.peerGroup.toLowerCase()}</strong> with a latest published or illustrative count of{" "}
+            <strong>{place.supportLatest.toLocaleString()}</strong>.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Hotel visibility</h3>
+          <p class="lede">
+            {place.namedSiteCount > 0
+              ? `${place.namedSiteCount} named hotel site(s) are already logged in the public evidence ledger.`
+              : "No named hotel sites are currently logged in the starter ledger for this area."}
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Hotel evidence for this place</h2>
+    {siteRows.length > 0 || sighting ? (
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Evidence</th>
+              <th>Last public date</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {siteRows.map((site) => (
+              <tr>
+                <td>{site.siteName}</td>
+                <td>{site.evidenceClass}</td>
+                <td>{site.lastPublicDate}</td>
+                <td>{site.notes}</td>
+              </tr>
+            ))}
+            {sighting && (
+              <tr>
+                <td>Area sighting</td>
+                <td>{sighting.namedSiteCount} named / {sighting.unnamedSiteCount} unnamed</td>
+                <td>{sighting.lastPublicDate}</td>
+                <td>{sighting.notes}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <article class="story-card">
+        <h3>No public hotel evidence logged yet</h3>
+        <p class="lede">That does not mean the area has no hotel use. It means the prototype has no public evidence row attached yet.</p>
+      </article>
+    )}
+  </section>
+</BaseLayout>

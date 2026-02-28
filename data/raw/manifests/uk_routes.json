@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-02-28T16:47:16.425Z",
+  "datasetId": "uk_routes",
+  "fetchedFileCount": 4,
+  "files": [
+    {
+      "sourceId": "local_immigration_groups",
+      "fileName": "regional-and-local-authority-dataset-dec-2025.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+      "sizeBytes": 271726,
+      "fileSha256": "597e625921dfb35dc2a1a87af5fcc66bd68ec3a979c522c571a0af7215d26f28"
+    },
+    {
+      "sourceId": "local_resettlement_routes",
+      "fileName": "resettlement-local-authority-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
+      "sizeBytes": 219262,
+      "fileSha256": "6242e4e29cd0b637ef8394de292618239a4442e55a0f348f18ef3212ef6e6ac0"
+    },
+    {
+      "sourceId": "illegal_entry_routes",
+      "fileName": "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
+      "sizeBytes": 2427668,
+      "fileSha256": "f59e2865d4e7be3449ffdefb23e98710beb40b76509066a38623b2e6c34bda29"
+    },
+    {
+      "sourceId": "safe_legal_routes_summary",
+      "fileName": "safe-legal-routes-summary-tables-dec-2025.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
+      "sizeBytes": 53753,
+      "fileSha256": "2ebcbfc291c68231d30d53a4c220a901117925d743c28f3bef346f27f38138e8"
+    }
+  ]
+}

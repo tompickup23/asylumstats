@@ -1,0 +1,1020 @@
+{
+  "generatedAt": "2026-02-28T16:48:43.753Z",
+  "localSnapshotDate": "2025-12-31",
+  "routeFamilies": [
+    {
+      "id": "safe_legal_total",
+      "label": "Safe and legal (humanitarian) grants",
+      "group": "Humanitarian routes",
+      "schemeStatus": "Mixed route family",
+      "localBreakdown": "No single local authority split",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "Includes refugee resettlement, refugee family reunion, Ukraine, and BN(O) routes. Do not present as a refugee total.",
+      "series": [
+        {
+          "periodLabel": "2010",
+          "periodEnd": "2010-12-31",
+          "value": 5603
+        },
+        {
+          "periodLabel": "2011",
+          "periodEnd": "2011-12-31",
+          "value": 4765
+        },
+        {
+          "periodLabel": "2012",
+          "periodEnd": "2012-12-31",
+          "value": 4721
+        },
+        {
+          "periodLabel": "2013",
+          "periodEnd": "2013-12-31",
+          "value": 5088
+        },
+        {
+          "periodLabel": "2014",
+          "periodEnd": "2014-12-31",
+          "value": 5236
+        },
+        {
+          "periodLabel": "2015",
+          "periodEnd": "2015-12-31",
+          "value": 6714
+        },
+        {
+          "periodLabel": "2016",
+          "periodEnd": "2016-12-31",
+          "value": 11251
+        },
+        {
+          "periodLabel": "2017",
+          "periodEnd": "2017-12-31",
+          "value": 11411
+        },
+        {
+          "periodLabel": "2018",
+          "periodEnd": "2018-12-31",
+          "value": 11518
+        },
+        {
+          "periodLabel": "2019",
+          "periodEnd": "2019-12-31",
+          "value": 13068
+        },
+        {
+          "periodLabel": "2020",
+          "periodEnd": "2020-12-31",
+          "value": 5620
+        },
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 120095
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 299285
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 100124
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 77199
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 189823
+        }
+      ],
+      "latestValue": 189823,
+      "latestPeriod": "2025",
+      "firstPeriod": "2010"
+    },
+    {
+      "id": "small_boats",
+      "label": "Small boat arrivals",
+      "group": "Irregular asylum route",
+      "schemeStatus": "Not a refugee scheme",
+      "localBreakdown": "No standard local authority split",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "Detected arrivals via small boat across the UK.",
+      "series": [
+        {
+          "periodLabel": "2018",
+          "periodEnd": "2018-12-31",
+          "value": 299
+        },
+        {
+          "periodLabel": "2019",
+          "periodEnd": "2019-12-31",
+          "value": 1843
+        },
+        {
+          "periodLabel": "2020",
+          "periodEnd": "2020-12-31",
+          "value": 8466
+        },
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 28526
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 45774
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 29437
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 36816
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 41472
+        }
+      ],
+      "latestValue": 41472,
+      "latestPeriod": "2025",
+      "firstPeriod": "2018"
+    },
+    {
+      "id": "asylum_support",
+      "label": "Supported asylum population",
+      "group": "Asylum support system",
+      "schemeStatus": "Not a refugee scheme",
+      "localBreakdown": "Latest local authority snapshot available",
+      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "note": "Published as a local authority snapshot rather than a long national time series in this build.",
+      "series": [
+        {
+          "periodLabel": "2025-12-31",
+          "periodEnd": "2025-12-31",
+          "value": 107003
+        }
+      ],
+      "latestValue": 107003,
+      "latestPeriod": "2025-12-31",
+      "firstPeriod": "2025-12-31"
+    },
+    {
+      "id": "afghan_resettlement_programme",
+      "label": "Afghan Resettlement Programme arrivals",
+      "group": "Refugee resettlement and relocation",
+      "schemeStatus": "Scheme family",
+      "localBreakdown": "Latest local population snapshot and local quarterly arrivals available",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "National yearly arrivals from summary tables; local stock from immigration group tables; quarterly local arrival history from resettlement tables.",
+      "series": [
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 16445
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 4737
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 3695
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 7199
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 5874
+        }
+      ],
+      "latestValue": 5874,
+      "latestPeriod": "2025",
+      "firstPeriod": "2021"
+    },
+    {
+      "id": "uk_resettlement_scheme",
+      "label": "UK Resettlement Scheme and predecessor schemes",
+      "group": "Refugee resettlement",
+      "schemeStatus": "Scheme family",
+      "localBreakdown": "Quarterly local authority arrivals available",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "This build groups UKRS, Mandate, VPRS, VCRS, and Gateway to avoid pretending the current local stock table publishes them separately.",
+      "series": [
+        {
+          "periodLabel": "2010",
+          "periodEnd": "2010-12-31",
+          "value": 717
+        },
+        {
+          "periodLabel": "2011",
+          "periodEnd": "2011-12-31",
+          "value": 461
+        },
+        {
+          "periodLabel": "2012",
+          "periodEnd": "2012-12-31",
+          "value": 1053
+        },
+        {
+          "periodLabel": "2013",
+          "periodEnd": "2013-12-31",
+          "value": 967
+        },
+        {
+          "periodLabel": "2014",
+          "periodEnd": "2014-12-31",
+          "value": 786
+        },
+        {
+          "periodLabel": "2015",
+          "periodEnd": "2015-12-31",
+          "value": 1865
+        },
+        {
+          "periodLabel": "2016",
+          "periodEnd": "2016-12-31",
+          "value": 5212
+        },
+        {
+          "periodLabel": "2017",
+          "periodEnd": "2017-12-31",
+          "value": 6212
+        },
+        {
+          "periodLabel": "2018",
+          "periodEnd": "2018-12-31",
+          "value": 5806
+        },
+        {
+          "periodLabel": "2019",
+          "periodEnd": "2019-12-31",
+          "value": 5612
+        },
+        {
+          "periodLabel": "2020",
+          "periodEnd": "2020-12-31",
+          "value": 823
+        },
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 1587
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 1163
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 632
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 734
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 543
+        }
+      ],
+      "latestValue": 543,
+      "latestPeriod": "2025",
+      "firstPeriod": "2010"
+    },
+    {
+      "id": "community_sponsorship",
+      "label": "Community Sponsorship arrivals",
+      "group": "Refugee resettlement support model",
+      "schemeStatus": "Scheme support channel",
+      "localBreakdown": "Quarterly local authority arrivals available",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "Separate from core resettlement totals because this is a sponsorship mechanism rather than a separate national asylum route. Cumulative total since 2014: 1,195.",
+      "series": [
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 179
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 278
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 145
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 58
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 12
+        }
+      ],
+      "latestValue": 12,
+      "latestPeriod": "2025",
+      "firstPeriod": "2021"
+    },
+    {
+      "id": "refugee_family_reunion",
+      "label": "Refugee Family Reunion grants",
+      "group": "Protection-linked family route",
+      "schemeStatus": "Not a refugee resettlement scheme",
+      "localBreakdown": "No local authority split",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "Family route connected to existing protection status in the UK.",
+      "series": [
+        {
+          "periodLabel": "2010",
+          "periodEnd": "2010-12-31",
+          "value": 4886
+        },
+        {
+          "periodLabel": "2011",
+          "periodEnd": "2011-12-31",
+          "value": 4304
+        },
+        {
+          "periodLabel": "2012",
+          "periodEnd": "2012-12-31",
+          "value": 3668
+        },
+        {
+          "periodLabel": "2013",
+          "periodEnd": "2013-12-31",
+          "value": 4121
+        },
+        {
+          "periodLabel": "2014",
+          "periodEnd": "2014-12-31",
+          "value": 4450
+        },
+        {
+          "periodLabel": "2015",
+          "periodEnd": "2015-12-31",
+          "value": 4849
+        },
+        {
+          "periodLabel": "2016",
+          "periodEnd": "2016-12-31",
+          "value": 6039
+        },
+        {
+          "periodLabel": "2017",
+          "periodEnd": "2017-12-31",
+          "value": 5199
+        },
+        {
+          "periodLabel": "2018",
+          "periodEnd": "2018-12-31",
+          "value": 5712
+        },
+        {
+          "periodLabel": "2019",
+          "periodEnd": "2019-12-31",
+          "value": 7456
+        },
+        {
+          "periodLabel": "2020",
+          "periodEnd": "2020-12-31",
+          "value": 4797
+        },
+        {
+          "periodLabel": "2021",
+          "periodEnd": "2021-12-31",
+          "value": 5645
+        },
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 4113
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 9320
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 19258
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 18869
+        }
+      ],
+      "latestValue": 18869,
+      "latestPeriod": "2025",
+      "firstPeriod": "2010"
+    },
+    {
+      "id": "homes_for_ukraine",
+      "label": "Ukraine arrivals",
+      "group": "Humanitarian route",
+      "schemeStatus": "Not a refugee resettlement scheme",
+      "localBreakdown": "Latest local authority arrivals snapshot available",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "note": "Use arrivals rather than grants when comparing to local authority placement counts.",
+      "series": [
+        {
+          "periodLabel": "2022",
+          "periodEnd": "2022-12-31",
+          "value": 155000
+        },
+        {
+          "periodLabel": "2023",
+          "periodEnd": "2023-12-31",
+          "value": 42300
+        },
+        {
+          "periodLabel": "2024",
+          "periodEnd": "2024-12-31",
+          "value": 22300
+        },
+        {
+          "periodLabel": "2025",
+          "periodEnd": "2025-12-31",
+          "value": 14900
+        }
+      ],
+      "latestValue": 14900,
+      "latestPeriod": "2025",
+      "firstPeriod": "2022"
+    }
+  ],
+  "nationalCards": [
+    {
+      "id": "small_boat_arrivals",
+      "label": "Small boat arrivals",
+      "value": 41472,
+      "period": "2025",
+      "detail": "Detected arrivals via small boat across the UK.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    },
+    {
+      "id": "small_boat_share",
+      "label": "Small boat share of illegal entry routes",
+      "value": 89.2,
+      "period": "2025",
+      "detail": "Derived from the illegal entry routes dataset.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "valueSuffix": "%"
+    },
+    {
+      "id": "supported_asylum",
+      "label": "Supported asylum population",
+      "value": 107003,
+      "period": "As at 2025-12-31",
+      "detail": "Latest official UK stock snapshot from the immigration groups table.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
+    },
+    {
+      "id": "contingency_accommodation",
+      "label": "Contingency accommodation population",
+      "value": 32667,
+      "period": "As at 2025-12-31",
+      "detail": "Proxy for the most visible temporary accommodation pressure.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
+    },
+    {
+      "id": "afghan_arrivals",
+      "label": "Afghan Resettlement Programme arrivals",
+      "value": 5874,
+      "period": "2025",
+      "detail": "National yearly arrivals through Afghan resettlement and relocation pathways.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    },
+    {
+      "id": "resettled_total",
+      "label": "Total resettled arrivals",
+      "value": 6417,
+      "period": "2025",
+      "detail": "Separate from the UKRS-family line because the total includes Afghan arrivals.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    },
+    {
+      "id": "ukraine_arrivals",
+      "label": "Ukraine arrivals",
+      "value": 14900,
+      "period": "2025",
+      "detail": "Do not mix this humanitarian route into refugee resettlement totals.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    },
+    {
+      "id": "family_reunion",
+      "label": "Refugee Family Reunion grants",
+      "value": 18869,
+      "period": "2025",
+      "detail": "Protection-linked family route, not a resettlement scheme.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    }
+  ],
+  "illegalEntryMethodsLatestYear": [
+    {
+      "method": "Small boat arrivals",
+      "value": 41472
+    },
+    {
+      "method": "Inadequately documented air arrivals",
+      "value": 3027
+    },
+    {
+      "method": "Recorded detections in the UK",
+      "value": 1817
+    },
+    {
+      "method": "Recorded detections at UK ports",
+      "value": 181
+    }
+  ],
+  "smallBoatDecisionGroupsLatestYear": {
+    "year": "2025",
+    "rows": [
+      {
+        "outcomeGroup": "Grant of Protection",
+        "value": 14210
+      },
+      {
+        "outcomeGroup": "Awaiting initial decision",
+        "value": 14105
+      },
+      {
+        "outcomeGroup": "Refused",
+        "value": 9125
+      },
+      {
+        "outcomeGroup": "Withdrawn",
+        "value": 1644
+      },
+      {
+        "outcomeGroup": "Administrative Outcome",
+        "value": 421
+      },
+      {
+        "outcomeGroup": "Grant of Other Leave",
+        "value": 164
+      }
+    ]
+  },
+  "topAreasByMetric": [
+    {
+      "metricId": "supportedAsylum",
+      "label": "Supported asylum population",
+      "rows": [
+        {
+          "areaCode": "S12000049",
+          "areaName": "Glasgow City",
+          "regionName": "Scotland",
+          "value": 3835
+        },
+        {
+          "areaCode": "E08000025",
+          "areaName": "Birmingham",
+          "regionName": "West Midlands",
+          "value": 2637
+        },
+        {
+          "areaCode": "E08000012",
+          "areaName": "Liverpool",
+          "regionName": "North West",
+          "value": 2189
+        },
+        {
+          "areaCode": "E09000017",
+          "areaName": "Hillingdon",
+          "regionName": "London",
+          "value": 2133
+        },
+        {
+          "areaCode": "E08000003",
+          "areaName": "Manchester",
+          "regionName": "North West",
+          "value": 1846
+        },
+        {
+          "areaCode": "E08000035",
+          "areaName": "Leeds",
+          "regionName": "Yorkshire and The Humber",
+          "value": 1772
+        },
+        {
+          "areaCode": "N09000003",
+          "areaName": "Belfast",
+          "regionName": "Northern Ireland",
+          "value": 1749
+        },
+        {
+          "areaCode": "E09000018",
+          "areaName": "Hounslow",
+          "regionName": "London",
+          "value": 1720
+        },
+        {
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
+          "regionName": "West Midlands",
+          "value": 1719
+        },
+        {
+          "areaCode": "E06000018",
+          "areaName": "Nottingham",
+          "regionName": "East Midlands",
+          "value": 1605
+        }
+      ]
+    },
+    {
+      "metricId": "supportedAsylumRate",
+      "label": "Supported asylum rate per 10,000",
+      "rows": [
+        {
+          "areaCode": "E09000017",
+          "areaName": "Hillingdon",
+          "regionName": "London",
+          "value": 64.8
+        },
+        {
+          "areaCode": "S12000049",
+          "areaName": "Glasgow City",
+          "regionName": "Scotland",
+          "value": 58.97
+        },
+        {
+          "areaCode": "E09000018",
+          "areaName": "Hounslow",
+          "regionName": "London",
+          "value": 57.44
+        },
+        {
+          "areaCode": "N09000003",
+          "areaName": "Belfast",
+          "regionName": "Northern Ireland",
+          "value": 49.63
+        },
+        {
+          "areaCode": "E06000018",
+          "areaName": "Nottingham",
+          "regionName": "East Midlands",
+          "value": 48.48
+        },
+        {
+          "areaCode": "E07000120",
+          "areaName": "Hyndburn",
+          "regionName": "North West",
+          "value": 48.22
+        },
+        {
+          "areaCode": "E06000021",
+          "areaName": "Stoke-on-Trent",
+          "regionName": "West Midlands",
+          "value": 47.3
+        },
+        {
+          "areaCode": "E08000031",
+          "areaName": "Wolverhampton",
+          "regionName": "West Midlands",
+          "value": 46.86
+        },
+        {
+          "areaCode": "E06000008",
+          "areaName": "Blackburn with Darwen",
+          "regionName": "North West",
+          "value": 46.7
+        },
+        {
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
+          "regionName": "West Midlands",
+          "value": 46.58
+        }
+      ]
+    },
+    {
+      "metricId": "contingencyAccommodation",
+      "label": "Contingency accommodation population",
+      "rows": [
+        {
+          "areaCode": "E09000017",
+          "areaName": "Hillingdon",
+          "regionName": "London",
+          "value": 1896
+        },
+        {
+          "areaCode": "E09000018",
+          "areaName": "Hounslow",
+          "regionName": "London",
+          "value": 1466
+        },
+        {
+          "areaCode": "E09000003",
+          "areaName": "Barnet",
+          "regionName": "London",
+          "value": 1251
+        },
+        {
+          "areaCode": "E08000025",
+          "areaName": "Birmingham",
+          "regionName": "West Midlands",
+          "value": 1087
+        },
+        {
+          "areaCode": "E09000008",
+          "areaName": "Croydon",
+          "regionName": "London",
+          "value": 1069
+        },
+        {
+          "areaCode": "E08000003",
+          "areaName": "Manchester",
+          "regionName": "North West",
+          "value": 979
+        },
+        {
+          "areaCode": "E09000025",
+          "areaName": "Newham",
+          "regionName": "London",
+          "value": 772
+        },
+        {
+          "areaCode": "E09000005",
+          "areaName": "Brent",
+          "regionName": "London",
+          "value": 730
+        },
+        {
+          "areaCode": "E06000023",
+          "areaName": "Bristol, City of",
+          "regionName": "South West",
+          "value": 722
+        },
+        {
+          "areaCode": "E08000007",
+          "areaName": "Stockport",
+          "regionName": "North West",
+          "value": 668
+        }
+      ]
+    },
+    {
+      "metricId": "homesForUkraineArrivals",
+      "label": "Homes for Ukraine arrivals",
+      "rows": [
+        {
+          "areaCode": "E06000060",
+          "areaName": "Buckinghamshire",
+          "regionName": "South East",
+          "value": 2188
+        },
+        {
+          "areaCode": "E06000066",
+          "areaName": "Somerset",
+          "regionName": "South West",
+          "value": 1958
+        },
+        {
+          "areaCode": "E09000003",
+          "areaName": "Barnet",
+          "regionName": "London",
+          "value": 1912
+        },
+        {
+          "areaCode": "E06000054",
+          "areaName": "Wiltshire",
+          "regionName": "South West",
+          "value": 1727
+        },
+        {
+          "areaCode": "E09000009",
+          "areaName": "Ealing",
+          "regionName": "London",
+          "value": 1700
+        },
+        {
+          "areaCode": "E06000065",
+          "areaName": "North Yorkshire",
+          "regionName": "Yorkshire and The Humber",
+          "value": 1679
+        },
+        {
+          "areaCode": "E09000024",
+          "areaName": "Merton",
+          "regionName": "London",
+          "value": 1530
+        },
+        {
+          "areaCode": "E09000011",
+          "areaName": "Greenwich",
+          "regionName": "London",
+          "value": 1379
+        },
+        {
+          "areaCode": "E09000032",
+          "areaName": "Wandsworth",
+          "regionName": "London",
+          "value": 1363
+        },
+        {
+          "areaCode": "E08000025",
+          "areaName": "Birmingham",
+          "regionName": "West Midlands",
+          "value": 1346
+        }
+      ]
+    },
+    {
+      "metricId": "afghanProgrammePopulation",
+      "label": "Afghan Resettlement Programme population",
+      "rows": [
+        {
+          "areaCode": "E08000035",
+          "areaName": "Leeds",
+          "regionName": "Yorkshire and The Humber",
+          "value": 639
+        },
+        {
+          "areaCode": "E08000025",
+          "areaName": "Birmingham",
+          "regionName": "West Midlands",
+          "value": 625
+        },
+        {
+          "areaCode": "E07000226",
+          "areaName": "Crawley",
+          "regionName": "South East",
+          "value": 616
+        },
+        {
+          "areaCode": "S12000036",
+          "areaName": "City of Edinburgh",
+          "regionName": "Scotland",
+          "value": 569
+        },
+        {
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
+          "regionName": "West Midlands",
+          "value": 553
+        },
+        {
+          "areaCode": "E09000019",
+          "areaName": "Islington",
+          "regionName": "London",
+          "value": 537
+        },
+        {
+          "areaCode": "E06000023",
+          "areaName": "Bristol, City of",
+          "regionName": "South West",
+          "value": 487
+        },
+        {
+          "areaCode": "E08000032",
+          "areaName": "Bradford",
+          "regionName": "Yorkshire and The Humber",
+          "value": 482
+        },
+        {
+          "areaCode": "E06000065",
+          "areaName": "North Yorkshire",
+          "regionName": "Yorkshire and The Humber",
+          "value": 440
+        },
+        {
+          "areaCode": "E06000054",
+          "areaName": "Wiltshire",
+          "regionName": "South West",
+          "value": 438
+        }
+      ]
+    },
+    {
+      "metricId": "resettlementCumulativeTotal",
+      "label": "Cumulative resettlement arrivals since 2014",
+      "rows": [
+        {
+          "areaCode": "E08000032",
+          "areaName": "Bradford",
+          "regionName": "Yorkshire and The Humber",
+          "value": 827
+        },
+        {
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
+          "regionName": "West Midlands",
+          "value": 799
+        },
+        {
+          "areaCode": "S12000036",
+          "areaName": "City of Edinburgh",
+          "regionName": "Scotland",
+          "value": 694
+        },
+        {
+          "areaCode": "E08000025",
+          "areaName": "Birmingham",
+          "regionName": "West Midlands",
+          "value": 658
+        },
+        {
+          "areaCode": "E08000037",
+          "areaName": "Gateshead",
+          "regionName": "North East",
+          "value": 515
+        },
+        {
+          "areaCode": "E06000023",
+          "areaName": "Bristol, City of",
+          "regionName": "South West",
+          "value": 486
+        },
+        {
+          "areaCode": "N09000003",
+          "areaName": "Belfast",
+          "regionName": "Northern Ireland",
+          "value": 419
+        },
+        {
+          "areaCode": "E08000035",
+          "areaName": "Leeds",
+          "regionName": "Yorkshire and The Humber",
+          "value": 406
+        },
+        {
+          "areaCode": "E08000021",
+          "areaName": "Newcastle upon Tyne",
+          "regionName": "North East",
+          "value": 385
+        },
+        {
+          "areaCode": "E06000003",
+          "areaName": "Redcar and Cleveland",
+          "regionName": "North East",
+          "value": 383
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
+    "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "Homes for Ukraine, refugee family reunion, and Afghan resettlement should be compared with clear labels because they are not the same kind of route or scheme."
+  ],
+  "sources": [
+    {
+      "source_id": "local_immigration_groups_dec_2025",
+      "source_url": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+      "methodology_url": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "release_date": "2026-02-26"
+    },
+    {
+      "source_id": "local_resettlement_routes_dec_2025",
+      "source_url": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+      "release_date": "2026-02-26"
+    },
+    {
+      "source_id": "illegal_entry_routes_dec_2025",
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "release_date": "2026-02-26"
+    },
+    {
+      "source_id": "safe_legal_routes_summary_dec_2025",
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+      "release_date": "2026-02-26"
+    }
+  ]
+}

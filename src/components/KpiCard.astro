@@ -1,0 +1,23 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  context?: string;
+  status?: string;
+  sourceUrl?: string;
+}
+
+const { label, value, context, status, sourceUrl } = Astro.props;
+---
+
+<article class="kpi-card">
+  <span class="tiny">{label}</span>
+  <strong>{value}</strong>
+  {context && <small>{context}</small>}
+  {status && <div class="chip-row"><span class="chip">{status}</span></div>}
+  {sourceUrl && (
+    <p class="tiny">
+      <a class="source-pill" href={sourceUrl}>Source</a>
+    </p>
+  )}
+</article>

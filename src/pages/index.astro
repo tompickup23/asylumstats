@@ -1,0 +1,218 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import KpiCard from "../components/KpiCard.astro";
+import overview from "../data/mock/overview.json";
+import places from "../data/mock/places.json";
+import releases from "../data/mock/releases.json";
+import asylumFinance from "../data/live/asylum-finance.json";
+import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
+import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { loadMoneyLedger } from "../lib/money-data";
+
+const routeDashboard = loadRouteDashboard();
+const localRouteLatest = loadLocalRouteLatest();
+const hotelLedger = loadHotelEntityLedger();
+const moneyLedger = loadMoneyLedger();
+const routeCards = routeDashboard.nationalCards.slice(0, 4);
+const topPlaces = localRouteLatest.topAreasByMetric.find((group) => group.metricId === "supportedAsylum")?.rows ?? [];
+const maxSupport = Math.max(...topPlaces.map((place) => place.value), 1);
+const namedCurrentHotels = hotelLedger.sites.filter((site) => site.status === "current");
+const moneyPreview = moneyLedger.records.slice(0, 3);
+---
+
+<BaseLayout
+  title="asylumstats | UK asylum accountability prototype"
+  description="Prototype site for UK asylum and refugee data, hotel tracking, and spending accountability."
+>
+  <section class="hero">
+    <span class="kicker">{overview.hero.kicker}</span>
+    <h1>{overview.hero.title}</h1>
+    <p>{overview.hero.summary}</p>
+    <div class="chip-row">
+      <a class="chip accent" href="/compare">Compare places</a>
+      <a class="chip" href="/routes">Split routes</a>
+      <a class="chip teal" href="/hotels">Track hotels</a>
+      <a class="chip" href="/spending">Follow the money</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Accountability snapshot</h2>
+    <div class="kpi-grid">
+      {overview.kpis.map((item) => (
+        <KpiCard
+          label={item.label}
+          value={item.value}
+          context={item.context}
+          status={item.status}
+          sourceUrl={item.sourceUrl}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Official route split now live</h2>
+    <div class="kpi-grid">
+      {routeCards.map((item) => (
+        <article class="kpi-card">
+          <span class="tiny">{item.label}</span>
+          <strong>{item.valueSuffix ? `${item.value}${item.valueSuffix}` : item.value.toLocaleString()}</strong>
+          <small>{item.period}</small>
+          <p class="tiny">{item.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={item.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Why this can hit harder than a normal dashboard</h2>
+    <div class="story-grid">
+      {overview.angles.map((angle) => (
+        <article class="story-card">
+          <h3>{angle.title}</h3>
+          <p class="lede">{angle.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={angle.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What counts as in scope</h2>
+    <div class="story-grid">
+      {asylumFinance.scopeRules.map((rule) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
+              {rule.label}
+            </span>
+          </div>
+          <p class="lede">{rule.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What the product should split out</h2>
+    <div class="story-grid">
+      {asylumFinance.routeFamilies.slice(0, 6).map((route) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{route.group}</span>
+          </div>
+          <h3>{route.label}</h3>
+          <p class="lede">{route.note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Where pressure is concentrated</h2>
+      <p class="lede">Latest official local-authority asylum-support snapshot as at 31 December 2025.</p>
+      {topPlaces.map((place) => (
+        <div class="metric-bar">
+          <div style="min-width: 10rem;">
+            <strong>{place.areaName}</strong>
+            <div class="tiny">{place.value.toLocaleString()} supported people</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(place.value / maxSupport) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Named current hotel sites with entity coverage</h2>
+      <p class="lede">
+        The public estate is only partially visible. This starter ledger shows which named current sites have owner or
+        operator links and which still sit inside the secrecy gap.
+      </p>
+      <div class="story-grid">
+        {namedCurrentHotels.map((site) => (
+          <article class="metric-card">
+            <div class="chip-row">
+              <span class="chip accent">{site.evidenceClass}</span>
+              <span class="chip">{site.entityCoverage}</span>
+            </div>
+            <h3>{site.siteName}</h3>
+            <p class="lede">{site.areaName}</p>
+            <p class="tiny">Owner: {site.ownerName ?? "Unresolved"}</p>
+            <p class="tiny">Operator: {site.operatorName ?? "Unresolved"}</p>
+            <p class="tiny">Last public evidence: {site.lastPublicDate}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Prototype area pages</h2>
+    <div class="place-grid">
+      {places.map((place) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip">{place.region}</span>
+            <span class="chip teal">{place.peerGroup}</span>
+          </div>
+          <h3>
+            <a href={`/places/${place.code}`}>{place.name}</a>
+          </h3>
+          <p class="lede">{place.summary}</p>
+          <p class="tiny">
+            Latest support count: {place.supportLatest.toLocaleString()} | Rate per 10,000: {place.ratePer10000}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Public money layer now live</h2>
+    <div class="story-grid">
+      {moneyPreview.map((record) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{record.recordType.replace(/_/g, " ")}</span>
+            {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
+          </div>
+          <h3>{record.title}</h3>
+          <p class="lede">
+            {record.supplierName ? `${record.buyerName} -> ${record.supplierName}` : record.buyerName}
+          </p>
+          <p class="tiny">{record.periodLabel ?? "No period label recorded"}</p>
+          <p class="tiny">
+            <a class="source-pill" href="/spending">Open money ledger</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Release diary</h2>
+    <div class="story-grid">
+      {releases.map((release) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip">{release.date}</span>
+          </div>
+          <h3>{release.title}</h3>
+          <p class="lede">{release.summary}</p>
+          <p class="tiny">
+            <a class="source-pill" href={release.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

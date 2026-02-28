@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import releases from "../data/mock/releases.json";
+---
+
+<BaseLayout title="Releases | asylumstats">
+  <section class="page-head">
+    <span class="kicker">Release diary</span>
+    <h1>Log what changed and which parts of the site should move with it.</h1>
+    <p>
+      Release discipline matters because national asylum numbers, local authority tables, hotel scrutiny documents, and local public evidence do not all
+      update together.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="story-grid">
+      {releases.map((release) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip">{release.date}</span>
+          </div>
+          <h3>{release.title}</h3>
+          <p class="lede">{release.summary}</p>
+          <p class="tiny">
+            <a class="source-pill" href={release.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

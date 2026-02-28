@@ -1,0 +1,436 @@
+{
+  "generated_at": "2026-02-28T15:44:58.637Z",
+  "body_id": "lancashire_cc",
+  "source_file_count": 20,
+  "total_records": 753220,
+  "total_spend_gbp": 3558124490.37,
+  "average_monthly_spend_gbp": 177906224.52,
+  "first_date": "2024-04-02",
+  "last_date": "2025-12-31",
+  "by_financial_year": [
+    {
+      "financial_year": "2024/25",
+      "total_spend_gbp": 1866325978.46
+    },
+    {
+      "financial_year": "2025/26",
+      "total_spend_gbp": 1691798511.91
+    }
+  ],
+  "monthly_totals": [
+    {
+      "month": "2024-04",
+      "record_count": 46961,
+      "total_spend_gbp": 214507963.57
+    },
+    {
+      "month": "2024-05",
+      "record_count": 44304,
+      "total_spend_gbp": 161719647.62
+    },
+    {
+      "month": "2024-06",
+      "record_count": 41060,
+      "total_spend_gbp": 128162264.28
+    },
+    {
+      "month": "2024-07",
+      "record_count": 38852,
+      "total_spend_gbp": 153190885.14
+    },
+    {
+      "month": "2024-09",
+      "record_count": 38267,
+      "total_spend_gbp": 176129680.64
+    },
+    {
+      "month": "2024-10",
+      "record_count": 40190,
+      "total_spend_gbp": 169164269.69
+    },
+    {
+      "month": "2024-11",
+      "record_count": 50512,
+      "total_spend_gbp": 192113662.65
+    },
+    {
+      "month": "2024-12",
+      "record_count": 37980,
+      "total_spend_gbp": 147834909.99
+    },
+    {
+      "month": "2025-01",
+      "record_count": 37556,
+      "total_spend_gbp": 176528743.82
+    },
+    {
+      "month": "2025-02",
+      "record_count": 45631,
+      "total_spend_gbp": 142924923.18
+    },
+    {
+      "month": "2025-03",
+      "record_count": 33558,
+      "total_spend_gbp": 204049027.88
+    },
+    {
+      "month": "2025-04",
+      "record_count": 24981,
+      "total_spend_gbp": 178371078.03
+    },
+    {
+      "month": "2025-05",
+      "record_count": 34089,
+      "total_spend_gbp": 168435395.83
+    },
+    {
+      "month": "2025-06",
+      "record_count": 43122,
+      "total_spend_gbp": 183476096.61
+    },
+    {
+      "month": "2025-07",
+      "record_count": 42841,
+      "total_spend_gbp": 215564533.2
+    },
+    {
+      "month": "2025-08",
+      "record_count": 48200,
+      "total_spend_gbp": 275698133.72
+    },
+    {
+      "month": "2025-09",
+      "record_count": 27835,
+      "total_spend_gbp": 204921392.49
+    },
+    {
+      "month": "2025-10",
+      "record_count": 22781,
+      "total_spend_gbp": 168494399.95
+    },
+    {
+      "month": "2025-11",
+      "record_count": 24952,
+      "total_spend_gbp": 130721290.97
+    },
+    {
+      "month": "2025-12",
+      "record_count": 29548,
+      "total_spend_gbp": 166116191.11
+    }
+  ],
+  "redacted_supplier_spend_gbp": 255002441.98,
+  "redacted_supplier_labels": [
+    "REDACT",
+    "REDACTED"
+  ],
+  "missing_expected_months": [
+    "2024-08"
+  ],
+  "top_suppliers": [
+    {
+      "supplier_name": "REDACTED",
+      "total_spend_gbp": 204603176.02
+    },
+    {
+      "supplier_name": "NHS LANCASHIRE & SOUTH CUMBRIA ICB",
+      "total_spend_gbp": 163694723.82
+    },
+    {
+      "supplier_name": "LANCASHIRE RENEWABLES LTD",
+      "total_spend_gbp": 70086011.87
+    },
+    {
+      "supplier_name": "SUEZ RECYCLING & RECOVERY UK LTD",
+      "total_spend_gbp": 57706789.79
+    },
+    {
+      "supplier_name": "LCCG INTERNAL CARE SUPPLIER",
+      "total_spend_gbp": 51247409.6
+    },
+    {
+      "supplier_name": "REDACT",
+      "total_spend_gbp": 50399265.96
+    },
+    {
+      "supplier_name": "LANCASHIRE SCHOOLS SPC PHASE 1 LTD",
+      "total_spend_gbp": 43304852.63
+    },
+    {
+      "supplier_name": "GUARDIAN HOMECARE",
+      "total_spend_gbp": 37944980.18
+    },
+    {
+      "supplier_name": "NPOWER COMMERCIAL GAS LTD",
+      "total_spend_gbp": 36170751.37
+    },
+    {
+      "supplier_name": "CGL SERVICES LTD",
+      "total_spend_gbp": 35401867.14
+    },
+    {
+      "supplier_name": "ALTERNATIVE FUTURES GROUP LTD",
+      "total_spend_gbp": 28113694.52
+    },
+    {
+      "supplier_name": "LANCASHIRE SCHOOLS SPC PHASE 2A LTD",
+      "total_spend_gbp": 28008210.54
+    },
+    {
+      "supplier_name": "DISABILITY EQUALITY (NW) LTD",
+      "total_spend_gbp": 24816932.09
+    },
+    {
+      "supplier_name": "BROTHERS OF CHARITY SERVICES",
+      "total_spend_gbp": 23517422.08
+    },
+    {
+      "supplier_name": "HCRG CARE SERVICES LTD",
+      "total_spend_gbp": 22285257.75
+    },
+    {
+      "supplier_name": "LOCAL PENSIONS PARTNERSHIP ADMINISTRATION LTD",
+      "total_spend_gbp": 21797950.61
+    },
+    {
+      "supplier_name": "REED SPECIALIST RECRUITMENT LTD",
+      "total_spend_gbp": 21774434.1
+    },
+    {
+      "supplier_name": "RALPH LIVESEY LTD",
+      "total_spend_gbp": 21107566.21
+    },
+    {
+      "supplier_name": "LANCASHIRE SCHOOLS SPC PHASE 2 LTD",
+      "total_spend_gbp": 19548851.07
+    },
+    {
+      "supplier_name": "LANCASHIRE SCHOOLS SPC PHASE 3 LTD",
+      "total_spend_gbp": 19312799.09
+    },
+    {
+      "supplier_name": "PRESTON CITY COUNCIL",
+      "total_spend_gbp": 18872623.89
+    },
+    {
+      "supplier_name": "HCRG CARE SERVICES LTD (FORMALLY VIRGIN CARE SERVICES)",
+      "total_spend_gbp": 18390858.75
+    },
+    {
+      "supplier_name": "ONE FYLDE LTD",
+      "total_spend_gbp": 18266614.93
+    },
+    {
+      "supplier_name": "DOVEHAVEN CARE HOMES LTD",
+      "total_spend_gbp": 18233543.32
+    },
+    {
+      "supplier_name": "LANCASHIRE WASTE RECYCLING",
+      "total_spend_gbp": 17061692.81
+    }
+  ],
+  "top_departments": [
+    {
+      "department_raw": "OP-Residential Long Term Placements",
+      "total_spend_gbp": 242201984.33
+    },
+    {
+      "department_raw": "Schools Block - Secondary",
+      "total_spend_gbp": 149963475.29
+    },
+    {
+      "department_raw": "Corporate Accounting General (BS)",
+      "total_spend_gbp": 148701131.62
+    },
+    {
+      "department_raw": "LD - APL Supported Living",
+      "total_spend_gbp": 146353008.8
+    },
+    {
+      "department_raw": "Chorley & South Ribble BCF",
+      "total_spend_gbp": 121993660.52
+    },
+    {
+      "department_raw": "OP-Nursing Long Term Placements",
+      "total_spend_gbp": 121827321.11
+    },
+    {
+      "department_raw": "OP-LWH Home Care",
+      "total_spend_gbp": 87901575.7
+    },
+    {
+      "department_raw": "Landfill Whinney Hill",
+      "total_spend_gbp": 72711222.55
+    },
+    {
+      "department_raw": "LD-Direct Payments Direct Cash",
+      "total_spend_gbp": 69749444.04
+    },
+    {
+      "department_raw": "LRL (Old GRLOL PFI)",
+      "total_spend_gbp": 64460748.36
+    },
+    {
+      "department_raw": "PDSI-Direct Payments Direct Cash",
+      "total_spend_gbp": 61741981.87
+    },
+    {
+      "department_raw": "LD-Residential Long Term Placements",
+      "total_spend_gbp": 52866755.09
+    },
+    {
+      "department_raw": "PDSI-LWH Home Care",
+      "total_spend_gbp": 45126146.08
+    },
+    {
+      "department_raw": "BSF Wave 1 Phase 1",
+      "total_spend_gbp": 43111456.31
+    },
+    {
+      "department_raw": "CYP SEN Home To School",
+      "total_spend_gbp": 41629926.59
+    },
+    {
+      "department_raw": "Disabled Facilities Grant 2015/16",
+      "total_spend_gbp": 41480912
+    },
+    {
+      "department_raw": "Health Visiting 0-5",
+      "total_spend_gbp": 36979949.64
+    },
+    {
+      "department_raw": "Lancashire Concessionary Travel Scheme",
+      "total_spend_gbp": 36720430.3
+    },
+    {
+      "department_raw": "Household Support Fund",
+      "total_spend_gbp": 34561952.09
+    },
+    {
+      "department_raw": "Energy Recharge",
+      "total_spend_gbp": 34126736.77
+    },
+    {
+      "department_raw": "Schools Block - Primary",
+      "total_spend_gbp": 30865620.31
+    },
+    {
+      "department_raw": "PVI Providers 3 & 4 yr olds",
+      "total_spend_gbp": 29968677.82
+    },
+    {
+      "department_raw": "OP-Direct Payments Direct Cash",
+      "total_spend_gbp": 29333943.87
+    },
+    {
+      "department_raw": "LD-Domiciliary Care",
+      "total_spend_gbp": 28009456.09
+    },
+    {
+      "department_raw": "BSF Wave 1 Phase 2A",
+      "total_spend_gbp": 27929044.89
+    }
+  ],
+  "top_service_areas": [
+    {
+      "service_area_raw": "Private Contractors & Other Agencies - Other",
+      "total_spend_gbp": 501398827.91
+    },
+    {
+      "service_area_raw": "Residential Care - Independent Sector",
+      "total_spend_gbp": 383750681.37
+    },
+    {
+      "service_area_raw": "Domicilliary Care - Independent Sector",
+      "total_spend_gbp": 244938700.73
+    },
+    {
+      "service_area_raw": "CYP Direct Payments",
+      "total_spend_gbp": 196185451.81
+    },
+    {
+      "service_area_raw": "Schools Block Funding",
+      "total_spend_gbp": 180829095.6
+    },
+    {
+      "service_area_raw": "Nursing Care - Independent Sector",
+      "total_spend_gbp": 153312305.63
+    },
+    {
+      "service_area_raw": "R12 - AP Expense Accrual",
+      "total_spend_gbp": 140620382.89
+    },
+    {
+      "service_area_raw": "Rents - Premises",
+      "total_spend_gbp": 105479396.5
+    },
+    {
+      "service_area_raw": "Other Establishments",
+      "total_spend_gbp": 103124916.36
+    },
+    {
+      "service_area_raw": "Ext, Adapt, Improv, Etc",
+      "total_spend_gbp": 101916714.4
+    },
+    {
+      "service_area_raw": "Health Authority Payments",
+      "total_spend_gbp": 92601900.85
+    },
+    {
+      "service_area_raw": "Professional Services",
+      "total_spend_gbp": 88226759.97
+    },
+    {
+      "service_area_raw": "APL Supported Living 1 to 1 Support",
+      "total_spend_gbp": 74815020.99
+    },
+    {
+      "service_area_raw": "APL Supported Living Background Support",
+      "total_spend_gbp": 69717780.78
+    },
+    {
+      "service_area_raw": "Works Fees (External)",
+      "total_spend_gbp": 67343270.75
+    },
+    {
+      "service_area_raw": "General Fees & Charges",
+      "total_spend_gbp": 60881717.86
+    },
+    {
+      "service_area_raw": "Hire of Transport",
+      "total_spend_gbp": 55836943.46
+    },
+    {
+      "service_area_raw": "SUB-CONTRACT",
+      "total_spend_gbp": 49239896.18
+    },
+    {
+      "service_area_raw": "Operating Costs",
+      "total_spend_gbp": 42645012.61
+    },
+    {
+      "service_area_raw": "Allowances - Fostering General",
+      "total_spend_gbp": 35580884.98
+    },
+    {
+      "service_area_raw": "Electricity",
+      "total_spend_gbp": 29415714.24
+    },
+    {
+      "service_area_raw": "Allowances - RO's/SGO's",
+      "total_spend_gbp": 27226223.33
+    },
+    {
+      "service_area_raw": "Agency Staff",
+      "total_spend_gbp": 26612048.82
+    },
+    {
+      "service_area_raw": "Catering Service (External)",
+      "total_spend_gbp": 23913215.76
+    },
+    {
+      "service_area_raw": "Landfill tax",
+      "total_spend_gbp": 23681664.87
+    }
+  ]
+}

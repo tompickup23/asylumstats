@@ -1,0 +1,106 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadLocalRouteLatest } from "../lib/route-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const comparePlaces = localRouteLatest.defaultCompareCodes
+  .map((code) => localRouteLatest.areas.find((place) => place.areaCode === code))
+  .filter(Boolean);
+const maxSupported = Math.max(...comparePlaces.map((row) => row.supportedAsylum), 1);
+---
+
+<BaseLayout title="Compare | asylumstats">
+  <section class="page-head">
+    <span class="kicker">Compare</span>
+    <h1>Area comparison now starts with the real local route snapshot, not mock counts.</h1>
+    <p>
+      This view now uses the official local-authority snapshot as at 31 December 2025, plus cumulative resettlement
+      history from the local authority resettlement dataset. It still needs richer UI work, but the data layer is no
+      longer illustrative.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Default compare set</h2>
+    <div class="place-grid">
+      {comparePlaces.map((place) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip">{place.regionName}</span>
+            <span class="chip accent">{localRouteLatest.snapshotDate}</span>
+          </div>
+          <h3>{place.areaName}</h3>
+          <p class="metric-value">{place.supportedAsylum.toLocaleString()}</p>
+          <p class="tiny">Supported asylum per 10,000: {place.supportedAsylumRate}</p>
+          <p class="tiny">Homes for Ukraine arrivals: {place.homesForUkraineArrivals.toLocaleString()}</p>
+          <p class="tiny">Afghan programme population: {place.afghanProgrammePopulation.toLocaleString()}</p>
+          <p class="tiny">Contingency accommodation: {place.contingencyAccommodation.toLocaleString()}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Supported asylum snapshot</h2>
+      {comparePlaces.map((place) => (
+        <div class="metric-bar">
+          <div style="min-width: 10rem;">
+            <strong>{place.areaName}</strong>
+            <div class="tiny">{place.supportedAsylum.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(place.supportedAsylum / maxSupported) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Why this view matters</h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Counts and rates together</h3>
+          <p class="lede">Glasgow, Birmingham, and Liverpool dominate by supported-asylum count, while Hillingdon dominates the contingency-accommodation story by rate.</p>
+        </article>
+        <article class="story-card">
+          <h3>Hotels should not be isolated from place data</h3>
+          <p class="lede">Contingency-accommodation counts now sit beside local asylum support, Afghan programme population, and Homes for Ukraine arrivals on the same scaffold.</p>
+        </article>
+        <article class="story-card">
+          <h3>Route filters matter</h3>
+          <p class="lede">The real compare UI should switch cleanly between supported asylum, Afghan stock, Homes for Ukraine arrivals, contingency accommodation, and resettlement history.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Top areas by route metric</h2>
+    <div class="story-grid">
+      {localRouteLatest.topAreasByMetric.map((metric) => (
+        <article class="story-card">
+          <h3>{metric.label}</h3>
+          <div class="table-card" style="margin-top: 0.75rem;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {metric.rows.slice(0, 6).map((row) => (
+                  <tr>
+                    <td>{row.areaName}</td>
+                    <td>{row.value.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

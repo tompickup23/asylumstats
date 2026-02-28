@@ -1,0 +1,1218 @@
+import { createHash } from "node:crypto";
+import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import xlsx from "xlsx";
+
+const rawDir = path.resolve("data/raw/uk_routes");
+const canonicalDir = path.resolve("data/canonical/uk_routes");
+const martsDir = path.resolve("data/marts/uk_routes");
+const liveDir = path.resolve("src/data/live");
+
+const sourceFiles = {
+  localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-dec-2025.ods"),
+  localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-dec-2025.xlsx"),
+  illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx"),
+  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-dec-2025.ods")
+};
+
+const sourceMeta = {
+  localImmigration: {
+    source_id: "local_immigration_groups_dec_2025",
+    source_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+    methodology_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+    release_date: "2026-02-26"
+  },
+  localResettlement: {
+    source_id: "local_resettlement_routes_dec_2025",
+    source_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
+    methodology_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+    release_date: "2026-02-26"
+  },
+  illegalEntry: {
+    source_id: "illegal_entry_routes_dec_2025",
+    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
+    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    release_date: "2026-02-26"
+  },
+  safeLegal: {
+    source_id: "safe_legal_routes_summary_dec_2025",
+    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
+    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    release_date: "2026-02-26"
+  }
+};
+
+function ensureCleanDir(directory) {
+  rmSync(directory, { recursive: true, force: true });
+  mkdirSync(directory, { recursive: true });
+}
+
+function writeJson(filePath, value) {
+  writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+function writeNdjson(filePath, rows) {
+  writeFileSync(filePath, `${rows.map((row) => JSON.stringify(row)).join("\n")}\n`);
+}
+
+function hashId(parts) {
+  return createHash("sha1").update(parts.join("|")).digest("hex").slice(0, 16);
+}
+
+function fileSha256(filePath) {
+  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
+}
+
+function readSheetRows(filePath, sheetName) {
+  const workbook = xlsx.readFile(filePath, { raw: false });
+  return xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], {
+    header: 1,
+    raw: false,
+    defval: ""
+  });
+}
+
+function rowObjects(filePath, sheetName, headerRowIndex = 1) {
+  const workbook = xlsx.readFile(filePath, { raw: false });
+  return xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], {
+    range: headerRowIndex,
+    raw: false,
+    defval: ""
+  });
+}
+
+function roundNumber(value, digits = 2) {
+  return Number(value.toFixed(digits));
+}
+
+function parseNumber(value) {
+  const text = String(value ?? "").trim();
+  if (!text || text === "-" || text === ":" || text.toLowerCase() === "z" || text === "N/A") {
+    return null;
+  }
+
+  const normalized = text.replace(/,/g, "").replace(/%/g, "").replace(/\+/g, "").trim();
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function safeNumber(value) {
+  return parseNumber(value) ?? 0;
+}
+
+function slugify(value) {
+  return String(value)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function endOfQuarter(quarterLabel) {
+  const match = /^(\d{4}) Q([1-4])$/.exec(String(quarterLabel).trim());
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const quarter = Number(match[2]);
+  const month = quarter * 3;
+  const date = new Date(Date.UTC(year, month, 0));
+  return date.toISOString().slice(0, 10);
+}
+
+function startOfQuarter(quarterLabel) {
+  const match = /^(\d{4}) Q([1-4])$/.exec(String(quarterLabel).trim());
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const quarter = Number(match[2]);
+  const month = (quarter - 1) * 3;
+  const date = new Date(Date.UTC(year, month, 1));
+  return date.toISOString().slice(0, 10);
+}
+
+function endOfYear(yearLabel) {
+  const year = Number(String(yearLabel).trim().slice(0, 4));
+  return Number.isFinite(year) ? `${year}-12-31` : null;
+}
+
+function startOfYear(yearLabel) {
+  const year = Number(String(yearLabel).trim().slice(0, 4));
+  return Number.isFinite(year) ? `${year}-01-01` : null;
+}
+
+function inferCountryFromRow(regionOrNation, areaCode = "") {
+  if (String(regionOrNation).includes("Scotland") || String(areaCode).startsWith("S")) {
+    return "Scotland";
+  }
+
+  if (String(regionOrNation).includes("Wales") || String(areaCode).startsWith("W")) {
+    return "Wales";
+  }
+
+  if (String(regionOrNation).includes("Northern Ireland") || String(areaCode).startsWith("N")) {
+    return "Northern Ireland";
+  }
+
+  if (String(regionOrNation).includes("United Kingdom")) {
+    return "United Kingdom";
+  }
+
+  return "England";
+}
+
+function inferAreaType(areaCode, areaName) {
+  if (areaCode === "UK") {
+    return "country";
+  }
+
+  if (/^region_/.test(areaCode)) {
+    return "region";
+  }
+
+  if (/^country_/.test(areaCode)) {
+    return "country";
+  }
+
+  if (areaName.includes("United Kingdom")) {
+    return "country";
+  }
+
+  return "local_authority";
+}
+
+function areaCodeForRegionalRow(location) {
+  if (location === "United Kingdom - total") {
+    return "UK";
+  }
+
+  if (/England - /.test(location) && !location.endsWith("total")) {
+    return `region_${slugify(location.replace("England - ", ""))}`;
+  }
+
+  if (location.endsWith("- total")) {
+    return `country_${slugify(location.replace(" - total", ""))}`;
+  }
+
+  return `special_${slugify(location)}`;
+}
+
+function classifyResettlementFamily(scheme) {
+  if (/Afghan|ACRS|ARAP|ARR/.test(scheme)) {
+    return "afghan_resettlement_programme";
+  }
+
+  if (/UK Resettlement Scheme|Mandate Scheme|Vulnerable Children|Vulnerable Persons|Gateway/.test(scheme)) {
+    return "uk_resettlement_scheme";
+  }
+
+  return "resettled_refugees_arrivals";
+}
+
+function topAreas(areas, key, label, limit = 10) {
+  return {
+    metricId: key,
+    label,
+    rows: [...areas]
+      .filter((row) => typeof row[key] === "number" && row[key] > 0)
+      .sort((a, b) => b[key] - a[key])
+      .slice(0, limit)
+      .map((row) => ({
+        areaCode: row.areaCode,
+        areaName: row.areaName,
+        regionName: row.regionName,
+        value: row[key]
+      }))
+  };
+}
+
+function unitForMetric(metricId) {
+  if (metricId.endsWith("_rate")) {
+    return "rate_per_10000";
+  }
+
+  if (metricId.includes("_share_") || metricId.endsWith("_share")) {
+    return "percentage";
+  }
+
+  return "people";
+}
+
+function makeObservation({
+  metricId,
+  sourceMetaEntry,
+  areaCode,
+  areaName,
+  areaType,
+  countryName,
+  regionCode = null,
+  periodStart,
+  periodEnd,
+  periodType,
+  value,
+  notes = null,
+  fileHash
+}) {
+  return {
+    observation_id: `obs_${hashId([metricId, sourceMetaEntry.source_id, areaCode, periodEnd, String(value)])}`,
+    metric_id: metricId,
+    source_id: sourceMetaEntry.source_id,
+    area_code_original: areaCode,
+    area_code_current: areaCode,
+    area_name_original: areaName,
+    area_type: areaType,
+    country_code: countryName ? slugify(countryName) : null,
+    region_code: regionCode,
+    period_start: periodStart,
+    period_end: periodEnd,
+    period_type: periodType,
+    release_date: sourceMetaEntry.release_date,
+    value,
+    unit: unitForMetric(metricId),
+    status: "official",
+    series_status: null,
+    source_url: sourceMetaEntry.source_url,
+    archive_source_url: null,
+    file_hash: fileHash,
+    methodology_url: sourceMetaEntry.methodology_url,
+    notes
+  };
+}
+
+function extractYearSeries(rows, headerRowIndex) {
+  const header = rows[headerRowIndex] || [];
+  const endIndex = header.findIndex((cell) => String(cell).includes("Change in the latest year"));
+  const periods = header
+    .slice(1, endIndex === -1 ? header.length : endIndex)
+    .map((value) => String(value).trim())
+    .filter(Boolean);
+  const series = new Map();
+
+  for (const row of rows.slice(headerRowIndex + 1)) {
+    const label = String(row[0] || "").trim();
+    if (!label) {
+      continue;
+    }
+
+    series.set(
+      label,
+      periods.map((period, index) => ({
+        periodLabel: period,
+        periodEnd: endOfYear(period),
+        value: parseNumber(row[index + 1])
+      }))
+    );
+  }
+
+  return series;
+}
+
+function combineSeries(seriesList) {
+  const byPeriod = new Map();
+
+  for (const series of seriesList) {
+    for (const point of series || []) {
+      if (!point?.periodLabel || point.value === null) {
+        continue;
+      }
+
+      const current = byPeriod.get(point.periodLabel) || {
+        periodLabel: point.periodLabel,
+        periodEnd: point.periodEnd,
+        value: 0
+      };
+      current.value += point.value;
+      byPeriod.set(point.periodLabel, current);
+    }
+  }
+
+  return [...byPeriod.values()].sort((a, b) => a.periodLabel.localeCompare(b.periodLabel));
+}
+
+ensureCleanDir(canonicalDir);
+ensureCleanDir(martsDir);
+
+const localImmigrationHash = fileSha256(sourceFiles.localImmigration);
+const localResettlementHash = fileSha256(sourceFiles.localResettlement);
+const illegalEntryHash = fileSha256(sourceFiles.illegalEntry);
+const safeLegalHash = fileSha256(sourceFiles.safeLegal);
+
+const localImmigrationRows = readSheetRows(sourceFiles.localImmigration, "Reg_02");
+const localImmigrationRegionalRows = readSheetRows(sourceFiles.localImmigration, "Reg_01");
+const localResettlementRows = rowObjects(sourceFiles.localResettlement, "Data_Res_D01", 1);
+const illegalEntryRows = rowObjects(sourceFiles.illegalEntry, "Data_IER_D01", 1);
+const illegalBoatClaimRows = rowObjects(sourceFiles.illegalEntry, "Data_IER_D02", 1);
+const illegalBoatDecisionRows = rowObjects(sourceFiles.illegalEntry, "Data_IER_D03", 1);
+const safeLegalHumRows = readSheetRows(sourceFiles.safeLegal, "Hum_01");
+const safeLegalResRows = readSheetRows(sourceFiles.safeLegal, "Res_01");
+const safeLegalCommunityRows = readSheetRows(sourceFiles.safeLegal, "Res_02");
+const safeLegalFamRows = readSheetRows(sourceFiles.safeLegal, "Fam_01");
+const safeLegalUkrRows = readSheetRows(sourceFiles.safeLegal, "Ukr_01");
+
+const observationRows = [];
+
+const localAreas = localImmigrationRows
+  .slice(2)
+  .filter((row) => row[0] && row[2] && row[15] && row[15] !== "-")
+  .map((row) => {
+    const area = {
+      areaCode: String(row[2]).trim(),
+      areaName: String(row[0]).trim(),
+      regionName: String(row[1]).trim(),
+      countryName: inferCountryFromRow(row[1], row[2]),
+      population: safeNumber(row[15]),
+      homesForUkraineArrivals: safeNumber(row[3]),
+      afghanProgrammePopulation: safeNumber(row[4]),
+      afghanProgrammeTransitional: safeNumber(row[5]),
+      afghanProgrammeLaHousing: safeNumber(row[6]),
+      afghanProgrammePrsHousing: safeNumber(row[7]),
+      supportedAsylum: safeNumber(row[8]),
+      initialAccommodation: safeNumber(row[9]),
+      dispersalAccommodation: safeNumber(row[10]),
+      contingencyAccommodation: safeNumber(row[11]),
+      otherAccommodation: safeNumber(row[12]),
+      subsistenceOnly: safeNumber(row[13]),
+      allThreePathwaysTotal: safeNumber(row[14]),
+      shareOfPopulationPct: parseNumber(row[16]),
+      snapshotDate: "2025-12-31"
+    };
+
+    area.homesForUkraineRate = area.population
+      ? roundNumber((area.homesForUkraineArrivals / area.population) * 10000, 2)
+      : null;
+    area.afghanProgrammeRate = area.population
+      ? roundNumber((area.afghanProgrammePopulation / area.population) * 10000, 2)
+      : null;
+    area.supportedAsylumRate = area.population
+      ? roundNumber((area.supportedAsylum / area.population) * 10000, 2)
+      : null;
+    area.contingencyAccommodationRate = area.population
+      ? roundNumber((area.contingencyAccommodation / area.population) * 10000, 2)
+      : null;
+
+    observationRows.push(
+      makeObservation({
+        metricId: "hfu_arrivals",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.homesForUkraineArrivals,
+        notes: "Snapshot of arrivals as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "hfu_arrivals_rate",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.homesForUkraineRate ?? 0,
+        notes: "Derived from arrivals and local population.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "afghan_resettlement_programme_population",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.afghanProgrammePopulation,
+        notes: "Population snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "afghan_resettlement_programme_population_rate",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.afghanProgrammeRate ?? 0,
+        notes: "Derived from Afghan Resettlement Programme population and local population.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "asylum_supported_people",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.supportedAsylum,
+        notes: "Population snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "asylum_supported_people_rate",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.supportedAsylumRate ?? 0,
+        notes: "Derived from supported asylum count and local population.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "asylum_contingency_accommodation_people",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: area.areaCode,
+        areaName: area.areaName,
+        areaType: "local_authority",
+        countryName: area.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: area.snapshotDate,
+        periodType: "year",
+        value: area.contingencyAccommodation,
+        notes: "Contingency accommodation snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      })
+    );
+
+    return area;
+  });
+
+const regionalRows = localImmigrationRegionalRows
+  .slice(2)
+  .filter((row) => row[0])
+  .map((row) => {
+    const areaCode = areaCodeForRegionalRow(String(row[0]).trim());
+    const areaName = String(row[0]).trim();
+    const countryName = inferCountryFromRow(areaName);
+
+    const record = {
+      areaCode,
+      areaName,
+      areaType: inferAreaType(areaCode, areaName),
+      countryName,
+      homesForUkraineArrivals: safeNumber(row[1]),
+      afghanProgrammePopulation: safeNumber(row[2]),
+      supportedAsylum: safeNumber(row[6]),
+      contingencyAccommodation: safeNumber(row[9]),
+      allThreePathwaysTotal: safeNumber(row[12]),
+      population: safeNumber(row[13]),
+      percentageOfPopulation: parseNumber(row[14]),
+      snapshotDate: "2025-12-31"
+    };
+
+    observationRows.push(
+      makeObservation({
+        metricId: "hfu_arrivals",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: record.areaCode,
+        areaName: record.areaName,
+        areaType: record.areaType,
+        countryName: record.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: record.snapshotDate,
+        periodType: "year",
+        value: record.homesForUkraineArrivals,
+        notes: "Regional or country snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "afghan_resettlement_programme_population",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: record.areaCode,
+        areaName: record.areaName,
+        areaType: record.areaType,
+        countryName: record.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: record.snapshotDate,
+        periodType: "year",
+        value: record.afghanProgrammePopulation,
+        notes: "Regional or country snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "asylum_supported_people",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: record.areaCode,
+        areaName: record.areaName,
+        areaType: record.areaType,
+        countryName: record.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: record.snapshotDate,
+        periodType: "year",
+        value: record.supportedAsylum,
+        notes: "Regional or country snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      }),
+      makeObservation({
+        metricId: "asylum_contingency_accommodation_people",
+        sourceMetaEntry: sourceMeta.localImmigration,
+        areaCode: record.areaCode,
+        areaName: record.areaName,
+        areaType: record.areaType,
+        countryName: record.countryName,
+        periodStart: "2025-01-01",
+        periodEnd: record.snapshotDate,
+        periodType: "year",
+        value: record.contingencyAccommodation,
+        notes: "Regional or country snapshot as at 31 December 2025.",
+        fileHash: localImmigrationHash
+      })
+    );
+
+    return record;
+  });
+
+const resettlementSeriesByArea = new Map();
+
+for (const row of localResettlementRows) {
+  const areaCode = String(row["LAD Code"] || "").trim();
+  const areaName = String(row["Local Authority"] || "").trim();
+  const scheme = String(row["Resettlement Scheme"] || "").trim();
+  const quarter = String(row["Quarter"] || "").trim();
+  const persons = parseNumber(row["Persons"]);
+
+  if (!areaCode || !areaName || !scheme || !quarter || persons === null) {
+    continue;
+  }
+
+  const routeFamily = classifyResettlementFamily(scheme);
+  const communitySponsorship = String(row["Community Sponsorship"] || "").trim();
+  const key = `${areaCode}|${quarter}`;
+  const seriesRow = resettlementSeriesByArea.get(key) || {
+    areaCode,
+    areaName,
+    regionName: String(row["UK Region"] || "").trim(),
+    countryName: inferCountryFromRow(row["UK Region"], areaCode),
+    quarter,
+    periodStart: startOfQuarter(quarter),
+    periodEnd: endOfQuarter(quarter),
+    resettled_refugees_arrivals: 0,
+    afghan_resettlement_programme_arrivals: 0,
+    uk_resettlement_scheme_arrivals: 0,
+    community_sponsorship_arrivals: 0
+  };
+
+  seriesRow.resettled_refugees_arrivals += persons;
+
+  if (routeFamily === "afghan_resettlement_programme") {
+    seriesRow.afghan_resettlement_programme_arrivals += persons;
+  }
+
+  if (routeFamily === "uk_resettlement_scheme") {
+    seriesRow.uk_resettlement_scheme_arrivals += persons;
+  }
+
+  if (communitySponsorship !== "N/A") {
+    seriesRow.community_sponsorship_arrivals += persons;
+  }
+
+  resettlementSeriesByArea.set(key, seriesRow);
+}
+
+const resettlementObservations = [];
+
+for (const row of [...resettlementSeriesByArea.values()]) {
+  for (const metricId of [
+    "resettled_refugees_arrivals",
+    "afghan_resettlement_programme_arrivals",
+    "uk_resettlement_scheme_arrivals",
+    "community_sponsorship_arrivals"
+  ]) {
+    resettlementObservations.push(
+      makeObservation({
+        metricId,
+        sourceMetaEntry: sourceMeta.localResettlement,
+        areaCode: row.areaCode,
+        areaName: row.areaName,
+        areaType: "local_authority",
+        countryName: row.countryName,
+        periodStart: row.periodStart,
+        periodEnd: row.periodEnd,
+        periodType: "quarter",
+        value: row[metricId],
+        notes: `Quarterly arrivals aggregated from ${row.quarter}.`,
+        fileHash: localResettlementHash
+      })
+    );
+  }
+}
+
+observationRows.push(...resettlementObservations);
+
+const illegalEntryByYearMethod = new Map();
+
+for (const row of illegalEntryRows) {
+  const year = String(row.Year || "").trim();
+  const method = String(row["Method of entry"] || "").trim();
+  const value = parseNumber(row["Number of detections"]);
+  if (!year || !method || value === null) {
+    continue;
+  }
+
+  const key = `${year}|${method}`;
+  illegalEntryByYearMethod.set(key, (illegalEntryByYearMethod.get(key) || 0) + value);
+}
+
+const illegalEntryTotalsByYear = new Map();
+const smallBoatArrivalsSeries = [];
+
+for (const [key, value] of [...illegalEntryByYearMethod.entries()].sort()) {
+  const [year, method] = key.split("|");
+  illegalEntryTotalsByYear.set(year, (illegalEntryTotalsByYear.get(year) || 0) + value);
+
+  if (method === "Small boat arrivals") {
+    smallBoatArrivalsSeries.push({
+      periodLabel: year,
+      periodEnd: endOfYear(year),
+      value
+    });
+
+    observationRows.push(
+      makeObservation({
+        metricId: "small_boat_arrivals",
+        sourceMetaEntry: sourceMeta.illegalEntry,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: startOfYear(year),
+        periodEnd: endOfYear(year),
+        periodType: "year",
+        value,
+        notes: "Detected arrivals via small boat.",
+        fileHash: illegalEntryHash
+      })
+    );
+  }
+}
+
+for (const [year, value] of [...illegalEntryTotalsByYear.entries()].sort()) {
+  observationRows.push(
+    makeObservation({
+      metricId: "illegal_entry_route_arrivals",
+      sourceMetaEntry: sourceMeta.illegalEntry,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: startOfYear(year),
+      periodEnd: endOfYear(year),
+      periodType: "year",
+      value,
+      notes: "Detected arrivals across all recorded illegal entry routes.",
+      fileHash: illegalEntryHash
+    })
+  );
+
+  const smallBoatValue =
+    smallBoatArrivalsSeries.find((point) => point.periodLabel === year)?.value ?? 0;
+  const share = value ? roundNumber((smallBoatValue / value) * 100, 1) : 0;
+
+  observationRows.push(
+    makeObservation({
+      metricId: "small_boat_arrivals_share_illegal_routes",
+      sourceMetaEntry: sourceMeta.illegalEntry,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: startOfYear(year),
+      periodEnd: endOfYear(year),
+      periodType: "year",
+      value: share,
+      notes: "Derived share of illegal entry route detections arriving by small boat.",
+      fileHash: illegalEntryHash
+    })
+  );
+}
+
+const smallBoatAsylumClaimsByYear = new Map();
+
+for (const row of illegalBoatClaimRows) {
+  const year = String(row.Year || "").trim();
+  const claimStatus = String(row["Asylum claim"] || "").trim();
+  const value = parseNumber(row.Arrivals);
+  if (!year || !claimStatus || value === null) {
+    continue;
+  }
+
+  if (claimStatus === "Asylum claim raised") {
+    smallBoatAsylumClaimsByYear.set(year, (smallBoatAsylumClaimsByYear.get(year) || 0) + value);
+  }
+}
+
+for (const [year, value] of [...smallBoatAsylumClaimsByYear.entries()].sort()) {
+  observationRows.push(
+    makeObservation({
+      metricId: "small_boat_asylum_claims",
+      sourceMetaEntry: sourceMeta.illegalEntry,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: startOfYear(year),
+      periodEnd: endOfYear(year),
+      periodType: "year",
+      value,
+      notes: "Asylum claims raised by arrival date for people arriving by small boat.",
+      fileHash: illegalEntryHash
+    })
+  );
+}
+
+const smallBoatOutcomesByYear = new Map();
+
+for (const row of illegalBoatDecisionRows) {
+  const year = String(row.Year || "").trim();
+  const outcomeGroup = String(row["Asylum Case Outcome Group"] || "").trim();
+  const value = parseNumber(row.Outcomes);
+  if (!year || !outcomeGroup || value === null) {
+    continue;
+  }
+
+  const key = `${year}|${outcomeGroup}`;
+  smallBoatOutcomesByYear.set(key, (smallBoatOutcomesByYear.get(key) || 0) + value);
+}
+
+const latestSmallBoatOutcomeYear = [...new Set([...smallBoatOutcomesByYear.keys()].map((key) => key.split("|")[0]))]
+  .sort()
+  .at(-1);
+
+const smallBoatDecisionGroupsLatestYear = [...smallBoatOutcomesByYear.entries()]
+  .filter(([key]) => key.startsWith(`${latestSmallBoatOutcomeYear}|`))
+  .map(([key, value]) => ({
+    outcomeGroup: key.split("|")[1],
+    value
+  }))
+  .sort((a, b) => b.value - a.value);
+
+const humSeries = extractYearSeries(safeLegalHumRows, 8);
+const resSeries = extractYearSeries(safeLegalResRows, 5);
+const communitySeries = extractYearSeries(safeLegalCommunityRows, 5);
+const famSeries = extractYearSeries(safeLegalFamRows, 4);
+const ukrSeries = extractYearSeries(safeLegalUkrRows, 6);
+
+const totalResettledSeries = (resSeries.get("Total Resettled") || []).filter((point) => point.value !== null);
+const ukResettlementFamilySeries = combineSeries([
+  resSeries.get("UK Resettlement Scheme"),
+  resSeries.get("Mandate Scheme"),
+  resSeries.get("Vulnerable Children's Resettlement Scheme"),
+  resSeries.get("Vulnerable Persons Resettlement Scheme"),
+  resSeries.get("Gateway Protection Programme")
+]);
+const communitySponsorshipYearlySeries = (communitySeries.get("Total Community Sponsorship arrivals") || [])
+  .filter((point) => /^\d{4}$/.test(point.periodLabel) && point.value !== null);
+const communitySponsorshipCumulative =
+  (communitySeries.get("Total Community Sponsorship arrivals") || []).find(
+    (point) => point.periodLabel === "2014 - 2025"
+  )?.value ?? null;
+
+const routeSeries = [
+  {
+    id: "safe_legal_total",
+    label: "Safe and legal (humanitarian) grants",
+    group: "Humanitarian routes",
+    schemeStatus: "Mixed route family",
+    localBreakdown: "No single local authority split",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: "Includes refugee resettlement, refugee family reunion, Ukraine, and BN(O) routes. Do not present as a refugee total.",
+    series: (humSeries.get("Total") || []).filter((point) => point.value !== null)
+  },
+  {
+    id: "small_boats",
+    label: "Small boat arrivals",
+    group: "Irregular asylum route",
+    schemeStatus: "Not a refugee scheme",
+    localBreakdown: "No standard local authority split",
+    sourceUrl: sourceMeta.illegalEntry.source_url,
+    note: "Detected arrivals via small boat across the UK.",
+    series: smallBoatArrivalsSeries
+  },
+  {
+    id: "asylum_support",
+    label: "Supported asylum population",
+    group: "Asylum support system",
+    schemeStatus: "Not a refugee scheme",
+    localBreakdown: "Latest local authority snapshot available",
+    sourceUrl: sourceMeta.localImmigration.source_url,
+    note: "Published as a local authority snapshot rather than a long national time series in this build.",
+    series: regionalRows
+      .filter((row) => row.areaCode === "UK")
+      .map((row) => ({
+        periodLabel: "2025-12-31",
+        periodEnd: row.snapshotDate,
+        value: row.supportedAsylum
+      }))
+  },
+  {
+    id: "afghan_resettlement_programme",
+    label: "Afghan Resettlement Programme arrivals",
+    group: "Refugee resettlement and relocation",
+    schemeStatus: "Scheme family",
+    localBreakdown: "Latest local population snapshot and local quarterly arrivals available",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: "National yearly arrivals from summary tables; local stock from immigration group tables; quarterly local arrival history from resettlement tables.",
+    series: (resSeries.get("Afghan Resettlement Programme") || []).filter((point) => point.value !== null)
+  },
+  {
+    id: "uk_resettlement_scheme",
+    label: "UK Resettlement Scheme and predecessor schemes",
+    group: "Refugee resettlement",
+    schemeStatus: "Scheme family",
+    localBreakdown: "Quarterly local authority arrivals available",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: "This build groups UKRS, Mandate, VPRS, VCRS, and Gateway to avoid pretending the current local stock table publishes them separately.",
+    series: ukResettlementFamilySeries
+  },
+  {
+    id: "community_sponsorship",
+    label: "Community Sponsorship arrivals",
+    group: "Refugee resettlement support model",
+    schemeStatus: "Scheme support channel",
+    localBreakdown: "Quarterly local authority arrivals available",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: `Separate from core resettlement totals because this is a sponsorship mechanism rather than a separate national asylum route.${communitySponsorshipCumulative ? ` Cumulative total since 2014: ${communitySponsorshipCumulative.toLocaleString()}.` : ""}`,
+    series: communitySponsorshipYearlySeries
+  },
+  {
+    id: "refugee_family_reunion",
+    label: "Refugee Family Reunion grants",
+    group: "Protection-linked family route",
+    schemeStatus: "Not a refugee resettlement scheme",
+    localBreakdown: "No local authority split",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: "Family route connected to existing protection status in the UK.",
+    series: (famSeries.get("Total grants") || []).filter((point) => point.value !== null)
+  },
+  {
+    id: "homes_for_ukraine",
+    label: "Ukraine arrivals",
+    group: "Humanitarian route",
+    schemeStatus: "Not a refugee resettlement scheme",
+    localBreakdown: "Latest local authority arrivals snapshot available",
+    sourceUrl: sourceMeta.safeLegal.source_url,
+    note: "Use arrivals rather than grants when comparing to local authority placement counts.",
+    series: (ukrSeries.get("Total arrivals") || []).filter((point) => point.value !== null)
+  }
+];
+
+for (const route of routeSeries) {
+  const metricIdMap = {
+    small_boats: "small_boat_arrivals",
+    asylum_support: "asylum_supported_people",
+    afghan_resettlement_programme: "afghan_resettlement_programme_arrivals",
+    uk_resettlement_scheme: "resettled_refugees_arrivals",
+    community_sponsorship: "community_sponsorship_arrivals",
+    refugee_family_reunion: "refugee_family_reunion_visas",
+    homes_for_ukraine: "hfu_arrivals"
+  };
+
+  const metricId = metricIdMap[route.id];
+  if (!metricId) {
+    continue;
+  }
+
+  for (const point of route.series) {
+    observationRows.push(
+      makeObservation({
+        metricId,
+        sourceMetaEntry: route.id === "small_boats" ? sourceMeta.illegalEntry : sourceMeta.safeLegal,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: startOfYear(point.periodLabel),
+        periodEnd: point.periodEnd,
+        periodType: "year",
+        value: point.value,
+        notes: `${route.label} national series.`,
+        fileHash: route.id === "small_boats" ? illegalEntryHash : safeLegalHash
+      })
+    );
+  }
+}
+
+const resettlementSummaryByArea = new Map();
+let latestResettlementQuarterLabel = null;
+
+for (const row of [...resettlementSeriesByArea.values()]) {
+  latestResettlementQuarterLabel =
+    !latestResettlementQuarterLabel || row.quarter > latestResettlementQuarterLabel
+      ? row.quarter
+      : latestResettlementQuarterLabel;
+
+  const current = resettlementSummaryByArea.get(row.areaCode) || {
+    areaCode: row.areaCode,
+    areaName: row.areaName,
+    regionName: row.regionName,
+    countryName: row.countryName,
+    resettlementCumulativeTotal: 0,
+    afghanResettlementCumulative: 0,
+    ukResettlementFamilyCumulative: 0,
+    communitySponsorshipCumulative: 0,
+    resettlementLatestYearTotal: 0,
+    latestResettlementQuarterLabel: row.quarter,
+    latestResettlementQuarterValue: 0
+  };
+
+  current.resettlementCumulativeTotal += row.resettled_refugees_arrivals;
+  current.afghanResettlementCumulative += row.afghan_resettlement_programme_arrivals;
+  current.ukResettlementFamilyCumulative += row.uk_resettlement_scheme_arrivals;
+  current.communitySponsorshipCumulative += row.community_sponsorship_arrivals;
+
+  if (row.quarter.startsWith("2025")) {
+    current.resettlementLatestYearTotal += row.resettled_refugees_arrivals;
+  }
+
+  if (row.quarter >= current.latestResettlementQuarterLabel) {
+    current.latestResettlementQuarterLabel = row.quarter;
+    current.latestResettlementQuarterValue = row.resettled_refugees_arrivals;
+  }
+
+  resettlementSummaryByArea.set(row.areaCode, current);
+}
+
+const localAreaSummaries = localAreas
+  .map((area) => {
+    const resettlement = resettlementSummaryByArea.get(area.areaCode) || {
+      resettlementCumulativeTotal: 0,
+      afghanResettlementCumulative: 0,
+      ukResettlementFamilyCumulative: 0,
+      communitySponsorshipCumulative: 0,
+      resettlementLatestYearTotal: 0,
+      latestResettlementQuarterLabel: latestResettlementQuarterLabel || "2025 Q4",
+      latestResettlementQuarterValue: 0
+    };
+
+    return {
+      ...area,
+      ...resettlement
+    };
+  })
+  .sort((a, b) => b.supportedAsylum - a.supportedAsylum);
+
+const topAreasByMetric = [
+  topAreas(localAreaSummaries, "supportedAsylum", "Supported asylum population"),
+  topAreas(localAreaSummaries, "supportedAsylumRate", "Supported asylum rate per 10,000"),
+  topAreas(localAreaSummaries, "contingencyAccommodation", "Contingency accommodation population"),
+  topAreas(localAreaSummaries, "homesForUkraineArrivals", "Homes for Ukraine arrivals"),
+  topAreas(localAreaSummaries, "afghanProgrammePopulation", "Afghan Resettlement Programme population"),
+  topAreas(localAreaSummaries, "resettlementCumulativeTotal", "Cumulative resettlement arrivals since 2014")
+];
+
+const defaultCompareCodes = localAreaSummaries.slice(0, 4).map((row) => row.areaCode);
+
+const latestSmallBoatShare =
+  observationRows
+    .filter((row) => row.metric_id === "small_boat_arrivals_share_illegal_routes")
+    .sort((a, b) => a.period_end.localeCompare(b.period_end))
+    .at(-1)?.value ?? 0;
+
+const nationalCards = [
+  {
+    id: "small_boat_arrivals",
+    label: "Small boat arrivals",
+    value: smallBoatArrivalsSeries.at(-1)?.value ?? 0,
+    period: smallBoatArrivalsSeries.at(-1)?.periodLabel ?? "Latest year",
+    detail: "Detected arrivals via small boat across the UK.",
+    sourceUrl: sourceMeta.illegalEntry.source_url
+  },
+  {
+    id: "small_boat_share",
+    label: "Small boat share of illegal entry routes",
+    value: latestSmallBoatShare,
+    period: smallBoatArrivalsSeries.at(-1)?.periodLabel ?? "Latest year",
+    detail: "Derived from the illegal entry routes dataset.",
+    sourceUrl: sourceMeta.illegalEntry.source_url,
+    valueSuffix: "%"
+  },
+  {
+    id: "supported_asylum",
+    label: "Supported asylum population",
+    value: regionalRows.find((row) => row.areaCode === "UK")?.supportedAsylum ?? 0,
+    period: "As at 2025-12-31",
+    detail: "Latest official UK stock snapshot from the immigration groups table.",
+    sourceUrl: sourceMeta.localImmigration.source_url
+  },
+  {
+    id: "contingency_accommodation",
+    label: "Contingency accommodation population",
+    value: regionalRows.find((row) => row.areaCode === "UK")?.contingencyAccommodation ?? 0,
+    period: "As at 2025-12-31",
+    detail: "Proxy for the most visible temporary accommodation pressure.",
+    sourceUrl: sourceMeta.localImmigration.source_url
+  },
+  {
+    id: "afghan_arrivals",
+    label: "Afghan Resettlement Programme arrivals",
+    value: routeSeries.find((row) => row.id === "afghan_resettlement_programme")?.series.at(-1)?.value ?? 0,
+    period: routeSeries.find((row) => row.id === "afghan_resettlement_programme")?.series.at(-1)?.periodLabel ?? "Latest year",
+    detail: "National yearly arrivals through Afghan resettlement and relocation pathways.",
+    sourceUrl: sourceMeta.safeLegal.source_url
+  },
+  {
+    id: "resettled_total",
+    label: "Total resettled arrivals",
+    value: totalResettledSeries.at(-1)?.value ?? 0,
+    period: totalResettledSeries.at(-1)?.periodLabel ?? "Latest year",
+    detail: "Separate from the UKRS-family line because the total includes Afghan arrivals.",
+    sourceUrl: sourceMeta.safeLegal.source_url
+  },
+  {
+    id: "ukraine_arrivals",
+    label: "Ukraine arrivals",
+    value: routeSeries.find((row) => row.id === "homes_for_ukraine")?.series.at(-1)?.value ?? 0,
+    period: routeSeries.find((row) => row.id === "homes_for_ukraine")?.series.at(-1)?.periodLabel ?? "Latest year",
+    detail: "Do not mix this humanitarian route into refugee resettlement totals.",
+    sourceUrl: sourceMeta.safeLegal.source_url
+  },
+  {
+    id: "family_reunion",
+    label: "Refugee Family Reunion grants",
+    value: routeSeries.find((row) => row.id === "refugee_family_reunion")?.series.at(-1)?.value ?? 0,
+    period: routeSeries.find((row) => row.id === "refugee_family_reunion")?.series.at(-1)?.periodLabel ?? "Latest year",
+    detail: "Protection-linked family route, not a resettlement scheme.",
+    sourceUrl: sourceMeta.safeLegal.source_url
+  }
+];
+
+const routeDashboard = {
+  generatedAt: new Date().toISOString(),
+  localSnapshotDate: "2025-12-31",
+  routeFamilies: routeSeries.map((route) => ({
+    ...route,
+    latestValue: route.series.at(-1)?.value ?? 0,
+    latestPeriod: route.series.at(-1)?.periodLabel ?? route.series.at(-1)?.periodEnd ?? "Latest",
+    firstPeriod: route.series[0]?.periodLabel ?? null
+  })),
+  nationalCards,
+  illegalEntryMethodsLatestYear: [...illegalEntryByYearMethod.entries()]
+    .filter(([key]) => key.startsWith(`${smallBoatArrivalsSeries.at(-1)?.periodLabel}|`))
+    .map(([key, value]) => ({
+      method: key.split("|")[1],
+      value
+    }))
+    .sort((a, b) => b.value - a.value),
+  smallBoatDecisionGroupsLatestYear: {
+    year: latestSmallBoatOutcomeYear,
+    rows: smallBoatDecisionGroupsLatestYear
+  },
+  topAreasByMetric,
+  limitations: [
+    "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
+    "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "Homes for Ukraine, refugee family reunion, and Afghan resettlement should be compared with clear labels because they are not the same kind of route or scheme."
+  ],
+  sources: [
+    sourceMeta.localImmigration,
+    sourceMeta.localResettlement,
+    sourceMeta.illegalEntry,
+    sourceMeta.safeLegal
+  ]
+};
+
+const localRouteLatest = {
+  generatedAt: new Date().toISOString(),
+  snapshotDate: "2025-12-31",
+  defaultCompareCodes,
+  areas: localAreaSummaries,
+  topAreasByMetric,
+  routeMetricFamilies: [
+    {
+      id: "supportedAsylum",
+      label: "Supported asylum population",
+      unit: "people",
+      description: "Latest official local authority stock of asylum seekers receiving support."
+    },
+    {
+      id: "homesForUkraineArrivals",
+      label: "Homes for Ukraine arrivals",
+      unit: "people",
+      description: "Latest published local authority arrivals count."
+    },
+    {
+      id: "afghanProgrammePopulation",
+      label: "Afghan Resettlement Programme population",
+      unit: "people",
+      description: "Latest published local authority stock for the Afghan programme."
+    },
+    {
+      id: "contingencyAccommodation",
+      label: "Contingency accommodation population",
+      unit: "people",
+      description: "Latest published local authority contingency-accommodation stock."
+    },
+    {
+      id: "resettlementCumulativeTotal",
+      label: "Cumulative resettlement arrivals since 2014",
+      unit: "people",
+      description: "Quarterly local authority arrivals aggregated across the resettlement dataset."
+    }
+  ]
+};
+
+const canonicalManifest = {
+  generated_at: new Date().toISOString(),
+  dataset_id: "uk_routes",
+  domains: ["asylum_routes", "refugees", "ukraine_routes"],
+  record_counts: {
+    canonical_observations: observationRows.length,
+    local_authority_summaries: localAreaSummaries.length,
+    route_families: routeSeries.length
+  },
+  outputs: [
+    "local_route_observations.ndjson",
+    "national_route_observations.ndjson",
+    "local_resettlement_observations.ndjson",
+    "national-route-dashboard.json",
+    "local-route-latest.json",
+    "area-route-summaries.json"
+  ]
+};
+
+const nationalObservationRows = observationRows.filter((row) => row.area_code_original === "UK");
+const localObservationRows = observationRows.filter((row) => row.area_type === "local_authority");
+
+writeNdjson(path.join(canonicalDir, "national_route_observations.ndjson"), nationalObservationRows);
+writeNdjson(path.join(canonicalDir, "local_route_observations.ndjson"), localObservationRows);
+writeNdjson(path.join(canonicalDir, "local_resettlement_observations.ndjson"), resettlementObservations);
+writeJson(path.join(canonicalDir, "manifest.json"), canonicalManifest);
+
+writeJson(path.join(martsDir, "national-route-dashboard.json"), routeDashboard);
+writeJson(path.join(martsDir, "local-route-latest.json"), localRouteLatest);
+writeJson(path.join(martsDir, "area-route-summaries.json"), localAreaSummaries);
+
+copyFileSync(path.join(martsDir, "national-route-dashboard.json"), path.join(liveDir, "route-dashboard.json"));
+copyFileSync(path.join(martsDir, "local-route-latest.json"), path.join(liveDir, "local-route-latest.json"));
+
+console.log(
+  `Built uk_routes marts with ${observationRows.length} canonical observations across ${localAreaSummaries.length} areas.`
+);

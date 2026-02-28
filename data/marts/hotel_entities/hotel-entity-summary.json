@@ -1,0 +1,14 @@
+{
+  "totalNamedSites": 9,
+  "currentNamedSites": 4,
+  "historicalNamedSites": 4,
+  "parliamentaryReferenceSites": 1,
+  "currentNamedSitesWithAnyEntityLinks": 3,
+  "currentNamedSitesWithOwnerLinks": 2,
+  "currentNamedSitesWithOperatorLinks": 1,
+  "currentNamedSitesFullyResolved": 0,
+  "currentNamedSitesUnresolved": 1,
+  "currentNamedSitesWithIntegritySignals": 3,
+  "unnamedOnlyAreaCount": 3,
+  "totalIntegritySignals": 4
+}

@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-02-28T17:10:43.745Z",
+  "dataset_id": "hotel_entities",
+  "source_files": [
+    {
+      "name": "siteLedger",
+      "path": "data/hotel-source-ledger.csv",
+      "sha256": "9f344591ab5b04e2e311259fa684f73f76e0ecd6bb9f4a2110196c367d932386"
+    },
+    {
+      "name": "areaSightings",
+      "path": "data/manual/hotel-area-sightings.csv",
+      "sha256": "dcafbfebca037966506bff3f4bcaafc489bf3be4475004014304f23b187f7827"
+    },
+    {
+      "name": "entityLinks",
+      "path": "data/manual/hotel-entity-links.csv",
+      "sha256": "0d8e90e6be10f4547a92d7b347ef7e9ec43fd453b2a0728cb35b0563553d1a32"
+    },
+    {
+      "name": "integritySignals",
+      "path": "data/manual/hotel-integrity-signals.csv",
+      "sha256": "bac675e4b33751061bf1b6e35fb717cc43e7faf96d3504af0596937576c6c0e7"
+    },
+    {
+      "name": "asylumFinance",
+      "path": "src/data/live/asylum-finance.json",
+      "sha256": "f93d56fcbe85c16ade19bdadf466fc1ffc4ec29e335d45a8cd8cc86b0ca29eba"
+    }
+  ],
+  "counts": {
+    "site_rows": 9,
+    "entity_link_rows": 4,
+    "integrity_signal_rows": 4,
+    "area_rows": 9
+  }
+}

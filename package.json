@@ -1,0 +1,26 @@
+{
+  "name": "asylumstats",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "fetch:lancashirecc": "node scripts/fetch/fetch-lancashire-cc.mjs",
+    "transform:lancashirecc": "node scripts/transform/transform-lancashire-cc.mjs",
+    "ingest:lancashirecc": "npm run fetch:lancashirecc && npm run transform:lancashirecc",
+    "fetch:routes": "node scripts/fetch/fetch-routes.mjs",
+    "transform:routes": "node scripts/transform/transform-routes.mjs",
+    "ingest:routes": "npm run fetch:routes && npm run transform:routes",
+    "transform:hotels": "node scripts/transform/transform-hotel-entities.mjs",
+    "ingest:hotels": "npm run transform:hotels",
+    "transform:money": "node scripts/transform/transform-money-ledger.mjs",
+    "ingest:money": "npm run transform:money"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "xlsx": "^0.18.5"
+  }
+}

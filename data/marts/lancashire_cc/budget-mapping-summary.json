@@ -1,0 +1,124 @@
+{
+  "generated_at": "2026-02-28T15:44:58.676Z",
+  "body_id": "lancashire_cc",
+  "total_departments": 3840,
+  "mapped_departments": 1277,
+  "unmapped_departments": 2563,
+  "coverage": {
+    "mapped_spend": 2191395719.9499984,
+    "total_spend": 3685931518.2099957,
+    "mapped_spend_pct": 59.5
+  },
+  "unmapped_spend_gbp": 1494535798.26,
+  "canonical_total_spend_gbp": 3558124490.37,
+  "difference_from_canonical_spend_gbp": 127807027.84,
+  "category_summary": {
+    "Highways and transport services": 97778407.53000008,
+    "Central services": 281310349.93000215,
+    "Children Social Care": 142134807.29999983,
+    "Adult Social Care": 1152591152.7199955,
+    "Planning and development services": 1243911.09,
+    "Cultural and related services": 60106862.58999999,
+    "Environmental and regulatory services": 77057603.97,
+    "Capital": 17900580.450000014,
+    "Other services": 9630.869999999999,
+    "Housing services (GFRA only)": 45389682.54000001,
+    "Education services": 268698392.6499999,
+    "Public Health": 47174338.309999995
+  },
+  "top_unmapped": [
+    {
+      "department": "Chorley & South Ribble BCF",
+      "spend": 134259310.52
+    },
+    {
+      "department": "LRL (Old GRLOL PFI)",
+      "spend": 67218860.03999999
+    },
+    {
+      "department": "PDSI-Direct Payments Direct Cash",
+      "spend": 62062436.74999977
+    },
+    {
+      "department": "BSF Wave 1 Phase 1",
+      "spend": 44302182.72999998
+    },
+    {
+      "department": "Lancashire Concessionary Travel Scheme",
+      "spend": 36720430.30000004
+    },
+    {
+      "department": "Public Min Cost",
+      "spend": 35439366.21000003
+    },
+    {
+      "department": "Energy Recharge",
+      "spend": 34852536.03
+    },
+    {
+      "department": "Household Support Fund",
+      "spend": 34561952.089999996
+    },
+    {
+      "department": "PVI Providers 3 & 4 yr olds",
+      "spend": 29968677.820000015
+    },
+    {
+      "department": "BSF Wave 1 Phase 2A",
+      "spend": 28510948.71000003
+    },
+    {
+      "department": "Prevention Short Term Care at Home Block",
+      "spend": 27780758.509999998
+    },
+    {
+      "department": "PVI Providers under 2 yr olds",
+      "spend": 24805084.170000233
+    },
+    {
+      "department": "Employment and Support Income",
+      "spend": 23762610.619999986
+    },
+    {
+      "department": "Consolidated Invoices Holding Account",
+      "spend": 23470756.870000012
+    },
+    {
+      "department": "BSF Wave 1 Phase 2",
+      "spend": 21107532.639999982
+    },
+    {
+      "department": "PVI Providers 2 yr olds",
+      "spend": 20952657.67000017
+    },
+    {
+      "department": "Drug Misuse in Adults",
+      "spend": 20424470.020000014
+    },
+    {
+      "department": "BSF Wave 1 Phase 3",
+      "spend": 19559549.689999994
+    },
+    {
+      "department": "LTA Supply Non Teaching Staff",
+      "spend": 18758826.830000002
+    },
+    {
+      "department": "Burnley Fostering LCC",
+      "spend": 16669952.609999025
+    }
+  ],
+  "quality_flags": [
+    {
+      "code": "low_mapping_coverage",
+      "severity": "high",
+      "message": "Only 59.5% of spend in the upstream mapping layer is assigned to a budget category."
+    },
+    {
+      "code": "mapping_differs_from_canonical_spend",
+      "severity": "medium",
+      "message": "The upstream mapping layer total differs from the canonical transaction corpus by GBP 127,807,027.84."
+    }
+  ],
+  "record_count": 3840
+}

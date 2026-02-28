@@ -1,0 +1,282 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import { getCouncilCatalog, getCouncilSnapshotBySlug } from "../../lib/council-data";
+
+export function getStaticPaths() {
+  return getCouncilCatalog().map((body) => ({
+    params: { body: body.slug },
+    props: { slug: body.slug }
+  }));
+}
+
+const { slug } = Astro.props;
+const snapshot = getCouncilSnapshotBySlug(slug);
+
+if (!snapshot) {
+  throw new Error(`Unknown council body: ${slug}`);
+}
+
+const compactCurrency = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+  notation: "compact",
+  maximumFractionDigits: 1
+});
+
+const fullCurrency = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+  maximumFractionDigits: 0
+});
+
+const number = new Intl.NumberFormat("en-GB");
+const latestMonth = snapshot.latestMonth;
+const maxFySpend = Math.max(1, ...snapshot.spending.by_financial_year.map((row) => row.total_spend_gbp));
+const maxService = Math.max(1, ...snapshot.topServiceBreakdown.map((row) => row.value_gbp));
+const maxMapped = Math.max(1, ...snapshot.topMappedCategories.map((row) => row.value_gbp));
+const maxUnmapped = Math.max(1, ...snapshot.topUnmapped.map((row) => row.spend));
+const refreshedOn = new Date(snapshot.rawManifest.generatedAt).toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+});
+---
+
+<BaseLayout
+  title={`${snapshot.body.name} | asylumstats`}
+  description={`Canonical council-accountability view for ${snapshot.body.name}.`}
+>
+  <section class="page-head">
+    <span class="kicker">Context infrastructure</span>
+    <h1>{snapshot.body.name}</h1>
+    <p>
+      This page is built from a live canonical ingest of the upstream Lancashire transparency pack, but it is `context
+      only`. None of these totals should appear on public route-specific spending charts unless specific rows are later
+      proven to be tied to asylum accommodation, refugee resettlement, or hotel response.
+    </p>
+    <div class="chip-row">
+      <span class="chip">context only</span>
+      <span class="chip accent">{snapshot.body.councilTier} council</span>
+      <span class="chip">{snapshot.body.region}</span>
+      <span class="chip teal">{snapshot.body.status}</span>
+      <a class="chip" href={snapshot.body.sourceRepo}>Upstream repo</a>
+      <a class="chip" href={snapshot.body.upstreamSite}>Upstream site</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Immediate pressure points</h2>
+    <div class="story-grid">
+      {snapshot.flags.slice(0, 6).map((flag) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class={`chip ${flag.severity === "high" ? "accent" : flag.severity === "medium" ? "teal" : ""}`}>
+              {flag.severity}
+            </span>
+          </div>
+          <p class="lede">{flag.message}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Core numbers</h2>
+    <div class="kpi-grid">
+      <KpiCard
+        label="Transaction rows"
+        value={number.format(snapshot.spending.total_records)}
+        context={`${snapshot.spending.source_file_count} monthly files through ${latestMonth?.month || "latest source month"}`}
+      />
+      <KpiCard
+        label="Spend corpus"
+        value={compactCurrency.format(snapshot.spending.total_spend_gbp)}
+        context={`${snapshot.spending.first_date} to ${snapshot.spending.last_date}`}
+      />
+      <KpiCard
+        label="Approved budget plan"
+        value={compactCurrency.format(snapshot.budget.approved_budget.net_revenue_budget)}
+        context={`${snapshot.budget.approved_budget.financial_year} approved by full council`}
+      />
+      <KpiCard
+        label="Budget mapping coverage"
+        value={`${snapshot.mapping.coverage?.mapped_spend_pct || 0}%`}
+        context={`${compactCurrency.format(snapshot.mapping.unmapped_spend_gbp || 0)} not mapped to a category`}
+      />
+      <KpiCard
+        label="Redacted supplier spend"
+        value={compactCurrency.format(snapshot.spending.redacted_supplier_spend_gbp)}
+        context={`${snapshot.redactedSpendPct}% of the full transaction corpus`}
+      />
+      <KpiCard
+        label="Reserves drift"
+        value={compactCurrency.format(snapshot.budget.latest_reserves_total_gbp || 0)}
+        context={`${snapshot.budget.reserves_change_since_first_year_pct}% since the first official source year`}
+      />
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Spend by financial year</h2>
+      <p class="lede">
+        Canonical transaction data currently covers two financial years. The upstream monthly series has a visible gap in
+        August 2024, so the corpus should be treated as an observed publication series, not an assumed complete ledger.
+      </p>
+      {snapshot.spending.by_financial_year.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 9rem;">
+            <strong>{row.financial_year}</strong>
+            <div class="tiny">{compactCurrency.format(row.total_spend_gbp)}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.total_spend_gbp / maxFySpend) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+      <p class="tiny" style="margin-top: 1rem;">
+        Latest month in corpus: {latestMonth?.month || "n/a"} with {number.format(latestMonth?.record_count || 0)} rows
+        and {compactCurrency.format(latestMonth?.total_spend_gbp || 0)} of spend.
+      </p>
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Source coverage</h2>
+      <p class="lede">Refresh run completed on {refreshedOn}. These counts are direct from the fetched upstream artifact set.</p>
+      <div class="story-grid">
+        {snapshot.sourceFamilies.map((family) => (
+          <article class="metric-card">
+            <div class="metric-value">{number.format(family.count)}</div>
+            <h3>{family.label}</h3>
+            <p class="tiny">{family.note}</p>
+          </article>
+        ))}
+      </div>
+      <p class="tiny" style="margin-top: 1rem;">
+        Canonical outputs: {Object.entries(snapshot.canonicalManifest.record_counts)
+          .map(([label, value]) => `${label.replace(/_/g, " ")} ${number.format(value)}`)
+          .join(" | ")}
+      </p>
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Largest suppliers in the current corpus</h2>
+      <p class="lede">The current top line already includes materially redacted suppliers, which is why the redaction total is surfaced separately.</p>
+      <div class="table-card" style="margin-top: 1rem;">
+        <table>
+          <thead>
+            <tr>
+              <th>Supplier</th>
+              <th>Spend</th>
+            </tr>
+          </thead>
+          <tbody>
+            {snapshot.topSuppliers.map((row) => (
+              <tr>
+                <td>{row.supplier_name}</td>
+                <td>{fullCurrency.format(row.total_spend_gbp)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top: 1rem;">
+        Redacted labels observed: {snapshot.spending.redacted_supplier_labels.join(", ")}
+      </p>
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Budget drift and tax pressure</h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Total service expenditure</h3>
+          <p class="lede">
+            {compactCurrency.format(snapshot.budget.latest_summary?.total_service_expenditure || 0)} in{" "}
+            {snapshot.budget.latest_year}, up from the first official source year.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Council tax Band D</h3>
+          <p class="lede">
+            {fullCurrency.format(snapshot.budget.council_tax_band_d_latest || 0)} in{" "}
+            {snapshot.budget.council_tax_band_d_latest_year}, a {snapshot.budget.council_tax_band_d_change_since_2021_22_pct}
+            % increase since 2021/22.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Reserves</h3>
+          <p class="lede">
+            {compactCurrency.format(snapshot.budget.latest_reserves_total_gbp || 0)} latest total reserves, with a{" "}
+            {snapshot.budget.reserves_change_since_first_year_pct}% change since the first official source year.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Official service pressure</h2>
+      <p class="lede">This is the latest official service breakdown from the budget summary family, not a roll-up of transaction rows.</p>
+      {snapshot.topServiceBreakdown.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 13rem;">
+            <strong>{row.label}</strong>
+            <div class="tiny">{compactCurrency.format(row.value_gbp)}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value_gbp / maxService) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+      <div class="story-grid" style="margin-top: 1rem;">
+        {snapshot.budget.service_growth_pct.slice(0, 4).map((row) => (
+          <article class="story-card">
+            <h3>{row.service_name}</h3>
+            <p class="lede">{row.change_pct}% change since the first official source year.</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel" style="padding: 1.25rem;">
+      <h2>Observed mapped categories</h2>
+      <p class="lede">
+        The budget mapping layer is useful but incomplete. It reflects the upstream mapping artifact and currently differs
+        from the canonical spend corpus by {fullCurrency.format(snapshot.mapping.difference_from_canonical_spend_gbp || 0)}.
+      </p>
+      {snapshot.topMappedCategories.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 13rem;">
+            <strong>{row.label}</strong>
+            <div class="tiny">{compactCurrency.format(row.value_gbp)}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value_gbp / maxMapped) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Largest unmapped labels</h2>
+    <div class="place-grid">
+      {snapshot.topUnmapped.map((row) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip accent">unmapped</span>
+          </div>
+          <h3>{row.department}</h3>
+          <p class="lede">{fullCurrency.format(row.spend)}</p>
+          <div class="metric-track" style="margin-top: 0.85rem;">
+            <div class="metric-fill" style={`width: ${(row.spend / maxUnmapped) * 100}%`}></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

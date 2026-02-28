@@ -1,0 +1,42 @@
+---
+import SiteHeader from "../components/SiteHeader.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "UK asylum and refugee accountability data prototype." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <SiteHeader />
+    <div class="shell banner">
+      Prototype state: public pages are being constrained to route-specific asylum, refugee, and humanitarian material.
+      General council models remain in the repo as background context only.
+    </div>
+    <main class="shell">
+      <slot />
+    </main>
+    <footer class="shell footer">
+      asylumstats prototype. Built as a static GitHub-friendly scaffold with live council ingestion, clear source
+      provenance, and room for official, derived, archive, and public-evidence layers.
+    </footer>
+  </body>
+</html>

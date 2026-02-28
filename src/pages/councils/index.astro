@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import { getCouncilSnapshots } from "../../lib/council-data";
+
+const councils = getCouncilSnapshots();
+
+const compactCurrency = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+  notation: "compact",
+  maximumFractionDigits: 1
+});
+
+const number = new Intl.NumberFormat("en-GB");
+---
+
+<BaseLayout
+  title="Councils | asylumstats"
+  description="Live council accountability models built from canonical ingestion outputs."
+>
+  <section class="page-head">
+    <span class="kicker">Context infrastructure</span>
+    <h1>Background council models, not public route-specific spending pages.</h1>
+    <p>
+      These routes stay in the repo because they are useful research infrastructure, but they are `context only`. Their
+      figures should not be treated as route-specific spend unless specific rows are later tied to asylum accommodation,
+      refugee resettlement, or another named scheme.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Live bodies</h2>
+    <div class="place-grid">
+      {councils.map((council) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip">context only</span>
+            <span class="chip accent">{council.body.councilTier}</span>
+            <span class="chip">{council.body.region}</span>
+            <span class="chip teal">{council.body.status}</span>
+          </div>
+          <h3>
+            <a href={`/councils/${council.body.slug}`}>{council.body.name}</a>
+          </h3>
+          <p class="lede">{council.body.notes}</p>
+          <div class="kpi-grid" style="margin-top: 1rem;">
+            <KpiCard
+              label="Transactions"
+              value={number.format(council.spending.total_records)}
+              context={`${council.spending.source_file_count} monthly files`}
+            />
+            <KpiCard
+              label="Spend corpus"
+              value={compactCurrency.format(council.spending.total_spend_gbp)}
+              context={`${council.spending.first_date} to ${council.spending.last_date}`}
+            />
+            <KpiCard
+              label="Mapping coverage"
+              value={`${council.mapping.coverage?.mapped_spend_pct || 0}%`}
+              context={`${number.format(council.mapping.unmapped_departments)} unmapped department labels`}
+            />
+          </div>
+          <div class="story-grid" style="margin-top: 1rem;">
+            {council.flags.slice(0, 3).map((flag) => (
+              <article class="story-card">
+                <div class="chip-row">
+                  <span class={`chip ${flag.severity === "high" ? "accent" : flag.severity === "medium" ? "teal" : ""}`}>
+                    {flag.severity}
+                  </span>
+                </div>
+                <p class="lede">{flag.message}</p>
+              </article>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

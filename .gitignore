@@ -1,0 +1,15 @@
+node_modules
+dist
+.astro
+.DS_Store
+coverage
+
+# Large regenerable data files (run npm run ingest:* to regenerate)
+data/raw/lancashire_cc/spending-*.json
+data/raw/lancashire_cc/spending-index.json
+data/raw/uk_routes/*.xlsx
+data/raw/uk_routes/*.ods
+data/canonical/lancashire_cc/spending/
+data/canonical/uk_routes/
+data/raw/lancashire_cc/budgets_govuk.json
+data/raw/lancashire_cc/budget_mapping.json

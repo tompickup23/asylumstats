@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-02-28T15:44:58.652Z",
+  "body_id": "lancashire_cc",
+  "source_years_local": [
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25"
+  ],
+  "source_years_govuk": [
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25"
+  ],
+  "latest_year": "2024-25",
+  "latest_summary": {
+    "total_service_expenditure": 2476155000,
+    "net_current_expenditure": 0,
+    "net_revenue_expenditure": 985926000,
+    "council_tax_requirement": 642208000
+  },
+  "local_service_breakdown_latest": {
+    "Education services": 1266580000,
+    "Highways and transport services": 68472000,
+    "Children Social Care": 291482000,
+    "Adult Social Care": 584501000,
+    "Public Health": 97641000,
+    "Cultural and related services": 23653000,
+    "Environmental and regulatory services": 94348000,
+    "Planning and development services": 7597000,
+    "Central services": 41881000
+  },
+  "headline_trends": {
+    "TOTAL SERVICE EXPENDITURE": [
+      {
+        "year": "2021-22",
+        "value": 1983086000
+      },
+      {
+        "year": "2022-23",
+        "value": 2157051000
+      },
+      {
+        "year": "2023-24",
+        "value": 2249427000
+      },
+      {
+        "year": "2024-25",
+        "value": 2476155000
+      }
+    ],
+    "NET REVENUE EXPENDITURE": [
+      {
+        "year": "2021-22",
+        "value": 733051000
+      },
+      {
+        "year": "2022-23",
+        "value": 869906000
+      },
+      {
+        "year": "2023-24",
+        "value": 916425000
+      },
+      {
+        "year": "2024-25",
+        "value": 985926000
+      }
+    ],
+    "COUNCIL TAX REQUIREMENT": [
+      {
+        "year": "2021-22",
+        "value": 540158000
+      },
+      {
+        "year": "2022-23",
+        "value": 571188000
+      },
+      {
+        "year": "2023-24",
+        "value": 604416000
+      },
+      {
+        "year": "2024-25",
+        "value": 642208000
+      }
+    ]
+  },
+  "latest_reserves_total_gbp": 345040000,
+  "reserves_change_since_first_year_gbp": -74748000,
+  "reserves_change_since_first_year_pct": -17.8,
+  "council_tax_band_d_latest": 1735.79,
+  "council_tax_band_d_latest_year": "2025/26",
+  "council_tax_band_d_change_since_2021_22_pct": 19.2,
+  "service_growth_pct": [
+    {
+      "service_name": "Central services",
+      "change_pct": 92.8
+    },
+    {
+      "service_name": "Children Social Care",
+      "change_pct": 30.3
+    },
+    {
+      "service_name": "Highways and transport services",
+      "change_pct": 26
+    },
+    {
+      "service_name": "Environmental and regulatory services",
+      "change_pct": 25
+    },
+    {
+      "service_name": "Education services",
+      "change_pct": 24.1
+    },
+    {
+      "service_name": "Public Health",
+      "change_pct": 23.5
+    },
+    {
+      "service_name": "Adult Social Care",
+      "change_pct": 22.1
+    },
+    {
+      "service_name": "Cultural and related services",
+      "change_pct": 13
+    },
+    {
+      "service_name": "Planning and development services",
+      "change_pct": -10.2
+    }
+  ],
+  "approved_budget": {
+    "financial_year": "2026/27",
+    "net_revenue_budget": 1329312000,
+    "council_tax_band_d": 1801.75,
+    "status": "approved_by_full_council"
+  },
+  "quality_flags": [
+    {
+      "code": "zero_net_current_expenditure",
+      "severity": "note",
+      "message": "The upstream budget summary publishes net current expenditure as zero; keep that field separate from other headline measures."
+    }
+  ],
+  "record_count": 114
+}
