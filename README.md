@@ -163,19 +163,26 @@ That is where the “scandalous” energy should go: toward waste, opacity, and 
 
 As of `2026-02-28`, the latest national asylum statistics chapters were published for the year ending `December 2025` on `2026-02-26`, while the latest public local-authority and regional tables surfaced in the researched GOV.UK pages were still the year ending `September 2025`, updated `2025-11-27`. Build the site so release calendars can differ by dataset family.
 
-## Current handoff state
+## Current state (28 Feb 2026)
 
-The repo is now ready to hand to Claude as an extension job rather than a blank build:
+The site is **live at asylumstats.co.uk** with automated GitHub Pages deployment.
 
-- Astro site scaffold is live and builds cleanly
-- routes page uses official transformed data
-- hotels page uses the live hotel entity ledger rather than mock site rows
-- spending page uses the live public money ledger rather than concept-only copy
-- methodology and sources pages explain scope and provenance rules
+- **157 pages** built from live data in ~900ms
+- **147 area place pages** generated from live GOV.UK local authority route data (areas with ≥200 supported asylum)
+- Routes, hotels, spending, compare, sources, methodology all use live data
+- Homepage uses live top areas, route cards, hotel entity coverage, and money ledger preview
+- **26 tests** (vitest) covering CSV parser, data loaders, and source scope integrity
+- **Zero references** to AI DOGE or ECA CRM on any published page (enforced by tests)
+- Weekly data refresh workflow (manual dispatch or Monday 8am cron)
+- See `AGENTS.md` for full agent/developer guide
 
-The main missing layers for the next builder are:
+### Next priorities
 
-- deeper normalization of refugee funding instruction tariff tables
-- local response contracts and council procurement tied to named hotels or schemes
-- subcontractor ingestion and supplier network expansion
-- generated place pages from live route, hotel, and money marts instead of the remaining mocked place set
+- Deeper normalization of refugee funding instruction tariff tables
+- Local response contracts and council procurement tied to named hotels or schemes
+- Subcontractor ingestion and supplier network expansion
+- Observable Plot charts for route trends and area comparisons
+- MapLibre/Leaflet geographic visualisation
+- SEO (OpenGraph, structured data, sitemap.xml)
+- Accessibility audit (ARIA labels, screen reader testing)
+- E2E tests with Playwright
