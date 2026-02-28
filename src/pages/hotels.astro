@@ -45,6 +45,9 @@ const providerBreakdown = [...hotelLedger.primeProviderBreakdown].sort(
 );
 const regionVisibility = getHotelRegionVisibilitySummaries(hotelLedger);
 const visibilityAreas = getHotelVisibilityAreas(hotelLedger.areas);
+const hotelFilterRegions = [...new Set([...hotelLedger.sites.map((site) => site.regionName), ...hotelLedger.areas.map((area) => area.regionName)])].sort();
+const hotelFilterStatuses = [...new Set(hotelLedger.sites.map((site) => site.status))].sort();
+const hotelFilterCoverages = [...new Set(hotelLedger.sites.map((site) => site.entityCoverage))].sort();
 const leadUnnamedArea = unnamedOnlyAreas[0];
 const namedRegionLeader = regionVisibility[0];
 const secrecyRegionLeader = [...regionVisibility].sort((a, b) => b.unnamedSiteCount - a.unnamedSiteCount)[0];
@@ -332,6 +335,69 @@ function formatReportedPeople(value: number | null): string {
     </div>
   </section>
 
+  <section class="section" id="hotel-filters">
+    <div class="section-head">
+      <div>
+        <h2>Explorer and shareable filters</h2>
+        <p class="lede">
+          These controls apply to the visibility and starter ledgers below, and the filter state stays in the URL so
+          the exact evidence slice can be shared.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip" data-hotel-site-summary aria-live="polite">Showing 0 matching site rows</span>
+        <span class="chip teal" data-hotel-area-summary aria-live="polite">Showing 0 matching area rows</span>
+      </div>
+    </div>
+    <form class="filter-panel" data-hotel-form>
+      <div class="filter-grid">
+        <label class="filter-field">
+          <span class="tiny">Search site or area</span>
+          <input type="search" name="hotel_q" placeholder="Search site, area, or region" />
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Region</span>
+          <select name="hotel_region">
+            <option value="all">All regions</option>
+            {hotelFilterRegions.map((region) => (
+              <option value={region}>{region}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Site status</span>
+          <select name="hotel_status">
+            <option value="all">All site statuses</option>
+            {hotelFilterStatuses.map((status) => (
+              <option value={status}>{status}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Entity coverage</span>
+          <select name="hotel_coverage">
+            <option value="all">All coverage states</option>
+            {hotelFilterCoverages.map((coverage) => (
+              <option value={coverage}>{coverage}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Area visibility</span>
+          <select name="hotel_visibility">
+            <option value="all">All visibility states</option>
+            <option value="named-visible">Named visible</option>
+            <option value="mixed">Mixed named and unnamed</option>
+            <option value="unnamed-only">Unnamed only</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="button" class="source-pill" data-hotel-reset>Reset filters</button>
+      </div>
+    </form>
+  </section>
+
   <section class="section">
     <div class="section-head">
       <div>
@@ -357,7 +423,18 @@ function formatReportedPeople(value: number | null): string {
         </thead>
         <tbody>
           {visibilityAreas.map((area) => (
-            <tr>
+            <tr
+              data-hotel-area-row
+              data-area-name={area.areaName}
+              data-region={area.regionName}
+              data-visibility={
+                area.currentNamedSiteCount > 0 && area.unnamedSiteCount > 0
+                  ? "mixed"
+                  : area.currentNamedSiteCount > 0
+                    ? "named-visible"
+                    : "unnamed-only"
+              }
+            >
               <th scope="row">
                 <strong>{area.areaName}</strong>
                 {area.areaCode && (
@@ -385,6 +462,10 @@ function formatReportedPeople(value: number | null): string {
         </tbody>
       </table>
     </div>
+    <article class="editor-note" data-hotel-area-empty hidden>
+      <h3>No area rows match these filters</h3>
+      <p>Reset the filters or widen the region and visibility scope to bring area evidence back into view.</p>
+    </article>
   </section>
 
   <section class="section">
@@ -404,7 +485,14 @@ function formatReportedPeople(value: number | null): string {
         </thead>
         <tbody>
           {[...namedCurrent, ...namedHistorical, ...parliamentaryReferences].map((site) => (
-            <tr>
+            <tr
+              data-hotel-site-row
+              data-site-name={site.siteName}
+              data-area-name={site.areaName}
+              data-region={site.regionName}
+              data-status={site.status}
+              data-coverage={site.entityCoverage}
+            >
               <th scope="row">
                 <strong>{site.siteName}</strong>
                 <div class="tiny">
@@ -456,6 +544,10 @@ function formatReportedPeople(value: number | null): string {
         </tbody>
       </table>
     </div>
+    <article class="editor-note" data-hotel-site-empty hidden>
+      <h3>No site rows match these filters</h3>
+      <p>Reset the filters or widen the site status and coverage scope to bring starter-ledger rows back into view.</p>
+    </article>
   </section>
 
   <section class="section">
@@ -475,4 +567,10 @@ function formatReportedPeople(value: number | null): string {
       ))}
     </div>
   </section>
+
+  <script>
+    import { initHotelFilters } from "../scripts/hotel-filters";
+
+    initHotelFilters();
+  </script>
 </BaseLayout>

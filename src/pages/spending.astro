@@ -1,8 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PathwayMixCard from "../components/PathwayMixCard.astro";
+import RegionTileMap from "../components/RegionTileMap.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
 import followMoney from "../data/live/follow-money.json";
 import { loadMoneyLedger } from "../lib/money-data";
+import {
+  getMoneyBuyerSummaries,
+  getMoneyLinkedRegionSummaries,
+  getMoneyRecordTypeSummaries,
+  getMoneyRouteSummaries
+} from "../lib/money-analytics";
 
 const moneyLedger = loadMoneyLedger();
 const topSuppliers = moneyLedger.supplierProfiles.slice(0, 8);
@@ -19,9 +27,21 @@ const supplierWatchlist = [...moneyLedger.supplierProfiles]
       b.siteCount - a.siteCount
   )
   .slice(0, 4);
-const routeCoverage = [...moneyLedger.routeGroups].sort((a, b) => b.recordCount - a.recordCount);
-const recordTypeBreakdown = [...moneyLedger.recordTypeGroups].sort((a, b) => b.recordCount - a.recordCount);
+const routeSummaries = getMoneyRouteSummaries(moneyLedger.records);
+const recordTypeSummaries = getMoneyRecordTypeSummaries(moneyLedger.records);
+const buyerSummaries = getMoneyBuyerSummaries(moneyLedger.records);
+const linkedRegionSummaries = getMoneyLinkedRegionSummaries(moneyLedger.records);
+const topBuyers = buyerSummaries.slice(0, 3);
+const leadRoute = routeSummaries[0];
+const leadRecordType = recordTypeSummaries[0];
+const leadBuyer = buyerSummaries[0];
+const leadMoneyRegion = linkedRegionSummaries[0];
 const primaryLead = moneyLedger.investigativeLeads[0];
+const segmentTones = ["accent", "teal", "warm", "soft"] as const;
+const routeValueLabel =
+  moneyLedger.summary.rowsWithDisclosedValue > 0
+    ? `${moneyLedger.summary.rowsWithDisclosedValue} rows with published values`
+    : "No rows with published values";
 
 const recordTypeLabels: Record<string, string> = {
   prime_contract_scope: "Prime contract scope",
@@ -43,6 +63,50 @@ function formatMoney(value: number | null | undefined): string {
     maximumFractionDigits: value >= 1000 ? 0 : 2
   }).format(value);
 }
+
+function formatRouteFamily(routeFamily: string | null | undefined): string {
+  switch (routeFamily) {
+    case "asylum_support":
+      return "Asylum support";
+    case "homes_for_ukraine":
+      return "Homes for Ukraine";
+    case "uk_resettlement_scheme":
+      return "UK Resettlement Scheme";
+    case "afghan_resettlement_programme":
+      return "Afghan Resettlement Programme";
+    case "not_route_specific":
+      return "Not route-specific";
+    default:
+      return routeFamily ?? "Not route-specific";
+  }
+}
+
+const spendingReadoutCards = [
+  leadRoute
+    ? {
+        title: "Asylum support still dominates the money ledger",
+        body: `${formatRouteFamily(leadRoute.routeFamily)} accounts for ${leadRoute.recordCount} of the ${moneyLedger.summary.totalRecords} public rows now in scope, with ${leadRoute.linkedSiteCount} named sites already tied into the money layer.`
+      }
+    : null,
+  leadRecordType
+    ? {
+        title: "Record type still matters more than one headline spend total",
+        body: `${recordTypeLabels[leadRecordType.recordType] ?? leadRecordType.recordType} is the largest ledger class by row count. The page keeps row types separate because tariffs, contract scope, and scrutiny estimates are not comparable as one fake total.`
+      }
+    : null,
+  leadBuyer
+    ? {
+        title: "Buyer control is concentrated",
+        body: `${leadBuyer.buyerName} currently appears on ${leadBuyer.recordCount} public rows across ${leadBuyer.routeFamilyCount} route families, which is why buyer-level accountability belongs alongside supplier exposure.`
+      }
+    : null,
+  leadMoneyRegion
+    ? {
+        title: "Site-linked money rows are already geographically concentrated",
+        body: `${leadMoneyRegion.regionName} currently leads the starter money ledger on linked named sites, showing where contract responsibility and the visible estate already overlap in public evidence.`
+      }
+    : null
+].filter((card): card is { title: string; body: string } => card !== null);
 ---
 
 <BaseLayout
@@ -121,7 +185,7 @@ function formatMoney(value: number | null | undefined): string {
         <article class="feature-card accent">
           <div class="chip-row">
             <span class="chip accent">{recordTypeLabels[record.recordType] ?? record.recordType}</span>
-            {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
+            {record.routeFamily && <span class="chip">{formatRouteFamily(record.routeFamily)}</span>}
           </div>
           <h3>{record.title}</h3>
           <p class="metric-value">{formatMoney(record.valueGbp)}</p>
@@ -148,34 +212,103 @@ function formatMoney(value: number | null | undefined): string {
     </div>
   </section>
 
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Ledger composition at a glance</h2>
+        <p class="lede">
+          These visual splits show the structure of the money layer without collapsing unlike rows into one misleading
+          total.
+        </p>
+      </div>
+    </div>
+    <div class="viz-grid">
+      <PathwayMixCard
+        title="Route family record mix"
+        description="Record counts by route or scheme family currently represented in the starter ledger."
+        totalLabel="public rows"
+        segments={routeSummaries.map((summary, index) => ({
+          label: formatRouteFamily(summary.routeFamily),
+          value: summary.recordCount,
+          tone: segmentTones[index % segmentTones.length],
+          detail: `${summary.rowsWithValue} rows with published value | ${summary.linkedSiteCount} linked sites`
+        }))}
+        note="Record counts only. This avoids turning tariffs, contract scope, and scrutiny estimates into one fake spend figure."
+      />
+      <PathwayMixCard
+        title="Record type mix"
+        description="The ledger keeps contract scope, funding instructions, and scrutiny rows split because they answer different questions."
+        totalLabel="public rows"
+        segments={recordTypeSummaries.map((summary, index) => ({
+          label: recordTypeLabels[summary.recordType] ?? summary.recordType,
+          value: summary.recordCount,
+          tone: segmentTones[index % segmentTones.length],
+          detail:
+            summary.rowsWithValue > 0
+              ? `${summary.rowsWithValue} rows with published value`
+              : "No rows with published value"
+        }))}
+        note={routeValueLabel}
+      />
+    </div>
+  </section>
+
   <section class="split section">
     <div class="panel panel-pad">
-      <h2>Route coverage</h2>
+      <h2>Buyer control</h2>
+      <p class="lede">
+        Buyer concentration belongs on the page because a small number of public bodies still control most of the
+        route-specific money surface.
+      </p>
       <div class="signal-list">
-        {routeCoverage.map((group) => (
-          <article class="signal-card">
+        {topBuyers.map((buyer, index) => (
+          <article class={`signal-card${index === 0 ? " accent" : ""}`}>
             <div class="chip-row">
-              <span class="chip accent">{group.recordCount} rows</span>
-              <span class="chip">{group.rowsWithValue} with value</span>
+              <span class="chip accent">{buyer.recordCount} rows</span>
+              <span class="chip">{buyer.routeFamilyCount} route families</span>
             </div>
-            <h3>{group.routeFamily}</h3>
+            <h3>{buyer.buyerName}</h3>
+            <p class="tiny">
+              {buyer.rowsWithValue} rows with published values | {buyer.linkedSiteCount} linked site
+              {buyer.linkedSiteCount === 1 ? "" : "s"}
+            </p>
+            <p class="tiny">Disclosed value total: {formatMoney(buyer.disclosedValueTotal)}</p>
           </article>
         ))}
       </div>
     </div>
 
-    <div class="panel panel-pad">
-      <h2>Ledger composition</h2>
-      <div class="signal-list">
-        {recordTypeBreakdown.map((group) => (
-          <article class="signal-card accent">
-            <div class="chip-row">
-              <span class="chip accent">{group.recordCount} rows</span>
-            </div>
-            <h3>{recordTypeLabels[group.recordType] ?? group.recordType}</h3>
-          </article>
-        ))}
+    <RegionTileMap
+      items={linkedRegionSummaries.map((summary) => ({ regionName: summary.regionName, value: summary.linkedSiteCount }))}
+      title="Named sites linked to money rows by region"
+      description={
+        leadMoneyRegion
+          ? `${leadMoneyRegion.regionName} currently has the largest count of named sites already attached to money rows.`
+          : "No named sites are currently linked to money rows."
+      }
+      valueLabel="linked sites"
+      highlightRegion={leadMoneyRegion?.regionName}
+      tone="warm"
+    />
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>What the ledger already proves</h2>
+        <p class="lede">
+          The money layer is still small, but it already exposes concentration, missing comparability, and where
+          visible sites intersect with public contracts.
+        </p>
       </div>
+    </div>
+    <div class="story-grid">
+      {spendingReadoutCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
     </div>
   </section>
 
@@ -210,7 +343,7 @@ function formatMoney(value: number | null | undefined): string {
             </div>
             <div class="data-row">
               <span>Route families</span>
-              <span class="data-row-value">{supplier.routeFamilies.join(", ") || "none"}</span>
+              <span class="data-row-value">{supplier.routeFamilies.map(formatRouteFamily).join(", ") || "none"}</span>
             </div>
           </div>
           {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
@@ -249,7 +382,7 @@ function formatMoney(value: number | null | undefined): string {
                 </div>
               </th>
               <td>
-                <div>{record.routeFamily ?? "Not route-specific"}</div>
+                <div>{formatRouteFamily(record.routeFamily)}</div>
                 {record.schemeLabel && <div class="tiny">{record.schemeLabel}</div>}
                 {record.periodLabel && <div class="tiny">{record.periodLabel}</div>}
               </td>
@@ -304,7 +437,7 @@ function formatMoney(value: number | null | undefined): string {
             money row{supplier.publicContractCount === 1 ? "" : "s"}
           </p>
           <p class="tiny">
-            Route families: {supplier.routeFamilies.join(", ") || "none"}
+            Route families: {supplier.routeFamilies.map(formatRouteFamily).join(", ") || "none"}
           </p>
           <p class="tiny">
             Integrity signals: {supplier.integritySignalCount}

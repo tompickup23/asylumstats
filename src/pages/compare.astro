@@ -30,6 +30,8 @@ const contingencyStats = getDistributionStats(
 );
 const compareRegions = [...new Set(comparePlaces.map((place) => place.regionName))];
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+const compareExplorerRegions = [...new Set(localRouteLatest.areas.map((place) => place.regionName))].sort();
+const compareExplorerCountries = [...new Set(localRouteLatest.areas.map((place) => place.countryName))].sort();
 const compareProfiles = comparePlaces.map((place) => {
   const contingencySharePct = place.supportedAsylum
     ? Number(((place.contingencyAccommodation / place.supportedAsylum) * 100).toFixed(1))
@@ -54,6 +56,29 @@ const compareProfiles = comparePlaces.map((place) => {
     )
   };
 });
+const compareExplorerItems = [...localRouteLatest.areas]
+  .sort((a, b) => b.supportedAsylum - a.supportedAsylum || a.areaName.localeCompare(b.areaName))
+  .map((place) => {
+    const humanitarianTotal = place.homesForUkraineArrivals + place.afghanProgrammePopulation;
+    const contingencySharePct = place.supportedAsylum
+      ? Number(((place.contingencyAccommodation / place.supportedAsylum) * 100).toFixed(1))
+      : 0;
+    const primaryModel =
+      contingencySharePct >= 35
+        ? "hotel-heavy"
+        : humanitarianTotal >= place.supportedAsylum * 0.5
+          ? "humanitarian-heavy"
+          : contingencySharePct <= 10
+            ? "dispersal-led"
+            : "balanced";
+
+    return {
+      place,
+      humanitarianTotal,
+      contingencySharePct,
+      primaryModel
+    };
+  });
 const humanitarianLeader = [...compareProfiles].sort((a, b) => b.humanitarianTotal - a.humanitarianTotal)[0];
 const compareEditorialCards = [
   supportedLeader && supportedRateLeader
@@ -401,6 +426,137 @@ const compareMatrixRows = [
     </div>
   </section>
 
+  <section class="section" id="compare-explorer">
+    <div class="section-head">
+      <div>
+        <h2>Explorer and shareable filters</h2>
+        <p class="lede">
+          The default compare set stays editorially useful, but this explorer lets readers move across the full
+          authority dataset and keep the filter state in the URL.
+        </p>
+      </div>
+      <span class="chip" data-compare-summary aria-live="polite">Showing 12 matching places</span>
+    </div>
+    <form class="filter-panel" data-compare-form>
+      <div class="filter-grid">
+        <label class="filter-field">
+          <span class="tiny">Search place</span>
+          <input type="search" name="compare_q" placeholder="Search area or region" />
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Region</span>
+          <select name="compare_region">
+            <option value="all">All regions</option>
+            {compareExplorerRegions.map((region) => (
+              <option value={region}>{region}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Country</span>
+          <select name="compare_country">
+            <option value="all">All countries</option>
+            {compareExplorerCountries.map((country) => (
+              <option value={country}>{country}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Sort by</span>
+          <select name="compare_focus">
+            <option value="supported">Supported asylum count</option>
+            <option value="rate">Supported asylum rate</option>
+            <option value="contingency">Contingency accommodation</option>
+            <option value="humanitarian">Humanitarian pathway total</option>
+            <option value="resettlement">Resettlement cumulative total</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Local model</span>
+          <select name="compare_model">
+            <option value="all">All models</option>
+            <option value="hotel-heavy">Hotel-heavy</option>
+            <option value="dispersal-led">Dispersal-led</option>
+            <option value="humanitarian-heavy">Humanitarian-heavy</option>
+            <option value="balanced">Balanced</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Show</span>
+          <select name="compare_limit">
+            <option value="12">12 places</option>
+            <option value="24">24 places</option>
+            <option value="48">48 places</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="button" class="source-pill" data-compare-reset>Reset filters</button>
+      </div>
+    </form>
+    <div class="story-grid explorer-grid" data-compare-results>
+      {compareExplorerItems.map((item) => (
+        <article
+          class="story-card explorer-card"
+          data-compare-item
+          data-name={item.place.areaName}
+          data-region={item.place.regionName}
+          data-country={item.place.countryName}
+          data-model={item.primaryModel}
+          data-supported={item.place.supportedAsylum}
+          data-rate={item.place.supportedAsylumRate ?? 0}
+          data-contingency={item.place.contingencyAccommodation}
+          data-humanitarian={item.humanitarianTotal}
+          data-resettlement={item.place.resettlementCumulativeTotal}
+        >
+          <div class="chip-row">
+            <span class="chip">{item.place.regionName}</span>
+            <span class="chip teal">{item.place.countryName}</span>
+            <span class={`chip ${item.primaryModel === "hotel-heavy" ? "accent" : item.primaryModel === "humanitarian-heavy" ? "teal" : ""}`}>
+              {item.primaryModel}
+            </span>
+          </div>
+          <h3>{item.place.areaName}</h3>
+          <p class="lede">
+            Supported asylum: {item.place.supportedAsylum.toLocaleString()} | rate {item.place.supportedAsylumRate ?? "n/a"} per 10,000
+          </p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Contingency accommodation</span>
+              <span class="data-row-value">{item.place.contingencyAccommodation.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Humanitarian pathways</span>
+              <span class="data-row-value">{item.humanitarianTotal.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Resettlement cumulative</span>
+              <span class="data-row-value">{item.place.resettlementCumulativeTotal.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Three-pathway share of population</span>
+              <span class="data-row-value">
+                {item.place.shareOfPopulationPct !== null ? `${item.place.shareOfPopulationPct}%` : "n/a"}
+              </span>
+            </div>
+          </div>
+          <p class="tiny">
+            {item.place.contingencyAccommodation > 0
+              ? `${item.contingencySharePct}% of supported asylum is in contingency accommodation.`
+              : "No contingency accommodation is recorded in the current local snapshot."}
+          </p>
+          <p class="tiny">
+            <a class="source-pill" href={`/places/${item.place.areaCode}/`}>Open place page</a>
+          </p>
+        </article>
+      ))}
+    </div>
+    <article class="editor-note" data-compare-empty hidden>
+      <h3>No places match this filter set</h3>
+      <p>Reset the filters or widen the region and model constraints to bring places back into scope.</p>
+    </article>
+  </section>
+
   <section class="split section">
     <div class="panel panel-pad">
       <h2>Supported asylum snapshot</h2>
@@ -491,4 +647,10 @@ const compareMatrixRows = [
       ))}
     </div>
   </section>
+
+  <script>
+    import { initCompareExplorer } from "../scripts/compare-explorer";
+
+    initCompareExplorer();
+  </script>
 </BaseLayout>
