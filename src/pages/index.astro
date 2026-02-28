@@ -22,22 +22,99 @@ const topAreas = localRouteLatest.areas
   .filter((a) => a.supportedAsylum >= 200)
   .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
   .slice(0, 8);
+const pressureLead = topAreas[0];
+const featuredRouteSignal = routeCards[0];
+const heroStats = [
+  {
+    label: "Areas tracked",
+    value: localRouteLatest.areas.length.toLocaleString(),
+    detail: `Official local-authority rows in the ${localRouteLatest.snapshotDate} snapshot.`
+  },
+  {
+    label: "Current named hotels",
+    value: namedCurrentHotels.length.toLocaleString(),
+    detail: "Visible current sites in the public evidence ledger."
+  },
+  {
+    label: "Money-ledger rows",
+    value: moneyLedger.summary.totalRecords.toLocaleString(),
+    detail: "Contracts, tariffs, scrutiny estimates, and local response rows."
+  },
+  {
+    label: "Bodies and suppliers",
+    value: moneyLedger.summary.uniqueSuppliers.toLocaleString(),
+    detail: "Public bodies, providers, and linked entities with trackable exposure."
+  }
+];
 ---
 
 <BaseLayout
-  title="asylumstats | UK asylum accountability prototype"
-  description="Prototype site for UK asylum and refugee data, hotel tracking, and spending accountability."
+  title="asylumstats | UK asylum accountability"
+  description="UK asylum accountability site covering routes, hotel tracking, and public money."
 >
   <section class="hero">
-    <span class="kicker">{overview.hero.kicker}</span>
-    <h1>{overview.hero.title}</h1>
-    <p>{overview.hero.summary}</p>
-    <div class="chip-row">
-      <a class="chip accent" href="/compare">Compare places</a>
-      <a class="chip" href="/routes">Split routes</a>
-      <a class="chip teal" href="/hotels">Track hotels</a>
-      <a class="chip" href="/spending">Follow the money</a>
+    <div class="hero-copy">
+      <span class="kicker">{overview.hero.kicker}</span>
+      <h1>{overview.hero.title}</h1>
+      <p>{overview.hero.summary}</p>
+      <div class="hero-actions">
+        <a class="chip accent" href="/compare">Compare places</a>
+        <a class="chip" href="/routes">Split routes</a>
+        <a class="chip teal" href="/hotels">Track hotels</a>
+        <a class="chip" href="/spending">Follow the money</a>
+      </div>
+      <div class="chip-row">
+        <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
+        <span class="chip teal">
+          {hotelLedger.summary.currentNamedSitesWithAnyEntityLinks} current hotel sites with entity links
+        </span>
+        <span class="chip accent">{hotelLedger.summary.currentNamedSitesUnresolved} unresolved current sites</span>
+      </div>
     </div>
+
+    <aside class="hero-panel">
+      <div class="hero-panel-header">
+        <div>
+          <span class="tiny">Live accountability stack</span>
+          <span class="hero-panel-title">Routes, hotels, and money on one source-linked surface.</span>
+        </div>
+        <span class="chip">Dec 2025</span>
+      </div>
+
+      <div class="hero-stat-grid">
+        {heroStats.map((item) => (
+          <article class="hero-stat">
+            <span class="tiny">{item.label}</span>
+            <strong>{item.value}</strong>
+            <p class="tiny">{item.detail}</p>
+          </article>
+        ))}
+      </div>
+
+      {pressureLead && (
+        <article class="hero-callout">
+          <span class="tiny">Pressure leader</span>
+          <strong>{pressureLead.areaName}</strong>
+          <p class="lede">
+            {pressureLead.supportedAsylum.toLocaleString()} people on asylum support, with{" "}
+            {pressureLead.contingencyAccommodation.toLocaleString()} in contingency accommodation.
+          </p>
+        </article>
+      )}
+
+      {featuredRouteSignal && (
+        <article class="hero-callout accent">
+          <span class="tiny">National route signal</span>
+          <strong>{featuredRouteSignal.label}</strong>
+          <p class="lede">
+            {featuredRouteSignal.valueSuffix
+              ? `${featuredRouteSignal.value}${featuredRouteSignal.valueSuffix}`
+              : featuredRouteSignal.value.toLocaleString()}{" "}
+            in {featuredRouteSignal.period}.
+          </p>
+        </article>
+      )}
+    </aside>
   </section>
 
   <section class="section">

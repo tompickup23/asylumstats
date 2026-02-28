@@ -26,6 +26,9 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@types/node": "^25.3.2",
+    "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   }
 }

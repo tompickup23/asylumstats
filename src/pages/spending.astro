@@ -7,7 +7,7 @@ import { loadMoneyLedger } from "../lib/money-data";
 const moneyLedger = loadMoneyLedger();
 const topSuppliers = moneyLedger.supplierProfiles.slice(0, 8);
 
-const recordTypeLabels = {
+const recordTypeLabels: Record<string, string> = {
   prime_contract_scope: "Prime contract scope",
   funding_instruction: "Funding instruction",
   scrutiny_estimate: "Scrutiny estimate",

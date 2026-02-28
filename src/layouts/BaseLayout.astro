@@ -7,36 +7,43 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "UK asylum and refugee accountability data prototype." } = Astro.props;
+const { title, description = "UK asylum accountability data on routes, hotels, and public money." } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#050812" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Manrope:wght@400;500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <SiteHeader />
     <div class="shell banner">
-      Prototype state: public pages are being constrained to route-specific asylum, refugee, and humanitarian material.
-      General council models remain in the repo as background context only.
+      <strong>Live build</strong>
+      <span>
+        Public pages stay route-specific. Broader council context remains background infrastructure until a row has a
+        documented route or scheme link.
+      </span>
     </div>
     <main class="shell">
       <slot />
     </main>
     <footer class="shell footer">
-      asylumstats prototype. Built as a static GitHub-friendly scaffold with live council ingestion, clear source
-      provenance, and room for official, derived, archive, and public-evidence layers.
+      asylumstats tracks UK asylum routes, hotel secrecy, and public money with source-linked evidence, static delivery,
+      and clear scope rules about what is publishable.
     </footer>
   </body>
 </html>

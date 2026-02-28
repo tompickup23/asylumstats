@@ -3,9 +3,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadLocalRouteLatest } from "../lib/route-data";
 
 const localRouteLatest = loadLocalRouteLatest();
+type ComparePlace = (typeof localRouteLatest.areas)[number];
 const comparePlaces = localRouteLatest.defaultCompareCodes
   .map((code) => localRouteLatest.areas.find((place) => place.areaCode === code))
-  .filter(Boolean);
+  .filter((place): place is ComparePlace => place !== undefined);
 const maxSupported = Math.max(...comparePlaces.map((row) => row.supportedAsylum), 1);
 ---
 
