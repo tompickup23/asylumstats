@@ -1,0 +1,256 @@
+{
+  "summary": {
+    "regionalPartnerCount": 4,
+    "similarOrganisationCount": 2,
+    "archiveToolCount": 2,
+    "archivedResearchInputCount": 1,
+    "nwrsmpWorkbookCount": 6,
+    "nwrsmpHistoricWorkbookCount": 5
+  },
+  "nwrsmp": {
+    "pageTitle": "Data and insights",
+    "pageUrl": "https://northwestrsmp.org.uk/data-and-insights/",
+    "dashboardUrl": "https://public.tableau.com/views/NorthWestMigrationDashboard/RegionDashboard?:showVizHome=no",
+    "dashboardName": "NorthWestMigrationDashboard/RegionDashboard",
+    "introNote": "We have created an interactive data visualizer Tableau that lets you explore the North West migration data released by the Home Office.",
+    "provenanceNote": "The data provided in this table set comes from a range of published sources and is not provided by the RSMP. The source file data information is found in the data tab on the Tableau series above and queries should be directed to the source data owners in the first instance.",
+    "documents": [
+      {
+        "title": "North West Public Accessible February 2026 (XLS, 1398KB)",
+        "publishedAt": "2026-02-27",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/02/North-West-Public-Accessible-February-2026-XLS-1398KB.xlsx",
+        "fileSizeBytes": 1430831,
+        "format": "xlsx"
+      },
+      {
+        "title": "North West Public Accessible November 2025 (xls, 1,272KB)",
+        "publishedAt": "2025-12-05",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/12/North-West-Public-Accessible-November-2025-xls-1272KB.xlsx",
+        "fileSizeBytes": 1301569,
+        "format": "xlsx"
+      },
+      {
+        "title": "North West Public Accessible Data August 2025 (xls, 3,789KB)",
+        "publishedAt": "2025-08-22",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/08/North-West-Public-Accessible-Data-August-2025-xls-3789KB.xlsx",
+        "fileSizeBytes": 3879894,
+        "format": "xlsx"
+      },
+      {
+        "title": "North West Public Accessible Data May 2025 (XLS, 3,841KB)",
+        "publishedAt": "2025-05-23",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/05/North-West-Public-Accessible-Data-May-2025-XLS-3841KB.xlsx",
+        "fileSizeBytes": 3932436,
+        "format": "xlsx"
+      },
+      {
+        "title": "North West Public accessible data November 2024 (xls, 1,211KB)",
+        "publishedAt": "2025-01-31",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/01/North-West-Public-accessible-data-November-2024-xls-1211KB-1.xlsx",
+        "fileSizeBytes": 1239474,
+        "format": "xlsx"
+      },
+      {
+        "title": "North West Public Accessible Data August 2024 (PDF, 6MB)",
+        "publishedAt": "2024-11-01",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2024/11/North-West-Public-Accessible-Data-August-2024-PDF-6MB.xlsx",
+        "fileSizeBytes": 5995153,
+        "format": "xlsx"
+      }
+    ]
+  },
+  "regionalPartners": [
+    {
+      "entryId": "migration_yorkshire_statistics",
+      "organisation": "Migration Yorkshire",
+      "regionName": "Yorkshire and the Humber",
+      "coverage": "England region and local authority",
+      "currentUrl": "https://www.migrationyorkshire.org.uk/statistics",
+      "historicUrl": "https://www.migrationyorkshire.org.uk/statistics",
+      "historicPriority": "high",
+      "formats": [
+        "html",
+        "dashboard",
+        "downloads"
+      ],
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "migration"
+      ],
+      "recommendedUse": "Regional benchmark series and local authority context",
+      "notes": "Statistics hub with asylum and migration data tools and long-running regional evidence."
+    },
+    {
+      "entryId": "nemp_data_page",
+      "organisation": "North East Migration Partnership",
+      "regionName": "North East England",
+      "coverage": "England region and local authority",
+      "currentUrl": "https://www.nemp.org.uk/data/",
+      "historicUrl": "https://www.nemp.org.uk/data/",
+      "historicPriority": "high",
+      "formats": [
+        "html",
+        "dashboard",
+        "downloads"
+      ],
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "migration"
+      ],
+      "recommendedUse": "Regional dashboard and downloadable evidence leads",
+      "notes": "Partnership data page that can surface current regional series and historic downloads."
+    },
+    {
+      "entryId": "london_councils_asylum_resettlement_survey",
+      "organisation": "London Councils",
+      "regionName": "London",
+      "coverage": "London borough and city region",
+      "currentUrl": "https://www.londoncouncils.gov.uk/news-and-press-releases/2024/asylum-and-resettlement-london-councils-survey",
+      "historicUrl": "https://www.londoncouncils.gov.uk/news-and-press-releases/2024/asylum-and-resettlement-london-councils-survey",
+      "historicPriority": "medium",
+      "formats": [
+        "html",
+        "report"
+      ],
+      "routeFocus": [
+        "asylum",
+        "resettlement"
+      ],
+      "recommendedUse": "Comparable city-regional survey evidence and method cues",
+      "notes": "Useful similar-organisation evidence even though it is not an SMP."
+    },
+    {
+      "entryId": "wsmp_data_pages",
+      "organisation": "Wales Strategic Migration Partnership",
+      "regionName": "Wales",
+      "coverage": "Wales nation and local authority",
+      "currentUrl": "https://www.wsmp.wales/home",
+      "historicUrl": "https://www.wsmp.wales/home",
+      "historicPriority": "medium",
+      "formats": [
+        "html",
+        "guidance",
+        "data_pages"
+      ],
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "migration"
+      ],
+      "recommendedUse": "Welsh nation-level migration evidence and referral routes",
+      "notes": "Strategic migration partnership pages include migration data and research entry points."
+    }
+  ],
+  "similarOrganisations": [
+    {
+      "entryId": "aida_uk_types_of_accommodation",
+      "organisation": "Asylum Information Database (AIDA)",
+      "regionName": "United Kingdom",
+      "coverage": "UK asylum reception system and accommodation evidence",
+      "currentUrl": "https://asylumineurope.org/reports/country/united-kingdom/reception-conditions/housing/types-accommodation/",
+      "historicUrl": "https://asylumineurope.org/reports/country/united-kingdom/reception-conditions/housing/types-accommodation/",
+      "historicPriority": "medium",
+      "formats": [
+        "html",
+        "report",
+        "references"
+      ],
+      "routeFocus": [
+        "asylum",
+        "hotels",
+        "dispersal"
+      ],
+      "recommendedUse": "Structured secondary evidence on hotel use dispersal geography and contracts",
+      "notes": "Footnoted UK reception-conditions page with references to official hotel counts contract structure and dispersal realities."
+    },
+    {
+      "entryId": "migration_observatory_local_data_guide",
+      "organisation": "Migration Observatory",
+      "regionName": "United Kingdom",
+      "coverage": "UK local authority and national synthesis",
+      "currentUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
+      "historicUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
+      "historicPriority": "medium",
+      "formats": [
+        "html",
+        "guide",
+        "charts",
+        "links"
+      ],
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "migration"
+      ],
+      "recommendedUse": "Synthesis guide to official local migration datasets and their limits",
+      "notes": "Useful for tracing official asylum and refugee datasets and the strengths and caveats of each source."
+    }
+  ],
+  "archiveTools": [
+    {
+      "entryId": "wayback_machine",
+      "organisation": "Internet Archive Wayback Machine",
+      "regionName": "UK",
+      "coverage": "All web geographies",
+      "currentUrl": "https://web.archive.org/",
+      "historicUrl": "https://web.archive.org/",
+      "historicPriority": "high",
+      "formats": [
+        "html",
+        "pdf",
+        "warc"
+      ],
+      "routeFocus": [
+        "archive",
+        "historical_recovery"
+      ],
+      "recommendedUse": "Fallback capture for deleted workbook URLs and non-government pages",
+      "notes": "Useful when partnership downloads or Tableau pages move outside the public-sector archive perimeter."
+    },
+    {
+      "entryId": "ukg_web_archive",
+      "organisation": "UK Government Web Archive",
+      "regionName": "UK",
+      "coverage": "All public-sector geographies",
+      "currentUrl": "https://webarchive.nationalarchives.gov.uk/",
+      "historicUrl": "https://webarchive.nationalarchives.gov.uk/",
+      "historicPriority": "high",
+      "formats": [
+        "html",
+        "pdf",
+        "warc"
+      ],
+      "routeFocus": [
+        "archive",
+        "historical_recovery"
+      ],
+      "recommendedUse": "Recover overwritten public-sector pages and historic attachments",
+      "notes": "Prefer when a partnership page or council publication has been replaced."
+    }
+  ],
+  "archivedResearchInputs": [
+    {
+      "entryId": "migranthotels_wayback_snapshot",
+      "organisation": "migranthotels.net archive snapshot",
+      "regionName": "United Kingdom",
+      "coverage": "Named hotel-site discovery map and archived list",
+      "currentUrl": "https://web.archive.org/web/20250826101522/https://migranthotels.net/",
+      "historicUrl": "https://web.archive.org/web/*/https://migranthotels.net/",
+      "historicPriority": "high",
+      "formats": [
+        "html",
+        "map",
+        "archived_site"
+      ],
+      "routeFocus": [
+        "asylum",
+        "hotels",
+        "historical_recovery"
+      ],
+      "recommendedUse": "Archive-only lead source for candidate hotel sites that still need independent verification",
+      "notes": "Use only as a discovery layer and never as the sole basis for a published hotel claim."
+    }
+  ]
+}

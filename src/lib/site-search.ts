@@ -70,9 +70,11 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     title: "Sources",
     kind: "page",
     kicker: "Source ledger",
-    description: "Source inventory showing what evidence is in scope and why some rows stay out.",
+    description:
+      "Source inventory showing what evidence is in scope, which regional feeds are worth mining, and where historic backfill and archive-only hotel leads live.",
     priority: 108,
-    searchText: "sources source ledger evidence scope source inventory"
+    searchText:
+      "sources source ledger evidence scope source inventory regional migration partnerships historic backfill archive nwrsmp workbooks dashboards migration observatory aida archived hotel map"
   },
   {
     href: "/methodology/",

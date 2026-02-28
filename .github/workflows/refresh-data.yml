@@ -17,6 +17,8 @@ jobs:
       - run: npm ci
       - name: Fetch and transform routes
         run: npm run ingest:routes
+      - name: Fetch and transform regional sources
+        run: npm run ingest:regionalsources
       - name: Transform hotels
         run: npm run ingest:hotels
       - name: Transform money ledger

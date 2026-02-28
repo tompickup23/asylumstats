@@ -117,6 +117,60 @@
     "sourceUrl": "https://find-and-update.company-information.service.gov.uk/company/03929881"
   },
   {
+    "name": "North West RSMP data and insights workbook series",
+    "type": "regional secondary data",
+    "coverage": "North West England, region and local authority",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, with provenance caveats",
+    "use": "Secondary regional workbook series for discovery, historic backfill, and cross-checking route-specific local authority patterns while keeping original source ownership visible.",
+    "sourceUrl": "https://northwestrsmp.org.uk/data-and-insights/"
+  },
+  {
+    "name": "Strategic Migration Partnership dashboards and regional data hubs",
+    "type": "regional secondary data",
+    "coverage": "Region or nation specific",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, when route labels and source provenance stay explicit",
+    "use": "Regional dashboards, workbook series, and data hubs used to identify asylum and refugee series, historic snapshots, and methods worth porting into the public site.",
+    "sourceUrl": "https://www.nemp.org.uk/data/"
+  },
+  {
+    "name": "Web archives for overwritten migration pages and downloads",
+    "type": "archive recovery",
+    "coverage": "UK public-sector and civil-society web pages",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, for preserved public evidence",
+    "use": "Recover historic SMP downloads, overwritten council pages, and older migration dashboards when current sites only surface the latest file.",
+    "sourceUrl": "https://webarchive.nationalarchives.gov.uk/"
+  },
+  {
+    "name": "Migration Observatory local data guide",
+    "type": "research synthesis",
+    "coverage": "UK local authority and national",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, when the underlying official dataset and caveats stay visible",
+    "use": "Method and synthesis layer for tracing local asylum, refugee, and migration datasets without losing their strengths and limitations.",
+    "sourceUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/"
+  },
+  {
+    "name": "AIDA UK accommodation and reception pages",
+    "type": "research synthesis",
+    "coverage": "UK asylum reception system",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, for secondary context and source tracing",
+    "use": "Secondary evidence on hotel use, initial accommodation, dispersal geography, and contract structure with footnoted references.",
+    "sourceUrl": "https://asylumineurope.org/reports/country/united-kingdom/reception-conditions/housing/types-accommodation/"
+  },
+  {
+    "name": "Archived hotel-map snapshots",
+    "type": "archived discovery map",
+    "coverage": "Named hotel-site leads across the UK",
+    "scope": "local_route_relevant",
+    "publiclyIncluded": "yes, only when every site is independently verified",
+    "use": "Archive-only discovery layer for candidate asylum hotel sites and local leads that must be corroborated before any public claim.",
+    "sourceUrl": "https://web.archive.org/web/20250826101522/https://migranthotels.net/"
+  },
+  {
     "name": "General council spending corpus",
     "type": "context infrastructure",
     "coverage": "Single authority",

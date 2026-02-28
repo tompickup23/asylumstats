@@ -13,3 +13,4 @@ data/canonical/lancashire_cc/spending/
 data/canonical/uk_routes/
 data/raw/lancashire_cc/budgets_govuk.json
 data/raw/lancashire_cc/budget_mapping.json
+data/raw/regional_sources/*.json

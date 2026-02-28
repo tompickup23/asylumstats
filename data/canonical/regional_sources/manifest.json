@@ -1,0 +1,26 @@
+{
+  "datasetId": "regional_sources",
+  "generatedAt": "2026-02-28T23:38:53.028Z",
+  "inputs": [
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/manual/regional-source-watch.csv",
+      "fileSha256": "014ed9f3ff937ed5ada9c62d6a5ac482706ddc98a510bd8f086f69d4efc7634d"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-media.json",
+      "fileSha256": "18fb3f886d9dca814dd819b19a5af2b34a35c3c319ce253554592351e39a573e"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-data-page.json",
+      "fileSha256": "885f8c096857789eb2dde5e64c8aa2a1b290cb32f962f7e2fc805c31241ba4d5"
+    }
+  ],
+  "outputs": {
+    "live": "src/data/live/regional-source-watch.json",
+    "nwrsmpWorkbookCount": 6,
+    "regionalPartnerCount": 4,
+    "similarOrganisationCount": 2,
+    "archiveToolCount": 2,
+    "archivedResearchInputCount": 1
+  }
+}
