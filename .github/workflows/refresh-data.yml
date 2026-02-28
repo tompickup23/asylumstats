@@ -10,5 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Placeholder
-        run: echo "Fetch official releases, run transforms, validate, and export site data."
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Fetch and transform routes
+        run: npm run ingest:routes
+      - name: Transform hotels
+        run: npm run ingest:hotels
+      - name: Transform money ledger
+        run: npm run ingest:money
+      - name: Check for data changes
+        id: changes
+        run: |
+          git diff --quiet src/data/live/ data/marts/ || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Commit and push updated data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/live/ data/marts/ data/canonical/
+          git commit -m "data: refresh route + hotel + money data $(date -u +%Y-%m-%d)"
+          git push
