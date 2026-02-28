@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import BenchmarkStrip from "../components/BenchmarkStrip.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
@@ -144,6 +145,78 @@ const compareMatrixRows = [
     format: (place: ComparePlace) => place.resettlementCumulativeTotal.toLocaleString()
   }
 ];
+
+function buildPresetHref(pathname: string, params: Record<string, string>, hash: string): string {
+  return `${pathname}?${new URLSearchParams(params).toString()}#${hash}`;
+}
+
+const comparePresetViews = [
+  {
+    title: "Hotel-heavy pressure points",
+    body: "Filter to hotel-heavy local models and rank by contingency accommodation so the places most dependent on contingency stay together.",
+    href: buildPresetHref(
+      "/compare/",
+      {
+        compare_model: "hotel-heavy",
+        compare_focus: "contingency",
+        compare_limit: "24"
+      },
+      "compare-explorer"
+    ),
+    cta: "Open hotel-heavy view"
+  },
+  {
+    title: "Humanitarian-heavy authorities",
+    body: "Bring forward places where Homes for Ukraine and Afghan programme populations materially change the local reading.",
+    href: buildPresetHref(
+      "/compare/",
+      {
+        compare_model: "humanitarian-heavy",
+        compare_focus: "humanitarian",
+        compare_limit: "24"
+      },
+      "compare-explorer"
+    ),
+    cta: "Open humanitarian view"
+  },
+  {
+    title: `${supportedRateLeader.regionName} rate leaderboard`,
+    body: `Jump straight into ${supportedRateLeader.regionName} and rank by supported asylum rate rather than raw count.`,
+    href: buildPresetHref(
+      "/compare/",
+      {
+        compare_region: supportedRateLeader.regionName,
+        compare_focus: "rate",
+        compare_limit: "24"
+      },
+      "compare-explorer"
+    ),
+    cta: "Open rate view"
+  },
+  {
+    title: "Dispersal-led volume check",
+    body: "Keep attention on places with low contingency share but substantial supported asylum counts, which often read differently from hotel-heavy areas.",
+    href: buildPresetHref(
+      "/compare/",
+      {
+        compare_model: "dispersal-led",
+        compare_focus: "supported",
+        compare_limit: "24"
+      },
+      "compare-explorer"
+    ),
+    cta: "Open dispersal view"
+  }
+];
+const compareSections = [
+  { id: "default-compare-set", label: "Default set" },
+  { id: "pathway-profiles", label: "Pathway mix" },
+  { id: "regional-pressure-field", label: "Region field" },
+  { id: "compare-presets", label: "Presets" },
+  { id: "compare-explorer", label: "Explorer" },
+  { id: "cross-place-matrix", label: "Matrix" },
+  { id: "compare-findings", label: "Findings" }
+];
 ---
 
 <BaseLayout
@@ -204,7 +277,9 @@ const compareMatrixRows = [
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents sections={compareSections} />
+
+  <section id="default-compare-set" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Default compare set</h2>
@@ -255,7 +330,7 @@ const compareMatrixRows = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="pathway-profiles" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Pathway mix profiles</h2>
@@ -358,7 +433,7 @@ const compareMatrixRows = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="regional-pressure-field" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Regional pressure field</h2>
@@ -388,7 +463,7 @@ const compareMatrixRows = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="cross-place-matrix" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Cross-place matrix</h2>
@@ -426,7 +501,31 @@ const compareMatrixRows = [
     </div>
   </section>
 
-  <section class="section" id="compare-explorer">
+  <section id="compare-presets" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Preset views</h2>
+        <p class="lede">
+          These saved views jump straight into the strongest comparison lenses without asking readers to rebuild the
+          same filters by hand.
+        </p>
+      </div>
+      <span class="chip accent">Deep-link presets</span>
+    </div>
+    <div class="guide-grid">
+      {comparePresetViews.map((preset) => (
+        <article class="guide-card">
+          <h3>{preset.title}</h3>
+          <p>{preset.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={preset.href}>{preset.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-anchor" id="compare-explorer">
     <div class="section-head">
       <div>
         <h2>Explorer and shareable filters</h2>
@@ -589,7 +688,7 @@ const compareMatrixRows = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="compare-findings" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>What these four already prove</h2>

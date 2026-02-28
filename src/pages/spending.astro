@@ -82,6 +82,10 @@ function formatRouteFamily(routeFamily: string | null | undefined): string {
   }
 }
 
+function buildPresetHref(pathname: string, params: Record<string, string>, hash: string): string {
+  return `${pathname}?${new URLSearchParams(params).toString()}#${hash}`;
+}
+
 const moneyRouteOptions = [...new Set(moneyLedger.records.map((record) => record.routeFamily ?? "not_route_specific"))].sort(
   (left, right) => formatRouteFamily(left).localeCompare(formatRouteFamily(right))
 );
@@ -121,9 +125,67 @@ const spendingReadoutCards = [
       }
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
+const spendingPresetViews = [
+  {
+    title: "Asylum support rows with published values",
+    body: "Focus on asylum-support money rows that already disclose normalized GBP values and sort them by size.",
+    href: buildPresetHref(
+      "/spending/",
+      {
+        money_route: "asylum_support",
+        money_value: "with_value",
+        money_sort: "value"
+      },
+      "money-explorer"
+    ),
+    cta: "Open asylum support spend"
+  },
+  {
+    title: "Homes for Ukraine funding rows",
+    body: "Jump straight into the Homes for Ukraine money layer and keep the funding rows grouped together.",
+    href: buildPresetHref(
+      "/spending/",
+      {
+        money_route: "homes_for_ukraine",
+        money_type: "funding_instruction",
+        money_sort: "value"
+      },
+      "money-explorer"
+    ),
+    cta: "Open Ukraine funding"
+  },
+  {
+    title: "Scrutiny rows without published values",
+    body: "Surface scrutiny estimates and non-disclosed rows, where accountability often depends on evidence links rather than a published price tag.",
+    href: buildPresetHref(
+      "/spending/",
+      {
+        money_type: "scrutiny_estimate",
+        money_value: "without_value",
+        money_sort: "linked_sites"
+      },
+      "money-explorer"
+    ),
+    cta: "Open scrutiny view"
+  },
+  {
+    title: "Afghan programme money surface",
+    body: "Keep the Afghan programme rows together and rank the visible items by published value.",
+    href: buildPresetHref(
+      "/spending/",
+      {
+        money_route: "afghan_resettlement_programme",
+        money_sort: "value"
+      },
+      "money-explorer"
+    ),
+    cta: "Open Afghan view"
+  }
+];
 const spendingSections = [
   { id: "money-composition", label: "Composition" },
   { id: "money-readout", label: "Readout" },
+  { id: "money-presets", label: "Presets" },
   { id: "money-explorer", label: "Explorer" },
   { id: "supplier-watchlist", label: "Watchlist" },
   { id: "money-ledger", label: "Ledger" },
@@ -332,6 +394,30 @@ const spendingSections = [
         <article class="story-card">
           <h3>{card.title}</h3>
           <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="money-presets" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Preset views</h2>
+        <p class="lede">
+          These saved money views open the most useful ledger slices immediately and keep the existing query-state
+          explorer as the underlying model.
+        </p>
+      </div>
+      <span class="chip accent">Deep-link presets</span>
+    </div>
+    <div class="guide-grid">
+      {spendingPresetViews.map((preset) => (
+        <article class="guide-card">
+          <h3>{preset.title}</h3>
+          <p>{preset.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={preset.href}>{preset.cta}</a>
+          </p>
         </article>
       ))}
     </div>

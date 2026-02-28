@@ -3,6 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import RegionTileMap from "../../components/RegionTileMap.astro";
+import TrendChart from "../../components/TrendChart.astro";
+import { getAreaTrendSummary } from "../../lib/area-series";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
@@ -66,6 +68,8 @@ const hotelSignals = hotelSites
     }))
   )
   .slice(0, 3);
+const areaTrend = getAreaTrendSummary(area.areaCode);
+const previousTrendPoint = areaTrend ? areaTrend.points[areaTrend.points.length - 2] ?? null : null;
 const placeDrilldownMetrics = getPlaceDrilldownMetrics(localRouteLatest.areas, area);
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
@@ -159,6 +163,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
   unnamedSiteCount
 });
 const placeSections = [
+  ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "place-drilldown", label: "Drill-down" },
   { id: "local-benchmarks", label: "Benchmarks" },
   { id: "editorial-readout", label: "Readout" },
@@ -226,6 +231,63 @@ const placeSections = [
   </section>
 
   <PageContents sections={placeSections} />
+
+  {areaTrend && (
+    <section id="recent-trend" class="split section section-anchor">
+      <TrendChart
+        points={areaTrend.points.map((point) => ({ label: point.label, value: point.value }))}
+        title={`Recent supported asylum path in ${area.areaName}`}
+        description={`Quarter-end place series to ${areaTrend.latestPeriodLabel}. ${areaTrend.hasIllustrativeData ? "Illustrative bridge points remain in the series until fuller official quarterly coverage is wired." : "All visible points are official anchor values."}`}
+        tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
+      />
+
+      <article class="panel panel-pad">
+        <div class="chip-row">
+          <span class="chip accent">Trend readout</span>
+          <span class="chip">{areaTrend.latestPeriodLabel}</span>
+        </div>
+        <h2>Recent path and evidence quality</h2>
+        <div class="signal-list">
+          <article class={`signal-card${(areaTrend.deltaFromPrevious ?? 0) > 0 ? " accent" : ""}`}>
+            <span class="tiny">Latest move</span>
+            <h3>
+              {areaTrend.deltaFromPrevious !== null
+                ? `${areaTrend.deltaFromPrevious >= 0 ? "+" : ""}${areaTrend.deltaFromPrevious.toLocaleString()} since ${previousTrendPoint?.label ?? "the previous point"}`
+                : "Only one published trend point"}
+            </h3>
+            <p class="tiny">
+              {areaTrend.changePctFromPrevious !== null
+                ? `${areaTrend.changePctFromPrevious >= 0 ? "+" : ""}${areaTrend.changePctFromPrevious}% by the latest quarter-on-quarter step.`
+                : "Quarter-on-quarter change cannot be calculated from a single point."}
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Series span</span>
+            <h3>
+              {areaTrend.deltaFromFirst >= 0 ? "+" : ""}
+              {areaTrend.deltaFromFirst.toLocaleString()} across the visible series
+            </h3>
+            <p class="tiny">
+              {areaTrend.changePctFromFirst !== null
+                ? `${areaTrend.changePctFromFirst >= 0 ? "+" : ""}${areaTrend.changePctFromFirst}% from the first visible point to ${areaTrend.latestPeriodLabel}.`
+                : "Percentage change from the first visible point cannot be calculated."}
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Series quality</span>
+            <h3>
+              {areaTrend.officialAnchorCount} official anchor point{areaTrend.officialAnchorCount === 1 ? "" : "s"}
+            </h3>
+            <p class="tiny">
+              {areaTrend.hasIllustrativeData
+                ? `${areaTrend.illustrativeCount} illustrative bridge point${areaTrend.illustrativeCount === 1 ? "" : "s"} remain in the visible series, so this section is a directional reading rather than a full official quarterly run.`
+                : "The visible trend line is built entirely from official anchor points in the local area series."}
+            </p>
+          </article>
+        </div>
+      </article>
+    </section>
+  )}
 
   <section id="place-drilldown" class="section section-anchor">
     <div class="section-head">

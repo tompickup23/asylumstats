@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import {
@@ -70,6 +71,77 @@ const hotelReadoutCards = [
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
 
+function buildPresetHref(pathname: string, params: Record<string, string>, hash: string): string {
+  return `${pathname}?${new URLSearchParams(params).toString()}#${hash}`;
+}
+
+const hotelPresetViews = [
+  {
+    title: "Current unresolved sites",
+    body: "Jump straight to current named hotels where public evidence still cannot resolve the owner or operator chain.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_status: "current",
+        hotel_coverage: "unresolved"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open unresolved sites"
+  },
+  {
+    title: "Partial chains in the current estate",
+    body: "Keep only current sites with some entity evidence but an incomplete ownership or operator picture.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_status: "current",
+        hotel_coverage: "partial"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open partial chains"
+  },
+  {
+    title: "Unnamed-only visibility gap",
+    body: "Move directly to areas where public authorities acknowledge hotel use without publishing the site names.",
+    href: buildPresetHref(
+      "/hotels/",
+      {
+        hotel_visibility: "unnamed-only"
+      },
+      "hotel-filters"
+    ),
+    cta: "Open unnamed-only areas"
+  },
+  ...(secrecyRegionLeader
+    ? [
+        {
+          title: `${secrecyRegionLeader.regionName} secrecy cluster`,
+          body: `Filter the hotel ledger to ${secrecyRegionLeader.regionName}, where unnamed acknowledged sites currently cluster most heavily in the starter ledger.`,
+          href: buildPresetHref(
+            "/hotels/",
+            {
+              hotel_region: secrecyRegionLeader.regionName,
+              hotel_visibility: "unnamed-only"
+            },
+            "hotel-filters"
+          ),
+          cta: "Open regional secrecy view"
+        }
+      ]
+    : [])
+];
+const hotelSections = [
+  { id: "hotel-pressure", label: "Pressure" },
+  { id: "regional-visibility", label: "Visibility" },
+  { id: "hotel-presets", label: "Presets" },
+  { id: "hotel-filters", label: "Explorer" },
+  { id: "hotel-areas", label: "Area ledger" },
+  { id: "hotel-ledger", label: "Site ledger" },
+  { id: "hotel-limits", label: "Limits" }
+];
+
 function formatReportedPeople(value: number | null): string {
   return typeof value === "number" ? `${value.toLocaleString()} people reported` : "People total not published";
 }
@@ -123,7 +195,9 @@ function formatReportedPeople(value: number | null): string {
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents sections={hotelSections} />
+
+  <section id="hotel-pressure" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Official hotel pressure</h2>
@@ -151,7 +225,7 @@ function formatReportedPeople(value: number | null): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="regional-visibility" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Regional visibility pattern</h2>
@@ -335,7 +409,31 @@ function formatReportedPeople(value: number | null): string {
     </div>
   </section>
 
-  <section class="section" id="hotel-filters">
+  <section id="hotel-presets" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Preset views</h2>
+        <p class="lede">
+          These saved hotel views open the strongest evidence slices immediately and preserve the same query-state
+          model as the manual filters below.
+        </p>
+      </div>
+      <span class="chip accent">Deep-link presets</span>
+    </div>
+    <div class="guide-grid">
+      {hotelPresetViews.map((preset) => (
+        <article class="guide-card">
+          <h3>{preset.title}</h3>
+          <p>{preset.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={preset.href}>{preset.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-anchor" id="hotel-filters">
     <div class="section-head">
       <div>
         <h2>Explorer and shareable filters</h2>
@@ -398,7 +496,7 @@ function formatReportedPeople(value: number | null): string {
     </form>
   </section>
 
-  <section class="section">
+  <section id="hotel-areas" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Area visibility ledger</h2>
@@ -468,7 +566,7 @@ function formatReportedPeople(value: number | null): string {
     </article>
   </section>
 
-  <section class="section">
+  <section id="hotel-ledger" class="section section-anchor">
     <h2>Full starter ledger</h2>
     <div class="table-card">
       <table>
@@ -550,7 +648,7 @@ function formatReportedPeople(value: number | null): string {
     </article>
   </section>
 
-  <section class="section">
+  <section id="hotel-limits" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Current limitations</h2>
