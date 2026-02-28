@@ -275,6 +275,15 @@ textarea {
   padding: 1rem;
 }
 
+.site-search-shell[hidden] {
+  display: none;
+}
+
+.site-search-shell[aria-hidden="true"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .site-search-backdrop {
   position: absolute;
   inset: 0;
@@ -883,6 +892,10 @@ main {
   flex-wrap: wrap;
   gap: 0.65rem;
   align-items: center;
+}
+
+.filter-status {
+  min-height: 1.55rem;
 }
 
 button.source-pill {

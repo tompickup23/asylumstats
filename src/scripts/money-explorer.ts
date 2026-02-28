@@ -5,6 +5,7 @@ import {
   type MoneyExplorerItem,
   type MoneyExplorerState
 } from "../lib/money-explorer";
+import { wireShareState } from "./share-state";
 
 function toNumber(value: string | undefined): number {
   const parsed = Number(value);
@@ -56,6 +57,8 @@ export function initMoneyExplorer(): void {
   const disclosedValue = root.querySelector<HTMLElement>("[data-money-value-total]");
   const linkedSites = root.querySelector<HTMLElement>("[data-money-linked-sites]");
   const leadBuyer = root.querySelector<HTMLElement>("[data-money-lead-buyer]");
+  const copy = root.querySelector<HTMLButtonElement>("[data-money-copy]");
+  const copyStatus = root.querySelector<HTMLElement>("[data-money-copy-status]");
 
   if (!form || !summary || !meta || !empty || !rowsRoot || !resultCount || !disclosedValue || !linkedSites || !leadBuyer) {
     return;
@@ -88,6 +91,12 @@ export function initMoneyExplorer(): void {
   const value = valueSelect;
   const scope = scopeSelect;
   const sort = sortSelect;
+  const share = wireShareState({
+    button: copy,
+    statusElement: copyStatus,
+    getUrl: () => new URL(buildRelativeUrl(), window.location.origin).toString(),
+    successMessage: "Filtered money view copied"
+  });
 
   const items = Array.from(rows.querySelectorAll<HTMLElement>("[data-money-row]")).map((element) => ({
     element,
@@ -122,7 +131,7 @@ export function initMoneyExplorer(): void {
     sort.value = params.get("money_sort") ?? "newest";
   }
 
-  function writeStateToUrl(): void {
+  function buildRelativeUrl(): string {
     const params = new URLSearchParams(window.location.search);
     const nextEntries = {
       money_q: query.value.trim(),
@@ -149,8 +158,11 @@ export function initMoneyExplorer(): void {
       }
     }
 
-    const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}${window.location.hash}`;
-    window.history.replaceState({}, "", nextUrl);
+    return `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}#money-explorer`;
+  }
+
+  function writeStateToUrl(): void {
+    window.history.replaceState({}, "", buildRelativeUrl());
   }
 
   function applyFilters(): void {
@@ -198,6 +210,7 @@ export function initMoneyExplorer(): void {
 
   function onChange(): void {
     writeStateToUrl();
+    share.setStatus("");
     applyFilters();
   }
 

@@ -497,6 +497,8 @@ const spendingSections = [
       </form>
       <div class="filter-actions">
         <button class="source-pill" type="button" data-money-reset>Reset filters</button>
+        <button class="source-pill" type="button" data-money-copy>Copy filtered view</button>
+        <span class="tiny filter-status" data-money-copy-status aria-live="polite"></span>
         <span class="tiny" data-money-summary>Showing {moneyLedger.summary.totalRecords.toLocaleString()} public ledger rows</span>
         <span class="tiny" data-money-meta>
           {moneyLedger.summary.rowsWithDisclosedValue.toLocaleString()} rows with values | lead buyer {leadBuyer?.buyerName ?? "not available"}

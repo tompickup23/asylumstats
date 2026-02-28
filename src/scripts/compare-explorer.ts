@@ -1,3 +1,5 @@
+import { wireShareState } from "./share-state";
+
 type CompareFocus = "supported" | "rate" | "contingency" | "humanitarian" | "resettlement";
 
 interface CompareItem {
@@ -45,6 +47,8 @@ export function initCompareExplorer(): void {
   const summaryElement = root.querySelector<HTMLElement>("[data-compare-summary]");
   const emptyElement = root.querySelector<HTMLElement>("[data-compare-empty]");
   const reset = root.querySelector<HTMLButtonElement>("[data-compare-reset]");
+  const copy = root.querySelector<HTMLButtonElement>("[data-compare-copy]");
+  const copyStatus = root.querySelector<HTMLElement>("[data-compare-copy-status]");
 
   if (!form || !resultsElement || !summaryElement || !emptyElement) {
     return;
@@ -70,6 +74,12 @@ export function initCompareExplorer(): void {
   const focus = focusSelect;
   const model = modelSelect;
   const limit = limitSelect;
+  const share = wireShareState({
+    button: copy,
+    statusElement: copyStatus,
+    getUrl: () => new URL(buildRelativeUrl(), window.location.origin).toString(),
+    successMessage: "Filtered compare view copied"
+  });
 
   const items = Array.from(results.querySelectorAll<HTMLElement>("[data-compare-item]")).map((element) => ({
     element,
@@ -94,7 +104,7 @@ export function initCompareExplorer(): void {
     limit.value = params.get("compare_limit") ?? "12";
   }
 
-  function writeStateToUrl(): void {
+  function buildRelativeUrl(): string {
     const params = new URLSearchParams(window.location.search);
     const nextEntries = {
       compare_q: search.value.trim(),
@@ -123,8 +133,11 @@ export function initCompareExplorer(): void {
     }
 
     const query = params.toString();
-    const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-    window.history.replaceState({}, "", nextUrl);
+    return `${window.location.pathname}${query ? `?${query}` : ""}#compare-explorer`;
+  }
+
+  function writeStateToUrl(): void {
+    window.history.replaceState({}, "", buildRelativeUrl());
   }
 
   function applyFilters(): void {
@@ -172,6 +185,7 @@ export function initCompareExplorer(): void {
 
   function onChange(): void {
     writeStateToUrl();
+    share.setStatus("");
     applyFilters();
   }
 

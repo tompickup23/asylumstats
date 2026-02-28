@@ -119,6 +119,8 @@ export function initSiteSearch(): void {
 
   function setOpen(nextOpen: boolean): void {
     rootElement.hidden = !nextOpen;
+    rootElement.toggleAttribute("inert", !nextOpen);
+    rootElement.setAttribute("aria-hidden", nextOpen ? "false" : "true");
     document.body.classList.toggle("site-search-open", nextOpen);
 
     if (nextOpen) {
@@ -263,4 +265,8 @@ export function initSiteSearch(): void {
       void loadEntries();
     }, 1500);
   }
+
+  rootElement.hidden = true;
+  rootElement.toggleAttribute("inert", true);
+  rootElement.setAttribute("aria-hidden", "true");
 }

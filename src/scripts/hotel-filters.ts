@@ -1,3 +1,5 @@
+import { wireShareState } from "./share-state";
+
 interface HotelSiteRow {
   element: HTMLElement;
   text: string;
@@ -26,6 +28,8 @@ export function initHotelFilters(): void {
   const siteEmptyElement = root.querySelector<HTMLElement>("[data-hotel-site-empty]");
   const areaEmptyElement = root.querySelector<HTMLElement>("[data-hotel-area-empty]");
   const reset = root.querySelector<HTMLButtonElement>("[data-hotel-reset]");
+  const copy = root.querySelector<HTMLButtonElement>("[data-hotel-copy]");
+  const copyStatus = root.querySelector<HTMLElement>("[data-hotel-copy-status]");
 
   if (!form || !siteSummaryElement || !areaSummaryElement || !siteEmptyElement || !areaEmptyElement) {
     return;
@@ -50,6 +54,12 @@ export function initHotelFilters(): void {
   const status = statusSelect;
   const coverage = coverageSelect;
   const visibility = visibilitySelect;
+  const share = wireShareState({
+    button: copy,
+    statusElement: copyStatus,
+    getUrl: () => new URL(buildRelativeUrl(), window.location.origin).toString(),
+    successMessage: "Filtered hotel view copied"
+  });
 
   const siteRows = Array.from(document.querySelectorAll<HTMLElement>("[data-hotel-site-row]")).map((element) => ({
     element,
@@ -82,7 +92,7 @@ export function initHotelFilters(): void {
     visibility.value = params.get("hotel_visibility") ?? "all";
   }
 
-  function writeStateToUrl(): void {
+  function buildRelativeUrl(): string {
     const params = new URLSearchParams(window.location.search);
     const nextEntries = {
       hotel_q: search.value.trim(),
@@ -103,8 +113,11 @@ export function initHotelFilters(): void {
     }
 
     const query = params.toString();
-    const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-    window.history.replaceState({}, "", nextUrl);
+    return `${window.location.pathname}${query ? `?${query}` : ""}#hotel-filters`;
+  }
+
+  function writeStateToUrl(): void {
+    window.history.replaceState({}, "", buildRelativeUrl());
   }
 
   function applyFilters(): void {
@@ -153,6 +166,7 @@ export function initHotelFilters(): void {
 
   function onChange(): void {
     writeStateToUrl();
+    share.setStatus("");
     applyFilters();
   }
 

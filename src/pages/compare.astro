@@ -4,6 +4,8 @@ import PageContents from "../components/PageContents.astro";
 import BenchmarkStrip from "../components/BenchmarkStrip.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
+import TrendChart from "../components/TrendChart.astro";
+import { getAreaTrendSummary } from "../lib/area-series";
 import { loadLocalRouteLatest } from "../lib/route-data";
 import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../lib/route-analytics";
 
@@ -98,6 +100,63 @@ const compareEditorialCards = [
     ? {
         title: "Humanitarian pathway load changes the local reading",
         body: `${pathwayLeader.areaName} has the largest three-pathway total, but ${humanitarianLeader.place.areaName} carries the biggest combined Homes for Ukraine and Afghan programme population in this compare set.`
+      }
+    : null
+].filter((card): card is { title: string; body: string } => card !== null);
+const compareTrendProfiles = comparePlaces
+  .map((place) => {
+    const trend = getAreaTrendSummary(place.areaCode);
+
+    if (!trend) {
+      return null;
+    }
+
+    const previousPoint = trend.points.length > 1 ? trend.points[trend.points.length - 2] : null;
+
+    return {
+      place,
+      trend,
+      previousLabel: previousPoint?.label ?? null,
+      tone: (trend.deltaFromPrevious ?? trend.deltaFromFirst) > 0 ? "warm" : "teal"
+    };
+  })
+  .filter(
+    (
+      profile
+    ): profile is {
+      place: ComparePlace;
+      trend: NonNullable<ReturnType<typeof getAreaTrendSummary>>;
+      previousLabel: string | null;
+      tone: "teal" | "warm";
+    } => profile !== null
+  );
+const latestTrendLeader = [...compareTrendProfiles]
+  .filter((profile) => profile.trend.deltaFromPrevious !== null)
+  .sort((left, right) => (right.trend.deltaFromPrevious ?? 0) - (left.trend.deltaFromPrevious ?? 0))[0];
+const longRunTrendLeader = [...compareTrendProfiles].sort(
+  (left, right) => right.trend.deltaFromFirst - left.trend.deltaFromFirst
+)[0];
+const trendIllustrativePlaces = compareTrendProfiles.filter((profile) => profile.trend.hasIllustrativeData).length;
+const compareTrendCards = [
+  latestTrendLeader
+    ? {
+        title: "Latest quarterly move is not evenly distributed",
+        body: `${latestTrendLeader.place.areaName} shows the sharpest latest step in the current compare set, moving ${latestTrendLeader.trend.deltaFromPrevious! >= 0 ? "+" : ""}${latestTrendLeader.trend.deltaFromPrevious!.toLocaleString()} since ${latestTrendLeader.previousLabel ?? "the previous point"}.`
+      }
+    : null,
+  longRunTrendLeader
+    ? {
+        title: "Long-run visible growth still clusters in specific authorities",
+        body: `${longRunTrendLeader.place.areaName} shows the largest gain across the visible compare-series window, up ${longRunTrendLeader.trend.deltaFromFirst >= 0 ? "+" : ""}${longRunTrendLeader.trend.deltaFromFirst.toLocaleString()} from the first visible point to ${longRunTrendLeader.trend.latestPeriodLabel}.`
+      }
+    : null,
+  compareTrendProfiles.length > 0
+    ? {
+        title: trendIllustrativePlaces > 0 ? "Series quality remains mixed and explicit" : "Series quality is explicit in this compare field",
+        body:
+          trendIllustrativePlaces > 0
+            ? `${trendIllustrativePlaces} of the ${compareTrendProfiles.length} compare places still rely on illustrative bridge points between official anchors. The trend field is directional and should be read alongside the current snapshot, not as a full quarterly release series.`
+            : "Every visible compare-series point is backed by official anchors, so the trend field can be read as a direct short-run movement view."
       }
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
@@ -212,9 +271,10 @@ const compareSections = [
   { id: "default-compare-set", label: "Default set" },
   { id: "pathway-profiles", label: "Pathway mix" },
   { id: "regional-pressure-field", label: "Region field" },
+  ...(compareTrendProfiles.length > 0 ? [{ id: "compare-trends", label: "Trends" }] : []),
+  { id: "cross-place-matrix", label: "Matrix" },
   { id: "compare-presets", label: "Presets" },
   { id: "compare-explorer", label: "Explorer" },
-  { id: "cross-place-matrix", label: "Matrix" },
   { id: "compare-findings", label: "Findings" }
 ];
 ---
@@ -463,6 +523,91 @@ const compareSections = [
     </div>
   </section>
 
+  {compareTrendProfiles.length > 0 && (
+    <section id="compare-trends" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Trend field across the compare set</h2>
+          <p class="lede">
+            The default compare places now carry visible recent movement as well as current levels, so the comparison
+            can show where pressure is rising, flattening, or easing instead of only where it currently sits.
+          </p>
+        </div>
+        <span class="chip">{compareTrendProfiles.length} places with series coverage</span>
+      </div>
+      <div class="viz-grid">
+        {compareTrendProfiles.map((profile) => (
+          <TrendChart
+            points={profile.trend.points.map((point) => ({ label: point.label, value: point.value }))}
+            title={`Recent supported asylum path in ${profile.place.areaName}`}
+            description={`${profile.place.regionName}. Latest point ${profile.trend.latestPeriodLabel}. ${profile.trend.hasIllustrativeData ? "Illustrative bridge points remain between official anchors." : "Visible points are all official anchors."}`}
+            tone={profile.tone}
+          />
+        ))}
+      </div>
+      <div class="feature-grid">
+        {compareTrendProfiles.map((profile) => (
+          <article class={`feature-card${(profile.trend.deltaFromPrevious ?? 0) > 0 ? " accent" : ""}`}>
+            <div class="chip-row">
+              <span class="chip accent">{profile.place.areaName}</span>
+              <span class="chip">{profile.trend.latestPeriodLabel}</span>
+              <span class="chip teal">{profile.place.regionName}</span>
+            </div>
+            <h3>Recent movement and evidence quality</h3>
+            <p class="lede">
+              {profile.trend.deltaFromPrevious !== null
+                ? `${profile.trend.deltaFromPrevious >= 0 ? "+" : ""}${profile.trend.deltaFromPrevious.toLocaleString()} since ${profile.previousLabel ?? "the previous point"}`
+                : "Only one visible trend point is currently available."}
+            </p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Latest value</span>
+                <span class="data-row-value">{profile.trend.latestValue.toLocaleString()}</span>
+              </div>
+              <div class="data-row">
+                <span>Series span</span>
+                <span class="data-row-value">
+                  {profile.trend.deltaFromFirst >= 0 ? "+" : ""}
+                  {profile.trend.deltaFromFirst.toLocaleString()}
+                </span>
+              </div>
+              <div class="data-row">
+                <span>Latest change</span>
+                <span class="data-row-value">
+                  {profile.trend.changePctFromPrevious !== null
+                    ? `${profile.trend.changePctFromPrevious >= 0 ? "+" : ""}${profile.trend.changePctFromPrevious}%`
+                    : "n/a"}
+                </span>
+              </div>
+              <div class="data-row">
+                <span>Series quality</span>
+                <span class="data-row-value">
+                  {profile.trend.officialAnchorCount} anchor / {profile.trend.illustrativeCount} illustrative
+                </span>
+              </div>
+            </div>
+            <p class="tiny">
+              {profile.trend.hasIllustrativeData
+                ? "Directional read only: illustrative bridge points remain in the visible series."
+                : "All visible points are official anchors in the current series."}
+            </p>
+            <p class="tiny">
+              <a class="source-pill" href={`/places/${profile.place.areaCode}/#recent-trend`}>Open place trend</a>
+            </p>
+          </article>
+        ))}
+      </div>
+      <div class="story-grid">
+        {compareTrendCards.map((card) => (
+          <article class="story-card">
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
   <section id="cross-place-matrix" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -591,6 +736,8 @@ const compareSections = [
       </div>
       <div class="filter-actions">
         <button type="button" class="source-pill" data-compare-reset>Reset filters</button>
+        <button type="button" class="source-pill" data-compare-copy>Copy filtered view</button>
+        <span class="tiny filter-status" data-compare-copy-status aria-live="polite"></span>
       </div>
     </form>
     <div class="story-grid explorer-grid" data-compare-results>
