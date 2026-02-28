@@ -1,8 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
+import RegionTileMap from "../../components/RegionTileMap.astro";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
+import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
@@ -23,6 +26,19 @@ const hotelArea = hotelLedger.areas.find(
 );
 const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
 const unnamedSiteCount = hotelArea?.unnamedSiteCount ?? 0;
+const regionalAreas = [...localRouteLatest.areas]
+  .filter((candidate) => candidate.regionName === area.regionName)
+  .sort((a, b) => b.supportedAsylum - a.supportedAsylum);
+const regionalRank = regionalAreas.findIndex((candidate) => candidate.areaCode === area.areaCode) + 1;
+const regionalPeerRows = (() => {
+  const leadingPeers = regionalAreas.slice(0, 5);
+
+  if (leadingPeers.some((candidate) => candidate.areaCode === area.areaCode)) {
+    return leadingPeers;
+  }
+
+  return [...leadingPeers, area];
+})();
 const areaRank =
   [...localRouteLatest.areas]
     .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
@@ -48,6 +64,86 @@ const hotelSignals = hotelSites
     }))
   )
   .slice(0, 3);
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
+const supportedStats = getDistributionStats(localRouteLatest.areas.map((candidate) => candidate.supportedAsylum));
+const supportedRateStats = getDistributionStats(
+  localRouteLatest.areas.map((candidate) => candidate.supportedAsylumRate ?? 0)
+);
+const contingencyStats = getDistributionStats(
+  localRouteLatest.areas.map((candidate) => candidate.contingencyAccommodation)
+);
+const supportedPercentile = getPercentileRank(
+  localRouteLatest.areas.map((candidate) => candidate.supportedAsylum),
+  area.supportedAsylum
+);
+const ratePercentile = getPercentileRank(
+  localRouteLatest.areas.map((candidate) => candidate.supportedAsylumRate ?? 0),
+  area.supportedAsylumRate ?? 0
+);
+const contingencyPercentile = getPercentileRank(
+  localRouteLatest.areas.map((candidate) => candidate.contingencyAccommodation),
+  area.contingencyAccommodation
+);
+const contingencySharePct = area.supportedAsylum
+  ? Number(((area.contingencyAccommodation / area.supportedAsylum) * 100).toFixed(1))
+  : 0;
+const regionalPeerMax = Math.max(...regionalPeerRows.map((candidate) => candidate.supportedAsylum), 1);
+const secondaryPathways = [
+  { label: "Homes for Ukraine", value: area.homesForUkraineArrivals },
+  { label: "Afghan programme", value: area.afghanProgrammePopulation },
+  { label: "Resettlement cumulative", value: area.resettlementCumulativeTotal ?? 0 }
+].sort((a, b) => b.value - a.value);
+const leadingSecondaryPathway = secondaryPathways[0];
+const editorialSignals = [
+  {
+    kicker: "Volume",
+    title:
+      areaRank <= 10
+        ? `${area.areaName} is one of the highest-volume asylum support areas in the UK`
+        : `${area.areaName} is outside the top ten by volume, but still carries a material local load`,
+    body: `${area.areaName} ranks ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName} for supported asylum count, placing it around the ${supportedPercentile}th percentile of local authorities by volume.`
+  },
+  {
+    kicker: "Intensity",
+    title:
+      ratePercentile >= 90
+        ? "Intensity is stronger than the raw count alone suggests"
+        : "The rate picture is important, even where the headline count is lower",
+    body: `The supported asylum rate here is ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents, around the ${ratePercentile}th percentile nationally. This matters because smaller places can carry a sharper load than bigger city totals imply.`
+  },
+  {
+    kicker: "Accommodation model",
+    title:
+      contingencySharePct >= 35
+        ? "A large share of support is sitting in contingency accommodation"
+        : "The local picture leans more toward dispersal than contingency pressure",
+    body:
+      contingencySharePct > 0
+        ? `${area.contingencyAccommodation.toLocaleString()} people are in contingency accommodation here, around ${contingencySharePct}% of the supported asylum population and roughly the ${contingencyPercentile}th percentile by contingency count.`
+        : "No contingency accommodation is recorded for this area in the latest local-authority snapshot, which makes it structurally different from hotel-heavy pressure points."
+  },
+  {
+    kicker: "Visibility",
+    title:
+      namedSiteCount > 0 || unnamedSiteCount > 0
+        ? "There is already enough public hotel evidence here to make the secrecy gap concrete"
+        : "The hotel layer is still mostly invisible in public records here",
+    body:
+      namedSiteCount > 0 || unnamedSiteCount > 0
+        ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} and ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} are attached to this area in the starter ledger.`
+        : "No named current site or unnamed acknowledged count is attached to this area yet, which is itself a reminder that absence of public evidence is not evidence of absence."
+  }
+];
+const editorialParagraphs = [
+  `${area.areaName} sits ${areaRank.toLocaleString()} nationally by supported asylum count and ${regionalRank.toLocaleString()} within ${area.regionName}. The raw volume is ${area.supportedAsylum.toLocaleString()}, but the rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents gives a cleaner sense of local intensity than the headline count on its own.`,
+  leadingSecondaryPathway.value > 0
+    ? `${leadingSecondaryPathway.label} is the largest non-asylum pathway in this area at ${leadingSecondaryPathway.value.toLocaleString()}. That matters because the local story is not just about one route family; it is about how asylum support, humanitarian schemes, and historic resettlement stack together in one place.`
+    : `The main local story here is concentrated in asylum support rather than the other humanitarian pathways, which makes accommodation mode and contingency use especially important.`,
+  currentRegion
+    ? `${area.regionName} as a whole currently carries ${currentRegion.supportedAsylum.toLocaleString()} people on supported asylum, with a weighted regional rate of ${currentRegion.supportedAsylumRate} per 10,000 residents. This page puts ${area.areaName} inside that wider regional pressure field instead of treating it as an isolated case.`
+    : `${area.regionName} is part of a wider regional pressure pattern that matters as much as the local area headline alone.`
+];
 const pageDescription = `${area.areaName} asylum profile with supported asylum counts, contingency accommodation, route pathway context, and hotel evidence as at ${localRouteLatest.snapshotDate}.`;
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
@@ -175,6 +271,81 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </div>
   </section>
 
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>National benchmarks</h2>
+      <p class="lede">
+        These strips show where {area.areaName} sits in the national distribution for the most important place-level
+        pressure measures.
+      </p>
+      <div class="benchmark-grid">
+        <BenchmarkStrip
+          label="Supported asylum count"
+          description="National distribution across all local-authority rows."
+          value={area.supportedAsylum}
+          min={supportedStats.min}
+          median={supportedStats.median}
+          p90={supportedStats.p90}
+          max={supportedStats.max}
+          valueLabel={area.supportedAsylum.toLocaleString()}
+        />
+        <BenchmarkStrip
+          label="Supported asylum rate"
+          description="Rate per 10,000 residents."
+          value={area.supportedAsylumRate ?? 0}
+          min={supportedRateStats.min}
+          median={supportedRateStats.median}
+          p90={supportedRateStats.p90}
+          max={supportedRateStats.max}
+          valueLabel={area.supportedAsylumRate !== null ? `${area.supportedAsylumRate}` : "n/a"}
+          tone="teal"
+        />
+        <BenchmarkStrip
+          label="Contingency accommodation"
+          description="Hotel and other contingency placements."
+          value={area.contingencyAccommodation}
+          min={contingencyStats.min}
+          median={contingencyStats.median}
+          p90={contingencyStats.p90}
+          max={contingencyStats.max}
+          valueLabel={area.contingencyAccommodation.toLocaleString()}
+          tone="warm"
+        />
+      </div>
+    </div>
+
+    <RegionTileMap
+      items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+      title="Regional pressure context"
+      description={`${area.regionName} is highlighted so this place can be read inside the wider regional supported asylum map.`}
+      valueLabel="supported asylum total"
+      highlightRegion={area.regionName}
+    />
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Editorial readout</h2>
+        <p class="lede">
+          These cards translate the data into the most defensible local claims the site can make right now.
+        </p>
+      </div>
+      <span class="chip">{localRouteLatest.snapshotDate} evidence frame</span>
+    </div>
+    <div class="story-grid">
+      {editorialSignals.map((signal) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{signal.kicker}</span>
+          </div>
+          <h3>{signal.title}</h3>
+          <p class="lede">{signal.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <section class="section">
     <div class="section-head">
       <div>
@@ -262,6 +433,42 @@ const pageStructuredData = buildPlaceStructuredData(area, {
         </div>
       </article>
     </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Regional peer frame</h2>
+      <p class="lede">
+        The regional ranking matters because high-pressure areas compete for attention with their nearest peers, not
+        just with the national top ten.
+      </p>
+      {regionalPeerRows.map((peer) => (
+        <div class="metric-bar">
+          <div style="min-width: 11rem;">
+            <strong>{peer.areaName}</strong>
+            <div class="tiny">
+              {peer.areaCode === area.areaCode
+                ? `Current page | ${peer.supportedAsylum.toLocaleString()} supported asylum`
+                : `${peer.supportedAsylum.toLocaleString()} supported asylum`}
+            </div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(peer.supportedAsylum / regionalPeerMax) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <article class="editor-note prose-stack">
+      <div class="chip-row">
+        <span class="chip accent">Local reading</span>
+        <span class="chip">{area.regionName}</span>
+      </div>
+      <h3>How this place reads in context</h3>
+      {editorialParagraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </article>
   </section>
 
   <section class="section">

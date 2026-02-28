@@ -633,8 +633,24 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+.viz-grid,
+.benchmark-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.viz-grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.benchmark-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
 .guide-card,
-.freshness-card {
+.freshness-card,
+.viz-card,
+.benchmark-card {
   position: relative;
   overflow: hidden;
   padding: 1.2rem;
@@ -645,7 +661,9 @@ main {
 }
 
 .guide-card::before,
-.freshness-card::before {
+.freshness-card::before,
+.viz-card::before,
+.benchmark-card::before {
   content: "";
   position: absolute;
   inset: auto auto -3rem -3rem;
@@ -656,13 +674,17 @@ main {
 }
 
 .guide-card > *,
-.freshness-card > * {
+.freshness-card > *,
+.viz-card > *,
+.benchmark-card > * {
   position: relative;
   z-index: 1;
 }
 
 .guide-card h3,
-.freshness-card h3 {
+.freshness-card h3,
+.viz-card h3,
+.benchmark-card h3 {
   margin: 0.45rem 0 0.55rem;
   font-family: "Sora", sans-serif;
   font-size: 1.15rem;
@@ -674,6 +696,113 @@ main {
 .freshness-card p {
   color: var(--muted);
   line-height: 1.65;
+}
+
+.viz-card.tone-warm::before,
+.benchmark-card.tone-warm::before {
+  background: radial-gradient(circle, rgba(255, 139, 97, 0.14), transparent 72%);
+}
+
+.viz-card.tone-teal::before,
+.benchmark-card.tone-teal::before {
+  background: radial-gradient(circle, rgba(78, 228, 195, 0.14), transparent 72%);
+}
+
+.viz-head,
+.benchmark-copy {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.viz-head .chip,
+.benchmark-copy strong {
+  flex-shrink: 0;
+}
+
+.benchmark-copy strong {
+  font-family: "Sora", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.trend-chart,
+.region-map,
+.benchmark-strip {
+  width: 100%;
+  height: auto;
+  margin-top: 0.8rem;
+}
+
+.trend-label,
+.trend-tick,
+.trend-annotation,
+.benchmark-label,
+.region-map-label,
+.region-map-value {
+  fill: var(--muted);
+  font-family: "Manrope", sans-serif;
+}
+
+.trend-label,
+.benchmark-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.trend-tick {
+  font-size: 10px;
+}
+
+.trend-annotation {
+  font-size: 11px;
+  font-weight: 800;
+  fill: var(--ink-soft);
+}
+
+.region-map-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.9);
+}
+
+.region-map-value {
+  font-family: "Sora", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  fill: var(--ink);
+}
+
+.peer-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.peer-card {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.peer-card h3 {
+  margin: 0.4rem 0 0.35rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.prose-stack {
+  display: grid;
+  gap: 0.95rem;
 }
 
 .freshness-list {

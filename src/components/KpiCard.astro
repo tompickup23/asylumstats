@@ -17,7 +17,9 @@ const { label, value, context, status, sourceUrl } = Astro.props;
   {status && <div class="chip-row"><span class="chip">{status}</span></div>}
   {sourceUrl && (
     <p class="tiny">
-      <a class="source-pill" href={sourceUrl}>Source</a>
+      <a class="source-pill" href={sourceUrl} aria-label={`Open source for ${label}`}>
+        Source
+      </a>
     </p>
   )}
 </article>

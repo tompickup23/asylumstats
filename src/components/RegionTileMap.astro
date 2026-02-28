@@ -1,0 +1,105 @@
+---
+interface RegionValue {
+  regionName: string;
+  value: number;
+  note?: string;
+}
+
+interface Props {
+  items: RegionValue[];
+  title: string;
+  description?: string;
+  valueLabel: string;
+  highlightRegion?: string;
+  tone?: "accent" | "teal" | "warm";
+}
+
+const { items, title, description, valueLabel, highlightRegion, tone = "accent" } = Astro.props;
+
+const width = 520;
+const height = 460;
+const tileWidth = 94;
+const tileHeight = 74;
+const positions: Record<string, { x: number; y: number; short: string }> = {
+  Scotland: { x: 208, y: 18, short: "Scotland" },
+  "Northern Ireland": { x: 16, y: 190, short: "N. Ireland" },
+  "North West": { x: 152, y: 152, short: "North West" },
+  "North East": { x: 264, y: 152, short: "North East" },
+  "Yorkshire and The Humber": { x: 264, y: 236, short: "Yorkshire" },
+  Wales: { x: 96, y: 274, short: "Wales" },
+  "West Midlands": { x: 208, y: 274, short: "West Mids" },
+  "East Midlands": { x: 320, y: 274, short: "East Mids" },
+  "East of England": { x: 360, y: 358, short: "East" },
+  London: { x: 264, y: 358, short: "London" },
+  "South West": { x: 96, y: 358, short: "South West" },
+  "South East": { x: 360, y: 274, short: "South East" }
+};
+
+const values = items.map((item) => item.value);
+const minValue = Math.min(...values, 0);
+const maxValue = Math.max(...values, 1);
+const range = Math.max(maxValue - minValue, 1);
+
+function formatValue(value: number): string {
+  return value.toLocaleString();
+}
+
+function getFill(value: number): string {
+  const ratio = (value - minValue) / range;
+
+  if (tone === "teal") {
+    return `rgba(78, 228, 195, ${0.16 + ratio * 0.54})`;
+  }
+
+  if (tone === "warm") {
+    return `rgba(255, 139, 97, ${0.16 + ratio * 0.54})`;
+  }
+
+  return `rgba(125, 211, 252, ${0.16 + ratio * 0.54})`;
+}
+---
+
+<figure class={`viz-card tone-${tone}`}>
+  <div class="viz-head">
+    <div>
+      <h3>{title}</h3>
+      {description && <p class="tiny">{description}</p>}
+    </div>
+    <span class="chip">{valueLabel}</span>
+  </div>
+  <svg class="region-map" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
+    {items.map((item) => {
+      const position = positions[item.regionName];
+
+      if (!position) {
+        return null;
+      }
+
+      const active = item.regionName === highlightRegion;
+      return (
+        <g>
+          <rect
+            x={position.x}
+            y={position.y}
+            width={tileWidth}
+            height={tileHeight}
+            rx="18"
+            fill={getFill(item.value)}
+            stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.14)"}
+            stroke-width={active ? "2.5" : "1.2"}
+          ></rect>
+          <text x={position.x + 12} y={position.y + 24} class="region-map-label">
+            {position.short}
+          </text>
+          <text x={position.x + 12} y={position.y + 50} class="region-map-value">
+            {formatValue(item.value)}
+          </text>
+        </g>
+      );
+    })}
+  </svg>
+  <figcaption class="tiny">
+    {highlightRegion ? `${highlightRegion} is highlighted. ` : ""}Darker tiles indicate higher values in the latest
+    local-authority snapshot.
+  </figcaption>
+</figure>

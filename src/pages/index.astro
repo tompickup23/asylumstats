@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import KpiCard from "../components/KpiCard.astro";
+import RegionTileMap from "../components/RegionTileMap.astro";
+import TrendChart from "../components/TrendChart.astro";
 import overview from "../data/mock/overview.json";
 import releases from "../data/mock/releases.json";
 
@@ -8,6 +10,7 @@ import asylumFinance from "../data/live/asylum-finance.json";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { loadMoneyLedger } from "../lib/money-data";
+import { getRegionPressureSummaries } from "../lib/route-analytics";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -24,6 +27,9 @@ const topAreas = localRouteLatest.areas
   .slice(0, 8);
 const pressureLead = topAreas[0];
 const featuredRouteSignal = routeCards[0];
+const smallBoatTrend = routeDashboard.routeFamilies.find((route) => route.id === "small_boats") ?? routeDashboard.routeFamilies[0];
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+const leadRegion = regionalPressure[0];
 const heroStats = [
   {
     label: "Areas tracked",
@@ -283,6 +289,34 @@ function formatUtcDateTime(iso: string | undefined): string {
           sourceUrl={item.sourceUrl}
         />
       ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Visual brief</h2>
+        <p class="lede">
+          The product now has static charts and map views that make concentration and change legible without adding a
+          client-side charting dependency.
+        </p>
+      </div>
+      <span class="chip">Built from live route marts</span>
+    </div>
+    <div class="viz-grid">
+      <TrendChart
+        points={smallBoatTrend.series.map((point) => ({ label: point.periodLabel, value: point.value }))}
+        title={smallBoatTrend.label}
+        description="Official annual series showing how the irregular arrival route changed from 2018 to 2025."
+        tone="warm"
+      />
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+        title="Regional concentration of supported asylum"
+        description={`${leadRegion.regionName} currently has the largest supported asylum total in the live local-authority snapshot.`}
+        valueLabel="supported asylum total"
+        highlightRegion={leadRegion?.regionName}
+      />
     </div>
   </section>
 

@@ -1,20 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadRouteDashboard } from "../lib/route-data";
+import RegionTileMap from "../components/RegionTileMap.astro";
+import TrendChart from "../components/TrendChart.astro";
+import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
+import { getRegionPressureSummaries, getSeriesDelta } from "../lib/route-analytics";
 
 const routeDashboard = loadRouteDashboard();
+const localRouteLatest = loadLocalRouteLatest();
 const routeSignalCards = routeDashboard.nationalCards.slice(0, 3);
 const featuredRoutes = [...routeDashboard.routeFamilies]
   .sort((a, b) => b.latestValue - a.latestValue)
   .slice(0, 3);
 const featuredRouteIds = new Set(featuredRoutes.map((route) => route.id));
 const remainingRoutes = routeDashboard.routeFamilies.filter((route) => !featuredRouteIds.has(route.id));
-const routeMaxValues = new Map(
-  routeDashboard.routeFamilies.map((route) => [
-    route.id,
-    Math.max(...route.series.map((point) => point.value), 1)
-  ])
-);
 const illegalMethods = [...routeDashboard.illegalEntryMethodsLatestYear].sort((a, b) => b.value - a.value);
 const decisionGroups = [...routeDashboard.smallBoatDecisionGroupsLatestYear.rows].sort((a, b) => b.value - a.value);
 const maxMethodValue = Math.max(...illegalMethods.map((row) => row.value), 1);
@@ -23,6 +21,9 @@ const leadPressureMetric =
   routeDashboard.topAreasByMetric.find((metric) => metric.metricId === "supportedAsylum") ??
   routeDashboard.topAreasByMetric[0];
 const pressureLeader = leadPressureMetric?.rows[0];
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+const leadingRegionByTotal = regionalPressure[0];
+const leadingRegionByRate = [...regionalPressure].sort((a, b) => b.supportedAsylumRate - a.supportedAsylumRate)[0];
 
 function formatCardValue(value: number, suffix?: string): string {
   return suffix ? `${value}${suffix}` : value.toLocaleString();
@@ -98,24 +99,6 @@ function formatCardValue(value: number, suffix?: string): string {
           <h3>{route.label}</h3>
           <p class="metric-value">{route.latestValue.toLocaleString()}</p>
           <p class="lede">{route.note}</p>
-          {route.series.length > 1 && (
-            <div class="signal-list">
-              {route.series.slice(-4).map((point) => (
-                <div class="metric-bar">
-                  <div style="min-width: 5rem;">
-                    <strong>{point.periodLabel}</strong>
-                  </div>
-                  <div class="metric-track">
-                    <div
-                      class="metric-fill"
-                      style={`width: ${(point.value / (routeMaxValues.get(route.id) || 1)) * 100}%`}
-                    ></div>
-                  </div>
-                  <div class="tiny">{point.value.toLocaleString()}</div>
-                </div>
-              ))}
-            </div>
-          )}
           <div class="data-list">
             <div class="data-row">
               <span>Scheme status</span>
@@ -131,6 +114,36 @@ function formatCardValue(value: number, suffix?: string): string {
           </p>
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Tracked route trends</h2>
+        <p class="lede">
+          The featured route families now have full static trend charts so users can see direction, not just the latest
+          annual value.
+        </p>
+      </div>
+    </div>
+    <div class="viz-grid">
+      {featuredRoutes.map((route, index) => {
+        const delta = getSeriesDelta(route.series);
+        const tone = index === 0 ? "accent" : index === 1 ? "warm" : "teal";
+        return (
+          <TrendChart
+            points={route.series.map((point) => ({ label: point.periodLabel, value: point.value }))}
+            title={route.label}
+            description={
+              route.series.length > 1
+                ? `${route.firstPeriod ?? route.series[0].periodLabel} to ${route.latestPeriod}. Last annual move: ${delta >= 0 ? "+" : ""}${delta.toLocaleString()}.`
+                : `Latest observed value in ${route.latestPeriod}.`
+            }
+            tone={tone}
+          />
+        );
+      })}
     </div>
   </section>
 
@@ -168,6 +181,36 @@ function formatCardValue(value: number, suffix?: string): string {
           </div>
         </div>
       ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Regional pressure map</h2>
+        <p class="lede">
+          National route families eventually resolve into regional concentration. Totals and rates tell slightly
+          different stories, so both belong on the page.
+        </p>
+      </div>
+      <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
+    </div>
+    <div class="viz-grid">
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+        title="Supported asylum by region"
+        description={`${leadingRegionByTotal.regionName} currently carries the largest total supported asylum count.`}
+        valueLabel="total people"
+        highlightRegion={leadingRegionByTotal.regionName}
+      />
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
+        title="Supported asylum rate by region"
+        description={`${leadingRegionByRate.regionName} currently has the highest weighted rate per 10,000 residents.`}
+        valueLabel="rate per 10,000"
+        highlightRegion={leadingRegionByRate.regionName}
+        tone="teal"
+      />
     </div>
   </section>
 
