@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import BenchmarkStrip from "../components/BenchmarkStrip.astro";
+import PathwayMixCard from "../components/PathwayMixCard.astro";
+import RegionTileMap from "../components/RegionTileMap.astro";
 import { loadLocalRouteLatest } from "../lib/route-data";
+import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 type ComparePlace = (typeof localRouteLatest.areas)[number];
@@ -17,6 +21,60 @@ const contingencyLeader = [...comparePlaces].sort(
   (a, b) => b.contingencyAccommodation - a.contingencyAccommodation
 )[0];
 const pathwayLeader = [...comparePlaces].sort((a, b) => b.allThreePathwaysTotal - a.allThreePathwaysTotal)[0];
+const supportedStats = getDistributionStats(localRouteLatest.areas.map((place) => place.supportedAsylum));
+const supportedRateStats = getDistributionStats(
+  localRouteLatest.areas.map((place) => place.supportedAsylumRate ?? 0)
+);
+const contingencyStats = getDistributionStats(
+  localRouteLatest.areas.map((place) => place.contingencyAccommodation)
+);
+const compareRegions = [...new Set(comparePlaces.map((place) => place.regionName))];
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+const compareProfiles = comparePlaces.map((place) => {
+  const contingencySharePct = place.supportedAsylum
+    ? Number(((place.contingencyAccommodation / place.supportedAsylum) * 100).toFixed(1))
+    : 0;
+  const humanitarianTotal = place.homesForUkraineArrivals + place.afghanProgrammePopulation;
+
+  return {
+    place,
+    humanitarianTotal,
+    contingencySharePct,
+    supportedPercentile: getPercentileRank(
+      localRouteLatest.areas.map((candidate) => candidate.supportedAsylum),
+      place.supportedAsylum
+    ),
+    supportedRatePercentile: getPercentileRank(
+      localRouteLatest.areas.map((candidate) => candidate.supportedAsylumRate ?? 0),
+      place.supportedAsylumRate ?? 0
+    ),
+    contingencyPercentile: getPercentileRank(
+      localRouteLatest.areas.map((candidate) => candidate.contingencyAccommodation),
+      place.contingencyAccommodation
+    )
+  };
+});
+const humanitarianLeader = [...compareProfiles].sort((a, b) => b.humanitarianTotal - a.humanitarianTotal)[0];
+const compareEditorialCards = [
+  supportedLeader && supportedRateLeader
+    ? {
+        title: "Count and rate split apart immediately",
+        body: `${supportedLeader.areaName} has the highest supported asylum count in this set, while ${supportedRateLeader.areaName} has the highest rate per 10,000 residents. The busiest place is not automatically the most intense one.`
+      }
+    : null,
+  contingencyLeader
+    ? {
+        title: "Contingency pressure is concentrated, not evenly spread",
+        body: `${contingencyLeader.areaName} leads this set on contingency accommodation, which is why hotel-heavy pressure has to be read separately from dispersal-heavy places like Glasgow City.`
+      }
+    : null,
+  pathwayLeader && humanitarianLeader
+    ? {
+        title: "Humanitarian pathway load changes the local reading",
+        body: `${pathwayLeader.areaName} has the largest three-pathway total, but ${humanitarianLeader.place.areaName} carries the biggest combined Homes for Ukraine and Afghan programme population in this compare set.`
+      }
+    : null
+].filter((card): card is { title: string; body: string } => card !== null);
 const compareMatrixRows = [
   {
     label: "Supported asylum",
@@ -70,10 +128,11 @@ const compareMatrixRows = [
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Compare</span>
-      <h1>Area comparison now starts with the real local route snapshot, not mock counts.</h1>
+      <h1>Area comparison should show route mix, intensity, and accommodation model in the same frame.</h1>
       <p>
         This view uses the official local-authority snapshot as at 31 December 2025, plus cumulative resettlement
-        history from the local authority resettlement dataset. The next job is clarity, not more placeholder UI.
+        history from the local authority resettlement dataset. The compare page now starts with composition and
+        benchmarks so the table lands after the story is already visible.
       </p>
     </section>
 
@@ -81,8 +140,8 @@ const compareMatrixRows = [
       <article class="panel panel-pad">
         <span class="tiny">Compare set</span>
         <p class="rail-copy">
-          These places show different route mixes, different rates, and very different hotel exposure. That is exactly
-          why they belong on one comparison surface.
+          These places show different route mixes, different rates, and very different contingency exposure. That is
+          exactly why they belong on one comparison surface.
         </p>
         <div class="stat-strip">
           {supportedLeader && (
@@ -113,8 +172,8 @@ const compareMatrixRows = [
         <span class="tiny">Snapshot date</span>
         <h2 class="rail-title">{localRouteLatest.snapshotDate}</h2>
         <p class="rail-copy">
-          The compare set should always keep count, rate, and pathway composition in the same frame rather than forcing
-          users to flip between disconnected pages.
+          Count, rate, and pathway composition now stay in the same frame instead of forcing users to infer the local
+          model from one headline number.
         </p>
       </article>
     </aside>
@@ -163,8 +222,144 @@ const compareMatrixRows = [
               <span class="data-row-value">{place.allThreePathwaysTotal.toLocaleString()}</span>
             </div>
           </div>
+          <p class="tiny">
+            <a class="source-pill" href={`/places/${place.areaCode}/`}>Open place page</a>
+          </p>
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Pathway mix profiles</h2>
+        <p class="lede">
+          Each compare place now shows the relative scale of supported asylum, Homes for Ukraine, and Afghan programme
+          population, with contingency pressure called out separately inside the asylum layer.
+        </p>
+      </div>
+    </div>
+    <div class="viz-grid">
+      {compareProfiles.map((profile) => (
+        <PathwayMixCard
+          title={profile.place.areaName}
+          description={`${profile.place.regionName}. Supported asylum count sits around the ${profile.supportedPercentile}th percentile nationally.`}
+          segments={[
+            {
+              label: "Supported asylum",
+              value: profile.place.supportedAsylum,
+              tone: "accent",
+              detail: `${profile.place.supportedAsylumRate ?? "n/a"} per 10,000`
+            },
+            {
+              label: "Homes for Ukraine",
+              value: profile.place.homesForUkraineArrivals,
+              tone: "teal",
+              detail: `${profile.place.homesForUkraineRate ?? "n/a"} per 10,000`
+            },
+            {
+              label: "Afghan programme",
+              value: profile.place.afghanProgrammePopulation,
+              tone: "warm",
+              detail: `${profile.place.afghanProgrammeRate ?? "n/a"} per 10,000`
+            }
+          ]}
+          note={
+            profile.place.contingencyAccommodation > 0
+              ? `${profile.place.contingencyAccommodation.toLocaleString()} people are in contingency accommodation here, about ${profile.contingencySharePct}% of the supported asylum population.`
+              : "No contingency accommodation is recorded here in the current local-authority snapshot."
+          }
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>National benchmark frame</h2>
+        <p class="lede">
+          Raw counts alone flatten the picture. These strips show where each place sits in the full national
+          distribution for count, rate, and contingency pressure.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {compareProfiles.map((profile) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{profile.supportedPercentile}th percentile by count</span>
+            <span class="chip teal">{profile.supportedRatePercentile}th percentile by rate</span>
+            <span class="chip">{profile.contingencyPercentile}th percentile by contingency</span>
+          </div>
+          <h3>{profile.place.areaName}</h3>
+          <p class="lede">
+            This is what keeps volume, intensity, and hotel-heavy pressure separate for the same place.
+          </p>
+          <div class="benchmark-grid">
+            <BenchmarkStrip
+              label="Supported asylum count"
+              value={profile.place.supportedAsylum}
+              min={supportedStats.min}
+              median={supportedStats.median}
+              p90={supportedStats.p90}
+              max={supportedStats.max}
+              valueLabel={profile.place.supportedAsylum.toLocaleString()}
+            />
+            <BenchmarkStrip
+              label="Supported asylum rate"
+              value={profile.place.supportedAsylumRate ?? 0}
+              min={supportedRateStats.min}
+              median={supportedRateStats.median}
+              p90={supportedRateStats.p90}
+              max={supportedRateStats.max}
+              valueLabel={profile.place.supportedAsylumRate !== null ? `${profile.place.supportedAsylumRate}` : "n/a"}
+              tone="teal"
+            />
+            <BenchmarkStrip
+              label="Contingency accommodation"
+              value={profile.place.contingencyAccommodation}
+              min={contingencyStats.min}
+              median={contingencyStats.median}
+              p90={contingencyStats.p90}
+              max={contingencyStats.max}
+              valueLabel={profile.place.contingencyAccommodation.toLocaleString()}
+              tone="warm"
+            />
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Regional pressure field</h2>
+        <p class="lede">
+          The four compare places sit inside wider regional concentration patterns. Highlighting their regions stops the
+          compare set from floating free of the national map.
+        </p>
+      </div>
+      <span class="chip">{compareRegions.length} regions represented</span>
+    </div>
+    <div class="viz-grid">
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+        title="Supported asylum by region"
+        description="The compare-set regions are highlighted on the national regional total map."
+        valueLabel="total people"
+        highlightRegions={compareRegions}
+      />
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
+        title="Supported asylum rate by region"
+        description="Regional rates show where smaller populations carry sharper pressure."
+        valueLabel="rate per 10,000"
+        highlightRegions={compareRegions}
+        tone="teal"
+      />
     </div>
   </section>
 
@@ -241,40 +436,20 @@ const compareMatrixRows = [
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>What these four already show</h2>
+        <h2>What these four already prove</h2>
         <p class="lede">
-          Even a four-place compare set can expose the difference between volume, rate, and hotel-heavy local pressure.
+          Even a small compare set exposes the difference between volume, rate, humanitarian pathway mix, and
+          contingency-heavy local pressure.
         </p>
       </div>
     </div>
     <div class="story-grid">
-      {supportedLeader && (
+      {compareEditorialCards.map((card) => (
         <article class="story-card">
-          <h3>Highest supported asylum count</h3>
-          <p class="lede">
-            {supportedLeader.areaName} leads this compare set with {supportedLeader.supportedAsylum.toLocaleString()}{" "}
-            people on asylum support.
-          </p>
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
         </article>
-      )}
-      {supportedRateLeader && (
-        <article class="story-card">
-          <h3>Highest supported asylum rate</h3>
-          <p class="lede">
-            {supportedRateLeader.areaName} carries the highest supported asylum rate at{" "}
-            {supportedRateLeader.supportedAsylumRate ?? "n/a"} per 10,000 residents.
-          </p>
-        </article>
-      )}
-      {pathwayLeader && contingencyLeader && (
-        <article class="story-card">
-          <h3>Count and hotel load are not the same thing</h3>
-          <p class="lede">
-            {pathwayLeader.areaName} has the largest combined three-pathway total, while {contingencyLeader.areaName}{" "}
-            leads this set on contingency accommodation.
-          </p>
-        </article>
-      )}
+      ))}
     </div>
   </section>
 
@@ -303,7 +478,9 @@ const compareMatrixRows = [
               <tbody>
                 {metric.rows.slice(0, 6).map((row) => (
                   <tr>
-                    <th scope="row">{row.areaName}</th>
+                    <th scope="row">
+                      <a href={`/places/${row.areaCode}/`}>{row.areaName}</a>
+                    </th>
                     <td>{row.value.toLocaleString()}</td>
                   </tr>
                 ))}

@@ -736,6 +736,86 @@ main {
   margin-top: 0.8rem;
 }
 
+.pathway-mix-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.pathway-mix-track {
+  display: flex;
+  height: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pathway-mix-segment {
+  height: 100%;
+}
+
+.pathway-mix-segment.tone-accent,
+.pathway-mix-swatch.tone-accent {
+  background: linear-gradient(90deg, var(--accent) 0%, #d9f5ff 100%);
+}
+
+.pathway-mix-segment.tone-teal,
+.pathway-mix-swatch.tone-teal {
+  background: linear-gradient(90deg, var(--accent-2) 0%, #c6fff4 100%);
+}
+
+.pathway-mix-segment.tone-warm,
+.pathway-mix-swatch.tone-warm {
+  background: linear-gradient(90deg, var(--accent-3) 0%, #ffd5c6 100%);
+}
+
+.pathway-mix-segment.tone-soft,
+.pathway-mix-swatch.tone-soft {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.7) 100%);
+}
+
+.pathway-mix-legend {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.pathway-mix-row {
+  display: grid;
+  gap: 0.15rem 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.pathway-mix-row .tiny {
+  grid-column: 1 / -1;
+}
+
+.pathway-mix-row strong {
+  font-family: "Sora", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.pathway-mix-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.pathway-mix-swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+}
+
+.pathway-mix-note {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .trend-label,
 .trend-tick,
 .trend-annotation,
@@ -918,6 +998,10 @@ main {
 .feature-card {
   padding: 1.35rem;
   box-shadow: var(--shadow-soft);
+}
+
+.feature-card .benchmark-grid {
+  grid-template-columns: 1fr;
 }
 
 .feature-card::before {
