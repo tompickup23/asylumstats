@@ -277,24 +277,25 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     {hotelSites.length > 0 || hotelArea ? (
       <div class="table-card">
         <table>
+          <caption>Public hotel evidence currently attached to {area.areaName}, including named sites and unnamed acknowledged use.</caption>
           <thead>
             <tr>
-              <th>Site</th>
-              <th>Status</th>
-              <th>Evidence</th>
-              <th>Last public date</th>
-              <th>Entity coverage</th>
+              <th scope="col">Site</th>
+              <th scope="col">Status</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Last public date</th>
+              <th scope="col">Entity coverage</th>
             </tr>
           </thead>
           <tbody>
             {hotelSites.map((site) => (
               <tr>
-                <td>
+                <th scope="row">
                   <strong>{site.siteName}</strong>
                   <div class="tiny">
                     <a class="source-pill" href={site.sourceUrl}>Evidence</a>
                   </div>
-                </td>
+                </th>
                 <td>{site.status}</td>
                 <td>{site.evidenceClass}</td>
                 <td>{site.lastPublicDate}</td>
@@ -309,12 +310,12 @@ const pageStructuredData = buildPlaceStructuredData(area, {
             ))}
             {hotelArea && hotelArea.unnamedSiteCount > 0 && (
               <tr>
-                <td>
+                <th scope="row">
                   <strong>Unnamed sites</strong>
                   <div class="tiny">
                     <a class="source-pill" href={hotelArea.sourceUrl}>Source</a>
                   </div>
-                </td>
+                </th>
                 <td>acknowledged</td>
                 <td>area sighting</td>
                 <td>{hotelArea.lastPublicDate}</td>

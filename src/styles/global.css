@@ -1040,6 +1040,15 @@ table {
   border-collapse: collapse;
 }
 
+caption {
+  padding: 1rem 1rem 0.2rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  text-align: left;
+  caption-side: top;
+}
+
 th,
 td {
   padding: 1rem;
@@ -1055,6 +1064,15 @@ th {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   background: rgba(255, 255, 255, 0.04);
+}
+
+tbody th[scope="row"] {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  background: transparent;
 }
 
 tbody tr:hover td {

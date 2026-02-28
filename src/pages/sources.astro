@@ -161,24 +161,25 @@ const typeCounts = [...new Set(sourceScope.map((source) => source.type))].map((t
     </div>
     <div class="table-card">
       <table>
+        <caption>Source register showing each dataset, its scope label, and the way it is allowed to shape public pages.</caption>
         <thead>
           <tr>
-            <th>Source</th>
-            <th>Type</th>
-            <th>Scope</th>
-            <th>Public use</th>
-            <th>Used for</th>
+            <th scope="col">Source</th>
+            <th scope="col">Type</th>
+            <th scope="col">Scope</th>
+            <th scope="col">Public use</th>
+            <th scope="col">Used for</th>
           </tr>
         </thead>
         <tbody>
           {sourceScope.map((source) => (
             <tr>
-              <td>
+              <th scope="row">
                 <strong>{source.name}</strong>
                 <div class="tiny">
                   <a class="source-pill" href={source.sourceUrl}>Open source</a>
                 </div>
-              </td>
+              </th>
               <td>{source.type}</td>
               <td>{source.scope}</td>
               <td>{source.publiclyIncluded}</td>

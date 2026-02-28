@@ -223,19 +223,20 @@ function formatMoney(value: number | null | undefined): string {
     <h2>Current public ledger</h2>
     <div class="table-card">
       <table>
+        <caption>Current public money ledger rows with route labels, buyer and supplier context, disclosed values, and linked named sites.</caption>
         <thead>
           <tr>
-            <th>Row</th>
-            <th>Route or scheme</th>
-            <th>Buyer / supplier</th>
-            <th>Value</th>
-            <th>Linked sites</th>
+            <th scope="col">Row</th>
+            <th scope="col">Route or scheme</th>
+            <th scope="col">Buyer / supplier</th>
+            <th scope="col">Value</th>
+            <th scope="col">Linked sites</th>
           </tr>
         </thead>
         <tbody>
           {moneyLedger.records.map((record) => (
             <tr>
-              <td>
+              <th scope="row">
                 <strong>{record.title}</strong>
                 <div class="chip-row" style="margin-top: 0.5rem;">
                   <span class="chip accent">{recordTypeLabels[record.recordType] ?? record.recordType}</span>
@@ -246,7 +247,7 @@ function formatMoney(value: number | null | undefined): string {
                 <div class="tiny" style="margin-top: 0.5rem;">
                   <a class="source-pill" href={record.sourceUrl ?? "#"}>Source</a>
                 </div>
-              </td>
+              </th>
               <td>
                 <div>{record.routeFamily ?? "Not route-specific"}</div>
                 {record.schemeLabel && <div class="tiny">{record.schemeLabel}</div>}

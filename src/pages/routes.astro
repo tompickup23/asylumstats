@@ -218,16 +218,17 @@ function formatCardValue(value: number, suffix?: string): string {
           <h3>{metric.label}</h3>
           <div class="table-card">
             <table>
+              <caption>Top eight local authority areas for {metric.label.toLowerCase()} in the latest local snapshot.</caption>
               <thead>
                 <tr>
-                  <th>Area</th>
-                  <th>Value</th>
+                  <th scope="col">Area</th>
+                  <th scope="col">Value</th>
                 </tr>
               </thead>
               <tbody>
                 {metric.rows.slice(0, 8).map((row) => (
                   <tr>
-                    <td>{row.areaName}</td>
+                    <th scope="row">{row.areaName}</th>
                     <td>{row.value.toLocaleString()}</td>
                   </tr>
                 ))}

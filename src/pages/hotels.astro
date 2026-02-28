@@ -297,25 +297,26 @@ function formatReportedPeople(value: number | null): string {
     <h2>Full starter ledger</h2>
     <div class="table-card">
       <table>
+        <caption>Named current, historical, and parliamentary-reference hotel sites with coverage status, linked entities, and integrity signals.</caption>
         <thead>
           <tr>
-            <th>Site</th>
-            <th>Status</th>
-            <th>Area</th>
-            <th>Coverage</th>
-            <th>Linked entities</th>
-            <th>Signals</th>
+            <th scope="col">Site</th>
+            <th scope="col">Status</th>
+            <th scope="col">Area</th>
+            <th scope="col">Coverage</th>
+            <th scope="col">Linked entities</th>
+            <th scope="col">Signals</th>
           </tr>
         </thead>
         <tbody>
           {[...namedCurrent, ...namedHistorical, ...parliamentaryReferences].map((site) => (
             <tr>
-              <td>
+              <th scope="row">
                 <strong>{site.siteName}</strong>
                 <div class="tiny">
                   <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
                 </div>
-              </td>
+              </th>
               <td>{site.status}</td>
               <td>
                 {site.areaName}
