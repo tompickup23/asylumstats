@@ -133,23 +133,5 @@
     "publiclyIncluded": "no",
     "use": "Held back unless an individual notice can be shown to be tied to asylum accommodation or a specific refugee or humanitarian route.",
     "sourceUrl": "https://www.contractsfinder.service.gov.uk/"
-  },
-  {
-    "name": "AI DOGE / Lancashire integrity methodology",
-    "type": "research infrastructure",
-    "coverage": "Cross-body integrity techniques",
-    "scope": "context_only",
-    "publiclyIncluded": "not directly",
-    "use": "Method source for supplier matching, ownership chains, network scoring, threshold checks, and related integrity signals adapted into asylumstats.",
-    "sourceUrl": "https://github.com/tompickup23/tompickup23.github.io"
-  },
-  {
-    "name": "ECA CRM research workflow",
-    "type": "research operations",
-    "coverage": "Lead and evidence management",
-    "scope": "context_only",
-    "publiclyIncluded": "no",
-    "use": "Potential case-management layer for hotel-owner leads, FOIs, planning evidence, supplier profiles, and investigation workflow.",
-    "sourceUrl": "https://github.com/tompickup23/eca"
   }
 ]

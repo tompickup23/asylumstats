@@ -16,7 +16,7 @@ const recordTypeLabels = {
   other: "Other"
 };
 
-function formatMoney(value) {
+function formatMoney(value: number | null | undefined): string {
   if (typeof value !== "number") {
     return "Not disclosed / not normalized";
   }
@@ -238,7 +238,7 @@ function formatMoney(value) {
   </section>
 
   <section class="section">
-    <h2>Integrity techniques adapted from AI DOGE</h2>
+    <h2>Integrity techniques</h2>
     <div class="story-grid">
       {followMoney.integrityTechniques.map((technique) => (
         <article class="story-card">

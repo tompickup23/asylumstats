@@ -1,75 +1,101 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import places from "../../data/mock/places.json";
-import areaSeries from "../../data/mock/area-series.json";
-import hotelSites from "../../data/mock/hotel-sites.json";
-import hotelSightings from "../../data/mock/hotel-sightings.json";
+import { loadLocalRouteLatest } from "../../lib/route-data";
+import { loadHotelEntityLedger } from "../../lib/hotel-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const hotelLedger = loadHotelEntityLedger();
 
 export function getStaticPaths() {
-  return places.map((place) => ({
-    params: { code: place.code },
-    props: { place }
-  }));
+  const localRouteLatest = loadLocalRouteLatest();
+  const topCodes = new Set(
+    localRouteLatest.topAreasByMetric.flatMap((group) => group.rows.map((row) => row.areaCode))
+  );
+  return localRouteLatest.areas
+    .filter((area) => topCodes.has(area.areaCode) || area.supportedAsylum >= 200)
+    .map((area) => ({
+      params: { code: area.areaCode },
+      props: { area }
+    }));
 }
 
-const { place } = Astro.props;
-const rows = areaSeries.filter((row) => row.areaCode === place.code);
-const latestRow = rows[rows.length - 1];
-const maxValue = Math.max(...rows.map((row) => row.value), 1);
-const siteRows = hotelSites.filter((site) => site.areaCode === place.code);
-const sighting = hotelSightings.find((row) => row.areaCode === place.code);
+const { area } = Astro.props;
+const hotelSites = hotelLedger.sites.filter(
+  (site) => site.areaCode === area.areaCode || site.areaName === area.areaName
+);
+const hotelArea = hotelLedger.areas.find(
+  (a) => a.areaCode === area.areaCode || a.areaName === area.areaName
+);
+const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
 ---
 
-<BaseLayout title={`${place.name} | asylumstats`}>
+<BaseLayout title={`${area.areaName} | asylumstats`}>
   <section class="page-head">
-    <span class="kicker">{place.region}</span>
-    <h1>{place.name}</h1>
-    <p>{place.summary}</p>
+    <span class="kicker">{area.regionName}</span>
+    <h1>{area.areaName}</h1>
+    <p>
+      Official local-authority snapshot as at {localRouteLatest.snapshotDate}. This area page uses live route data
+      from the GOV.UK local authority asylum and resettlement tables.
+    </p>
     <div class="chip-row">
-      <span class="chip">{place.type}</span>
-      <span class="chip teal">{place.peerGroup}</span>
-      <span class="chip accent">Latest support count {place.supportLatest.toLocaleString()}</span>
+      <span class="chip">{area.countryName}</span>
+      <span class="chip teal">Population {area.population?.toLocaleString() ?? "n/a"}</span>
+      <span class="chip accent">Supported asylum {area.supportedAsylum.toLocaleString()}</span>
     </div>
   </section>
 
   <section class="kpi-grid section">
     <article class="kpi-card">
-      <span class="tiny">Supported people</span>
-      <strong>{place.supportLatest.toLocaleString()}</strong>
-      <small>{latestRow?.periodEnd ?? "Latest period"}</small>
+      <span class="tiny">Supported asylum</span>
+      <strong>{area.supportedAsylum.toLocaleString()}</strong>
+      <small>As at {localRouteLatest.snapshotDate}</small>
     </article>
     <article class="kpi-card">
       <span class="tiny">Rate per 10,000</span>
-      <strong>{place.ratePer10000}</strong>
-      <small>Prototype rate</small>
+      <strong>{area.supportedAsylumRate ?? "n/a"}</strong>
+      <small>Supported asylum per 10,000 population</small>
     </article>
     <article class="kpi-card">
-      <span class="tiny">Recent change</span>
-      <strong>{place.recentChangePct > 0 ? "+" : ""}{place.recentChangePct}%</strong>
-      <small>Latest quarter versus previous</small>
+      <span class="tiny">Contingency accommodation</span>
+      <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
+      <small>People in contingency (hotel-type) accommodation</small>
     </article>
     <article class="kpi-card">
-      <span class="tiny">Public hotel evidence</span>
-      <strong>{place.namedSiteCount + place.unnamedSiteCount}</strong>
-      <small>{place.namedSiteCount} named | {place.unnamedSiteCount} unnamed</small>
+      <span class="tiny">Homes for Ukraine</span>
+      <strong>{area.homesForUkraineArrivals.toLocaleString()}</strong>
+      <small>Cumulative arrivals under the HfU scheme</small>
     </article>
   </section>
 
   <section class="split section">
     <div class="panel" style="padding: 1.25rem;">
-      <h2>Support trend</h2>
-      {rows.map((row) => (
-        <div class="metric-bar">
-          <div style="min-width: 9rem;">
-            <strong>{row.periodEnd}</strong>
-            <div class="tiny">{row.dataStatus}</div>
-          </div>
-          <div class="metric-track">
-            <div class="metric-fill" style={`width: ${(row.value / maxValue) * 100}%`}></div>
-          </div>
-          <div class="tiny">{row.value.toLocaleString()}</div>
-        </div>
-      ))}
+      <h2>Route breakdown</h2>
+      <div class="story-grid">
+        <article class="metric-card">
+          <span class="tiny">Dispersal accommodation</span>
+          <p class="metric-value">{area.dispersalAccommodation.toLocaleString()}</p>
+        </article>
+        <article class="metric-card">
+          <span class="tiny">Initial accommodation</span>
+          <p class="metric-value">{area.initialAccommodation.toLocaleString()}</p>
+        </article>
+        <article class="metric-card">
+          <span class="tiny">Subsistence only</span>
+          <p class="metric-value">{area.subsistenceOnly.toLocaleString()}</p>
+        </article>
+        <article class="metric-card">
+          <span class="tiny">Afghan programme</span>
+          <p class="metric-value">{area.afghanProgrammePopulation.toLocaleString()}</p>
+        </article>
+        <article class="metric-card">
+          <span class="tiny">Resettlement cumulative</span>
+          <p class="metric-value">{(area.resettlementCumulativeTotal ?? 0).toLocaleString()}</p>
+        </article>
+        <article class="metric-card">
+          <span class="tiny">Share of population</span>
+          <p class="metric-value">{area.shareOfPopulationPct ?? "n/a"}%</p>
+        </article>
+      </div>
     </div>
 
     <div class="panel" style="padding: 1.25rem;">
@@ -78,16 +104,22 @@ const sighting = hotelSightings.find((row) => row.areaCode === place.code);
         <article class="story-card">
           <h3>Pressure profile</h3>
           <p class="lede">
-            {place.name} sits in the prototype as a <strong>{place.peerGroup.toLowerCase()}</strong> with a latest published or illustrative count of{" "}
-            <strong>{place.supportLatest.toLocaleString()}</strong>.
+            {area.areaName} has <strong>{area.supportedAsylum.toLocaleString()}</strong> people on asylum support,
+            with a rate of <strong>{area.supportedAsylumRate ?? "n/a"}</strong> per 10,000 population.
+            {area.contingencyAccommodation > 0
+              ? ` Of these, ${area.contingencyAccommodation.toLocaleString()} are in contingency (hotel-type) accommodation.`
+              : " No contingency accommodation is recorded for this area."}
           </p>
         </article>
         <article class="story-card">
           <h3>Hotel visibility</h3>
           <p class="lede">
-            {place.namedSiteCount > 0
-              ? `${place.namedSiteCount} named hotel site(s) are already logged in the public evidence ledger.`
-              : "No named hotel sites are currently logged in the starter ledger for this area."}
+            {namedSiteCount > 0
+              ? `${namedSiteCount} named current hotel site${namedSiteCount > 1 ? "s are" : " is"} logged in the entity ledger for this area.`
+              : "No named hotel sites are currently logged in the entity ledger for this area."}
+            {hotelArea && hotelArea.unnamedSiteCount > 0
+              ? ` Additionally, ${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} publicly acknowledged.`
+              : ""}
           </p>
         </article>
       </div>
@@ -96,32 +128,53 @@ const sighting = hotelSightings.find((row) => row.areaCode === place.code);
 
   <section class="section">
     <h2>Hotel evidence for this place</h2>
-    {siteRows.length > 0 || sighting ? (
+    {hotelSites.length > 0 || hotelArea ? (
       <div class="table-card">
         <table>
           <thead>
             <tr>
-              <th>Type</th>
+              <th>Site</th>
+              <th>Status</th>
               <th>Evidence</th>
               <th>Last public date</th>
-              <th>Notes</th>
+              <th>Entity coverage</th>
             </tr>
           </thead>
           <tbody>
-            {siteRows.map((site) => (
+            {hotelSites.map((site) => (
               <tr>
-                <td>{site.siteName}</td>
+                <td>
+                  <strong>{site.siteName}</strong>
+                  <div class="tiny">
+                    <a class="source-pill" href={site.sourceUrl}>Evidence</a>
+                  </div>
+                </td>
+                <td>{site.status}</td>
                 <td>{site.evidenceClass}</td>
                 <td>{site.lastPublicDate}</td>
-                <td>{site.notes}</td>
+                <td>
+                  <div class="chip-row">
+                    <span class="chip">{site.entityCoverage}</span>
+                  </div>
+                  {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
+                  {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
+                </td>
               </tr>
             ))}
-            {sighting && (
+            {hotelArea && hotelArea.unnamedSiteCount > 0 && (
               <tr>
-                <td>Area sighting</td>
-                <td>{sighting.namedSiteCount} named / {sighting.unnamedSiteCount} unnamed</td>
-                <td>{sighting.lastPublicDate}</td>
-                <td>{sighting.notes}</td>
+                <td>
+                  <strong>Unnamed sites</strong>
+                  <div class="tiny">
+                    <a class="source-pill" href={hotelArea.sourceUrl}>Source</a>
+                  </div>
+                </td>
+                <td>acknowledged</td>
+                <td>area sighting</td>
+                <td>{hotelArea.lastPublicDate}</td>
+                <td>
+                  <span class="tiny">{hotelArea.unnamedSiteCount} site{hotelArea.unnamedSiteCount > 1 ? "s" : ""} without public names</span>
+                </td>
               </tr>
             )}
           </tbody>
@@ -130,7 +183,7 @@ const sighting = hotelSightings.find((row) => row.areaCode === place.code);
     ) : (
       <article class="story-card">
         <h3>No public hotel evidence logged yet</h3>
-        <p class="lede">That does not mean the area has no hotel use. It means the prototype has no public evidence row attached yet.</p>
+        <p class="lede">That does not mean the area has no hotel use. It means the ledger has no public evidence row attached yet.</p>
       </article>
     )}
   </section>

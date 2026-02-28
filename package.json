@@ -17,10 +17,15 @@
     "transform:hotels": "node scripts/transform/transform-hotel-entities.mjs",
     "ingest:hotels": "npm run transform:hotels",
     "transform:money": "node scripts/transform/transform-money-ledger.mjs",
-    "ingest:money": "npm run transform:money"
+    "ingest:money": "npm run transform:money",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "astro": "^5.0.0",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
   }
 }

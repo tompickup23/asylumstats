@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fileSha256, hashId, parseCsv, readCsv } from "../lib/csv-parser.mjs";
 
 const generatedAt = new Date().toISOString();
 
@@ -35,81 +35,7 @@ function writeNdjson(filePath, rows) {
   writeFileSync(filePath, `${rows.map((row) => JSON.stringify(row)).join("\n")}\n`);
 }
 
-function hashId(parts) {
-  return createHash("sha1").update(parts.join("|")).digest("hex").slice(0, 16);
-}
 
-function fileSha256(filePath) {
-  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
-}
-
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let index = 0; index < text.length; index += 1) {
-    const character = text[index];
-
-    if (inQuotes) {
-      if (character === "\"") {
-        if (text[index + 1] === "\"") {
-          field += "\"";
-          index += 1;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += character;
-      }
-      continue;
-    }
-
-    if (character === "\"") {
-      inQuotes = true;
-      continue;
-    }
-
-    if (character === ",") {
-      row.push(field);
-      field = "";
-      continue;
-    }
-
-    if (character === "\n") {
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-      continue;
-    }
-
-    if (character === "\r") {
-      continue;
-    }
-
-    field += character;
-  }
-
-  if (field.length > 0 || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-
-  const [headerRow = [], ...dataRows] = rows;
-  const headers = headerRow.map((header) => header.trim());
-
-  return dataRows
-    .filter((dataRow) => dataRow.some((value) => String(value).trim().length > 0))
-    .map((dataRow) =>
-      Object.fromEntries(headers.map((header, index) => [header, dataRow[index] ?? ""]))
-    );
-}
-
-function readCsv(filePath) {
-  return parseCsv(readFileSync(filePath, "utf8"));
-}
 
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
