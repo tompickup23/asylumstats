@@ -1,21 +1,161 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import sourceScope from "../data/live/source-scope.json";
+
+const scopeGroups = [
+  {
+    id: "route_specific",
+    label: "Route specific",
+    description: "Direct asylum, refugee, or route-specific evidence that can support public charts and claims."
+  },
+  {
+    id: "local_route_relevant",
+    label: "Local route relevant",
+    description: "Place-level sources that are safe to publish when tied to a route or scheme with clear logic."
+  },
+  {
+    id: "context_only",
+    label: "Context only",
+    description: "Useful research or infrastructure sources that stay out of the public product unless promoted."
+  }
+];
+const sourcesByScope = scopeGroups.map((group) => ({
+  ...group,
+  rows: sourceScope.filter((source) => source.scope === group.id)
+}));
+const typeCounts = [...new Set(sourceScope.map((source) => source.type))].map((type) => ({
+  type,
+  count: sourceScope.filter((source) => source.type === type).length
+}));
 ---
 
 <BaseLayout title="Sources | asylumstats">
-  <section class="page-head">
-    <span class="kicker">Sources</span>
-    <h1>Every published source needs a scope label before it gets a chart.</h1>
-    <p>
-      The core publishing rule is simple: route-specific and explicitly local route-relevant sources can appear on
-      public pages. `Context only` sources stay in the research layer unless a row can be promoted with a clear route or
-      scheme link.
-    </p>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Sources</span>
+      <h1>Every published source needs a scope label before it gets a chart.</h1>
+      <p>
+        The core publishing rule is simple: route-specific and explicitly local route-relevant sources can appear on
+        public pages. Context-only sources stay in the research layer unless a row can be promoted with a clear route
+        or scheme link.
+      </p>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Source governance snapshot</span>
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">Tracked sources</span>
+            <strong>{sourceScope.length.toLocaleString()}</strong>
+            <p class="tiny">Rows in the current public source ledger.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Route specific</span>
+            <strong>{sourcesByScope.find((group) => group.id === "route_specific")?.rows.length ?? 0}</strong>
+            <p class="tiny">Direct publishable route evidence.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Context only</span>
+            <strong>{sourcesByScope.find((group) => group.id === "context_only")?.rows.length ?? 0}</strong>
+            <p class="tiny">Research-layer sources kept off public charts.</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Publication rule</span>
+        <h2 class="rail-title">Scope before visualisation</h2>
+        <p class="rail-copy">
+          This product only becomes trustworthy if every source is classified before it is allowed to shape a public
+          claim.
+        </p>
+      </article>
+    </aside>
   </section>
 
   <section class="section">
-    <h2>Source ledger</h2>
+    <div class="section-head">
+      <div>
+        <h2>Scope classes</h2>
+        <p class="lede">
+          These classes decide whether a source is ready for public use, needs tighter route framing, or belongs in the
+          background research layer only.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {sourcesByScope.map((group) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class={`chip ${group.id === "route_specific" ? "accent" : group.id === "local_route_relevant" ? "teal" : ""}`}>
+              {group.label}
+            </span>
+            <span class="chip">{group.rows.length} sources</span>
+          </div>
+          <h3>{group.label}</h3>
+          <p class="lede">{group.description}</p>
+          <div class="signal-list">
+            {group.rows.slice(0, 3).map((source) => (
+              <article class="signal-card">
+                <span class="tiny">{source.type}</span>
+                <h3>{source.name}</h3>
+                <p class="tiny">{source.use}</p>
+              </article>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Source types in use</h2>
+      <div class="signal-list">
+        {typeCounts.map((row) => (
+          <article class="signal-card">
+            <div class="chip-row">
+              <span class="chip accent">{row.count} rows</span>
+            </div>
+            <h3>{row.type}</h3>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>What this protects against</h2>
+      <div class="signal-list">
+        <article class="signal-card accent">
+          <span class="tiny">Mixing problem</span>
+          <h3>Generic infrastructure stops pretending to be asylum evidence</h3>
+          <p class="tiny">
+            Councils, contracts, and public finance systems only move onto public pages when they can be tied back to a
+            route or scheme clearly enough to defend.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Public trust rule</span>
+          <h3>Every chart inherits a source discipline</h3>
+          <p class="tiny">
+            A dataset is not enough. It needs coverage, scope, and a publishability judgment first.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Source ledger</h2>
+        <p class="lede">
+          This is the underlying register of sources, their scope label, and how they are allowed to influence the
+          public site.
+        </p>
+      </div>
+    </div>
     <div class="table-card">
       <table>
         <thead>

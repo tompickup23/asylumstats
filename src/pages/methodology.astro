@@ -1,38 +1,95 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
+
+const evidenceLayers = [
+  {
+    title: "Official",
+    body: "Published Home Office, ONS, NAO, or parliamentary sources with stable release or document provenance."
+  },
+  {
+    title: "Derived estimate",
+    body: "Rates, tariff estimates, or calculated shares built from published source inputs and documented methods."
+  },
+  {
+    title: "Archive-derived",
+    body: "Recovered historical regional material that must always keep archive URL, capture date, and validation notes."
+  },
+  {
+    title: "Public evidence",
+    body: "Council statements, FOIs, planning records, or parliamentary material that help identify hotel sites or hotel presence."
+  }
+];
 ---
 
 <BaseLayout title="Methodology | asylumstats">
-  <section class="page-head">
-    <span class="kicker">Methodology</span>
-    <h1>Tell users what is known, what is estimated, and what is only publicly evidenced.</h1>
-    <p>
-      This product has to be stricter than a normal dashboard because it mixes official releases with public hotel evidence and later archive recoveries.
-    </p>
-  </section>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Methodology</span>
+      <h1>Tell users what is known, what is estimated, and what is only publicly evidenced.</h1>
+      <p>
+        This product has to be stricter than a normal dashboard because it mixes official releases with public hotel
+        evidence and later archive recoveries.
+      </p>
+    </section>
 
-  <section class="story-grid section">
-    <article class="story-card">
-      <h3>Official</h3>
-      <p class="lede">Published Home Office, ONS, NAO, or parliamentary sources with stable release or document provenance.</p>
-    </article>
-    <article class="story-card">
-      <h3>Derived estimate</h3>
-      <p class="lede">Rates, tariff estimates, or calculated shares built from published source inputs and documented methods.</p>
-    </article>
-    <article class="story-card">
-      <h3>Archive-derived</h3>
-      <p class="lede">Recovered historical regional material that must always keep archive URL, capture date, and validation notes.</p>
-    </article>
-    <article class="story-card">
-      <h3>Public evidence</h3>
-      <p class="lede">Council statements, FOIs, planning records, or parliamentary material that help identify hotel sites or hotel presence.</p>
-    </article>
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Method rule</span>
+        <h2 class="rail-title">Scope discipline before storytelling</h2>
+        <p class="rail-copy">
+          The site is allowed to be sharp in tone because the publishing rules are tighter than the average advocacy or
+          data product.
+        </p>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Core layers</span>
+        <div class="signal-list">
+          {evidenceLayers.map((layer) => (
+            <article class="signal-card accent">
+              <span class="tiny">Evidence layer</span>
+              <h3>{layer.title}</h3>
+              <p class="tiny">{layer.body}</p>
+            </article>
+          ))}
+        </div>
+      </article>
+    </aside>
   </section>
 
   <section class="section">
-    <h2>Rules this prototype assumes</h2>
+    <div class="section-head">
+      <div>
+        <h2>Evidence layers</h2>
+        <p class="lede">
+          Different source types can coexist on the same site only if the reader can tell exactly what kind of claim
+          each one supports.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {evidenceLayers.map((layer) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{layer.title}</span>
+          </div>
+          <h3>{layer.title}</h3>
+          <p class="lede">{layer.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Rules this product assumes</h2>
+        <p class="lede">
+          These are the editorial and structural rules that stop the site drifting into vague outrage or false precision.
+        </p>
+      </div>
+    </div>
     <div class="story-grid">
       <article class="story-card">
         <h3>Never imply the hotel list is complete</h3>
@@ -65,79 +122,113 @@ import asylumFinance from "../data/live/asylum-finance.json";
     </div>
   </section>
 
-  <section class="section">
-    <h2>Route scope classes</h2>
-    <div class="story-grid">
-      {asylumFinance.scopeRules.map((rule) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
-              {rule.label}
-            </span>
-          </div>
-          <p class="lede">{rule.description}</p>
-        </article>
-      ))}
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Route scope classes</h2>
+      <div class="signal-list">
+        {asylumFinance.scopeRules.map((rule) => (
+          <article class="signal-card">
+            <div class="chip-row">
+              <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
+                {rule.label}
+              </span>
+            </div>
+            <p class="tiny">{rule.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>Public inclusion test</h2>
+      <div class="signal-list">
+        {asylumFinance.inclusionTests.map((rule) => (
+          <article class="signal-card accent">
+            <span class="tiny">Inclusion rule</span>
+            <p class="tiny">{rule}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
   <section class="section">
-    <h2>Public inclusion test</h2>
-    <div class="story-grid">
-      {asylumFinance.inclusionTests.map((rule) => (
-        <article class="story-card">
-          <p class="lede">{rule}</p>
-        </article>
-      ))}
+    <div class="section-head">
+      <div>
+        <h2>Route families the site should split</h2>
+        <p class="lede">
+          The route model is explicit because the point of the product is to stop incompatible flows being presented as
+          one moralised bucket.
+        </p>
+      </div>
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Route families the site should split</h2>
-    <div class="story-grid">
+    <div class="feature-grid">
       {asylumFinance.routeFamilies.map((route) => (
-        <article class="story-card">
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">{route.group}</span>
+            <span class="chip">{route.schemeStatus}</span>
+          </div>
           <h3>{route.label}</h3>
           <p class="lede">{route.note}</p>
-          <p class="tiny">{route.group} | {route.schemeStatus}</p>
         </article>
       ))}
     </div>
   </section>
 
-  <section class="section">
-    <h2>Hotel entity-resolution rule</h2>
-    <div class="story-grid">
-      <article class="story-card">
-        <h3>Documented</h3>
-        <p class="lede">Use this only when the ledger can tie a site to both owner-side and operator-side entities with a strong public source trail.</p>
-      </article>
-      <article class="story-card">
-        <h3>Partial</h3>
-        <p class="lede">Use this when one side of the chain is known, such as an owner group or operator brand, but the full site-level entity picture is still incomplete.</p>
-      </article>
-      <article class="story-card">
-        <h3>Unresolved</h3>
-        <p class="lede">Use this when a hotel is publicly named but the starter ledger still lacks a publishable owner or operator match. That is a transparency finding, not a reason to hide the row.</p>
-      </article>
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Hotel entity-resolution rule</h2>
+      <div class="signal-list">
+        <article class="signal-card accent">
+          <span class="tiny">Documented</span>
+          <p class="tiny">
+            Use this only when the ledger can tie a site to both owner-side and operator-side entities with a strong
+            public source trail.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Partial</span>
+          <p class="tiny">
+            Use this when one side of the chain is known, such as an owner group or operator brand, but the full
+            site-level entity picture is still incomplete.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Unresolved</span>
+          <p class="tiny">
+            Use this when a hotel is publicly named but the starter ledger still lacks a publishable owner or operator
+            match. That is a transparency finding, not a reason to hide the row.
+          </p>
+        </article>
+      </div>
     </div>
-  </section>
 
-  <section class="section">
-    <h2>Money-ledger display rule</h2>
-    <div class="story-grid">
-      <article class="story-card">
-        <h3>Prime contract scope</h3>
-        <p class="lede">These rows show who controls a region or visible set of current sites. They are not automatically a disclosed contract value.</p>
-      </article>
-      <article class="story-card">
-        <h3>Funding instruction</h3>
-        <p class="lede">These rows can be tariff rates or guidance components. They should not be shown as actual spend totals unless multiplied through with transparent placement counts and method notes.</p>
-      </article>
-      <article class="story-card">
-        <h3>Scrutiny and cost rows</h3>
-        <p class="lede">These rows are valuable accountability facts, but they belong in a distinct display state from contracts and tariffs.</p>
-      </article>
+    <div class="panel panel-pad">
+      <h2>Money-ledger display rule</h2>
+      <div class="signal-list">
+        <article class="signal-card accent">
+          <span class="tiny">Prime contract scope</span>
+          <p class="tiny">
+            These rows show who controls a region or visible set of current sites. They are not automatically a
+            disclosed contract value.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Funding instruction</span>
+          <p class="tiny">
+            These rows can be tariff rates or guidance components. They should not be shown as actual spend totals
+            unless multiplied through with transparent placement counts and method notes.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Scrutiny and cost rows</span>
+          <p class="tiny">
+            These rows are valuable accountability facts, but they belong in a distinct display state from contracts and
+            tariffs.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 </BaseLayout>

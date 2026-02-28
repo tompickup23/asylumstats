@@ -27,98 +27,136 @@ const hotelArea = hotelLedger.areas.find(
   (a) => a.areaCode === area.areaCode || a.areaName === area.areaName
 );
 const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
+const areaRank =
+  [...localRouteLatest.areas]
+    .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
+    .findIndex((candidate) => candidate.areaCode === area.areaCode) + 1;
+const contingencyRank =
+  [...localRouteLatest.areas]
+    .sort((a, b) => b.contingencyAccommodation - a.contingencyAccommodation)
+    .findIndex((candidate) => candidate.areaCode === area.areaCode) + 1;
+const pathwayBreakdown = [
+  { label: "Supported asylum", value: area.supportedAsylum },
+  { label: "Homes for Ukraine", value: area.homesForUkraineArrivals },
+  { label: "Afghan programme", value: area.afghanProgrammePopulation },
+  { label: "Resettlement cumulative", value: area.resettlementCumulativeTotal ?? 0 }
+];
+const maxPathwayValue = Math.max(...pathwayBreakdown.map((item) => item.value), 1);
+const hotelSignals = hotelSites
+  .flatMap((site) =>
+    site.integritySignals.map((signal) => ({
+      siteName: site.siteName,
+      headline: signal.headline,
+      detail: signal.detail,
+      severity: signal.severity
+    }))
+  )
+  .slice(0, 3);
 ---
 
 <BaseLayout title={`${area.areaName} | asylumstats`}>
-  <section class="page-head">
-    <span class="kicker">{area.regionName}</span>
-    <h1>{area.areaName}</h1>
-    <p>
-      Official local-authority snapshot as at {localRouteLatest.snapshotDate}. This area page uses live route data
-      from the GOV.UK local authority asylum and resettlement tables.
-    </p>
-    <div class="chip-row">
-      <span class="chip">{area.countryName}</span>
-      <span class="chip teal">Population {area.population?.toLocaleString() ?? "n/a"}</span>
-      <span class="chip accent">Supported asylum {area.supportedAsylum.toLocaleString()}</span>
-    </div>
-  </section>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">{area.regionName}</span>
+      <h1>{area.areaName}</h1>
+      <p>
+        Official local-authority snapshot as at {localRouteLatest.snapshotDate}. This page keeps live route data and
+        local hotel evidence on one place-level surface so pressure can be read in context.
+      </p>
+      <div class="chip-row">
+        <span class="chip">{area.countryName}</span>
+        <span class="chip teal">Population {area.population?.toLocaleString() ?? "n/a"}</span>
+        <span class="chip accent">Supported asylum {area.supportedAsylum.toLocaleString()}</span>
+      </div>
+    </section>
 
-  <section class="kpi-grid section">
-    <article class="kpi-card">
-      <span class="tiny">Supported asylum</span>
-      <strong>{area.supportedAsylum.toLocaleString()}</strong>
-      <small>As at {localRouteLatest.snapshotDate}</small>
-    </article>
-    <article class="kpi-card">
-      <span class="tiny">Rate per 10,000</span>
-      <strong>{area.supportedAsylumRate ?? "n/a"}</strong>
-      <small>Supported asylum per 10,000 population</small>
-    </article>
-    <article class="kpi-card">
-      <span class="tiny">Contingency accommodation</span>
-      <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
-      <small>People in contingency (hotel-type) accommodation</small>
-    </article>
-    <article class="kpi-card">
-      <span class="tiny">Homes for Ukraine</span>
-      <strong>{area.homesForUkraineArrivals.toLocaleString()}</strong>
-      <small>Cumulative arrivals under the HfU scheme</small>
-    </article>
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Local pressure position</span>
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">UK area rank by supported asylum</span>
+            <strong>{areaRank.toLocaleString()}</strong>
+            <p class="tiny">Across all local authority rows in the live dataset.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Supported asylum rate</span>
+            <strong>{area.supportedAsylumRate ?? "n/a"}</strong>
+            <p class="tiny">Per 10,000 residents.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Contingency rank</span>
+            <strong>{contingencyRank.toLocaleString()}</strong>
+            <p class="tiny">By contingency accommodation count.</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Hotel visibility</span>
+        <h2 class="rail-title">
+          {namedSiteCount > 0 ? `${namedSiteCount} named current site${namedSiteCount > 1 ? "s" : ""}` : "No named current sites"}
+        </h2>
+        <p class="rail-copy">
+          {hotelArea && hotelArea.unnamedSiteCount > 0
+            ? `${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} also publicly acknowledged here.`
+            : "No unnamed hotel count is attached to this area in the starter ledger."}
+        </p>
+      </article>
+    </aside>
   </section>
 
   <section class="split section">
-    <div class="panel" style="padding: 1.25rem;">
-      <h2>Route breakdown</h2>
-      <div class="story-grid">
-        <article class="metric-card">
-          <span class="tiny">Dispersal accommodation</span>
-          <p class="metric-value">{area.dispersalAccommodation.toLocaleString()}</p>
-        </article>
-        <article class="metric-card">
-          <span class="tiny">Initial accommodation</span>
-          <p class="metric-value">{area.initialAccommodation.toLocaleString()}</p>
-        </article>
-        <article class="metric-card">
-          <span class="tiny">Subsistence only</span>
-          <p class="metric-value">{area.subsistenceOnly.toLocaleString()}</p>
-        </article>
-        <article class="metric-card">
-          <span class="tiny">Afghan programme</span>
-          <p class="metric-value">{area.afghanProgrammePopulation.toLocaleString()}</p>
-        </article>
-        <article class="metric-card">
-          <span class="tiny">Resettlement cumulative</span>
-          <p class="metric-value">{(area.resettlementCumulativeTotal ?? 0).toLocaleString()}</p>
-        </article>
-        <article class="metric-card">
-          <span class="tiny">Share of population</span>
-          <p class="metric-value">{area.shareOfPopulationPct ?? "n/a"}%</p>
-        </article>
-      </div>
+    <div class="panel panel-pad">
+      <h2>Pathway breakdown</h2>
+      <p class="lede">
+        The local picture only becomes legible when supported asylum, contingency use, Ukraine arrivals, and Afghan
+        programme population are kept distinct.
+      </p>
+      {pathwayBreakdown.map((item) => (
+        <div class="metric-bar">
+          <div style="min-width: 11rem;">
+            <strong>{item.label}</strong>
+            <div class="tiny">{item.value.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(item.value / maxPathwayValue) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
     </div>
 
-    <div class="panel" style="padding: 1.25rem;">
+    <div class="panel panel-pad">
       <h2>What stands out here</h2>
-      <div class="story-grid">
-        <article class="story-card">
-          <h3>Pressure profile</h3>
-          <p class="lede">
-            {area.areaName} has <strong>{area.supportedAsylum.toLocaleString()}</strong> people on asylum support,
-            with a rate of <strong>{area.supportedAsylumRate ?? "n/a"}</strong> per 10,000 population.
+      <div class="signal-list">
+        <article class="signal-card accent">
+          <span class="tiny">Pressure profile</span>
+          <h3>{area.areaName} is carrying a real asylum-support load</h3>
+          <p class="tiny">
+            {area.supportedAsylum.toLocaleString()} people are on asylum support here, with a rate of{" "}
+            {area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
             {area.contingencyAccommodation > 0
-              ? ` Of these, ${area.contingencyAccommodation.toLocaleString()} are in contingency (hotel-type) accommodation.`
+              ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation.`
               : " No contingency accommodation is recorded for this area."}
           </p>
         </article>
-        <article class="story-card">
-          <h3>Hotel visibility</h3>
-          <p class="lede">
+        <article class="signal-card">
+          <span class="tiny">Three-pathway load</span>
+          <h3>{area.allThreePathwaysTotal.toLocaleString()} people across the main local pathways</h3>
+          <p class="tiny">
+            This combines supported asylum, Homes for Ukraine arrivals, and Afghan programme population, representing{" "}
+            {area.shareOfPopulationPct ?? "n/a"}% of the local population.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Hotel visibility</span>
+          <h3>{namedSiteCount > 0 ? "Public hotel evidence exists here" : "Public hotel evidence is still thin here"}</h3>
+          <p class="tiny">
             {namedSiteCount > 0
               ? `${namedSiteCount} named current hotel site${namedSiteCount > 1 ? "s are" : " is"} logged in the entity ledger for this area.`
-              : "No named hotel sites are currently logged in the entity ledger for this area."}
+              : "No named current hotel site is attached to this area in the starter ledger yet."}
             {hotelArea && hotelArea.unnamedSiteCount > 0
-              ? ` Additionally, ${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} publicly acknowledged.`
+              ? ` ${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} publicly acknowledged as well.`
               : ""}
           </p>
         </article>
@@ -127,7 +165,104 @@ const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
   </section>
 
   <section class="section">
-    <h2>Hotel evidence for this place</h2>
+    <div class="section-head">
+      <div>
+        <h2>Local route metrics</h2>
+        <p class="lede">
+          The area profile should show route composition, not force users to infer it from a single asylum count.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card accent">
+        <div class="chip-row">
+          <span class="chip accent">Asylum support</span>
+        </div>
+        <h3>Accommodation split</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>Dispersal accommodation</span>
+            <span class="data-row-value">{area.dispersalAccommodation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Initial accommodation</span>
+            <span class="data-row-value">{area.initialAccommodation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Subsistence only</span>
+            <span class="data-row-value">{area.subsistenceOnly.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Contingency accommodation</span>
+            <span class="data-row-value">{area.contingencyAccommodation.toLocaleString()}</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature-card">
+        <div class="chip-row">
+          <span class="chip teal">Ukraine and Afghan pathways</span>
+        </div>
+        <h3>Other current routes in this place</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>Homes for Ukraine arrivals</span>
+            <span class="data-row-value">{area.homesForUkraineArrivals.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Afghan programme population</span>
+            <span class="data-row-value">{area.afghanProgrammePopulation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Afghan local authority housing</span>
+            <span class="data-row-value">{area.afghanProgrammeLaHousing.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Afghan private rented housing</span>
+            <span class="data-row-value">{area.afghanProgrammePrsHousing.toLocaleString()}</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature-card">
+        <div class="chip-row">
+          <span class="chip">Historical routes</span>
+        </div>
+        <h3>Resettlement history</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>Resettlement cumulative total</span>
+            <span class="data-row-value">{(area.resettlementCumulativeTotal ?? 0).toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>UK resettlement and family reunion cumulative</span>
+            <span class="data-row-value">{area.ukResettlementFamilyCumulative.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Community sponsorship cumulative</span>
+            <span class="data-row-value">{area.communitySponsorshipCumulative.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Latest resettlement quarter</span>
+            <span class="data-row-value">
+              {area.latestResettlementQuarterLabel} ({area.latestResettlementQuarterValue.toLocaleString()})
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Hotel evidence for this place</h2>
+        <p class="lede">
+          Place pages should merge live route data with the named and unnamed hotel evidence already on the public
+          record.
+        </p>
+      </div>
+    </div>
     {hotelSites.length > 0 || hotelArea ? (
       <div class="table-card">
         <table>
@@ -181,10 +316,42 @@ const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
         </table>
       </div>
     ) : (
-      <article class="story-card">
+      <article class="feature-card">
+        <div class="chip-row">
+          <span class="chip">Evidence gap</span>
+        </div>
         <h3>No public hotel evidence logged yet</h3>
-        <p class="lede">That does not mean the area has no hotel use. It means the ledger has no public evidence row attached yet.</p>
+        <p class="lede">
+          That does not mean the area has no hotel use. It means the ledger has no publishable public evidence row
+          attached yet.
+        </p>
       </article>
     )}
   </section>
+
+  {hotelSignals.length > 0 && (
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Integrity signals already visible</h2>
+          <p class="lede">
+            These signals are attached to publicly evidenced sites in this area. They are place-level accountability
+            leads, not background noise.
+          </p>
+        </div>
+      </div>
+      <div class="story-grid">
+        {hotelSignals.map((signal) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class={`chip ${signal.severity === "warning" ? "accent" : ""}`}>{signal.severity}</span>
+              <span class="chip">{signal.siteName}</span>
+            </div>
+            <h3>{signal.headline ?? "Integrity signal"}</h3>
+            {signal.detail && <p class="lede">{signal.detail}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>

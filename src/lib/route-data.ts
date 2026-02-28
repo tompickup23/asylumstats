@@ -74,6 +74,8 @@ export interface LocalRouteAreaSummary {
   homesForUkraineRate: number | null;
   afghanProgrammePopulation: number;
   afghanProgrammeRate: number | null;
+  afghanProgrammeLaHousing: number;
+  afghanProgrammePrsHousing: number;
   supportedAsylum: number;
   supportedAsylumRate: number | null;
   contingencyAccommodation: number;
