@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
@@ -81,6 +82,19 @@ function formatRouteFamily(routeFamily: string | null | undefined): string {
   }
 }
 
+const moneyRouteOptions = [...new Set(moneyLedger.records.map((record) => record.routeFamily ?? "not_route_specific"))].sort(
+  (left, right) => formatRouteFamily(left).localeCompare(formatRouteFamily(right))
+);
+const moneyTypeOptions = [...new Set(moneyLedger.records.map((record) => record.recordType))].sort((left, right) =>
+  (recordTypeLabels[left] ?? left).localeCompare(recordTypeLabels[right] ?? right)
+);
+const moneyBuyerOptions = [...new Set(moneyLedger.records.map((record) => record.buyerName))].sort((left, right) =>
+  left.localeCompare(right)
+);
+const moneyScopeOptions = [...new Set(moneyLedger.records.map((record) => record.scopeClass))].sort((left, right) =>
+  left.localeCompare(right)
+);
+
 const spendingReadoutCards = [
   leadRoute
     ? {
@@ -107,6 +121,15 @@ const spendingReadoutCards = [
       }
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
+const spendingSections = [
+  { id: "money-composition", label: "Composition" },
+  { id: "money-readout", label: "Readout" },
+  { id: "money-explorer", label: "Explorer" },
+  { id: "supplier-watchlist", label: "Watchlist" },
+  { id: "money-ledger", label: "Ledger" },
+  { id: "supplier-profiles", label: "Profiles" },
+  { id: "investigative-leads", label: "Leads" }
+];
 ---
 
 <BaseLayout
@@ -169,7 +192,9 @@ const spendingReadoutCards = [
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents sections={spendingSections} />
+
+  <section id="where-values" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Where the public values already exist</h2>
@@ -212,7 +237,7 @@ const spendingReadoutCards = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="money-composition" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Ledger composition at a glance</h2>
@@ -292,7 +317,7 @@ const spendingReadoutCards = [
     />
   </section>
 
-  <section class="section">
+  <section id="money-readout" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>What the ledger already proves</h2>
@@ -312,7 +337,126 @@ const spendingReadoutCards = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="money-explorer" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Explorer and shareable filters</h2>
+        <p class="lede">
+          This drill-down is URL-synced, so filtered views of the money ledger can be shared directly instead of being
+          recreated from scratch every time.
+        </p>
+      </div>
+      <span class="chip accent">Query-state explorer</span>
+    </div>
+
+    <div class="filter-panel">
+      <form class="filter-grid" data-money-form>
+        <label class="filter-field">
+          <span class="tiny">Search rows</span>
+          <input type="search" name="money_q" placeholder="Buyer, supplier, route, site, or title" />
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Route family</span>
+          <select name="money_route">
+            <option value="all">All route families</option>
+            {moneyRouteOptions.map((routeFamily) => (
+              <option value={routeFamily}>{formatRouteFamily(routeFamily)}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Record type</span>
+          <select name="money_type">
+            <option value="all">All record types</option>
+            {moneyTypeOptions.map((recordType) => (
+              <option value={recordType}>{recordTypeLabels[recordType] ?? recordType}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Buyer</span>
+          <select name="money_buyer">
+            <option value="all">All buyers</option>
+            {moneyBuyerOptions.map((buyerName) => (
+              <option value={buyerName}>{buyerName}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Value status</span>
+          <select name="money_value">
+            <option value="all">All rows</option>
+            <option value="with_value">Rows with published values</option>
+            <option value="without_value">Rows without published values</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Scope rule</span>
+          <select name="money_scope">
+            <option value="all">All scope classes</option>
+            {moneyScopeOptions.map((scopeClass) => (
+              <option value={scopeClass}>{scopeClass}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Sort rows by</span>
+          <select name="money_sort">
+            <option value="newest">Newest publication</option>
+            <option value="value">Largest published value</option>
+            <option value="linked_sites">Most linked named sites</option>
+            <option value="title">Title</option>
+          </select>
+        </label>
+      </form>
+      <div class="filter-actions">
+        <button class="source-pill" type="button" data-money-reset>Reset filters</button>
+        <span class="tiny" data-money-summary>Showing {moneyLedger.summary.totalRecords.toLocaleString()} public ledger rows</span>
+        <span class="tiny" data-money-meta>
+          {moneyLedger.summary.rowsWithDisclosedValue.toLocaleString()} rows with values | lead buyer {leadBuyer?.buyerName ?? "not available"}
+        </span>
+      </div>
+    </div>
+
+    <div class="data-pill-grid">
+      <article class="guide-card">
+        <span class="tiny">Matching rows</span>
+        <h3 data-money-result-count>{moneyLedger.summary.totalRecords.toLocaleString()}</h3>
+        <p class="tiny">Current ledger rows still visible after filtering.</p>
+      </article>
+      <article class="guide-card">
+        <span class="tiny">Published value total</span>
+        <h3 data-money-value-total>
+          {moneyLedger.summary.rowsWithDisclosedValue > 0
+            ? formatMoney(routeSummaries.reduce((total, summary) => total + summary.disclosedValueTotal, 0))
+            : "No published values"}
+        </h3>
+        <p class="tiny">Only explicit normalized GBP values are counted here.</p>
+      </article>
+      <article class="guide-card">
+        <span class="tiny">Linked named sites</span>
+        <h3 data-money-linked-sites>{moneyLedger.summary.linkedNamedSites.toLocaleString()}</h3>
+        <p class="tiny">Site links in the visible ledger rows.</p>
+      </article>
+      <article class="guide-card">
+        <span class="tiny">Lead buyer in view</span>
+        <h3 data-money-lead-buyer>{leadBuyer?.buyerName ?? "No buyer recorded"}</h3>
+        <p class="tiny">Highest-frequency buyer in the current filtered ledger view.</p>
+      </article>
+    </div>
+
+    <article class="feature-card" data-money-empty hidden>
+      <div class="chip-row">
+        <span class="chip accent">No matches</span>
+      </div>
+      <h3>No public money rows match this filter combination</h3>
+      <p class="lede">
+        Try widening the route family, clearing the buyer filter, or removing the published-value requirement.
+      </p>
+    </article>
+  </section>
+
+  <section id="supplier-watchlist" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Supplier and public-body watchlist</h2>
@@ -352,7 +496,7 @@ const spendingReadoutCards = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="money-ledger" class="section section-anchor">
     <h2>Current public ledger</h2>
     <div class="table-card">
       <table>
@@ -366,9 +510,36 @@ const spendingReadoutCards = [
             <th scope="col">Linked sites</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-money-rows>
           {moneyLedger.records.map((record) => (
-            <tr>
+            <tr
+              data-money-row
+              data-record-id={record.recordId}
+              data-title={record.title}
+              data-buyer={record.buyerName}
+              data-supplier={record.supplierName ?? ""}
+              data-route={record.routeFamily ?? "not_route_specific"}
+              data-record-type={record.recordType}
+              data-scope={record.scopeClass}
+              data-has-value={typeof record.valueGbp === "number" ? "true" : "false"}
+              data-value={record.valueGbp ?? 0}
+              data-linked-sites={record.linkedSites.length}
+              data-site-ids={record.linkedSites.map((site) => site.siteId).join(",")}
+              data-published-at={record.publishedDate ?? record.awardDate ?? ""}
+              data-search-text={[
+                record.title,
+                record.buyerName,
+                record.supplierName,
+                record.routeFamily,
+                record.schemeLabel,
+                record.periodLabel,
+                record.scopeClass,
+                ...record.linkedSites.map((site) => `${site.siteName} ${site.areaName} ${site.regionName}`)
+              ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase()}
+            >
               <th scope="row">
                 <strong>{record.title}</strong>
                 <div class="chip-row" style="margin-top: 0.5rem;">
@@ -415,7 +586,7 @@ const spendingReadoutCards = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="supplier-profiles" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Supplier and public-body profiles</h2>
@@ -448,7 +619,7 @@ const spendingReadoutCards = [
     </div>
   </section>
 
-  <section class="section">
+  <section id="investigative-leads" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Investigative leads already visible in the data</h2>
@@ -566,4 +737,10 @@ const spendingReadoutCards = [
       </div>
     </div>
   </section>
+
+  <script>
+    import { initMoneyExplorer } from "../scripts/money-explorer";
+
+    initMoneyExplorer();
+  </script>
 </BaseLayout>

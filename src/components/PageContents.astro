@@ -1,0 +1,27 @@
+---
+interface SectionLink {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  title?: string;
+  sections: SectionLink[];
+}
+
+const { title = "On this page", sections } = Astro.props;
+---
+
+{
+  sections.length > 0 && (
+    <nav class="page-contents section-anchor" aria-label={title}>
+      <span class="tiny">{title}</span>
+      <div class="page-contents-links">
+        {sections.map((section) => (
+          <a href={`#${section.id}`}>{section.label}</a>
+        ))}
+      </div>
+    </nav>
+  )
+}
+

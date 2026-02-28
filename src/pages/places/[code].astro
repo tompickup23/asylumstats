@@ -1,10 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import RegionTileMap from "../../components/RegionTileMap.astro";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
+import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
 import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
@@ -64,6 +66,7 @@ const hotelSignals = hotelSites
     }))
   )
   .slice(0, 3);
+const placeDrilldownMetrics = getPlaceDrilldownMetrics(localRouteLatest.areas, area);
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
 const supportedStats = getDistributionStats(localRouteLatest.areas.map((candidate) => candidate.supportedAsylum));
@@ -155,6 +158,15 @@ const pageStructuredData = buildPlaceStructuredData(area, {
   namedSiteCount,
   unnamedSiteCount
 });
+const placeSections = [
+  { id: "place-drilldown", label: "Drill-down" },
+  { id: "local-benchmarks", label: "Benchmarks" },
+  { id: "editorial-readout", label: "Readout" },
+  { id: "route-metrics", label: "Metrics" },
+  { id: "regional-peers", label: "Peers" },
+  { id: "hotel-evidence", label: "Hotels" },
+  ...(hotelSignals.length > 0 ? [{ id: "integrity-signals", label: "Signals" }] : [])
+];
 ---
 
 <BaseLayout
@@ -213,7 +225,103 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </aside>
   </section>
 
-  <section class="split section">
+  <PageContents sections={placeSections} />
+
+  <section id="place-drilldown" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Interactive place drill-down</h2>
+        <p class="lede">
+          Switch metric and comparison frame to read {area.areaName} as a pressure leader, rate outlier, contingency
+          site, or three-pathway case without leaving the page.
+        </p>
+      </div>
+      <span class="chip accent">Shareable place lens</span>
+    </div>
+
+    <div class="filter-panel">
+      <form class="filter-grid" data-place-drill-form>
+        <label class="filter-field">
+          <span class="tiny">Metric</span>
+          <select name="place_metric">
+            {placeDrilldownMetrics.map((metric) => (
+              <option value={metric.id}>{metric.label}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Comparison frame</span>
+          <select name="place_scope">
+            <option value="regional">Regional peers</option>
+            <option value="national">National ranking</option>
+          </select>
+        </label>
+      </form>
+      <div class="filter-actions">
+        <button class="source-pill" type="button" data-place-drill-reset>Reset lens</button>
+        <span class="tiny" data-place-drill-summary>
+          {placeDrilldownMetrics[0]?.views[0]?.summary ?? `${area.areaName} in regional context.`}
+        </span>
+      </div>
+    </div>
+
+    <div class="drilldown-grid">
+      {placeDrilldownMetrics.map((metric) =>
+        metric.views.map((view) => (
+          <article
+            class="drilldown-card"
+            data-place-drill-panel
+            data-metric={metric.id}
+            data-scope={view.scope}
+            data-summary={view.summary}
+            hidden={!(metric.id === "supported_asylum" && view.scope === "regional")}
+          >
+            <div class="chip-row">
+              <span class="chip accent">{metric.label}</span>
+              <span class="chip">{view.scope === "regional" ? area.regionName : "United Kingdom"}</span>
+            </div>
+            <h3>{metric.description}</h3>
+            <p class="lede">{view.summary}</p>
+            <div class="drilldown-meta">
+              <article class="signal-card">
+                <span class="tiny">Current value</span>
+                <strong>{metric.currentValueLabel}</strong>
+              </article>
+              <article class="signal-card">
+                <span class="tiny">{view.scope === "regional" ? "Regional rank" : "National rank"}</span>
+                <strong>
+                  #{view.scope === "regional" ? metric.regionalRank.toLocaleString() : metric.nationalRank.toLocaleString()}
+                </strong>
+              </article>
+              <article class="signal-card">
+                <span class="tiny">National percentile</span>
+                <strong>{metric.percentile}th</strong>
+              </article>
+            </div>
+            <div class="drilldown-list">
+              {view.rows.map((row) => (
+                <a class="drilldown-row-link" href={row.href}>
+                  <div class="metric-bar">
+                    <div style="min-width: 12rem;">
+                      <strong>{row.areaName}</strong>
+                      <div class="tiny">
+                        {row.secondaryLabel} | {row.valueLabel}
+                      </div>
+                    </div>
+                    <div class="metric-track">
+                      <div class="metric-fill" style={`width: ${row.widthPct}%`}></div>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </article>
+        ))
+      )}
+    </div>
+  </section>
+
+  <section id="pathway-breakdown" class="split section">
     <div class="panel panel-pad">
       <h2>Pathway breakdown</h2>
       <p class="lede">
@@ -271,7 +379,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </div>
   </section>
 
-  <section class="split section">
+  <section id="local-benchmarks" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>National benchmarks</h2>
       <p class="lede">
@@ -323,7 +431,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     />
   </section>
 
-  <section class="section">
+  <section id="editorial-readout" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Editorial readout</h2>
@@ -346,7 +454,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </div>
   </section>
 
-  <section class="section">
+  <section id="route-metrics" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Local route metrics</h2>
@@ -435,7 +543,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </div>
   </section>
 
-  <section class="split section">
+  <section id="regional-peers" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>Regional peer frame</h2>
       <p class="lede">
@@ -471,7 +579,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
     </article>
   </section>
 
-  <section class="section">
+  <section id="hotel-evidence" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Hotel evidence for this place</h2>
@@ -549,7 +657,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
   </section>
 
   {hotelSignals.length > 0 && (
-    <section class="section">
+    <section id="integrity-signals" class="section section-anchor">
       <div class="section-head">
         <div>
           <h2>Integrity signals already visible</h2>
@@ -573,4 +681,10 @@ const pageStructuredData = buildPlaceStructuredData(area, {
       </div>
     </section>
   )}
+
+  <script>
+    import { initPlaceDrilldown } from "../../scripts/place-drilldown";
+
+    initPlaceDrilldown();
+  </script>
 </BaseLayout>

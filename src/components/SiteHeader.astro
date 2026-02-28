@@ -30,9 +30,69 @@ function isActive(href: string): boolean {
     </span>
   </a>
 
-  <nav class="site-nav" aria-label="Primary">
-    {navItems.map((item) => (
-      <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>
-    ))}
-  </nav>
+  <div class="site-tools">
+    <button
+      class="search-launch"
+      type="button"
+      data-site-search-open
+      aria-haspopup="dialog"
+      aria-controls="site-search-panel"
+    >
+      <span>Search pages and places</span>
+      <span class="search-shortcut">/</span>
+    </button>
+
+    <nav class="site-nav" aria-label="Primary">
+      {navItems.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
 </header>
+
+<div class="site-search-shell" data-site-search hidden>
+  <div class="site-search-backdrop" data-site-search-close></div>
+  <section
+    id="site-search-panel"
+    class="site-search-panel"
+    data-site-search-panel
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="site-search-title"
+  >
+    <div class="site-search-head">
+      <div>
+        <span class="tiny">Search the publication</span>
+        <h2 id="site-search-title">Pages, place profiles, and accountability surfaces</h2>
+      </div>
+      <button class="source-pill" type="button" data-site-search-close>Close</button>
+    </div>
+
+    <form class="site-search-form" role="search">
+      <label class="filter-field">
+        <span class="tiny">Search</span>
+        <input
+          type="search"
+          name="site_search"
+          placeholder="Try Glasgow, hotels, spending, or an area code"
+          autocomplete="off"
+          spellcheck="false"
+          data-site-search-input
+        />
+      </label>
+    </form>
+
+    <div class="site-search-meta">
+      <span class="tiny" data-site-search-status>Loading search index...</span>
+      <span class="tiny">Shortcut: <span data-site-search-hint>Ctrl+K</span></span>
+    </div>
+
+    <div class="site-search-results" data-site-search-results></div>
+  </section>
+
+  <script>
+    import { initSiteSearch } from "../scripts/site-search";
+
+    initSiteSearch();
+  </script>
+</div>
