@@ -2,21 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
+import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
 
 export function getStaticPaths() {
-  const localRouteLatest = loadLocalRouteLatest();
-  const topCodes = new Set(
-    localRouteLatest.topAreasByMetric.flatMap((group) => group.rows.map((row) => row.areaCode))
-  );
-  return localRouteLatest.areas
-    .filter((area) => topCodes.has(area.areaCode) || area.supportedAsylum >= 200)
-    .map((area) => ({
-      params: { code: area.areaCode },
-      props: { area }
-    }));
+  return getPublicPlaceAreas().map((area) => ({
+    params: { code: area.areaCode },
+    props: { area }
+  }));
 }
 
 const { area } = Astro.props;
@@ -27,6 +22,7 @@ const hotelArea = hotelLedger.areas.find(
   (a) => a.areaCode === area.areaCode || a.areaName === area.areaName
 );
 const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
+const unnamedSiteCount = hotelArea?.unnamedSiteCount ?? 0;
 const areaRank =
   [...localRouteLatest.areas]
     .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
@@ -52,9 +48,24 @@ const hotelSignals = hotelSites
     }))
   )
   .slice(0, 3);
+const pageDescription = `${area.areaName} asylum profile with supported asylum counts, contingency accommodation, route pathway context, and hotel evidence as at ${localRouteLatest.snapshotDate}.`;
+const pageStructuredData = buildPlaceStructuredData(area, {
+  canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
+  description: pageDescription,
+  socialImageUrl: buildAbsoluteUrl("/og-card.png"),
+  snapshotDate: localRouteLatest.snapshotDate,
+  areaRank,
+  contingencyRank,
+  namedSiteCount,
+  unnamedSiteCount
+});
 ---
 
-<BaseLayout title={`${area.areaName} | asylumstats`}>
+<BaseLayout
+  title={`${area.areaName} | asylumstats`}
+  description={pageDescription}
+  structuredData={pageStructuredData}
+>
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">{area.regionName}</span>

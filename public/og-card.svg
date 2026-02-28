@@ -1,0 +1,55 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="24" x2="1044" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1221" />
+      <stop offset="1" stop-color="#04070D" />
+    </linearGradient>
+    <linearGradient id="panel" x1="254" y1="88" x2="934" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#132239" stop-opacity="0.96" />
+      <stop offset="1" stop-color="#08111D" stop-opacity="0.98" />
+    </linearGradient>
+    <linearGradient id="accent" x1="700" y1="78" x2="1010" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DD3FC" />
+      <stop offset="0.55" stop-color="#4EE4C3" />
+      <stop offset="1" stop-color="#FF8B61" />
+    </linearGradient>
+    <filter id="shadow" x="92" y="72" width="1016" height="514" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+      <feOffset dy="16" />
+      <feGaussianBlur stdDeviation="24" />
+      <feComposite in2="hardAlpha" operator="out" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0.0313726 0 0 0 0 0.0784314 0 0 0 0.42 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape" />
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1034" cy="94" r="188" fill="#7DD3FC" fill-opacity="0.12" />
+  <circle cx="1066" cy="558" r="164" fill="#FF8B61" fill-opacity="0.11" />
+  <circle cx="152" cy="102" r="138" fill="#4EE4C3" fill-opacity="0.1" />
+  <g filter="url(#shadow)">
+    <rect x="140" y="104" width="920" height="418" rx="34" fill="url(#panel)" stroke="#FFFFFF" stroke-opacity="0.14" />
+  </g>
+  <rect x="188" y="156" width="168" height="46" rx="23" fill="#0E2031" stroke="#2D5871" />
+  <text x="216" y="186" fill="#DDF7FF" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="1.8">ASYLUMSTATS</text>
+  <text x="188" y="276" fill="#F5F7FB" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="800">UK asylum</text>
+  <text x="188" y="352" fill="#F5F7FB" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="800">accountability</text>
+  <text x="188" y="420" fill="#D2DDF0" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="500">
+    Routes, hotel secrecy, public money, and local pressure
+  </text>
+  <text x="188" y="458" fill="#9DB3CC" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="500">
+    Source-linked evidence with hard scope rules on what is safe to publish
+  </text>
+  <rect x="768" y="164" width="224" height="224" rx="34" fill="#0D1727" stroke="#274157" />
+  <path d="M816 330C816 274.771 860.771 230 916 230H944V330H816Z" fill="url(#accent)" fill-opacity="0.92" />
+  <rect x="816" y="336" width="48" height="20" rx="10" fill="#4EE4C3" fill-opacity="0.45" />
+  <rect x="872" y="302" width="48" height="54" rx="12" fill="#7DD3FC" fill-opacity="0.6" />
+  <rect x="928" y="272" width="48" height="84" rx="12" fill="#FF8B61" fill-opacity="0.72" />
+  <rect x="188" y="494" width="214" height="10" rx="5" fill="#183246" />
+  <rect x="188" y="494" width="126" height="10" rx="5" fill="#7DD3FC" />
+  <rect x="420" y="494" width="188" height="10" rx="5" fill="#183246" />
+  <rect x="420" y="494" width="104" height="10" rx="5" fill="#4EE4C3" />
+  <rect x="626" y="494" width="140" height="10" rx="5" fill="#183246" />
+  <rect x="626" y="494" width="86" height="10" rx="5" fill="#FF8B61" />
+</svg>

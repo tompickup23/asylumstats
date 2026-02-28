@@ -29,7 +29,10 @@ const typeCounts = [...new Set(sourceScope.map((source) => source.type))].map((t
 }));
 ---
 
-<BaseLayout title="Sources | asylumstats">
+<BaseLayout
+  title="Sources | asylumstats"
+  description="Source ledger for asylumstats showing which datasets are route specific, locally route relevant, or context only."
+>
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Sources</span>

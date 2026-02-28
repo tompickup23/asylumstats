@@ -1,11 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import releases from "../data/mock/releases.json";
+import { buildAbsoluteUrl, buildReleaseCollectionStructuredData } from "../lib/site";
 
 const latestRelease = releases[0];
+const pageDescription =
+  "Release diary for asylumstats covering national data updates, local authority snapshots, and hotel evidence changes.";
+const pageStructuredData = buildReleaseCollectionStructuredData(releases, {
+  canonicalUrl: buildAbsoluteUrl("/releases/"),
+  description: pageDescription,
+  socialImageUrl: buildAbsoluteUrl("/og-card.png")
+});
 ---
 
-<BaseLayout title="Releases | asylumstats">
+<BaseLayout
+  title="Releases | asylumstats"
+  description={pageDescription}
+  structuredData={pageStructuredData}
+>
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Release diary</span>

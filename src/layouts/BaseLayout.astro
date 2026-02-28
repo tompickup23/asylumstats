@@ -1,13 +1,88 @@
 ---
 import SiteHeader from "../components/SiteHeader.astro";
 import "../styles/global.css";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_SOCIAL_IMAGE_PATH,
+  SITE_NAME,
+  SITE_URL,
+  normalisePageTitle,
+  type StructuredDataNode
+} from "../lib/site";
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  noIndex?: boolean;
+  structuredData?: StructuredDataNode[];
 }
 
-const { title, description = "UK asylum accountability data on routes, hotels, and public money." } = Astro.props;
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  image = DEFAULT_SOCIAL_IMAGE_PATH,
+  noIndex = false,
+  structuredData: pageStructuredData = []
+} = Astro.props;
+const siteOrigin = Astro.site ?? new URL(SITE_URL);
+const pathname = Astro.url.pathname || "/";
+const pageTitle = normalisePageTitle(title);
+const canonicalUrl = new URL(pathname, siteOrigin).toString();
+const socialImageUrl = /^https?:\/\//.test(image) ? image : new URL(image, siteOrigin).toString();
+const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
+const socialImageMime = socialImageUrl.endsWith(".png")
+  ? "image/png"
+  : socialImageUrl.endsWith(".webp")
+    ? "image/webp"
+    : socialImageUrl.endsWith(".svg")
+      ? "image/svg+xml"
+      : undefined;
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageTitle,
+    description,
+    url: canonicalUrl,
+    inLanguage: "en-GB",
+    isPartOf: {
+      "@id": `${SITE_URL}/#website`
+    },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: socialImageUrl
+    }
+  },
+  ...(pathname === "/"
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": `${SITE_URL}/#website`,
+          url: SITE_URL,
+          name: SITE_NAME,
+          description: DEFAULT_DESCRIPTION,
+          inLanguage: "en-GB",
+          publisher: {
+            "@id": `${SITE_URL}/#organization`
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": `${SITE_URL}/#organization`,
+          name: SITE_NAME,
+          url: SITE_URL,
+          logo: {
+            "@type": "ImageObject",
+            url: new URL("/favicon.svg", siteOrigin).toString()
+          }
+        }
+      ]
+    : []),
+  ...pageStructuredData
+];
 ---
 
 <!doctype html>
@@ -16,11 +91,29 @@ const { title, description = "UK asylum accountability data on routes, hotels, a
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robotsContent} />
     <meta name="theme-color" content="#050812" />
     <meta name="color-scheme" content="dark" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>{title}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    {socialImageMime && <meta property="og:image:type" content={socialImageMime} />}
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="asylumstats social card for UK asylum accountability data." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content="asylumstats social card for UK asylum accountability data." />
+    <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,6 +121,9 @@ const { title, description = "UK asylum accountability data on routes, hotels, a
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    {structuredData.map((item) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
+    ))}
   </head>
   <body>
     <SiteHeader />
