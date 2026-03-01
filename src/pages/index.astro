@@ -7,6 +7,7 @@ import TrendChart from "../components/TrendChart.astro";
 import overview from "../data/mock/overview.json";
 import releases from "../data/mock/releases.json";
 
+import { getLeadEntityProfileForTrail } from "../lib/entities";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { getHomepageInvestigationTrails } from "../lib/investigations";
@@ -46,7 +47,12 @@ const featuredRouteSignal = routeCards[0];
 const smallBoatTrend = routeDashboard.routeFamilies.find((route) => route.id === "small_boats") ?? routeDashboard.routeFamilies[0];
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
-const homepageInvestigationTrails = getHomepageInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3);
+const homepageInvestigationTrails = getHomepageInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map(
+  (trail) => ({
+    trail,
+    leadEntity: getLeadEntityProfileForTrail(trail)
+  })
+);
 const heroStats = [
   {
     label: "Areas tracked",
@@ -349,7 +355,7 @@ function formatUtcDateTime(iso: string | undefined): string {
         <a class="chip accent" href="/spending#money-site-trails">Open site-linked money trails</a>
       </div>
       <div class="feature-grid">
-        {homepageInvestigationTrails.map((trail) => (
+        {homepageInvestigationTrails.map(({ trail, leadEntity }) => (
           <InvestigationTrail
             kicker={trail.kicker}
             title={trail.title}
@@ -358,6 +364,11 @@ function formatUtcDateTime(iso: string | undefined): string {
             tone={trail.tone}
             steps={trail.steps}
             footnote={trail.footnote}
+            footerLinks={
+              leadEntity
+                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
+                : []
+            }
           />
         ))}
       </div>

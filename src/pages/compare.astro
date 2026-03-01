@@ -11,7 +11,7 @@ import {
   supportedAsylumReadingRules
 } from "../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../lib/area-series";
-import { getLeadEntityProfileForTrail } from "../lib/entities";
+import { getEntityProfiles, getLeadEntityProfileForTrail } from "../lib/entities";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { getCompareInvestigationTrails } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
@@ -285,6 +285,29 @@ const compareCaseFiles = getCompareInvestigationTrails(localRouteLatest.areas, h
   trail,
   leadEntity: getLeadEntityProfileForTrail(trail)
 }));
+const namedEstateProfiles = getEntityProfiles().filter((profile) => profile.currentSiteCount > 0);
+const leadNamedEntityByCountry = new Map(
+  [...new Set(comparePlaces.map((place) => place.countryName))].map((countryName) => [
+    countryName,
+    namedEstateProfiles
+      .filter((profile) => profile.linkedAreas.some((area) => area.countryName === countryName))
+      .sort((left, right) => right.score - left.score || left.entityName.localeCompare(right.entityName))[0] ?? null
+  ])
+);
+const comparePlaceCards = comparePlaces.map((place) => {
+  const localEntityProfiles = namedEstateProfiles
+    .filter((profile) => profile.linkedAreas.some((area) => area.areaCode === place.areaCode))
+    .sort((left, right) => right.score - left.score || left.entityName.localeCompare(right.entityName));
+  const localLeadEntity = localEntityProfiles[0] ?? null;
+  const widerCountryLeadEntity = localLeadEntity ? null : (leadNamedEntityByCountry.get(place.countryName) ?? null);
+
+  return {
+    place,
+    localEntityProfiles,
+    localLeadEntity,
+    widerCountryLeadEntity
+  };
+});
 const compareSections = [
   { id: "compare-findings", label: "Findings" },
   ...(compareCaseFiles.length > 0 ? [{ id: "compare-case-files", label: "Case files" }] : []),
@@ -453,7 +476,7 @@ const compareSections = [
       <span class="chip">{comparePlaces.length} places in the default view</span>
     </div>
     <div class="feature-grid">
-      {comparePlaces.map((place) => (
+      {comparePlaceCards.map(({ place, localEntityProfiles, localLeadEntity, widerCountryLeadEntity }) => (
         <article class="feature-card">
           <div class="chip-row">
             <span class="chip">{place.regionName}</span>
@@ -483,9 +506,38 @@ const compareSections = [
               <span>All three pathways total</span>
               <span class="data-row-value">{place.allThreePathwaysTotal.toLocaleString()}</span>
             </div>
+            <div class="data-row">
+              <span>Named current actor profiles</span>
+              <span class="data-row-value">{localEntityProfiles.length.toLocaleString()}</span>
+            </div>
           </div>
           <p class="tiny">
             <a class="source-pill" href={`/places/${place.areaCode}/`}>Open place page</a>
+            {localLeadEntity && (
+              <a class="source-pill" href={`/entities/${localLeadEntity.entityId}/`}>
+                Open {localLeadEntity.entityName} profile
+              </a>
+            )}
+            {!localLeadEntity && widerCountryLeadEntity && (
+              <a class="source-pill" href={`/entities/${widerCountryLeadEntity.entityId}/`}>
+                Open wider-field {widerCountryLeadEntity.entityName} profile
+              </a>
+            )}
+            {!localLeadEntity && !widerCountryLeadEntity && (
+              <a class="source-pill" href="/entities/?entity_footprint=named_estate#entity-explorer">
+                Open named actor explorer
+              </a>
+            )}
+            {!localLeadEntity && compareCaseFiles.length > 0 && (
+              <a class="source-pill" href="#compare-case-files">Open named case files</a>
+            )}
+          </p>
+          <p class="tiny">
+            {localLeadEntity
+              ? `${localLeadEntity.entityName} is the clearest named actor currently attached to this place in the live evidence field.`
+              : widerCountryLeadEntity
+                ? `No named current hotel actor is published for ${place.areaName} in the live ledger yet. ${widerCountryLeadEntity.entityName} is one named actor elsewhere in the current ${place.countryName} evidence field.`
+                : `No named current hotel actor is published for ${place.areaName} in the current live evidence field yet.`}
           </p>
         </article>
       ))}

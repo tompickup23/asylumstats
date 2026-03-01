@@ -5,6 +5,7 @@ const pages = [
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
+  { name: "entity-serco", path: "/entities/supplier_serco/", focus: "#entity-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
   { name: "sources", path: "/sources/", focus: "#source-findings", hasPageContents: true },

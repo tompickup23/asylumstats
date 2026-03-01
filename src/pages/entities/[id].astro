@@ -2,6 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import InvestigationTrail from "../../components/InvestigationTrail.astro";
 import PageContents from "../../components/PageContents.astro";
+import {
+  getEntityExposureSummary,
+  getEntityLinkedPlaceRankings,
+  getEntityRegionSpread
+} from "../../lib/entity-analytics";
 import { formatRouteFamilyLabel, getEntityProfiles, type EntityProfile } from "../../lib/entities";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { loadMoneyLedger } from "../../lib/money-data";
@@ -22,7 +27,10 @@ export function getStaticPaths() {
 }
 
 const { profile } = Astro.props as { profile: EntityProfile };
-const leadArea = profile.linkedAreas[0] ?? null;
+const exposureSummary = getEntityExposureSummary(profile);
+const regionSpread = getEntityRegionSpread(profile);
+const linkedPlaceRankings = getEntityLinkedPlaceRankings(profile, 5);
+const leadArea = exposureSummary.leadArea;
 const leadMoneyRecord = profile.moneyRecords[0] ?? null;
 const entityTrails = profile.currentSites.flatMap((site) => {
   const trail = siteTrailMap.get(site.siteId);
@@ -52,17 +60,55 @@ const entityFindingCards = [
   profile.currentSiteCount > 0
     ? {
         title:
-          profile.unresolvedCurrentSiteCount > 0
+          exposureSummary.nonResolvedCurrentSiteCount > 0
             ? "Current chain gaps are still part of the story"
             : "The visible chain is currently more legible than the average named site",
         body:
-          profile.unresolvedCurrentSiteCount > 0
-            ? `${profile.unresolvedCurrentSiteCount} current site${profile.unresolvedCurrentSiteCount === 1 ? "" : "s"} linked to this profile still sit in unresolved or partial chain coverage.`
+          exposureSummary.nonResolvedCurrentSiteCount > 0
+            ? `${exposureSummary.nonResolvedCurrentSiteCount} of ${profile.currentSiteCount} current site${profile.currentSiteCount === 1 ? "" : "s"} linked to this profile still sit in partial or unresolved chain coverage.`
             : `No current site linked to ${profile.entityName} is marked unresolved in the live hotel ledger.`
       }
     : {
         title: "Route labels still matter here",
         body: `${profile.routeFamilies.map(formatRouteFamilyLabel).join(", ")} stay separate on this page so one funding surface does not get collapsed into a fake overall total.`
+      }
+].filter((card): card is { title: string; body: string } => card !== null);
+const entityExposureCards = [
+  profile.currentSiteCount > 0
+    ? {
+        title:
+          exposureSummary.nonResolvedCurrentSiteCount > 0
+            ? "Non-resolved chain exposure still dominates the visible estate"
+            : "Current named estate is fully resolved in the live ledger",
+        body:
+          exposureSummary.nonResolvedCurrentSiteCount > 0
+            ? `${profile.entityName} still has ${exposureSummary.nonResolvedCurrentSiteCount} of ${profile.currentSiteCount} current named site${profile.currentSiteCount === 1 ? "" : "s"} in partial or unresolved coverage, which is ${exposureSummary.nonResolvedSharePct}% of its visible current estate.`
+            : `${profile.entityName} is currently attached only to resolved named current sites in the live hotel ledger.`
+      }
+    : {
+        title: "This profile is visible through funding or oversight rather than named estate",
+        body: `${profile.entityName} has no current named hotel footprint in the live ledger, so its accountability surface is contractual or public-body rather than site-level.`
+      },
+  leadArea
+    ? {
+        title: `${leadArea.areaName} is the main linked pressure point`,
+        body: `${leadArea.supportedAsylum?.toLocaleString() ?? "n/a"} people were on supported asylum there at quarter end, with ${leadArea.contingencyAccommodation?.toLocaleString() ?? "n/a"} in contingency accommodation across ${leadArea.currentSiteCount} current linked site${leadArea.currentSiteCount === 1 ? "" : "s"}.`
+      }
+    : {
+        title: "No place-ranked pressure row is attached yet",
+        body: "This profile does not yet resolve to a named place-pressure row in the live local ledger."
+      },
+  profile.moneyRecordCount > 0
+    ? {
+        title: "Public money visibility is still partial",
+        body:
+          profile.moneyRowsWithPublishedValueCount > 0
+            ? `${profile.moneyRowsWithPublishedValueCount} of ${profile.moneyRecordCount} linked money row${profile.moneyRecordCount === 1 ? "" : "s"} have a published value, totaling ${formatMoney(profile.publicContractValueGbp)} where the public row already discloses one.`
+            : `${profile.moneyRecordCount} linked money row${profile.moneyRecordCount === 1 ? "" : "s"} already sit on this profile, but none of them disclose a normalized public value yet.`
+      }
+    : {
+        title: "No public money row is attached yet",
+        body: "This profile is currently being held together by site-chain evidence rather than a direct public money disclosure."
       }
 ].filter((card): card is { title: string; body: string } => card !== null);
 const pageDescription = `${profile.entityName} profile tying named hotels, public money rows, and linked place pressure together on one evidence surface.`;
@@ -74,6 +120,9 @@ const pageStructuredData = buildEntityStructuredData(profile, {
 });
 const entitySections = [
   { id: "entity-findings", label: "Findings" },
+  { id: "entity-exposure", label: "Exposure" },
+  ...(regionSpread.length > 0 ? [{ id: "entity-region-spread", label: "Regions" }] : []),
+  ...(linkedPlaceRankings.length > 0 ? [{ id: "entity-place-rankings", label: "Rankings" }] : []),
   ...(profile.currentSites.length > 0 ? [{ id: "entity-sites", label: "Sites" }] : []),
   ...(profile.moneyRecords.length > 0 ? [{ id: "entity-money", label: "Money" }] : []),
   ...(profile.linkedAreas.length > 0 ? [{ id: "entity-places", label: "Places" }] : []),
@@ -210,6 +259,132 @@ function formatSourceKind(kind: string): string {
       ))}
     </div>
   </section>
+
+  <section id="entity-exposure" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Exposure summary</h2>
+        <p class="lede">
+          This is the quickest read on how much of the visible current estate is still non-resolved, where the linked
+          pressure is landing, and how much public money is actually disclosed.
+        </p>
+      </div>
+      <span class="chip accent">
+        {profile.currentSiteCount > 0
+          ? `${exposureSummary.nonResolvedCurrentSiteCount}/${profile.currentSiteCount} non-resolved current sites`
+          : "Money-led profile"}
+      </span>
+    </div>
+    <div class="story-grid">
+      {entityExposureCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+    {profile.currentSiteCount > 0 && (
+      <div class="stat-strip" style="margin-top: 1rem;">
+        {exposureSummary.coverageRows.map((row) => (
+          <article class="stat-tile">
+            <span class="tiny">{row.label}</span>
+            <strong>{row.count.toLocaleString()}</strong>
+            <p class="tiny">{row.sharePct}% of current named sites.</p>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+
+  {regionSpread.length > 0 && (
+    <section id="entity-region-spread" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Region spread</h2>
+          <p class="lede">
+            Region counts stay tied to named-site and linked-place evidence so footprint claims do not outrun the
+            public ledger.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {regionSpread.map((row) => (
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{row.regionName}</span>
+              <span class="chip">{row.countryName}</span>
+            </div>
+            <h3>
+              {row.currentSiteCount.toLocaleString()} current site{row.currentSiteCount === 1 ? "" : "s"}
+            </h3>
+            <p class="lede">
+              {row.linkedAreaCount.toLocaleString()} linked place{row.linkedAreaCount === 1 ? "" : "s"} and{" "}
+              {row.nonResolvedCurrentSiteCount.toLocaleString()} non-resolved current chain
+              {row.nonResolvedCurrentSiteCount === 1 ? "" : "s"} in this region slice.
+            </p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Supported asylum across linked places</span>
+                <span class="data-row-value">{row.supportedAsylumTotal?.toLocaleString() ?? "n/a"}</span>
+              </div>
+              <div class="data-row">
+                <span>Contingency across linked places</span>
+                <span class="data-row-value">{row.contingencyAccommodationTotal?.toLocaleString() ?? "n/a"}</span>
+              </div>
+              <div class="data-row">
+                <span>Historical named sites</span>
+                <span class="data-row-value">{row.historicalSiteCount.toLocaleString()}</span>
+              </div>
+            </div>
+            {row.areaNames.length > 0 && <p class="tiny">Places: {row.areaNames.join(", ")}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {linkedPlaceRankings.length > 0 && (
+    <section id="entity-place-rankings" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Linked-place rankings</h2>
+          <p class="lede">
+            These are the heaviest linked place rows for this entity, ordered by quarter-end supported asylum stock and
+            then contingency pressure.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {linkedPlaceRankings.map((area) => (
+          <article class="feature-card teal">
+            <div class="chip-row">
+              <span class="chip teal">#{String(area.rank).padStart(2, "0")}</span>
+              <span class="chip">{area.regionName}</span>
+            </div>
+            <h3>{area.areaName}</h3>
+            <p class="metric-value">{area.supportedAsylum?.toLocaleString() ?? "n/a"}</p>
+            <p class="lede">
+              Quarter-end supported asylum stock, with {area.contingencyAccommodation?.toLocaleString() ?? "n/a"} in
+              contingency accommodation and {area.siteLabel}.
+            </p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Supported asylum rate</span>
+                <span class="data-row-value">{area.supportedAsylumRate?.toLocaleString() ?? "n/a"} per 10,000</span>
+              </div>
+              <div class="data-row">
+                <span>Historical linked sites</span>
+                <span class="data-row-value">{area.historicalSiteCount.toLocaleString()}</span>
+              </div>
+            </div>
+            <p class="tiny">
+              <a class="source-pill" href={buildPlaceHref(area.areaCode)}>Open place profile</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
   {profile.currentSites.length > 0 && (
     <section id="entity-sites" class="section section-anchor">
