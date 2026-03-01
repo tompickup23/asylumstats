@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
 import followMoney from "../data/live/follow-money.json";
+import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { getSpendingLinkedSiteTrails } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
 import {
   getMoneyBuyerSummaries,
@@ -12,8 +15,11 @@ import {
   getMoneyRecordTypeSummaries,
   getMoneyRouteSummaries
 } from "../lib/money-analytics";
+import { loadLocalRouteLatest } from "../lib/route-data";
 
+const hotelLedger = loadHotelEntityLedger();
 const moneyLedger = loadMoneyLedger();
+const localRouteLatest = loadLocalRouteLatest();
 const topSuppliers = moneyLedger.supplierProfiles.slice(0, 8);
 type MoneyRecordWithValue = (typeof moneyLedger.records)[number] & { valueGbp: number };
 const highValueRecords = moneyLedger.records
@@ -39,6 +45,7 @@ const leadBuyer = buyerSummaries[0];
 const leadMoneyRegion = linkedRegionSummaries[0];
 const primaryLead = moneyLedger.investigativeLeads[0];
 const investigativeLeadHighlights = moneyLedger.investigativeLeads.slice(1, 4);
+const spendingSiteTrails = getSpendingLinkedSiteTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 4);
 const segmentTones = ["accent", "teal", "warm", "soft"] as const;
 const routeValueLabel =
   moneyLedger.summary.rowsWithDisclosedValue > 0
@@ -187,6 +194,7 @@ const spendingSections = [
   { id: "money-findings", label: "Findings" },
   { id: "where-values", label: "Big rows" },
   { id: "supplier-watchlist", label: "Watchlist" },
+  ...(spendingSiteTrails.length > 0 ? [{ id: "money-site-trails", label: "Site trails" }] : []),
   { id: "money-composition", label: "Composition" },
   { id: "money-readout", label: "Readout" },
   { id: "money-presets", label: "Presets" },
@@ -388,6 +396,34 @@ const spendingSections = [
       ))}
     </div>
   </section>
+
+  {spendingSiteTrails.length > 0 && (
+    <section id="money-site-trails" class="section section-anchor priority-section">
+      <div class="section-head">
+        <div>
+          <h2>Where the money already touches named hotels</h2>
+          <p class="lede">
+            These rows are the clearest public examples of contract scope, named sites, and place pressure already
+            landing on the same evidence chain.
+          </p>
+        </div>
+        <a class="source-pill" href="/hotels#unresolved-watchlist">Open hotel watchlist</a>
+      </div>
+      <div class="feature-grid">
+        {spendingSiteTrails.map((trail) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section id="money-composition" class="section section-anchor">
     <div class="section-head">

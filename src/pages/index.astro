@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import InvestigationTrail from "../components/InvestigationTrail.astro";
 import KpiCard from "../components/KpiCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
@@ -8,6 +9,7 @@ import releases from "../data/mock/releases.json";
 
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { getHomepageInvestigationTrails } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
 
@@ -44,6 +46,7 @@ const featuredRouteSignal = routeCards[0];
 const smallBoatTrend = routeDashboard.routeFamilies.find((route) => route.id === "small_boats") ?? routeDashboard.routeFamilies[0];
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
+const homepageInvestigationTrails = getHomepageInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3);
 const heroStats = [
   {
     label: "Areas tracked",
@@ -332,6 +335,34 @@ function formatUtcDateTime(iso: string | undefined): string {
       ))}
     </div>
   </section>
+
+  {homepageInvestigationTrails.length > 0 && (
+    <section class="section section-anchor" id="case-files">
+      <div class="section-head">
+        <div>
+          <h2>Concrete case files</h2>
+          <p class="lede">
+            These are the fastest routes through the site when you want one named hotel, one money trail, and one place
+            pressure frame tied together without rebuilding the chain by hand.
+          </p>
+        </div>
+        <a class="chip accent" href="/spending#money-site-trails">Open site-linked money trails</a>
+      </div>
+      <div class="feature-grid">
+        {homepageInvestigationTrails.map((trail) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="split section evidence-preview">
     <div class="panel panel-pad evidence-panel evidence-panel-hotels">

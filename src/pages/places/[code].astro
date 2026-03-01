@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import InvestigationTrail from "../../components/InvestigationTrail.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import RegionTileMap from "../../components/RegionTileMap.astro";
@@ -11,12 +12,15 @@ import {
 import { getAreaTrendSummary } from "../../lib/area-series";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
+import { getPlaceInvestigationTrails } from "../../lib/investigations";
+import { loadMoneyLedger } from "../../lib/money-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
 import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
 import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
+const moneyLedger = loadMoneyLedger();
 
 export function getStaticPaths() {
   return getPublicPlaceAreas().map((area) => ({
@@ -75,6 +79,7 @@ const hotelSignals = hotelSites
 const areaTrend = getAreaTrendSummary(area.areaCode);
 const previousTrendPoint = areaTrend ? areaTrend.points[areaTrend.points.length - 2] ?? null : null;
 const placeDrilldownMetrics = getPlaceDrilldownMetrics(localRouteLatest.areas, area);
+const placeInvestigationTrails = getPlaceInvestigationTrails(area, hotelLedger, moneyLedger, localRouteLatest.areas, 3);
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
 const supportedStats = getDistributionStats(localRouteLatest.areas.map((candidate) => candidate.supportedAsylum));
@@ -172,6 +177,7 @@ const placeSections = [
   { id: "place-drilldown", label: "Drill-down" },
   { id: "local-benchmarks", label: "Benchmarks" },
   { id: "editorial-readout", label: "Readout" },
+  ...(placeInvestigationTrails.length > 0 ? [{ id: "evidence-chain", label: "Evidence chain" }] : []),
   { id: "route-metrics", label: "Metrics" },
   { id: "regional-peers", label: "Peers" },
   { id: "hotel-evidence", label: "Hotels" },
@@ -547,6 +553,34 @@ const placeSections = [
       ))}
     </div>
   </section>
+
+  {placeInvestigationTrails.length > 0 && (
+    <section id="evidence-chain" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Evidence chain in this place</h2>
+          <p class="lede">
+            These trails connect the visible hotel estate, the linked money surface, and the local pressure frame so the
+            area can be read as one investigation rather than separate ledgers.
+          </p>
+        </div>
+        <a class="source-pill" href="/spending#money-site-trails">Open site-linked money trails</a>
+      </div>
+      <div class="feature-grid">
+        {placeInvestigationTrails.map((trail) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section id="route-metrics" class="section section-anchor">
     <div class="section-head">

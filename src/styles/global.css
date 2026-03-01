@@ -1380,6 +1380,18 @@ button.source-pill {
     linear-gradient(145deg, rgba(18, 29, 52, 0.98), rgba(7, 12, 24, 0.96));
 }
 
+.feature-card.teal {
+  border-color: rgba(78, 228, 195, 0.18);
+  background:
+    linear-gradient(145deg, rgba(8, 34, 34, 0.98), rgba(7, 12, 24, 0.96));
+}
+
+.feature-card.warm {
+  border-color: rgba(245, 158, 11, 0.18);
+  background:
+    linear-gradient(145deg, rgba(46, 23, 5, 0.98), rgba(7, 12, 24, 0.96));
+}
+
 .feature-card {
   padding: 1.35rem;
   box-shadow: var(--shadow-soft);
@@ -1387,6 +1399,11 @@ button.source-pill {
 
 .feature-card .benchmark-grid {
   grid-template-columns: 1fr;
+}
+
+.trail-card {
+  display: grid;
+  gap: 1rem;
 }
 
 .feature-card::before {
@@ -1404,9 +1421,67 @@ button.source-pill {
   background: radial-gradient(circle, rgba(255, 139, 97, 0.14), transparent 72%);
 }
 
+.feature-card.teal::before {
+  background: radial-gradient(circle, rgba(78, 228, 195, 0.16), transparent 72%);
+}
+
+.feature-card.warm::before {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.16), transparent 72%);
+}
+
 .feature-card > * {
   position: relative;
   z-index: 1;
+}
+
+.trail-steps {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.trail-step:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.trail-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.trail-step strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.trail-step p {
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .data-list {
@@ -1621,6 +1696,12 @@ button.source-pill {
   border-color: rgba(78, 228, 195, 0.18);
   background: rgba(78, 228, 195, 0.12);
   color: #b8fff0;
+}
+
+.chip.warm {
+  border-color: rgba(245, 158, 11, 0.18);
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbd38d;
 }
 
 .source-pill {
