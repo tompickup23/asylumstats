@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
+import PageGuide from "../components/PageGuide.astro";
 import BenchmarkStrip from "../components/BenchmarkStrip.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
@@ -282,6 +284,29 @@ const comparePresetViews = [
     cta: "Open dispersal view"
   }
 ];
+const compareGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the default compare set before filtering",
+    body: "The editorial compare set is the fastest way to understand how count, rate, contingency use, and humanitarian pathways split apart.",
+    href: "#default-compare-set",
+    cta: "Open the default set"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Keep the stock-reading rules in view",
+    body: "This page only makes sense if supported asylum is read as quarter-end stock rather than turnover. The reading rules belong near the top for that reason.",
+    href: "#supported-asylum-logic",
+    cta: "Open the reading rules"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Use the wider explorer after the first read",
+    body: "The presets, trends, matrix, and full explorer help widen or verify the comparison once the basic story is already clear.",
+    href: "#compare-data",
+    cta: "Open the deep data"
+  }
+];
 const compareCaseFiles = getCompareInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
   trail,
   leadEntity: getLeadEntityProfileForTrail(trail)
@@ -306,15 +331,11 @@ const comparePlaceCards = comparePlaces.map((place) => {
 });
 const compareSections = [
   { id: "compare-findings", label: "Findings" },
+  { id: "compare-guide", label: "How to use" },
   ...(compareCaseFiles.length > 0 ? [{ id: "compare-case-files", label: "Case files" }] : []),
   { id: "supported-asylum-logic", label: "How to read" },
   { id: "default-compare-set", label: "Default set" },
-  { id: "pathway-profiles", label: "Pathway mix" },
-  { id: "regional-pressure-field", label: "Region field" },
-  ...(compareTrendProfiles.length > 0 ? [{ id: "compare-trends", label: "Trends" }] : []),
-  { id: "cross-place-matrix", label: "Matrix" },
-  { id: "compare-presets", label: "Presets" },
-  { id: "compare-explorer", label: "Explorer" }
+  { id: "compare-data", label: "Explorer + charts" }
 ];
 ---
 
@@ -325,12 +346,10 @@ const compareSections = [
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Compare</span>
-      <h1>Area comparison should show route mix, intensity, and accommodation model in the same frame.</h1>
+      <h1>Compare local asylum pressure properly.</h1>
       <p>
-        This view uses the official local-authority snapshot as at 31 December 2025, plus cumulative resettlement
-        history from the local authority resettlement dataset. The compare page now starts with composition and
-        benchmarks so the table lands after the story is already visible, while keeping supported asylum explicitly in
-        the language of stock rather than throughput or a stand-in for the backlog.
+        Use this page to keep quarter-end supported asylum stock, contingency accommodation, humanitarian pathways,
+        and local model differences in separate lanes before you widen out to the full authority explorer.
       </p>
     </section>
 
@@ -377,7 +396,7 @@ const compareSections = [
     </aside>
   </section>
 
-  <PageContents title="Jump to evidence" sections={compareSections} variant="priority" />
+  <PageContents title="Start here" sections={compareSections} variant="priority" />
 
   <section id="compare-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -405,6 +424,13 @@ const compareSections = [
       ))}
     </div>
   </section>
+
+  <PageGuide
+    id="compare-guide"
+    title="Use the compare page in three moves"
+    intro="Start with the editorial compare set, keep the stock-reading rules nearby, and only then widen out to the full authority field."
+    items={compareGuideItems}
+  />
 
   {compareCaseFiles.length > 0 && (
     <section id="compare-case-files" class="section section-anchor priority-section">
@@ -549,6 +575,12 @@ const compareSections = [
     </div>
   </section>
 
+  <DataDrawer
+    id="compare-data"
+    label="Deep data"
+    title="Open the wider charts, matrix, presets, and full compare explorer"
+    summary="Once the compare set and reading rules are clear, use this section to widen the field, inspect trends, and move into shareable filtered authority views."
+  >
   <section id="pathway-profiles" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -1036,6 +1068,7 @@ const compareSections = [
       ))}
     </div>
   </section>
+  </DataDrawer>
 
   <script>
     import { initCompareExplorer } from "../scripts/compare-explorer";

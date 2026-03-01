@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
 import PageContents from "../components/PageContents.astro";
+import PageGuide from "../components/PageGuide.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import { getEntityProfileByReference } from "../lib/entities";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
@@ -163,18 +165,35 @@ const hotelPresetViews = [
       ]
     : [])
 ];
+const hotelGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the named-site failures first",
+    body: "Start with the current unresolved chain watchlist. That is where the strongest current evidence and the clearest accountability gaps meet.",
+    href: "#unresolved-watchlist",
+    cta: "Open the watchlist"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Separate named hotels from the hidden estate",
+    body: "Use the secrecy-gap section to distinguish places with publicly named sites from places where councils confirm hotel use without publishing the list.",
+    href: "#secrecy-gap",
+    cta: "Open hidden-site evidence"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Use the explorer and ledgers to verify the story",
+    body: "The region maps, archive queue, filters, and full tables are here to extend or verify the findings, not to be the first thing a reader has to decode.",
+    href: "#hotel-data",
+    cta: "Open the deep data"
+  }
+];
 const hotelSections = [
   { id: "hotel-findings", label: "Findings" },
+  { id: "hotel-guide", label: "How to use" },
   { id: "unresolved-watchlist", label: "Watchlist" },
   { id: "secrecy-gap", label: "Secrecy gap" },
-  { id: "hotel-pressure", label: "Official counts" },
-  { id: "regional-visibility", label: "Region field" },
-  { id: "archive-verification", label: "Archive queue" },
-  { id: "hotel-presets", label: "Presets" },
-  { id: "hotel-filters", label: "Explorer" },
-  { id: "hotel-areas", label: "Area ledger" },
-  { id: "hotel-ledger", label: "Site ledger" },
-  { id: "hotel-limits", label: "Limits" }
+  { id: "hotel-data", label: "Explorer + ledger" }
 ];
 
 function formatReportedPeople(value: number | null): string {
@@ -198,10 +217,10 @@ function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Hotel tracker</span>
-      <h1>Follow the hotel, then follow the chain that sits behind it.</h1>
+      <h1>Track asylum hotels, hidden sites, and broken chains.</h1>
       <p>
-        This page is about the asylum accommodation estate, not every migration route. The job is to make the visible
-        estate, the hidden estate, and the unresolved ownership chain legible on one public surface.
+        Use this page to separate named current sites, hidden official hotel use, and the owner or operator gaps that
+        still stop the chain from resolving cleanly.
       </p>
     </section>
 
@@ -239,7 +258,7 @@ function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
     </aside>
   </section>
 
-  <PageContents title="Jump to evidence" sections={hotelSections} variant="priority" />
+  <PageContents title="Start here" sections={hotelSections} variant="priority" />
 
   <section id="hotel-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -269,6 +288,13 @@ function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
       ))}
     </div>
   </section>
+
+  <PageGuide
+    id="hotel-guide"
+    title="Use the hotel page in three moves"
+    intro="This page works best when it starts as an investigation surface and only becomes a data table when you need to verify something."
+    items={hotelGuideItems}
+  />
 
   <section id="unresolved-watchlist" class="section section-anchor priority-section">
     <div class="section-head">
@@ -361,6 +387,12 @@ function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
     </div>
   </section>
 
+  <DataDrawer
+    id="hotel-data"
+    label="Deep data"
+    title="Open the region view, archive queue, explorer, and full ledgers"
+    summary="Once the main findings are clear, this is where to verify them, widen them to the full visible estate, and inspect the raw starter records."
+  >
   <section id="hotel-pressure" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -956,6 +988,7 @@ function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
       ))}
     </div>
   </section>
+  </DataDrawer>
 
   <script>
     import { initHotelFilters } from "../scripts/hotel-filters";

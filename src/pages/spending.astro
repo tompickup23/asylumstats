@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
+import PageGuide from "../components/PageGuide.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
@@ -190,18 +192,36 @@ const spendingPresetViews = [
     cta: "Open Afghan view"
   }
 ];
+const spendingGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the findings before the ledger",
+    body: "Start with the concentration and control findings. The page is designed to show where public money is already visible, not to drown that signal in raw rows.",
+    href: "#money-findings",
+    cta: "Open findings"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Use the biggest rows and supplier watchlist",
+    body: "Those two sections show the clearest public money rows and the actors with the strongest visible exposure before you touch filters.",
+    href: "#supplier-watchlist",
+    cta: "Open the watchlist"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Open the explorer when you have a verification question",
+    body: "The presets, filters, full ledger, and profile lists are there for checking a claim or widening the view, not as the first reading experience.",
+    href: "#money-data",
+    cta: "Open the deep data"
+  }
+];
 const spendingSections = [
   { id: "money-findings", label: "Findings" },
+  { id: "money-guide", label: "How to use" },
   { id: "where-values", label: "Big rows" },
   { id: "supplier-watchlist", label: "Watchlist" },
   ...(spendingSiteTrails.length > 0 ? [{ id: "money-site-trails", label: "Site trails" }] : []),
-  { id: "money-composition", label: "Composition" },
-  { id: "money-readout", label: "Readout" },
-  { id: "money-presets", label: "Presets" },
-  { id: "money-explorer", label: "Explorer" },
-  { id: "money-ledger", label: "Ledger" },
-  { id: "supplier-profiles", label: "Profiles" },
-  { id: "investigative-leads", label: "Leads" }
+  { id: "money-data", label: "Explorer + ledger" }
 ];
 ---
 
@@ -212,11 +232,10 @@ const spendingSections = [
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Spending and contracts</span>
-      <h1>Follow the migrants, follow the money, and keep the route labels honest.</h1>
+      <h1>Track public money, supplier exposure, and missing links.</h1>
       <p>
-        The public money layer now has a real starter ledger behind it. It mixes prime contract scope, official funding
-        instructions, and scrutiny cost rows so the public can see where money is documented, where it is estimated,
-        and where the supplier chain still disappears into opacity.
+        Use this page to separate disclosed values, control rows, scrutiny estimates, and supplier exposure without
+        collapsing unlike records into one fake total.
       </p>
     </section>
 
@@ -265,7 +284,7 @@ const spendingSections = [
     </aside>
   </section>
 
-  <PageContents title="Jump to evidence" sections={spendingSections} variant="priority" />
+  <PageContents title="Start here" sections={spendingSections} variant="priority" />
 
   <section id="money-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -311,6 +330,13 @@ const spendingSections = [
       ))}
     </div>
   </section>
+
+  <PageGuide
+    id="money-guide"
+    title="Use the money page in three moves"
+    intro="Start with the money story, not the filter controls. The ledger matters, but only after the route, buyer, and supplier logic is clear."
+    items={spendingGuideItems}
+  />
 
   <section id="where-values" class="section section-anchor priority-section">
     <div class="section-head">
@@ -428,6 +454,12 @@ const spendingSections = [
     </section>
   )}
 
+  <DataDrawer
+    id="money-data"
+    label="Deep data"
+    title="Open the composition view, presets, explorer, and full money ledger"
+    summary="Once the first findings are clear, use this section to interrogate route splits, buyer concentration, query-state filters, and the full public records."
+  >
   <section id="money-composition" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -917,6 +949,7 @@ const spendingSections = [
       </div>
     </div>
   </section>
+  </DataDrawer>
 
   <script>
     import { initMoneyExplorer } from "../scripts/money-explorer";

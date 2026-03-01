@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import DataDrawer from "../../components/DataDrawer.astro";
 import PageContents from "../../components/PageContents.astro";
+import PageGuide from "../../components/PageGuide.astro";
 import {
   formatEntityRoleLabel,
   formatRouteFamilyLabel,
@@ -168,13 +170,35 @@ const entityPresetViews = [
     cta: "Open unresolved exposure"
   }
 ];
+const entityGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Open the priority actor profiles first",
+    body: "Use the featured profiles as the fastest route into the named providers, owner groups, and public bodies already carrying the strongest public evidence.",
+    href: "#priority-entities",
+    cta: "Open priority profiles"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Use presets before free filtering",
+    body: "The preset views answer common questions quickly: newest actors, oldest visible chains, regional providers, and money-only public bodies.",
+    href: "#entity-presets",
+    cta: "Open preset views"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Use the full explorer to verify or widen the field",
+    body: "The full entity explorer, named-estate list, and funding surfaces matter when you need completeness, but they should not be the first thing a reader faces.",
+    href: "#entity-data",
+    cta: "Open the deep data"
+  }
+];
 const entitySections = [
   { id: "entity-findings", label: "Findings" },
+  { id: "entity-guide", label: "How to use" },
   { id: "priority-entities", label: "Priority profiles" },
   { id: "entity-presets", label: "Presets" },
-  { id: "entity-explorer", label: "Explorer" },
-  { id: "visible-estate", label: "Named estate" },
-  { id: "funding-surfaces", label: "Funding" }
+  { id: "entity-data", label: "Explorer + lists" }
 ];
 
 function formatMoney(value: number | null | undefined): string {
@@ -208,11 +232,10 @@ function formatEvidenceDate(value: string | null | undefined): string {
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Entities</span>
-      <h1>Providers, owner groups, operators, and public bodies should be readable as named actors, not scattered mentions.</h1>
+      <h1>Track the named actors behind hotels, contracts, and local pressure.</h1>
       <p>
-        This page turns the current hotel and money ledgers into entity profiles. It keeps prime providers separate
-        from owner groups, hotel operators, and public-body funding surfaces so the public can move from a named site
-        or money row to the actor behind it.
+        This page turns scattered supplier, owner, operator, and public-body references into readable actor profiles.
+        Start with the strongest public actors, then widen out only if you need the full profile field.
       </p>
     </section>
 
@@ -245,7 +268,7 @@ function formatEvidenceDate(value: string | null | undefined): string {
     </aside>
   </section>
 
-  <PageContents title="Jump to evidence" sections={entitySections} variant="priority" />
+  <PageContents title="Start here" sections={entitySections} variant="priority" />
 
   <section id="entity-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -267,6 +290,13 @@ function formatEvidenceDate(value: string | null | undefined): string {
       ))}
     </div>
   </section>
+
+  <PageGuide
+    id="entity-guide"
+    title="Use the entity page in three moves"
+    intro="This page should make named actors legible quickly, not ask the reader to decode the whole profile universe at once."
+    items={entityGuideItems}
+  />
 
   <section id="priority-entities" class="section section-anchor">
     <div class="section-head">
@@ -333,6 +363,12 @@ function formatEvidenceDate(value: string | null | undefined): string {
     </div>
   </section>
 
+  <DataDrawer
+    id="entity-data"
+    label="Deep data"
+    title="Open the full explorer, named-estate list, and funding surfaces"
+    summary="Once the priority actors and presets are clear, use this section to filter the full profile field and inspect the wider named-estate and money-only surfaces."
+  >
   <section id="entity-explorer" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -561,9 +597,10 @@ function formatEvidenceDate(value: string | null | undefined): string {
               <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
             </p>
           </article>
-        ))}
+      ))}
     </div>
   </section>
+  </DataDrawer>
 
   <script>
     import { initEntityExplorer } from "../../scripts/entity-explorer";

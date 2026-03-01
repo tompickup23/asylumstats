@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
 import KpiCard from "../components/KpiCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
@@ -78,31 +79,31 @@ const heroStats = [
 const guidedPaths = [
   {
     kicker: "Secrecy gap",
-    title: "Hotels first if you want the sharpest public accountability failure",
-    body: "The hotel tracker leads with unresolved chains, unnamed-only areas, and archive-led verification so the hidden estate lands before the methodology.",
+    title: "Hotels if you want the hidden estate first",
+    body: "Start here for named hotels, unnamed-only areas, unresolved chains, and archive-led hotel verification.",
     href: "/hotels",
     cta: "Open hotels"
   },
   {
     kicker: "Money trail",
-    title: "Money second if you want the contract rows and supplier exposure underneath the estate",
-    body: "The spending page now opens with investigative leads, largest disclosed rows, buyer concentration, and supplier watchlists before the full ledger.",
+    title: "Money if you want contracts and supplier exposure",
+    body: "Start here for the clearest public money rows, buyer control, supplier watchlists, and linked hotel trails.",
     href: "/spending",
     cta: "Open money"
   },
   {
     kicker: "Pressure map",
-    title: "Pressure next if you need to see where the load is landing locally",
-    body: "Compare and place pages show which authorities carry the heaviest stock, rates, contingency use, and pathway mix.",
+    title: "Places if you want local pressure",
+    body: "Start here to compare authorities on stock, rate, contingency use, and pathway mix without flattening them into one number.",
     href: "/compare",
-    cta: "Open pressure view"
+    cta: "Open places"
   },
   {
     kicker: "System logic",
-    title: "Routes and stock-flow logic come after the estate and money layers",
-    body: "The routes page explains why support is stock, not throughput, and why appeals and returns have to be kept in separate lanes.",
+    title: "System if you want claims, backlog, support, and returns",
+    body: "Start here for the stock-flow model and the logic that keeps claims, support, appeals, and returns in separate lanes.",
     href: "/routes",
-    cta: "Open routes"
+    cta: "Open system"
   }
 ];
 const freshnessCards = [
@@ -342,6 +343,32 @@ function formatUtcDateTime(iso: string | undefined): string {
     </div>
   </section>
 
+  <section class="section section-anchor" id="start-here">
+    <div class="section-head">
+      <div>
+        <h2>Choose the page you need</h2>
+        <p class="lede">
+          Once the top findings are clear, these are the main routes through the site.
+        </p>
+      </div>
+      <a class="chip accent" href="/sources">Open the source ledger</a>
+    </div>
+    <div class="guide-grid">
+      {guidedPaths.map((path) => (
+        <article class="guide-card">
+          <div class="chip-row">
+            <span class="chip accent">{path.kicker}</span>
+          </div>
+          <h3>{path.title}</h3>
+          <p>{path.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={path.href}>{path.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
   {homepageInvestigationTrails.length > 0 && (
     <section class="section section-anchor" id="case-files">
       <div class="section-head">
@@ -375,6 +402,12 @@ function formatUtcDateTime(iso: string | undefined): string {
     </section>
   )}
 
+  <DataDrawer
+    id="home-background"
+    label="More context"
+    title="Open the wider evidence panels, freshness notes, charts, and release context"
+    summary="The homepage should start with the sharpest evidence. Open this section when you want extra hotel and money panels, update timing, stock-flow context, national snapshots, and the release diary."
+  >
   <section class="split section evidence-preview">
     <div class="panel panel-pad evidence-panel evidence-panel-hotels">
       <div class="section-head">
@@ -429,32 +462,6 @@ function formatUtcDateTime(iso: string | undefined): string {
           </article>
         ))}
       </div>
-    </div>
-  </section>
-
-  <section class="section section-anchor" id="start-here">
-    <div class="section-head">
-      <div>
-        <h2>Then widen out</h2>
-        <p class="lede">
-          Once the key findings are clear, these are the four main surfaces that let users move from scandal to system.
-        </p>
-      </div>
-      <a class="chip accent" href="/sources">Open the source ledger</a>
-    </div>
-    <div class="guide-grid">
-      {guidedPaths.map((path) => (
-        <article class="guide-card">
-          <div class="chip-row">
-            <span class="chip accent">{path.kicker}</span>
-          </div>
-          <h3>{path.title}</h3>
-          <p>{path.body}</p>
-          <p class="tiny">
-            <a class="source-pill" href={path.href}>{path.cta}</a>
-          </p>
-        </article>
-      ))}
     </div>
   </section>
 
@@ -650,4 +657,5 @@ function formatUtcDateTime(iso: string | undefined): string {
       ))}
     </div>
   </section>
+  </DataDrawer>
 </BaseLayout>

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
+import PageGuide from "../components/PageGuide.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
 import {
@@ -69,18 +71,36 @@ const routeCaseFiles = getRouteInvestigationTrails(localRouteLatest.areas, hotel
   trail,
   leadEntity: getLeadEntityProfileForTrail(trail)
 }));
+const routeGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the stock and flow model first",
+    body: "If claims, backlog, support, appeals, and returns are read as one measure, the rest of the page becomes misleading immediately.",
+    href: "#national-stock-flow",
+    cta: "Open stock vs flow"
+  },
+  {
+    eyebrow: "Then check",
+    title: "Use the route findings and case files",
+    body: "Those sections tell you what changed nationally and how the abstract measures land in named places and named hotels.",
+    href: "#route-findings",
+    cta: "Open findings"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Open the trend and route ledgers later",
+    body: "The extra charts, route splits, regional maps, and full leaderboards are there to widen the view once the system logic is already clear.",
+    href: "#route-data",
+    cta: "Open the deep data"
+  }
+];
 const routeSections = [
   { id: "route-findings", label: "Findings" },
+  { id: "route-guide", label: "How to use" },
   ...(routeCaseFiles.length > 0 ? [{ id: "route-case-files", label: "Case files" }] : []),
   { id: "route-logic", label: "How to read" },
   { id: "national-stock-flow", label: "Stock vs flow" },
-  { id: "claims-support-tracks", label: "Tracks" },
-  { id: "post-decision-path", label: "Post-decision" },
-  { id: "route-splits", label: "Route splits" },
-  { id: "route-trends", label: "Trends" },
-  { id: "regional-pressure", label: "Region map" },
-  { id: "local-pressure-leaders", label: "Local leaders" },
-  { id: "route-limits", label: "Limits" }
+  { id: "route-data", label: "Explorer + charts" }
 ];
 
 function formatCardValue(value: number, suffix?: string): string {
@@ -95,11 +115,10 @@ function formatCardValue(value: number, suffix?: string): string {
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Routes and schemes</span>
-      <h1>Boat arrivals, asylum support, refugee schemes, family reunion, and Ukraine routes have to stay split.</h1>
+      <h1>Separate claims, backlog, support, appeals, and returns.</h1>
       <p>
-        This page now runs on official December 2025 route tables and the latest local-authority immigration-group
-        snapshot. The product rule is simple: stop mixing incompatible routes and schemes into one misleading number,
-        and treat supported asylum as a stock snapshot rather than a throughput count or a synonym for the backlog.
+        Use this page to keep flows, stocks, route families, and post-decision paths separate before you look at the
+        fuller charts and route tables underneath.
       </p>
     </section>
 
@@ -138,7 +157,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </aside>
   </section>
 
-  <PageContents title="Jump to evidence" sections={routeSections} variant="priority" />
+  <PageContents title="Start here" sections={routeSections} variant="priority" />
 
   <section id="route-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -159,6 +178,13 @@ function formatCardValue(value: number, suffix?: string): string {
       ))}
     </div>
   </section>
+
+  <PageGuide
+    id="route-guide"
+    title="Use the routes page in three moves"
+    intro="This page should explain the national system, not overload the reader with every series at once."
+    items={routeGuideItems}
+  />
 
   {routeCaseFiles.length > 0 && (
     <section id="route-case-files" class="section section-anchor priority-section">
@@ -243,6 +269,12 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
+  <DataDrawer
+    id="route-data"
+    label="Deep data"
+    title="Open the extra route charts, regional maps, and full ledgers"
+    summary="Once the stock-flow model is clear, use this section to inspect route splits, trend series, regional concentration, and the wider route tables."
+  >
   <section id="claims-support-tracks" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -713,4 +745,5 @@ function formatCardValue(value: number, suffix?: string): string {
       ))}
     </div>
   </section>
+  </DataDrawer>
 </BaseLayout>

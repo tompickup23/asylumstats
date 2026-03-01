@@ -2,12 +2,11 @@
 const navItems = [
   { href: "/hotels", label: "Hotels", priority: true },
   { href: "/spending", label: "Money", priority: true },
-  { href: "/entities", label: "Entities" },
-  { href: "/compare", label: "Pressure", priority: true },
-  { href: "/routes", label: "Routes" },
+  { href: "/compare", label: "Places", priority: true },
+  { href: "/routes", label: "System" },
+  { href: "/entities", label: "Actors" },
   { href: "/sources", label: "Sources" },
-  { href: "/releases", label: "Releases" },
-  { href: "/methodology", label: "Method" }
+  { href: "/methodology", label: "How it works" }
 ];
 
 const pathname = Astro.url.pathname;
@@ -38,7 +37,7 @@ function isActive(href: string): boolean {
       aria-haspopup="dialog"
       aria-controls="site-search-panel"
     >
-      <span>Search pages, places, and entities</span>
+      <span>Search the site</span>
       <span class="search-shortcut">/</span>
     </button>
 

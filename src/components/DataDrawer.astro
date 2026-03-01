@@ -1,0 +1,24 @@
+---
+interface Props {
+  id?: string;
+  label?: string;
+  title: string;
+  summary: string;
+  open?: boolean;
+}
+
+const { id, label = "Deep dive", title, summary, open = false } = Astro.props;
+---
+
+<details id={id} class="section section-anchor data-drawer" open={open}>
+  <summary class="data-drawer-summary">
+    <div>
+      <span class="tiny">{label}</span>
+      <h2>{title}</h2>
+      <p class="lede">{summary}</p>
+    </div>
+  </summary>
+  <div class="data-drawer-body">
+    <slot />
+  </div>
+</details>
