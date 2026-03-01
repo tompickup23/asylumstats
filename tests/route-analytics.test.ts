@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { LocalRouteAreaSummary, RouteSeriesPoint } from "../src/lib/route-data";
 import {
+  formatOrdinal,
   getDistributionStats,
   getPercentileRank,
   getRegionPressureSummaries,
@@ -98,6 +99,20 @@ describe("route analytics helpers", () => {
   it("returns percentile ranks based on values at or below the target", () => {
     expect(getPercentileRank([10, 20, 30, 40], 25)).toBe(50);
     expect(getPercentileRank([10, 20, 30, 40], 40)).toBe(100);
+  });
+
+  it("formats ordinals correctly for percentile copy", () => {
+    expect(formatOrdinal(1)).toBe("1st");
+    expect(formatOrdinal(2)).toBe("2nd");
+    expect(formatOrdinal(3)).toBe("3rd");
+    expect(formatOrdinal(4)).toBe("4th");
+    expect(formatOrdinal(11)).toBe("11th");
+    expect(formatOrdinal(12)).toBe("12th");
+    expect(formatOrdinal(13)).toBe("13th");
+    expect(formatOrdinal(21)).toBe("21st");
+    expect(formatOrdinal(32)).toBe("32nd");
+    expect(formatOrdinal(83)).toBe("83rd");
+    expect(formatOrdinal(100)).toBe("100th");
   });
 
   it("calculates the last observed delta in a route series", () => {

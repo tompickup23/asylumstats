@@ -19,7 +19,12 @@ import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { getCompareInvestigationTrails } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest } from "../lib/route-data";
-import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../lib/route-analytics";
+import {
+  formatOrdinal,
+  getDistributionStats,
+  getPercentileRank,
+  getRegionPressureSummaries
+} from "../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
@@ -595,7 +600,7 @@ const compareSections = [
       {compareProfiles.map((profile) => (
         <PathwayMixCard
           title={profile.place.areaName}
-          description={`${profile.place.regionName}. Supported asylum count sits around the ${profile.supportedPercentile}th percentile nationally.`}
+          description={`${profile.place.regionName}. Supported asylum count sits around the ${formatOrdinal(profile.supportedPercentile)} percentile nationally.`}
           segments={[
             {
               label: "Supported asylum",
@@ -640,9 +645,9 @@ const compareSections = [
       {compareProfiles.map((profile) => (
         <article class="feature-card accent">
           <div class="chip-row">
-            <span class="chip accent">{profile.supportedPercentile}th percentile by count</span>
-            <span class="chip teal">{profile.supportedRatePercentile}th percentile by rate</span>
-            <span class="chip">{profile.contingencyPercentile}th percentile by contingency</span>
+            <span class="chip accent">{formatOrdinal(profile.supportedPercentile)} percentile by count</span>
+            <span class="chip teal">{formatOrdinal(profile.supportedRatePercentile)} percentile by rate</span>
+            <span class="chip">{formatOrdinal(profile.contingencyPercentile)} percentile by contingency</span>
           </div>
           <h3>{profile.place.areaName}</h3>
           <p class="lede">

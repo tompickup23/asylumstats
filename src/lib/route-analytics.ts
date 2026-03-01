@@ -122,6 +122,26 @@ export function getPercentileRank(values: number[], target: number): number {
   return Math.round((count / sorted.length) * 100);
 }
 
+export function formatOrdinal(value: number): string {
+  const absoluteValue = Math.abs(Math.trunc(value));
+  const lastTwoDigits = absoluteValue % 100;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+    return `${value}th`;
+  }
+
+  switch (absoluteValue % 10) {
+    case 1:
+      return `${value}st`;
+    case 2:
+      return `${value}nd`;
+    case 3:
+      return `${value}rd`;
+    default:
+      return `${value}th`;
+  }
+}
+
 export function getSeriesDelta(points: RouteSeriesPoint[]): number {
   if (points.length < 2) {
     return 0;

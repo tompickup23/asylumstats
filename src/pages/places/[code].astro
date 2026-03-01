@@ -20,7 +20,12 @@ import { getPlaceInvestigationTrails } from "../../lib/investigations";
 import { loadMoneyLedger } from "../../lib/money-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
 import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
-import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../../lib/route-analytics";
+import {
+  formatOrdinal,
+  getDistributionStats,
+  getPercentileRank,
+  getRegionPressureSummaries
+} from "../../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
@@ -114,6 +119,9 @@ const contingencyPercentile = getPercentileRank(
 const contingencySharePct = area.supportedAsylum
   ? Number(((area.contingencyAccommodation / area.supportedAsylum) * 100).toFixed(1))
   : 0;
+const supportedPercentileLabel = formatOrdinal(supportedPercentile);
+const ratePercentileLabel = formatOrdinal(ratePercentile);
+const contingencyPercentileLabel = formatOrdinal(contingencyPercentile);
 const regionalPeerMax = Math.max(...regionalPeerRows.map((candidate) => candidate.supportedAsylum), 1);
 const secondaryPathways = [
   { label: "Homes for Ukraine", value: area.homesForUkraineArrivals },
@@ -121,6 +129,28 @@ const secondaryPathways = [
   { label: "Resettlement cumulative", value: area.resettlementCumulativeTotal ?? 0 }
 ].sort((a, b) => b.value - a.value);
 const leadingSecondaryPathway = secondaryPathways[0];
+const hotelEvidenceSummary =
+  namedSiteCount > 0 && unnamedSiteCount > 0
+    ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} and ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}`
+    : namedSiteCount > 0
+      ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"}`
+      : unnamedSiteCount > 0
+        ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}`
+    : null;
+const placeOpeningFocus =
+  areaRank <= 10
+    ? `${area.areaName} is one of the UK's highest-volume asylum support authorities, with ${area.supportedAsylum.toLocaleString()} people on support at quarter end and a national rank of ${areaRank.toLocaleString()}.`
+    : ratePercentile >= 90
+      ? `${area.areaName} carries a sharper asylum-support load than the raw count alone suggests, with ${area.supportedAsylumRate ?? "n/a"} people per 10,000 residents on support and a rate around the ${ratePercentileLabel} percentile nationally.`
+      : contingencySharePct >= 35
+        ? `${area.areaName} is currently shaped heavily by contingency accommodation, with ${area.contingencyAccommodation.toLocaleString()} people in that setting, about ${contingencySharePct}% of the local supported asylum total.`
+        : `${area.areaName} currently has ${area.supportedAsylum.toLocaleString()} people on asylum support, ranking ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName}.`;
+const placeOpeningVisibility = hotelEvidenceSummary
+  ? `Public hotel evidence is already visible here: ${hotelEvidenceSummary}.`
+  : regionalPrimeProviderCoverage
+    ? `${regionalPrimeProviderCoverage.profile.entityName} holds the public regional asylum accommodation contract for this area, but no named current local hotel is attached to ${area.areaName} in the live ledger yet.`
+    : `No named current local hotel is attached to ${area.areaName} in the live public ledger yet.`;
+const placeOpeningParagraph = `${placeOpeningFocus} ${placeOpeningVisibility} These are quarter-end stock numbers, not a count of everyone who has passed through the area.`;
 const editorialSignals = [
   {
     kicker: "Volume",
@@ -128,7 +158,7 @@ const editorialSignals = [
       areaRank <= 10
         ? `${area.areaName} is one of the highest-volume asylum support areas in the UK`
         : `${area.areaName} is outside the top ten by volume, but still carries a material local load`,
-    body: `${area.areaName} ranks ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName} for supported asylum count, placing it around the ${supportedPercentile}th percentile of local authorities by volume.`
+    body: `${area.areaName} ranks ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName} for supported asylum count, placing it around the ${supportedPercentileLabel} percentile of local authorities by volume.`
   },
   {
     kicker: "Intensity",
@@ -136,7 +166,7 @@ const editorialSignals = [
       ratePercentile >= 90
         ? "Intensity is stronger than the raw count alone suggests"
         : "The rate picture is important, even where the headline count is lower",
-    body: `The supported asylum rate here is ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents, around the ${ratePercentile}th percentile nationally. This matters because smaller places can carry a sharper load than bigger city totals imply.`
+    body: `The supported asylum rate here is ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents, around the ${ratePercentileLabel} percentile nationally. This matters because smaller places can carry a sharper load than bigger city totals imply.`
   },
   {
     kicker: "Accommodation model",
@@ -146,7 +176,7 @@ const editorialSignals = [
         : "The local picture leans more toward dispersal than contingency pressure",
     body:
       contingencySharePct > 0
-        ? `${area.contingencyAccommodation.toLocaleString()} people are in contingency accommodation here, around ${contingencySharePct}% of the supported asylum population and roughly the ${contingencyPercentile}th percentile by contingency count.`
+        ? `${area.contingencyAccommodation.toLocaleString()} people are in contingency accommodation here, around ${contingencySharePct}% of the supported asylum population and roughly the ${contingencyPercentileLabel} percentile by contingency count.`
         : "No contingency accommodation is recorded for this area in the latest local-authority snapshot, which makes it structurally different from hotel-heavy pressure points."
   },
   {
@@ -172,8 +202,8 @@ const editorialParagraphs = [
 ];
 const placeLead =
   namedSiteCount > 0 || unnamedSiteCount > 0
-    ? `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count, sits around the ${ratePercentile}th percentile by rate, and already has ${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"}${unnamedSiteCount > 0 ? ` plus ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}` : ""} in the live hotel evidence field.`
-    : `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count and sits around the ${ratePercentile}th percentile by rate, but the live hotel evidence field still has no named current site or unnamed acknowledged count attached here.`;
+    ? `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count, sits around the ${ratePercentileLabel} percentile by rate, and already has ${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"}${unnamedSiteCount > 0 ? ` plus ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}` : ""} in the live hotel evidence field.`
+    : `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count and sits around the ${ratePercentileLabel} percentile by rate, but the live hotel evidence field still has no named current site or unnamed acknowledged count attached here.`;
 const pageDescription = `${area.areaName} asylum profile with supported asylum counts, contingency accommodation, route pathway context, and hotel evidence as at ${localRouteLatest.snapshotDate}.`;
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
@@ -239,11 +269,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     <section class="page-head">
       <span class="kicker">{area.regionName}</span>
       <h1>{area.areaName} asylum pressure profile</h1>
-      <p>
-        Official local-authority snapshot as at {localRouteLatest.snapshotDate}. This page keeps quarter-end support
-        stock, route context, and public hotel evidence on one surface. It does not show local throughput, and it does
-        not treat supported asylum as a synonym for the backlog.
-      </p>
+      <p>{placeOpeningParagraph}</p>
       <div class="chip-row">
         <span class="chip">{area.countryName}</span>
         <span class="chip teal">Population {area.population?.toLocaleString() ?? "n/a"}</span>
@@ -580,7 +606,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
                 </article>
                 <article class="signal-card">
                   <span class="tiny">National percentile</span>
-                  <strong>{metric.percentile}th</strong>
+                  <strong>{formatOrdinal(metric.percentile)}</strong>
                 </article>
               </div>
               <div class="drilldown-list">
