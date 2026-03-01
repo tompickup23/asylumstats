@@ -5,7 +5,9 @@ import PageContents from "../../components/PageContents.astro";
 import {
   getEntityExposureSummary,
   getEntityLinkedPlaceRankings,
-  getEntityRegionSpread
+  getEntityRegionalContractCoverage,
+  getEntityRegionSpread,
+  getEntityTimeline
 } from "../../lib/entity-analytics";
 import { formatRouteFamilyLabel, getEntityProfiles, type EntityProfile } from "../../lib/entities";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
@@ -28,6 +30,8 @@ export function getStaticPaths() {
 
 const { profile } = Astro.props as { profile: EntityProfile };
 const exposureSummary = getEntityExposureSummary(profile);
+const entityTimeline = getEntityTimeline(profile, 8);
+const regionalContractCoverage = getEntityRegionalContractCoverage(profile, localRouteLatest.areas, hotelLedger.areas, 5);
 const regionSpread = getEntityRegionSpread(profile);
 const linkedPlaceRankings = getEntityLinkedPlaceRankings(profile, 5);
 const leadArea = exposureSummary.leadArea;
@@ -120,7 +124,9 @@ const pageStructuredData = buildEntityStructuredData(profile, {
 });
 const entitySections = [
   { id: "entity-findings", label: "Findings" },
+  ...(entityTimeline.events.length > 0 ? [{ id: "entity-timeline", label: "Timeline" }] : []),
   { id: "entity-exposure", label: "Exposure" },
+  ...(regionalContractCoverage ? [{ id: "entity-contract-coverage", label: "Coverage" }] : []),
   ...(regionSpread.length > 0 ? [{ id: "entity-region-spread", label: "Regions" }] : []),
   ...(linkedPlaceRankings.length > 0 ? [{ id: "entity-place-rankings", label: "Rankings" }] : []),
   ...(profile.currentSites.length > 0 ? [{ id: "entity-sites", label: "Sites" }] : []),
@@ -140,6 +146,19 @@ function formatMoney(value: number | null | undefined): string {
     currency: "GBP",
     maximumFractionDigits: value >= 1000 ? 0 : 2
   }).format(value);
+}
+
+function formatDate(value: string | null | undefined): string {
+  if (!value) {
+    return "n/a";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(new Date(value));
 }
 
 function buildHotelHref(siteName: string, status: string): string {
@@ -260,6 +279,57 @@ function formatSourceKind(kind: string): string {
     </div>
   </section>
 
+  {entityTimeline.events.length > 0 && (
+    <section id="entity-timeline" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Timeline of public evidence</h2>
+          <p class="lede">
+            These are the dated moments when this entity appears in the public record through named site evidence or
+            published money rows.
+          </p>
+        </div>
+        <span class="chip accent">{entityTimeline.eventCount} dated events</span>
+      </div>
+      <div class="stat-strip">
+        <article class="stat-tile">
+          <span class="tiny">First evidence</span>
+          <strong>{formatDate(entityTimeline.firstEvidenceDate)}</strong>
+          <p class="tiny">Earliest dated event currently attached to this profile.</p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Latest evidence</span>
+          <strong>{formatDate(entityTimeline.latestEvidenceDate)}</strong>
+          <p class="tiny">Most recent dated event in the current evidence chain.</p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Current named estate first appeared</span>
+          <strong>{formatDate(entityTimeline.firstCurrentSiteDate)}</strong>
+          <p class="tiny">Earliest dated public record for a current named site on this profile.</p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Latest money date</span>
+          <strong>{formatDate(entityTimeline.latestMoneyDate)}</strong>
+          <p class="tiny">Most recent dated money row attached to this profile.</p>
+        </article>
+      </div>
+      <div class="story-grid" style="margin-top: 1rem;">
+        {entityTimeline.events.map((event) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{formatDate(event.date)}</span>
+            </div>
+            <h3>{event.title}</h3>
+            <p class="lede">{event.detail}</p>
+            <p class="tiny">
+              <a class="source-pill" href={event.href}>{event.cta}</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
   <section id="entity-exposure" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -295,6 +365,68 @@ function formatSourceKind(kind: string): string {
       </div>
     )}
   </section>
+
+  {regionalContractCoverage && (
+    <section id="entity-contract-coverage" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Regional contract coverage</h2>
+          <p class="lede">
+            This is the wider contract field attached to the published asylum accommodation geography. It is broader
+            than the named estate and should not be read as proof of a named local hotel in every covered area.
+          </p>
+        </div>
+        <span class="chip accent">{regionalContractCoverage.geographyLabels.join(", ")}</span>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Contract geography is wider than the visible estate</h3>
+          <p class="lede">
+            {profile.entityName} currently covers {regionalContractCoverage.coveredAreaCount.toLocaleString()} local
+            authority rows in the published regional contract structure, but only {regionalContractCoverage.directLinkedAreaCount.toLocaleString()} of those are already tied to named hotel evidence on this profile.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Visibility gaps still matter inside the contract field</h3>
+          <p class="lede">
+            {regionalContractCoverage.namedCurrentAreaCount.toLocaleString()} covered areas already carry named current
+            hotel evidence, while {regionalContractCoverage.unnamedOnlyAreaCount.toLocaleString()} covered areas sit in
+            unnamed-only hotel visibility gaps.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Highest-pressure covered area</h3>
+          <p class="lede">
+            {regionalContractCoverage.highestPressureArea
+              ? `${regionalContractCoverage.highestPressureArea.areaName} is currently the largest supported-asylum place in this contract field at ${regionalContractCoverage.highestPressureArea.supportedAsylum.toLocaleString()}.`
+              : "No local authority rows are currently attached to this contract field."}
+          </p>
+        </article>
+      </div>
+      <div class="feature-grid" style="margin-top: 1rem;">
+        {regionalContractCoverage.topCoveredAreas.map((coveredArea) => (
+          <article class="feature-card teal">
+            <div class="chip-row">
+              <span class="chip teal">#{String(coveredArea.rank).padStart(2, "0")}</span>
+              <span class="chip">{coveredArea.regionName}</span>
+              {coveredArea.directLinkedCurrentSiteCount > 0 && <span class="chip accent">Named estate linked</span>}
+            </div>
+            <h3>{coveredArea.areaName}</h3>
+            <p class="metric-value">{coveredArea.supportedAsylum.toLocaleString()}</p>
+            <p class="lede">
+              Quarter-end supported asylum stock, with {coveredArea.contingencyAccommodation.toLocaleString()} in
+              contingency accommodation. {coveredArea.namedCurrentSiteCount > 0
+                ? `${coveredArea.namedCurrentSiteCount} named current hotel row${coveredArea.namedCurrentSiteCount === 1 ? "" : "s"} are already public here.`
+                : "No named current hotel row is public here in the live starter ledger yet."}
+            </p>
+            <p class="tiny">
+              <a class="source-pill" href={buildPlaceHref(coveredArea.areaCode)}>Open place profile</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
   {regionSpread.length > 0 && (
     <section id="entity-region-spread" class="section section-anchor">

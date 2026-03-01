@@ -1,11 +1,19 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  getAreaRegionalPrimeProviderCoverage,
   getEntityExposureSummary,
   getEntityLinkedPlaceRankings,
-  getEntityRegionSpread
+  getEntityRegionalContractCoverage,
+  getEntityRegionSpread,
+  getEntityTimeline
 } from "../src/lib/entity-analytics";
 import { getEntityProfile } from "../src/lib/entities";
+import { loadHotelEntityLedger } from "../src/lib/hotel-data";
+import { loadLocalRouteLatest } from "../src/lib/route-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const hotelLedger = loadHotelEntityLedger();
 
 describe("entity analytics helpers", () => {
   test("summarizes non-resolved exposure for named-estate profiles", () => {
@@ -49,5 +57,57 @@ describe("entity analytics helpers", () => {
     expect(sercoRankings[0]?.areaName).toBe("Epping Forest");
     expect(sercoRankings[0]?.rank).toBe(1);
     expect(publicBodyRankings).toHaveLength(0);
+  });
+
+  test("builds dated timelines from site evidence and money rows", () => {
+    const serco = getEntityProfile("supplier_serco");
+    const localAuthorities = getEntityProfile("supplier_participating_local_authorities");
+
+    expect(serco).toBeTruthy();
+    expect(localAuthorities).toBeTruthy();
+
+    const sercoTimeline = getEntityTimeline(serco!);
+    const localAuthorityTimeline = getEntityTimeline(localAuthorities!);
+
+    expect(sercoTimeline.firstCurrentSiteDate).toBe("2025-07-30");
+    expect(sercoTimeline.eventCount).toBeGreaterThanOrEqual(2);
+    expect(sercoTimeline.events.some((event) => event.title.includes("Bell Hotel"))).toBe(true);
+
+    expect(localAuthorityTimeline.latestMoneyDate).toBeTruthy();
+    expect(localAuthorityTimeline.events.every((event) => event.kind === "money_row")).toBe(true);
+  });
+
+  test("maps regional prime-provider coverage without confusing it for named estate", () => {
+    const serco = getEntityProfile("supplier_serco");
+    const birmingham = localRouteLatest.areas.find((area) => area.areaCode === "E08000025");
+    const hillingdon = localRouteLatest.areas.find((area) => area.areaCode === "E09000017");
+
+    expect(serco).toBeTruthy();
+    expect(birmingham).toBeTruthy();
+    expect(hillingdon).toBeTruthy();
+
+    const sercoCoverage = getEntityRegionalContractCoverage(serco!, localRouteLatest.areas, hotelLedger.areas, 5);
+    const birminghamProvider = getAreaRegionalPrimeProviderCoverage(
+      birmingham!,
+      [serco!, getEntityProfile("supplier_mears")!, getEntityProfile("supplier_clearsprings_ready_homes")!],
+      localRouteLatest.areas,
+      hotelLedger.areas
+    );
+    const hillingdonProvider = getAreaRegionalPrimeProviderCoverage(
+      hillingdon!,
+      [serco!, getEntityProfile("supplier_mears")!, getEntityProfile("supplier_clearsprings_ready_homes")!],
+      localRouteLatest.areas,
+      hotelLedger.areas
+    );
+
+    expect(sercoCoverage).toBeTruthy();
+    expect(sercoCoverage?.geographyLabels).toEqual(
+      expect.arrayContaining(["East of England", "Midlands", "North West"])
+    );
+    expect(sercoCoverage?.directLinkedAreaCount).toBe(1);
+    expect(sercoCoverage?.topCoveredAreas[0]?.areaName).toBe("Birmingham");
+
+    expect(birminghamProvider?.profile.entityId).toBe("supplier_serco");
+    expect(hillingdonProvider?.profile.entityId).toBe("supplier_clearsprings_ready_homes");
   });
 });

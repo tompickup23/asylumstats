@@ -10,7 +10,8 @@ import {
   supportedAsylumReadingRules
 } from "../../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../../lib/area-series";
-import { getEntityProfileByReference, getLeadEntityProfileForTrail } from "../../lib/entities";
+import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
+import { getEntityProfileByReference, getEntityProfiles, getLeadEntityProfileForTrail } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { getPlaceInvestigationTrails } from "../../lib/investigations";
@@ -81,6 +82,12 @@ const areaTrend = getAreaTrendSummary(area.areaCode);
 const previousTrendPoint = areaTrend ? areaTrend.points[areaTrend.points.length - 2] ?? null : null;
 const placeDrilldownMetrics = getPlaceDrilldownMetrics(localRouteLatest.areas, area);
 const placeInvestigationTrails = getPlaceInvestigationTrails(area, hotelLedger, moneyLedger, localRouteLatest.areas, 3);
+const regionalPrimeProviderCoverage = getAreaRegionalPrimeProviderCoverage(
+  area,
+  getEntityProfiles(),
+  localRouteLatest.areas,
+  hotelLedger.areas
+);
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
 const supportedStats = getDistributionStats(localRouteLatest.areas.map((candidate) => candidate.supportedAsylum));
@@ -174,6 +181,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
 });
 const placeSections = [
   { id: "stock-logic", label: "How to read" },
+  ...(regionalPrimeProviderCoverage ? [{ id: "provider-coverage", label: "Actor coverage" }] : []),
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "place-drilldown", label: "Drill-down" },
   { id: "local-benchmarks", label: "Benchmarks" },
@@ -250,6 +258,22 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             : "No unnamed hotel count is attached to this area in the starter ledger."}
         </p>
       </article>
+
+      {regionalPrimeProviderCoverage && (
+        <article class="panel panel-pad">
+          <span class="tiny">Regional prime provider</span>
+          <h2 class="rail-title">{regionalPrimeProviderCoverage.profile.entityName}</h2>
+          <p class="rail-copy">
+            This is the current public contract holder for asylum accommodation in {area.areaName}. It is regional
+            provider responsibility, not proof of a named local hotel.
+          </p>
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${regionalPrimeProviderCoverage.profile.entityId}/`}>
+              Open provider profile
+            </a>
+          </p>
+        </article>
+      )}
     </aside>
   </section>
 
@@ -276,6 +300,50 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       ))}
     </div>
   </section>
+
+  {regionalPrimeProviderCoverage && (
+    <section id="provider-coverage" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Named actor coverage in this place</h2>
+          <p class="lede">
+            This page separates named local estate from regional contract responsibility. A regional provider link means
+            the Home Office contract structure reaches this area, not that the public ledger has named every hotel here.
+          </p>
+        </div>
+        <a class="chip accent" href={`/entities/${regionalPrimeProviderCoverage.profile.entityId}/`}>
+          {regionalPrimeProviderCoverage.profile.entityName}
+        </a>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Regional contract holder</h3>
+          <p class="lede">
+            {regionalPrimeProviderCoverage.profile.entityName} currently holds the public regional asylum
+            accommodation contract covering {area.areaName}.
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Named local estate stays separate</h3>
+          <p class="lede">
+            {namedSiteCount > 0
+              ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} are already visible here in the hotel ledger.`
+              : `No named current site is publicly pinned down for ${area.areaName} in the live hotel ledger yet.`}{" "}
+            {unnamedSiteCount > 0
+              ? `${unnamedSiteCount} unnamed site${unnamedSiteCount === 1 ? "" : "s"} are still publicly acknowledged without full naming.`
+              : "No unnamed hotel count is attached to this area in the starter ledger."}
+          </p>
+        </article>
+        <article class="story-card">
+          <h3>Coverage field</h3>
+          <p class="lede">
+            {regionalPrimeProviderCoverage.coverage.coveredAreaCount.toLocaleString()} local authority rows fall
+            inside this published contract geography, with {regionalPrimeProviderCoverage.coverage.namedCurrentAreaCount.toLocaleString()} areas already carrying named current hotel evidence and {regionalPrimeProviderCoverage.coverage.unnamedOnlyAreaCount.toLocaleString()} still sitting in unnamed-only visibility gaps.
+          </p>
+        </article>
+      </div>
+    </section>
+  )}
 
   {areaTrend && (
     <section id="recent-trend" class="split section section-anchor">

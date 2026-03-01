@@ -14,6 +14,10 @@ export interface EntityProfileSite {
   entityCoverage: string;
   confidence: string;
   peopleHousedReported: number | null;
+  firstPublicDate: string | null;
+  lastPublicDate: string | null;
+  sourceTitle: string;
+  sourceUrl: string;
   relationshipLabels: string[];
   moneyRecordCount: number;
   integritySignalCount: number;
@@ -435,6 +439,10 @@ function buildEntityProfiles(): EntityProfile[] {
           entityCoverage: binding.site.entityCoverage,
           confidence: binding.site.confidence,
           peopleHousedReported: binding.site.peopleHousedReported,
+          firstPublicDate: binding.site.firstPublicDate,
+          lastPublicDate: binding.site.lastPublicDate,
+          sourceTitle: binding.site.sourceTitle,
+          sourceUrl: binding.site.sourceUrl,
           relationshipLabels: sortRoles(binding.roles).map(formatEntityRoleLabel),
           moneyRecordCount: binding.moneyRecordIds.size,
           integritySignalCount: binding.site.integritySignalCount
