@@ -95,25 +95,6 @@
     "notes": "Archived lead title uses a longer public-facing name than the council ledger row"
   },
   {
-    "lead_id": "archive_lead_ded08d62e17708a5",
-    "lead_name": "Allerton Court Hotel",
-    "latitude": 54.3477663953035,
-    "longitude": -1.442627830119846,
-    "verification_status": "pending_verification",
-    "verification_action": null,
-    "linked_site_id": null,
-    "linked_site_name": null,
-    "area_name": null,
-    "area_code": null,
-    "region_name": null,
-    "site_status": null,
-    "candidate_site_id": null,
-    "candidate_site_name": null,
-    "source_title": null,
-    "source_url": null,
-    "notes": null
-  },
-  {
     "lead_id": "archive_lead_09624b799002c50c",
     "lead_name": "Ambassadors Hotel",
     "latitude": 51.493893420873285,
@@ -4159,5 +4140,24 @@
     "source_title": null,
     "source_url": null,
     "notes": null
+  },
+  {
+    "lead_id": "archive_lead_ded08d62e17708a5",
+    "lead_name": "Allerton Court Hotel",
+    "latitude": 54.3477663953035,
+    "longitude": -1.442627830119846,
+    "verification_status": "promoted_new",
+    "verification_action": "promote_new",
+    "linked_site_id": "allerton-court-hotel-northallerton",
+    "linked_site_name": "Allerton Court Hotel",
+    "area_name": "North Yorkshire",
+    "area_code": "E06000065",
+    "region_name": "Yorkshire and The Humber",
+    "site_status": "current",
+    "candidate_site_id": "allerton-court-hotel-northallerton",
+    "candidate_site_name": "Allerton Court Hotel",
+    "source_title": "YorkMix report on Allerton Court Hotel asylum accommodation",
+    "source_url": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
+    "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025"
   }
 ]

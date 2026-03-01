@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-03-01T00:07:28.159Z",
+  "generatedAt": "2026-03-01T00:25:37.962Z",
   "inputs": [
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/data/manual/regional-source-watch.csv",
@@ -17,6 +17,34 @@
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/src/data/live/local-route-latest.json",
       "fileSha256": "29373e6166f130ff5f9936f5e24ab4739535836eb29f0ecc81c9c82e9a3e5d45"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
+      "fileSha256": "d168f82eed103f6d00ba91787879e6f602fb847c7866c8f3642818a09c82db96"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/migration-yorkshire-refugee-dashboard.html",
+      "fileSha256": "24229fcbc2b4353430f648f7f30f9abed6baac0a95e796efa51c233cbb9d6cf6"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/migration-yorkshire-ukraine-dashboard.html",
+      "fileSha256": "de5e748d048119d67f7e5b841c40b0c3560c5f2747c1912b2edf5ee39aa6edc4"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/migration-yorkshire-euss-dashboard.html",
+      "fileSha256": "a10a40e5b3da6211b83b10fb4f54e9b56cb21b9e0648bb1919d61629c29c663e"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nemp-data-page.html",
+      "fileSha256": "cce7e06703e863b702ce3355cd25a5c629bd98486904becb8cd8ac3c950efc5e"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/wsmp-dataobservatory.html",
+      "fileSha256": "86779b54ae4e1714899e95eece07bca56d74bd1f45dd68faa0dece5cc60917cc"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/migration-observatory-local-data-guide.html",
+      "fileSha256": "d54ea08d7196d0a7b5fc8bfff7e3336dc55bf9d7660e5fe2fc1f7950578e0fac"
     },
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2026-02-27.xlsx",
@@ -49,6 +77,8 @@
     "nwrsmpWorkbookCount": 6,
     "nwrsmpSupportedSeriesAreaCount": 354,
     "nwrsmpSupportedSeriesPointCount": 11718,
-    "nwrsmpSupportedSeriesLatestPeriod": "2025-12-31"
+    "nwrsmpSupportedSeriesLatestPeriod": "2025-12-31",
+    "regionalPartnerAssetCount": 14,
+    "migrationObservatoryGuideLinkCount": 4
   }
 }

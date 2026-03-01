@@ -69,6 +69,7 @@ describe("hotel-data loader", () => {
     expect(ledger.archiveVerification.totalLeadCount).toBeGreaterThan(100);
     expect(ledger.archiveVerification.publicArchiveMatches.length).toBeGreaterThan(0);
     expect(ledger.archiveVerification.pendingVerificationCount).toBeGreaterThan(0);
+    expect(ledger.archiveVerification.promotedNewCount).toBeGreaterThan(0);
   });
 });
 

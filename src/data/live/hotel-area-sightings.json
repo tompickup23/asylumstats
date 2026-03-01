@@ -102,6 +102,23 @@
     "visibilityPct": null
   },
   {
+    "areaName": "North Yorkshire",
+    "areaCode": "E06000065",
+    "regionName": "Yorkshire and The Humber",
+    "countryName": "England",
+    "currentNamedSiteCount": 1,
+    "historicalNamedSiteCount": 0,
+    "parliamentaryReferenceCount": 0,
+    "unnamedSiteCount": 0,
+    "peopleHousedReported": null,
+    "lastPublicDate": "2025-09-17",
+    "sourceTitle": "YorkMix report on Allerton Court Hotel asylum accommodation",
+    "sourceUrl": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
+    "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025",
+    "visibilityClass": "named_only",
+    "visibilityPct": 100
+  },
+  {
     "areaName": "Rushcliffe",
     "areaCode": "E07000174",
     "regionName": "East Midlands",

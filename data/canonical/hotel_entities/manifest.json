@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T00:06:44.540Z",
+  "generated_at": "2026-03-01T00:25:19.504Z",
   "dataset_id": "hotel_entities",
   "source_files": [
     {
@@ -25,12 +25,12 @@
     {
       "name": "archiveVerifications",
       "path": "data/manual/hotel-archive-verifications.csv",
-      "sha256": "cc7f54049e86f88aeb4a4df1badd0b5c573c093b5c3294ea15291222b9e21538"
+      "sha256": "832ce9554e6a89ca78b7763d4d7a10f5bca040d7a5543e3ca81c098bbcfce7e3"
     },
     {
       "name": "archiveLeads",
       "path": "data/raw/hotel_entities/archive-hotel-leads.json",
-      "sha256": "5917386e950644b383f422a42b3039220ec2c31410229df45c9fbeb13d639394"
+      "sha256": "da491269e0024408a07ab01561e7cd70f225a347a4675999f72366e183429d97"
     },
     {
       "name": "asylumFinance",
@@ -39,10 +39,10 @@
     }
   ],
   "counts": {
-    "site_rows": 9,
+    "site_rows": 10,
     "entity_link_rows": 4,
     "integrity_signal_rows": 4,
-    "area_rows": 9,
+    "area_rows": 10,
     "archive_lead_rows": 219
   }
 }

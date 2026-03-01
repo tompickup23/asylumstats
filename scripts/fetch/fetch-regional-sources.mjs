@@ -10,6 +10,36 @@ const mediaUrl =
   "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details";
 const pageUrl =
   "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content";
+const pageDownloads = [
+  {
+    fileName: "migration-yorkshire-statistics.html",
+    sourceUrl: "https://www.migrationyorkshire.org.uk/statistics"
+  },
+  {
+    fileName: "migration-yorkshire-refugee-dashboard.html",
+    sourceUrl: "https://www.migrationyorkshire.org.uk/statistics/refugee-and-asylum-seeker-dashboard"
+  },
+  {
+    fileName: "migration-yorkshire-ukraine-dashboard.html",
+    sourceUrl: "https://www.migrationyorkshire.org.uk/statistics/ukraine-data-dashboard"
+  },
+  {
+    fileName: "migration-yorkshire-euss-dashboard.html",
+    sourceUrl: "https://www.migrationyorkshire.org.uk/statistics/european-union-settlement-scheme-dashboard"
+  },
+  {
+    fileName: "nemp-data-page.html",
+    sourceUrl: "https://www.nemp.org.uk/data/"
+  },
+  {
+    fileName: "wsmp-dataobservatory.html",
+    sourceUrl: "https://www.wsmp.wales/dataobservatory"
+  },
+  {
+    fileName: "migration-observatory-local-data-guide.html",
+    sourceUrl: "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/"
+  }
+];
 
 function curlJson(url) {
   const output = execFileSync("curl", ["-sS", "-L", "-A", "Mozilla/5.0", url], {
@@ -112,6 +142,10 @@ for (const document of workbookDocuments) {
   downloadFile(document.sourceUrl, path.join(rawDir, fileName));
 }
 
+for (const page of pageDownloads) {
+  downloadFile(page.sourceUrl, path.join(rawDir, page.fileName));
+}
+
 const manifest = {
   generatedAt: new Date().toISOString(),
   datasetId: "regional_sources",
@@ -131,6 +165,12 @@ const manifest = {
       sizeBytes: statSync(path.join(rawDir, "nwrsmp-data-page.json")).size,
       fileSha256: fileSha256(path.join(rawDir, "nwrsmp-data-page.json"))
     },
+    ...pageDownloads.map((page) => ({
+      fileName: page.fileName,
+      sourceUrl: page.sourceUrl,
+      sizeBytes: statSync(path.join(rawDir, page.fileName)).size,
+      fileSha256: fileSha256(path.join(rawDir, page.fileName))
+    })),
     ...workbookDocuments.map((document) => {
       const fileName = buildWorkbookFileName(document, dateCounts);
       const filePath = path.join(rawDir, fileName);
@@ -149,4 +189,6 @@ const manifest = {
 
 writeFileSync(path.join(manifestDir, "regional_sources.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 
-console.log(`Fetched ${workbookDocuments.length} North West RSMP workbook snapshots plus metadata JSON.`);
+console.log(
+  `Fetched ${workbookDocuments.length} North West RSMP workbook snapshots plus ${pageDownloads.length} regional source pages.`
+);

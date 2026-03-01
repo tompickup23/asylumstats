@@ -15,4 +15,5 @@ data/raw/lancashire_cc/budgets_govuk.json
 data/raw/lancashire_cc/budget_mapping.json
 data/raw/regional_sources/*.json
 data/raw/regional_sources/*.xlsx
+data/raw/regional_sources/*.html
 data/raw/hotel_entities/*.json

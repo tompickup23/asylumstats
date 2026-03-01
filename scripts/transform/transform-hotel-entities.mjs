@@ -868,5 +868,5 @@ writeJson(path.join(liveDir, "hotel-area-sightings.json"), areaRows);
 writeJson(path.join(liveDir, "hotel-archive-queue.json"), archiveLeadQueue);
 
 console.log(
-  `Transformed ${canonicalSiteRows.length} hotel ledger rows plus ${archiveLeadQueue.length} archived map leads (${archiveVerificationSummary.linkedExistingCount} linked, ${archiveVerificationSummary.heldBackCount} held back).`
+  `Transformed ${canonicalSiteRows.length} hotel ledger rows plus ${archiveLeadQueue.length} archived map leads (${archiveVerificationSummary.linkedExistingCount} linked, ${archiveVerificationSummary.promotedNewCount} promoted, ${archiveVerificationSummary.heldBackCount} held back).`
 );

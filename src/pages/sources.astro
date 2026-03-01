@@ -51,6 +51,12 @@ const combinedHistoricLeadCount =
   regionalSourceWatch.summary.nwrsmpHistoricWorkbookCount +
   regionalSourceWatch.summary.archiveToolCount +
   regionalSourceWatch.summary.archivedResearchInputCount;
+const partnerAssetGroups = [...new Set(regionalSourceWatch.regionalPartnerAssets.map((row) => row.organisation))]
+  .map((organisation) => ({
+    organisation,
+    rows: regionalSourceWatch.regionalPartnerAssets.filter((row) => row.organisation === organisation)
+  }))
+  .sort((left, right) => left.organisation.localeCompare(right.organisation));
 
 const watchSections: Array<{
   id: string;
@@ -143,6 +149,11 @@ function formatLabelList(values: string[]) {
             <span class="tiny">Historic quarter points</span>
             <strong>{regionalSourceWatch.summary.nwrsmpSupportedSeriesPointCount.toLocaleString()}</strong>
             <p class="tiny">Official supported-asylum area values extracted from the workbook series.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Partner assets</span>
+            <strong>{regionalSourceWatch.summary.regionalPartnerAssetCount}</strong>
+            <p class="tiny">Dashboards, hubs, and official source links extracted from partner pages.</p>
           </article>
         </div>
       </article>
@@ -351,6 +362,94 @@ function formatLabelList(values: string[]) {
           </div>
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Partner-extracted dashboards and local tables</h2>
+        <p class="lede">
+          These assets are now being extracted directly from partner pages, so the site tracks concrete dashboards and
+          source links rather than only keeping a generic watchlist entry for each organisation.
+        </p>
+      </div>
+      <span class="chip accent">{regionalSourceWatch.summary.regionalPartnerAssetCount} extracted partner assets</span>
+    </div>
+    <div class="feature-grid">
+      {partnerAssetGroups.map((group) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{group.rows.length} assets</span>
+            <span class="chip">{group.rows[0]?.regionName}</span>
+          </div>
+          <h3>{group.organisation}</h3>
+          <div class="signal-list">
+            {group.rows.map((row) => (
+              <article class="signal-card">
+                <div class="chip-row">
+                  <span class="chip teal">{row.assetType.replaceAll("_", " ")}</span>
+                  <span class="chip">{formatLabelList(row.routeFocus)}</span>
+                </div>
+                <h3>{row.assetTitle}</h3>
+                <p class="tiny">{row.notes}</p>
+                <div class="chip-row">
+                  <a class="source-pill" href={row.assetUrl}>Open asset</a>
+                  <a class="source-pill" href={row.pageUrl}>Source page</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Migration Observatory traced local tables</h2>
+      <p class="lede">
+        The local data guide is now treated as a structured tracing layer. These are the concrete asylum, refugee, and
+        local migration links pulled out of the guide rather than left as a general recommendation.
+      </p>
+      <div class="signal-list">
+        {regionalSourceWatch.migrationObservatoryGuideLinks.map((row, index) => (
+          <article class={`signal-card${index === 0 ? " accent" : ""}`}>
+            <div class="chip-row">
+              <span class="chip accent">{row.assetType.replaceAll("_", " ")}</span>
+              <span class="chip">{formatLabelList(row.routeFocus)}</span>
+            </div>
+            <h3>{row.assetTitle}</h3>
+            <p class="tiny">{row.notes}</p>
+            <div class="chip-row">
+              <a class="source-pill" href={row.assetUrl}>Open traced link</a>
+              <a class="source-pill" href={row.pageUrl}>Open guide page</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>What the guide is now doing</h2>
+      <div class="signal-list">
+        <article class="signal-card accent">
+          <span class="tiny">Traceability</span>
+          <h3>{regionalSourceWatch.summary.migrationObservatoryGuideLinkCount} concrete links are now pulled out of the guide</h3>
+          <p class="tiny">
+            That means the guide can point users toward specific asylum, refugee, UASC, and local migration tables
+            instead of remaining a vague background recommendation.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Scope control</span>
+          <h3>The guide stays a synthesis layer, but its traced links can still be promoted individually</h3>
+          <p class="tiny">
+            This keeps the distinction clear between a useful explainer page and the underlying official tables that
+            are safe to chart or cite directly.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 

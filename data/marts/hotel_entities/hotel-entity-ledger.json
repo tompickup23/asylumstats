@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-01T00:06:44.540Z",
+  "generatedAt": "2026-03-01T00:25:19.504Z",
   "summary": {
-    "totalNamedSites": 9,
-    "currentNamedSites": 4,
+    "totalNamedSites": 10,
+    "currentNamedSites": 5,
     "historicalNamedSites": 4,
     "parliamentaryReferenceSites": 1,
     "currentNamedSitesWithAnyEntityLinks": 3,
     "currentNamedSitesWithOwnerLinks": 2,
     "currentNamedSitesWithOperatorLinks": 1,
     "currentNamedSitesFullyResolved": 0,
-    "currentNamedSitesUnresolved": 1,
+    "currentNamedSitesUnresolved": 2,
     "currentNamedSitesWithIntegritySignals": 3,
     "unnamedOnlyAreaCount": 3,
     "totalIntegritySignals": 4,
     "archiveLeadCount": 219,
     "archiveLinkedExistingCount": 4,
-    "archivePromotedNewCount": 0,
+    "archivePromotedNewCount": 1,
     "archiveHeldBackCount": 1,
-    "archivePendingVerificationCount": 214
+    "archivePendingVerificationCount": 213
   },
   "hotelFacts": [
     {
@@ -58,6 +58,40 @@
     }
   ],
   "sites": [
+    {
+      "siteId": "allerton-court-hotel-northallerton",
+      "siteName": "Allerton Court Hotel",
+      "areaName": "North Yorkshire",
+      "areaCode": "E06000065",
+      "regionName": "Yorkshire and The Humber",
+      "countryName": "England",
+      "status": "current",
+      "evidenceClass": "named_current",
+      "confidence": "medium",
+      "peopleHousedReported": null,
+      "firstPublicDate": "2025-09-17",
+      "lastPublicDate": "2025-09-17",
+      "sourceTitle": "YorkMix report on Allerton Court Hotel asylum accommodation",
+      "sourceUrl": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
+      "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025",
+      "ownerName": null,
+      "operatorName": null,
+      "entityCoverage": "unresolved",
+      "entityLinks": [],
+      "integritySignals": [],
+      "integritySignalCount": 0,
+      "primeProvider": {
+        "provider": "Mears",
+        "regions": [
+          "North East",
+          "Yorkshire and The Humber",
+          "Scotland",
+          "Northern Ireland"
+        ],
+        "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
+        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      }
+    },
     {
       "siteId": "bell-hotel-epping",
       "siteName": "Bell Hotel",
@@ -169,7 +203,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-03-01T00:06:44.540Z",
+          "generatedAt": "2026-03-01T00:25:19.504Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -221,7 +255,7 @@
             "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
           ],
           "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-03-01T00:06:44.540Z",
+          "generatedAt": "2026-03-01T00:25:19.504Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -296,7 +330,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-03-01T00:06:44.540Z",
+          "generatedAt": "2026-03-01T00:25:19.504Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -461,7 +495,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-03-01T00:06:44.540Z",
+          "generatedAt": "2026-03-01T00:25:19.504Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
@@ -573,6 +607,23 @@
       "visibilityPct": null
     },
     {
+      "areaName": "North Yorkshire",
+      "areaCode": "E06000065",
+      "regionName": "Yorkshire and The Humber",
+      "countryName": "England",
+      "currentNamedSiteCount": 1,
+      "historicalNamedSiteCount": 0,
+      "parliamentaryReferenceCount": 0,
+      "unnamedSiteCount": 0,
+      "peopleHousedReported": null,
+      "lastPublicDate": "2025-09-17",
+      "sourceTitle": "YorkMix report on Allerton Court Hotel asylum accommodation",
+      "sourceUrl": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
+      "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025",
+      "visibilityClass": "named_only",
+      "visibilityPct": 100
+    },
+    {
       "areaName": "Rushcliffe",
       "areaCode": "E07000174",
       "regionName": "East Midlands",
@@ -630,9 +681,9 @@
     "archiveSnapshotDate": "2025-08-26",
     "totalLeadCount": 219,
     "linkedExistingCount": 4,
-    "promotedNewCount": 0,
+    "promotedNewCount": 1,
     "heldBackCount": 1,
-    "pendingVerificationCount": 214,
+    "pendingVerificationCount": 213,
     "pendingAutoCandidateCount": 0,
     "publicArchiveMatches": [
       {
@@ -686,6 +737,19 @@
         "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
         "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
         "notes": "Archived lead title uses a longer public-facing name than the council ledger row"
+      },
+      {
+        "leadName": "Allerton Court Hotel",
+        "verificationStatus": "promoted_new",
+        "siteId": "allerton-court-hotel-northallerton",
+        "siteName": "Allerton Court Hotel",
+        "areaName": "North Yorkshire",
+        "areaCode": "E06000065",
+        "regionName": "Yorkshire and The Humber",
+        "status": "current",
+        "sourceTitle": "YorkMix report on Allerton Court Hotel asylum accommodation",
+        "sourceUrl": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
+        "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025"
       }
     ]
   },
@@ -702,7 +766,7 @@
     },
     {
       "provider": "Mears",
-      "currentNamedSiteCount": 1,
+      "currentNamedSiteCount": 2,
       "regions": [
         "North East",
         "Yorkshire and The Humber",

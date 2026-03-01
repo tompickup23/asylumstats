@@ -7,6 +7,9 @@ interface RegionalSourceWatch {
     similarOrganisationCount: number;
     archiveToolCount: number;
     archivedResearchInputCount: number;
+    regionalPartnerAssetCount: number;
+    regionalPartnerDashboardCount: number;
+    migrationObservatoryGuideLinkCount: number;
     nwrsmpWorkbookCount: number;
     nwrsmpHistoricWorkbookCount: number;
     nwrsmpAuthorityObservationCount: number;
@@ -31,6 +34,16 @@ interface RegionalSourceWatch {
       primaryWorkbookPublishedAt: string | null;
     };
   };
+  regionalPartnerAssets: Array<{
+    organisation: string;
+    assetTitle: string;
+    assetUrl: string;
+    assetType: string;
+  }>;
+  migrationObservatoryGuideLinks: Array<{
+    assetTitle: string;
+    assetUrl: string;
+  }>;
   regionalPartners: Array<{
     organisation: string;
     currentUrl: string;
@@ -63,6 +76,9 @@ describe("regional-source-watch.json", () => {
     expect(watch.summary.similarOrganisationCount).toBeGreaterThanOrEqual(2);
     expect(watch.summary.archiveToolCount).toBeGreaterThanOrEqual(2);
     expect(watch.summary.archivedResearchInputCount).toBeGreaterThanOrEqual(1);
+    expect(watch.summary.regionalPartnerAssetCount).toBeGreaterThanOrEqual(10);
+    expect(watch.summary.regionalPartnerDashboardCount).toBeGreaterThanOrEqual(4);
+    expect(watch.summary.migrationObservatoryGuideLinkCount).toBeGreaterThanOrEqual(4);
     expect(watch.regionalPartners.length).toBe(watch.summary.regionalPartnerCount);
     expect(watch.similarOrganisations.length).toBe(watch.summary.similarOrganisationCount);
     expect(watch.archiveTools.length).toBe(watch.summary.archiveToolCount);
@@ -92,5 +108,30 @@ describe("regional-source-watch.json", () => {
     expect(watch.similarOrganisations.map((row) => row.organisation)).toContain("Migration Observatory");
     expect(watch.similarOrganisations.map((row) => row.organisation)).toContain("Asylum Information Database (AIDA)");
     expect(watch.archivedResearchInputs[0]?.currentUrl).toMatch(/^https:\/\/web\.archive\.org\/web\//);
+  });
+
+  it("extracts concrete partner dashboards and traced local-guide links", () => {
+    expect(
+      watch.regionalPartnerAssets.some(
+        (row) =>
+          row.organisation === "Migration Yorkshire" &&
+          row.assetTitle === "Refugee and asylum seeker Power BI dashboard" &&
+          row.assetUrl.startsWith("https://app.powerbi.com/view")
+      )
+    ).toBe(true);
+    expect(
+      watch.regionalPartnerAssets.some(
+        (row) =>
+          row.organisation === "North East Migration Partnership" &&
+          row.assetTitle === "North East regional Power BI dashboard"
+      )
+    ).toBe(true);
+    expect(
+      watch.migrationObservatoryGuideLinks.some(
+        (row) =>
+          row.assetTitle === "Home Office local-authority asylum and resettlement data" &&
+          row.assetUrl.includes("asylum-and-resettlement-datasets#local-authority-data")
+      )
+    ).toBe(true);
   });
 });
