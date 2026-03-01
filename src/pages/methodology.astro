@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
 import { asylumSystemReadingRules, supportedAsylumReadingRules } from "../lib/asylum-support-logic";
 
@@ -23,6 +24,29 @@ const evidenceLayers = [
 ];
 
 const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadingRules];
+const methodFindingCards = [
+  {
+    title: "Supported asylum stays in the language of stock",
+    body: "Local supported-asylum figures are end-of-period support counts. They do not tell you how many distinct people passed through an area or how many claims were processed there."
+  },
+  {
+    title: "Route scope decides what is publishable",
+    body: `${asylumFinance.scopeRules.find((rule) => rule.id === "context_only")?.description ?? "Context-only material stays out of public charts until it can be tied to a route or scheme."}`
+  },
+  {
+    title: "Archive and public-evidence layers do not bypass corroboration",
+    body: "Archive-derived leads and public hotel evidence are useful, but they stay visibly distinct from official datasets and documented entity links so the product never fakes certainty."
+  }
+];
+const methodSections = [
+  { id: "method-findings", label: "Findings" },
+  { id: "evidence-layers", label: "Evidence" },
+  { id: "method-rules", label: "Rules" },
+  { id: "asylum-number-logic", label: "Asylum logic" },
+  { id: "method-scope-classes", label: "Scope" },
+  { id: "method-route-families", label: "Route split" },
+  { id: "publication-rules", label: "Publish rules" }
+];
 ---
 
 <BaseLayout
@@ -64,7 +88,29 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents title="Jump to evidence" sections={methodSections} variant="priority" />
+
+  <section id="method-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          {evidenceLayers.length} evidence layers, {asylumReadingRules.length} asylum interpretation rules, and {asylumFinance.inclusionTests.length} inclusion tests stop this site from turning official data, public hotel evidence, and archive recovery into one fake certainty.
+        </p>
+      </div>
+      <span class="chip accent">Publishing rules first</span>
+    </div>
+    <div class="story-grid">
+      {methodFindingCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="evidence-layers" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Evidence layers</h2>
@@ -87,7 +133,7 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </div>
   </section>
 
-  <section class="section">
+  <section id="method-rules" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Rules this product assumes</h2>
@@ -132,7 +178,7 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </div>
   </section>
 
-  <section class="split section">
+  <section id="asylum-number-logic" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>How supported asylum numbers work</h2>
       <div class="signal-list">
@@ -168,7 +214,7 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </div>
   </section>
 
-  <section class="split section">
+  <section id="method-scope-classes" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>Route scope classes</h2>
       <div class="signal-list">
@@ -198,7 +244,7 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </div>
   </section>
 
-  <section class="section">
+  <section id="method-route-families" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Route families the site should split</h2>
@@ -222,7 +268,7 @@ const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadi
     </div>
   </section>
 
-  <section class="split section">
+  <section id="publication-rules" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>Hotel entity-resolution rule</h2>
       <div class="signal-list">

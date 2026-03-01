@@ -3,6 +3,8 @@ dist
 .astro
 .DS_Store
 coverage
+playwright-report
+test-results
 
 # Large regenerable data files (run npm run ingest:* to regenerate)
 data/raw/lancashire_cc/spending-*.json

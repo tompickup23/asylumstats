@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
 import {
@@ -43,6 +44,32 @@ const pressureLeader = leadPressureMetric?.rows[0];
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadingRegionByTotal = regionalPressure[0];
 const leadingRegionByRate = [...regionalPressure].sort((a, b) => b.supportedAsylumRate - a.supportedAsylumRate)[0];
+const routeFindingCards = [
+  {
+    title: "Support and backlog are not the same stock",
+    body: `${latestQuarter.supportedAsylum.toLocaleString()} people were on asylum support at quarter end while ${latestQuarter.awaitingInitialDecision.toLocaleString()} were still awaiting an initial decision. Those measures overlap without matching.`
+  },
+  {
+    title: "Claims and decisions were moving on different tracks",
+    body: `In ${latestQuarter.quarterLabel ?? "the latest quarter"}, ${latestQuarter.initialDecisions.toLocaleString()} initial decisions ${latestQuarter.decisionMinusClaims >= 0 ? "ran ahead of" : "trailed"} ${latestQuarter.claims.toLocaleString()} claims by ${Math.abs(latestQuarter.decisionMinusClaims).toLocaleString()}.`
+  },
+  {
+    title: "Post-decision exits are still split across lagged systems",
+    body: `Appeals data is only complete through ${postDecisionPath.appeals.dataCompleteThroughLabel ?? "an older quarter"}, while returns run to ${postDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"} but cover all returns, not just asylum-specific exits.`
+  }
+];
+const routeSections = [
+  { id: "route-findings", label: "Findings" },
+  { id: "route-logic", label: "How to read" },
+  { id: "national-stock-flow", label: "Stock vs flow" },
+  { id: "claims-support-tracks", label: "Tracks" },
+  { id: "post-decision-path", label: "Post-decision" },
+  { id: "route-splits", label: "Route splits" },
+  { id: "route-trends", label: "Trends" },
+  { id: "regional-pressure", label: "Region map" },
+  { id: "local-pressure-leaders", label: "Local leaders" },
+  { id: "route-limits", label: "Limits" }
+];
 
 function formatCardValue(value: number, suffix?: string): string {
   return suffix ? `${value}${suffix}` : value.toLocaleString();
@@ -99,7 +126,29 @@ function formatCardValue(value: number, suffix?: string): string {
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents title="Jump to evidence" sections={routeSections} variant="priority" />
+
+  <section id="route-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          In {latestQuarter.quarterLabel ?? "the latest quarter"}, {latestQuarter.claims.toLocaleString()} asylum claims were lodged and {latestQuarter.initialDecisions.toLocaleString()} initial decisions were made, while {latestQuarter.awaitingInitialDecision.toLocaleString()} people were still awaiting an initial decision and {latestQuarter.supportedAsylum.toLocaleString()} were on asylum support at quarter end.
+        </p>
+      </div>
+      <span class="chip accent">Stock and flow stay split</span>
+    </div>
+    <div class="story-grid">
+      {routeFindingCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="route-logic" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>How to read asylum stock, flow, and churn</h2>
@@ -121,7 +170,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="national-stock-flow" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>National stock vs flow</h2>
@@ -150,7 +199,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="claims-support-tracks" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Claims, decisions, backlog, and support move on different tracks</h2>
@@ -396,7 +445,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="route-splits" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Where the split matters most</h2>
@@ -434,7 +483,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="route-trends" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Tracked route trends</h2>
@@ -466,7 +515,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="split section">
+  <section class="split section section-anchor" id="regional-entry-patterns">
     <div class="panel panel-pad">
       <h2>Illegal entry routes in the latest year</h2>
       <p class="lede">Different entry methods carry different operational and policy questions. They should not blur.</p>
@@ -503,7 +552,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="regional-pressure" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Regional pressure map</h2>
@@ -533,7 +582,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-anchor" id="route-ledger">
     <div class="section-head">
       <div>
         <h2>Full route family ledger</h2>
@@ -563,7 +612,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="local-pressure-leaders" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Local pressure leaders</h2>
@@ -602,7 +651,7 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
   </section>
 
-  <section class="section">
+  <section id="route-limits" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Current limits</h2>

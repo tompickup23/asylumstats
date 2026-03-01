@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageContents from "../components/PageContents.astro";
 import regionalSourceWatch from "../data/live/regional-source-watch.json";
 import sourceScope from "../data/live/source-scope.json";
 
@@ -81,6 +82,30 @@ const watchSections: Array<{
     chipClass: "teal",
     rows: regionalSourceWatch.similarOrganisations
   }
+];
+const sourceFindingCards = [
+  {
+    title: "Regional history is already feeding the live product",
+    body: `${regionalSourceWatch.summary.nwrsmpSupportedSeriesPointCount.toLocaleString()} official quarter-end supported-asylum values from the North West workbook series now feed live place trends instead of sitting as a dead file register.`
+  },
+  {
+    title: "Partner pages are now concrete source inputs",
+    body: `${regionalSourceWatch.summary.regionalPartnerAssetCount} partner assets and ${regionalSourceWatch.summary.migrationObservatoryGuideLinkCount} Migration Observatory guide links are now extracted as specific dashboards, tables, and briefings rather than vague recommendations.`
+  },
+  {
+    title: "Archive leads still have to clear a publication gate",
+    body: `${regionalSourceWatch.summary.archivedResearchInputCount} archive-only discovery input and ${regionalSourceWatch.summary.archiveToolCount} recovery tools stay in the research layer until a route-specific or document-backed public claim can be defended.`
+  }
+];
+const sourceSections = [
+  { id: "source-findings", label: "Findings" },
+  { id: "scope-classes", label: "Scope classes" },
+  { id: "nwrsmp-history", label: "NW history" },
+  { id: "regional-watchlist", label: "Watchlist" },
+  { id: "partner-assets", label: "Partner assets" },
+  { id: "migration-observatory", label: "Observatory" },
+  { id: "archive-tools", label: "Archive tools" },
+  { id: "source-ledger", label: "Ledger" }
 ];
 
 function formatIsoDate(value: string) {
@@ -169,7 +194,29 @@ function formatLabelList(values: string[]) {
     </aside>
   </section>
 
-  <section class="section">
+  <PageContents title="Jump to evidence" sections={sourceSections} variant="priority" />
+
+  <section id="source-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          {regionalSourceWatch.summary.nwrsmpSupportedSeriesPointCount.toLocaleString()} official quarter-end place values now feed live trends, {regionalSourceWatch.summary.regionalPartnerAssetCount} partner assets are extracted into the source ledger, and archive-only inputs still stay behind a publication gate until separately verified.
+        </p>
+      </div>
+      <span class="chip accent">Scope before charts</span>
+    </div>
+    <div class="story-grid">
+      {sourceFindingCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="scope-classes" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Scope classes</h2>
@@ -204,7 +251,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="section">
+  <section id="nwrsmp-history" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>North West workbook history</h2>
@@ -320,7 +367,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="section">
+  <section id="regional-watchlist" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Regional and synthesis watchlist</h2>
@@ -365,7 +412,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="section">
+  <section id="partner-assets" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Partner-extracted dashboards and local tables</h2>
@@ -405,7 +452,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="split section">
+  <section id="migration-observatory" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>Migration Observatory traced local tables</h2>
       <p class="lede">
@@ -453,7 +500,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="split section">
+  <section id="archive-tools" class="split section section-anchor">
     <div class="panel panel-pad">
       <h2>Historic recovery tools</h2>
       <div class="signal-list">
@@ -536,7 +583,7 @@ function formatLabelList(values: string[]) {
     </div>
   </section>
 
-  <section class="section">
+  <section id="source-ledger" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Source ledger</h2>
