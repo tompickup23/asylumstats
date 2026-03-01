@@ -25,8 +25,8 @@ export function initHotelFilters(): void {
   const form = root.querySelector<HTMLFormElement>("[data-hotel-form]");
   const siteSummaryElement = root.querySelector<HTMLElement>("[data-hotel-site-summary]");
   const areaSummaryElement = root.querySelector<HTMLElement>("[data-hotel-area-summary]");
-  const siteEmptyElement = root.querySelector<HTMLElement>("[data-hotel-site-empty]");
-  const areaEmptyElement = root.querySelector<HTMLElement>("[data-hotel-area-empty]");
+  const siteEmptyElement = document.querySelector<HTMLElement>("[data-hotel-site-empty]");
+  const areaEmptyElement = document.querySelector<HTMLElement>("[data-hotel-area-empty]");
   const reset = root.querySelector<HTMLButtonElement>("[data-hotel-reset]");
   const copy = root.querySelector<HTMLButtonElement>("[data-hotel-copy]");
   const copyStatus = root.querySelector<HTMLElement>("[data-hotel-copy-status]");
