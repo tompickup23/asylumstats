@@ -43,6 +43,29 @@ export interface TopMetricGroup {
   rows: TopMetricAreaRow[];
 }
 
+export interface RouteOutcomeCohort {
+  claimYear: string;
+  totalClaims: number;
+  initialDecisions: number;
+  initialGrantCount: number;
+  initialRefusalCount: number;
+  initialWithdrawalCount: number;
+  initialAdministrativeCount: number;
+  latestGrantCount: number;
+  latestRefusalCount: number;
+  latestWithdrawalCount: number;
+  latestAdministrativeCount: number;
+  initialGrantRatePct: number | null;
+  latestGrantRatePct: number | null;
+  latestOutcomeKnownPct: number | null;
+}
+
+export interface RouteQuarterBreakdownRow {
+  label: string;
+  value: number;
+  metricId: string;
+}
+
 export interface RouteDashboard {
   generatedAt: string;
   localSnapshotDate: string;
@@ -52,6 +75,45 @@ export interface RouteDashboard {
   smallBoatDecisionGroupsLatestYear: {
     year: string;
     rows: Array<{ outcomeGroup: string; value: number }>;
+  };
+  nationalSystemDynamics: {
+    stockFlowCards: RouteCard[];
+    flowSeries: {
+      claims: RouteSeriesPoint[];
+      initialDecisions: RouteSeriesPoint[];
+      initialGrants: RouteSeriesPoint[];
+      initialRefusals: RouteSeriesPoint[];
+      initialWithdrawals: RouteSeriesPoint[];
+    };
+    stockSeries: {
+      awaitingInitialDecision: RouteSeriesPoint[];
+      supportedAsylum: RouteSeriesPoint[];
+      hotelAccommodation: RouteSeriesPoint[];
+    };
+    latestQuarter: {
+      quarterLabel: string | null;
+      stockPeriodLabel: string | null;
+      claims: number;
+      initialDecisions: number;
+      initialGrants: number;
+      initialRefusals: number;
+      initialWithdrawals: number;
+      initialAdministrativeOutcomes: number;
+      awaitingInitialDecision: number;
+      supportedAsylum: number;
+      hotelAccommodation: number;
+      hotelShareOfSupportPct: number | null;
+      decisionMinusClaims: number;
+    };
+    latestQuarterDecisionBreakdown: RouteQuarterBreakdownRow[];
+    latestSupportBreakdown: RouteQuarterBreakdownRow[];
+    outcomeCohorts: RouteOutcomeCohort[];
+    recentOutcomeCohorts: RouteOutcomeCohort[];
+    outcomeRateSeries: {
+      initialGrantRate: RouteSeriesPoint[];
+      latestGrantRate: RouteSeriesPoint[];
+    };
+    readingNotes: string[];
   };
   topAreasByMetric: TopMetricGroup[];
   limitations: string[];

@@ -8,7 +8,7 @@
   "kpis": [
     {
       "label": "People on asylum support",
-      "value": "107,200",
+      "value": "107,003",
       "context": "End of Dec 2025",
       "status": "official",
       "sourceTitle": "Immigration system statistics, year ending December 2025",
@@ -16,7 +16,7 @@
     },
     {
       "label": "People in hotels",
-      "value": "31,000",
+      "value": "30,657",
       "context": "29% of supported people",
       "status": "official",
       "sourceTitle": "Immigration system statistics, year ending December 2025",
@@ -52,7 +52,7 @@
     },
     {
       "title": "Backlog pressure still feeds accommodation demand",
-      "body": "Around 64,000 people were still waiting for an initial decision at the end of December 2025.",
+      "body": "64,426 people were still waiting for an initial decision at the end of December 2025.",
       "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
     }
   ]

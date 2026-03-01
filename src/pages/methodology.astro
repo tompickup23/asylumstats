@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
-import { supportedAsylumReadingRules } from "../lib/asylum-support-logic";
+import { asylumSystemReadingRules, supportedAsylumReadingRules } from "../lib/asylum-support-logic";
 
 const evidenceLayers = [
   {
@@ -21,6 +21,8 @@ const evidenceLayers = [
     body: "Council statements, FOIs, planning records, or parliamentary material that help identify hotel sites or hotel presence."
   }
 ];
+
+const asylumReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadingRules];
 ---
 
 <BaseLayout
@@ -109,7 +111,7 @@ const evidenceLayers = [
       </article>
       <article class="story-card">
         <h3>Treat supported asylum as stock, not throughput</h3>
-        <p class="lede">Local supported-asylum figures are end-of-period support counts. They do not tell you how many different people moved through the system, or how many claims were processed locally.</p>
+        <p class="lede">Local supported-asylum figures are end-of-period support counts. They do not tell you how many different people moved through the system, how many claims were processed locally, or whether the support total matches the backlog exactly.</p>
       </article>
       <article class="story-card">
         <h3>Public spending must pass a route test</h3>
@@ -134,7 +136,7 @@ const evidenceLayers = [
     <div class="panel panel-pad">
       <h2>How supported asylum numbers work</h2>
       <div class="signal-list">
-        {supportedAsylumReadingRules.map((rule) => (
+        {asylumReadingRules.map((rule) => (
           <article class="signal-card accent">
             <span class="tiny">Interpretation rule</span>
             <h3>{rule.title}</h3>

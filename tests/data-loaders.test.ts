@@ -20,6 +20,14 @@ describe("route-data loader", () => {
     expect(dashboard.routeFamilies[0]).toHaveProperty("series");
   });
 
+  it("loads national stock and flow dynamics", () => {
+    expect(dashboard.nationalSystemDynamics.stockFlowCards.length).toBeGreaterThanOrEqual(4);
+    expect(dashboard.nationalSystemDynamics.flowSeries.claims.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.stockSeries.awaitingInitialDecision.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.outcomeCohorts.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.latestQuarter).toHaveProperty("decisionMinusClaims");
+  });
+
   it("loads local route areas", () => {
     expect(local.areas.length).toBeGreaterThan(100);
     expect(local.snapshotDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -48,7 +56,9 @@ describe("route-data loader", () => {
     expect(supportedAsylumRoute?.note.toLowerCase()).toContain("stock");
     expect(supportedAsylumRoute?.note.toLowerCase()).toContain("distinct people");
     expect(supportedAsylumMetric?.description.toLowerCase()).toContain("quarter-end stock");
+    expect(supportedAsylumMetric?.description.toLowerCase()).toContain("not identical");
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("flat local"))).toBe(true);
+    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("support is not a synonym"))).toBe(true);
   });
 });
 

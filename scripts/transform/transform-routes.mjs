@@ -12,7 +12,11 @@ const sourceFiles = {
   localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-dec-2025.ods"),
   localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-dec-2025.xlsx"),
   illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx"),
-  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-dec-2025.ods")
+  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-dec-2025.ods"),
+  asylumClaims: path.join(rawDir, "asylum-claims-datasets-dec-2025.xlsx"),
+  asylumAwaitingDecision: path.join(rawDir, "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx"),
+  asylumOutcomeAnalysis: path.join(rawDir, "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"),
+  asylumSupport: path.join(rawDir, "asylum-seekers-receipt-support-datasets-dec-2025.xlsx")
 };
 
 const sourceMeta = {
@@ -46,6 +50,46 @@ const sourceMeta = {
     attachment_url:
       "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
     methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    release_date: "2026-02-26"
+  },
+  asylumClaims: {
+    source_id: "asylum_claims_dec_2025",
+    source_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-claim-asylum-in-the-uk",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx",
+    methodology_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-claim-asylum-in-the-uk",
+    release_date: "2026-02-26"
+  },
+  asylumAwaitingDecision: {
+    source_id: "asylum_awaiting_decision_dec_2025",
+    source_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+    methodology_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
+    release_date: "2026-02-26"
+  },
+  asylumOutcomeAnalysis: {
+    source_id: "asylum_outcome_analysis_dec_2025",
+    source_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-granted-asylum-in-the-uk",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+    methodology_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-granted-asylum-in-the-uk",
+    release_date: "2026-02-26"
+  },
+  asylumSupport: {
+    source_id: "asylum_support_dec_2025",
+    source_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
+    attachment_url:
+      "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+    methodology_url:
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
     release_date: "2026-02-26"
   }
 };
@@ -150,6 +194,58 @@ function endOfYear(yearLabel) {
 function startOfYear(yearLabel) {
   const year = Number(String(yearLabel).trim().slice(0, 4));
   return Number.isFinite(year) ? `${year}-01-01` : null;
+}
+
+function endOfDateLabel(dateLabel) {
+  const match = /^(\d{1,2}) ([A-Za-z]{3}) (\d{4})$/.exec(String(dateLabel).trim());
+  if (!match) {
+    return null;
+  }
+
+  const monthMap = {
+    Jan: 1,
+    Feb: 2,
+    Mar: 3,
+    Apr: 4,
+    May: 5,
+    Jun: 6,
+    Jul: 7,
+    Aug: 8,
+    Sep: 9,
+    Oct: 10,
+    Nov: 11,
+    Dec: 12
+  };
+
+  const day = Number(match[1]);
+  const month = monthMap[match[2]];
+  const year = Number(match[3]);
+  if (!day || !month || !year) {
+    return null;
+  }
+
+  return new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10);
+}
+
+function startOfDateLabel(dateLabel) {
+  const iso = endOfDateLabel(dateLabel);
+  if (!iso) {
+    return null;
+  }
+
+  const [year, month] = iso.split("-").map(Number);
+  return `${year}-${String(month).padStart(2, "0")}-01`;
+}
+
+function quarterLabelForDateLabel(dateLabel) {
+  const iso = endOfDateLabel(dateLabel);
+  if (!iso) {
+    return null;
+  }
+
+  const [year, month] = iso.split("-").map(Number);
+  const quarter = Math.ceil(month / 3);
+  return `${year} Q${quarter}`;
 }
 
 function inferCountryFromRow(regionOrNation, areaCode = "") {
@@ -347,6 +443,10 @@ const localImmigrationHash = fileSha256(sourceFiles.localImmigration);
 const localResettlementHash = fileSha256(sourceFiles.localResettlement);
 const illegalEntryHash = fileSha256(sourceFiles.illegalEntry);
 const safeLegalHash = fileSha256(sourceFiles.safeLegal);
+const asylumClaimsHash = fileSha256(sourceFiles.asylumClaims);
+const asylumAwaitingDecisionHash = fileSha256(sourceFiles.asylumAwaitingDecision);
+const asylumOutcomeAnalysisHash = fileSha256(sourceFiles.asylumOutcomeAnalysis);
+const asylumSupportHash = fileSha256(sourceFiles.asylumSupport);
 
 const localImmigrationRows = readSheetRows(sourceFiles.localImmigration, "Reg_02");
 const localImmigrationRegionalRows = readSheetRows(sourceFiles.localImmigration, "Reg_01");
@@ -359,6 +459,11 @@ const safeLegalResRows = readSheetRows(sourceFiles.safeLegal, "Res_01");
 const safeLegalCommunityRows = readSheetRows(sourceFiles.safeLegal, "Res_02");
 const safeLegalFamRows = readSheetRows(sourceFiles.safeLegal, "Fam_01");
 const safeLegalUkrRows = readSheetRows(sourceFiles.safeLegal, "Ukr_01");
+const asylumClaimsRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D01", 1);
+const asylumInitialDecisionRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D02", 1);
+const asylumAwaitingDecisionRows = rowObjects(sourceFiles.asylumAwaitingDecision, "Data_Asy_D03", 1);
+const asylumOutcomeAnalysisRows = rowObjects(sourceFiles.asylumOutcomeAnalysis, "Data_Asy_D04", 1);
+const asylumSupportRows = rowObjects(sourceFiles.asylumSupport, "Data_Asy_D09", 1);
 
 const observationRows = [];
 
@@ -814,6 +919,410 @@ const smallBoatDecisionGroupsLatestYear = [...smallBoatOutcomesByYear.entries()]
   }))
   .sort((a, b) => b.value - a.value);
 
+const asylumClaimsByQuarter = new Map();
+const asylumInitialDecisionsByQuarter = new Map();
+const asylumInitialGrantDecisionsByQuarter = new Map();
+const asylumInitialRefusalsByQuarter = new Map();
+const asylumInitialWithdrawalsByQuarter = new Map();
+const asylumInitialAdministrativeOutcomesByQuarter = new Map();
+
+for (const row of asylumClaimsRows) {
+  const quarter = String(row.Quarter || "").trim();
+  const claims = parseNumber(row.Claims);
+  if (!quarter || claims === null) {
+    continue;
+  }
+
+  asylumClaimsByQuarter.set(quarter, (asylumClaimsByQuarter.get(quarter) || 0) + claims);
+}
+
+for (const row of asylumInitialDecisionRows) {
+  const quarter = String(row.Quarter || "").trim();
+  const decisions = parseNumber(row.Decisions);
+  const outcomeGroup = String(row["Case outcome group"] || "").trim();
+  if (!quarter || decisions === null) {
+    continue;
+  }
+
+  asylumInitialDecisionsByQuarter.set(quarter, (asylumInitialDecisionsByQuarter.get(quarter) || 0) + decisions);
+
+  if (outcomeGroup === "Grant of Protection" || outcomeGroup === "Grant of Other Leave") {
+    asylumInitialGrantDecisionsByQuarter.set(
+      quarter,
+      (asylumInitialGrantDecisionsByQuarter.get(quarter) || 0) + decisions
+    );
+  }
+
+  if (outcomeGroup === "Refused") {
+    asylumInitialRefusalsByQuarter.set(quarter, (asylumInitialRefusalsByQuarter.get(quarter) || 0) + decisions);
+  }
+
+  if (outcomeGroup === "Withdrawn") {
+    asylumInitialWithdrawalsByQuarter.set(quarter, (asylumInitialWithdrawalsByQuarter.get(quarter) || 0) + decisions);
+  }
+
+  if (outcomeGroup === "Administrative Outcome") {
+    asylumInitialAdministrativeOutcomesByQuarter.set(
+      quarter,
+      (asylumInitialAdministrativeOutcomesByQuarter.get(quarter) || 0) + decisions
+    );
+  }
+}
+
+const asylumAwaitingDecisionByDate = new Map();
+
+for (const row of asylumAwaitingDecisionRows) {
+  const dateLabel = String(row["Date (as at...)"] || "").trim();
+  const stage = String(row["Application stage"] || "").trim();
+  const claims = parseNumber(row.Claims);
+  if (!dateLabel || claims === null || stage !== "Pending initial decision") {
+    continue;
+  }
+
+  asylumAwaitingDecisionByDate.set(dateLabel, (asylumAwaitingDecisionByDate.get(dateLabel) || 0) + claims);
+}
+
+const asylumSupportByDate = new Map();
+const asylumSupportAccommodationByDate = new Map();
+
+for (const row of asylumSupportRows) {
+  const dateLabel = String(row["Date (as at…)"] || row["Date (as at...)"] || "").trim();
+  const accommodationType = String(row["Accommodation Type"] || "").trim();
+  const people = parseNumber(row.People);
+  if (!dateLabel || people === null) {
+    continue;
+  }
+
+  asylumSupportByDate.set(dateLabel, (asylumSupportByDate.get(dateLabel) || 0) + people);
+
+  const key = `${dateLabel}|${accommodationType}`;
+  asylumSupportAccommodationByDate.set(key, (asylumSupportAccommodationByDate.get(key) || 0) + people);
+}
+
+const asylumOutcomeByClaimYear = new Map();
+
+for (const row of asylumOutcomeAnalysisRows) {
+  const claimYear = String(row["Year of Claim"] || "").trim();
+  const totalClaims = parseNumber(row.Claims);
+  if (!claimYear || totalClaims === null) {
+    continue;
+  }
+
+  const current = asylumOutcomeByClaimYear.get(claimYear) || {
+    claimYear,
+    totalClaims: 0,
+    initialDecisions: 0,
+    initialGrantProtection: 0,
+    initialGrantOtherLeave: 0,
+    initialRefusals: 0,
+    initialWithdrawals: 0,
+    initialAdministrative: 0,
+    initialNotYetKnown: 0,
+    latestGrantProtection: 0,
+    latestGrantOtherLeave: 0,
+    latestRefusals: 0,
+    latestWithdrawals: 0,
+    latestAdministrative: 0,
+    latestNotYetKnown: 0
+  };
+
+  current.totalClaims += totalClaims;
+  current.initialDecisions += safeNumber(row["Initial Decisions"]);
+  current.initialGrantProtection += safeNumber(row["Initial: Grants of Protection"]);
+  current.initialGrantOtherLeave += safeNumber(row["Initial: Grants of Other Leave"]);
+  current.initialRefusals += safeNumber(row["Initial: Refusals"]);
+  current.initialWithdrawals += safeNumber(row["Initial: Withdrawals"]);
+  current.initialAdministrative += safeNumber(row["Initial: Administrative Outcomes"]);
+  current.initialNotYetKnown += safeNumber(row["Initial: Not yet known"]);
+  current.latestGrantProtection += safeNumber(row["Latest: Grants of Protection"]);
+  current.latestGrantOtherLeave += safeNumber(row["Latest: Grants of Other Leave"]);
+  current.latestRefusals += safeNumber(row["Latest: Refusals"]);
+  current.latestWithdrawals += safeNumber(row["Latest: Withdrawals"]);
+  current.latestAdministrative += safeNumber(row["Latest: Administrative Outcomes"]);
+  current.latestNotYetKnown += safeNumber(row["Latest: Not yet known"]);
+
+  asylumOutcomeByClaimYear.set(claimYear, current);
+}
+
+const asylumClaimsQuarterlySeries = [...asylumClaimsByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumInitialDecisionsQuarterlySeries = [...asylumInitialDecisionsByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumInitialGrantQuarterlySeries = [...asylumInitialGrantDecisionsByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumInitialRefusalQuarterlySeries = [...asylumInitialRefusalsByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumInitialWithdrawalQuarterlySeries = [...asylumInitialWithdrawalsByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumInitialAdministrativeQuarterlySeries = [...asylumInitialAdministrativeOutcomesByQuarter.entries()]
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfQuarter(periodLabel),
+    periodEnd: endOfQuarter(periodLabel),
+    value
+  }));
+
+const asylumAwaitingDecisionQuarterlySeries = [...asylumAwaitingDecisionByDate.entries()]
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfDateLabel(periodLabel),
+    periodEnd: endOfDateLabel(periodLabel),
+    quarterLabel: quarterLabelForDateLabel(periodLabel),
+    value
+  }))
+  .sort((left, right) => left.periodEnd.localeCompare(right.periodEnd));
+
+const asylumSupportQuarterlySeries = [...asylumSupportByDate.entries()]
+  .map(([periodLabel, value]) => ({
+    periodLabel,
+    periodStart: startOfDateLabel(periodLabel),
+    periodEnd: endOfDateLabel(periodLabel),
+    quarterLabel: quarterLabelForDateLabel(periodLabel),
+    value
+  }))
+  .sort((left, right) => left.periodEnd.localeCompare(right.periodEnd));
+
+const supportAccommodationSeriesByType = new Map();
+
+for (const [key, value] of asylumSupportAccommodationByDate.entries()) {
+  const [periodLabel, accommodationType] = key.split("|");
+  const series = supportAccommodationSeriesByType.get(accommodationType) || [];
+  series.push({
+    periodLabel,
+    periodStart: startOfDateLabel(periodLabel),
+    periodEnd: endOfDateLabel(periodLabel),
+    quarterLabel: quarterLabelForDateLabel(periodLabel),
+    value
+  });
+  supportAccommodationSeriesByType.set(accommodationType, series);
+}
+
+for (const series of supportAccommodationSeriesByType.values()) {
+  series.sort((left, right) => left.periodEnd.localeCompare(right.periodEnd));
+}
+
+const asylumOutcomeCohorts = [...asylumOutcomeByClaimYear.values()]
+  .sort((left, right) => Number(left.claimYear) - Number(right.claimYear))
+  .map((row) => {
+    const initialGrantCount = row.initialGrantProtection + row.initialGrantOtherLeave;
+    const latestGrantCount = row.latestGrantProtection + row.latestGrantOtherLeave;
+    const initialSubstantiveOutcomes = initialGrantCount + row.initialRefusals;
+    const latestSubstantiveOutcomes = latestGrantCount + row.latestRefusals;
+    const latestOutcomeKnownCount =
+      latestGrantCount + row.latestRefusals + row.latestWithdrawals + row.latestAdministrative;
+
+    return {
+      claimYear: row.claimYear,
+      totalClaims: row.totalClaims,
+      initialDecisions: row.initialDecisions,
+      initialGrantCount,
+      initialRefusalCount: row.initialRefusals,
+      initialWithdrawalCount: row.initialWithdrawals,
+      initialAdministrativeCount: row.initialAdministrative,
+      latestGrantCount,
+      latestRefusalCount: row.latestRefusals,
+      latestWithdrawalCount: row.latestWithdrawals,
+      latestAdministrativeCount: row.latestAdministrative,
+      initialGrantRatePct: initialSubstantiveOutcomes
+        ? roundNumber((initialGrantCount / initialSubstantiveOutcomes) * 100, 1)
+        : null,
+      latestGrantRatePct: latestSubstantiveOutcomes
+        ? roundNumber((latestGrantCount / latestSubstantiveOutcomes) * 100, 1)
+        : null,
+      latestOutcomeKnownPct: row.totalClaims
+        ? roundNumber((latestOutcomeKnownCount / row.totalClaims) * 100, 1)
+        : null
+    };
+  });
+
+for (const point of asylumClaimsQuarterlySeries) {
+  observationRows.push(
+    makeObservation({
+      metricId: "asylum_claims_total",
+      sourceMetaEntry: sourceMeta.asylumClaims,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: point.periodStart,
+      periodEnd: point.periodEnd,
+      periodType: "quarter",
+      value: point.value,
+      notes: "Quarterly asylum claims lodged in the UK.",
+      fileHash: asylumClaimsHash
+    })
+  );
+}
+
+for (const { metricId, series } of [
+  { metricId: "asylum_initial_decisions_total", series: asylumInitialDecisionsQuarterlySeries },
+  { metricId: "asylum_initial_grants", series: asylumInitialGrantQuarterlySeries },
+  { metricId: "asylum_initial_refusals", series: asylumInitialRefusalQuarterlySeries },
+  { metricId: "asylum_initial_withdrawals", series: asylumInitialWithdrawalQuarterlySeries },
+  { metricId: "asylum_initial_administrative_outcomes", series: asylumInitialAdministrativeQuarterlySeries }
+]) {
+  for (const point of series) {
+    observationRows.push(
+      makeObservation({
+        metricId,
+        sourceMetaEntry: sourceMeta.asylumClaims,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: point.periodStart,
+        periodEnd: point.periodEnd,
+        periodType: "quarter",
+        value: point.value,
+        notes: "Quarterly initial-decision series derived from the asylum claims dataset.",
+        fileHash: asylumClaimsHash
+      })
+    );
+  }
+}
+
+for (const point of asylumAwaitingDecisionQuarterlySeries) {
+  observationRows.push(
+    makeObservation({
+      metricId: "asylum_claims_awaiting_initial_decision",
+      sourceMetaEntry: sourceMeta.asylumAwaitingDecision,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: point.periodStart,
+      periodEnd: point.periodEnd,
+      periodType: "quarter",
+      value: point.value,
+      notes: "Quarter-end stock of asylum claims pending an initial decision.",
+      fileHash: asylumAwaitingDecisionHash
+    })
+  );
+}
+
+for (const point of asylumSupportQuarterlySeries) {
+  observationRows.push(
+    makeObservation({
+      metricId: "asylum_support_total",
+      sourceMetaEntry: sourceMeta.asylumSupport,
+      areaCode: "UK",
+      areaName: "United Kingdom",
+      areaType: "country",
+      countryName: "United Kingdom",
+      periodStart: point.periodStart,
+      periodEnd: point.periodEnd,
+      periodType: "quarter",
+      value: point.value,
+      notes: "Quarter-end stock of asylum seekers in receipt of Home Office support.",
+      fileHash: asylumSupportHash
+    })
+  );
+}
+
+for (const [metricId, accommodationType] of [
+  ["asylum_support_hotel_accommodation", "Contingency Accommodation - Hotel"],
+  ["asylum_support_contingency_other", "Contingency Accommodation - Other"],
+  ["asylum_support_dispersal_accommodation", "Dispersal Accommodation"],
+  ["asylum_support_initial_accommodation", "Initial Accommodation"],
+  ["asylum_support_other_accommodation", "Other Accommodation"],
+  ["asylum_support_subsistence_only", "Subsistence Only"]
+]) {
+  for (const point of supportAccommodationSeriesByType.get(accommodationType) || []) {
+    observationRows.push(
+      makeObservation({
+        metricId,
+        sourceMetaEntry: sourceMeta.asylumSupport,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: point.periodStart,
+        periodEnd: point.periodEnd,
+        periodType: "quarter",
+        value: point.value,
+        notes: `${accommodationType} within the asylum support stock.`,
+        fileHash: asylumSupportHash
+      })
+    );
+  }
+}
+
+for (const cohort of asylumOutcomeCohorts) {
+  if (cohort.initialGrantRatePct !== null) {
+    observationRows.push(
+      makeObservation({
+        metricId: "asylum_initial_grant_rate_pct",
+        sourceMetaEntry: sourceMeta.asylumOutcomeAnalysis,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: startOfYear(cohort.claimYear),
+        periodEnd: endOfYear(cohort.claimYear),
+        periodType: "year",
+        value: cohort.initialGrantRatePct,
+        notes: "Estimated initial grant rate by claim-year cohort.",
+        fileHash: asylumOutcomeAnalysisHash
+      })
+    );
+  }
+
+  if (cohort.latestGrantRatePct !== null) {
+    observationRows.push(
+      makeObservation({
+        metricId: "asylum_latest_grant_rate_pct",
+        sourceMetaEntry: sourceMeta.asylumOutcomeAnalysis,
+        areaCode: "UK",
+        areaName: "United Kingdom",
+        areaType: "country",
+        countryName: "United Kingdom",
+        periodStart: startOfYear(cohort.claimYear),
+        periodEnd: endOfYear(cohort.claimYear),
+        periodType: "year",
+        value: cohort.latestGrantRatePct,
+        notes: "Estimated latest grant rate by claim-year cohort.",
+        fileHash: asylumOutcomeAnalysisHash
+      })
+    );
+  }
+}
+
 const humSeries = extractYearSeries(safeLegalHumRows, 8);
 const resSeries = extractYearSeries(safeLegalResRows, 5);
 const communitySeries = extractYearSeries(safeLegalCommunityRows, 5);
@@ -1104,6 +1613,232 @@ const nationalCards = [
   }
 ];
 
+const latestClaimsQuarter = asylumClaimsQuarterlySeries.at(-1) ?? null;
+const latestInitialDecisionQuarter = asylumInitialDecisionsQuarterlySeries.at(-1) ?? null;
+const latestAwaitingDecisionQuarter = asylumAwaitingDecisionQuarterlySeries.at(-1) ?? null;
+const latestSupportQuarter = asylumSupportQuarterlySeries.at(-1) ?? null;
+const latestQuarterSupportAccommodation = [
+  {
+    label: "Contingency hotel",
+    value:
+      supportAccommodationSeriesByType.get("Contingency Accommodation - Hotel")?.at(-1)?.value ?? 0,
+    metricId: "hotel"
+  },
+  {
+    label: "Contingency other",
+    value:
+      supportAccommodationSeriesByType.get("Contingency Accommodation - Other")?.at(-1)?.value ?? 0,
+    metricId: "contingency_other"
+  },
+  {
+    label: "Dispersal accommodation",
+    value: supportAccommodationSeriesByType.get("Dispersal Accommodation")?.at(-1)?.value ?? 0,
+    metricId: "dispersal"
+  },
+  {
+    label: "Initial accommodation",
+    value: supportAccommodationSeriesByType.get("Initial Accommodation")?.at(-1)?.value ?? 0,
+    metricId: "initial"
+  },
+  {
+    label: "Other accommodation",
+    value: supportAccommodationSeriesByType.get("Other Accommodation")?.at(-1)?.value ?? 0,
+    metricId: "other"
+  },
+  {
+    label: "Subsistence only",
+    value: supportAccommodationSeriesByType.get("Subsistence Only")?.at(-1)?.value ?? 0,
+    metricId: "subsistence_only"
+  }
+];
+
+const latestQuarterDecisionBreakdown = latestInitialDecisionQuarter
+  ? [
+      {
+        label: "Claims lodged",
+        value:
+          asylumClaimsQuarterlySeries.find((point) => point.periodLabel === latestInitialDecisionQuarter.periodLabel)
+            ?.value ?? 0,
+        metricId: "claims"
+      },
+      {
+        label: "Initial decisions",
+        value: latestInitialDecisionQuarter.value,
+        metricId: "initial_decisions"
+      },
+      {
+        label: "Grants at initial decision",
+        value:
+          asylumInitialGrantQuarterlySeries.find((point) => point.periodLabel === latestInitialDecisionQuarter.periodLabel)
+            ?.value ?? 0,
+        metricId: "initial_grants"
+      },
+      {
+        label: "Refusals",
+        value:
+          asylumInitialRefusalQuarterlySeries.find((point) => point.periodLabel === latestInitialDecisionQuarter.periodLabel)
+            ?.value ?? 0,
+        metricId: "initial_refusals"
+      },
+      {
+        label: "Withdrawals",
+        value:
+          asylumInitialWithdrawalQuarterlySeries.find(
+            (point) => point.periodLabel === latestInitialDecisionQuarter.periodLabel
+          )?.value ?? 0,
+        metricId: "initial_withdrawals"
+      },
+      {
+        label: "Administrative outcomes",
+        value:
+          asylumInitialAdministrativeQuarterlySeries.find(
+            (point) => point.periodLabel === latestInitialDecisionQuarter.periodLabel
+          )?.value ?? 0,
+        metricId: "initial_administrative"
+      }
+    ]
+  : [];
+
+const latestQuarterClaimsValue = latestQuarterDecisionBreakdown.find((item) => item.metricId === "claims")?.value ?? 0;
+const latestQuarterInitialDecisionsValue =
+  latestQuarterDecisionBreakdown.find((item) => item.metricId === "initial_decisions")?.value ?? 0;
+const latestQuarterGrantValue =
+  latestQuarterDecisionBreakdown.find((item) => item.metricId === "initial_grants")?.value ?? 0;
+const latestQuarterRefusalValue =
+  latestQuarterDecisionBreakdown.find((item) => item.metricId === "initial_refusals")?.value ?? 0;
+const latestQuarterWithdrawalValue =
+  latestQuarterDecisionBreakdown.find((item) => item.metricId === "initial_withdrawals")?.value ?? 0;
+const latestQuarterAdministrativeValue =
+  latestQuarterDecisionBreakdown.find((item) => item.metricId === "initial_administrative")?.value ?? 0;
+const latestQuarterHotelSupportValue =
+  latestQuarterSupportAccommodation.find((item) => item.metricId === "hotel")?.value ?? 0;
+const recentOutcomeCohorts = asylumOutcomeCohorts.slice(-4);
+
+const nationalSystemDynamics = {
+  stockFlowCards: [
+    {
+      id: "asylum_claims",
+      label: "Asylum claims",
+      value: latestClaimsQuarter?.value ?? 0,
+      period: latestClaimsQuarter?.periodLabel ?? "Latest quarter",
+      detail: "Quarterly inflow into the asylum system.",
+      sourceUrl: sourceMeta.asylumClaims.source_url
+    },
+    {
+      id: "asylum_initial_decisions",
+      label: "Initial decisions",
+      value: latestInitialDecisionQuarter?.value ?? 0,
+      period: latestInitialDecisionQuarter?.periodLabel ?? "Latest quarter",
+      detail: "Quarterly operational output. This is not the same thing as latest cohort outcomes.",
+      sourceUrl: sourceMeta.asylumClaims.source_url
+    },
+    {
+      id: "awaiting_initial_decision",
+      label: "Awaiting initial decision",
+      value: latestAwaitingDecisionQuarter?.value ?? 0,
+      period: latestAwaitingDecisionQuarter ? `As at ${latestAwaitingDecisionQuarter.periodLabel}` : "Latest quarter",
+      detail: "Quarter-end stock awaiting an initial decision.",
+      sourceUrl: sourceMeta.asylumAwaitingDecision.source_url
+    },
+    {
+      id: "supported_asylum_stock",
+      label: "Supported asylum stock",
+      value: latestSupportQuarter?.value ?? 0,
+      period: latestSupportQuarter ? `As at ${latestSupportQuarter.periodLabel}` : "Latest quarter",
+      detail: "Quarter-end stock of people receiving asylum support, which overlaps with but is not identical to the awaiting-decision backlog.",
+      sourceUrl: sourceMeta.asylumSupport.source_url
+    }
+  ],
+  flowSeries: {
+    claims: asylumClaimsQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({ periodLabel, periodEnd, value })),
+    initialDecisions: asylumInitialDecisionsQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    })),
+    initialGrants: asylumInitialGrantQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    })),
+    initialRefusals: asylumInitialRefusalQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    })),
+    initialWithdrawals: asylumInitialWithdrawalQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    }))
+  },
+  stockSeries: {
+    awaitingInitialDecision: asylumAwaitingDecisionQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    })),
+    supportedAsylum: asylumSupportQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({
+      periodLabel,
+      periodEnd,
+      value
+    })),
+    hotelAccommodation: (supportAccommodationSeriesByType.get("Contingency Accommodation - Hotel") || []).map(
+      ({ periodLabel, periodEnd, value }) => ({
+        periodLabel,
+        periodEnd,
+        value
+      })
+    )
+  },
+  latestQuarter: {
+    quarterLabel: latestInitialDecisionQuarter?.periodLabel ?? latestClaimsQuarter?.periodLabel ?? null,
+    stockPeriodLabel: latestSupportQuarter?.periodLabel ?? latestAwaitingDecisionQuarter?.periodLabel ?? null,
+    claims: latestQuarterClaimsValue,
+    initialDecisions: latestQuarterInitialDecisionsValue,
+    initialGrants: latestQuarterGrantValue,
+    initialRefusals: latestQuarterRefusalValue,
+    initialWithdrawals: latestQuarterWithdrawalValue,
+    initialAdministrativeOutcomes: latestQuarterAdministrativeValue,
+    awaitingInitialDecision: latestAwaitingDecisionQuarter?.value ?? 0,
+    supportedAsylum: latestSupportQuarter?.value ?? 0,
+    hotelAccommodation: latestQuarterHotelSupportValue,
+    hotelShareOfSupportPct:
+      latestSupportQuarter?.value
+        ? roundNumber((latestQuarterHotelSupportValue / latestSupportQuarter.value) * 100, 1)
+        : null,
+    decisionMinusClaims: latestQuarterInitialDecisionsValue - latestQuarterClaimsValue
+  },
+  latestQuarterDecisionBreakdown,
+  latestSupportBreakdown: latestQuarterSupportAccommodation,
+  outcomeCohorts: asylumOutcomeCohorts,
+  recentOutcomeCohorts,
+  outcomeRateSeries: {
+    initialGrantRate: asylumOutcomeCohorts
+      .filter((cohort) => cohort.initialGrantRatePct !== null)
+      .slice(-8)
+      .map((cohort) => ({
+        periodLabel: cohort.claimYear,
+        periodEnd: endOfYear(cohort.claimYear),
+        value: cohort.initialGrantRatePct
+      })),
+    latestGrantRate: asylumOutcomeCohorts
+      .filter((cohort) => cohort.latestGrantRatePct !== null)
+      .slice(-8)
+      .map((cohort) => ({
+        periodLabel: cohort.claimYear,
+        periodEnd: endOfYear(cohort.claimYear),
+        value: cohort.latestGrantRatePct
+      }))
+  },
+  readingNotes: [
+    "Quarterly claims and initial decisions are flows through the period. Awaiting decision and support are stock counts at the end of the quarter.",
+    "Support stock and awaiting-initial-decision stock overlap, but they are not identical groups. Support can include people at appeal or on other support routes.",
+    "Comparing claims and initial decisions in the same quarter shows operational balance, not the experience of one single claim cohort.",
+    "Latest outcomes are grouped by year of claim and can change after appeals or later case progression, so they should not be read as current-quarter decision output."
+  ]
+};
+
 const routeDashboard = {
   generatedAt: new Date().toISOString(),
   localSnapshotDate: "2025-12-31",
@@ -1125,19 +1860,26 @@ const routeDashboard = {
     year: latestSmallBoatOutcomeYear,
     rows: smallBoatDecisionGroupsLatestYear
   },
+  nationalSystemDynamics,
   topAreasByMetric,
   limitations: [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
     "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "Awaiting an initial decision and receiving asylum support overlap, but they are not identical published populations. Support is not a synonym for the backlog.",
     "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
     "A flat local supported-asylum line does not prove there was no movement. Published local tables cannot show how many different people passed through support in an area over the period.",
+    "Latest outcomes are grouped by year of claim and can change after appeals or later case progression. They are not the same measure as current-quarter initial decisions.",
     "Homes for Ukraine, refugee family reunion, and Afghan resettlement should be compared with clear labels because they are not the same kind of route or scheme."
   ],
   sources: [
     sourceMeta.localImmigration,
     sourceMeta.localResettlement,
     sourceMeta.illegalEntry,
-    sourceMeta.safeLegal
+    sourceMeta.safeLegal,
+    sourceMeta.asylumClaims,
+    sourceMeta.asylumAwaitingDecision,
+    sourceMeta.asylumOutcomeAnalysis,
+    sourceMeta.asylumSupport
   ]
 };
 
@@ -1152,7 +1894,8 @@ const localRouteLatest = {
       id: "supportedAsylum",
       label: "Supported asylum population",
       unit: "people",
-      description: "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period."
+      description:
+        "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period, and it is not identical to the awaiting-decision backlog."
     },
     {
       id: "homesForUkraineArrivals",

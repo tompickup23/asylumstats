@@ -26,6 +26,30 @@ const sourceFiles = [
       "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx"
   },
   {
+    fileName: "asylum-claims-datasets-dec-2025.xlsx",
+    sourceId: "asylum_claims",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx"
+  },
+  {
+    fileName: "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+    sourceId: "asylum_awaiting_decision",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx"
+  },
+  {
+    fileName: "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+    sourceId: "asylum_outcome_analysis",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"
+  },
+  {
+    fileName: "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+    sourceId: "asylum_support",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx"
+  },
+  {
     fileName: "safe-legal-routes-summary-tables-dec-2025.ods",
     sourceId: "safe_legal_routes_summary",
     sourceUrl:

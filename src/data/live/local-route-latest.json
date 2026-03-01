@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-01T00:41:10.745Z",
+  "generatedAt": "2026-03-01T01:17:05.887Z",
   "snapshotDate": "2025-12-31",
   "defaultCompareCodes": [
     "S12000049",
@@ -11964,7 +11964,7 @@
       "id": "supportedAsylum",
       "label": "Supported asylum population",
       "unit": "people",
-      "description": "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period."
+      "description": "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period, and it is not identical to the awaiting-decision backlog."
     },
     {
       "id": "homesForUkraineArrivals",

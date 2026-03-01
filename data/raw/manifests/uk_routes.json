@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-28T16:47:16.425Z",
+  "generatedAt": "2026-03-01T01:16:34.629Z",
   "datasetId": "uk_routes",
-  "fetchedFileCount": 4,
+  "fetchedFileCount": 8,
   "files": [
     {
       "sourceId": "local_immigration_groups",
@@ -23,6 +23,34 @@
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
       "sizeBytes": 2427668,
       "fileSha256": "f59e2865d4e7be3449ffdefb23e98710beb40b76509066a38623b2e6c34bda29"
+    },
+    {
+      "sourceId": "asylum_claims",
+      "fileName": "asylum-claims-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx",
+      "sizeBytes": 11316776,
+      "fileSha256": "19c5522167bf78a215c1459482d6497ead3cacee1ccd6505e2d2e698c8476637"
+    },
+    {
+      "sourceId": "asylum_awaiting_decision",
+      "fileName": "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+      "sizeBytes": 3934947,
+      "fileSha256": "9b95d47625995825c23aec6616a493923f85d2ba8c3b82a215d0f1952768bf73"
+    },
+    {
+      "sourceId": "asylum_outcome_analysis",
+      "fileName": "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+      "sizeBytes": 349243,
+      "fileSha256": "4c442ad882ef9d6fdab44eb7ff236a099c3ab7d474452378154dbbc5def2b997"
+    },
+    {
+      "sourceId": "asylum_support",
+      "fileName": "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+      "sizeBytes": 3795022,
+      "fileSha256": "939832dbc9416dd732407e117486ddbbe2b3065f7622cc9862cf1008b9d1093f"
     },
     {
       "sourceId": "safe_legal_routes_summary",

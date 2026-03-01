@@ -6,10 +6,11 @@ import {
 
 describe("asylum support logic helpers", () => {
   it("keeps stock-vs-flow interpretation explicit", () => {
-    expect(supportedAsylumReadingRules).toHaveLength(3);
+    expect(supportedAsylumReadingRules).toHaveLength(4);
     expect(supportedAsylumReadingRules[0]?.body.toLowerCase()).toContain("end of the period");
-    expect(supportedAsylumReadingRules[1]?.body.toLowerCase()).toContain("grants");
-    expect(supportedAsylumReadingRules[2]?.body.toLowerCase()).toContain("different people");
+    expect(supportedAsylumReadingRules[1]?.body.toLowerCase()).toContain("not identical");
+    expect(supportedAsylumReadingRules[2]?.body.toLowerCase()).toContain("grants");
+    expect(supportedAsylumReadingRules[3]?.body.toLowerCase()).toContain("different people");
   });
 
   it("describes supported asylum trends as stock rather than throughput", () => {

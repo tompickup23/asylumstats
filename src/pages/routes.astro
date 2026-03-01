@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
 import {
+  asylumSystemReadingRules,
   buildSupportedAsylumStockDescription,
   supportedAsylumReadingRules
 } from "../lib/asylum-support-logic";
@@ -21,6 +22,15 @@ const illegalMethods = [...routeDashboard.illegalEntryMethodsLatestYear].sort((a
 const decisionGroups = [...routeDashboard.smallBoatDecisionGroupsLatestYear.rows].sort((a, b) => b.value - a.value);
 const maxMethodValue = Math.max(...illegalMethods.map((row) => row.value), 1);
 const maxOutcomeValue = Math.max(...decisionGroups.map((row) => row.value), 1);
+const stockFlowReadingRules = [...supportedAsylumReadingRules, ...asylumSystemReadingRules];
+const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
+const stockFlowCards = nationalSystemDynamics.stockFlowCards;
+const latestQuarter = nationalSystemDynamics.latestQuarter;
+const latestQuarterDecisionBreakdown = nationalSystemDynamics.latestQuarterDecisionBreakdown;
+const latestSupportBreakdown = nationalSystemDynamics.latestSupportBreakdown;
+const recentOutcomeCohorts = nationalSystemDynamics.recentOutcomeCohorts;
+const maxLatestDecisionBreakdownValue = Math.max(...latestQuarterDecisionBreakdown.map((row) => row.value), 1);
+const maxLatestSupportBreakdownValue = Math.max(...latestSupportBreakdown.map((row) => row.value), 1);
 const leadPressureMetric =
   routeDashboard.topAreasByMetric.find((metric) => metric.metricId === "supportedAsylum") ??
   routeDashboard.topAreasByMetric[0];
@@ -45,7 +55,7 @@ function formatCardValue(value: number, suffix?: string): string {
       <p>
         This page now runs on official December 2025 route tables and the latest local-authority immigration-group
         snapshot. The product rule is simple: stop mixing incompatible routes and schemes into one misleading number,
-        and treat supported asylum as a stock snapshot rather than a throughput count.
+        and treat supported asylum as a stock snapshot rather than a throughput count or a synonym for the backlog.
       </p>
     </section>
 
@@ -87,19 +97,201 @@ function formatCardValue(value: number, suffix?: string): string {
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>How to read supported asylum numbers</h2>
+        <h2>How to read asylum stock, flow, and churn</h2>
         <p class="lede">
-          This site treats supported asylum as an end-of-period stock. That matters because steady local counts can
-          still hide heavy turnover when new people enter support as others leave it.
+          This site keeps claims, initial decisions, awaiting-decision stock, and supported asylum stock in separate
+          lanes. That matters because steady local counts can still hide heavy turnover when new people enter support
+          as others leave it.
         </p>
       </div>
       <span class="chip accent">Core logic</span>
     </div>
     <div class="story-grid">
-      {supportedAsylumReadingRules.map((rule) => (
+      {stockFlowReadingRules.map((rule) => (
         <article class="story-card">
           <h3>{rule.title}</h3>
           <p class="lede">{rule.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>National stock vs flow</h2>
+        <p class="lede">
+          Claims and initial decisions are quarterly flows. Awaiting an initial decision and receiving asylum support
+          are quarter-end stock counts. They interact, but they are not the same measure.
+        </p>
+      </div>
+      <span class="chip accent">{latestQuarter.quarterLabel ?? "Latest quarter"}</span>
+    </div>
+    <div class="stat-strip">
+      {stockFlowCards.map((item) => (
+        <article class="stat-tile">
+          <span class="tiny">{item.label}</span>
+          <strong>{formatCardValue(item.value, item.valueSuffix)}</strong>
+          <p class="tiny">{item.period}</p>
+        </article>
+      ))}
+    </div>
+    <div class="story-grid" style="margin-top: 1rem;">
+      {nationalSystemDynamics.readingNotes.map((note) => (
+        <article class="story-card">
+          <p class="lede">{note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Claims, decisions, backlog, and support move on different tracks</h2>
+        <p class="lede">
+          These recent series show why a fall in the backlog, a rise in decisions, and a flat support line should not
+          be collapsed into one story.
+        </p>
+      </div>
+    </div>
+    <div class="viz-grid">
+      <TrendChart
+        points={nationalSystemDynamics.flowSeries.claims.map((point) => ({ label: point.periodLabel, value: point.value }))}
+        title="Asylum claims"
+        description="Quarterly inflow into the asylum system."
+        tone="accent"
+      />
+      <TrendChart
+        points={nationalSystemDynamics.flowSeries.initialDecisions.map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Initial decisions"
+        description="Quarterly operational output. This is not the same thing as latest cohort outcomes."
+        tone="warm"
+      />
+      <TrendChart
+        points={nationalSystemDynamics.stockSeries.awaitingInitialDecision.map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Awaiting initial decision"
+        description="Quarter-end stock of people waiting for an initial decision."
+        tone="teal"
+      />
+      <TrendChart
+        points={nationalSystemDynamics.stockSeries.supportedAsylum.map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Supported asylum stock"
+        description={buildSupportedAsylumStockDescription(latestQuarter.stockPeriodLabel ?? routeDashboard.localSnapshotDate)}
+        tone="accent"
+      />
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>Latest quarter decision mix</h2>
+      <p class="lede">
+        In {latestQuarter.quarterLabel ?? "the latest quarter"}, initial decisions {latestQuarter.decisionMinusClaims >= 0 ? "exceeded" : "trailed"} claims by{" "}
+        {Math.abs(latestQuarter.decisionMinusClaims).toLocaleString()}. That operational balance does not track a
+        single cohort one-for-one.
+      </p>
+      {latestQuarterDecisionBreakdown.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 12rem;">
+            <strong>{row.label}</strong>
+            <div class="tiny">{row.value.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value / maxLatestDecisionBreakdownValue) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>Latest support stock mix</h2>
+      <p class="lede">
+        As at {latestQuarter.stockPeriodLabel ?? routeDashboard.localSnapshotDate}, hotel accommodation accounted for{" "}
+        {latestQuarter.hotelShareOfSupportPct ?? 0}% of the published support stock.
+      </p>
+      {latestSupportBreakdown.map((row) => (
+        <div class="metric-bar">
+          <div style="min-width: 12rem;">
+            <strong>{row.label}</strong>
+            <div class="tiny">{row.value.toLocaleString()}</div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(row.value / maxLatestSupportBreakdownValue) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Claim cohorts resolve over time</h2>
+        <p class="lede">
+          Initial decisions are the operational read. Latest outcomes by claim year show what changed later after
+          appeals or subsequent case progression.
+        </p>
+      </div>
+      <span class="chip accent">Claim-year cohorts</span>
+    </div>
+    <div class="viz-grid">
+      <TrendChart
+        points={nationalSystemDynamics.outcomeRateSeries.initialGrantRate.map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Initial grant rate"
+        description="Estimated grant rate at initial decision for the most recent claim-year cohorts."
+        tone="warm"
+        valueSuffix="%"
+      />
+      <TrendChart
+        points={nationalSystemDynamics.outcomeRateSeries.latestGrantRate.map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Latest grant rate"
+        description="Estimated latest grant rate for the same claim-year cohorts after later case progression."
+        tone="teal"
+        valueSuffix="%"
+      />
+    </div>
+    <div class="feature-grid" style="margin-top: 1rem;">
+      {recentOutcomeCohorts.map((cohort) => (
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">Claim year {cohort.claimYear}</span>
+            <span class="chip">{cohort.latestOutcomeKnownPct ?? 0}% latest outcomes known</span>
+          </div>
+          <h3>{cohort.totalClaims.toLocaleString()} claims in the {cohort.claimYear} cohort</h3>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Initial grant rate</span>
+              <span class="data-row-value">{cohort.initialGrantRatePct ?? "n/a"}%</span>
+            </div>
+            <div class="data-row">
+              <span>Latest grant rate</span>
+              <span class="data-row-value">{cohort.latestGrantRatePct ?? "n/a"}%</span>
+            </div>
+            <div class="data-row">
+              <span>Latest outcome coverage</span>
+              <span class="data-row-value">{cohort.latestOutcomeKnownPct ?? "n/a"}%</span>
+            </div>
+            <div class="data-row">
+              <span>Initial withdrawals</span>
+              <span class="data-row-value">{cohort.initialWithdrawalCount.toLocaleString()}</span>
+            </div>
+          </div>
         </article>
       ))}
     </div>
