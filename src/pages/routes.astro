@@ -2,6 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
+import {
+  buildSupportedAsylumStockDescription,
+  supportedAsylumReadingRules
+} from "../lib/asylum-support-logic";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { getRegionPressureSummaries, getSeriesDelta } from "../lib/route-analytics";
 
@@ -40,7 +44,8 @@ function formatCardValue(value: number, suffix?: string): string {
       <h1>Boat arrivals, asylum support, refugee schemes, family reunion, and Ukraine routes have to stay split.</h1>
       <p>
         This page now runs on official December 2025 route tables and the latest local-authority immigration-group
-        snapshot. The product rule is simple: stop mixing incompatible routes and schemes into one misleading number.
+        snapshot. The product rule is simple: stop mixing incompatible routes and schemes into one misleading number,
+        and treat supported asylum as a stock snapshot rather than a throughput count.
       </p>
     </section>
 
@@ -77,6 +82,27 @@ function formatCardValue(value: number, suffix?: string): string {
         </article>
       )}
     </aside>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>How to read supported asylum numbers</h2>
+        <p class="lede">
+          This site treats supported asylum as an end-of-period stock. That matters because steady local counts can
+          still hide heavy turnover when new people enter support as others leave it.
+        </p>
+      </div>
+      <span class="chip accent">Core logic</span>
+    </div>
+    <div class="story-grid">
+      {supportedAsylumReadingRules.map((rule) => (
+        <article class="story-card">
+          <h3>{rule.title}</h3>
+          <p class="lede">{rule.body}</p>
+        </article>
+      ))}
+    </div>
   </section>
 
   <section class="section">
@@ -136,7 +162,9 @@ function formatCardValue(value: number, suffix?: string): string {
             points={route.series.map((point) => ({ label: point.periodLabel, value: point.value }))}
             title={route.label}
             description={
-              route.series.length > 1
+              route.id === "asylum_support"
+                ? buildSupportedAsylumStockDescription(route.latestPeriod)
+                : route.series.length > 1
                 ? `${route.firstPeriod ?? route.series[0].periodLabel} to ${route.latestPeriod}. Last annual move: ${delta >= 0 ? "+" : ""}${delta.toLocaleString()}.`
                 : `Latest observed value in ${route.latestPeriod}.`
             }

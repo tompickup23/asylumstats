@@ -5,6 +5,10 @@ import BenchmarkStrip from "../components/BenchmarkStrip.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
+import {
+  buildSupportedAsylumStockDescription,
+  supportedAsylumReadingRules
+} from "../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../lib/area-series";
 import { loadLocalRouteLatest } from "../lib/route-data";
 import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../lib/route-analytics";
@@ -140,14 +144,14 @@ const trendIllustrativePlaces = compareTrendProfiles.filter((profile) => profile
 const compareTrendCards = [
   latestTrendLeader
     ? {
-        title: "Latest quarterly move is not evenly distributed",
-        body: `${latestTrendLeader.place.areaName} shows the sharpest latest step in the current compare set, moving ${latestTrendLeader.trend.deltaFromPrevious! >= 0 ? "+" : ""}${latestTrendLeader.trend.deltaFromPrevious!.toLocaleString()} since ${latestTrendLeader.previousLabel ?? "the previous point"}.`
+        title: "Latest net stock move is not evenly distributed",
+        body: `${latestTrendLeader.place.areaName} shows the sharpest latest step in the current compare set, with quarter-end supported asylum stock moving ${latestTrendLeader.trend.deltaFromPrevious! >= 0 ? "+" : ""}${latestTrendLeader.trend.deltaFromPrevious!.toLocaleString()} since ${latestTrendLeader.previousLabel ?? "the previous point"}.`
       }
     : null,
   longRunTrendLeader
     ? {
-        title: "Long-run visible growth still clusters in specific authorities",
-        body: `${longRunTrendLeader.place.areaName} shows the largest gain across the visible compare-series window, up ${longRunTrendLeader.trend.deltaFromFirst >= 0 ? "+" : ""}${longRunTrendLeader.trend.deltaFromFirst.toLocaleString()} from the first visible point to ${longRunTrendLeader.trend.latestPeriodLabel}.`
+        title: "Long-run stock growth still clusters in specific authorities",
+        body: `${longRunTrendLeader.place.areaName} shows the largest gain across the visible compare-series window, with quarter-end stock up ${longRunTrendLeader.trend.deltaFromFirst >= 0 ? "+" : ""}${longRunTrendLeader.trend.deltaFromFirst.toLocaleString()} from the first visible point to ${longRunTrendLeader.trend.latestPeriodLabel}.`
       }
     : null,
   compareTrendProfiles.length > 0
@@ -271,6 +275,7 @@ const comparePresetViews = [
   }
 ];
 const compareSections = [
+  { id: "supported-asylum-logic", label: "How to read" },
   { id: "default-compare-set", label: "Default set" },
   { id: "pathway-profiles", label: "Pathway mix" },
   { id: "regional-pressure-field", label: "Region field" },
@@ -293,7 +298,8 @@ const compareSections = [
       <p>
         This view uses the official local-authority snapshot as at 31 December 2025, plus cumulative resettlement
         history from the local authority resettlement dataset. The compare page now starts with composition and
-        benchmarks so the table lands after the story is already visible.
+        benchmarks so the table lands after the story is already visible, while keeping supported asylum explicitly in
+        the language of stock rather than throughput.
       </p>
     </section>
 
@@ -342,6 +348,27 @@ const compareSections = [
 
   <PageContents sections={compareSections} />
 
+  <section id="supported-asylum-logic" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>How to read supported asylum in compare mode</h2>
+        <p class="lede">
+          A place staying near the same level can still have very different underlying churn. The compare field shows
+          quarter-end support stock, not how many different people passed through the system.
+        </p>
+      </div>
+      <span class="chip accent">Stock logic</span>
+    </div>
+    <div class="story-grid">
+      {supportedAsylumReadingRules.map((rule) => (
+        <article class="story-card">
+          <h3>{rule.title}</h3>
+          <p class="lede">{rule.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <section id="default-compare-set" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -362,7 +389,7 @@ const compareSections = [
           </div>
           <h3>{place.areaName}</h3>
           <p class="metric-value">{place.supportedAsylum.toLocaleString()}</p>
-          <p class="lede">Supported asylum population as at {localRouteLatest.snapshotDate}.</p>
+          <p class="lede">Quarter-end supported asylum stock as at {localRouteLatest.snapshotDate}.</p>
           <div class="data-list">
             <div class="data-row">
               <span>Supported asylum rate</span>
@@ -533,7 +560,8 @@ const compareSections = [
           <h2>Trend field across the compare set</h2>
           <p class="lede">
             The default compare places now carry visible recent movement as well as current levels, so the comparison
-            can show where pressure is rising, flattening, or easing instead of only where it currently sits.
+            can show where quarter-end support stock is rising, flattening, or easing instead of only where it
+            currently sits.
           </p>
         </div>
         <span class="chip">{compareTrendProfiles.length} places with series coverage</span>
@@ -542,8 +570,11 @@ const compareSections = [
         {compareTrendProfiles.map((profile) => (
           <TrendChart
             points={profile.trend.points.map((point) => ({ label: point.label, value: point.value }))}
-            title={`Recent supported asylum path in ${profile.place.areaName}`}
-            description={`${profile.place.regionName}. Latest point ${profile.trend.latestPeriodLabel}. ${profile.trend.hasIllustrativeData ? "Illustrative bridge points remain between official anchors." : "Visible points are all official quarter-end values."}`}
+            title={`Quarter-end supported asylum stock in ${profile.place.areaName}`}
+            description={buildSupportedAsylumStockDescription(
+              profile.trend.latestPeriodLabel,
+              profile.trend.hasIllustrativeData
+            )}
             tone={profile.tone}
           />
         ))}
@@ -559,7 +590,7 @@ const compareSections = [
             <h3>Recent movement and evidence quality</h3>
             <p class="lede">
               {profile.trend.deltaFromPrevious !== null
-                ? `${profile.trend.deltaFromPrevious >= 0 ? "+" : ""}${profile.trend.deltaFromPrevious.toLocaleString()} since ${profile.previousLabel ?? "the previous point"}`
+                ? `${profile.trend.deltaFromPrevious >= 0 ? "+" : ""}${profile.trend.deltaFromPrevious.toLocaleString()} net change in quarter-end stock since ${profile.previousLabel ?? "the previous point"}`
                 : "Only one visible trend point is currently available."}
             </p>
             <div class="data-list">

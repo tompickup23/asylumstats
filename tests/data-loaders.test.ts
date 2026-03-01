@@ -40,6 +40,16 @@ describe("route-data loader", () => {
     expect(asylumGroup).toBeDefined();
     expect(asylumGroup!.rows.length).toBeGreaterThan(0);
   });
+
+  it("keeps supported asylum described as stock rather than throughput", () => {
+    const supportedAsylumRoute = dashboard.routeFamilies.find((route) => route.id === "asylum_support");
+    const supportedAsylumMetric = local.routeMetricFamilies.find((metric) => metric.id === "supportedAsylum");
+
+    expect(supportedAsylumRoute?.note.toLowerCase()).toContain("stock");
+    expect(supportedAsylumRoute?.note.toLowerCase()).toContain("distinct people");
+    expect(supportedAsylumMetric?.description.toLowerCase()).toContain("quarter-end stock");
+    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("flat local"))).toBe(true);
+  });
 });
 
 describe("hotel-data loader", () => {

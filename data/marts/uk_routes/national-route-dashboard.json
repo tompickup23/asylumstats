@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-28T16:48:43.753Z",
+  "generatedAt": "2026-03-01T00:41:10.745Z",
   "localSnapshotDate": "2025-12-31",
   "routeFamilies": [
     {
@@ -157,7 +157,7 @@
       "schemeStatus": "Not a refugee scheme",
       "localBreakdown": "Latest local authority snapshot available",
       "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
-      "note": "Published as a local authority snapshot rather than a long national time series in this build.",
+      "note": "Quarter-end stock of people receiving asylum support. Changes reflect net movement onto and off support, not the number of distinct people who passed through the system.",
       "series": [
         {
           "periodLabel": "2025-12-31",
@@ -493,7 +493,7 @@
       "label": "Supported asylum population",
       "value": 107003,
       "period": "As at 2025-12-31",
-      "detail": "Latest official UK stock snapshot from the immigration groups table.",
+      "detail": "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
       "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
     },
     {
@@ -985,6 +985,8 @@
   "limitations": [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
     "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
+    "A flat local supported-asylum line does not prove there was no movement. Published local tables cannot show how many different people passed through support in an area over the period.",
     "Homes for Ukraine, refugee family reunion, and Afghan resettlement should be compared with clear labels because they are not the same kind of route or scheme."
   ],
   "sources": [

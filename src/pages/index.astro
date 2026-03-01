@@ -386,7 +386,10 @@ function formatUtcDateTime(iso: string | undefined): string {
   <section class="split section">
     <div class="panel" style="padding: 1.25rem;">
       <h2>Where pressure is concentrated</h2>
-      <p class="lede">Latest official local-authority asylum-support snapshot as at 31 December 2025.</p>
+      <p class="lede">
+        Latest official local-authority asylum-support snapshot as at 31 December 2025. These are end-of-period stock
+        counts, not the number of different people who moved through the system over the year.
+      </p>
       {topPlaces.map((place) => (
         <div class="metric-bar">
           <div style="min-width: 10rem;">
@@ -437,7 +440,7 @@ function formatUtcDateTime(iso: string | undefined): string {
             <a href={`/places/${area.areaCode}`}>{area.areaName}</a>
           </h3>
           <p class="lede">
-            {area.supportedAsylum.toLocaleString()} people on asylum support as at {localRouteLatest.snapshotDate}.
+            {area.supportedAsylum.toLocaleString()} people on asylum support at quarter end as at {localRouteLatest.snapshotDate}.
           </p>
           <p class="tiny">
             Rate per 10,000: {area.supportedAsylumRate ?? "n/a"} | Contingency: {area.contingencyAccommodation.toLocaleString()}

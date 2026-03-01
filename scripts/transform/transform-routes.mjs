@@ -863,7 +863,7 @@ const routeSeries = [
     schemeStatus: "Not a refugee scheme",
     localBreakdown: "Latest local authority snapshot available",
     sourceUrl: sourceMeta.localImmigration.source_url,
-    note: "Published as a local authority snapshot rather than a long national time series in this build.",
+    note: "Quarter-end stock of people receiving asylum support. Changes reflect net movement onto and off support, not the number of distinct people who passed through the system.",
     series: regionalRows
       .filter((row) => row.areaCode === "UK")
       .map((row) => ({
@@ -1059,7 +1059,7 @@ const nationalCards = [
     label: "Supported asylum population",
     value: regionalRows.find((row) => row.areaCode === "UK")?.supportedAsylum ?? 0,
     period: "As at 2025-12-31",
-    detail: "Latest official UK stock snapshot from the immigration groups table.",
+    detail: "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
     sourceUrl: sourceMeta.localImmigration.source_url
   },
   {
@@ -1129,6 +1129,8 @@ const routeDashboard = {
   limitations: [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
     "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
+    "A flat local supported-asylum line does not prove there was no movement. Published local tables cannot show how many different people passed through support in an area over the period.",
     "Homes for Ukraine, refugee family reunion, and Afghan resettlement should be compared with clear labels because they are not the same kind of route or scheme."
   ],
   sources: [
@@ -1150,7 +1152,7 @@ const localRouteLatest = {
       id: "supportedAsylum",
       label: "Supported asylum population",
       unit: "people",
-      description: "Latest official local authority stock of asylum seekers receiving support."
+      description: "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period."
     },
     {
       id: "homesForUkraineArrivals",
@@ -1168,7 +1170,7 @@ const localRouteLatest = {
       id: "contingencyAccommodation",
       label: "Contingency accommodation population",
       unit: "people",
-      description: "Latest published local authority contingency-accommodation stock."
+      description: "Latest published quarter-end contingency-accommodation stock, recorded within the wider asylum-support snapshot."
     },
     {
       id: "resettlementCumulativeTotal",

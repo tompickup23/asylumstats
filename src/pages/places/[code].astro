@@ -4,6 +4,10 @@ import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import RegionTileMap from "../../components/RegionTileMap.astro";
 import TrendChart from "../../components/TrendChart.astro";
+import {
+  buildSupportedAsylumStockDescription,
+  supportedAsylumReadingRules
+} from "../../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../../lib/area-series";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
@@ -163,6 +167,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
   unnamedSiteCount
 });
 const placeSections = [
+  { id: "stock-logic", label: "How to read" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "place-drilldown", label: "Drill-down" },
   { id: "local-benchmarks", label: "Benchmarks" },
@@ -185,7 +190,8 @@ const placeSections = [
       <h1>{area.areaName}</h1>
       <p>
         Official local-authority snapshot as at {localRouteLatest.snapshotDate}. This page keeps live route data and
-        local hotel evidence on one place-level surface so pressure can be read in context.
+        local hotel evidence on one place-level surface so pressure can be read in context. Supported asylum here means
+        people on support at that quarter end, not the number of different people whose claims were processed locally.
       </p>
       <div class="chip-row">
         <span class="chip">{area.countryName}</span>
@@ -232,12 +238,36 @@ const placeSections = [
 
   <PageContents sections={placeSections} />
 
+  <section id="stock-logic" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>How to read the asylum numbers here</h2>
+        <p class="lede">
+          A flat or slowly moving local line does not prove the same people stayed on support, and it does not prove
+          claims were not being processed. It only shows the quarter-end stock that remained on support.
+        </p>
+      </div>
+      <span class="chip accent">Core logic</span>
+    </div>
+    <div class="story-grid">
+      {supportedAsylumReadingRules.map((rule) => (
+        <article class="story-card">
+          <h3>{rule.title}</h3>
+          <p class="lede">{rule.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
   {areaTrend && (
     <section id="recent-trend" class="split section section-anchor">
       <TrendChart
         points={areaTrend.points.map((point) => ({ label: point.label, value: point.value }))}
-        title={`Recent supported asylum path in ${area.areaName}`}
-        description={`Quarter-end place series to ${areaTrend.latestPeriodLabel}. ${areaTrend.hasIllustrativeData ? "Illustrative bridge points remain in the visible series." : "All visible points are official quarter-end values."}`}
+        title={`Quarter-end supported asylum stock in ${area.areaName}`}
+        description={buildSupportedAsylumStockDescription(
+          areaTrend.latestPeriodLabel,
+          areaTrend.hasIllustrativeData
+        )}
         tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
       />
 
@@ -249,7 +279,7 @@ const placeSections = [
         <h2>Recent path and evidence quality</h2>
         <div class="signal-list">
           <article class={`signal-card${(areaTrend.deltaFromPrevious ?? 0) > 0 ? " accent" : ""}`}>
-            <span class="tiny">Latest move</span>
+            <span class="tiny">Latest net stock move</span>
             <h3>
               {areaTrend.deltaFromPrevious !== null
                 ? `${areaTrend.deltaFromPrevious >= 0 ? "+" : ""}${areaTrend.deltaFromPrevious.toLocaleString()} since ${previousTrendPoint?.label ?? "the previous point"}`
@@ -257,19 +287,19 @@ const placeSections = [
             </h3>
             <p class="tiny">
               {areaTrend.changePctFromPrevious !== null
-                ? `${areaTrend.changePctFromPrevious >= 0 ? "+" : ""}${areaTrend.changePctFromPrevious}% by the latest quarter-on-quarter step.`
+                ? `${areaTrend.changePctFromPrevious >= 0 ? "+" : ""}${areaTrend.changePctFromPrevious}% net change in quarter-end stock by the latest step.`
                 : "Quarter-on-quarter change cannot be calculated from a single point."}
             </p>
           </article>
           <article class="signal-card">
-            <span class="tiny">Series span</span>
+            <span class="tiny">Net change across visible series</span>
             <h3>
               {areaTrend.deltaFromFirst >= 0 ? "+" : ""}
               {areaTrend.deltaFromFirst.toLocaleString()} across the visible series
             </h3>
             <p class="tiny">
               {areaTrend.changePctFromFirst !== null
-                ? `${areaTrend.changePctFromFirst >= 0 ? "+" : ""}${areaTrend.changePctFromFirst}% from the first visible point to ${areaTrend.latestPeriodLabel}.`
+                ? `${areaTrend.changePctFromFirst >= 0 ? "+" : ""}${areaTrend.changePctFromFirst}% change in quarter-end stock from the first visible point to ${areaTrend.latestPeriodLabel}.`
                 : "Percentage change from the first visible point cannot be calculated."}
             </p>
           </article>
@@ -410,7 +440,7 @@ const placeSections = [
           <span class="tiny">Pressure profile</span>
           <h3>{area.areaName} is carrying a real asylum-support load</h3>
           <p class="tiny">
-            {area.supportedAsylum.toLocaleString()} people are on asylum support here, with a rate of{" "}
+            {area.supportedAsylum.toLocaleString()} people are on asylum support here at quarter end, with a rate of{" "}
             {area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
             {area.contingencyAccommodation > 0
               ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation.`

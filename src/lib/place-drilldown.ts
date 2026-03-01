@@ -116,7 +116,7 @@ export function getPlaceDrilldownMetrics(
     {
       id: "supported_asylum",
       label: "Supported asylum",
-      description: "Headline asylum-support volume for this local authority.",
+      description: "Quarter-end asylum-support stock for this local authority, not the number of distinct people who passed through support.",
       getValue: (area) => area.supportedAsylum,
       formatValue: toPeople
     },
@@ -130,7 +130,7 @@ export function getPlaceDrilldownMetrics(
     {
       id: "contingency_accommodation",
       label: "Contingency accommodation",
-      description: "Hotel and contingency placements recorded in the latest local-authority snapshot.",
+      description: "Hotel and contingency placements recorded in the latest quarter-end local-authority snapshot.",
       getValue: (area) => area.contingencyAccommodation,
       formatValue: toPeople
     },
@@ -173,4 +173,3 @@ export function getPlaceDrilldownMetrics(
     };
   });
 }
-

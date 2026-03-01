@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-28T16:48:43.753Z",
+  "generatedAt": "2026-03-01T00:41:10.745Z",
   "snapshotDate": "2025-12-31",
   "defaultCompareCodes": [
     "S12000049",
@@ -11964,7 +11964,7 @@
       "id": "supportedAsylum",
       "label": "Supported asylum population",
       "unit": "people",
-      "description": "Latest official local authority stock of asylum seekers receiving support."
+      "description": "Latest official quarter-end stock of asylum seekers receiving support. This is not the number of distinct people who moved through support over the period."
     },
     {
       "id": "homesForUkraineArrivals",
@@ -11982,7 +11982,7 @@
       "id": "contingencyAccommodation",
       "label": "Contingency accommodation population",
       "unit": "people",
-      "description": "Latest published local authority contingency-accommodation stock."
+      "description": "Latest published quarter-end contingency-accommodation stock, recorded within the wider asylum-support snapshot."
     },
     {
       "id": "resettlementCumulativeTotal",

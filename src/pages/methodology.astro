@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
+import { supportedAsylumReadingRules } from "../lib/asylum-support-logic";
 
 const evidenceLayers = [
   {
@@ -107,6 +108,10 @@ const evidenceLayers = [
         <p class="lede">Small boat arrivals, asylum support, refugee resettlement, refugee family reunion, and Ukraine routes should not be collapsed into one bucket.</p>
       </article>
       <article class="story-card">
+        <h3>Treat supported asylum as stock, not throughput</h3>
+        <p class="lede">Local supported-asylum figures are end-of-period support counts. They do not tell you how many different people moved through the system, or how many claims were processed locally.</p>
+      </article>
+      <article class="story-card">
         <h3>Public spending must pass a route test</h3>
         <p class="lede">Whole-council budgets, procurement feeds, and transaction corpora are context only unless a row explicitly ties back to a route or scheme.</p>
       </article>
@@ -122,6 +127,42 @@ const evidenceLayers = [
         <h3>Separate owner, operator, and prime provider</h3>
         <p class="lede">A hotel owner, a hotel operator, and the regional asylum accommodation prime can all be different entities. The site should keep those roles distinct instead of flattening them into one supplier label.</p>
       </article>
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <h2>How supported asylum numbers work</h2>
+      <div class="signal-list">
+        {supportedAsylumReadingRules.map((rule) => (
+          <article class="signal-card accent">
+            <span class="tiny">Interpretation rule</span>
+            <h3>{rule.title}</h3>
+            <p class="tiny">{rule.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <h2>Why backlog language is not enough</h2>
+      <div class="signal-list">
+        <article class="signal-card">
+          <span class="tiny">Backlog is only one mechanism</span>
+          <p class="tiny">
+            A local support count can stay flat because the backlog is static, but it can also stay flat because new
+            entrants are being offset by grants, refusals, withdrawals, departures, transfers, or other exits.
+          </p>
+        </article>
+        <article class="signal-card">
+          <span class="tiny">Local churn is not published</span>
+          <p class="tiny">
+            The published local authority asylum tables do not identify how many different people passed through
+            support in a place over a year. That is why the site treats flat local lines as ambiguous unless a better
+            flow measure is published.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 
