@@ -303,7 +303,7 @@ function formatUtcDateTime(iso: string | undefined): string {
     </aside>
   </section>
 
-  <section class="section section-anchor" id="read-this-first">
+  <section class="section section-anchor priority-section" id="read-this-first">
     <div class="section-head">
       <div>
         <h2>Read this first</h2>
@@ -315,8 +315,9 @@ function formatUtcDateTime(iso: string | undefined): string {
       <a class="chip accent" href="/hotels#unresolved-watchlist">Open the sharpest evidence trail</a>
     </div>
     <div class="feature-grid">
-      {homepagePriorityCards.map((card) => (
-        <article class={`feature-card${card.tone ? ` ${card.tone}` : ""}`}>
+      {homepagePriorityCards.map((card, index) => (
+        <article class={`feature-card priority-card${card.tone ? ` ${card.tone}` : ""}`}>
+          <span class="priority-rank">{String(index + 1).padStart(2, "0")}</span>
           <div class="chip-row">
             <span class="chip accent">{card.kicker}</span>
           </div>
@@ -331,8 +332,8 @@ function formatUtcDateTime(iso: string | undefined): string {
     </div>
   </section>
 
-  <section class="split section">
-    <div class="panel panel-pad">
+  <section class="split section evidence-preview">
+    <div class="panel panel-pad evidence-panel evidence-panel-hotels">
       <div class="section-head">
         <div>
           <h2>Open hotel evidence now</h2>
@@ -359,7 +360,7 @@ function formatUtcDateTime(iso: string | undefined): string {
       </div>
     </div>
 
-    <div class="panel panel-pad">
+    <div class="panel panel-pad evidence-panel evidence-panel-money">
       <div class="section-head">
         <div>
           <h2>Open money evidence now</h2>

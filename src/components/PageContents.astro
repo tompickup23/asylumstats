@@ -7,14 +7,15 @@ interface SectionLink {
 interface Props {
   title?: string;
   sections: SectionLink[];
+  variant?: "default" | "priority";
 }
 
-const { title = "On this page", sections } = Astro.props;
+const { title = "On this page", sections, variant = "default" } = Astro.props;
 ---
 
 {
   sections.length > 0 && (
-    <nav class="page-contents section-anchor" aria-label={title}>
+    <nav class:list={["page-contents", "section-anchor", { priority: variant === "priority" }]} aria-label={title}>
       <span class="tiny">{title}</span>
       <div class="page-contents-links">
         {sections.map((section) => (
@@ -24,4 +25,3 @@ const { title = "On this page", sections } = Astro.props;
     </nav>
   )
 }
-

@@ -921,6 +921,17 @@ button.source-pill {
   box-shadow: var(--shadow-soft);
 }
 
+.page-contents.priority {
+  position: sticky;
+  top: 5.2rem;
+  z-index: 14;
+  border-color: rgba(255, 139, 97, 0.18);
+  background:
+    linear-gradient(120deg, rgba(255, 139, 97, 0.14), rgba(125, 211, 252, 0.08) 50%, transparent 78%),
+    rgba(11, 17, 31, 0.92);
+  box-shadow: var(--shadow);
+}
+
 .page-contents-links {
   display: flex;
   flex-wrap: wrap;
@@ -942,6 +953,77 @@ button.source-pill {
 .page-contents-links a:focus-visible {
   border-color: var(--border-strong);
   background: rgba(255, 255, 255, 0.09);
+}
+
+.page-contents.priority .page-contents-links a:first-child {
+  color: #041019;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent-3) 0%, #ffd5c6 100%);
+  box-shadow: 0 12px 26px rgba(255, 139, 97, 0.18);
+}
+
+.priority-section {
+  position: relative;
+  overflow: hidden;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 139, 97, 0.16);
+  border-radius: calc(var(--radius) + 6px);
+  background:
+    linear-gradient(135deg, rgba(255, 139, 97, 0.1), rgba(125, 211, 252, 0.07) 56%, transparent 78%),
+    rgba(255, 255, 255, 0.03);
+  box-shadow: var(--shadow);
+}
+
+.priority-section::before {
+  content: "";
+  position: absolute;
+  inset: auto -3rem -3rem auto;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 139, 97, 0.16), transparent 72%);
+  filter: blur(10px);
+}
+
+.priority-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.priority-card {
+  padding-top: 3rem;
+}
+
+.priority-rank {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 1;
+  color: rgba(217, 245, 255, 0.34);
+}
+
+.evidence-preview .evidence-panel {
+  background:
+    linear-gradient(145deg, rgba(18, 30, 52, 0.32), transparent 44%),
+    rgba(255, 255, 255, 0.05);
+}
+
+.evidence-preview .evidence-panel-hotels {
+  border-color: rgba(255, 139, 97, 0.18);
+}
+
+.evidence-preview .evidence-panel-money {
+  border-color: rgba(125, 211, 252, 0.18);
+}
+
+.evidence-preview .story-card {
+  background:
+    linear-gradient(140deg, rgba(18, 30, 52, 0.2), transparent 44%),
+    rgba(255, 255, 255, 0.04);
 }
 
 .drilldown-grid {
@@ -1659,6 +1741,10 @@ tr:last-child td {
 
   .page-top {
     grid-template-columns: 1fr;
+  }
+
+  .page-contents.priority {
+    position: static;
   }
 }
 
