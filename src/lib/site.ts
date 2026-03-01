@@ -5,7 +5,7 @@ import { getEntityProfiles, type EntityProfile } from "./entities";
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
 export const DEFAULT_DESCRIPTION =
-  "UK asylum accountability data on routes, hotels, public money, and local area pressure with source-linked evidence.";
+  "UK asylum accountability data on places, regions, hotel visibility, and system logic with source-linked evidence.";
 export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-card.png";
 
 export type StructuredDataNode = Record<string, unknown>;
@@ -19,11 +19,9 @@ export interface ReleaseEntry {
 
 const INDEXABLE_STATIC_PATHS = [
   "/",
+  "/places/",
   "/compare/",
-  "/entities/",
   "/routes/",
-  "/hotels/",
-  "/spending/",
   "/releases/",
   "/sources/",
   "/methodology/"
@@ -58,10 +56,6 @@ export function getIndexableSitePaths(): string[] {
 
   for (const area of getPublicPlaceAreas()) {
     paths.add(`/places/${area.areaCode}/`);
-  }
-
-  for (const profile of getEntityProfiles()) {
-    paths.add(`/entities/${profile.entityId}/`);
   }
 
   return [...paths].sort((a, b) => a.localeCompare(b));

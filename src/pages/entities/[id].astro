@@ -197,7 +197,12 @@ function formatSourceKind(kind: string): string {
 }
 ---
 
-<BaseLayout title={`${profile.entityName} | asylumstats`} description={pageDescription} structuredData={pageStructuredData}>
+<BaseLayout
+  title={`${profile.entityName} | asylumstats`}
+  description={pageDescription}
+  noIndex={true}
+  structuredData={pageStructuredData}
+>
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">{profile.roleSummary}</span>

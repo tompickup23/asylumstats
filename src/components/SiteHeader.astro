@@ -1,10 +1,8 @@
 ---
 const navItems = [
-  { href: "/hotels", label: "Hotels", priority: true },
-  { href: "/spending", label: "Money", priority: true },
-  { href: "/compare", label: "Places", priority: true },
-  { href: "/routes", label: "System" },
-  { href: "/entities", label: "Actors" },
+  { href: "/places", label: "Places", priority: true },
+  { href: "/routes", label: "System", priority: true },
+  { href: "/compare", label: "Compare" },
   { href: "/sources", label: "Sources" },
   { href: "/methodology", label: "How it works" }
 ];
@@ -68,7 +66,7 @@ function isActive(href: string): boolean {
     <div class="site-search-head">
       <div>
         <span class="tiny">Search the publication</span>
-        <h2 id="site-search-title">Pages, place profiles, and named entities</h2>
+        <h2 id="site-search-title">Pages, regions, and place profiles</h2>
       </div>
       <button class="source-pill" type="button" data-site-search-close>Close</button>
     </div>
@@ -79,7 +77,7 @@ function isActive(href: string): boolean {
         <input
           type="search"
           name="site_search"
-          placeholder="Try Serco, Glasgow, hotels, spending, or an area code"
+          placeholder="Try Birmingham, Burnley, North West, or an area code"
           autocomplete="off"
           spellcheck="false"
           data-site-search-input

@@ -3,6 +3,7 @@ import { disableMotion, limitToTopOfPage, stabilizePage, waitForFonts } from "./
 
 const desktopPages = [
   { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
+  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },

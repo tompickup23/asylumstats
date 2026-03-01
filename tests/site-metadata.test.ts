@@ -26,12 +26,15 @@ describe("site metadata helpers", () => {
   it("returns unique indexable paths and excludes context-only council pages", () => {
     const paths = getIndexableSitePaths();
 
-    expect(paths.length).toBeGreaterThan(8);
+    expect(paths.length).toBeGreaterThan(6);
     expect(new Set(paths).size).toBe(paths.length);
     expect(paths).toContain("/");
-    expect(paths).toContain("/entities/");
+    expect(paths).toContain("/places/");
     expect(paths).toContain("/routes/");
-    expect(paths.some((path) => path.startsWith("/entities/"))).toBe(true);
+    expect(paths).not.toContain("/entities/");
+    expect(paths).not.toContain("/hotels/");
+    expect(paths).not.toContain("/spending/");
+    expect(paths.some((path) => path.startsWith("/entities/"))).toBe(false);
     expect(paths.some((path) => path.startsWith("/places/"))).toBe(true);
     expect(paths).not.toContain("/councils/");
     expect(paths.some((path) => path.startsWith("/councils/"))).toBe(false);

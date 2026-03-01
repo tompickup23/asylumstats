@@ -1,280 +1,207 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataDrawer from "../components/DataDrawer.astro";
-import InvestigationTrail from "../components/InvestigationTrail.astro";
-import KpiCard from "../components/KpiCard.astro";
+import PageGuide from "../components/PageGuide.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
-import TrendChart from "../components/TrendChart.astro";
-import overview from "../data/mock/overview.json";
 import releases from "../data/mock/releases.json";
-
-import { getLeadEntityProfileForTrail } from "../lib/entities";
-import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
-import { loadHotelEntityLedger } from "../lib/hotel-data";
-import { getHomepageInvestigationTrails } from "../lib/investigations";
-import { loadMoneyLedger } from "../lib/money-data";
+import { getPlaceDirectory } from "../lib/place-directory";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
+import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
-const hotelLedger = loadHotelEntityLedger();
-const moneyLedger = loadMoneyLedger();
-type MoneyRecordWithValue = (typeof moneyLedger.records)[number] & { valueGbp: number };
-const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
-const routeCards = routeDashboard.nationalCards.slice(0, 4);
-const homepageStockFlowCards = nationalSystemDynamics.stockFlowCards;
-const homepagePostDecisionPath = nationalSystemDynamics.postDecisionPath;
-const topPlaces = localRouteLatest.topAreasByMetric.find((group) => group.metricId === "supportedAsylum")?.rows ?? [];
-const maxSupport = Math.max(...topPlaces.map((place) => place.value), 1);
-const namedCurrentHotels = hotelLedger.sites.filter((site) => site.status === "current");
-const unnamedOnlyAreas = hotelLedger.areas.filter((area) => area.visibilityClass === "all_unnamed");
-const leadUnnamedArea = unnamedOnlyAreas[0];
-const hotelPreviewSites = namedCurrentHotels.slice(0, 4);
-const leadMoneyRecord = moneyLedger.records
-  .filter((record): record is MoneyRecordWithValue => typeof record.valueGbp === "number")
-  .sort((a, b) => b.valueGbp - a.valueGbp)[0];
-const moneyPreview = moneyLedger.records
-  .filter((record): record is MoneyRecordWithValue => typeof record.valueGbp === "number")
-  .sort((a, b) => b.valueGbp - a.valueGbp)
-  .slice(0, 3);
-const leadSupplier = moneyLedger.supplierProfiles[0];
-const primaryMoneyLead = moneyLedger.investigativeLeads[0];
-const topAreas = localRouteLatest.areas
-  .filter((a) => a.supportedAsylum >= 200)
-  .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
-  .slice(0, 8);
-const pressureLead = topAreas[0];
-const featuredRouteSignal = routeCards[0];
-const smallBoatTrend = routeDashboard.routeFamilies.find((route) => route.id === "small_boats") ?? routeDashboard.routeFamilies[0];
+const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
-const homepageInvestigationTrails = getHomepageInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map(
-  (trail) => ({
-    trail,
-    leadEntity: getLeadEntityProfileForTrail(trail)
-  })
-);
+const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
+const previewRegions = placeDirectory.regions.slice(0, 4);
+const featuredPlaces = placeDirectory.featuredAreas.slice(0, 6);
+const homepageStockFlowCards = routeDashboard.nationalSystemDynamics.stockFlowCards;
+const homepagePostDecisionPath = routeDashboard.nationalSystemDynamics.postDecisionPath;
 const heroStats = [
   {
-    label: "Areas tracked",
-    value: localRouteLatest.areas.length.toLocaleString(),
-    detail: `Official local-authority rows in the ${localRouteLatest.snapshotDate} snapshot.`
+    label: "Public place pages",
+    value: placeDirectory.publicPlaceCount.toLocaleString(),
+    detail: `Local-authority pages in the ${localRouteLatest.snapshotDate} snapshot.`
   },
   {
-    label: "Current named hotels",
-    value: namedCurrentHotels.length.toLocaleString(),
-    detail: "Visible current sites in the public evidence ledger."
+    label: "Regions covered",
+    value: placeDirectory.regions.length.toLocaleString(),
+    detail: "Grouped first as regions, then opened as place pages."
   },
   {
-    label: "Money-ledger rows",
-    value: moneyLedger.summary.totalRecords.toLocaleString(),
-    detail: "Contracts, tariffs, scrutiny estimates, and local response rows."
+    label: "Place pages with hotel evidence",
+    value: placeDirectory.hotelLinkedPlaceCount.toLocaleString(),
+    detail: "Named or unnamed hotel evidence folded into the local page."
   },
   {
-    label: "Bodies and suppliers",
-    value: moneyLedger.summary.uniqueSuppliers.toLocaleString(),
-    detail: "Public bodies, providers, and linked entities with trackable exposure."
+    label: "Named current hotel sites",
+    value: placeDirectory.namedCurrentSiteCount.toLocaleString(),
+    detail: "Visible through the place layer instead of the homepage."
+  }
+];
+const homepagePriorityCards = [
+  {
+    kicker: "Regional view",
+    title: `${leadRegion.regionName} is the first region to open`,
+    body: `${leadRegion.supportedAsylum.toLocaleString()} people are on supported asylum across the region, with ${leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.`,
+    detail:
+      previewRegions[0]?.leadArea
+        ? `${previewRegions[0].leadArea.area.areaName} is the clearest current place page to open first inside that regional field.`
+        : "Regional totals should come before a single local headline.",
+    href: "/places#regional-directory",
+    cta: "Browse regions"
+  },
+  {
+    kicker: "Local reading",
+    title: "Place pages now carry the main local accountability load",
+    body: `${placeDirectory.hotelLinkedPlaceCount.toLocaleString()} public place pages already carry hotel evidence, and ${placeDirectory.unnamedOnlyPlaceCount.toLocaleString()} still sit in unnamed-only hotel visibility gaps.`,
+    detail: "Open a place page to keep count, rate, contingency use, and hotel visibility on one surface.",
+    href: "/places#featured-places",
+    cta: "Open place leaders"
+  },
+  {
+    kicker: "System logic",
+    title: "Claims, backlog, support, appeals, and returns stay separate",
+    body: routeDashboard.nationalSystemDynamics.readingNotes[0],
+    detail: `Appeals are only complete through ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "the latest available quarter"}, while returns remain broader than asylum exits alone.`,
+    href: "/routes#route-findings",
+    cta: "Open system"
+  }
+];
+const homepageGuideItems = [
+  {
+    eyebrow: "Map first",
+    title: "Start with the regional map",
+    body: "Use the region totals and rates to see where pressure sits before you decide which authority to open.",
+    href: "#place-map",
+    cta: "Open the map"
+  },
+  {
+    eyebrow: "Then go local",
+    title: "Open a place page, not a side notebook",
+    body: "The place page is now the main route for local accountability because it holds the local claim, the stock logic, and the hotel line together.",
+    href: "#featured-places",
+    cta: "Open place leaders"
+  },
+  {
+    eyebrow: "Keep it honest",
+    title: "Use the system page when you need flow, churn, or backlog context",
+    body: "The place layer is about local stock and visibility. Use the system page when the question shifts to claims, decisions, appeals, or returns.",
+    href: "#system-logic",
+    cta: "Open system logic"
   }
 ];
 const guidedPaths = [
   {
-    kicker: "Secrecy gap",
-    title: "Hotels if you want the hidden estate first",
-    body: "Start here for named hotels, unnamed-only areas, unresolved chains, and archive-led hotel verification.",
-    href: "/hotels",
-    cta: "Open hotels"
-  },
-  {
-    kicker: "Money trail",
-    title: "Money if you want contracts and supplier exposure",
-    body: "Start here for the clearest public money rows, buyer control, supplier watchlists, and linked hotel trails.",
-    href: "/spending",
-    cta: "Open money"
-  },
-  {
-    kicker: "Pressure map",
-    title: "Places if you want local pressure",
-    body: "Start here to compare authorities on stock, rate, contingency use, and pathway mix without flattening them into one number.",
-    href: "/compare",
+    kicker: "Place map",
+    title: "Browse regions and places",
+    body: "The new front door is geographic: map first, region cards second, and place pages third.",
+    href: "/places",
     cta: "Open places"
   },
   {
-    kicker: "System logic",
-    title: "System if you want claims, backlog, support, and returns",
-    body: "Start here for the stock-flow model and the logic that keeps claims, support, appeals, and returns in separate lanes.",
+    kicker: "System",
+    title: "Keep stock and flow separate",
+    body: "Use the system page for claims, backlog, support, appeals, and returns once the geography is clear.",
     href: "/routes",
     cta: "Open system"
-  }
-];
-const freshnessCards = [
-  {
-    label: "Routes mart built",
-    value: routeDashboard.generatedAt,
-    detail: `Local snapshot ${localRouteLatest.snapshotDate}`,
-    href: "/routes"
   },
   {
-    label: "Hotel ledger built",
-    value: hotelLedger.generatedAt,
-    detail: `${hotelLedger.summary.currentNamedSites.toLocaleString()} current named sites tracked`,
-    href: "/hotels"
+    kicker: "Sources",
+    title: "Check source scope and regional feeds",
+    body: "Use the source ledger to see where the place data comes from and which regional workbook families are in scope.",
+    href: "/sources",
+    cta: "Open sources"
   },
   {
-    label: "Money ledger built",
-    value: moneyLedger.generatedAt,
-    detail: `${moneyLedger.summary.totalRecords.toLocaleString()} public money rows in scope`,
-    href: "/spending"
-  },
-  {
-    label: "Latest release logged",
-    value: releases[0]?.date,
-    detail: releases[0]?.title ?? "No release logged",
-    href: "/releases"
+    kicker: "Method",
+    title: "Check the publishing rules",
+    body: "Use the methodology page when you need the boundary between stock, visibility, route specificity, and publishable evidence.",
+    href: "/methodology",
+    cta: "Open methodology"
   }
 ];
 const systemLogicCards = [
   {
     title: "Support is quarter-end stock, not throughput",
-    body: nationalSystemDynamics.readingNotes[0]
+    body: routeDashboard.nationalSystemDynamics.readingNotes[0]
   },
   {
     title: "Flat local lines can still hide churn",
     body:
-      "A place hovering around the same support count can still be turning over people underneath that line because inflows and exits can offset each other."
+      "A local line hovering around the same level does not tell you whether the same people stayed or whether inflows and exits offset each other underneath the stock count."
   },
   {
     title: "Backlog and support overlap without matching",
-    body: nationalSystemDynamics.readingNotes[1]
+    body: routeDashboard.nationalSystemDynamics.readingNotes[1]
   },
   {
     title: "Appeals lag and returns are broader",
     body: `Appeals are asylum-specific but the latest machine-readable quarter is ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "older"}. Returns are current to ${homepagePostDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"}, but they cover all returns, not just asylum exits.`
   }
 ];
-const homepagePriorityCards = [
+const advancedSurfaces = [
   {
-    kicker: "Hidden estate",
-    title: `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still have unresolved ownership or operator chains`,
-    body: `${hotelLedger.summary.unnamedOnlyAreaCount} areas publicly acknowledge hotel use without naming the sites, and ${hotelLedger.archiveVerification.pendingVerificationCount} archive leads are still waiting for document-backed verification.`,
-    detail: leadUnnamedArea
-      ? `${leadUnnamedArea.areaName} is one of the clearest live examples of the secrecy gap.`
-      : "The public estate remains only partly visible.",
-    href: "/hotels#unresolved-watchlist",
-    cta: "Open hotel findings",
-    tone: "accent"
+    title: "Compare",
+    body: "Advanced filtered place explorer for query-state views once the map and directory are already clear.",
+    href: "/compare/",
+    cta: "Open compare"
   },
   {
-    kicker: "Money trail",
-    title: primaryMoneyLead?.title ?? "The money layer already exposes contract concentration",
-    body:
-      primaryMoneyLead?.detail ??
-      "The spending page now starts with the rows, buyers, and suppliers that matter before dropping into the full ledger.",
-    detail:
-      leadMoneyRecord && leadSupplier
-        ? `${leadMoneyRecord.title} is one of the largest disclosed rows at ${formatMoney(leadMoneyRecord.valueGbp)}, and ${leadSupplier.entityName} is already attached to ${leadSupplier.publicContractCount} public money rows.`
-        : "The contract layer is still partial, but the concentration is already visible.",
-    href: "/spending#money-findings",
-    cta: "Open money findings",
-    tone: "accent"
+    title: "Hotels",
+    body: "Raw hotel notebook for unresolved chains, archive-led leads, and the wider named-site ledger.",
+    href: "/hotels/",
+    cta: "Open hotels"
   },
-  pressureLead
-    ? {
-        kicker: "Pressure",
-        title: `${pressureLead.areaName} shows how local pressure can stay high without telling you who rotated through`,
-        body: `${pressureLead.supportedAsylum.toLocaleString()} people were on asylum support there at quarter end, with ${pressureLead.contingencyAccommodation.toLocaleString()} in contingency accommodation.`,
-        detail: "These are quarter-end stock counts. A flat local line can still hide churn underneath it.",
-        href: "/compare#compare-findings",
-        cta: "Open pressure findings",
-        tone: ""
-      }
-    : null
-].filter(
-  (
-    card
-  ): card is {
-    kicker: string;
-    title: string;
-    body: string;
-    detail: string;
-    href: string;
-    cta: string;
-    tone: string;
-  } => card !== null
-);
-
-function formatUtcDate(iso: string | undefined): string {
-  if (!iso) {
-    return "n/a";
+  {
+    title: "Money",
+    body: "Contract and supplier notebook for disclosed spending rows and linked site trails.",
+    href: "/spending/",
+    cta: "Open money"
+  },
+  {
+    title: "Actors",
+    body: "Provider and owner profile notebook for named-actor chains and entity timelines.",
+    href: "/entities/",
+    cta: "Open actors"
   }
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(new Date(iso));
-}
-
-function formatMoney(value: number | null | undefined): string {
-  if (typeof value !== "number") {
-    return "No published value";
-  }
-
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    maximumFractionDigits: value >= 1000 ? 0 : 2
-  }).format(value);
-}
-
-function formatUtcDateTime(iso: string | undefined): string {
-  if (!iso) {
-    return "n/a";
-  }
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "UTC",
-    timeZoneName: "short"
-  }).format(new Date(iso));
-}
+];
 ---
 
 <BaseLayout
   title="asylumstats | UK asylum accountability"
-  description="UK asylum accountability site covering routes, hotel tracking, public money, and local area pressure with source-linked evidence."
+  description="Place-led UK asylum accountability covering regions, local authorities, hotel visibility inside place pages, and asylum-system logic with source-linked evidence."
 >
   <section class="hero">
     <div class="hero-copy">
-      <span class="kicker">{overview.hero.kicker}</span>
-      <h1>{overview.hero.title}</h1>
-      <p>{overview.hero.summary}</p>
+      <span class="kicker">Place-led asylum accountability</span>
+      <h1>Start with the map, then the place.</h1>
+      <p>
+        The front door is now geographic. Start with the regional map, open a place page to read local pressure
+        properly, and only then drop into the deeper hotel, money, or actor notebooks if the place layer no longer
+        answers the question.
+      </p>
       <div class="hero-actions">
-        <a class="chip accent" href="/hotels">Track hotels first</a>
-        <a class="chip" href="/spending">Follow the money</a>
-        <a class="chip teal" href="/compare">See local pressure</a>
-        <a class="chip" href="/routes">Check stock and flow</a>
+        <a class="chip accent" href="/places#place-map">Browse the map</a>
+        <a class="chip teal" href="/places#regional-directory">Browse regions</a>
+        <a class="chip" href="/routes#route-findings">Check the system</a>
+        <a class="chip" href="/sources">Check the sources</a>
       </div>
       <div class="chip-row">
         <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
-        <span class="chip teal">
-          {hotelLedger.summary.currentNamedSitesWithAnyEntityLinks} current hotel sites with entity links
-        </span>
-        <span class="chip accent">{hotelLedger.summary.currentNamedSitesUnresolved} unresolved current sites</span>
+        <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
+        <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
       </div>
     </div>
 
     <aside class="hero-panel">
       <div class="hero-panel-header">
         <div>
-          <span class="tiny">Live accountability stack</span>
-          <span class="hero-panel-title">Hotels, supplier exposure, and local pressure on one source-linked surface.</span>
+          <span class="tiny">New front door</span>
+          <span class="hero-panel-title">Regions first, place pages second, system logic alongside.</span>
         </div>
-        <span class="chip">Dec 2025</span>
+        <span class="chip">{localRouteLatest.snapshotDate}</span>
       </div>
 
       <div class="hero-stat-grid">
@@ -287,29 +214,20 @@ function formatUtcDateTime(iso: string | undefined): string {
         ))}
       </div>
 
-      {pressureLead && (
-        <article class="hero-callout">
-          <span class="tiny">Pressure leader</span>
-          <strong>{pressureLead.areaName}</strong>
-          <p class="lede">
-            {pressureLead.supportedAsylum.toLocaleString()} people on asylum support, with{" "}
-            {pressureLead.contingencyAccommodation.toLocaleString()} in contingency accommodation.
-          </p>
-        </article>
-      )}
+      <article class="hero-callout">
+        <span class="tiny">Regional total leader</span>
+        <strong>{leadRegion.regionName}</strong>
+        <p class="lede">
+          {leadRegion.supportedAsylum.toLocaleString()} people on supported asylum, with{" "}
+          {leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.
+        </p>
+      </article>
 
-      {featuredRouteSignal && (
-        <article class="hero-callout accent">
-          <span class="tiny">National route signal</span>
-          <strong>{featuredRouteSignal.label}</strong>
-          <p class="lede">
-            {featuredRouteSignal.valueSuffix
-              ? `${featuredRouteSignal.value}${featuredRouteSignal.valueSuffix}`
-              : featuredRouteSignal.value.toLocaleString()}{" "}
-            in {featuredRouteSignal.period}.
-          </p>
-        </article>
-      )}
+      <article class="hero-callout accent">
+        <span class="tiny">Regional rate leader</span>
+        <strong>{rateLeader.regionName}</strong>
+        <p class="lede">{rateLeader.supportedAsylumRate} per 10,000 residents in the latest weighted regional view.</p>
+      </article>
     </aside>
   </section>
 
@@ -318,16 +236,15 @@ function formatUtcDateTime(iso: string | undefined): string {
       <div>
         <h2>Read this first</h2>
         <p class="lede">
-          {pressureLead
-            ? `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, ${hotelLedger.summary.unnamedOnlyAreaCount} areas acknowledge hotel use without naming the sites, and ${pressureLead.areaName} was carrying ${pressureLead.supportedAsylum.toLocaleString()} people on asylum support at quarter end.`
-            : `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, and ${hotelLedger.summary.unnamedOnlyAreaCount} areas acknowledge hotel use without naming the sites.`}
+          The homepage now starts with geography and reading rules. Hotel, money, and actor notebooks still exist, but
+          they no longer sit in front of the place layer.
         </p>
       </div>
-      <a class="chip accent" href="/hotels#unresolved-watchlist">Open the sharpest evidence trail</a>
+      <a class="chip accent" href="/places">Open the place-led front door</a>
     </div>
     <div class="feature-grid">
       {homepagePriorityCards.map((card, index) => (
-        <article class={`feature-card priority-card${card.tone ? ` ${card.tone}` : ""}`}>
+        <article class="feature-card priority-card accent">
           <span class="priority-rank">{String(index + 1).padStart(2, "0")}</span>
           <div class="chip-row">
             <span class="chip accent">{card.kicker}</span>
@@ -343,181 +260,118 @@ function formatUtcDateTime(iso: string | undefined): string {
     </div>
   </section>
 
-  <section class="section section-anchor" id="start-here">
+  <PageGuide
+    id="start-here"
+    title="Use the site in three moves"
+    intro="A good session now starts broad, then goes local, then reaches for the system page when you need to interpret churn, backlog, appeals, or returns."
+    items={homepageGuideItems}
+  />
+
+  <section id="place-map" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Choose the page you need</h2>
+        <h2>Start with the regional map</h2>
         <p class="lede">
-          Once the top findings are clear, these are the main routes through the site.
+          Total and rate answer different questions. Use both before you decide which local authority page to open.
         </p>
       </div>
-      <a class="chip accent" href="/sources">Open the source ledger</a>
+      <a class="chip accent" href="/places#place-map">Open the full place map</a>
     </div>
-    <div class="guide-grid">
-      {guidedPaths.map((path) => (
-        <article class="guide-card">
+    <div class="viz-grid">
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+        title="Supported asylum by region"
+        description={`${leadRegion.regionName} currently has the largest regional supported-asylum total in the live local-authority snapshot.`}
+        valueLabel="supported asylum total"
+        highlightRegion={leadRegion.regionName}
+      />
+      <RegionTileMap
+        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
+        title="Supported asylum rate by region"
+        description={`${rateLeader.regionName} currently has the highest weighted regional rate per 10,000 residents.`}
+        valueLabel="rate per 10,000"
+        highlightRegion={rateLeader.regionName}
+        tone="teal"
+      />
+    </div>
+  </section>
+
+  <section id="regional-preview" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Then open a region</h2>
+        <p class="lede">
+          These are the first region cards to open if you want the strongest current public place pages without dropping
+          straight into every notebook.
+        </p>
+      </div>
+      <a class="chip accent" href="/places#regional-directory">Open all regions</a>
+    </div>
+    <div class="feature-grid">
+      {previewRegions.map((region) => (
+        <article class="feature-card">
           <div class="chip-row">
-            <span class="chip accent">{path.kicker}</span>
+            <span class="chip accent">{region.regionName}</span>
+            <span class="chip teal">{region.countryName}</span>
+            <span class="chip">{region.publicPlaceCount.toLocaleString()} place pages</span>
           </div>
-          <h3>{path.title}</h3>
-          <p>{path.body}</p>
-          <p class="tiny">
-            <a class="source-pill" href={path.href}>{path.cta}</a>
+          <h3>{region.regionName}</h3>
+          <p class="lede">
+            {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, at {region.supportedAsylumRate} per 10,000 residents.
           </p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Lead place to open first</span>
+              <span class="data-row-value">{region.leadArea?.area.areaName ?? "No public place page yet"}</span>
+            </div>
+            <div class="data-row">
+              <span>Place pages with hotel evidence</span>
+              <span class="data-row-value">{region.hotelLinkedPlaceCount.toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="chip-row">
+            {region.areas.slice(0, 3).map((row) => (
+              <a class="source-pill" href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+            ))}
+          </div>
         </article>
       ))}
     </div>
   </section>
 
-  {homepageInvestigationTrails.length > 0 && (
-    <section class="section section-anchor" id="case-files">
-      <div class="section-head">
-        <div>
-          <h2>Concrete case files</h2>
-          <p class="lede">
-            These are the fastest routes through the site when you want one named hotel, one money trail, and one place
-            pressure frame tied together without rebuilding the chain by hand.
-          </p>
-        </div>
-        <a class="chip accent" href="/spending#money-site-trails">Open site-linked money trails</a>
+  <section id="featured-places" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Featured place pages</h2>
+        <p class="lede">
+          Open a place page when you need the local finding, the stock logic, and any public hotel evidence in one place.
+        </p>
       </div>
-      <div class="feature-grid">
-        {homepageInvestigationTrails.map(({ trail, leadEntity }) => (
-          <InvestigationTrail
-            kicker={trail.kicker}
-            title={trail.title}
-            summary={trail.summary}
-            chips={trail.chips}
-            tone={trail.tone}
-            steps={trail.steps}
-            footnote={trail.footnote}
-            footerLinks={
-              leadEntity
-                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
-                : []
-            }
-          />
-        ))}
-      </div>
-    </section>
-  )}
-
-  <DataDrawer
-    id="home-background"
-    label="More context"
-    title="Open the wider evidence panels, freshness notes, charts, and release context"
-    summary="The homepage should start with the sharpest evidence. Open this section when you want extra hotel and money panels, update timing, stock-flow context, national snapshots, and the release diary."
-  >
-  <section class="split section evidence-preview">
-    <div class="panel panel-pad evidence-panel evidence-panel-hotels">
-      <div class="section-head">
-        <div>
-          <h2>Open hotel evidence now</h2>
-          <p class="lede">{hotelLedger.summary.currentNamedSitesUnresolved} current named sites still stop short of a resolved chain even after public naming.</p>
-        </div>
-        <a class="source-pill" href="/hotels#hotel-ledger">Open hotel ledger</a>
-      </div>
-      <div class="story-grid">
-        {hotelPreviewSites.map((site) => (
-          <article class="story-card">
-            <div class="chip-row">
-              <span class="chip accent">{site.entityCoverage}</span>
-              <span class="chip">{site.evidenceClass}</span>
-            </div>
-            <h3>{site.siteName}</h3>
-            <p class="lede">{site.areaName}</p>
-            <p class="tiny">Owner: {site.ownerName ?? "Unresolved"}</p>
-            <p class="tiny">Operator: {site.operatorName ?? "Unresolved"}</p>
-            <p class="tiny">Last public evidence: {site.lastPublicDate}</p>
-          </article>
-        ))}
-      </div>
+      <a class="chip accent" href="/places#featured-places">Open more place pages</a>
     </div>
-
-    <div class="panel panel-pad evidence-panel evidence-panel-money">
-      <div class="section-head">
-        <div>
-          <h2>Open money evidence now</h2>
-          <p class="lede">
-            {leadMoneyRecord
-              ? `${leadMoneyRecord.title} is already public at ${formatMoney(leadMoneyRecord.valueGbp)}. The problem is control and comparability, not the absence of a money trail.`
-              : "Large public rows are already visible. The problem is control and comparability, not the absence of a money trail."}
-          </p>
-        </div>
-        <a class="source-pill" href="/spending#money-findings">Open money findings</a>
-      </div>
-      <div class="story-grid">
-        {moneyPreview.map((record) => (
-          <article class="story-card">
-            <div class="chip-row">
-              <span class="chip accent">{record.recordType.replace(/_/g, " ")}</span>
-              {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
-            </div>
-            <h3>{record.title}</h3>
-            <p class="lede">{formatMoney(record.valueGbp)}</p>
-            <p class="tiny">
-              {record.supplierName ? `${record.buyerName} -> ${record.supplierName}` : record.buyerName}
-            </p>
-            <p class="tiny">{record.periodLabel ?? "No period label recorded"}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="split section section-anchor" id="freshness">
-    <article class="freshness-card">
-      <div class="section-head">
-        <div>
-          <h2>Freshness ledger</h2>
-          <p class="lede">
-            National chapters, local authority tables, hotel evidence, and money rows do not update on one timetable.
-          </p>
-        </div>
-      </div>
-      <div class="freshness-list">
-        {freshnessCards.map((item) => (
-          <div class="freshness-row">
-            <div>
-              <strong>{item.label}</strong>
-              <span class="tiny">{item.detail}</span>
-            </div>
-            <div class="freshness-meta">
-              <time datetime={item.value}>{item.value?.includes("T") ? formatUtcDateTime(item.value) : formatUtcDate(item.value)}</time>
-              <a class="source-pill" href={item.href}>Open</a>
-            </div>
+    <div class="place-grid">
+      {featuredPlaces.map((row) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip">{row.area.regionName}</span>
+            <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
+            {row.hotelSignal !== "none" && (
+              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
+                {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+              </span>
+            )}
           </div>
-        ))}
-      </div>
-    </article>
-
-    <article class="editor-note">
-      <div class="chip-row">
-        <span class="chip accent">Editorial rule</span>
-      </div>
-      <h3>Do not let one update stream fake completeness</h3>
-      <p>
-        As of 28 February 2026, the national asylum chapters have already moved to the year ending December 2025,
-        while the latest public local-authority tables still sit on the year ending September 2025. The homepage keeps
-        that mismatch explicit so users do not mistake one fresh headline for a fully refreshed product.
-      </p>
-      <p class="tiny">
-        <a class="source-pill" href="/releases">Open release diary</a>
-      </p>
-    </article>
-  </section>
-
-  <section class="section">
-    <h2>National snapshot</h2>
-    <div class="kpi-grid">
-      {overview.kpis.map((item) => (
-        <KpiCard
-          label={item.label}
-          value={item.value}
-          context={item.context}
-          status={item.status}
-          sourceUrl={item.sourceUrl}
-        />
+          <h3>
+            <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+          </h3>
+          <p class="lede">
+            {row.area.supportedAsylum.toLocaleString()} people on asylum support at quarter end, with{" "}
+            {row.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.
+          </p>
+          <p class="tiny">
+            Rate {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents. Hotels: {row.hotelSummary}.
+          </p>
+        </article>
       ))}
     </div>
   </section>
@@ -525,10 +379,10 @@ function formatUtcDateTime(iso: string | undefined): string {
   <section class="section section-anchor" id="system-logic">
     <div class="section-head">
       <div>
-        <h2>How the system moves</h2>
+        <h2>Keep the system logic alongside the place layer</h2>
         <p class="lede">
-          The site’s main logic is that claims, decisions, backlog, support, appeals, and returns are different
-          measures. Put them on one line and you lose the meaning.
+          Place pages are local stock and visibility surfaces. Use the system page when the question shifts to claims,
+          backlog, decisions, appeals, or returns.
         </p>
       </div>
       <a class="chip accent" href="/routes#post-decision-path">Open the full stock-flow model</a>
@@ -552,110 +406,73 @@ function formatUtcDateTime(iso: string | undefined): string {
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <h2>Visual brief</h2>
-        <p class="lede">
-          The product now has static charts and map views that make concentration and change legible without adding a
-          client-side charting dependency.
-        </p>
-      </div>
-      <span class="chip">Built from live route marts</span>
-    </div>
-    <div class="viz-grid">
-      <TrendChart
-        points={smallBoatTrend.series.map((point) => ({ label: point.periodLabel, value: point.value }))}
-        title={smallBoatTrend.label}
-        description="Official annual series showing how the irregular arrival route changed from 2018 to 2025."
-        tone="warm"
-      />
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
-        title="Regional concentration of supported asylum"
-        description={`${leadRegion.regionName} currently has the largest supported asylum total in the live local-authority snapshot.`}
-        valueLabel="supported asylum total"
-        highlightRegion={leadRegion?.regionName}
-      />
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Why the current evidence matters</h2>
-    <div class="story-grid">
-      {overview.angles.map((angle) => (
-        <article class="story-card">
-          <h3>{angle.title}</h3>
-          <p class="lede">{angle.body}</p>
-          <p class="tiny">
-            <a class="source-pill" href={angle.sourceUrl}>Source</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="split section">
-    <div class="panel" style="padding: 1.25rem;">
-      <h2>Where pressure is landing</h2>
-      <p class="lede">
-        Latest official local-authority asylum-support snapshot as at 31 December 2025. These are end-of-period stock
-        counts, not the number of different people who moved through the system over the year, and not a one-line
-        substitute for the awaiting-decision backlog.
-      </p>
-      {topPlaces.map((place) => (
-        <div class="metric-bar">
-          <div style="min-width: 10rem;">
-            <strong>{place.areaName}</strong>
-            <div class="tiny">{place.value.toLocaleString()} supported people</div>
-          </div>
-          <div class="metric-track">
-            <div class="metric-fill" style={`width: ${(place.value / maxSupport) * 100}%`}></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Top area pages</h2>
-    <div class="place-grid">
-      {topAreas.map((area) => (
-        <article class="place-card">
-          <div class="chip-row">
-            <span class="chip">{area.regionName}</span>
-            <span class="chip teal">{area.countryName}</span>
-          </div>
-          <h3>
-            <a href={`/places/${area.areaCode}`}>{area.areaName}</a>
-          </h3>
+  <DataDrawer
+    id="home-background"
+    label="Advanced notebooks"
+    title="Open the secondary pages and release diary"
+    summary="Hotels, money, actors, and the advanced compare surface still exist, but they now sit behind the map-first place layer."
+  >
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Secondary pages</h2>
           <p class="lede">
-            {area.supportedAsylum.toLocaleString()} people on asylum support at quarter end as at {localRouteLatest.snapshotDate}.
+            These are still useful, but they are no longer the first thing a reader has to decode when arriving on the site.
           </p>
-          <p class="tiny">
-            Rate per 10,000: {area.supportedAsylumRate ?? "n/a"} | Contingency: {area.contingencyAccommodation.toLocaleString()}
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
+        </div>
+      </div>
+      <div class="guide-grid">
+        {advancedSurfaces.map((surface) => (
+          <article class="guide-card">
+            <h3>{surface.title}</h3>
+            <p>{surface.body}</p>
+            <p class="tiny">
+              <a class="source-pill" href={surface.href}>{surface.cta}</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
 
-  <section class="section">
-    <h2>Release diary</h2>
-    <div class="story-grid">
-      {releases.map((release) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class="chip">{release.date}</span>
-          </div>
-          <h3>{release.title}</h3>
-          <p class="lede">{release.summary}</p>
-          <p class="tiny">
-            <a class="source-pill" href={release.sourceUrl}>Source</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Choose the page you need</h2>
+          <p class="lede">These are the remaining routes once the map, region cards, and place pages are already clear.</p>
+        </div>
+      </div>
+      <div class="guide-grid">
+        {guidedPaths.map((path) => (
+          <article class="guide-card">
+            <div class="chip-row">
+              <span class="chip accent">{path.kicker}</span>
+            </div>
+            <h3>{path.title}</h3>
+            <p>{path.body}</p>
+            <p class="tiny">
+              <a class="source-pill" href={path.href}>{path.cta}</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Release diary</h2>
+      <div class="story-grid">
+        {releases.map((release) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip">{release.date}</span>
+            </div>
+            <h3>{release.title}</h3>
+            <p class="lede">{release.summary}</p>
+            <p class="tiny">
+              <a class="source-pill" href={release.sourceUrl}>Source</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
   </DataDrawer>
 </BaseLayout>

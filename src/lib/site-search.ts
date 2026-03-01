@@ -1,10 +1,9 @@
-import { getPublicEntityProfiles, getPublicPlaceAreas } from "./site";
-import { formatRouteFamilyLabel } from "./entities";
+import { getPublicPlaceAreas } from "./site";
 
 export interface SiteSearchEntry {
   href: string;
   title: string;
-  kind: "page" | "entity" | "place";
+  kind: "page" | "place";
   kicker: string;
   description: string;
   priority: number;
@@ -17,54 +16,36 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     title: "Home",
     kind: "page",
     kicker: "Overview",
-    description: "Routes, hotels, money, and source rules on one accountability surface.",
+    description: "Place-led homepage with the regional map, featured local authorities, and system reading rules.",
     priority: 120,
-    searchText: "home overview accountability routes hotels money methodology sources"
+    searchText: "home overview places regions local authorities map system methodology sources"
   },
   {
-    href: "/entities/",
-    title: "Entities",
+    href: "/places/",
+    title: "Places",
     kind: "page",
-    kicker: "Investigation subjects",
-    description: "Provider, owner-group, operator, and public-body profiles tied to hotels, money rows, and place pressure.",
-    priority: 115,
-    searchText: "entities providers owner groups operators public bodies serco mears clearsprings hotel owners profiles"
+    kicker: "Region and place directory",
+    description: "Browse regions, open place pages, and carry hotel visibility inside the local reading.",
+    priority: 119,
+    searchText: "places regions map local authorities supported asylum contingency hotel visibility place directory"
   },
   {
     href: "/compare/",
     title: "Compare",
     kind: "page",
-    kicker: "Local pressure",
-    description: "Compare local authorities by supported asylum, contingency use, route mix, and regional position.",
-    priority: 118,
-    searchText: "compare places local authorities pressure supported asylum contingency route mix regional"
+    kicker: "Advanced place explorer",
+    description: "Advanced compare surface for filtered local-authority views once the map and region directory are clear.",
+    priority: 111,
+    searchText: "compare advanced places local authorities pressure supported asylum contingency explorer filters"
   },
   {
     href: "/routes/",
     title: "Routes",
     kind: "page",
     kicker: "National chapters",
-    description: "Official route families, trend charts, and place-level concentration built from the live marts.",
+    description: "Official route families, stock-flow logic, trend charts, and national system context.",
     priority: 116,
-    searchText: "routes national route families small boats asylum trend charts regional concentration"
-  },
-  {
-    href: "/hotels/",
-    title: "Hotels",
-    kind: "page",
-    kicker: "Secrecy tracker",
-    description: "Named hotel sites, unresolved ownership chains, and area-level visibility gaps.",
-    priority: 117,
-    searchText: "hotels secrecy named sites unresolved chains ownership operators accommodation"
-  },
-  {
-    href: "/spending/",
-    title: "Spending",
-    kind: "page",
-    kicker: "Money ledger",
-    description: "Public contract scope, tariffs, scrutiny estimates, buyer control, and supplier exposure.",
-    priority: 117,
-    searchText: "spending money ledger contracts tariffs scrutiny buyers suppliers funding"
+    searchText: "routes national route families small boats asylum trend charts backlog support appeals returns"
   },
   {
     href: "/releases/",
@@ -107,26 +88,6 @@ function buildPlaceDescription(
 }
 
 export function getPublicSearchEntries(): SiteSearchEntry[] {
-  const entityEntries = getPublicEntityProfiles().map((profile) => ({
-    href: `/entities/${profile.entityId}/`,
-    title: profile.entityName,
-    kind: "entity" as const,
-    kicker: profile.roleSummary,
-    description: profile.searchDescription,
-    priority: Math.min(114, Math.max(60, Math.round(profile.score / 8))),
-    searchText: [
-      profile.entityName,
-      profile.companyNumber,
-      profile.primaryRoleLabel,
-      profile.roleLabels.join(" "),
-      profile.routeFamilies.map(formatRouteFamilyLabel).join(" "),
-      profile.currentSites.map((site) => site.siteName).join(" "),
-      profile.linkedAreas.map((area) => area.areaName).join(" "),
-      "entity provider owner operator public body hotel money profile"
-    ]
-      .join(" ")
-      .toLowerCase()
-  }));
   const placeEntries = getPublicPlaceAreas().map((area) => ({
     href: `/places/${area.areaCode}/`,
     title: area.areaName,
@@ -154,9 +115,9 @@ export function getPublicSearchEntries(): SiteSearchEntry[] {
       .toLowerCase()
   }));
 
-  const kindOrder: Record<SiteSearchEntry["kind"], number> = { page: 0, entity: 1, place: 2 };
+  const kindOrder: Record<SiteSearchEntry["kind"], number> = { page: 0, place: 1 };
 
-  return [...STATIC_PAGE_ENTRIES, ...entityEntries, ...placeEntries].sort((left, right) => {
+  return [...STATIC_PAGE_ENTRIES, ...placeEntries].sort((left, right) => {
     if (left.kind !== right.kind) {
       return kindOrder[left.kind] - kindOrder[right.kind];
     }
