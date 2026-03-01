@@ -66,6 +66,15 @@ export interface RouteQuarterBreakdownRow {
   metricId: string;
 }
 
+export interface RoutePostDecisionSeries {
+  lodged?: RouteSeriesPoint[];
+  determined?: RouteSeriesPoint[];
+  total?: RouteSeriesPoint[];
+  voluntary?: RouteSeriesPoint[];
+  enforced?: RouteSeriesPoint[];
+  refusedEntryDeparted?: RouteSeriesPoint[];
+}
+
 export interface RouteDashboard {
   generatedAt: string;
   localSnapshotDate: string;
@@ -109,6 +118,23 @@ export interface RouteDashboard {
     latestSupportBreakdown: RouteQuarterBreakdownRow[];
     outcomeCohorts: RouteOutcomeCohort[];
     recentOutcomeCohorts: RouteOutcomeCohort[];
+    postDecisionPath: {
+      appeals: {
+        latestQuarterLabel: string | null;
+        dataCompleteThroughLabel: string | null;
+        dataLagNote: string;
+        series: RoutePostDecisionSeries;
+        latestDeterminationBreakdown: RouteQuarterBreakdownRow[];
+      };
+      returns: {
+        latestQuarterLabel: string | null;
+        scopeLabel: string;
+        scopeNote: string;
+        series: RoutePostDecisionSeries;
+        latestBreakdown: RouteQuarterBreakdownRow[];
+      };
+      readingNotes: string[];
+    };
     outcomeRateSeries: {
       initialGrantRate: RouteSeriesPoint[];
       latestGrantRate: RouteSeriesPoint[];

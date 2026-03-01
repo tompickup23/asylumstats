@@ -16,7 +16,10 @@ const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
 const moneyLedger = loadMoneyLedger();
+const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
 const routeCards = routeDashboard.nationalCards.slice(0, 4);
+const homepageStockFlowCards = nationalSystemDynamics.stockFlowCards;
+const homepagePostDecisionPath = nationalSystemDynamics.postDecisionPath;
 const topPlaces = localRouteLatest.topAreasByMetric.find((group) => group.metricId === "supportedAsylum")?.rows ?? [];
 const maxSupport = Math.max(...topPlaces.map((place) => place.value), 1);
 const namedCurrentHotels = hotelLedger.sites.filter((site) => site.status === "current");
@@ -106,6 +109,25 @@ const freshnessCards = [
     value: releases[0]?.date,
     detail: releases[0]?.title ?? "No release logged",
     href: "/releases"
+  }
+];
+const systemLogicCards = [
+  {
+    title: "Support is quarter-end stock, not throughput",
+    body: nationalSystemDynamics.readingNotes[0]
+  },
+  {
+    title: "Flat local lines can still hide churn",
+    body:
+      "A place hovering around the same support count can still be turning over people underneath that line because inflows and exits can offset each other."
+  },
+  {
+    title: "Backlog and support overlap without matching",
+    body: nationalSystemDynamics.readingNotes[1]
+  },
+  {
+    title: "Appeals lag and returns are broader",
+    body: `Appeals are asylum-specific but the latest machine-readable quarter is ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "older"}. Returns are current to ${homepagePostDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"}, but they cover all returns, not just asylum exits.`
   }
 ];
 
@@ -288,6 +310,36 @@ function formatUtcDateTime(iso: string | undefined): string {
           status={item.status}
           sourceUrl={item.sourceUrl}
         />
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-anchor" id="system-logic">
+    <div class="section-head">
+      <div>
+        <h2>How the system moves</h2>
+        <p class="lede">
+          The site’s main logic is that claims, decisions, backlog, support, appeals, and returns are different
+          measures. Put them on one line and you lose the meaning.
+        </p>
+      </div>
+      <a class="chip accent" href="/routes#post-decision-path">Open the full stock-flow model</a>
+    </div>
+    <div class="stat-strip">
+      {homepageStockFlowCards.map((item) => (
+        <article class="stat-tile">
+          <span class="tiny">{item.label}</span>
+          <strong>{item.valueSuffix ? `${item.value}${item.valueSuffix}` : item.value.toLocaleString()}</strong>
+          <p class="tiny">{item.period}</p>
+        </article>
+      ))}
+    </div>
+    <div class="story-grid" style="margin-top: 1rem;">
+      {systemLogicCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
       ))}
     </div>
   </section>

@@ -26,6 +26,9 @@ describe("route-data loader", () => {
     expect(dashboard.nationalSystemDynamics.stockSeries.awaitingInitialDecision.length).toBeGreaterThan(0);
     expect(dashboard.nationalSystemDynamics.outcomeCohorts.length).toBeGreaterThan(0);
     expect(dashboard.nationalSystemDynamics.latestQuarter).toHaveProperty("decisionMinusClaims");
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.series.lodged?.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.returns.series.total?.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.dataCompleteThroughLabel).toMatch(/^\d{4} Q[1-4]$/);
   });
 
   it("loads local route areas", () => {
@@ -59,6 +62,8 @@ describe("route-data loader", () => {
     expect(supportedAsylumMetric?.description.toLowerCase()).toContain("not identical");
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("flat local"))).toBe(true);
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("support is not a synonym"))).toBe(true);
+    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("appeals dataset"))).toBe(true);
+    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("broader than asylum"))).toBe(true);
   });
 });
 

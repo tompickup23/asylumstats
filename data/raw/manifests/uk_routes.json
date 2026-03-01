@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-03-01T01:16:34.629Z",
+  "generatedAt": "2026-03-01T01:36:58.585Z",
   "datasetId": "uk_routes",
-  "fetchedFileCount": 8,
+  "fetchedFileCount": 10,
   "files": [
     {
       "sourceId": "local_immigration_groups",
@@ -46,11 +46,25 @@
       "fileSha256": "4c442ad882ef9d6fdab44eb7ff236a099c3ab7d474452378154dbbc5def2b997"
     },
     {
+      "sourceId": "asylum_appeals",
+      "fileName": "asylum-appeals-lodged-datasets-mar-2023.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx",
+      "sizeBytes": 864910,
+      "fileSha256": "fa89aa8ecce418a815df20659eb9b57870a569ea6dd3b0bfc52eabee73cd56db"
+    },
+    {
       "sourceId": "asylum_support",
       "fileName": "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
       "sizeBytes": 3795022,
       "fileSha256": "939832dbc9416dd732407e117486ddbbe2b3065f7622cc9862cf1008b9d1093f"
+    },
+    {
+      "sourceId": "returns",
+      "fileName": "returns-datasets-dec-2025.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx",
+      "sizeBytes": 14951946,
+      "fileSha256": "ecc481a4f7c833e504db378fa85681ce109aa01c64c5a05c0c0322717aaa378b"
     },
     {
       "sourceId": "safe_legal_routes_summary",

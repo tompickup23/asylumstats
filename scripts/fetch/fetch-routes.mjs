@@ -44,10 +44,22 @@ const sourceFiles = [
       "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"
   },
   {
+    fileName: "asylum-appeals-lodged-datasets-mar-2023.xlsx",
+    sourceId: "asylum_appeals",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx"
+  },
+  {
     fileName: "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
     sourceId: "asylum_support",
     sourceUrl:
       "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx"
+  },
+  {
+    fileName: "returns-datasets-dec-2025.xlsx",
+    sourceId: "returns",
+    sourceUrl:
+      "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx"
   },
   {
     fileName: "safe-legal-routes-summary-tables-dec-2025.ods",

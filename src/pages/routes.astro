@@ -29,8 +29,13 @@ const latestQuarter = nationalSystemDynamics.latestQuarter;
 const latestQuarterDecisionBreakdown = nationalSystemDynamics.latestQuarterDecisionBreakdown;
 const latestSupportBreakdown = nationalSystemDynamics.latestSupportBreakdown;
 const recentOutcomeCohorts = nationalSystemDynamics.recentOutcomeCohorts;
+const postDecisionPath = nationalSystemDynamics.postDecisionPath;
+const latestAppealDeterminationBreakdown = postDecisionPath.appeals.latestDeterminationBreakdown;
+const latestReturnsBreakdown = postDecisionPath.returns.latestBreakdown;
 const maxLatestDecisionBreakdownValue = Math.max(...latestQuarterDecisionBreakdown.map((row) => row.value), 1);
 const maxLatestSupportBreakdownValue = Math.max(...latestSupportBreakdown.map((row) => row.value), 1);
+const maxLatestAppealBreakdownValue = Math.max(...latestAppealDeterminationBreakdown.map((row) => row.value), 1);
+const maxLatestReturnsBreakdownValue = Math.max(...latestReturnsBreakdown.map((row) => row.value), 1);
 const leadPressureMetric =
   routeDashboard.topAreasByMetric.find((metric) => metric.metricId === "supportedAsylum") ??
   routeDashboard.topAreasByMetric[0];
@@ -292,6 +297,100 @@ function formatCardValue(value: number, suffix?: string): string {
               <span class="data-row-value">{cohort.initialWithdrawalCount.toLocaleString()}</span>
             </div>
           </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-anchor" id="post-decision-path">
+    <div class="section-head">
+      <div>
+        <h2>Post-decision path</h2>
+        <p class="lede">
+          After an initial refusal or other case progression, some claims move through appeals and some people later
+          leave the UK. The public data here has to stay split again: appeals are asylum-specific but lag badly, while
+          current returns are broader than asylum-only exits.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip accent">Appeals complete to {postDecisionPath.appeals.dataCompleteThroughLabel ?? "n/a"}</span>
+        <span class="chip">{postDecisionPath.returns.latestQuarterLabel ?? "Latest quarter"} all-returns series</span>
+      </div>
+    </div>
+    <div class="viz-grid">
+      <TrendChart
+        points={(postDecisionPath.appeals.series.lodged ?? []).map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Asylum appeals lodged"
+        description={postDecisionPath.appeals.dataLagNote}
+        tone="warm"
+      />
+      <TrendChart
+        points={(postDecisionPath.appeals.series.determined ?? []).map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title="Asylum appeals determined"
+        description="Quarterly tribunal-stage output within the asylum-specific appeals dataset."
+        tone="teal"
+      />
+      <TrendChart
+        points={(postDecisionPath.returns.series.total ?? []).map((point) => ({
+          label: point.periodLabel,
+          value: point.value
+        }))}
+        title={postDecisionPath.returns.scopeLabel}
+        description={postDecisionPath.returns.scopeNote}
+        tone="accent"
+      />
+    </div>
+    <div class="split section" style="margin-top: 1rem;">
+      <div class="panel panel-pad">
+        <h3>Latest appeals mix</h3>
+        <p class="lede">
+          In {postDecisionPath.appeals.latestQuarterLabel ?? "the latest appeals quarter"}, asylum appeals data shows
+          the tribunal-stage mix below. This is still an older operational view than the main December 2025 asylum
+          release.
+        </p>
+        {latestAppealDeterminationBreakdown.map((row) => (
+          <div class="metric-bar">
+            <div style="min-width: 12rem;">
+              <strong>{row.label}</strong>
+              <div class="tiny">{row.value.toLocaleString()}</div>
+            </div>
+            <div class="metric-track">
+              <div class="metric-fill" style={`width: ${(row.value / maxLatestAppealBreakdownValue) * 100}%`}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="panel panel-pad">
+        <h3>Latest returns mix</h3>
+        <p class="lede">
+          In {postDecisionPath.returns.latestQuarterLabel ?? "the latest returns quarter"}, the current all-returns
+          series was led by voluntary returns, with enforced returns and refused-entry departures shown separately.
+          This is not an asylum-only denominator.
+        </p>
+        {latestReturnsBreakdown.map((row) => (
+          <div class="metric-bar">
+            <div style="min-width: 12rem;">
+              <strong>{row.label}</strong>
+              <div class="tiny">{row.value.toLocaleString()}</div>
+            </div>
+            <div class="metric-track">
+              <div class="metric-fill" style={`width: ${(row.value / maxLatestReturnsBreakdownValue) * 100}%`}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="story-grid" style="margin-top: 1rem;">
+      {postDecisionPath.readingNotes.map((note) => (
+        <article class="story-card">
+          <p class="lede">{note}</p>
         </article>
       ))}
     </div>
