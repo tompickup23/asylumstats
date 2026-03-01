@@ -1,4 +1,5 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
+import { loadHotelEntityLedger } from "./hotel-data";
 
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
@@ -37,9 +38,17 @@ export function buildAbsoluteUrl(pathname: string): string {
 
 export function getPublicPlaceAreas(): LocalRouteAreaSummary[] {
   const localRouteLatest = loadLocalRouteLatest();
+  const hotelLedger = loadHotelEntityLedger();
   const topCodes = new Set(localRouteLatest.topAreasByMetric.flatMap((group) => group.rows.map((row) => row.areaCode)));
+  const hotelLinkedCodes = new Set(
+    [...hotelLedger.sites.map((site) => site.areaCode), ...hotelLedger.areas.map((area) => area.areaCode)].filter(
+      (areaCode): areaCode is string => Boolean(areaCode)
+    )
+  );
 
-  return localRouteLatest.areas.filter((area) => topCodes.has(area.areaCode) || area.supportedAsylum >= 200);
+  return localRouteLatest.areas.filter(
+    (area) => topCodes.has(area.areaCode) || area.supportedAsylum >= 200 || hotelLinkedCodes.has(area.areaCode)
+  );
 }
 
 export function getIndexableSitePaths(): string[] {

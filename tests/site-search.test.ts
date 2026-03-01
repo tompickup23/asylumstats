@@ -14,6 +14,6 @@ describe("site search index", () => {
     expect(placeEntries).toHaveLength(publicPlaces.length);
     expect(placeEntries.every((entry) => entry.href.startsWith("/places/"))).toBe(true);
     expect(placeEntries.some((entry) => entry.searchText.includes("local authority"))).toBe(true);
+    expect(placeEntries.map((entry) => entry.href)).toContain("/places/E07000072/");
   });
 });
-
