@@ -23,12 +23,12 @@ describe("entity analytics helpers", () => {
 
     const summary = getEntityExposureSummary(serco!);
 
-    expect(summary.currentSiteCount).toBe(2);
-    expect(summary.nonResolvedCurrentSiteCount).toBe(2);
-    expect(summary.unresolvedCurrentSiteCount).toBe(1);
+    expect(summary.currentSiteCount).toBe(5);
+    expect(summary.nonResolvedCurrentSiteCount).toBe(5);
+    expect(summary.unresolvedCurrentSiteCount).toBe(4);
     expect(summary.partialCurrentSiteCount).toBe(1);
     expect(summary.resolvedCurrentSiteCount).toBe(0);
-    expect(summary.leadArea?.areaName).toBe("Epping Forest");
+    expect(summary.leadArea?.areaName).toBe("West Northamptonshire");
   });
 
   test("groups named-estate footprint by region", () => {
@@ -54,7 +54,7 @@ describe("entity analytics helpers", () => {
     const sercoRankings = getEntityLinkedPlaceRankings(serco!);
     const publicBodyRankings = getEntityLinkedPlaceRankings(publicBodies!);
 
-    expect(sercoRankings[0]?.areaName).toBe("Epping Forest");
+    expect(sercoRankings[0]?.areaName).toBe("West Northamptonshire");
     expect(sercoRankings[0]?.rank).toBe(1);
     expect(publicBodyRankings).toHaveLength(0);
   });
@@ -104,7 +104,7 @@ describe("entity analytics helpers", () => {
     expect(sercoCoverage?.geographyLabels).toEqual(
       expect.arrayContaining(["East of England", "Midlands", "North West"])
     );
-    expect(sercoCoverage?.directLinkedAreaCount).toBe(1);
+    expect(sercoCoverage?.directLinkedAreaCount).toBe(2);
     expect(sercoCoverage?.topCoveredAreas[0]?.areaName).toBe("Birmingham");
 
     expect(birminghamProvider?.profile.entityId).toBe("supplier_serco");

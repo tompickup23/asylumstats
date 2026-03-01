@@ -1,22 +1,5 @@
 [
   {
-    "areaName": "West Northamptonshire",
-    "areaCode": null,
-    "regionName": "East Midlands",
-    "countryName": "England",
-    "currentNamedSiteCount": 0,
-    "historicalNamedSiteCount": 0,
-    "parliamentaryReferenceCount": 0,
-    "unnamedSiteCount": 3,
-    "peopleHousedReported": null,
-    "lastPublicDate": "2025-08-21",
-    "sourceTitle": "West Northamptonshire statement on hotels used for asylum seekers",
-    "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-use-hotels-house-asylum-seekers",
-    "notes": "Public hotel count without names.",
-    "visibilityClass": "all_unnamed",
-    "visibilityPct": 0
-  },
-  {
     "areaName": "Perth and Kinross",
     "areaCode": "S12000048",
     "regionName": "Scotland",
@@ -166,6 +149,23 @@
     "sourceTitle": "Wakefield statement on contingency asylum accommodation",
     "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
     "notes": "Named site publicly confirmed.",
+    "visibilityClass": "named_only",
+    "visibilityPct": 100
+  },
+  {
+    "areaName": "West Northamptonshire",
+    "areaCode": "E06000062",
+    "regionName": "East Midlands",
+    "countryName": "England",
+    "currentNamedSiteCount": 3,
+    "historicalNamedSiteCount": 0,
+    "parliamentaryReferenceCount": 0,
+    "unnamedSiteCount": 0,
+    "peopleHousedReported": null,
+    "lastPublicDate": "2025-11-17",
+    "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+    "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+    "notes": "Official council statement names ibis Rugby East in Crick, Holiday Inn in Flore, and M K Hotel in Deanshanger.",
     "visibilityClass": "named_only",
     "visibilityPct": 100
   }

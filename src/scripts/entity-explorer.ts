@@ -17,6 +17,10 @@ interface EntityExplorerRow {
   linkedAreaCount: number;
   unresolvedCurrentSiteCount: number;
   moneyRowsWithPublishedValueCount: number;
+  firstEvidenceDate: string | null;
+  latestEvidenceDate: string | null;
+  regionalCoverageAreaCount: number;
+  namedCoverageAreaCount: number;
   score: number;
   searchText: string;
 }
@@ -59,6 +63,7 @@ export function initEntityExplorer(): void {
   const summaryElement = root.querySelector<HTMLElement>("[data-entity-summary]");
   const estateSummaryElement = root.querySelector<HTMLElement>("[data-entity-estate-summary]");
   const moneySummaryElement = root.querySelector<HTMLElement>("[data-entity-money-summary]");
+  const timelineSummaryElement = root.querySelector<HTMLElement>("[data-entity-timeline-summary]");
   const emptyElement = root.querySelector<HTMLElement>("[data-entity-empty]");
   const reset = root.querySelector<HTMLButtonElement>("[data-entity-reset]");
   const copy = root.querySelector<HTMLButtonElement>("[data-entity-copy]");
@@ -70,6 +75,7 @@ export function initEntityExplorer(): void {
     !summaryElement ||
     !estateSummaryElement ||
     !moneySummaryElement ||
+    !timelineSummaryElement ||
     !emptyElement
   ) {
     return;
@@ -78,11 +84,12 @@ export function initEntityExplorer(): void {
   const searchInput = form.querySelector<HTMLInputElement>('input[name="entity_q"]');
   const roleSelect = form.querySelector<HTMLSelectElement>('select[name="entity_role"]');
   const routeSelect = form.querySelector<HTMLSelectElement>('select[name="entity_route"]');
+  const surfaceSelect = form.querySelector<HTMLSelectElement>('select[name="entity_surface"]');
   const footprintSelect = form.querySelector<HTMLSelectElement>('select[name="entity_footprint"]');
   const sortSelect = form.querySelector<HTMLSelectElement>('select[name="entity_sort"]');
   const limitSelect = form.querySelector<HTMLSelectElement>('select[name="entity_limit"]');
 
-  if (!searchInput || !roleSelect || !routeSelect || !footprintSelect || !sortSelect || !limitSelect) {
+  if (!searchInput || !roleSelect || !routeSelect || !surfaceSelect || !footprintSelect || !sortSelect || !limitSelect) {
     return;
   }
 
@@ -90,10 +97,12 @@ export function initEntityExplorer(): void {
   const summary = summaryElement;
   const estateSummary = estateSummaryElement;
   const moneySummary = moneySummaryElement;
+  const timelineSummary = timelineSummaryElement;
   const empty = emptyElement;
   const search = searchInput;
   const role = roleSelect;
   const route = routeSelect;
+  const surface = surfaceSelect;
   const footprint = footprintSelect;
   const sort = sortSelect;
   const limit = limitSelect;
@@ -118,6 +127,10 @@ export function initEntityExplorer(): void {
     linkedAreaCount: toNumber(element.dataset.linkedAreas),
     unresolvedCurrentSiteCount: toNumber(element.dataset.unresolvedSites),
     moneyRowsWithPublishedValueCount: toNumber(element.dataset.rowsWithValue),
+    firstEvidenceDate: element.dataset.firstEvidenceDate ?? null,
+    latestEvidenceDate: element.dataset.latestEvidenceDate ?? null,
+    regionalCoverageAreaCount: toNumber(element.dataset.regionalAreas),
+    namedCoverageAreaCount: toNumber(element.dataset.namedCoverageAreas),
     score: toNumber(element.dataset.score),
     searchText: (element.dataset.search ?? "").toLowerCase()
   })) satisfies EntityExplorerRow[];
@@ -127,6 +140,7 @@ export function initEntityExplorer(): void {
     search.value = params.get("entity_q") ?? "";
     role.value = params.get("entity_role") ?? "all";
     route.value = params.get("entity_route") ?? "all";
+    surface.value = params.get("entity_surface") ?? "all";
     footprint.value = params.get("entity_footprint") ?? "all";
     sort.value = params.get("entity_sort") ?? "exposure";
     limit.value = params.get("entity_limit") ?? "12";
@@ -138,6 +152,7 @@ export function initEntityExplorer(): void {
       entity_q: search.value.trim(),
       entity_role: role.value,
       entity_route: route.value,
+      entity_surface: surface.value,
       entity_footprint: footprint.value,
       entity_sort: sort.value,
       entity_limit: limit.value
@@ -173,6 +188,7 @@ export function initEntityExplorer(): void {
       query: search.value,
       role: role.value,
       routeFamily: route.value,
+      surface: (surface.value as EntityExplorerState["surface"]) || "all",
       footprint: (footprint.value as EntityExplorerState["footprint"]) || "all",
       sort: (sort.value as EntityExplorerState["sort"]) || "exposure"
     };
@@ -197,6 +213,7 @@ export function initEntityExplorer(): void {
     summary.textContent = `Showing ${renderedCount} of ${filtered.length} matching profiles`;
     estateSummary.textContent = `${summaryState.namedEstateCount} with a current named estate`;
     moneySummary.textContent = `${summaryState.moneyLinkedCount} with public money rows`;
+    timelineSummary.textContent = `${summaryState.datedEvidenceCount} with dated evidence, ${summaryState.regionalCoverageCount} with regional contract coverage`;
     empty.hidden = filtered.length !== 0;
 
     if (summaryState.leadRole) {
@@ -223,6 +240,7 @@ export function initEntityExplorer(): void {
     form.reset();
     role.value = "all";
     route.value = "all";
+    surface.value = "all";
     footprint.value = "all";
     sort.value = "exposure";
     limit.value = "12";

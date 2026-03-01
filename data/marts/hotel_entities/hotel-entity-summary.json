@@ -1,19 +1,19 @@
 {
-  "totalNamedSites": 10,
-  "currentNamedSites": 5,
+  "totalNamedSites": 13,
+  "currentNamedSites": 8,
   "historicalNamedSites": 4,
   "parliamentaryReferenceSites": 1,
   "currentNamedSitesWithAnyEntityLinks": 3,
   "currentNamedSitesWithOwnerLinks": 2,
   "currentNamedSitesWithOperatorLinks": 1,
   "currentNamedSitesFullyResolved": 0,
-  "currentNamedSitesUnresolved": 2,
+  "currentNamedSitesUnresolved": 5,
   "currentNamedSitesWithIntegritySignals": 3,
-  "unnamedOnlyAreaCount": 3,
+  "unnamedOnlyAreaCount": 2,
   "totalIntegritySignals": 4,
   "archiveLeadCount": 219,
   "archiveLinkedExistingCount": 4,
-  "archivePromotedNewCount": 1,
+  "archivePromotedNewCount": 4,
   "archiveHeldBackCount": 1,
-  "archivePendingVerificationCount": 213
+  "archivePendingVerificationCount": 210
 }

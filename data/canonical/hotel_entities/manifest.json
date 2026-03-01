@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T00:25:19.504Z",
+  "generated_at": "2026-03-01T18:06:29.053Z",
   "dataset_id": "hotel_entities",
   "source_files": [
     {
@@ -10,7 +10,7 @@
     {
       "name": "areaSightings",
       "path": "data/manual/hotel-area-sightings.csv",
-      "sha256": "dcafbfebca037966506bff3f4bcaafc489bf3be4475004014304f23b187f7827"
+      "sha256": "77d79e43ec34caecb3db45ad81ebe1000f7291b0268ea36a19308a7cff949a58"
     },
     {
       "name": "entityLinks",
@@ -25,7 +25,7 @@
     {
       "name": "archiveVerifications",
       "path": "data/manual/hotel-archive-verifications.csv",
-      "sha256": "832ce9554e6a89ca78b7763d4d7a10f5bca040d7a5543e3ca81c098bbcfce7e3"
+      "sha256": "130e352e37d0c3e179f3ef583fc03cf881a724b9ad2513de1efe88a3e0e99d76"
     },
     {
       "name": "archiveLeads",
@@ -39,7 +39,7 @@
     }
   ],
   "counts": {
-    "site_rows": 10,
+    "site_rows": 13,
     "entity_link_rows": 4,
     "integrity_signal_rows": 4,
     "area_rows": 10,

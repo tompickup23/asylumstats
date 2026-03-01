@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-01T00:25:19.504Z",
+  "generatedAt": "2026-03-01T18:06:29.053Z",
   "summary": {
-    "totalNamedSites": 10,
-    "currentNamedSites": 5,
+    "totalNamedSites": 13,
+    "currentNamedSites": 8,
     "historicalNamedSites": 4,
     "parliamentaryReferenceSites": 1,
     "currentNamedSitesWithAnyEntityLinks": 3,
     "currentNamedSitesWithOwnerLinks": 2,
     "currentNamedSitesWithOperatorLinks": 1,
     "currentNamedSitesFullyResolved": 0,
-    "currentNamedSitesUnresolved": 2,
+    "currentNamedSitesUnresolved": 5,
     "currentNamedSitesWithIntegritySignals": 3,
-    "unnamedOnlyAreaCount": 3,
+    "unnamedOnlyAreaCount": 2,
     "totalIntegritySignals": 4,
     "archiveLeadCount": 219,
     "archiveLinkedExistingCount": 4,
-    "archivePromotedNewCount": 1,
+    "archivePromotedNewCount": 4,
     "archiveHeldBackCount": 1,
-    "archivePendingVerificationCount": 213
+    "archivePendingVerificationCount": 210
   },
   "hotelFacts": [
     {
@@ -203,7 +203,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-03-01T00:25:19.504Z",
+          "generatedAt": "2026-03-01T18:06:29.053Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -215,6 +215,105 @@
           "Yorkshire and The Humber",
           "Scotland",
           "Northern Ireland"
+        ],
+        "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
+        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      }
+    },
+    {
+      "siteId": "holiday-inn-flore-west-northamptonshire",
+      "siteName": "Holiday Inn, Flore",
+      "areaName": "West Northamptonshire",
+      "areaCode": "E06000062",
+      "regionName": "East Midlands",
+      "countryName": "England",
+      "status": "current",
+      "evidenceClass": "named_current",
+      "confidence": "high",
+      "peopleHousedReported": null,
+      "firstPublicDate": "2025-11-17",
+      "lastPublicDate": "2025-11-17",
+      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "notes": "Official council statement names Holiday Inn in Flore as one of the current hotels used for asylum accommodation in West Northamptonshire",
+      "ownerName": null,
+      "operatorName": null,
+      "entityCoverage": "unresolved",
+      "entityLinks": [],
+      "integritySignals": [],
+      "integritySignalCount": 0,
+      "primeProvider": {
+        "provider": "Serco",
+        "regions": [
+          "North West",
+          "Midlands",
+          "East of England"
+        ],
+        "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
+        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      }
+    },
+    {
+      "siteId": "ibis-rugby-east-crick",
+      "siteName": "ibis Rugby East",
+      "areaName": "West Northamptonshire",
+      "areaCode": "E06000062",
+      "regionName": "East Midlands",
+      "countryName": "England",
+      "status": "current",
+      "evidenceClass": "named_current",
+      "confidence": "high",
+      "peopleHousedReported": null,
+      "firstPublicDate": "2025-11-17",
+      "lastPublicDate": "2025-11-17",
+      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "notes": "Official council statement refers to the Crick site as Ibis Hotel while the archived lead identifies the same property as ibis Rugby East",
+      "ownerName": null,
+      "operatorName": null,
+      "entityCoverage": "unresolved",
+      "entityLinks": [],
+      "integritySignals": [],
+      "integritySignalCount": 0,
+      "primeProvider": {
+        "provider": "Serco",
+        "regions": [
+          "North West",
+          "Midlands",
+          "East of England"
+        ],
+        "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
+        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      }
+    },
+    {
+      "siteId": "mk-hotel-deanshanger",
+      "siteName": "M K Hotel",
+      "areaName": "West Northamptonshire",
+      "areaCode": "E06000062",
+      "regionName": "East Midlands",
+      "countryName": "England",
+      "status": "current",
+      "evidenceClass": "named_current",
+      "confidence": "high",
+      "peopleHousedReported": null,
+      "firstPublicDate": "2025-11-17",
+      "lastPublicDate": "2025-11-17",
+      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "notes": "Official council statement names M K Hotel in Deanshanger as one of the current hotels used for asylum accommodation in West Northamptonshire",
+      "ownerName": null,
+      "operatorName": null,
+      "entityCoverage": "unresolved",
+      "entityLinks": [],
+      "integritySignals": [],
+      "integritySignalCount": 0,
+      "primeProvider": {
+        "provider": "Serco",
+        "regions": [
+          "North West",
+          "Midlands",
+          "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
         "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
@@ -255,7 +354,7 @@
             "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
           ],
           "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-03-01T00:25:19.504Z",
+          "generatedAt": "2026-03-01T18:06:29.053Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -330,7 +429,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-03-01T00:25:19.504Z",
+          "generatedAt": "2026-03-01T18:06:29.053Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -495,7 +594,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-03-01T00:25:19.504Z",
+          "generatedAt": "2026-03-01T18:06:29.053Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
@@ -504,23 +603,6 @@
     }
   ],
   "areas": [
-    {
-      "areaName": "West Northamptonshire",
-      "areaCode": null,
-      "regionName": "East Midlands",
-      "countryName": "England",
-      "currentNamedSiteCount": 0,
-      "historicalNamedSiteCount": 0,
-      "parliamentaryReferenceCount": 0,
-      "unnamedSiteCount": 3,
-      "peopleHousedReported": null,
-      "lastPublicDate": "2025-08-21",
-      "sourceTitle": "West Northamptonshire statement on hotels used for asylum seekers",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-use-hotels-house-asylum-seekers",
-      "notes": "Public hotel count without names.",
-      "visibilityClass": "all_unnamed",
-      "visibilityPct": 0
-    },
     {
       "areaName": "Perth and Kinross",
       "areaCode": "S12000048",
@@ -673,6 +755,23 @@
       "notes": "Named site publicly confirmed.",
       "visibilityClass": "named_only",
       "visibilityPct": 100
+    },
+    {
+      "areaName": "West Northamptonshire",
+      "areaCode": "E06000062",
+      "regionName": "East Midlands",
+      "countryName": "England",
+      "currentNamedSiteCount": 3,
+      "historicalNamedSiteCount": 0,
+      "parliamentaryReferenceCount": 0,
+      "unnamedSiteCount": 0,
+      "peopleHousedReported": null,
+      "lastPublicDate": "2025-11-17",
+      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "notes": "Official council statement names ibis Rugby East in Crick, Holiday Inn in Flore, and M K Hotel in Deanshanger.",
+      "visibilityClass": "named_only",
+      "visibilityPct": 100
     }
   ],
   "archiveVerification": {
@@ -681,9 +780,9 @@
     "archiveSnapshotDate": "2025-08-26",
     "totalLeadCount": 219,
     "linkedExistingCount": 4,
-    "promotedNewCount": 1,
+    "promotedNewCount": 4,
     "heldBackCount": 1,
-    "pendingVerificationCount": 213,
+    "pendingVerificationCount": 210,
     "pendingAutoCandidateCount": 0,
     "publicArchiveMatches": [
       {
@@ -750,13 +849,52 @@
         "sourceTitle": "YorkMix report on Allerton Court Hotel asylum accommodation",
         "sourceUrl": "https://yorkmix.com/decision-not-to-house-single-male-asylum-seekers-at-northallerton-hotel-welcomed/",
         "notes": "Local Democracy report says the hotel has housed family groups of asylum seekers for several years and records live Home Office and council correspondence in September 2025"
+      },
+      {
+        "leadName": "Holiday Inn Flore",
+        "verificationStatus": "promoted_new",
+        "siteId": "holiday-inn-flore-west-northamptonshire",
+        "siteName": "Holiday Inn, Flore",
+        "areaName": "West Northamptonshire",
+        "areaCode": "E06000062",
+        "regionName": "East Midlands",
+        "status": "current",
+        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "notes": "Official council statement names Holiday Inn in Flore as one of the current hotels used for asylum accommodation in West Northamptonshire"
+      },
+      {
+        "leadName": "ibis Rugby East",
+        "verificationStatus": "promoted_new",
+        "siteId": "ibis-rugby-east-crick",
+        "siteName": "ibis Rugby East",
+        "areaName": "West Northamptonshire",
+        "areaCode": "E06000062",
+        "regionName": "East Midlands",
+        "status": "current",
+        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "notes": "Official council statement refers to the Crick site as Ibis Hotel while the archived lead identifies the same property as ibis Rugby East"
+      },
+      {
+        "leadName": "M K Hotel",
+        "verificationStatus": "promoted_new",
+        "siteId": "mk-hotel-deanshanger",
+        "siteName": "M K Hotel",
+        "areaName": "West Northamptonshire",
+        "areaCode": "E06000062",
+        "regionName": "East Midlands",
+        "status": "current",
+        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "notes": "Official council statement names M K Hotel in Deanshanger as one of the current hotels used for asylum accommodation in West Northamptonshire"
       }
     ]
   },
   "primeProviderBreakdown": [
     {
       "provider": "Serco",
-      "currentNamedSiteCount": 2,
+      "currentNamedSiteCount": 5,
       "regions": [
         "North West",
         "Midlands",

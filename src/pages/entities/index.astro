@@ -6,8 +6,18 @@ import {
   formatRouteFamilyLabel,
   getEntityProfiles
 } from "../../lib/entities";
+import { getEntityRegionalContractCoverage, getEntityTimeline } from "../../lib/entity-analytics";
+import { loadHotelEntityLedger } from "../../lib/hotel-data";
+import { loadLocalRouteLatest } from "../../lib/route-data";
 
 const entityProfiles = getEntityProfiles();
+const hotelLedger = loadHotelEntityLedger();
+const localRouteLatest = loadLocalRouteLatest();
+const entityExplorerProfiles = entityProfiles.map((profile) => ({
+  profile,
+  timeline: getEntityTimeline(profile, 8),
+  regionalCoverage: getEntityRegionalContractCoverage(profile, localRouteLatest.areas, hotelLedger.areas, 5)
+}));
 const featuredProfiles = entityProfiles.slice(0, 4);
 const hotelLinkedProfiles = entityProfiles.filter((profile) => profile.currentSiteCount > 0);
 const publicBodyProfiles = entityProfiles.filter((profile) => profile.primaryRole === "public_body");
@@ -24,6 +34,10 @@ const uniqueMoneyRowCount = new Set(entityProfiles.flatMap((profile) => profile.
 const uniqueAreaCount = new Set(
   hotelLinkedProfiles.flatMap((profile) => profile.linkedAreas.map((area) => area.areaCode ?? area.areaName))
 ).size;
+const datedEvidenceProfileCount = entityExplorerProfiles.filter(
+  ({ timeline }) => timeline.firstEvidenceDate || timeline.latestEvidenceDate
+).length;
+const regionalCoverageProfileCount = entityExplorerProfiles.filter(({ regionalCoverage }) => regionalCoverage !== null).length;
 const entityFindingCards = [
   featuredProfiles[0]
     ? {
@@ -50,6 +64,50 @@ function buildPresetHref(pathname: string, params: Record<string, string>, hash:
 }
 
 const entityPresetViews = [
+  {
+    title: "Newest public evidence",
+    body: "Sort the entity field by the most recent public signal so the newest named actors and latest money trails rise to the top.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_surface: "dated_evidence",
+        entity_sort: "newest",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open newest evidence"
+  },
+  {
+    title: "Oldest visible chains",
+    body: "Keep named-estate actors only and rank them by the oldest surviving public evidence, so long-running chains surface first.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_surface: "named_chain",
+        entity_footprint: "named_estate",
+        entity_sort: "oldest",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open oldest chains"
+  },
+  {
+    title: "Widest regional providers",
+    body: "Jump straight to the prime providers whose published regional contract field covers the most local authorities.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_role: "prime_provider",
+        entity_surface: "regional_provider",
+        entity_sort: "regional",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open regional providers"
+  },
   {
     title: "Prime providers on the named estate",
     body: "Jump straight to prime providers that already touch current named hotel sites and rank them by estate footprint.",
@@ -129,6 +187,17 @@ function formatMoney(value: number | null | undefined): string {
     currency: "GBP",
     maximumFractionDigits: value >= 1000 ? 0 : 2
   }).format(value);
+}
+
+function formatEvidenceDate(value: string | null | undefined): string {
+  if (!value) {
+    return "No dated evidence";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    month: "short",
+    year: "numeric"
+  }).format(new Date(`${value}T00:00:00Z`));
 }
 ---
 
@@ -276,6 +345,7 @@ function formatMoney(value: number | null | undefined): string {
         <span class="chip" data-entity-summary aria-live="polite">Showing {Math.min(12, entityProfiles.length)} of {entityProfiles.length} matching profiles</span>
         <span class="chip teal" data-entity-estate-summary aria-live="polite">{hotelLinkedProfiles.length} with a current named estate</span>
         <span class="chip warm" data-entity-money-summary aria-live="polite">{entityProfiles.filter((profile) => profile.moneyRecordCount > 0).length} with public money rows</span>
+        <span class="chip" data-entity-timeline-summary aria-live="polite">{datedEvidenceProfileCount} with dated evidence, {regionalCoverageProfileCount} with regional contract coverage</span>
       </div>
     </div>
     <form class="filter-panel" data-entity-form>
@@ -303,6 +373,15 @@ function formatMoney(value: number | null | undefined): string {
           </select>
         </label>
         <label class="filter-field">
+          <span class="tiny">Evidence surface</span>
+          <select name="entity_surface">
+            <option value="all">All surfaces</option>
+            <option value="dated_evidence">Dated public evidence</option>
+            <option value="named_chain">Visible site chains</option>
+            <option value="regional_provider">Regional contract providers</option>
+          </select>
+        </label>
+        <label class="filter-field">
           <span class="tiny">Footprint</span>
           <select name="entity_footprint">
             <option value="all">All footprints</option>
@@ -317,6 +396,9 @@ function formatMoney(value: number | null | undefined): string {
             <option value="exposure">Exposure</option>
             <option value="estate">Estate footprint</option>
             <option value="money">Money rows</option>
+            <option value="newest">Newest evidence</option>
+            <option value="oldest">Oldest evidence</option>
+            <option value="regional">Regional coverage</option>
             <option value="title">Alphabetical</option>
           </select>
         </label>
@@ -336,7 +418,7 @@ function formatMoney(value: number | null | undefined): string {
       </div>
     </form>
     <div class="story-grid" data-entity-results>
-      {entityProfiles.map((profile) => (
+      {entityExplorerProfiles.map(({ profile, timeline, regionalCoverage }) => (
         <article
           class="story-card"
           data-entity-item
@@ -349,6 +431,10 @@ function formatMoney(value: number | null | undefined): string {
           data-linked-areas={profile.linkedAreaCount}
           data-unresolved-sites={profile.unresolvedCurrentSiteCount}
           data-rows-with-value={profile.moneyRowsWithPublishedValueCount}
+          data-first-evidence-date={timeline.firstEvidenceDate ?? undefined}
+          data-latest-evidence-date={timeline.latestEvidenceDate ?? undefined}
+          data-regional-areas={regionalCoverage?.coveredAreaCount ?? 0}
+          data-named-coverage-areas={regionalCoverage?.namedCurrentAreaCount ?? 0}
           data-score={profile.score}
           data-search={[
             profile.entityName,
@@ -383,8 +469,17 @@ function formatMoney(value: number | null | undefined): string {
               <span>Linked places</span>
               <span class="data-row-value">{profile.linkedAreaCount.toLocaleString()}</span>
             </div>
+            <div class="data-row">
+              <span>Latest evidence</span>
+              <span class="data-row-value">{formatEvidenceDate(timeline.latestEvidenceDate)}</span>
+            </div>
+            <div class="data-row">
+              <span>Regional contract areas</span>
+              <span class="data-row-value">{regionalCoverage?.coveredAreaCount?.toLocaleString() ?? "None"}</span>
+            </div>
           </div>
           <p class="tiny">
+            First visible evidence: {formatEvidenceDate(timeline.firstEvidenceDate)}.{" "}
             {profile.routeFamilies.map(formatRouteFamilyLabel).join(", ") || "No route family attached"}
           </p>
           <p class="tiny">

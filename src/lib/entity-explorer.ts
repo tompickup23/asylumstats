@@ -8,6 +8,10 @@ export interface EntityExplorerItem {
   linkedAreaCount: number;
   unresolvedCurrentSiteCount: number;
   moneyRowsWithPublishedValueCount: number;
+  firstEvidenceDate: string | null;
+  latestEvidenceDate: string | null;
+  regionalCoverageAreaCount: number;
+  namedCoverageAreaCount: number;
   score: number;
   searchText: string;
 }
@@ -16,8 +20,9 @@ export interface EntityExplorerState {
   query: string;
   role: string;
   routeFamily: string;
+  surface: "all" | "dated_evidence" | "named_chain" | "regional_provider";
   footprint: "all" | "named_estate" | "money_only" | "unresolved_estate";
-  sort: "exposure" | "money" | "estate" | "title";
+  sort: "exposure" | "money" | "estate" | "title" | "newest" | "oldest" | "regional";
 }
 
 export interface EntityExplorerSummary {
@@ -25,6 +30,8 @@ export interface EntityExplorerSummary {
   namedEstateCount: number;
   moneyLinkedCount: number;
   unresolvedEstateCount: number;
+  datedEvidenceCount: number;
+  regionalCoverageCount: number;
   leadRole: string | null;
 }
 
@@ -63,6 +70,55 @@ function compareTitle(left: EntityExplorerItem, right: EntityExplorerItem): numb
   return left.entityName.localeCompare(right.entityName) || compareExposure(left, right);
 }
 
+function compareOptionalDateDescending(left: string | null, right: string | null): number {
+  if (left && right) {
+    return right.localeCompare(left);
+  }
+
+  if (right) {
+    return 1;
+  }
+
+  if (left) {
+    return -1;
+  }
+
+  return 0;
+}
+
+function compareOptionalDateAscending(left: string | null, right: string | null): number {
+  if (left && right) {
+    return left.localeCompare(right);
+  }
+
+  if (left) {
+    return -1;
+  }
+
+  if (right) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function compareNewest(left: EntityExplorerItem, right: EntityExplorerItem): number {
+  return compareOptionalDateDescending(left.latestEvidenceDate, right.latestEvidenceDate) || compareExposure(left, right);
+}
+
+function compareOldest(left: EntityExplorerItem, right: EntityExplorerItem): number {
+  return compareOptionalDateAscending(left.firstEvidenceDate, right.firstEvidenceDate) || compareExposure(left, right);
+}
+
+function compareRegional(left: EntityExplorerItem, right: EntityExplorerItem): number {
+  return (
+    right.regionalCoverageAreaCount - left.regionalCoverageAreaCount ||
+    right.namedCoverageAreaCount - left.namedCoverageAreaCount ||
+    right.linkedAreaCount - left.linkedAreaCount ||
+    compareExposure(left, right)
+  );
+}
+
 export function filterEntityExplorerItems<T extends EntityExplorerItem>(
   items: T[],
   state: EntityExplorerState
@@ -73,13 +129,18 @@ export function filterEntityExplorerItems<T extends EntityExplorerItem>(
     const matchesQuery = !query || item.searchText.includes(query);
     const matchesRole = state.role === "all" || item.primaryRole === state.role;
     const matchesRoute = state.routeFamily === "all" || item.routeFamilies.includes(state.routeFamily);
+    const matchesSurface =
+      state.surface === "all" ||
+      (state.surface === "dated_evidence" && Boolean(item.latestEvidenceDate || item.firstEvidenceDate)) ||
+      (state.surface === "named_chain" && item.currentSiteCount > 0 && Boolean(item.firstEvidenceDate)) ||
+      (state.surface === "regional_provider" && item.regionalCoverageAreaCount > 0);
     const matchesFootprint =
       state.footprint === "all" ||
       (state.footprint === "named_estate" && item.currentSiteCount > 0) ||
       (state.footprint === "money_only" && item.currentSiteCount === 0 && item.moneyRecordCount > 0) ||
       (state.footprint === "unresolved_estate" && item.unresolvedCurrentSiteCount > 0);
 
-    return matchesQuery && matchesRole && matchesRoute && matchesFootprint;
+    return matchesQuery && matchesRole && matchesRoute && matchesSurface && matchesFootprint;
   });
 }
 
@@ -95,6 +156,12 @@ export function sortEntityExplorerItems<T extends EntityExplorerItem>(
         return compareMoney(left, right);
       case "estate":
         return compareEstate(left, right);
+      case "newest":
+        return compareNewest(left, right);
+      case "oldest":
+        return compareOldest(left, right);
+      case "regional":
+        return compareRegional(left, right);
       case "title":
         return compareTitle(left, right);
       default:
@@ -121,6 +188,8 @@ export function summarizeEntityExplorerItems(items: EntityExplorerItem[]): Entit
     namedEstateCount: items.filter((item) => item.currentSiteCount > 0).length,
     moneyLinkedCount: items.filter((item) => item.moneyRecordCount > 0).length,
     unresolvedEstateCount: items.filter((item) => item.unresolvedCurrentSiteCount > 0).length,
+    datedEvidenceCount: items.filter((item) => item.latestEvidenceDate || item.firstEvidenceDate).length,
+    regionalCoverageCount: items.filter((item) => item.regionalCoverageAreaCount > 0).length,
     leadRole
   };
 }
