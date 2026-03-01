@@ -14,9 +14,10 @@ interface Props {
   tone?: "" | "accent" | "teal" | "warm";
   steps: InvestigationStep[];
   footnote?: string;
+  footerLinks?: Array<{ href: string; label: string }>;
 }
 
-const { kicker, title, summary, chips = [], tone = "", steps, footnote } = Astro.props;
+const { kicker, title, summary, chips = [], tone = "", steps, footnote, footerLinks = [] } = Astro.props;
 ---
 
 <article class:list={["feature-card", "trail-card", tone]}>
@@ -43,4 +44,11 @@ const { kicker, title, summary, chips = [], tone = "", steps, footnote } = Astro
     ))}
   </ol>
   {footnote && <p class="tiny">{footnote}</p>}
+  {footerLinks.length > 0 && (
+    <div class="chip-row">
+      {footerLinks.map((link) => (
+        <a class="source-pill" href={link.href}>{link.label}</a>
+      ))}
+    </div>
+  )}
 </article>

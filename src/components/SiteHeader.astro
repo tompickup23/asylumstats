@@ -2,6 +2,7 @@
 const navItems = [
   { href: "/hotels", label: "Hotels", priority: true },
   { href: "/spending", label: "Money", priority: true },
+  { href: "/entities", label: "Entities" },
   { href: "/compare", label: "Pressure", priority: true },
   { href: "/routes", label: "Routes" },
   { href: "/sources", label: "Sources" },
@@ -37,7 +38,7 @@ function isActive(href: string): boolean {
       aria-haspopup="dialog"
       aria-controls="site-search-panel"
     >
-      <span>Search pages and places</span>
+      <span>Search pages, places, and entities</span>
       <span class="search-shortcut">/</span>
     </button>
 
@@ -68,7 +69,7 @@ function isActive(href: string): boolean {
     <div class="site-search-head">
       <div>
         <span class="tiny">Search the publication</span>
-        <h2 id="site-search-title">Pages, place profiles, and accountability surfaces</h2>
+        <h2 id="site-search-title">Pages, place profiles, and named entities</h2>
       </div>
       <button class="source-pill" type="button" data-site-search-close>Close</button>
     </div>
@@ -79,7 +80,7 @@ function isActive(href: string): boolean {
         <input
           type="search"
           name="site_search"
-          placeholder="Try Glasgow, hotels, spending, or an area code"
+          placeholder="Try Serco, Glasgow, hotels, spending, or an area code"
           autocomplete="off"
           spellcheck="false"
           data-site-search-input

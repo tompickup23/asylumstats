@@ -1,7 +1,7 @@
 interface SiteSearchEntry {
   href: string;
   title: string;
-  kind: "page" | "place";
+  kind: "page" | "entity" | "place";
   kicker: string;
   description: string;
   priority: number;
@@ -68,6 +68,8 @@ function scoreEntry(entry: SiteSearchEntry, query: string): number {
 
   if (entry.kind === "page") {
     score += 14;
+  } else if (entry.kind === "entity") {
+    score += 8;
   }
 
   return score;
@@ -138,10 +140,13 @@ export function initSiteSearch(): void {
   }
 
   function renderEntry(entry: SiteSearchEntry): string {
+    const kindLabel = entry.kind === "page" ? "Page" : entry.kind === "entity" ? "Entity" : "Place";
+    const kindTone = entry.kind === "page" ? "accent" : entry.kind === "entity" ? "warm" : "teal";
+
     return `
       <a class="site-search-result" href="${escapeHtml(entry.href)}">
         <div class="chip-row">
-          <span class="chip ${entry.kind === "page" ? "accent" : "teal"}">${entry.kind === "page" ? "Page" : "Place"}</span>
+          <span class="chip ${kindTone}">${kindLabel}</span>
           <span class="chip">${escapeHtml(entry.kicker)}</span>
         </div>
         <strong>${escapeHtml(entry.title)}</strong>
@@ -168,8 +173,8 @@ export function initSiteSearch(): void {
         statusElement.textContent = `No matches for "${trimmedQuery}"`;
         resultsElement.innerHTML = `
           <article class="site-search-empty">
-            <strong>No matching pages or places</strong>
-            <p>Try an area name, area code, route surface, or topic like hotels or spending.</p>
+            <strong>No matching pages, places, or entities</strong>
+            <p>Try an area name, area code, provider, owner group, or topic like hotels or spending.</p>
           </article>
         `;
         return;

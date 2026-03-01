@@ -1,0 +1,405 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import InvestigationTrail from "../../components/InvestigationTrail.astro";
+import PageContents from "../../components/PageContents.astro";
+import { formatRouteFamilyLabel, getEntityProfiles, type EntityProfile } from "../../lib/entities";
+import { loadHotelEntityLedger } from "../../lib/hotel-data";
+import { loadMoneyLedger } from "../../lib/money-data";
+import { getSiteInvestigationTrailMap } from "../../lib/investigations";
+import { loadLocalRouteLatest } from "../../lib/route-data";
+import { buildAbsoluteUrl, buildEntityStructuredData } from "../../lib/site";
+
+const hotelLedger = loadHotelEntityLedger();
+const moneyLedger = loadMoneyLedger();
+const localRouteLatest = loadLocalRouteLatest();
+const siteTrailMap = getSiteInvestigationTrailMap(localRouteLatest.areas, hotelLedger, moneyLedger);
+
+export function getStaticPaths() {
+  return getEntityProfiles().map((profile) => ({
+    params: { id: profile.entityId },
+    props: { profile }
+  }));
+}
+
+const { profile } = Astro.props as { profile: EntityProfile };
+const leadArea = profile.linkedAreas[0] ?? null;
+const leadMoneyRecord = profile.moneyRecords[0] ?? null;
+const entityTrails = profile.currentSites.flatMap((site) => {
+  const trail = siteTrailMap.get(site.siteId);
+  return trail ? [trail] : [];
+}).slice(0, 3);
+const entityFindingCards = [
+  profile.currentSiteCount > 0
+    ? {
+        title: "The visible estate is already named",
+        body: `${profile.entityName} already touches ${profile.currentSiteCount} current named site${profile.currentSiteCount === 1 ? "" : "s"}${leadArea ? ` across ${profile.linkedAreaCount} place${profile.linkedAreaCount === 1 ? "" : "s"}` : ""}.`
+      }
+    : {
+        title: "This profile is visible through money rather than named hotels",
+        body: `${profile.entityName} currently sits on ${profile.moneyRecordCount} public money row${profile.moneyRecordCount === 1 ? "" : "s"} without a named current hotel footprint in the starter ledgers.`
+      },
+  profile.moneyRecordCount > 0
+    ? {
+        title: "Public money rows already attach to this actor",
+        body: leadMoneyRecord
+          ? `${leadMoneyRecord.title} is part of the public money layer already tied to this profile.`
+          : `${profile.moneyRecordCount} public money row${profile.moneyRecordCount === 1 ? "" : "s"} are already tied to this profile.`
+      }
+    : {
+        title: "No direct money row is attached yet",
+        body: "This profile is currently visible through hotel-chain evidence rather than a direct public money row."
+      },
+  profile.currentSiteCount > 0
+    ? {
+        title:
+          profile.unresolvedCurrentSiteCount > 0
+            ? "Current chain gaps are still part of the story"
+            : "The visible chain is currently more legible than the average named site",
+        body:
+          profile.unresolvedCurrentSiteCount > 0
+            ? `${profile.unresolvedCurrentSiteCount} current site${profile.unresolvedCurrentSiteCount === 1 ? "" : "s"} linked to this profile still sit in unresolved or partial chain coverage.`
+            : `No current site linked to ${profile.entityName} is marked unresolved in the live hotel ledger.`
+      }
+    : {
+        title: "Route labels still matter here",
+        body: `${profile.routeFamilies.map(formatRouteFamilyLabel).join(", ")} stay separate on this page so one funding surface does not get collapsed into a fake overall total.`
+      }
+].filter((card): card is { title: string; body: string } => card !== null);
+const pageDescription = `${profile.entityName} profile tying named hotels, public money rows, and linked place pressure together on one evidence surface.`;
+const pageStructuredData = buildEntityStructuredData(profile, {
+  canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
+  description: pageDescription,
+  socialImageUrl: buildAbsoluteUrl("/og-card.png"),
+  snapshotDate: localRouteLatest.snapshotDate
+});
+const entitySections = [
+  { id: "entity-findings", label: "Findings" },
+  ...(profile.currentSites.length > 0 ? [{ id: "entity-sites", label: "Sites" }] : []),
+  ...(profile.moneyRecords.length > 0 ? [{ id: "entity-money", label: "Money" }] : []),
+  ...(profile.linkedAreas.length > 0 ? [{ id: "entity-places", label: "Places" }] : []),
+  ...(entityTrails.length > 0 ? [{ id: "entity-case-files", label: "Case files" }] : []),
+  { id: "entity-sources", label: "Sources" }
+];
+
+function formatMoney(value: number | null | undefined): string {
+  if (typeof value !== "number") {
+    return "Not disclosed / not normalized";
+  }
+
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: value >= 1000 ? 0 : 2
+  }).format(value);
+}
+
+function buildHotelHref(siteName: string, status: string): string {
+  const search = new URLSearchParams({
+    hotel_q: siteName,
+    hotel_status: status
+  });
+
+  return `/hotels/?${search.toString()}#hotel-filters`;
+}
+
+function buildMoneyHref(query: string): string {
+  const search = new URLSearchParams({ money_q: query });
+  return `/spending/?${search.toString()}#money-explorer`;
+}
+
+function buildPlaceHref(areaCode: string | null): string {
+  return areaCode ? `/places/${areaCode}/` : "/compare/#compare-explorer";
+}
+
+function formatSourceKind(kind: string): string {
+  switch (kind) {
+    case "money_row":
+      return "Money row";
+    case "supplier_profile":
+      return "Supplier source";
+    case "hotel_link":
+      return "Entity link";
+    case "hotel_site":
+      return "Hotel evidence";
+    case "prime_provider":
+      return "Prime-provider source";
+    default:
+      return kind.replaceAll("_", " ");
+  }
+}
+---
+
+<BaseLayout title={`${profile.entityName} | asylumstats`} description={pageDescription} structuredData={pageStructuredData}>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">{profile.roleSummary}</span>
+      <h1>{profile.entityName}</h1>
+      <p>
+        {profile.searchDescription} This page keeps named site evidence, linked money rows, and place pressure on one
+        actor-level surface so the public can move from hotel to provider or owner without losing the chain.
+      </p>
+      <div class="chip-row">
+        <span class="chip accent">{profile.primaryRoleLabel}</span>
+        <span class="chip">{profile.currentSiteCount} current site{profile.currentSiteCount === 1 ? "" : "s"}</span>
+        <span class="chip teal">{profile.moneyRecordCount} money row{profile.moneyRecordCount === 1 ? "" : "s"}</span>
+        {profile.riskLevel && <span class="chip">{profile.riskLevel}</span>}
+      </div>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Entity snapshot</span>
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">Current named sites</span>
+            <strong>{profile.currentSiteCount.toLocaleString()}</strong>
+            <p class="tiny">Current hotel sites attached to this profile.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Public money rows</span>
+            <strong>{profile.moneyRecordCount.toLocaleString()}</strong>
+            <p class="tiny">Money rows already linked to this actor.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Linked places</span>
+            <strong>{profile.linkedAreaCount.toLocaleString()}</strong>
+            <p class="tiny">Areas where the visible estate touches local pressure.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Integrity signals</span>
+            <strong>{profile.integritySignalCount.toLocaleString()}</strong>
+            <p class="tiny">Signals attached through linked hotel sites.</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Current profile readout</span>
+        <p class="rail-copy">
+          {profile.routeFamilies.length > 0
+            ? `Route families in scope: ${profile.routeFamilies.map(formatRouteFamilyLabel).join(", ")}.`
+            : "No route family is attached to this profile yet."}
+        </p>
+        <p class="rail-copy">
+          {profile.companyNumber ? `Company number: ${profile.companyNumber}.` : "No company number is published on the current profile."}
+        </p>
+      </article>
+    </aside>
+  </section>
+
+  <PageContents title="Jump to evidence" sections={entitySections} variant="priority" />
+
+  <section id="entity-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          {profile.currentSiteCount > 0
+            ? `${profile.entityName} is already visible on named hotel sites, which means the public chain can now run from actor to hotel to place and, in some cases, to public money.`
+            : `${profile.entityName} is currently a money-led profile. The public evidence is contractual or funding-based rather than tied to a named hotel estate.`}
+        </p>
+      </div>
+      <span class="chip accent">{profile.primaryRoleLabel}</span>
+    </div>
+    <div class="story-grid">
+      {entityFindingCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {profile.currentSites.length > 0 && (
+    <section id="entity-sites" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Current site footprint</h2>
+          <p class="lede">
+            Each site card keeps the relationship label, the local place, and the current chain status on the same
+            row.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {profile.currentSites.map((site) => (
+          <article class="feature-card">
+            <div class="chip-row">
+              {site.relationshipLabels.map((label) => (
+                <span class="chip accent">{label}</span>
+              ))}
+              <span class="chip">{site.entityCoverage}</span>
+            </div>
+            <h3>{site.siteName}</h3>
+            <p class="lede">
+              {site.areaName}, {site.regionName}. {site.moneyRecordCount} linked money row{site.moneyRecordCount === 1 ? "" : "s"} and {site.integritySignalCount} integrity signal{site.integritySignalCount === 1 ? "" : "s"}.
+            </p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Confidence</span>
+                <span class="data-row-value">{site.confidence}</span>
+              </div>
+              <div class="data-row">
+                <span>People reported</span>
+                <span class="data-row-value">{site.peopleHousedReported?.toLocaleString() ?? "n/a"}</span>
+              </div>
+            </div>
+            <p class="tiny">
+              <a class="source-pill" href={buildHotelHref(site.siteName, site.status)}>Open hotel view</a>
+              <a class="source-pill" href={buildPlaceHref(site.areaCode)}>Open place profile</a>
+            </p>
+          </article>
+        ))}
+      </div>
+
+      {profile.historicalSites.length > 0 && (
+        <div class="story-grid" style="margin-top: 1rem;">
+          {profile.historicalSites.map((site) => (
+            <article class="story-card">
+              <div class="chip-row">
+                <span class="chip">{site.status}</span>
+                <span class="chip">{site.areaName}</span>
+              </div>
+              <h3>{site.siteName}</h3>
+              <p class="lede">{site.relationshipLabels.join(", ")}.</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
+  {profile.moneyRecords.length > 0 && (
+    <section id="entity-money" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Public money surface</h2>
+          <p class="lede">
+            These are the public rows already attached to this profile. They stay split by route family and row type.
+          </p>
+        </div>
+      </div>
+      <div class="story-grid">
+        {profile.moneyRecords.map((record) => (
+          <article class="story-card">
+            <div class="chip-row">
+              {record.routeFamily && <span class="chip accent">{formatRouteFamilyLabel(record.routeFamily)}</span>}
+              <span class="chip">{record.recordType.replaceAll("_", " ")}</span>
+            </div>
+            <h3>{record.title}</h3>
+            <p class="lede">{record.notes ?? "Public row already in the live money ledger."}</p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Buyer</span>
+                <span class="data-row-value">{record.buyerName}</span>
+              </div>
+              <div class="data-row">
+                <span>Published value</span>
+                <span class="data-row-value">{formatMoney(record.valueGbp)}</span>
+              </div>
+              <div class="data-row">
+                <span>Linked sites</span>
+                <span class="data-row-value">{record.linkedSites.length.toLocaleString()}</span>
+              </div>
+            </div>
+            <p class="tiny">
+              <a class="source-pill" href={buildMoneyHref(profile.entityName)}>Open money explorer</a>
+              {record.sourceUrl && <a class="source-pill" href={record.sourceUrl}>Source</a>}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {profile.linkedAreas.length > 0 && (
+    <section id="entity-places" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Linked places</h2>
+          <p class="lede">
+            These places are where the current public site chain already meets quarter-end local pressure data.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {profile.linkedAreas.map((area) => (
+          <article class="feature-card teal">
+            <div class="chip-row">
+              <span class="chip teal">{area.regionName}</span>
+              <span class="chip">{area.currentSiteCount} current site{area.currentSiteCount === 1 ? "" : "s"}</span>
+            </div>
+            <h3>{area.areaName}</h3>
+            <p class="lede">
+              {area.supportedAsylum !== null
+                ? `${area.supportedAsylum.toLocaleString()} people on supported asylum and ${area.contingencyAccommodation?.toLocaleString() ?? "n/a"} in contingency accommodation in the latest local snapshot.`
+                : "No matched local-authority pressure row is attached to this place label."}
+            </p>
+            <p class="tiny">Sites: {area.siteNames.join(", ")}</p>
+            <p class="tiny">
+              <a class="source-pill" href={buildPlaceHref(area.areaCode)}>Open place profile</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {entityTrails.length > 0 && (
+    <section id="entity-case-files" class="section section-anchor priority-section">
+      <div class="section-head">
+        <div>
+          <h2>Concrete case files</h2>
+          <p class="lede">
+            These are the clearest current examples of this entity showing up on a named hotel site with a followable
+            place and money chain.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {entityTrails.map((trail) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section id="entity-sources" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Source trail</h2>
+        <p class="lede">
+          The source layer below is the public trail currently holding this profile together.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {profile.sourceLinks.map((source) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip">{formatSourceKind(source.kind)}</span>
+          </div>
+          <h3>{source.title}</h3>
+          <p class="tiny">
+            <a class="source-pill" href={source.url}>Open source</a>
+          </p>
+        </article>
+      ))}
+      {profile.notes.map((note) => (
+        <article class="story-card">
+          <h3>Editorial note</h3>
+          <p class="lede">{note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

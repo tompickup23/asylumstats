@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
 import TrendChart from "../components/TrendChart.astro";
@@ -8,11 +9,17 @@ import {
   buildSupportedAsylumStockDescription,
   supportedAsylumReadingRules
 } from "../lib/asylum-support-logic";
+import { getLeadEntityProfileForTrail } from "../lib/entities";
+import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { getRouteInvestigationTrails } from "../lib/investigations";
+import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { getRegionPressureSummaries, getSeriesDelta } from "../lib/route-analytics";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
+const hotelLedger = loadHotelEntityLedger();
+const moneyLedger = loadMoneyLedger();
 const routeSignalCards = routeDashboard.nationalCards.slice(0, 3);
 const featuredRoutes = [...routeDashboard.routeFamilies]
   .sort((a, b) => b.latestValue - a.latestValue)
@@ -58,8 +65,13 @@ const routeFindingCards = [
     body: `Appeals data is only complete through ${postDecisionPath.appeals.dataCompleteThroughLabel ?? "an older quarter"}, while returns run to ${postDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"} but cover all returns, not just asylum-specific exits.`
   }
 ];
+const routeCaseFiles = getRouteInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
+  trail,
+  leadEntity: getLeadEntityProfileForTrail(trail)
+}));
 const routeSections = [
   { id: "route-findings", label: "Findings" },
+  ...(routeCaseFiles.length > 0 ? [{ id: "route-case-files", label: "Case files" }] : []),
   { id: "route-logic", label: "How to read" },
   { id: "national-stock-flow", label: "Stock vs flow" },
   { id: "claims-support-tracks", label: "Tracks" },
@@ -147,6 +159,38 @@ function formatCardValue(value: number, suffix?: string): string {
       ))}
     </div>
   </section>
+
+  {routeCaseFiles.length > 0 && (
+    <section id="route-case-files" class="section section-anchor priority-section">
+      <div class="section-head">
+        <div>
+          <h2>Named case files behind the national numbers</h2>
+          <p class="lede">
+            National stocks and flows only become concrete when they land in named hotels, named actors, and specific
+            places. These live case files show where that chain is already public.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {routeCaseFiles.map(({ trail, leadEntity }) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+            footerLinks={
+              leadEntity
+                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
+                : []
+            }
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section id="route-logic" class="section section-anchor">
     <div class="section-head">

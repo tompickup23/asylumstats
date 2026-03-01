@@ -1,5 +1,6 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { loadHotelEntityLedger } from "./hotel-data";
+import { getEntityProfiles, type EntityProfile } from "./entities";
 
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
@@ -19,6 +20,7 @@ export interface ReleaseEntry {
 const INDEXABLE_STATIC_PATHS = [
   "/",
   "/compare/",
+  "/entities/",
   "/routes/",
   "/hotels/",
   "/spending/",
@@ -58,7 +60,15 @@ export function getIndexableSitePaths(): string[] {
     paths.add(`/places/${area.areaCode}/`);
   }
 
+  for (const profile of getEntityProfiles()) {
+    paths.add(`/entities/${profile.entityId}/`);
+  }
+
   return [...paths].sort((a, b) => a.localeCompare(b));
+}
+
+export function getPublicEntityProfiles(): EntityProfile[] {
+  return getEntityProfiles();
 }
 
 interface PlaceStructuredDataOptions {
@@ -205,6 +215,13 @@ interface ReleaseCollectionStructuredDataOptions {
   socialImageUrl: string;
 }
 
+interface EntityStructuredDataOptions {
+  canonicalUrl: string;
+  description: string;
+  socialImageUrl: string;
+  snapshotDate: string;
+}
+
 export function buildReleaseCollectionStructuredData(
   releases: ReleaseEntry[],
   options: ReleaseCollectionStructuredDataOptions
@@ -265,6 +282,76 @@ export function buildReleaseCollectionStructuredData(
           datePublished: release.date
         }
       }))
+    }
+  ];
+}
+
+export function buildEntityStructuredData(
+  profile: EntityProfile,
+  options: EntityStructuredDataOptions
+): StructuredDataNode[] {
+  const profileId = `${options.canonicalUrl}#profile`;
+  const organizationId = `${options.canonicalUrl}#organization`;
+
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Entities",
+          item: `${SITE_URL}/entities/`
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: profile.entityName,
+          item: options.canonicalUrl
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "@id": profileId,
+      name: `${profile.entityName} profile`,
+      description: options.description,
+      url: options.canonicalUrl,
+      image: options.socialImageUrl,
+      dateModified: options.snapshotDate,
+      mainEntity: {
+        "@id": organizationId
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": organizationId,
+      name: profile.entityName,
+      identifier: profile.companyNumber ?? profile.entityId,
+      description: options.description,
+      url: options.canonicalUrl,
+      knowsAbout: [
+        profile.primaryRoleLabel,
+        ...profile.routeFamilies.map((routeFamily) => routeFamily.replaceAll("_", " ")),
+        "asylum accommodation",
+        "public money"
+      ],
+      address: profile.linkedAreas[0]
+        ? {
+            "@type": "PostalAddress",
+            addressRegion: profile.linkedAreas[0].regionName,
+            addressCountry: profile.linkedAreas[0].countryName
+          }
+        : undefined
     }
   ];
 }

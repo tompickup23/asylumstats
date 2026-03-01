@@ -1,0 +1,265 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageContents from "../../components/PageContents.astro";
+import { formatRouteFamilyLabel, getEntityProfiles } from "../../lib/entities";
+
+const entityProfiles = getEntityProfiles();
+const featuredProfiles = entityProfiles.slice(0, 4);
+const hotelLinkedProfiles = entityProfiles.filter((profile) => profile.currentSiteCount > 0);
+const publicBodyProfiles = entityProfiles.filter((profile) => profile.primaryRole === "public_body");
+const uniqueCurrentSiteCount = new Set(hotelLinkedProfiles.flatMap((profile) => profile.currentSites.map((site) => site.siteId)))
+  .size;
+const uniqueMoneyRowCount = new Set(entityProfiles.flatMap((profile) => profile.moneyRecords.map((record) => record.recordId)))
+  .size;
+const uniqueAreaCount = new Set(
+  hotelLinkedProfiles.flatMap((profile) => profile.linkedAreas.map((area) => area.areaCode ?? area.areaName))
+).size;
+const entityFindingCards = [
+  featuredProfiles[0]
+    ? {
+        title: "Named entities now sit on the main accountability surface",
+        body: `${featuredProfiles[0].entityName} already links ${featuredProfiles[0].currentSiteCount} current named site${featuredProfiles[0].currentSiteCount === 1 ? "" : "s"} to ${featuredProfiles[0].moneyRecordCount} public money row${featuredProfiles[0].moneyRecordCount === 1 ? "" : "s"}.`
+      }
+    : null,
+  hotelLinkedProfiles.length > 0
+    ? {
+        title: "Owner and operator visibility is still thinner than provider visibility",
+        body: `${hotelLinkedProfiles.length} profiles already touch named current hotel sites, but several of those sites still sit under partial or unresolved chain coverage.`
+      }
+    : null,
+  publicBodyProfiles[0]
+    ? {
+        title: "Some entity pages are funding surfaces rather than hotel chains",
+        body: `${publicBodyProfiles[0].entityName} carries ${publicBodyProfiles[0].moneyRecordCount} money rows across ${publicBodyProfiles[0].routeFamilies.map(formatRouteFamilyLabel).join(", ")} without sitting on a named hotel estate.`
+      }
+    : null
+].filter((card): card is { title: string; body: string } => card !== null);
+const entitySections = [
+  { id: "entity-findings", label: "Findings" },
+  { id: "priority-entities", label: "Priority profiles" },
+  { id: "visible-estate", label: "Named estate" },
+  { id: "funding-surfaces", label: "Funding" },
+  { id: "entity-ledger", label: "All profiles" }
+];
+
+function formatMoney(value: number | null | undefined): string {
+  if (typeof value !== "number") {
+    return "Not disclosed / not normalized";
+  }
+
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: value >= 1000 ? 0 : 2
+  }).format(value);
+}
+---
+
+<BaseLayout
+  title="Entities | asylumstats"
+  description="Named provider, owner-group, operator, and public-body profiles tied to the visible hotel estate, money rows, and local pressure."
+>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Entities</span>
+      <h1>Providers, owner groups, operators, and public bodies should be readable as named actors, not scattered mentions.</h1>
+      <p>
+        This page turns the current hotel and money ledgers into entity profiles. It keeps prime providers separate
+        from owner groups, hotel operators, and public-body funding surfaces so the public can move from a named site
+        or money row to the actor behind it.
+      </p>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Entity surface</span>
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">Profiles tracked</span>
+            <strong>{entityProfiles.length.toLocaleString()}</strong>
+            <p class="tiny">Visible named actors in the live starter ledgers.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Current named sites</span>
+            <strong>{uniqueCurrentSiteCount.toLocaleString()}</strong>
+            <p class="tiny">Unique current named hotels tied to at least one profile.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Public money rows</span>
+            <strong>{uniqueMoneyRowCount.toLocaleString()}</strong>
+            <p class="tiny">Unique money rows already attached to entity pages.</p>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Linked places</span>
+            <strong>{uniqueAreaCount.toLocaleString()}</strong>
+            <p class="tiny">Local areas with visible entity-to-place links.</p>
+          </article>
+        </div>
+      </article>
+    </aside>
+  </section>
+
+  <PageContents title="Jump to evidence" sections={entitySections} variant="priority" />
+
+  <section id="entity-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          The visible estate is no longer just a hotel list. It now has named actors behind it, direct money rows for
+          some of them, and clear gaps where the chain is still only partially resolved.
+        </p>
+      </div>
+      <span class="chip accent">{entityProfiles.length} public profiles</span>
+    </div>
+    <div class="story-grid">
+      {entityFindingCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="priority-entities" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Priority profiles</h2>
+        <p class="lede">
+          These are the fastest routes into the strongest named-actor evidence already on the site.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {featuredProfiles.map((profile) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{profile.primaryRoleLabel}</span>
+            <span class="chip">{profile.roleSummary}</span>
+            {profile.riskLevel && <span class="chip">{profile.riskLevel}</span>}
+          </div>
+          <h3>{profile.entityName}</h3>
+          <p class="metric-value">{profile.currentSiteCount.toLocaleString()}</p>
+          <p class="lede">Current named site{profile.currentSiteCount === 1 ? "" : "s"} already attached to this profile.</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Public money rows</span>
+              <span class="data-row-value">{profile.moneyRecordCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Linked places</span>
+              <span class="data-row-value">{profile.linkedAreaCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Published value</span>
+              <span class="data-row-value">{formatMoney(profile.publicContractValueGbp)}</span>
+            </div>
+          </div>
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="visible-estate" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Profiles already touching the named estate</h2>
+        <p class="lede">
+          These actors already sit on named current hotel sites, which means the chain can be investigated from site to
+          place to money row.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {hotelLinkedProfiles.map((profile) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{profile.primaryRoleLabel}</span>
+            <span class="chip">{profile.currentSiteCount} current site{profile.currentSiteCount === 1 ? "" : "s"}</span>
+          </div>
+          <h3>{profile.entityName}</h3>
+          <p class="lede">
+            {profile.currentSites.map((site) => site.siteName).join(", ")}
+          </p>
+          <p class="tiny">
+            Areas: {profile.linkedAreas.map((area) => area.areaName).join(", ")}
+          </p>
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="funding-surfaces" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Money-led funding surfaces</h2>
+        <p class="lede">
+          Not every entity page is a hotel chain. Some are where public funding instructions and buyer control sit in
+          the open.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {entityProfiles
+        .filter((profile) => profile.moneyRecordCount > 0)
+        .map((profile) => (
+          <article class="feature-card teal">
+            <div class="chip-row">
+              <span class="chip teal">{profile.primaryRoleLabel}</span>
+              <span class="chip">{profile.moneyRecordCount} money row{profile.moneyRecordCount === 1 ? "" : "s"}</span>
+            </div>
+            <h3>{profile.entityName}</h3>
+            <p class="lede">{profile.routeFamilies.map(formatRouteFamilyLabel).join(", ") || "No route families attached"}</p>
+            <div class="data-list">
+              <div class="data-row">
+                <span>Rows with published values</span>
+                <span class="data-row-value">{profile.moneyRowsWithPublishedValueCount.toLocaleString()}</span>
+              </div>
+              <div class="data-row">
+                <span>Published value</span>
+                <span class="data-row-value">{formatMoney(profile.publicContractValueGbp)}</span>
+              </div>
+            </div>
+            <p class="tiny">
+              <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+            </p>
+          </article>
+        ))}
+    </div>
+  </section>
+
+  <section id="entity-ledger" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>All entity profiles</h2>
+        <p class="lede">
+          Every current profile in the live starter ledgers, sorted by how much visible estate and money exposure it
+          already carries.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {entityProfiles.map((profile) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">{profile.primaryRoleLabel}</span>
+            <span class="chip">{profile.roleSummary}</span>
+          </div>
+          <h3>{profile.entityName}</h3>
+          <p class="lede">{profile.searchDescription}</p>
+          {profile.companyNumber && <p class="tiny">Company number: {profile.companyNumber}</p>}
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

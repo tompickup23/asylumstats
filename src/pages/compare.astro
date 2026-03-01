@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
 import BenchmarkStrip from "../components/BenchmarkStrip.astro";
 import PathwayMixCard from "../components/PathwayMixCard.astro";
@@ -10,10 +11,16 @@ import {
   supportedAsylumReadingRules
 } from "../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../lib/area-series";
+import { getLeadEntityProfileForTrail } from "../lib/entities";
+import { loadHotelEntityLedger } from "../lib/hotel-data";
+import { getCompareInvestigationTrails } from "../lib/investigations";
+import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest } from "../lib/route-data";
 import { getDistributionStats, getPercentileRank, getRegionPressureSummaries } from "../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
+const hotelLedger = loadHotelEntityLedger();
+const moneyLedger = loadMoneyLedger();
 type ComparePlace = (typeof localRouteLatest.areas)[number];
 const comparePlaces = localRouteLatest.defaultCompareCodes
   .map((code) => localRouteLatest.areas.find((place) => place.areaCode === code))
@@ -274,8 +281,13 @@ const comparePresetViews = [
     cta: "Open dispersal view"
   }
 ];
+const compareCaseFiles = getCompareInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
+  trail,
+  leadEntity: getLeadEntityProfileForTrail(trail)
+}));
 const compareSections = [
   { id: "compare-findings", label: "Findings" },
+  ...(compareCaseFiles.length > 0 ? [{ id: "compare-case-files", label: "Case files" }] : []),
   { id: "supported-asylum-logic", label: "How to read" },
   { id: "default-compare-set", label: "Default set" },
   { id: "pathway-profiles", label: "Pathway mix" },
@@ -374,6 +386,38 @@ const compareSections = [
       ))}
     </div>
   </section>
+
+  {compareCaseFiles.length > 0 && (
+    <section id="compare-case-files" class="section section-anchor priority-section">
+      <div class="section-head">
+        <div>
+          <h2>Concrete case files from the wider compare field</h2>
+          <p class="lede">
+            The compare surface is not just quartiles and rates. Named hotels, provider links, and owner chains already
+            show how different local models look in practice.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {compareCaseFiles.map(({ trail, leadEntity }) => (
+          <InvestigationTrail
+            kicker={trail.kicker}
+            title={trail.title}
+            summary={trail.summary}
+            chips={trail.chips}
+            tone={trail.tone}
+            steps={trail.steps}
+            footnote={trail.footnote}
+            footerLinks={
+              leadEntity
+                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
+                : []
+            }
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section id="supported-asylum-logic" class="section section-anchor">
     <div class="section-head">

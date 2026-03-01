@@ -1,9 +1,10 @@
-import { getPublicPlaceAreas } from "./site";
+import { getPublicEntityProfiles, getPublicPlaceAreas } from "./site";
+import { formatRouteFamilyLabel } from "./entities";
 
 export interface SiteSearchEntry {
   href: string;
   title: string;
-  kind: "page" | "place";
+  kind: "page" | "entity" | "place";
   kicker: string;
   description: string;
   priority: number;
@@ -19,6 +20,15 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     description: "Routes, hotels, money, and source rules on one accountability surface.",
     priority: 120,
     searchText: "home overview accountability routes hotels money methodology sources"
+  },
+  {
+    href: "/entities/",
+    title: "Entities",
+    kind: "page",
+    kicker: "Investigation subjects",
+    description: "Provider, owner-group, operator, and public-body profiles tied to hotels, money rows, and place pressure.",
+    priority: 115,
+    searchText: "entities providers owner groups operators public bodies serco mears clearsprings hotel owners profiles"
   },
   {
     href: "/compare/",
@@ -97,6 +107,26 @@ function buildPlaceDescription(
 }
 
 export function getPublicSearchEntries(): SiteSearchEntry[] {
+  const entityEntries = getPublicEntityProfiles().map((profile) => ({
+    href: `/entities/${profile.entityId}/`,
+    title: profile.entityName,
+    kind: "entity" as const,
+    kicker: profile.roleSummary,
+    description: profile.searchDescription,
+    priority: Math.min(114, Math.max(60, Math.round(profile.score / 8))),
+    searchText: [
+      profile.entityName,
+      profile.companyNumber,
+      profile.primaryRoleLabel,
+      profile.roleLabels.join(" "),
+      profile.routeFamilies.map(formatRouteFamilyLabel).join(" "),
+      profile.currentSites.map((site) => site.siteName).join(" "),
+      profile.linkedAreas.map((area) => area.areaName).join(" "),
+      "entity provider owner operator public body hotel money profile"
+    ]
+      .join(" ")
+      .toLowerCase()
+  }));
   const placeEntries = getPublicPlaceAreas().map((area) => ({
     href: `/places/${area.areaCode}/`,
     title: area.areaName,
@@ -124,9 +154,11 @@ export function getPublicSearchEntries(): SiteSearchEntry[] {
       .toLowerCase()
   }));
 
-  return [...STATIC_PAGE_ENTRIES, ...placeEntries].sort((left, right) => {
+  const kindOrder: Record<SiteSearchEntry["kind"], number> = { page: 0, entity: 1, place: 2 };
+
+  return [...STATIC_PAGE_ENTRIES, ...entityEntries, ...placeEntries].sort((left, right) => {
     if (left.kind !== right.kind) {
-      return left.kind === "page" ? -1 : 1;
+      return kindOrder[left.kind] - kindOrder[right.kind];
     }
 
     return right.priority - left.priority || left.title.localeCompare(right.title);

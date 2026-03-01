@@ -392,6 +392,9 @@ const spendingSections = [
             </div>
           </div>
           {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${supplier.supplierId}/`}>Open entity profile</a>
+          </p>
         </article>
       ))}
     </div>
@@ -788,6 +791,9 @@ const spendingSections = [
             Integrity signals: {supplier.integritySignalCount}
           </p>
           {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${supplier.supplierId}/`}>Open entity profile</a>
+          </p>
         </article>
       ))}
     </div>

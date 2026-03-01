@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { existsSync } from "node:fs";
+import { getEntityProfiles } from "../src/lib/entities";
 import { loadLocalRouteLatest } from "../src/lib/route-data";
 import {
   DEFAULT_SOCIAL_IMAGE_PATH,
   SITE_URL,
   buildAbsoluteUrl,
+  buildEntityStructuredData,
   buildPlaceStructuredData,
   buildReleaseCollectionStructuredData,
   getIndexableSitePaths,
@@ -27,7 +29,9 @@ describe("site metadata helpers", () => {
     expect(paths.length).toBeGreaterThan(8);
     expect(new Set(paths).size).toBe(paths.length);
     expect(paths).toContain("/");
+    expect(paths).toContain("/entities/");
     expect(paths).toContain("/routes/");
+    expect(paths.some((path) => path.startsWith("/entities/"))).toBe(true);
     expect(paths.some((path) => path.startsWith("/places/"))).toBe(true);
     expect(paths).not.toContain("/councils/");
     expect(paths.some((path) => path.startsWith("/councils/"))).toBe(false);
@@ -80,5 +84,19 @@ describe("site metadata helpers", () => {
     expect(nodes).toHaveLength(3);
     expect(nodes[1]["@type"]).toBe("CollectionPage");
     expect(nodes[2]["@type"]).toBe("ItemList");
+  });
+
+  it("builds entity structured data with profile and organization nodes", () => {
+    const entity = getEntityProfiles()[0]!;
+    const nodes = buildEntityStructuredData(entity, {
+      canonicalUrl: buildAbsoluteUrl(`/entities/${entity.entityId}/`),
+      description: "Entity profile",
+      socialImageUrl: buildAbsoluteUrl("/og-card.png"),
+      snapshotDate: "2025-12-31"
+    });
+
+    expect(nodes).toHaveLength(3);
+    expect(nodes[1]["@type"]).toBe("ProfilePage");
+    expect(nodes[2]["@type"]).toBe("Organization");
   });
 });

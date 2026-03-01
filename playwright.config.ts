@@ -3,7 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   testMatch: /mobile-layout\.spec\.ts/,
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
+  timeout: 60000,
   reporter: [["list"], ["html", { open: "never" }]],
   projects: [
     {

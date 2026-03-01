@@ -1,7 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { loadHotelEntityLedger } from "../src/lib/hotel-data";
-import { getHomepageInvestigationTrails, getPlaceInvestigationTrails, getSpendingLinkedSiteTrails } from "../src/lib/investigations";
+import {
+  getCompareInvestigationTrails,
+  getHomepageInvestigationTrails,
+  getPlaceInvestigationTrails,
+  getRouteInvestigationTrails,
+  getSpendingLinkedSiteTrails
+} from "../src/lib/investigations";
 import { loadMoneyLedger } from "../src/lib/money-data";
 import { loadLocalRouteLatest } from "../src/lib/route-data";
 
@@ -38,5 +44,15 @@ describe("investigation trails", () => {
     expect(trails.length).toBeGreaterThan(0);
     expect(trails.some((trail) => trail.siteName === "Phoenix Hotel")).toBe(true);
     expect(trails.some((trail) => trail.steps.some((step) => step.href.includes("/spending/")))).toBe(true);
+  });
+
+  test("builds compare and route case files with unique areas", () => {
+    const compareTrails = getCompareInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3);
+    const routeTrails = getRouteInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3);
+
+    expect(compareTrails.length).toBeGreaterThan(0);
+    expect(routeTrails.length).toBeGreaterThan(0);
+    expect(new Set(compareTrails.map((trail) => trail.areaCode ?? trail.areaName)).size).toBe(compareTrails.length);
+    expect(new Set(routeTrails.map((trail) => trail.areaCode ?? trail.areaName)).size).toBe(routeTrails.length);
   });
 });

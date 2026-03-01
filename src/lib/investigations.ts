@@ -286,6 +286,28 @@ function getSiteTrailCandidates(
     .sort((left, right) => right.score - left.score || left.trail.title.localeCompare(right.trail.title));
 }
 
+function selectUniqueAreaTrails(candidates: SiteTrailCandidate[], limit: number): InvestigationTrail[] {
+  const selected: InvestigationTrail[] = [];
+  const seenAreas = new Set<string>();
+
+  for (const candidate of candidates) {
+    const areaKey = candidate.trail.areaCode ?? candidate.trail.areaName;
+
+    if (seenAreas.has(areaKey)) {
+      continue;
+    }
+
+    selected.push(candidate.trail);
+    seenAreas.add(areaKey);
+
+    if (selected.length === limit) {
+      break;
+    }
+  }
+
+  return selected;
+}
+
 export function getSiteInvestigationTrailMap(
   areas: LocalRouteAreaSummary[],
   hotelLedger: HotelEntityLedger,
@@ -304,25 +326,35 @@ export function getHomepageInvestigationTrails(
   moneyLedger: MoneyLedger,
   limit = 3
 ): InvestigationTrail[] {
-  const selected: InvestigationTrail[] = [];
-  const seenAreas = new Set<string>();
+  return selectUniqueAreaTrails(getSiteTrailCandidates(areas, hotelLedger, moneyLedger), limit);
+}
 
-  for (const candidate of getSiteTrailCandidates(areas, hotelLedger, moneyLedger)) {
-    const areaKey = candidate.trail.areaCode ?? candidate.trail.areaName;
+export function getCompareInvestigationTrails(
+  areas: LocalRouteAreaSummary[],
+  hotelLedger: HotelEntityLedger,
+  moneyLedger: MoneyLedger,
+  limit = 3
+): InvestigationTrail[] {
+  return selectUniqueAreaTrails(
+    getSiteTrailCandidates(areas, hotelLedger, moneyLedger).filter(
+      (candidate) => candidate.trail.moneyMatchType !== "none"
+    ),
+    limit
+  );
+}
 
-    if (seenAreas.has(areaKey)) {
-      continue;
-    }
-
-    selected.push(candidate.trail);
-    seenAreas.add(areaKey);
-
-    if (selected.length === limit) {
-      break;
-    }
-  }
-
-  return selected;
+export function getRouteInvestigationTrails(
+  areas: LocalRouteAreaSummary[],
+  hotelLedger: HotelEntityLedger,
+  moneyLedger: MoneyLedger,
+  limit = 3
+): InvestigationTrail[] {
+  return selectUniqueAreaTrails(
+    getSiteTrailCandidates(areas, hotelLedger, moneyLedger).filter(
+      (candidate) => candidate.trail.kind === "site" && candidate.trail.siteName !== null
+    ),
+    limit
+  );
 }
 
 export function getSpendingLinkedSiteTrails(
