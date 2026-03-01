@@ -1,4 +1,4 @@
-import rawAreaSeries from "../data/mock/area-series.json";
+import rawAreaSeries from "../data/live/area-series.json";
 
 export interface AreaSeriesPoint {
   areaCode: string;

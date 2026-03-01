@@ -9,6 +9,10 @@ interface RegionalSourceWatch {
     archivedResearchInputCount: number;
     nwrsmpWorkbookCount: number;
     nwrsmpHistoricWorkbookCount: number;
+    nwrsmpAuthorityObservationCount: number;
+    nwrsmpLatestGroupRowCount: number;
+    nwrsmpSupportedSeriesAreaCount: number;
+    nwrsmpSupportedSeriesPointCount: number;
   };
   nwrsmp: {
     pageUrl: string;
@@ -19,6 +23,13 @@ interface RegionalSourceWatch {
       sourceUrl: string;
       format: string;
     }>;
+    supportedSeries: {
+      areaCount: number;
+      pointCount: number;
+      firstPeriodEnd: string;
+      latestPeriodEnd: string;
+      primaryWorkbookPublishedAt: string | null;
+    };
   };
   regionalPartners: Array<{
     organisation: string;
@@ -64,6 +75,11 @@ describe("regional-source-watch.json", () => {
     expect(watch.nwrsmp.dashboardUrl).toMatch(/^https:\/\/public\.tableau\.com\/views\//);
     expect(watch.nwrsmp.documents[0]?.sourceUrl).toMatch(/^https:\/\/northwestrsmp\.org\.uk\//);
     expect(watch.nwrsmp.documents[0]?.format).toBe("xlsx");
+    expect(watch.summary.nwrsmpSupportedSeriesAreaCount).toBeGreaterThan(300);
+    expect(watch.summary.nwrsmpSupportedSeriesPointCount).toBeGreaterThan(10000);
+    expect(watch.nwrsmp.supportedSeries.firstPeriodEnd).toBe("2014-03-31");
+    expect(watch.nwrsmp.supportedSeries.latestPeriodEnd).toBe("2025-12-31");
+    expect(watch.nwrsmp.supportedSeries.primaryWorkbookPublishedAt).toBe("2026-02-27");
   });
 
   it("sorts the north west workbook series newest first", () => {

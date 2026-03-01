@@ -10,5 +10,10 @@
   "currentNamedSitesUnresolved": 1,
   "currentNamedSitesWithIntegritySignals": 3,
   "unnamedOnlyAreaCount": 3,
-  "totalIntegritySignals": 4
+  "totalIntegritySignals": 4,
+  "archiveLeadCount": 219,
+  "archiveLinkedExistingCount": 4,
+  "archivePromotedNewCount": 0,
+  "archiveHeldBackCount": 1,
+  "archivePendingVerificationCount": 214
 }

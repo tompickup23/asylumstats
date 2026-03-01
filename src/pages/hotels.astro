@@ -52,6 +52,29 @@ const hotelFilterCoverages = [...new Set(hotelLedger.sites.map((site) => site.en
 const leadUnnamedArea = unnamedOnlyAreas[0];
 const namedRegionLeader = regionVisibility[0];
 const secrecyRegionLeader = [...regionVisibility].sort((a, b) => b.unnamedSiteCount - a.unnamedSiteCount)[0];
+const archiveVerification = hotelLedger.archiveVerification;
+const archiveSummaryCards = [
+  {
+    label: "Archive leads",
+    value: archiveVerification.totalLeadCount.toLocaleString(),
+    detail: "Names recovered from the archived map snapshot."
+  },
+  {
+    label: "Verified overlaps",
+    value: (archiveVerification.linkedExistingCount + archiveVerification.promotedNewCount).toLocaleString(),
+    detail: "Archive leads that now connect to publishable hotel records."
+  },
+  {
+    label: "Held back",
+    value: archiveVerification.heldBackCount.toLocaleString(),
+    detail: "Leads kept out of the public overlap list pending stronger corroboration."
+  },
+  {
+    label: "Pending review",
+    value: archiveVerification.pendingVerificationCount.toLocaleString(),
+    detail: "Unpublished archive leads still waiting for document-backed verification."
+  }
+];
 const hotelReadoutCards = [
   {
     title: "Named does not mean resolved",
@@ -135,6 +158,7 @@ const hotelPresetViews = [
 const hotelSections = [
   { id: "hotel-pressure", label: "Pressure" },
   { id: "regional-visibility", label: "Visibility" },
+  { id: "archive-verification", label: "Archive queue" },
   { id: "hotel-presets", label: "Presets" },
   { id: "hotel-filters", label: "Explorer" },
   { id: "hotel-areas", label: "Area ledger" },
@@ -258,6 +282,87 @@ function formatReportedPeople(value: number | null): string {
         valueLabel="unnamed sites"
         tone="warm"
       />
+    </div>
+  </section>
+
+  <section id="archive-verification" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Archive-led verification queue</h2>
+        <p class="lede">
+          The archived hotel map is useful as a discovery layer, but it is not a publishable site list on its own.
+          Leads only surface publicly here once they can be linked to an existing documented hotel or promoted with
+          separate public evidence.
+        </p>
+      </div>
+      {archiveVerification.archiveSnapshotUrl && (
+        <a class="source-pill" href={archiveVerification.archiveSnapshotUrl}>Open archive snapshot</a>
+      )}
+    </div>
+    <div class="kpi-grid">
+      {archiveSummaryCards.map((card) => (
+        <article class="kpi-card">
+          <span class="tiny">{card.label}</span>
+          <strong>{card.value}</strong>
+          <p class="tiny">{card.detail}</p>
+        </article>
+      ))}
+    </div>
+    <div class="split section">
+      <div class="panel panel-pad">
+        <h2>Verified archive overlaps</h2>
+        <p class="lede">
+          These rows are safe to show because the site is already publishable in the public ledger. The archive lead is
+          being used as discovery context, not as standalone proof.
+        </p>
+        <div class="story-grid">
+          {archiveVerification.publicArchiveMatches.map((match) => (
+            <article class="story-card">
+              <div class="chip-row">
+                <span class="chip accent">{match.verificationStatus === "promoted_new" ? "Promoted new" : "Linked existing"}</span>
+                <span class="chip">{match.regionName}</span>
+              </div>
+              <h3>{match.siteName}</h3>
+              <p class="lede">Archive lead: {match.leadName}</p>
+              <p class="tiny">{match.notes}</p>
+              <p class="tiny">
+                {match.sourceUrl && <a class="source-pill" href={match.sourceUrl}>Public evidence</a>}
+                {match.areaCode && <a class="source-pill" href={`/places/${match.areaCode}/`}>Open place page</a>}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="panel panel-pad">
+        <h2>Publication rule for archive leads</h2>
+        <div class="signal-list">
+          <article class="signal-card accent">
+            <span class="tiny">Discovery only</span>
+            <h3>Unverified archive names stay out of the public ledger.</h3>
+            <p class="tiny">
+              {archiveVerification.pendingVerificationCount.toLocaleString()} archive leads are still in the queue and
+              are counted here without being published as hotel claims.
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Held back leads</span>
+            <h3>{archiveVerification.heldBackCount.toLocaleString()} leads are explicitly blocked from promotion</h3>
+            <p class="tiny">
+              This lets the site keep doubtful or weakly corroborated names visible to the research workflow without
+              laundering them into the public tracker.
+            </p>
+          </article>
+          <article class="signal-card">
+            <span class="tiny">Review acceleration</span>
+            <h3>{archiveVerification.pendingAutoCandidateCount.toLocaleString()} pending leads already have exact name candidates</h3>
+            <p class="tiny">
+              Exact name matches can guide verification work internally, but they still need independent public
+              evidence before they become publishable rows.
+            </p>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 

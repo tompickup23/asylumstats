@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-03-01T00:06:07.538Z",
+  "datasetId": "regional_sources",
+  "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
+  "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
+  "workbookCount": 6,
+  "files": [
+    {
+      "fileName": "nwrsmp-media.json",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
+      "sizeBytes": 3972,
+      "fileSha256": "168b2241cb81258cb23204d38b516ccb45048a334fff8dba0f03d0482f1a931e"
+    },
+    {
+      "fileName": "nwrsmp-data-page.json",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
+      "sizeBytes": 10949,
+      "fileSha256": "a6474d82a3845486bf727d1548764b2e7569c24a93989cb30af029ed02be4d7e"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2026-02-27.xlsx",
+      "publishedAt": "2026-02-27",
+      "title": "North West Public Accessible February 2026 (XLS, 1398KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/02/North-West-Public-Accessible-February-2026-XLS-1398KB.xlsx",
+      "fileSizeBytes": 1430831,
+      "sizeBytes": 1430831,
+      "fileSha256": "ed9d0e479d3a48ca0ae4c673f5dcde6160f478b48718200851cce1b07d1a0817"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-12-05.xlsx",
+      "publishedAt": "2025-12-05",
+      "title": "North West Public Accessible November 2025 (xls, 1,272KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/12/North-West-Public-Accessible-November-2025-xls-1272KB.xlsx",
+      "fileSizeBytes": 1301569,
+      "sizeBytes": 1301569,
+      "fileSha256": "d9ef53a0d6d9ad61957123b34dc6254d08f04b5dccd7b8c07acbed215176ab38"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-08-22.xlsx",
+      "publishedAt": "2025-08-22",
+      "title": "North West Public Accessible Data August 2025 (xls, 3,789KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/08/North-West-Public-Accessible-Data-August-2025-xls-3789KB.xlsx",
+      "fileSizeBytes": 3879894,
+      "sizeBytes": 3879894,
+      "fileSha256": "bd909af55bdbb1ed5212e7e65c1855aa3db9db885534d3f7121d65aa38f5e24a"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-05-23.xlsx",
+      "publishedAt": "2025-05-23",
+      "title": "North West Public Accessible Data May 2025 (XLS, 3,841KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/05/North-West-Public-Accessible-Data-May-2025-XLS-3841KB.xlsx",
+      "fileSizeBytes": 3932436,
+      "sizeBytes": 3932436,
+      "fileSha256": "fa467794aaa51f6d4f44047b6f821c47bedde1aa046f54c1b34472b925aa3874"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-01-31.xlsx",
+      "publishedAt": "2025-01-31",
+      "title": "North West Public accessible data November 2024 (xls, 1,211KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/01/North-West-Public-accessible-data-November-2024-xls-1211KB-1.xlsx",
+      "fileSizeBytes": 1239474,
+      "sizeBytes": 1239474,
+      "fileSha256": "15d97d02f9237c74daa30c4b5a5fe1aac3d9079b3acd4550807611576a8f1bc6"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2024-11-01.xlsx",
+      "publishedAt": "2024-11-01",
+      "title": "North West Public Accessible Data August 2024 (PDF, 6MB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2024/11/North-West-Public-Accessible-Data-August-2024-PDF-6MB.xlsx",
+      "fileSizeBytes": 5995153,
+      "sizeBytes": 5995153,
+      "fileSha256": "6b279315d95ba96887959a839fadefb2c821e6e427381c9dd540834cc1c4fc25"
+    }
+  ]
+}

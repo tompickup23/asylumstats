@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { fileSha256, hashId, parseCsv, readCsv } from "../lib/csv-parser.mjs";
+import { fileSha256, hashId, readCsv } from "../lib/csv-parser.mjs";
 
 const generatedAt = new Date().toISOString();
 
@@ -9,6 +9,8 @@ const sourceFiles = {
   areaSightings: path.resolve("data/manual/hotel-area-sightings.csv"),
   entityLinks: path.resolve("data/manual/hotel-entity-links.csv"),
   integritySignals: path.resolve("data/manual/hotel-integrity-signals.csv"),
+  archiveVerifications: path.resolve("data/manual/hotel-archive-verifications.csv"),
+  archiveLeads: path.resolve("data/raw/hotel_entities/archive-hotel-leads.json"),
   asylumFinance: path.resolve("src/data/live/asylum-finance.json")
 };
 
@@ -44,6 +46,14 @@ function readJson(filePath) {
 function normalizeText(value) {
   const normalized = String(value ?? "").trim();
   return normalized ? normalized : null;
+}
+
+function normalizeMatchKey(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 function parseNumber(value) {
@@ -133,9 +143,10 @@ function areaKeyOf(areaName, areaCode) {
 }
 
 const asylumFinance = readJson(sourceFiles.asylumFinance);
+const archiveLeadData = readJson(sourceFiles.archiveLeads);
 const providerCatalog = asylumFinance.providers;
 
-const rawSites = readCsv(sourceFiles.siteLedger).map((row) => ({
+const baseRawSites = readCsv(sourceFiles.siteLedger).map((row) => ({
   site_id: row.site_id,
   site_name: row.site_name,
   site_type: normalizeText(row.site_type),
@@ -154,6 +165,104 @@ const rawSites = readCsv(sourceFiles.siteLedger).map((row) => ({
   source_url: row.source_url,
   notes: normalizeText(row.notes)
 }));
+
+const archiveLeads = (archiveLeadData.leads ?? []).map((lead) => ({
+  leadId: lead.leadId,
+  leadName: lead.leadName,
+  latitude: typeof lead.latitude === "number" ? lead.latitude : Number(lead.latitude),
+  longitude: typeof lead.longitude === "number" ? lead.longitude : Number(lead.longitude)
+}));
+
+const archiveLeadMap = new Map();
+for (const lead of archiveLeads) {
+  const key = normalizeMatchKey(lead.leadName);
+  if (archiveLeadMap.has(key)) {
+    throw new Error(`Duplicate archived lead name: ${lead.leadName}`);
+  }
+  archiveLeadMap.set(key, lead);
+}
+
+const archiveVerificationRows = readCsv(sourceFiles.archiveVerifications).map((row) => ({
+  leadName: row.lead_name,
+  verificationAction: row.verification_action,
+  siteId: normalizeText(row.site_id),
+  siteName: normalizeText(row.site_name),
+  areaName: normalizeText(row.area_name),
+  areaCode: normalizeText(row.area_code),
+  regionName: normalizeText(row.region_name),
+  countryName: normalizeText(row.country_name),
+  status: normalizeText(row.status),
+  evidenceClass: normalizeText(row.evidence_class),
+  confidence: normalizeText(row.confidence),
+  peopleHousedReported: parseNumber(row.people_housed_reported),
+  firstPublicDate: normalizeText(row.date_first_public),
+  lastPublicDate: normalizeText(row.date_last_public),
+  operatorName: normalizeText(row.operator_name),
+  sourceTitle: normalizeText(row.source_title),
+  sourceUrl: normalizeText(row.source_url),
+  notes: normalizeText(row.notes)
+}));
+
+const archiveVerificationMap = new Map();
+for (const row of archiveVerificationRows) {
+  const leadKey = normalizeMatchKey(row.leadName);
+  if (!archiveLeadMap.has(leadKey)) {
+    throw new Error(`Verification row references an unknown archived lead: ${row.leadName}`);
+  }
+  if (archiveVerificationMap.has(leadKey)) {
+    throw new Error(`Duplicate verification row for archived lead: ${row.leadName}`);
+  }
+  archiveVerificationMap.set(leadKey, row);
+}
+
+const promotedArchiveSites = archiveVerificationRows
+  .filter((row) => row.verificationAction === "promote_new")
+  .map((row) => {
+    if (
+      !row.siteId ||
+      !row.siteName ||
+      !row.areaName ||
+      !row.regionName ||
+      !row.countryName ||
+      !row.status ||
+      !row.evidenceClass ||
+      !row.confidence ||
+      !row.lastPublicDate ||
+      !row.sourceTitle ||
+      !row.sourceUrl
+    ) {
+      throw new Error(`promote_new verification row is missing required fields: ${row.leadName}`);
+    }
+
+    return {
+      site_id: row.siteId,
+      site_name: row.siteName,
+      site_type: "hotel",
+      area_name: row.areaName,
+      area_code: row.areaCode,
+      region_name: row.regionName,
+      country_name: row.countryName,
+      status: row.status,
+      evidence_class: row.evidenceClass,
+      confidence: row.confidence,
+      people_housed_reported: row.peopleHousedReported,
+      date_first_public: row.firstPublicDate,
+      date_last_public: row.lastPublicDate,
+      operator_name: row.operatorName,
+      source_title: row.sourceTitle,
+      source_url: row.sourceUrl,
+      notes: row.notes
+    };
+  });
+
+const rawSites = [...baseRawSites, ...promotedArchiveSites];
+const rawSiteIds = new Set();
+for (const site of rawSites) {
+  if (rawSiteIds.has(site.site_id)) {
+    throw new Error(`Duplicate site_id in hotel ledger inputs: ${site.site_id}`);
+  }
+  rawSiteIds.add(site.site_id);
+}
 
 const aggregatedEntityLinks = [];
 const entityLinkGroups = new Map();
@@ -469,6 +578,140 @@ const areaRows = [...derivedAreaGroups.values()]
     return String(left.areaName).localeCompare(String(right.areaName));
   });
 
+const siteById = new Map(siteRows.map((site) => [site.site_id, site]));
+const siteNameCandidateMap = new Map();
+for (const site of siteRows) {
+  const matchKey = normalizeMatchKey(site.site_name);
+  if (!siteNameCandidateMap.has(matchKey)) {
+    siteNameCandidateMap.set(matchKey, site);
+    continue;
+  }
+
+  siteNameCandidateMap.set(matchKey, null);
+}
+
+const archiveLeadQueue = archiveLeads
+  .map((lead) => {
+    const leadKey = normalizeMatchKey(lead.leadName);
+    const verification = archiveVerificationMap.get(leadKey) ?? null;
+    const candidateSite = siteNameCandidateMap.get(leadKey) ?? null;
+
+    if (!verification) {
+      return {
+        lead_id: lead.leadId,
+        lead_name: lead.leadName,
+        latitude: lead.latitude,
+        longitude: lead.longitude,
+        verification_status: "pending_verification",
+        verification_action: null,
+        linked_site_id: null,
+        linked_site_name: null,
+        area_name: null,
+        area_code: null,
+        region_name: null,
+        site_status: null,
+        candidate_site_id: candidateSite?.site_id ?? null,
+        candidate_site_name: candidateSite?.site_name ?? null,
+        source_title: null,
+        source_url: null,
+        notes: null
+      };
+    }
+
+    if (["link_existing", "promote_new"].includes(verification.verificationAction)) {
+      if (!verification.siteId) {
+        throw new Error(`Archive verification action ${verification.verificationAction} requires a site_id: ${verification.leadName}`);
+      }
+
+      const linkedSite = siteById.get(verification.siteId);
+      if (!linkedSite) {
+        throw new Error(`Archive verification references unknown site_id: ${verification.siteId}`);
+      }
+
+      return {
+        lead_id: lead.leadId,
+        lead_name: lead.leadName,
+        latitude: lead.latitude,
+        longitude: lead.longitude,
+        verification_status:
+          verification.verificationAction === "promote_new" ? "promoted_new" : "linked_existing",
+        verification_action: verification.verificationAction,
+        linked_site_id: linkedSite.site_id,
+        linked_site_name: linkedSite.site_name,
+        area_name: linkedSite.area_name,
+        area_code: linkedSite.area_code,
+        region_name: linkedSite.region_name,
+        site_status: linkedSite.status,
+        candidate_site_id: candidateSite?.site_id ?? null,
+        candidate_site_name: candidateSite?.site_name ?? null,
+        source_title: verification.sourceTitle ?? linkedSite.source_title,
+        source_url: verification.sourceUrl ?? linkedSite.source_url,
+        notes: verification.notes ?? null
+      };
+    }
+
+    if (verification.verificationAction === "hold_back") {
+      const linkedSite = verification.siteId ? siteById.get(verification.siteId) ?? null : null;
+      return {
+        lead_id: lead.leadId,
+        lead_name: lead.leadName,
+        latitude: lead.latitude,
+        longitude: lead.longitude,
+        verification_status: "held_back",
+        verification_action: verification.verificationAction,
+        linked_site_id: linkedSite?.site_id ?? verification.siteId ?? null,
+        linked_site_name: linkedSite?.site_name ?? verification.siteName ?? null,
+        area_name: linkedSite?.area_name ?? verification.areaName ?? null,
+        area_code: linkedSite?.area_code ?? verification.areaCode ?? null,
+        region_name: linkedSite?.region_name ?? verification.regionName ?? null,
+        site_status: linkedSite?.status ?? verification.status ?? null,
+        candidate_site_id: candidateSite?.site_id ?? null,
+        candidate_site_name: candidateSite?.site_name ?? null,
+        source_title: verification.sourceTitle ?? null,
+        source_url: verification.sourceUrl ?? null,
+        notes: verification.notes ?? null
+      };
+    }
+
+    throw new Error(`Unsupported archive verification action: ${verification.verificationAction}`);
+  })
+  .sort(
+    (left, right) =>
+      left.verification_status.localeCompare(right.verification_status) ||
+      left.lead_name.localeCompare(right.lead_name)
+  );
+
+const publicArchiveMatches = archiveLeadQueue
+  .filter((row) => ["linked_existing", "promoted_new"].includes(row.verification_status))
+  .map((row) => ({
+    leadName: row.lead_name,
+    verificationStatus: row.verification_status,
+    siteId: row.linked_site_id,
+    siteName: row.linked_site_name,
+    areaName: row.area_name,
+    areaCode: row.area_code,
+    regionName: row.region_name,
+    status: row.site_status,
+    sourceTitle: row.source_title,
+    sourceUrl: row.source_url,
+    notes: row.notes
+  }));
+
+const archiveVerificationSummary = {
+  sourceName: archiveLeadData.source?.name ?? "migranthotels.net archive snapshot",
+  archiveSnapshotUrl: archiveLeadData.source?.archiveSnapshotUrl ?? null,
+  archiveSnapshotDate: archiveLeadData.source?.archiveSnapshotDate ?? null,
+  totalLeadCount: archiveLeads.length,
+  linkedExistingCount: archiveLeadQueue.filter((row) => row.verification_status === "linked_existing").length,
+  promotedNewCount: archiveLeadQueue.filter((row) => row.verification_status === "promoted_new").length,
+  heldBackCount: archiveLeadQueue.filter((row) => row.verification_status === "held_back").length,
+  pendingVerificationCount: archiveLeadQueue.filter((row) => row.verification_status === "pending_verification").length,
+  pendingAutoCandidateCount: archiveLeadQueue.filter(
+    (row) => row.verification_status === "pending_verification" && row.candidate_site_id
+  ).length,
+  publicArchiveMatches
+};
+
 const primeProviderBreakdown = providerCatalog
   .map((provider) => ({
     provider: provider.provider,
@@ -493,7 +736,12 @@ const hotelEntityLedger = {
       (site) => site.integritySignals.length > 0
     ).length,
     unnamedOnlyAreaCount: areaRows.filter((area) => area.visibilityClass === "all_unnamed").length,
-    totalIntegritySignals: liveSignals.length
+    totalIntegritySignals: liveSignals.length,
+    archiveLeadCount: archiveVerificationSummary.totalLeadCount,
+    archiveLinkedExistingCount: archiveVerificationSummary.linkedExistingCount,
+    archivePromotedNewCount: archiveVerificationSummary.promotedNewCount,
+    archiveHeldBackCount: archiveVerificationSummary.heldBackCount,
+    archivePendingVerificationCount: archiveVerificationSummary.pendingVerificationCount
   },
   hotelFacts: asylumFinance.hotelFacts,
   sites: siteRows.map((site) => ({
@@ -538,12 +786,14 @@ const hotelEntityLedger = {
       : null
   })),
   areas: areaRows,
+  archiveVerification: archiveVerificationSummary,
   primeProviderBreakdown,
   limitations: [
     "The named hotel ledger is intentionally incomplete because the Home Office does not publish a full public site list.",
     "Owner and operator links are only published when the documentary trail is strong enough to support the match.",
     "Prime provider mapping uses the current regional asylum accommodation contract structure and should not be treated as a historical site-by-site contract proof.",
-    "Parliamentary-reference rows stay in the ledger to show visibility gaps, but they are not treated as fully corroborated current hotels without stronger local evidence."
+    "Parliamentary-reference rows stay in the ledger to show visibility gaps, but they are not treated as fully corroborated current hotels without stronger local evidence.",
+    "Archived hotel-map leads are discovery inputs only. A lead is only shown publicly when it can be linked to an already-published site or promoted with independent documentary evidence."
   ],
   sources: [
     {
@@ -560,6 +810,11 @@ const hotelEntityLedger = {
       name: "Asylum accommodation provider regions",
       sourceUrl: "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
       type: "official contract"
+    },
+    {
+      name: "migranthotels.net archive snapshot",
+      sourceUrl: archiveLeadData.source?.archiveSnapshotUrl ?? "https://web.archive.org/",
+      type: "archive discovery"
     }
   ]
 };
@@ -584,6 +839,7 @@ writeNdjson(
   }))
 );
 writeNdjson(path.join(canonicalDir, "integrity-signals.ndjson"), canonicalSignals);
+writeNdjson(path.join(canonicalDir, "archive-lead-queue.ndjson"), archiveLeadQueue);
 
 const manifest = {
   generated_at: generatedAt,
@@ -597,7 +853,8 @@ const manifest = {
     site_rows: canonicalSiteRows.length,
     entity_link_rows: aggregatedEntityLinks.length,
     integrity_signal_rows: canonicalSignals.length,
-    area_rows: areaRows.length
+    area_rows: areaRows.length,
+    archive_lead_rows: archiveLeadQueue.length
   }
 };
 
@@ -605,5 +862,11 @@ writeJson(path.join(canonicalDir, "manifest.json"), manifest);
 writeJson(path.join(martsDir, "hotel-entity-ledger.json"), hotelEntityLedger);
 writeJson(path.join(martsDir, "hotel-area-sightings.json"), areaRows);
 writeJson(path.join(martsDir, "hotel-entity-summary.json"), hotelEntityLedger.summary);
+writeJson(path.join(martsDir, "hotel-archive-queue.json"), archiveLeadQueue);
 writeJson(path.join(liveDir, "hotel-entity-ledger.json"), hotelEntityLedger);
 writeJson(path.join(liveDir, "hotel-area-sightings.json"), areaRows);
+writeJson(path.join(liveDir, "hotel-archive-queue.json"), archiveLeadQueue);
+
+console.log(
+  `Transformed ${canonicalSiteRows.length} hotel ledger rows plus ${archiveLeadQueue.length} archived map leads (${archiveVerificationSummary.linkedExistingCount} linked, ${archiveVerificationSummary.heldBackCount} held back).`
+);

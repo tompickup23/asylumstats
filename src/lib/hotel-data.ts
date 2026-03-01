@@ -101,10 +101,39 @@ export interface HotelEntityLedger {
     currentNamedSitesWithIntegritySignals: number;
     unnamedOnlyAreaCount: number;
     totalIntegritySignals: number;
+    archiveLeadCount: number;
+    archiveLinkedExistingCount: number;
+    archivePromotedNewCount: number;
+    archiveHeldBackCount: number;
+    archivePendingVerificationCount: number;
   };
   hotelFacts: HotelFact[];
   sites: HotelSiteSummary[];
   areas: HotelAreaSummary[];
+  archiveVerification: {
+    sourceName: string;
+    archiveSnapshotUrl: string | null;
+    archiveSnapshotDate: string | null;
+    totalLeadCount: number;
+    linkedExistingCount: number;
+    promotedNewCount: number;
+    heldBackCount: number;
+    pendingVerificationCount: number;
+    pendingAutoCandidateCount: number;
+    publicArchiveMatches: Array<{
+      leadName: string;
+      verificationStatus: string;
+      siteId: string;
+      siteName: string;
+      areaName: string;
+      areaCode: string | null;
+      regionName: string;
+      status: string;
+      sourceTitle: string | null;
+      sourceUrl: string | null;
+      notes: string | null;
+    }>;
+  };
   primeProviderBreakdown: Array<{
     provider: string;
     currentNamedSiteCount: number;

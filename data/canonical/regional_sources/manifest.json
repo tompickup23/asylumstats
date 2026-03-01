@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-02-28T23:38:53.028Z",
+  "generatedAt": "2026-03-01T00:07:28.159Z",
   "inputs": [
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/data/manual/regional-source-watch.csv",
@@ -8,19 +8,47 @@
     },
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-media.json",
-      "fileSha256": "18fb3f886d9dca814dd819b19a5af2b34a35c3c319ce253554592351e39a573e"
+      "fileSha256": "168b2241cb81258cb23204d38b516ccb45048a334fff8dba0f03d0482f1a931e"
     },
     {
       "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-data-page.json",
-      "fileSha256": "885f8c096857789eb2dde5e64c8aa2a1b290cb32f962f7e2fc805c31241ba4d5"
+      "fileSha256": "a6474d82a3845486bf727d1548764b2e7569c24a93989cb30af029ed02be4d7e"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/src/data/live/local-route-latest.json",
+      "fileSha256": "29373e6166f130ff5f9936f5e24ab4739535836eb29f0ecc81c9c82e9a3e5d45"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2026-02-27.xlsx",
+      "fileSha256": "ed9d0e479d3a48ca0ae4c673f5dcde6160f478b48718200851cce1b07d1a0817"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-12-05.xlsx",
+      "fileSha256": "d9ef53a0d6d9ad61957123b34dc6254d08f04b5dccd7b8c07acbed215176ab38"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-08-22.xlsx",
+      "fileSha256": "bd909af55bdbb1ed5212e7e65c1855aa3db9db885534d3f7121d65aa38f5e24a"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-05-23.xlsx",
+      "fileSha256": "fa467794aaa51f6d4f44047b6f821c47bedde1aa046f54c1b34472b925aa3874"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-01-31.xlsx",
+      "fileSha256": "15d97d02f9237c74daa30c4b5a5fe1aac3d9079b3acd4550807611576a8f1bc6"
+    },
+    {
+      "path": "/Users/tompickup/Documents/New project/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2024-11-01.xlsx",
+      "fileSha256": "6b279315d95ba96887959a839fadefb2c821e6e427381c9dd540834cc1c4fc25"
     }
   ],
   "outputs": {
-    "live": "src/data/live/regional-source-watch.json",
+    "liveRegionalWatch": "src/data/live/regional-source-watch.json",
+    "liveAreaSeries": "src/data/live/area-series.json",
     "nwrsmpWorkbookCount": 6,
-    "regionalPartnerCount": 4,
-    "similarOrganisationCount": 2,
-    "archiveToolCount": 2,
-    "archivedResearchInputCount": 1
+    "nwrsmpSupportedSeriesAreaCount": 354,
+    "nwrsmpSupportedSeriesPointCount": 11718,
+    "nwrsmpSupportedSeriesLatestPeriod": "2025-12-31"
   }
 }

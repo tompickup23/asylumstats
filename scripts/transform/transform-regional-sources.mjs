@@ -1,13 +1,16 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import xlsx from "xlsx";
 import { fileSha256, readCsv } from "../lib/csv-parser.mjs";
 
 const inputPaths = {
   nwrsmpMedia: path.resolve("data/raw/regional_sources/nwrsmp-media.json"),
   nwrsmpPage: path.resolve("data/raw/regional_sources/nwrsmp-data-page.json"),
-  watchlist: path.resolve("data/manual/regional-source-watch.csv")
+  watchlist: path.resolve("data/manual/regional-source-watch.csv"),
+  localRouteLatest: path.resolve("src/data/live/local-route-latest.json")
 };
 
+const rawWorkbookDir = path.resolve("data/raw/regional_sources");
 const canonicalDir = path.resolve("data/canonical/regional_sources");
 const liveDir = path.resolve("src/data/live");
 
@@ -22,6 +25,10 @@ function writeJson(filePath, value) {
 
 function writeNdjson(filePath, rows) {
   writeFileSync(filePath, `${rows.map((row) => JSON.stringify(row)).join("\n")}\n`);
+}
+
+function readJson(filePath) {
+  return JSON.parse(readFileSync(filePath, "utf8"));
 }
 
 function decodeEntities(value) {
@@ -42,6 +49,17 @@ function stripHtml(value) {
 
 function cleanText(value) {
   return stripHtml(value).replace(/\s+/g, " ").trim();
+}
+
+function normalizeText(value) {
+  const text = cleanText(value);
+  return text.length > 0 ? text : null;
+}
+
+function normalizeHeader(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 }
 
 function splitPipeList(value) {
@@ -106,12 +124,269 @@ function buildWatchEntries(rows, group, defaultPriority = "medium") {
     .sort(sortByPriorityAndOrganisation);
 }
 
+function parseNumber(value) {
+  const normalized = String(value ?? "")
+    .replace(/,/g, "")
+    .replace(/%/g, "")
+    .trim();
+  if (!normalized || normalized === "-" || normalized.toLowerCase() === "n/a") {
+    return null;
+  }
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function readSheetMatrix(filePath, sheetName) {
+  const workbook = xlsx.readFile(filePath, { raw: false });
+  const sheet = workbook.Sheets[sheetName];
+  if (!sheet) {
+    return [];
+  }
+
+  return xlsx.utils.sheet_to_json(sheet, {
+    header: 1,
+    raw: false,
+    defval: ""
+  });
+}
+
+function findHeaderRowIndex(rows, requiredHeaders) {
+  return rows.findIndex((row) => {
+    const headers = new Set(row.map((cell) => normalizeHeader(cell)));
+    return requiredHeaders.every((header) => headers.has(header));
+  });
+}
+
+function rowToObject(headerRow, row) {
+  return Object.fromEntries(
+    headerRow.map((header, index) => [normalizeHeader(header), row[index] ?? ""])
+  );
+}
+
+function parseLongDate(value) {
+  const match = /^(\d{1,2}) ([A-Za-z]{3,9}) (\d{4})$/.exec(String(value).trim());
+  if (!match) {
+    return null;
+  }
+
+  const parsed = new Date(`${match[1]} ${match[2]} ${match[3]} UTC`);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return parsed.toISOString().slice(0, 10);
+}
+
+function parseSlashDate(value) {
+  const match = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(String(value).trim());
+  if (!match) {
+    return null;
+  }
+
+  const month = Number(match[1]);
+  const day = Number(match[2]);
+  const year = Number(match[3].length === 2 ? `20${match[3]}` : match[3]);
+  if (!Number.isFinite(month) || !Number.isFinite(day) || !Number.isFinite(year)) {
+    return null;
+  }
+
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return parsed.toISOString().slice(0, 10);
+}
+
+function parseIsoDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(value).trim()) ? String(value).trim() : null;
+}
+
+function parseWorkbookDate(value) {
+  return parseIsoDate(value) ?? parseSlashDate(value) ?? parseLongDate(value);
+}
+
+function formatIsoDate(value) {
+  if (!value) {
+    return null;
+  }
+
+  return new Date(`${value}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
+
+function extractSnapshotDateHint(rowsBeforeHeader) {
+  const combinedText = rowsBeforeHeader
+    .flat()
+    .map((value) => cleanText(value))
+    .join(" ");
+  const match = /as at (\d{1,2} [A-Za-z]+ \d{4})/i.exec(combinedText);
+  return match ? parseLongDate(match[1]) : null;
+}
+
+function buildWorkbookFileName(document, dateCounts) {
+  const publishedAt = String(document.publishedAt || "undated").slice(0, 10);
+  const suffix = dateCounts.get(publishedAt) > 1 ? `-${document.id}` : "";
+  return `nwrsmp-workbook-${publishedAt}${suffix}.xlsx`;
+}
+
+function parseSupportedSheet(document, filePath) {
+  const rows = readSheetMatrix(filePath, "Supported");
+  const headerRowIndex = findHeaderRowIndex(rows, [
+    "supporttype",
+    "ukregion",
+    "localauthority",
+    "ladcode",
+    "accommodationtype"
+  ]);
+
+  if (headerRowIndex === -1) {
+    return [];
+  }
+
+  const headerRow = rows[headerRowIndex];
+  const groupedRows = new Map();
+
+  for (const row of rows.slice(headerRowIndex + 1)) {
+    const record = rowToObject(headerRow, row);
+    const areaCode = normalizeText(record.ladcode);
+    const areaName = normalizeText(record.localauthority);
+    const regionName = normalizeText(record.ukregion);
+    const periodEnd = parseWorkbookDate(record.date ?? record.dateasat);
+    const value = parseNumber(record.people ?? record.value);
+
+    if (!areaCode || !areaName || !regionName || !periodEnd || value === null) {
+      continue;
+    }
+
+    const groupKey = `${areaCode}|${periodEnd}`;
+    if (!groupedRows.has(groupKey)) {
+      groupedRows.set(groupKey, {
+        areaCode,
+        areaName,
+        regionName,
+        periodEnd,
+        value: 0,
+        sourceWorkbookTitle: document.title,
+        sourceWorkbookPublishedAt: document.publishedAt,
+        sourceWorkbookUrl: document.sourceUrl
+      });
+    }
+
+    groupedRows.get(groupKey).value += value;
+  }
+
+  return [...groupedRows.values()].sort(
+    (left, right) =>
+      left.areaCode.localeCompare(right.areaCode) || left.periodEnd.localeCompare(right.periodEnd)
+  );
+}
+
+function parseLatestGroupsSheet(document, filePath) {
+  const rows = readSheetMatrix(filePath, "Latest Groups");
+  const headerRowIndex = findHeaderRowIndex(rows, [
+    "localauthority",
+    "regionnation",
+    "ltlaonscode"
+  ]);
+
+  if (headerRowIndex === -1) {
+    return [];
+  }
+
+  const headerRow = rows[headerRowIndex];
+  const snapshotDateHint = extractSnapshotDateHint(rows.slice(0, headerRowIndex));
+
+  return rows
+    .slice(headerRowIndex + 1)
+    .map((row) => rowToObject(headerRow, row))
+    .map((record) => ({
+      areaCode: normalizeText(record.ltlaonscode),
+      areaName: normalizeText(record.localauthority),
+      regionName: normalizeText(record.regionnation),
+      snapshotDateHint,
+      supportedAsylum: parseNumber(record.supportedasylumtotalpopulation),
+      contingencyAccommodation: parseNumber(
+        record.ofwhichsupportedasylumcontingencyaccommodationpopulation
+      ),
+      dispersalAccommodation: parseNumber(
+        record.ofwhichsupportedasylumdispersalaccommodationpopulation
+      ),
+      subsistenceOnly: parseNumber(record.ofwhichsubsistenceonlypopulation),
+      allThreePathwaysTotal: parseNumber(record.all3pathwaystotal),
+      population: parseNumber(record.population),
+      shareOfPopulationPct: parseNumber(record.percentageofpopulation),
+      sourceWorkbookTitle: document.title,
+      sourceWorkbookPublishedAt: document.publishedAt,
+      sourceWorkbookUrl: document.sourceUrl
+    }))
+    .filter((record) => record.areaCode && record.areaName && record.regionName);
+}
+
+function parseAuthoritySheet(document, filePath) {
+  const rows = readSheetMatrix(filePath, "North West Authorities");
+  const headerRowIndex = findHeaderRowIndex(rows, [
+    "uppertierauthority",
+    "utlacode",
+    "measuretype",
+    "attribute",
+    "value"
+  ]);
+
+  if (headerRowIndex === -1) {
+    return [];
+  }
+
+  const headerRow = rows[headerRowIndex];
+
+  return rows
+    .slice(headerRowIndex + 1)
+    .map((row) => rowToObject(headerRow, row))
+    .map((record) => ({
+      areaCode: normalizeText(record.utlacode),
+      areaName: normalizeText(record.uppertierauthority),
+      authorityType: normalizeText(record.authoritytype),
+      measureType: normalizeText(record.measuretype),
+      attribute: normalizeText(record.attribute),
+      value: parseNumber(record.value),
+      proRataBasis: normalizeText(record.proratabasis),
+      sourceWorkbookTitle: document.title,
+      sourceWorkbookPublishedAt: document.publishedAt,
+      sourceWorkbookUrl: document.sourceUrl
+    }))
+    .filter((record) => record.areaCode && record.areaName && record.attribute && record.value !== null);
+}
+
+function pickPreferredRows(rows, getKey) {
+  const preferred = new Map();
+
+  for (const row of [...rows].sort((left, right) => {
+    const dateDelta = String(right.sourceWorkbookPublishedAt).localeCompare(String(left.sourceWorkbookPublishedAt));
+    if (dateDelta !== 0) {
+      return dateDelta;
+    }
+
+    return String(left.sourceWorkbookTitle).localeCompare(String(right.sourceWorkbookTitle));
+  })) {
+    const key = getKey(row);
+    if (!preferred.has(key)) {
+      preferred.set(key, row);
+    }
+  }
+
+  return [...preferred.values()];
+}
+
 ensureCleanDir(canonicalDir);
 mkdirSync(liveDir, { recursive: true });
 
-const nwrsmpMedia = JSON.parse(readFileSync(inputPaths.nwrsmpMedia, "utf8"));
-const [nwrsmpPage] = JSON.parse(readFileSync(inputPaths.nwrsmpPage, "utf8"));
+const nwrsmpMedia = readJson(inputPaths.nwrsmpMedia);
+const [nwrsmpPage] = readJson(inputPaths.nwrsmpPage);
 const watchlistRows = readCsv(inputPaths.watchlist);
+const localRouteLatest = readJson(inputPaths.localRouteLatest);
+
+const currentAreaMap = new Map(localRouteLatest.areas.map((area) => [area.areaCode, area]));
 
 const nwrsmpParagraphs = extractParagraphs(nwrsmpPage?.content?.rendered ?? "");
 const meaningfulNwrsmpParagraphs = nwrsmpParagraphs.filter(
@@ -121,7 +396,7 @@ const dashboardMatch = String(nwrsmpPage?.content?.rendered ?? "").match(/<param
 const dashboardPath = dashboardMatch?.[1] ?? null;
 const dashboardUrl = dashboardPath ? `https://public.tableau.com/views/${dashboardPath}?:showVizHome=no` : null;
 
-const nwrsmpDocuments = dedupeBy(
+const nwrsmpDocumentsBase = dedupeBy(
   nwrsmpMedia
     .filter(
       (item) =>
@@ -129,6 +404,7 @@ const nwrsmpDocuments = dedupeBy(
         /north west public accessible/i.test(cleanText(item?.title?.rendered))
     )
     .map((item) => ({
+      id: item.id,
       title: cleanText(item.title?.rendered),
       publishedAt: String(item.date_gmt || item.date || "").slice(0, 10),
       sourceUrl: item.source_url,
@@ -139,10 +415,122 @@ const nwrsmpDocuments = dedupeBy(
   (row) => `${row.title}|${row.fileSizeBytes ?? "na"}`
 );
 
+const dateCounts = new Map();
+for (const document of nwrsmpDocumentsBase) {
+  const key = document.publishedAt || "undated";
+  dateCounts.set(key, (dateCounts.get(key) ?? 0) + 1);
+}
+
+const nwrsmpDocuments = nwrsmpDocumentsBase.map((document) => ({
+  ...document,
+  localFileName: buildWorkbookFileName(document, dateCounts)
+}));
+
+for (const document of nwrsmpDocuments) {
+  const filePath = path.join(rawWorkbookDir, document.localFileName);
+  if (!existsSync(filePath)) {
+    throw new Error(`Missing expected workbook file: ${document.localFileName}`);
+  }
+}
+
 const regionalPartners = buildWatchEntries(watchlistRows, "regional_partner", "medium");
 const similarOrganisations = buildWatchEntries(watchlistRows, "similar_organisation", "medium");
 const archiveTools = buildWatchEntries(watchlistRows, "archive_tool", "high");
 const archivedResearchInputs = buildWatchEntries(watchlistRows, "archived_research_input", "high");
+
+const workbookExtractions = nwrsmpDocuments.map((document) => {
+  const filePath = path.join(rawWorkbookDir, document.localFileName);
+  return {
+    document,
+    authorityRows: parseAuthoritySheet(document, filePath),
+    latestGroupRows: parseLatestGroupsSheet(document, filePath),
+    supportedRows: parseSupportedSheet(document, filePath)
+  };
+});
+
+const authorityObservationRows = workbookExtractions
+  .flatMap((workbook) => workbook.authorityRows)
+  .sort(
+    (left, right) =>
+      left.areaCode.localeCompare(right.areaCode) ||
+      left.attribute.localeCompare(right.attribute) ||
+      String(left.sourceWorkbookPublishedAt).localeCompare(String(right.sourceWorkbookPublishedAt))
+  );
+
+const latestGroupRows = workbookExtractions
+  .flatMap((workbook) => workbook.latestGroupRows)
+  .sort(
+    (left, right) =>
+      left.areaCode.localeCompare(right.areaCode) ||
+      String(left.sourceWorkbookPublishedAt).localeCompare(String(right.sourceWorkbookPublishedAt))
+  );
+
+const supportedSeriesRows = workbookExtractions
+  .flatMap((workbook) => workbook.supportedRows)
+  .sort(
+    (left, right) =>
+      left.areaCode.localeCompare(right.areaCode) ||
+      left.periodEnd.localeCompare(right.periodEnd) ||
+      String(left.sourceWorkbookPublishedAt).localeCompare(String(right.sourceWorkbookPublishedAt))
+  );
+
+const preferredSupportedSeriesRows = pickPreferredRows(
+  supportedSeriesRows,
+  (row) => `${row.areaCode}|${row.periodEnd}`
+).sort(
+  (left, right) =>
+    left.areaCode.localeCompare(right.areaCode) || left.periodEnd.localeCompare(right.periodEnd)
+);
+
+const liveAreaSeries = preferredSupportedSeriesRows
+  .filter((row) => currentAreaMap.has(row.areaCode))
+  .map((row) => ({
+    areaCode: row.areaCode,
+    areaName: currentAreaMap.get(row.areaCode)?.areaName ?? row.areaName,
+    periodEnd: row.periodEnd,
+    value: row.value,
+    dataStatus: "official_anchor"
+  }))
+  .sort((left, right) => left.areaCode.localeCompare(right.areaCode) || left.periodEnd.localeCompare(right.periodEnd));
+
+const liveSeriesAreaCount = new Set(liveAreaSeries.map((row) => row.areaCode)).size;
+const liveSeriesPointCount = liveAreaSeries.length;
+const liveSeriesFirstPeriod =
+  [...new Set(liveAreaSeries.map((row) => row.periodEnd))].sort((left, right) => left.localeCompare(right))[0] ??
+  null;
+const liveSeriesLatestPeriod =
+  [...new Set(liveAreaSeries.map((row) => row.periodEnd))].sort((left, right) => right.localeCompare(left))[0] ??
+  null;
+
+const contributorCounts = new Map();
+for (const row of preferredSupportedSeriesRows) {
+  const key = row.sourceWorkbookUrl;
+  if (!contributorCounts.has(key)) {
+    contributorCounts.set(key, {
+      sourceWorkbookTitle: row.sourceWorkbookTitle,
+      sourceWorkbookPublishedAt: row.sourceWorkbookPublishedAt,
+      sourceWorkbookUrl: row.sourceWorkbookUrl,
+      contributionCount: 0
+    });
+  }
+  contributorCounts.get(key).contributionCount += 1;
+}
+
+const primarySeriesContributor =
+  [...contributorCounts.values()].sort(
+    (left, right) =>
+      right.contributionCount - left.contributionCount ||
+      String(right.sourceWorkbookPublishedAt).localeCompare(String(left.sourceWorkbookPublishedAt))
+  )[0] ?? null;
+
+const latestLatestGroupsWorkbook =
+  [...latestGroupRows].sort(
+    (left, right) => String(right.sourceWorkbookPublishedAt).localeCompare(String(left.sourceWorkbookPublishedAt))
+  )[0] ?? null;
+const latestAuthorityWorkbook =
+  [...authorityObservationRows].sort(
+    (left, right) => String(right.sourceWorkbookPublishedAt).localeCompare(String(left.sourceWorkbookPublishedAt))
+  )[0] ?? null;
 
 const liveOutput = {
   summary: {
@@ -151,7 +539,11 @@ const liveOutput = {
     archiveToolCount: archiveTools.length,
     archivedResearchInputCount: archivedResearchInputs.length,
     nwrsmpWorkbookCount: nwrsmpDocuments.length,
-    nwrsmpHistoricWorkbookCount: Math.max(0, nwrsmpDocuments.length - 1)
+    nwrsmpHistoricWorkbookCount: Math.max(0, nwrsmpDocuments.length - 1),
+    nwrsmpAuthorityObservationCount: authorityObservationRows.length,
+    nwrsmpLatestGroupRowCount: latestGroupRows.length,
+    nwrsmpSupportedSeriesAreaCount: liveSeriesAreaCount,
+    nwrsmpSupportedSeriesPointCount: liveSeriesPointCount
   },
   nwrsmp: {
     pageTitle: cleanText(nwrsmpPage?.title?.rendered ?? "Data and insights"),
@@ -165,7 +557,28 @@ const liveOutput = {
     provenanceNote:
       meaningfulNwrsmpParagraphs.find((paragraph) => /source data owners|not provided by the rsmp/i.test(paragraph)) ??
       "",
-    documents: nwrsmpDocuments
+    documents: nwrsmpDocuments,
+    authorityObservations: {
+      rowCount: authorityObservationRows.length,
+      latestWorkbookPublishedAt: latestAuthorityWorkbook?.sourceWorkbookPublishedAt ?? null
+    },
+    latestGroups: {
+      rowCount: latestGroupRows.length,
+      latestWorkbookPublishedAt: latestLatestGroupsWorkbook?.sourceWorkbookPublishedAt ?? null,
+      latestSnapshotDateHint: latestLatestGroupsWorkbook?.snapshotDateHint ?? null
+    },
+    supportedSeries: {
+      areaCount: liveSeriesAreaCount,
+      pointCount: liveSeriesPointCount,
+      firstPeriodEnd: liveSeriesFirstPeriod,
+      latestPeriodEnd: liveSeriesLatestPeriod,
+      firstPeriodLabel: formatIsoDate(liveSeriesFirstPeriod),
+      latestPeriodLabel: formatIsoDate(liveSeriesLatestPeriod),
+      primaryWorkbookTitle: primarySeriesContributor?.sourceWorkbookTitle ?? null,
+      primaryWorkbookPublishedAt: primarySeriesContributor?.sourceWorkbookPublishedAt ?? null,
+      primaryWorkbookUrl: primarySeriesContributor?.sourceWorkbookUrl ?? null,
+      contributingWorkbookCount: contributorCounts.size
+    }
   },
   regionalPartners,
   similarOrganisations,
@@ -174,10 +587,14 @@ const liveOutput = {
 };
 
 writeNdjson(path.join(canonicalDir, "nwrsmp-workbooks.ndjson"), nwrsmpDocuments);
+writeNdjson(path.join(canonicalDir, "nwrsmp-authority-observations.ndjson"), authorityObservationRows);
+writeNdjson(path.join(canonicalDir, "nwrsmp-latest-groups.ndjson"), latestGroupRows);
+writeNdjson(path.join(canonicalDir, "nwrsmp-supported-area-series.ndjson"), preferredSupportedSeriesRows);
 writeNdjson(path.join(canonicalDir, "regional-partners.ndjson"), regionalPartners);
 writeNdjson(path.join(canonicalDir, "similar-organisations.ndjson"), similarOrganisations);
 writeNdjson(path.join(canonicalDir, "archive-tools.ndjson"), archiveTools);
 writeNdjson(path.join(canonicalDir, "archived-research-inputs.ndjson"), archivedResearchInputs);
+
 writeJson(path.join(canonicalDir, "manifest.json"), {
   datasetId: "regional_sources",
   generatedAt: new Date().toISOString(),
@@ -193,19 +610,29 @@ writeJson(path.join(canonicalDir, "manifest.json"), {
     {
       path: inputPaths.nwrsmpPage,
       fileSha256: fileSha256(inputPaths.nwrsmpPage)
-    }
+    },
+    {
+      path: inputPaths.localRouteLatest,
+      fileSha256: fileSha256(inputPaths.localRouteLatest)
+    },
+    ...nwrsmpDocuments.map((document) => ({
+      path: path.join(rawWorkbookDir, document.localFileName),
+      fileSha256: fileSha256(path.join(rawWorkbookDir, document.localFileName))
+    }))
   ],
   outputs: {
-    live: "src/data/live/regional-source-watch.json",
+    liveRegionalWatch: "src/data/live/regional-source-watch.json",
+    liveAreaSeries: "src/data/live/area-series.json",
     nwrsmpWorkbookCount: nwrsmpDocuments.length,
-    regionalPartnerCount: regionalPartners.length,
-    similarOrganisationCount: similarOrganisations.length,
-    archiveToolCount: archiveTools.length,
-    archivedResearchInputCount: archivedResearchInputs.length
+    nwrsmpSupportedSeriesAreaCount: liveSeriesAreaCount,
+    nwrsmpSupportedSeriesPointCount: liveSeriesPointCount,
+    nwrsmpSupportedSeriesLatestPeriod: liveSeriesLatestPeriod
   }
 });
+
 writeJson(path.join(liveDir, "regional-source-watch.json"), liveOutput);
+writeJson(path.join(liveDir, "area-series.json"), liveAreaSeries);
 
 console.log(
-  `Transformed ${nwrsmpDocuments.length} North West workbooks, ${regionalPartners.length} regional partner leads, ${similarOrganisations.length} synthesis leads, and ${archivedResearchInputs.length} archived research leads.`
+  `Transformed ${nwrsmpDocuments.length} North West workbooks into ${liveSeriesPointCount} official supported-asylum history points across ${liveSeriesAreaCount} current areas.`
 );

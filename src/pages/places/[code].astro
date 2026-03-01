@@ -237,7 +237,7 @@ const placeSections = [
       <TrendChart
         points={areaTrend.points.map((point) => ({ label: point.label, value: point.value }))}
         title={`Recent supported asylum path in ${area.areaName}`}
-        description={`Quarter-end place series to ${areaTrend.latestPeriodLabel}. ${areaTrend.hasIllustrativeData ? "Illustrative bridge points remain in the series until fuller official quarterly coverage is wired." : "All visible points are official anchor values."}`}
+        description={`Quarter-end place series to ${areaTrend.latestPeriodLabel}. ${areaTrend.hasIllustrativeData ? "Illustrative bridge points remain in the visible series." : "All visible points are official quarter-end values."}`}
         tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
       />
 
@@ -276,12 +276,12 @@ const placeSections = [
           <article class="signal-card">
             <span class="tiny">Series quality</span>
             <h3>
-              {areaTrend.officialAnchorCount} official anchor point{areaTrend.officialAnchorCount === 1 ? "" : "s"}
+              {areaTrend.officialAnchorCount} official quarter point{areaTrend.officialAnchorCount === 1 ? "" : "s"}
             </h3>
             <p class="tiny">
               {areaTrend.hasIllustrativeData
                 ? `${areaTrend.illustrativeCount} illustrative bridge point${areaTrend.illustrativeCount === 1 ? "" : "s"} remain in the visible series, so this section is a directional reading rather than a full official quarterly run.`
-                : "The visible trend line is built entirely from official anchor points in the local area series."}
+                : "The visible trend line is built entirely from official quarter-end supported asylum values in the local area series."}
             </p>
           </article>
         </div>

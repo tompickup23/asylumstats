@@ -48,6 +48,7 @@ describe("hotel-data loader", () => {
   it("loads hotel entity ledger with summary", () => {
     expect(ledger.summary).toHaveProperty("totalNamedSites");
     expect(ledger.summary.totalNamedSites).toBeGreaterThan(0);
+    expect(ledger.summary.archiveLeadCount).toBeGreaterThan(100);
   });
 
   it("sites have required fields", () => {
@@ -62,6 +63,12 @@ describe("hotel-data loader", () => {
     expect(ledger.areas.length).toBeGreaterThan(0);
     expect(ledger.areas[0]).toHaveProperty("areaName");
     expect(ledger.areas[0]).toHaveProperty("unnamedSiteCount");
+  });
+
+  it("includes archive verification tracking", () => {
+    expect(ledger.archiveVerification.totalLeadCount).toBeGreaterThan(100);
+    expect(ledger.archiveVerification.publicArchiveMatches.length).toBeGreaterThan(0);
+    expect(ledger.archiveVerification.pendingVerificationCount).toBeGreaterThan(0);
   });
 });
 

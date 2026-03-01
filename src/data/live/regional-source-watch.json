@@ -5,7 +5,11 @@
     "archiveToolCount": 2,
     "archivedResearchInputCount": 1,
     "nwrsmpWorkbookCount": 6,
-    "nwrsmpHistoricWorkbookCount": 5
+    "nwrsmpHistoricWorkbookCount": 5,
+    "nwrsmpAuthorityObservationCount": 4126,
+    "nwrsmpLatestGroupRowCount": 2184,
+    "nwrsmpSupportedSeriesAreaCount": 354,
+    "nwrsmpSupportedSeriesPointCount": 11718
   },
   "nwrsmp": {
     "pageTitle": "Data and insights",
@@ -16,48 +20,81 @@
     "provenanceNote": "The data provided in this table set comes from a range of published sources and is not provided by the RSMP. The source file data information is found in the data tab on the Tableau series above and queries should be directed to the source data owners in the first instance.",
     "documents": [
       {
+        "id": 17446,
         "title": "North West Public Accessible February 2026 (XLS, 1398KB)",
         "publishedAt": "2026-02-27",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/02/North-West-Public-Accessible-February-2026-XLS-1398KB.xlsx",
         "fileSizeBytes": 1430831,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2026-02-27.xlsx"
       },
       {
+        "id": 17071,
         "title": "North West Public Accessible November 2025 (xls, 1,272KB)",
         "publishedAt": "2025-12-05",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/12/North-West-Public-Accessible-November-2025-xls-1272KB.xlsx",
         "fileSizeBytes": 1301569,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2025-12-05.xlsx"
       },
       {
+        "id": 16448,
         "title": "North West Public Accessible Data August 2025 (xls, 3,789KB)",
         "publishedAt": "2025-08-22",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/08/North-West-Public-Accessible-Data-August-2025-xls-3789KB.xlsx",
         "fileSizeBytes": 3879894,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2025-08-22.xlsx"
       },
       {
+        "id": 15639,
         "title": "North West Public Accessible Data May 2025 (XLS, 3,841KB)",
         "publishedAt": "2025-05-23",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/05/North-West-Public-Accessible-Data-May-2025-XLS-3841KB.xlsx",
         "fileSizeBytes": 3932436,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2025-05-23.xlsx"
       },
       {
+        "id": 15117,
         "title": "North West Public accessible data November 2024 (xls, 1,211KB)",
         "publishedAt": "2025-01-31",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/01/North-West-Public-accessible-data-November-2024-xls-1211KB-1.xlsx",
         "fileSizeBytes": 1239474,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2025-01-31.xlsx"
       },
       {
+        "id": 14334,
         "title": "North West Public Accessible Data August 2024 (PDF, 6MB)",
         "publishedAt": "2024-11-01",
         "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2024/11/North-West-Public-Accessible-Data-August-2024-PDF-6MB.xlsx",
         "fileSizeBytes": 5995153,
-        "format": "xlsx"
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2024-11-01.xlsx"
       }
-    ]
+    ],
+    "authorityObservations": {
+      "rowCount": 4126,
+      "latestWorkbookPublishedAt": "2026-02-27"
+    },
+    "latestGroups": {
+      "rowCount": 2184,
+      "latestWorkbookPublishedAt": "2026-02-27",
+      "latestSnapshotDateHint": null
+    },
+    "supportedSeries": {
+      "areaCount": 354,
+      "pointCount": 11718,
+      "firstPeriodEnd": "2014-03-31",
+      "latestPeriodEnd": "2025-12-31",
+      "firstPeriodLabel": "31 Mar 2014",
+      "latestPeriodLabel": "31 Dec 2025",
+      "primaryWorkbookTitle": "North West Public Accessible February 2026 (XLS, 1398KB)",
+      "primaryWorkbookPublishedAt": "2026-02-27",
+      "primaryWorkbookUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/02/North-West-Public-Accessible-February-2026-XLS-1398KB.xlsx",
+      "contributingWorkbookCount": 3
+    }
   },
   "regionalPartners": [
     {

@@ -72,11 +72,28 @@ function makeLedger(sites: HotelSiteSummary[], areas: HotelAreaSummary[]): Hotel
       currentNamedSitesUnresolved: sites.filter((site) => site.entityCoverage === "unresolved").length,
       currentNamedSitesWithIntegritySignals: sites.filter((site) => site.integritySignalCount > 0).length,
       unnamedOnlyAreaCount: areas.length,
-      totalIntegritySignals: sites.reduce((total, site) => total + site.integritySignalCount, 0)
+      totalIntegritySignals: sites.reduce((total, site) => total + site.integritySignalCount, 0),
+      archiveLeadCount: 0,
+      archiveLinkedExistingCount: 0,
+      archivePromotedNewCount: 0,
+      archiveHeldBackCount: 0,
+      archivePendingVerificationCount: 0
     },
     hotelFacts: [],
     sites,
     areas,
+    archiveVerification: {
+      sourceName: "Archive",
+      archiveSnapshotUrl: null,
+      archiveSnapshotDate: null,
+      totalLeadCount: 0,
+      linkedExistingCount: 0,
+      promotedNewCount: 0,
+      heldBackCount: 0,
+      pendingVerificationCount: 0,
+      pendingAutoCandidateCount: 0,
+      publicArchiveMatches: []
+    },
     primeProviderBreakdown: [],
     limitations: [],
     sources: []

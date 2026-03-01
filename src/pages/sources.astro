@@ -46,6 +46,7 @@ const typeCounts = [...new Set(sourceScope.map((source) => source.type))].map((t
 }));
 
 const latestNwrsmpWorkbook = regionalSourceWatch.nwrsmp.documents[0] ?? null;
+const nwrsmpSupportedSeries = regionalSourceWatch.nwrsmp.supportedSeries;
 const combinedHistoricLeadCount =
   regionalSourceWatch.summary.nwrsmpHistoricWorkbookCount +
   regionalSourceWatch.summary.archiveToolCount +
@@ -138,6 +139,11 @@ function formatLabelList(values: string[]) {
             <strong>{combinedHistoricLeadCount}</strong>
             <p class="tiny">Archive tools, older workbook snapshots, and archive-only discovery inputs.</p>
           </article>
+          <article class="stat-tile">
+            <span class="tiny">Historic quarter points</span>
+            <strong>{regionalSourceWatch.summary.nwrsmpSupportedSeriesPointCount.toLocaleString()}</strong>
+            <p class="tiny">Official supported-asylum area values extracted from the workbook series.</p>
+          </article>
         </div>
       </article>
 
@@ -229,6 +235,26 @@ function formatLabelList(values: string[]) {
           </div>
         </article>
       )}
+
+      <article class="feature-card">
+        <div class="chip-row">
+          <span class="chip accent">Extracted official history</span>
+          <span class="chip">{nwrsmpSupportedSeries.areaCount} current areas</span>
+        </div>
+        <h3>{regionalSourceWatch.summary.nwrsmpSupportedSeriesPointCount.toLocaleString()} quarter-end values now feed the live place trends</h3>
+        <p class="lede">
+          The site is now ingesting official supported-asylum history from {nwrsmpSupportedSeries.firstPeriodLabel} to{" "}
+          {nwrsmpSupportedSeries.latestPeriodLabel}, rather than only tracking workbook files as research leads.
+        </p>
+        <div class="chip-row">
+          {nwrsmpSupportedSeries.primaryWorkbookPublishedAt && (
+            <span class="chip">{formatIsoDate(nwrsmpSupportedSeries.primaryWorkbookPublishedAt)} primary source workbook</span>
+          )}
+          {nwrsmpSupportedSeries.primaryWorkbookUrl && (
+            <a class="source-pill" href={nwrsmpSupportedSeries.primaryWorkbookUrl}>Open source workbook</a>
+          )}
+        </div>
+      </article>
     </div>
 
     <div class="split section">

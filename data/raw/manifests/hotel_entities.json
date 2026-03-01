@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-03-01T00:06:06.845Z",
+  "datasetId": "hotel_entities",
+  "sourceUrl": "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json",
+  "files": [
+    {
+      "fileName": "archive-hotel-leads.json",
+      "sizeBytes": 40721,
+      "leadCount": 219
+    }
+  ]
+}

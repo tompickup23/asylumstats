@@ -152,11 +152,14 @@ const compareTrendCards = [
     : null,
   compareTrendProfiles.length > 0
     ? {
-        title: trendIllustrativePlaces > 0 ? "Series quality remains mixed and explicit" : "Series quality is explicit in this compare field",
+        title:
+          trendIllustrativePlaces > 0
+            ? "Series quality remains mixed and explicit"
+            : "The compare field now carries official quarterly place history",
         body:
           trendIllustrativePlaces > 0
             ? `${trendIllustrativePlaces} of the ${compareTrendProfiles.length} compare places still rely on illustrative bridge points between official anchors. The trend field is directional and should be read alongside the current snapshot, not as a full quarterly release series.`
-            : "Every visible compare-series point is backed by official anchors, so the trend field can be read as a direct short-run movement view."
+            : `All ${compareTrendProfiles.length} compare places now use official quarter-end supported asylum values, so this trend field can be read as a direct movement view rather than a mock bridge.`
       }
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
@@ -540,7 +543,7 @@ const compareSections = [
           <TrendChart
             points={profile.trend.points.map((point) => ({ label: point.label, value: point.value }))}
             title={`Recent supported asylum path in ${profile.place.areaName}`}
-            description={`${profile.place.regionName}. Latest point ${profile.trend.latestPeriodLabel}. ${profile.trend.hasIllustrativeData ? "Illustrative bridge points remain between official anchors." : "Visible points are all official anchors."}`}
+            description={`${profile.place.regionName}. Latest point ${profile.trend.latestPeriodLabel}. ${profile.trend.hasIllustrativeData ? "Illustrative bridge points remain between official anchors." : "Visible points are all official quarter-end values."}`}
             tone={profile.tone}
           />
         ))}
@@ -582,14 +585,14 @@ const compareSections = [
               <div class="data-row">
                 <span>Series quality</span>
                 <span class="data-row-value">
-                  {profile.trend.officialAnchorCount} anchor / {profile.trend.illustrativeCount} illustrative
+                  {profile.trend.officialAnchorCount} official quarter points
                 </span>
               </div>
             </div>
             <p class="tiny">
               {profile.trend.hasIllustrativeData
                 ? "Directional read only: illustrative bridge points remain in the visible series."
-                : "All visible points are official anchors in the current series."}
+                : "All visible points are official quarter-end values in the current series."}
             </p>
             <p class="tiny">
               <a class="source-pill" href={`/places/${profile.place.areaCode}/#recent-trend`}>Open place trend</a>

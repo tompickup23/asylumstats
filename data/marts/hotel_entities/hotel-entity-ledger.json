@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-28T17:10:43.745Z",
+  "generatedAt": "2026-03-01T00:06:44.540Z",
   "summary": {
     "totalNamedSites": 9,
     "currentNamedSites": 4,
@@ -12,7 +12,12 @@
     "currentNamedSitesUnresolved": 1,
     "currentNamedSitesWithIntegritySignals": 3,
     "unnamedOnlyAreaCount": 3,
-    "totalIntegritySignals": 4
+    "totalIntegritySignals": 4,
+    "archiveLeadCount": 219,
+    "archiveLinkedExistingCount": 4,
+    "archivePromotedNewCount": 0,
+    "archiveHeldBackCount": 1,
+    "archivePendingVerificationCount": 214
   },
   "hotelFacts": [
     {
@@ -164,7 +169,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-02-28T17:10:43.745Z",
+          "generatedAt": "2026-03-01T00:06:44.540Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -216,7 +221,7 @@
             "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
           ],
           "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-02-28T17:10:43.745Z",
+          "generatedAt": "2026-03-01T00:06:44.540Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -291,7 +296,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-02-28T17:10:43.745Z",
+          "generatedAt": "2026-03-01T00:06:44.540Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -456,7 +461,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-02-28T17:10:43.745Z",
+          "generatedAt": "2026-03-01T00:06:44.540Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
@@ -619,6 +624,71 @@
       "visibilityPct": 100
     }
   ],
+  "archiveVerification": {
+    "sourceName": "migranthotels.net archive snapshot",
+    "archiveSnapshotUrl": "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json",
+    "archiveSnapshotDate": "2025-08-26",
+    "totalLeadCount": 219,
+    "linkedExistingCount": 4,
+    "promotedNewCount": 0,
+    "heldBackCount": 1,
+    "pendingVerificationCount": 214,
+    "pendingAutoCandidateCount": 0,
+    "publicArchiveMatches": [
+      {
+        "leadName": "Allesley Hotel",
+        "verificationStatus": "linked_existing",
+        "siteId": "allesley-hotel-coventry",
+        "siteName": "Allesley Hotel",
+        "areaName": "Coventry",
+        "areaCode": "E08000026",
+        "regionName": "West Midlands",
+        "status": "historical",
+        "sourceTitle": "Coventry FOI publication on asylum seeker hotels",
+        "sourceUrl": "https://www.whatdotheyknow.com/request/asylum_seekers_hotels_2#incoming-2663596",
+        "notes": "Archive lead matches a hotel already documented in the public Coventry FOI response"
+      },
+      {
+        "leadName": "Cedar Court Hotel Wakefield",
+        "verificationStatus": "linked_existing",
+        "siteId": "cedar-court-wakefield",
+        "siteName": "Cedar Court Hotel",
+        "areaName": "Wakefield",
+        "areaCode": "E08000036",
+        "regionName": "Yorkshire and The Humber",
+        "status": "current",
+        "sourceTitle": "Wakefield statement on contingency asylum accommodation",
+        "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
+        "notes": "Archived lead confirmed against the council statement already used in the public ledger"
+      },
+      {
+        "leadName": "Phoenix Hotel",
+        "verificationStatus": "linked_existing",
+        "siteId": "phoenix-hotel-north-weald",
+        "siteName": "Phoenix Hotel",
+        "areaName": "Epping Forest",
+        "areaCode": "E07000072",
+        "regionName": "East of England",
+        "status": "current",
+        "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
+        "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+        "notes": "Archived map lead aligns with a site already publicly named by Epping Forest District Council"
+      },
+      {
+        "leadName": "The Bell Hotel London Epping Forest",
+        "verificationStatus": "linked_existing",
+        "siteId": "bell-hotel-epping",
+        "siteName": "Bell Hotel",
+        "areaName": "Epping Forest",
+        "areaCode": "E07000072",
+        "regionName": "East of England",
+        "status": "current",
+        "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
+        "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+        "notes": "Archived lead title uses a longer public-facing name than the council ledger row"
+      }
+    ]
+  },
   "primeProviderBreakdown": [
     {
       "provider": "Serco",
@@ -655,7 +725,8 @@
     "The named hotel ledger is intentionally incomplete because the Home Office does not publish a full public site list.",
     "Owner and operator links are only published when the documentary trail is strong enough to support the match.",
     "Prime provider mapping uses the current regional asylum accommodation contract structure and should not be treated as a historical site-by-site contract proof.",
-    "Parliamentary-reference rows stay in the ledger to show visibility gaps, but they are not treated as fully corroborated current hotels without stronger local evidence."
+    "Parliamentary-reference rows stay in the ledger to show visibility gaps, but they are not treated as fully corroborated current hotels without stronger local evidence.",
+    "Archived hotel-map leads are discovery inputs only. A lead is only shown publicly when it can be linked to an already-published site or promoted with independent documentary evidence."
   ],
   "sources": [
     {
@@ -672,6 +743,11 @@
       "name": "Asylum accommodation provider regions",
       "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
       "type": "official contract"
+    },
+    {
+      "name": "migranthotels.net archive snapshot",
+      "sourceUrl": "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json",
+      "type": "archive discovery"
     }
   ]
 }
