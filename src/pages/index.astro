@@ -308,8 +308,9 @@ function formatUtcDateTime(iso: string | undefined): string {
       <div>
         <h2>Read this first</h2>
         <p class="lede">
-          The strongest public story is not the headline totals. It is the hidden hotel estate, the contract chain
-          behind it, and the local authorities carrying the pressure.
+          {pressureLead
+            ? `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, ${hotelLedger.summary.unnamedOnlyAreaCount} areas acknowledge hotel use without naming the sites, and ${pressureLead.areaName} was carrying ${pressureLead.supportedAsylum.toLocaleString()} people on asylum support at quarter end.`
+            : `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, and ${hotelLedger.summary.unnamedOnlyAreaCount} areas acknowledge hotel use without naming the sites.`}
         </p>
       </div>
       <a class="chip accent" href="/hotels#unresolved-watchlist">Open the sharpest evidence trail</a>
@@ -337,9 +338,7 @@ function formatUtcDateTime(iso: string | undefined): string {
       <div class="section-head">
         <div>
           <h2>Open hotel evidence now</h2>
-          <p class="lede">
-            These current named sites already show how much of the estate is still unresolved even after public naming.
-          </p>
+          <p class="lede">{hotelLedger.summary.currentNamedSitesUnresolved} current named sites still stop short of a resolved chain even after public naming.</p>
         </div>
         <a class="source-pill" href="/hotels#hotel-ledger">Open hotel ledger</a>
       </div>
@@ -365,7 +364,9 @@ function formatUtcDateTime(iso: string | undefined): string {
         <div>
           <h2>Open money evidence now</h2>
           <p class="lede">
-            Start with the biggest disclosed rows and then move into the supplier watchlist and full ledger.
+            {leadMoneyRecord
+              ? `${leadMoneyRecord.title} is already public at ${formatMoney(leadMoneyRecord.valueGbp)}. The problem is control and comparability, not the absence of a money trail.`
+              : "Large public rows are already visible. The problem is control and comparability, not the absence of a money trail."}
           </p>
         </div>
         <a class="source-pill" href="/spending#money-findings">Open money findings</a>

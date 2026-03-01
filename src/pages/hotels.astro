@@ -230,8 +230,7 @@ function formatReportedPeople(value: number | null): string {
       <div>
         <h2>What matters first</h2>
         <p class="lede">
-          This page is strongest when it opens with the secrecy gap and the unresolved chain, not with a calm tour of
-          the full estate.
+          {hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still lack a resolved owner or operator chain, and {hotelLedger.summary.unnamedOnlyAreaCount} areas publicly acknowledge hotel use without naming the sites.
         </p>
       </div>
       <a class="source-pill" href="/spending#money-findings">Open the linked money findings</a>
@@ -259,10 +258,7 @@ function formatReportedPeople(value: number | null): string {
     <div class="section-head">
       <div>
         <h2>Current unresolved chain watchlist</h2>
-        <p class="lede">
-          These are the live sites most worth opening first because the public name exists but the full owner or
-          operator chain still does not.
-        </p>
+        <p class="lede">{watchlist.length} live named sites still break at owner or operator level even though the hotel itself is already public.</p>
       </div>
       <span class="chip accent">{watchlist.length} sites on the current watchlist</span>
     </div>
@@ -305,10 +301,7 @@ function formatReportedPeople(value: number | null): string {
     <div class="section-head">
       <div>
         <h2>The secrecy gap is already documentable</h2>
-        <p class="lede">
-          Public bodies can confirm hotel use without publishing the full site list. These areas are the clearest live
-          examples of that gap.
-        </p>
+        <p class="lede">{unnamedOnlyAreas.length} areas in the live ledger confirm hotel use without publishing the hotel list.</p>
       </div>
       <span class="chip">{unnamedOnlyAreas.length} unnamed-only areas in the live ledger</span>
     </div>

@@ -264,8 +264,9 @@ const spendingSections = [
       <div>
         <h2>What matters first</h2>
         <p class="lede">
-          The public money story is strongest when it opens with the exposed leads, biggest rows, and concentrated
-          supplier or buyer control before dropping into composition charts and ledger tooling.
+          {leadRoute && leadBuyer
+            ? `${formatRouteFamily(leadRoute.routeFamily)} already accounts for ${leadRoute.recordCount} of the ${moneyLedger.summary.totalRecords} public money rows in scope, and ${leadBuyer.buyerName} appears on ${leadBuyer.recordCount} of them.`
+            : "The public money layer already exposes concentration before the full ledger is complete."}
         </p>
       </div>
       {primaryLead && <span class={`chip ${primaryLead.severity === "warning" ? "accent" : ""}`}>{primaryLead.severity}</span>}
@@ -308,8 +309,9 @@ const spendingSections = [
       <div>
         <h2>Big disclosed rows already visible</h2>
         <p class="lede">
-          The starter ledger already contains large public figures. They need clear route labels and context, not
-          flattening into one misleading spend total.
+          {highValueRecords[0]
+            ? `${highValueRecords[0].title} is already visible at ${formatMoney(highValueRecords[0].valueGbp)}. The problem is not the absence of public numbers; it is keeping unlike rows separate and legible.`
+            : "The starter ledger already contains large public figures. They need clear route labels and context, not flattening into one misleading spend total."}
         </p>
       </div>
       <span class="chip">{moneyLedger.summary.uniqueSuppliers.toLocaleString()} suppliers or public bodies tracked</span>
@@ -351,8 +353,9 @@ const spendingSections = [
       <div>
         <h2>Supplier and public-body watchlist</h2>
         <p class="lede">
-          The watchlist combines visible hotel exposure, public contract rows, and any disclosed contract value already
-          in the starter ledger.
+          {supplierWatchlist[0]
+            ? `${supplierWatchlist[0].entityName} already features in ${supplierWatchlist[0].publicContractCount} public money rows${supplierWatchlist[0].siteCount > 0 ? ` and ${supplierWatchlist[0].siteCount} linked sites` : ""}. This is where entity-level exposure stops being abstract.`
+            : "The watchlist combines visible hotel exposure, public contract rows, and any disclosed contract value already in the starter ledger."}
         </p>
       </div>
     </div>

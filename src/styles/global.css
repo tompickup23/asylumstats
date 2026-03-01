@@ -1773,6 +1773,15 @@ tr:last-child td {
     white-space: nowrap;
   }
 
+  .page-contents-links {
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+  }
+
+  .page-contents-links a {
+    flex: 0 0 auto;
+  }
+
   .split {
     grid-template-columns: 1fr;
   }
@@ -1825,8 +1834,24 @@ tr:last-child td {
     max-height: calc(100vh - 1rem);
   }
 
+  .page-contents,
+  .priority-section {
+    padding: 0.95rem;
+    border-radius: 20px;
+  }
+
   .page-contents-links {
     flex-direction: column;
+  }
+
+  .priority-card {
+    padding-top: 2.5rem;
+  }
+
+  .priority-rank {
+    top: 0.85rem;
+    right: 0.85rem;
+    font-size: 1.55rem;
   }
 
   .metric-bar {

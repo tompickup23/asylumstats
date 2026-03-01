@@ -353,8 +353,9 @@ const compareSections = [
       <div>
         <h2>What this compare set already shows</h2>
         <p class="lede">
-          Even a small compare field is enough to separate volume, rate, hotel-heavy contingency use, and the wider
-          humanitarian pathway load.
+          {supportedLeader && supportedRateLeader && contingencyLeader
+            ? `${supportedLeader.areaName} leads this set by supported asylum count, ${supportedRateLeader.areaName} leads by rate, and ${contingencyLeader.areaName} leads on contingency accommodation. One headline number hides all three stories.`
+            : "Even a small compare field is enough to separate volume, rate, hotel-heavy contingency use, and the wider humanitarian pathway load."}
         </p>
       </div>
     </div>
