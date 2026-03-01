@@ -4,6 +4,7 @@ const pages = [
   { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
+  { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
   { name: "sources", path: "/sources/", focus: "#source-findings", hasPageContents: true },
@@ -42,6 +43,15 @@ const filteredViews = [
     expectedSummary: /Showing \d+ of \d+ public ledger rows/,
     expectedFocus: "asylum_support",
     expectedLocation: "money_sort=value"
+  },
+  {
+    name: "entities-filtered",
+    path: "/entities/?entity_role=prime_provider&entity_footprint=named_estate&entity_sort=estate#entity-explorer",
+    root: "#entity-explorer",
+    summary: "[data-entity-summary]",
+    expectedSummary: /Showing \d+ of \d+ matching profiles/,
+    expectedFocus: "prime_provider",
+    expectedLocation: "entity_footprint=named_estate"
   },
   {
     name: "place-drilldown",
@@ -204,6 +214,21 @@ test.describe("mobile filtered views", () => {
           "data-metric",
           "contingency_accommodation"
         );
+      }
+
+      if (view.name === "entities-filtered") {
+        await expect(page.locator('select[name="entity_role"]')).toHaveValue(view.expectedFocus);
+        await expect(page.locator('select[name="entity_footprint"]')).toHaveValue("named_estate");
+        const visibleEntityRows = await page
+          .locator("[data-entity-item]:not([hidden])")
+          .evaluateAll((elements) =>
+            elements.map((element) => ({
+              role: element.getAttribute("data-role") ?? "",
+              currentSites: Number(element.getAttribute("data-current-sites") ?? "0")
+            }))
+          );
+        expect(visibleEntityRows.length).toBeGreaterThan(0);
+        expect(visibleEntityRows.every((row) => row.role === "prime_provider" && row.currentSites > 0)).toBe(true);
       }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

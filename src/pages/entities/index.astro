@@ -1,12 +1,22 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageContents from "../../components/PageContents.astro";
-import { formatRouteFamilyLabel, getEntityProfiles } from "../../lib/entities";
+import {
+  formatEntityRoleLabel,
+  formatRouteFamilyLabel,
+  getEntityProfiles
+} from "../../lib/entities";
 
 const entityProfiles = getEntityProfiles();
 const featuredProfiles = entityProfiles.slice(0, 4);
 const hotelLinkedProfiles = entityProfiles.filter((profile) => profile.currentSiteCount > 0);
 const publicBodyProfiles = entityProfiles.filter((profile) => profile.primaryRole === "public_body");
+const entityRoleOptions = [...new Set(entityProfiles.map((profile) => profile.primaryRole))].sort((left, right) =>
+  formatEntityRoleLabel(left).localeCompare(formatEntityRoleLabel(right))
+);
+const entityRouteOptions = [...new Set(entityProfiles.flatMap((profile) => profile.routeFamilies))].sort((left, right) =>
+  formatRouteFamilyLabel(left).localeCompare(formatRouteFamilyLabel(right))
+);
 const uniqueCurrentSiteCount = new Set(hotelLinkedProfiles.flatMap((profile) => profile.currentSites.map((site) => site.siteId)))
   .size;
 const uniqueMoneyRowCount = new Set(entityProfiles.flatMap((profile) => profile.moneyRecords.map((record) => record.recordId)))
@@ -34,12 +44,79 @@ const entityFindingCards = [
       }
     : null
 ].filter((card): card is { title: string; body: string } => card !== null);
+
+function buildPresetHref(pathname: string, params: Record<string, string>, hash: string): string {
+  return `${pathname}?${new URLSearchParams(params).toString()}#${hash}`;
+}
+
+const entityPresetViews = [
+  {
+    title: "Prime providers on the named estate",
+    body: "Jump straight to prime providers that already touch current named hotel sites and rank them by estate footprint.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_role: "prime_provider",
+        entity_footprint: "named_estate",
+        entity_sort: "estate",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open prime providers"
+  },
+  {
+    title: "Ownership and operator chain links",
+    body: "Pull the owner-group, freeholder, brand-operator, operator, and hotel-operator profiles into one visible ledger by searching the named estate only.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_q: "hotel owner operator freeholder group",
+        entity_footprint: "named_estate",
+        entity_sort: "estate",
+        entity_limit: "24"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open ownership chain"
+  },
+  {
+    title: "Money-only public-body surfaces",
+    body: "Keep the funding and tariff actors together, without the hotel-linked profiles crowding them out.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_role: "public_body",
+        entity_footprint: "money_only",
+        entity_sort: "money",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open public bodies"
+  },
+  {
+    title: "Unresolved estate exposure",
+    body: "Move straight to profiles whose current named sites still sit inside unresolved or partial chain coverage.",
+    href: buildPresetHref(
+      "/entities/",
+      {
+        entity_footprint: "unresolved_estate",
+        entity_sort: "exposure",
+        entity_limit: "12"
+      },
+      "entity-explorer"
+    ),
+    cta: "Open unresolved exposure"
+  }
+];
 const entitySections = [
   { id: "entity-findings", label: "Findings" },
   { id: "priority-entities", label: "Priority profiles" },
+  { id: "entity-presets", label: "Presets" },
+  { id: "entity-explorer", label: "Explorer" },
   { id: "visible-estate", label: "Named estate" },
-  { id: "funding-surfaces", label: "Funding" },
-  { id: "entity-ledger", label: "All profiles" }
+  { id: "funding-surfaces", label: "Funding" }
 ];
 
 function formatMoney(value: number | null | undefined): string {
@@ -164,6 +241,164 @@ function formatMoney(value: number | null | undefined): string {
     </div>
   </section>
 
+  <section id="entity-presets" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Deep-link presets</h2>
+        <p class="lede">
+          These saved views jump straight into the most useful cuts of the entity surface instead of making users rebuild the same filters manually.
+        </p>
+      </div>
+      <span class="chip accent">Deep-link presets</span>
+    </div>
+    <div class="story-grid">
+      {entityPresetViews.map((preset) => (
+        <article class="story-card">
+          <h3>{preset.title}</h3>
+          <p class="lede">{preset.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={preset.href}>{preset.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="entity-explorer" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Explorer and full profile ledger</h2>
+        <p class="lede">
+          This explorer keeps the entity state in the URL, so the exact provider, owner, or public-body slice can be shared.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip" data-entity-summary aria-live="polite">Showing {Math.min(12, entityProfiles.length)} of {entityProfiles.length} matching profiles</span>
+        <span class="chip teal" data-entity-estate-summary aria-live="polite">{hotelLinkedProfiles.length} with a current named estate</span>
+        <span class="chip warm" data-entity-money-summary aria-live="polite">{entityProfiles.filter((profile) => profile.moneyRecordCount > 0).length} with public money rows</span>
+      </div>
+    </div>
+    <form class="filter-panel" data-entity-form>
+      <div class="filter-grid">
+        <label class="filter-field">
+          <span class="tiny">Search entity, site, or place</span>
+          <input type="search" name="entity_q" placeholder="Search Serco, Bell Hotel, or Epping Forest" />
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Primary role</span>
+          <select name="entity_role">
+            <option value="all">All roles</option>
+            {entityRoleOptions.map((role) => (
+              <option value={role}>{formatEntityRoleLabel(role)}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Route family</span>
+          <select name="entity_route">
+            <option value="all">All route families</option>
+            {entityRouteOptions.map((routeFamily) => (
+              <option value={routeFamily}>{formatRouteFamilyLabel(routeFamily)}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Footprint</span>
+          <select name="entity_footprint">
+            <option value="all">All footprints</option>
+            <option value="named_estate">Named estate only</option>
+            <option value="money_only">Money-only surfaces</option>
+            <option value="unresolved_estate">Unresolved estate exposure</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Sort</span>
+          <select name="entity_sort">
+            <option value="exposure">Exposure</option>
+            <option value="estate">Estate footprint</option>
+            <option value="money">Money rows</option>
+            <option value="title">Alphabetical</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="tiny">Show</span>
+          <select name="entity_limit">
+            <option value="12">12 profiles</option>
+            <option value="24">24 profiles</option>
+            <option value="99">All profiles</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="button" class="source-pill" data-entity-reset>Reset filters</button>
+        <button type="button" class="source-pill" data-entity-copy>Copy filtered view</button>
+        <span class="tiny filter-status" data-entity-copy-status aria-live="polite"></span>
+      </div>
+    </form>
+    <div class="story-grid" data-entity-results>
+      {entityProfiles.map((profile) => (
+        <article
+          class="story-card"
+          data-entity-item
+          data-entity-id={profile.entityId}
+          data-name={profile.entityName}
+          data-role={profile.primaryRole}
+          data-routes={profile.routeFamilies.join("|")}
+          data-current-sites={profile.currentSiteCount}
+          data-money-rows={profile.moneyRecordCount}
+          data-linked-areas={profile.linkedAreaCount}
+          data-unresolved-sites={profile.unresolvedCurrentSiteCount}
+          data-rows-with-value={profile.moneyRowsWithPublishedValueCount}
+          data-score={profile.score}
+          data-search={[
+            profile.entityName,
+            profile.primaryRoleLabel,
+            profile.roleLabels.join(" "),
+            profile.routeFamilies.map(formatRouteFamilyLabel).join(" "),
+            profile.currentSites.map((site) => site.siteName).join(" "),
+            profile.linkedAreas.map((area) => area.areaName).join(" "),
+            profile.searchDescription
+          ]
+            .join(" ")
+            .toLowerCase()}
+          hidden={entityProfiles.indexOf(profile) >= 12}
+        >
+          <div class="chip-row">
+            <span class="chip accent">{profile.primaryRoleLabel}</span>
+            <span class="chip">{profile.roleSummary}</span>
+            {profile.riskLevel && <span class="chip">{profile.riskLevel}</span>}
+          </div>
+          <h3>{profile.entityName}</h3>
+          <p class="lede">{profile.searchDescription}</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Current named sites</span>
+              <span class="data-row-value">{profile.currentSiteCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Public money rows</span>
+              <span class="data-row-value">{profile.moneyRecordCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Linked places</span>
+              <span class="data-row-value">{profile.linkedAreaCount.toLocaleString()}</span>
+            </div>
+          </div>
+          <p class="tiny">
+            {profile.routeFamilies.map(formatRouteFamilyLabel).join(", ") || "No route family attached"}
+          </p>
+          <p class="tiny">
+            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+          </p>
+        </article>
+      ))}
+    </div>
+    <article class="editor-note" data-entity-empty hidden>
+      <h3>No entity profiles match these filters</h3>
+      <p>Reset the filters or widen the role, route, and footprint scope to bring entity profiles back into view.</p>
+    </article>
+  </section>
+
   <section id="visible-estate" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -235,31 +470,9 @@ function formatMoney(value: number | null | undefined): string {
     </div>
   </section>
 
-  <section id="entity-ledger" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>All entity profiles</h2>
-        <p class="lede">
-          Every current profile in the live starter ledgers, sorted by how much visible estate and money exposure it
-          already carries.
-        </p>
-      </div>
-    </div>
-    <div class="story-grid">
-      {entityProfiles.map((profile) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class="chip accent">{profile.primaryRoleLabel}</span>
-            <span class="chip">{profile.roleSummary}</span>
-          </div>
-          <h3>{profile.entityName}</h3>
-          <p class="lede">{profile.searchDescription}</p>
-          {profile.companyNumber && <p class="tiny">Company number: {profile.companyNumber}</p>}
-          <p class="tiny">
-            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
+  <script>
+    import { initEntityExplorer } from "../../scripts/entity-explorer";
+
+    initEntityExplorer();
+  </script>
 </BaseLayout>

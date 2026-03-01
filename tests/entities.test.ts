@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { getEntityProfile, getEntityProfiles, getLeadEntityProfileForTrail } from "../src/lib/entities";
+import {
+  getEntityProfile,
+  getEntityProfileByReference,
+  getEntityProfiles,
+  getLeadEntityProfileForTrail
+} from "../src/lib/entities";
 import { loadHotelEntityLedger } from "../src/lib/hotel-data";
 import { getRouteInvestigationTrails } from "../src/lib/investigations";
 import { loadMoneyLedger } from "../src/lib/money-data";
@@ -43,5 +48,10 @@ describe("entity profiles", () => {
 
     expect(leadEntity).toBeTruthy();
     expect(leadEntity?.entityId).toMatch(/^supplier_/);
+  });
+
+  test("finds entity profiles by name or company-number reference", () => {
+    expect(getEntityProfileByReference("Serco", null)?.entityId).toBe("supplier_serco");
+    expect(getEntityProfileByReference("Somani Hotels Limited", "03929881")?.entityId).toBe("supplier_03929881");
   });
 });

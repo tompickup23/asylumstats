@@ -557,6 +557,17 @@ export function getEntityProfile(entityId: string): EntityProfile | undefined {
   return getEntityProfiles().find((profile) => profile.entityId === entityId);
 }
 
+export function getEntityProfileByReference(
+  entityName: string | null | undefined,
+  companyNumber: string | null | undefined
+): EntityProfile | undefined {
+  const key = buildEntityKey(entityName, companyNumber);
+
+  return getEntityProfiles().find(
+    (profile) => buildEntityKey(profile.entityName, profile.companyNumber) === key
+  );
+}
+
 export function getLeadEntityProfileForTrail(
   trail: Pick<InvestigationTrail, "siteId" | "recordIds">
 ): EntityProfile | undefined {

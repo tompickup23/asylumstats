@@ -10,6 +10,7 @@ import {
   supportedAsylumReadingRules
 } from "../../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../../lib/area-series";
+import { getEntityProfileByReference, getLeadEntityProfileForTrail } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { getPlaceInvestigationTrails } from "../../lib/investigations";
@@ -183,6 +184,15 @@ const placeSections = [
   { id: "hotel-evidence", label: "Hotels" },
   ...(hotelSignals.length > 0 ? [{ id: "integrity-signals", label: "Signals" }] : [])
 ];
+
+function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
+  const matches = [
+    ...site.entityLinks.map((link) => getEntityProfileByReference(link.entityName, link.companyNumber)),
+    site.primeProvider ? getEntityProfileByReference(site.primeProvider.provider, null) : null
+  ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
+
+  return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
+}
 ---
 
 <BaseLayout
@@ -567,17 +577,26 @@ const placeSections = [
         <a class="source-pill" href="/spending#money-site-trails">Open site-linked money trails</a>
       </div>
       <div class="feature-grid">
-        {placeInvestigationTrails.map((trail) => (
-          <InvestigationTrail
-            kicker={trail.kicker}
-            title={trail.title}
-            summary={trail.summary}
-            chips={trail.chips}
-            tone={trail.tone}
-            steps={trail.steps}
-            footnote={trail.footnote}
-          />
-        ))}
+        {placeInvestigationTrails.map((trail) => {
+          const leadEntity = getLeadEntityProfileForTrail(trail);
+
+          return (
+            <InvestigationTrail
+              kicker={trail.kicker}
+              title={trail.title}
+              summary={trail.summary}
+              chips={trail.chips}
+              tone={trail.tone}
+              steps={trail.steps}
+              footnote={trail.footnote}
+              footerLinks={
+                leadEntity
+                  ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
+                  : []
+              }
+            />
+          );
+        })}
       </div>
     </section>
   )}
@@ -732,24 +751,61 @@ const placeSections = [
           </thead>
           <tbody>
             {hotelSites.map((site) => (
-              <tr>
-                <th scope="row">
-                  <strong>{site.siteName}</strong>
-                  <div class="tiny">
-                    <a class="source-pill" href={site.sourceUrl}>Evidence</a>
-                  </div>
-                </th>
-                <td>{site.status}</td>
-                <td>{site.evidenceClass}</td>
-                <td>{site.lastPublicDate}</td>
-                <td>
-                  <div class="chip-row">
-                    <span class="chip">{site.entityCoverage}</span>
-                  </div>
-                  {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
-                  {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
-                </td>
-              </tr>
+              (() => {
+                const entityProfiles = getSiteEntityProfiles(site);
+
+                return (
+                  <tr>
+                    <th scope="row">
+                      <strong>{site.siteName}</strong>
+                      <div class="tiny">
+                        <a class="source-pill" href={site.sourceUrl}>Evidence</a>
+                      </div>
+                    </th>
+                    <td>{site.status}</td>
+                    <td>{site.evidenceClass}</td>
+                    <td>{site.lastPublicDate}</td>
+                    <td>
+                      <div class="chip-row">
+                        <span class="chip">{site.entityCoverage}</span>
+                      </div>
+                      {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
+                      {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
+                      {site.primeProvider && (
+                        <div class="tiny">
+                          Prime provider: {site.primeProvider.provider}
+                          {getEntityProfileByReference(site.primeProvider.provider, null) && (
+                            <>
+                              {" "}
+                              <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>
+                                profile
+                              </a>
+                            </>
+                          )}
+                        </div>
+                      )}
+                      {site.entityLinks.map((link) => {
+                        const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
+
+                        return (
+                          <div class="tiny">
+                            {link.entityName} ({link.linkRole})
+                            {profile && (
+                              <>
+                                {" "}
+                                <a href={`/entities/${profile.entityId}/`}>profile</a>
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
+                      {site.entityLinks.length === 0 &&
+                        !site.primeProvider &&
+                        entityProfiles.length === 0 && <div class="tiny">No linked entity profile yet.</div>}
+                    </td>
+                  </tr>
+                );
+              })()
             ))}
             {hotelArea && hotelArea.unnamedSiteCount > 0 && (
               <tr>

@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageContents from "../components/PageContents.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
+import { getEntityProfileByReference } from "../lib/entities";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { getSiteInvestigationTrailMap } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
@@ -179,6 +180,15 @@ const hotelSections = [
 function formatReportedPeople(value: number | null): string {
   return typeof value === "number" ? `${value.toLocaleString()} people reported` : "People total not published";
 }
+
+function getSiteEntityProfiles(site: (typeof hotelLedger.sites)[number]) {
+  const matches = [
+    ...site.entityLinks.map((link) => getEntityProfileByReference(link.entityName, link.companyNumber)),
+    site.primeProvider ? getEntityProfileByReference(site.primeProvider.provider, null) : null
+  ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
+
+  return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
+}
 ---
 
 <BaseLayout
@@ -271,6 +281,7 @@ function formatReportedPeople(value: number | null): string {
     <div class="feature-grid">
       {watchlistHighlights.map((site) => {
         const trail = siteTrailMap.get(site.siteId);
+        const entityProfiles = getSiteEntityProfiles(site);
 
         return (
           <article class="feature-card accent">
@@ -310,6 +321,9 @@ function formatReportedPeople(value: number | null): string {
                   {trail.moneyMatchType === "direct" ? "Open direct money trail" : "Open provider money trail"}
                 </a>
               )}
+              {entityProfiles.map((profile) => (
+                <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open {profile.entityName} profile</a>
+              ))}
               {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/#evidence-chain`}>Open place page</a>}
             </p>
           </article>
@@ -504,51 +518,60 @@ function formatReportedPeople(value: number | null): string {
     </div>
     <div class="feature-grid">
       {watchlist.map((site) => (
-        <article class="feature-card accent">
-          <div class="chip-row">
-            <span class="chip accent">{site.entityCoverage}</span>
-            <span class="chip">{site.evidenceClass}</span>
-            <span class="chip teal">{site.confidence}</span>
-          </div>
-          <h3>{site.siteName}</h3>
-          <p class="lede">
-            {site.areaName}, {site.regionName}
-          </p>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Owner</span>
-              <span class="data-row-value">{site.ownerName ?? "Not yet resolved"}</span>
-            </div>
-            <div class="data-row">
-              <span>Operator</span>
-              <span class="data-row-value">{site.operatorName ?? "Not yet resolved"}</span>
-            </div>
-            <div class="data-row">
-              <span>Prime provider</span>
-              <span class="data-row-value">{site.primeProvider?.provider ?? "Not yet attached"}</span>
-            </div>
-            <div class="data-row">
-              <span>Integrity signals</span>
-              <span class="data-row-value">{site.integritySignalCount.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>People housed</span>
-              <span class="data-row-value">{formatReportedPeople(site.peopleHousedReported)}</span>
-            </div>
-          </div>
-          {site.integritySignals[0]?.headline && (
-            <article class="signal-card accent">
-              <span class="tiny">{site.integritySignals[0].severity}</span>
-              <h3>{site.integritySignals[0].headline}</h3>
-              {site.integritySignals[0].detail && <p class="tiny">{site.integritySignals[0].detail}</p>}
+        (() => {
+          const entityProfiles = getSiteEntityProfiles(site);
+
+          return (
+            <article class="feature-card accent">
+              <div class="chip-row">
+                <span class="chip accent">{site.entityCoverage}</span>
+                <span class="chip">{site.evidenceClass}</span>
+                <span class="chip teal">{site.confidence}</span>
+              </div>
+              <h3>{site.siteName}</h3>
+              <p class="lede">
+                {site.areaName}, {site.regionName}
+              </p>
+              <div class="data-list">
+                <div class="data-row">
+                  <span>Owner</span>
+                  <span class="data-row-value">{site.ownerName ?? "Not yet resolved"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Operator</span>
+                  <span class="data-row-value">{site.operatorName ?? "Not yet resolved"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Prime provider</span>
+                  <span class="data-row-value">{site.primeProvider?.provider ?? "Not yet attached"}</span>
+                </div>
+                <div class="data-row">
+                  <span>Integrity signals</span>
+                  <span class="data-row-value">{site.integritySignalCount.toLocaleString()}</span>
+                </div>
+                <div class="data-row">
+                  <span>People housed</span>
+                  <span class="data-row-value">{formatReportedPeople(site.peopleHousedReported)}</span>
+                </div>
+              </div>
+              {site.integritySignals[0]?.headline && (
+                <article class="signal-card accent">
+                  <span class="tiny">{site.integritySignals[0].severity}</span>
+                  <h3>{site.integritySignals[0].headline}</h3>
+                  {site.integritySignals[0].detail && <p class="tiny">{site.integritySignals[0].detail}</p>}
+                </article>
+              )}
+              <p class="tiny">
+                <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+                {site.primeProvider && <a class="source-pill" href={site.primeProvider.sourceUrl}>Provider region</a>}
+                {entityProfiles.map((profile) => (
+                  <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open {profile.entityName} profile</a>
+                ))}
+                {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/`}>Open place page</a>}
+              </p>
             </article>
-          )}
-          <p class="tiny">
-            <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
-            {site.primeProvider && <a class="source-pill" href={site.primeProvider.sourceUrl}>Provider region</a>}
-            {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/`}>Open place page</a>}
-          </p>
-        </article>
+          );
+        })()
       ))}
     </div>
   </section>
@@ -815,61 +838,97 @@ function formatReportedPeople(value: number | null): string {
         </thead>
         <tbody>
           {[...namedCurrent, ...namedHistorical, ...parliamentaryReferences].map((site) => (
-            <tr
-              data-hotel-site-row
-              data-site-name={site.siteName}
-              data-area-name={site.areaName}
-              data-region={site.regionName}
-              data-status={site.status}
-              data-coverage={site.entityCoverage}
-            >
-              <th scope="row">
-                <strong>{site.siteName}</strong>
-                <div class="tiny">
-                  <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
-                </div>
-              </th>
-              <td>{site.status}</td>
-              <td>
-                {site.areaName}
-                <div class="tiny">{site.regionName}</div>
-                {site.areaCode && (
-                  <div class="tiny">
-                    <a href={`/places/${site.areaCode}/`}>Place page</a>
-                  </div>
-                )}
-              </td>
-              <td>
-                <div class="chip-row">
-                  <span class="chip">{site.entityCoverage}</span>
-                  <span class="chip">{site.evidenceClass}</span>
-                </div>
-                {site.primeProvider && <div class="tiny">Prime: {site.primeProvider.provider}</div>}
-              </td>
-              <td>
-                {site.entityLinks.length > 0 ? (
-                  site.entityLinks.map((link) => (
-                    <div class="tiny" style="margin-bottom: 0.5rem;">
-                      <strong>{link.entityName}</strong> | {link.linkRole} | {link.confidence}
-                      {link.companyNumber && <div>{link.companyNumber}</div>}
+            (() => {
+              const entityProfiles = getSiteEntityProfiles(site);
+
+              return (
+                <tr
+                  data-hotel-site-row
+                  data-site-name={site.siteName}
+                  data-area-name={site.areaName}
+                  data-region={site.regionName}
+                  data-status={site.status}
+                  data-coverage={site.entityCoverage}
+                >
+                  <th scope="row">
+                    <strong>{site.siteName}</strong>
+                    <div class="tiny">
+                      <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
                     </div>
-                  ))
-                ) : (
-                  <span class="tiny">No publishable owner or operator link yet.</span>
-                )}
-              </td>
-              <td>
-                {site.integritySignals.length > 0 ? (
-                  site.integritySignals.map((signal) => (
-                    <div class="tiny" style="margin-bottom: 0.5rem;">
-                      <strong>{signal.severity}</strong> | {signal.headline}
+                  </th>
+                  <td>{site.status}</td>
+                  <td>
+                    {site.areaName}
+                    <div class="tiny">{site.regionName}</div>
+                    {site.areaCode && (
+                      <div class="tiny">
+                        <a href={`/places/${site.areaCode}/`}>Place page</a>
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <div class="chip-row">
+                      <span class="chip">{site.entityCoverage}</span>
+                      <span class="chip">{site.evidenceClass}</span>
                     </div>
-                  ))
-                ) : (
-                  <span class="tiny">No live integrity signal in starter ledger.</span>
-                )}
-              </td>
-            </tr>
+                    {site.primeProvider && (
+                      <div class="tiny">
+                        Prime: {site.primeProvider.provider}
+                        {getEntityProfileByReference(site.primeProvider.provider, null) && (
+                          <>
+                            {" "}
+                            <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>
+                              profile
+                            </a>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    {site.entityLinks.length > 0 ? (
+                      site.entityLinks.map((link) => {
+                        const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
+
+                        return (
+                          <div class="tiny" style="margin-bottom: 0.5rem;">
+                            <strong>{link.entityName}</strong> | {link.linkRole} | {link.confidence}
+                            {link.companyNumber && <div>{link.companyNumber}</div>}
+                            {profile && (
+                              <div>
+                                <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                    ) : entityProfiles.length > 0 ? (
+                      entityProfiles.map((profile) => (
+                        <div class="tiny" style="margin-bottom: 0.5rem;">
+                          <strong>{profile.entityName}</strong>
+                          <div>
+                            <a class="source-pill" href={`/entities/${profile.entityId}/`}>Open entity profile</a>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <span class="tiny">No publishable owner or operator link yet.</span>
+                    )}
+                  </td>
+                  <td>
+                    {site.integritySignals.length > 0 ? (
+                      site.integritySignals.map((signal) => (
+                        <div class="tiny" style="margin-bottom: 0.5rem;">
+                          <strong>{signal.severity}</strong> | {signal.headline}
+                        </div>
+                      ))
+                    ) : (
+                      <span class="tiny">No live integrity signal in starter ledger.</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })()
           ))}
         </tbody>
       </table>
