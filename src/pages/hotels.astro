@@ -40,6 +40,7 @@ const summaryCards = [
   }
 ];
 const watchlist = getHotelWatchlist(namedCurrent, 4);
+const watchlistHighlights = watchlist.slice(0, 3);
 const coverageSummary = getHotelCoverageSummary(namedCurrent);
 const providerBreakdown = [...hotelLedger.primeProviderBreakdown].sort(
   (a, b) => b.currentNamedSiteCount - a.currentNamedSiteCount
@@ -156,8 +157,11 @@ const hotelPresetViews = [
     : [])
 ];
 const hotelSections = [
-  { id: "hotel-pressure", label: "Pressure" },
-  { id: "regional-visibility", label: "Visibility" },
+  { id: "hotel-findings", label: "Findings" },
+  { id: "unresolved-watchlist", label: "Watchlist" },
+  { id: "secrecy-gap", label: "Secrecy gap" },
+  { id: "hotel-pressure", label: "Official counts" },
+  { id: "regional-visibility", label: "Region field" },
   { id: "archive-verification", label: "Archive queue" },
   { id: "hotel-presets", label: "Presets" },
   { id: "hotel-filters", label: "Explorer" },
@@ -219,7 +223,115 @@ function formatReportedPeople(value: number | null): string {
     </aside>
   </section>
 
-  <PageContents sections={hotelSections} />
+  <PageContents title="Jump to evidence" sections={hotelSections} />
+
+  <section id="hotel-findings" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          This page is strongest when it opens with the secrecy gap and the unresolved chain, not with a calm tour of
+          the full estate.
+        </p>
+      </div>
+      <a class="source-pill" href="/spending#money-findings">Open the linked money findings</a>
+    </div>
+    <div class="kpi-grid">
+      {summaryCards.map((card) => (
+        <article class="kpi-card">
+          <span class="tiny">{card.label}</span>
+          <strong>{card.value}</strong>
+          <p class="tiny">{card.detail}</p>
+        </article>
+      ))}
+    </div>
+    <div class="story-grid">
+      {hotelReadoutCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="unresolved-watchlist" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Current unresolved chain watchlist</h2>
+        <p class="lede">
+          These are the live sites most worth opening first because the public name exists but the full owner or
+          operator chain still does not.
+        </p>
+      </div>
+      <span class="chip accent">{watchlist.length} sites on the current watchlist</span>
+    </div>
+    <div class="feature-grid">
+      {watchlistHighlights.map((site) => (
+        <article class="feature-card accent">
+          <div class="chip-row">
+            <span class="chip accent">{site.entityCoverage}</span>
+            <span class="chip">{site.evidenceClass}</span>
+            <span class="chip teal">{site.confidence}</span>
+          </div>
+          <h3>{site.siteName}</h3>
+          <p class="lede">
+            {site.areaName}, {site.regionName}
+          </p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Owner</span>
+              <span class="data-row-value">{site.ownerName ?? "Not yet resolved"}</span>
+            </div>
+            <div class="data-row">
+              <span>Operator</span>
+              <span class="data-row-value">{site.operatorName ?? "Not yet resolved"}</span>
+            </div>
+            <div class="data-row">
+              <span>Prime provider</span>
+              <span class="data-row-value">{site.primeProvider?.provider ?? "Not yet attached"}</span>
+            </div>
+          </div>
+          <p class="tiny">
+            <a class="source-pill" href={site.sourceUrl}>Site evidence</a>
+            {site.areaCode && <a class="source-pill" href={`/places/${site.areaCode}/`}>Open place page</a>}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="secrecy-gap" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>The secrecy gap is already documentable</h2>
+        <p class="lede">
+          Public bodies can confirm hotel use without publishing the full site list. These areas are the clearest live
+          examples of that gap.
+        </p>
+      </div>
+      <span class="chip">{unnamedOnlyAreas.length} unnamed-only areas in the live ledger</span>
+    </div>
+    <div class="story-grid">
+      {unnamedOnlyAreas.slice(0, 6).map((area) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class="chip accent">
+              {area.unnamedSiteCount} unnamed site{area.unnamedSiteCount > 1 ? "s" : ""}
+            </span>
+            {area.peopleHousedReported !== null && <span class="chip">{area.peopleHousedReported} people reported</span>}
+          </div>
+          <h3>{area.areaName}</h3>
+          <p class="lede">{area.notes}</p>
+          <p class="tiny">Last public reference: {area.lastPublicDate}</p>
+          <p class="tiny">
+            <a class="source-pill" href={area.sourceUrl}>Source</a>
+            {area.areaCode && <a class="source-pill" href={`/places/${area.areaCode}/`}>Open place page</a>}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
 
   <section id="hotel-pressure" class="section section-anchor">
     <div class="section-head">
@@ -369,10 +481,9 @@ function formatReportedPeople(value: number | null): string {
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>Unresolved chain watchlist</h2>
+        <h2>Full unresolved chain watchlist</h2>
         <p class="lede">
-          These current sites best show where naming, entity coverage, provider mapping, and integrity signals still
-          need to be held together.
+          This expands the opening watchlist into the full current set carried by the page.
         </p>
       </div>
       <span class="chip">{watchlist.length} sites on the current watchlist</span>
@@ -457,7 +568,7 @@ function formatReportedPeople(value: number | null): string {
     </div>
 
     <div class="panel panel-pad">
-      <h2>Unnamed areas that prove the secrecy gap</h2>
+      <h2>Unnamed-area full list</h2>
       <div class="story-grid">
         {unnamedOnlyAreas.map((area) => (
           <article class="story-card">
@@ -502,7 +613,7 @@ function formatReportedPeople(value: number | null): string {
     </div>
 
     <div class="panel panel-pad">
-      <h2>What the visible estate already proves</h2>
+      <h2>Why the wider ledger still matters</h2>
       <div class="signal-list">
         {hotelReadoutCards.map((card, index) => (
           <article class={`signal-card${index === 0 ? " accent" : ""}`}>

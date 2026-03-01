@@ -222,6 +222,13 @@ textarea {
   text-decoration: none;
 }
 
+.site-nav a.priority {
+  border-color: rgba(255, 139, 97, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 139, 97, 0.14), rgba(125, 211, 252, 0.08)),
+    rgba(255, 255, 255, 0.05);
+}
+
 .site-nav a:hover,
 .site-nav a:focus-visible {
   border-color: var(--border-strong);

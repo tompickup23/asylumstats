@@ -6,7 +6,6 @@ import TrendChart from "../components/TrendChart.astro";
 import overview from "../data/mock/overview.json";
 import releases from "../data/mock/releases.json";
 
-import asylumFinance from "../data/live/asylum-finance.json";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
 import { loadMoneyLedger } from "../lib/money-data";
@@ -16,6 +15,7 @@ const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
 const moneyLedger = loadMoneyLedger();
+type MoneyRecordWithValue = (typeof moneyLedger.records)[number] & { valueGbp: number };
 const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
 const routeCards = routeDashboard.nationalCards.slice(0, 4);
 const homepageStockFlowCards = nationalSystemDynamics.stockFlowCards;
@@ -23,7 +23,18 @@ const homepagePostDecisionPath = nationalSystemDynamics.postDecisionPath;
 const topPlaces = localRouteLatest.topAreasByMetric.find((group) => group.metricId === "supportedAsylum")?.rows ?? [];
 const maxSupport = Math.max(...topPlaces.map((place) => place.value), 1);
 const namedCurrentHotels = hotelLedger.sites.filter((site) => site.status === "current");
-const moneyPreview = moneyLedger.records.slice(0, 3);
+const unnamedOnlyAreas = hotelLedger.areas.filter((area) => area.visibilityClass === "all_unnamed");
+const leadUnnamedArea = unnamedOnlyAreas[0];
+const hotelPreviewSites = namedCurrentHotels.slice(0, 4);
+const leadMoneyRecord = moneyLedger.records
+  .filter((record): record is MoneyRecordWithValue => typeof record.valueGbp === "number")
+  .sort((a, b) => b.valueGbp - a.valueGbp)[0];
+const moneyPreview = moneyLedger.records
+  .filter((record): record is MoneyRecordWithValue => typeof record.valueGbp === "number")
+  .sort((a, b) => b.valueGbp - a.valueGbp)
+  .slice(0, 3);
+const leadSupplier = moneyLedger.supplierProfiles[0];
+const primaryMoneyLead = moneyLedger.investigativeLeads[0];
 const topAreas = localRouteLatest.areas
   .filter((a) => a.supportedAsylum >= 200)
   .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
@@ -57,32 +68,32 @@ const heroStats = [
 ];
 const guidedPaths = [
   {
-    kicker: "Pressure map",
-    title: "Start with places if you need to know where the load actually lands",
-    body: "The compare and place pages turn national asylum headlines into local authority pressure, pathway mix, and contingency exposure.",
-    href: "/compare",
-    cta: "Open compare"
-  },
-  {
     kicker: "Secrecy gap",
-    title: "Start with hotels if you need named sites, ownership gaps, and visible unresolved chains",
-    body: "The hotel layer keeps current named sites, unnamed-only areas, and owner or operator evidence on one surface.",
+    title: "Hotels first if you want the sharpest public accountability failure",
+    body: "The hotel tracker leads with unresolved chains, unnamed-only areas, and archive-led verification so the hidden estate lands before the methodology.",
     href: "/hotels",
-    cta: "Open hotel tracker"
+    cta: "Open hotels"
   },
   {
     kicker: "Money trail",
-    title: "Start with spending if you need contract scope, tariff rows, and supplier exposure",
-    body: "The money ledger separates prime contracts, funding instructions, and scrutiny cost rows instead of flattening them into one fake spend total.",
+    title: "Money second if you want the contract rows and supplier exposure underneath the estate",
+    body: "The spending page now opens with investigative leads, largest disclosed rows, buyer concentration, and supplier watchlists before the full ledger.",
     href: "/spending",
-    cta: "Open money ledger"
+    cta: "Open money"
   },
   {
-    kicker: "Source discipline",
-    title: "Start with sources and methodology if you need to know what the site will and will not publish",
-    body: "This product stays useful because route-specific evidence, local route relevance, and context-only research are kept separate.",
-    href: "/sources",
-    cta: "Open source ledger"
+    kicker: "Pressure map",
+    title: "Pressure next if you need to see where the load is landing locally",
+    body: "Compare and place pages show which authorities carry the heaviest stock, rates, contingency use, and pathway mix.",
+    href: "/compare",
+    cta: "Open pressure view"
+  },
+  {
+    kicker: "System logic",
+    title: "Routes and stock-flow logic come after the estate and money layers",
+    body: "The routes page explains why support is stock, not throughput, and why appeals and returns have to be kept in separate lanes.",
+    href: "/routes",
+    cta: "Open routes"
   }
 ];
 const freshnessCards = [
@@ -130,6 +141,56 @@ const systemLogicCards = [
     body: `Appeals are asylum-specific but the latest machine-readable quarter is ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "older"}. Returns are current to ${homepagePostDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"}, but they cover all returns, not just asylum exits.`
   }
 ];
+const homepagePriorityCards = [
+  {
+    kicker: "Hidden estate",
+    title: `${hotelLedger.summary.currentNamedSitesUnresolved} current named hotels still have unresolved ownership or operator chains`,
+    body: `${hotelLedger.summary.unnamedOnlyAreaCount} areas publicly acknowledge hotel use without naming the sites, and ${hotelLedger.archiveVerification.pendingVerificationCount} archive leads are still waiting for document-backed verification.`,
+    detail: leadUnnamedArea
+      ? `${leadUnnamedArea.areaName} is one of the clearest live examples of the secrecy gap.`
+      : "The public estate remains only partly visible.",
+    href: "/hotels#unresolved-watchlist",
+    cta: "Open hotel findings",
+    tone: "accent"
+  },
+  {
+    kicker: "Money trail",
+    title: primaryMoneyLead?.title ?? "The money layer already exposes contract concentration",
+    body:
+      primaryMoneyLead?.detail ??
+      "The spending page now starts with the rows, buyers, and suppliers that matter before dropping into the full ledger.",
+    detail:
+      leadMoneyRecord && leadSupplier
+        ? `${leadMoneyRecord.title} is one of the largest disclosed rows at ${formatMoney(leadMoneyRecord.valueGbp)}, and ${leadSupplier.entityName} is already attached to ${leadSupplier.publicContractCount} public money rows.`
+        : "The contract layer is still partial, but the concentration is already visible.",
+    href: "/spending#money-findings",
+    cta: "Open money findings",
+    tone: "accent"
+  },
+  pressureLead
+    ? {
+        kicker: "Pressure",
+        title: `${pressureLead.areaName} shows how local pressure can stay high without telling you who rotated through`,
+        body: `${pressureLead.supportedAsylum.toLocaleString()} people were on asylum support there at quarter end, with ${pressureLead.contingencyAccommodation.toLocaleString()} in contingency accommodation.`,
+        detail: "These are quarter-end stock counts. A flat local line can still hide churn underneath it.",
+        href: "/compare#compare-findings",
+        cta: "Open pressure findings",
+        tone: ""
+      }
+    : null
+].filter(
+  (
+    card
+  ): card is {
+    kicker: string;
+    title: string;
+    body: string;
+    detail: string;
+    href: string;
+    cta: string;
+    tone: string;
+  } => card !== null
+);
 
 function formatUtcDate(iso: string | undefined): string {
   if (!iso) {
@@ -142,6 +203,18 @@ function formatUtcDate(iso: string | undefined): string {
     year: "numeric",
     timeZone: "UTC"
   }).format(new Date(iso));
+}
+
+function formatMoney(value: number | null | undefined): string {
+  if (typeof value !== "number") {
+    return "No published value";
+  }
+
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: value >= 1000 ? 0 : 2
+  }).format(value);
 }
 
 function formatUtcDateTime(iso: string | undefined): string {
@@ -171,10 +244,10 @@ function formatUtcDateTime(iso: string | undefined): string {
       <h1>{overview.hero.title}</h1>
       <p>{overview.hero.summary}</p>
       <div class="hero-actions">
-        <a class="chip accent" href="/compare">Compare places</a>
-        <a class="chip" href="/routes">Split routes</a>
-        <a class="chip teal" href="/hotels">Track hotels</a>
+        <a class="chip accent" href="/hotels">Track hotels first</a>
         <a class="chip" href="/spending">Follow the money</a>
+        <a class="chip teal" href="/compare">See local pressure</a>
+        <a class="chip" href="/routes">Check stock and flow</a>
       </div>
       <div class="chip-row">
         <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
@@ -189,7 +262,7 @@ function formatUtcDateTime(iso: string | undefined): string {
       <div class="hero-panel-header">
         <div>
           <span class="tiny">Live accountability stack</span>
-          <span class="hero-panel-title">Routes, hotels, and money on one source-linked surface.</span>
+          <span class="hero-panel-title">Hotels, supplier exposure, and local pressure on one source-linked surface.</span>
         </div>
         <span class="chip">Dec 2025</span>
       </div>
@@ -230,16 +303,100 @@ function formatUtcDateTime(iso: string | undefined): string {
     </aside>
   </section>
 
+  <section class="section section-anchor" id="read-this-first">
+    <div class="section-head">
+      <div>
+        <h2>Read this first</h2>
+        <p class="lede">
+          The strongest public story is not the headline totals. It is the hidden hotel estate, the contract chain
+          behind it, and the local authorities carrying the pressure.
+        </p>
+      </div>
+      <a class="chip accent" href="/hotels#unresolved-watchlist">Open the sharpest evidence trail</a>
+    </div>
+    <div class="feature-grid">
+      {homepagePriorityCards.map((card) => (
+        <article class={`feature-card${card.tone ? ` ${card.tone}` : ""}`}>
+          <div class="chip-row">
+            <span class="chip accent">{card.kicker}</span>
+          </div>
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+          <p class="tiny">{card.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={card.href}>{card.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="split section">
+    <div class="panel panel-pad">
+      <div class="section-head">
+        <div>
+          <h2>Open hotel evidence now</h2>
+          <p class="lede">
+            These current named sites already show how much of the estate is still unresolved even after public naming.
+          </p>
+        </div>
+        <a class="source-pill" href="/hotels#hotel-ledger">Open hotel ledger</a>
+      </div>
+      <div class="story-grid">
+        {hotelPreviewSites.map((site) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{site.entityCoverage}</span>
+              <span class="chip">{site.evidenceClass}</span>
+            </div>
+            <h3>{site.siteName}</h3>
+            <p class="lede">{site.areaName}</p>
+            <p class="tiny">Owner: {site.ownerName ?? "Unresolved"}</p>
+            <p class="tiny">Operator: {site.operatorName ?? "Unresolved"}</p>
+            <p class="tiny">Last public evidence: {site.lastPublicDate}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <div class="section-head">
+        <div>
+          <h2>Open money evidence now</h2>
+          <p class="lede">
+            Start with the biggest disclosed rows and then move into the supplier watchlist and full ledger.
+          </p>
+        </div>
+        <a class="source-pill" href="/spending#money-findings">Open money findings</a>
+      </div>
+      <div class="story-grid">
+        {moneyPreview.map((record) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{record.recordType.replace(/_/g, " ")}</span>
+              {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
+            </div>
+            <h3>{record.title}</h3>
+            <p class="lede">{formatMoney(record.valueGbp)}</p>
+            <p class="tiny">
+              {record.supplierName ? `${record.buyerName} -> ${record.supplierName}` : record.buyerName}
+            </p>
+            <p class="tiny">{record.periodLabel ?? "No period label recorded"}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="section section-anchor" id="start-here">
     <div class="section-head">
       <div>
-        <h2>Start with the right surface</h2>
+        <h2>Then widen out</h2>
         <p class="lede">
-          The site works best when readers pick the right layer first. Pressure, hotel secrecy, money, and source
-          rules answer different questions.
+          Once the key findings are clear, these are the four main surfaces that let users move from scandal to system.
         </p>
       </div>
-      <a class="chip accent" href="/methodology">Why the scope rules matter</a>
+      <a class="chip accent" href="/sources">Open the source ledger</a>
     </div>
     <div class="guide-grid">
       {guidedPaths.map((path) => (
@@ -300,7 +457,7 @@ function formatUtcDateTime(iso: string | undefined): string {
   </section>
 
   <section class="section">
-    <h2>Accountability snapshot</h2>
+    <h2>National snapshot</h2>
     <div class="kpi-grid">
       {overview.kpis.map((item) => (
         <KpiCard
@@ -373,24 +530,7 @@ function formatUtcDateTime(iso: string | undefined): string {
   </section>
 
   <section class="section">
-    <h2>Official route split now live</h2>
-    <div class="kpi-grid">
-      {routeCards.map((item) => (
-        <article class="kpi-card">
-          <span class="tiny">{item.label}</span>
-          <strong>{item.valueSuffix ? `${item.value}${item.valueSuffix}` : item.value.toLocaleString()}</strong>
-          <small>{item.period}</small>
-          <p class="tiny">{item.detail}</p>
-          <p class="tiny">
-            <a class="source-pill" href={item.sourceUrl}>Source</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Why this can hit harder than a normal dashboard</h2>
+    <h2>Why the current evidence matters</h2>
     <div class="story-grid">
       {overview.angles.map((angle) => (
         <article class="story-card">
@@ -404,40 +544,9 @@ function formatUtcDateTime(iso: string | undefined): string {
     </div>
   </section>
 
-  <section class="section">
-    <h2>What counts as in scope</h2>
-    <div class="story-grid">
-      {asylumFinance.scopeRules.map((rule) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class={`chip ${rule.id === "route_specific" ? "accent" : rule.id === "local_route_relevant" ? "teal" : ""}`}>
-              {rule.label}
-            </span>
-          </div>
-          <p class="lede">{rule.description}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>What the product should split out</h2>
-    <div class="story-grid">
-      {asylumFinance.routeFamilies.slice(0, 6).map((route) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class="chip accent">{route.group}</span>
-          </div>
-          <h3>{route.label}</h3>
-          <p class="lede">{route.note}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
   <section class="split section">
     <div class="panel" style="padding: 1.25rem;">
-      <h2>Where pressure is concentrated</h2>
+      <h2>Where pressure is landing</h2>
       <p class="lede">
         Latest official local-authority asylum-support snapshot as at 31 December 2025. These are end-of-period stock
         counts, not the number of different people who moved through the system over the year, and not a one-line
@@ -454,29 +563,6 @@ function formatUtcDateTime(iso: string | undefined): string {
           </div>
         </div>
       ))}
-    </div>
-
-    <div class="panel" style="padding: 1.25rem;">
-      <h2>Named current hotel sites with entity coverage</h2>
-      <p class="lede">
-        The public estate is only partially visible. This starter ledger shows which named current sites have owner or
-        operator links and which still sit inside the secrecy gap.
-      </p>
-      <div class="story-grid">
-        {namedCurrentHotels.map((site) => (
-          <article class="metric-card">
-            <div class="chip-row">
-              <span class="chip accent">{site.evidenceClass}</span>
-              <span class="chip">{site.entityCoverage}</span>
-            </div>
-            <h3>{site.siteName}</h3>
-            <p class="lede">{site.areaName}</p>
-            <p class="tiny">Owner: {site.ownerName ?? "Unresolved"}</p>
-            <p class="tiny">Operator: {site.operatorName ?? "Unresolved"}</p>
-            <p class="tiny">Last public evidence: {site.lastPublicDate}</p>
-          </article>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -497,28 +583,6 @@ function formatUtcDateTime(iso: string | undefined): string {
           </p>
           <p class="tiny">
             Rate per 10,000: {area.supportedAsylumRate ?? "n/a"} | Contingency: {area.contingencyAccommodation.toLocaleString()}
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Public money layer now live</h2>
-    <div class="story-grid">
-      {moneyPreview.map((record) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class="chip accent">{record.recordType.replace(/_/g, " ")}</span>
-            {record.routeFamily && <span class="chip">{record.routeFamily}</span>}
-          </div>
-          <h3>{record.title}</h3>
-          <p class="lede">
-            {record.supplierName ? `${record.buyerName} -> ${record.supplierName}` : record.buyerName}
-          </p>
-          <p class="tiny">{record.periodLabel ?? "No period label recorded"}</p>
-          <p class="tiny">
-            <a class="source-pill" href="/spending">Open money ledger</a>
           </p>
         </article>
       ))}

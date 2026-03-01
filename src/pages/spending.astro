@@ -38,6 +38,7 @@ const leadRecordType = recordTypeSummaries[0];
 const leadBuyer = buyerSummaries[0];
 const leadMoneyRegion = linkedRegionSummaries[0];
 const primaryLead = moneyLedger.investigativeLeads[0];
+const investigativeLeadHighlights = moneyLedger.investigativeLeads.slice(1, 4);
 const segmentTones = ["accent", "teal", "warm", "soft"] as const;
 const routeValueLabel =
   moneyLedger.summary.rowsWithDisclosedValue > 0
@@ -183,11 +184,13 @@ const spendingPresetViews = [
   }
 ];
 const spendingSections = [
+  { id: "money-findings", label: "Findings" },
+  { id: "where-values", label: "Big rows" },
+  { id: "supplier-watchlist", label: "Watchlist" },
   { id: "money-composition", label: "Composition" },
   { id: "money-readout", label: "Readout" },
   { id: "money-presets", label: "Presets" },
   { id: "money-explorer", label: "Explorer" },
-  { id: "supplier-watchlist", label: "Watchlist" },
   { id: "money-ledger", label: "Ledger" },
   { id: "supplier-profiles", label: "Profiles" },
   { id: "investigative-leads", label: "Leads" }
@@ -254,12 +257,56 @@ const spendingSections = [
     </aside>
   </section>
 
-  <PageContents sections={spendingSections} />
+  <PageContents title="Jump to evidence" sections={spendingSections} />
+
+  <section id="money-findings" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>What matters first</h2>
+        <p class="lede">
+          The public money story is strongest when it opens with the exposed leads, biggest rows, and concentrated
+          supplier or buyer control before dropping into composition charts and ledger tooling.
+        </p>
+      </div>
+      {primaryLead && <span class={`chip ${primaryLead.severity === "warning" ? "accent" : ""}`}>{primaryLead.severity}</span>}
+    </div>
+    {primaryLead && (
+      <article class="editor-note">
+        <h3>{primaryLead.title}</h3>
+        <p>{primaryLead.detail}</p>
+        <p class="tiny">
+          <a class="source-pill" href={primaryLead.sourceUrl}>Source</a>
+        </p>
+      </article>
+    )}
+    <div class="story-grid">
+      {spendingReadoutCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+    <div class="story-grid">
+      {investigativeLeadHighlights.map((lead) => (
+        <article class="story-card">
+          <div class="chip-row">
+            <span class={`chip ${lead.severity === "warning" ? "accent" : ""}`}>{lead.severity}</span>
+          </div>
+          <h3>{lead.title}</h3>
+          <p class="lede">{lead.detail}</p>
+          <p class="tiny">
+            <a class="source-pill" href={lead.sourceUrl}>Source</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
 
   <section id="where-values" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Where the public values already exist</h2>
+        <h2>Big disclosed rows already visible</h2>
         <p class="lede">
           The starter ledger already contains large public figures. They need clear route labels and context, not
           flattening into one misleading spend total.
@@ -294,6 +341,46 @@ const spendingSections = [
           <p class="tiny">
             <a class="source-pill" href={record.sourceUrl ?? "#"}>Source</a>
           </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="supplier-watchlist" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Supplier and public-body watchlist</h2>
+        <p class="lede">
+          The watchlist combines visible hotel exposure, public contract rows, and any disclosed contract value already
+          in the starter ledger.
+        </p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      {supplierWatchlist.map((supplier) => (
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">{supplier.entityRole}</span>
+            {supplier.riskLevel && <span class="chip">{supplier.riskLevel}</span>}
+          </div>
+          <h3>{supplier.entityName}</h3>
+          <p class="metric-value">{supplier.publicContractCount.toLocaleString()}</p>
+          <p class="lede">Public money row{supplier.publicContractCount === 1 ? "" : "s"} tied to this profile.</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span>Linked sites</span>
+              <span class="data-row-value">{supplier.siteCount.toLocaleString()}</span>
+            </div>
+            <div class="data-row">
+              <span>Published value</span>
+              <span class="data-row-value">{formatMoney(supplier.publicContractValueGbp)}</span>
+            </div>
+            <div class="data-row">
+              <span>Route families</span>
+              <span class="data-row-value">{supplier.routeFamilies.map(formatRouteFamily).join(", ") || "none"}</span>
+            </div>
+          </div>
+          {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
         </article>
       ))}
     </div>
@@ -542,46 +629,6 @@ const spendingSections = [
         Try widening the route family, clearing the buyer filter, or removing the published-value requirement.
       </p>
     </article>
-  </section>
-
-  <section id="supplier-watchlist" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Supplier and public-body watchlist</h2>
-        <p class="lede">
-          The watchlist combines visible hotel exposure, public contract rows, and any disclosed contract value already
-          in the starter ledger.
-        </p>
-      </div>
-    </div>
-    <div class="feature-grid">
-      {supplierWatchlist.map((supplier) => (
-        <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip accent">{supplier.entityRole}</span>
-            {supplier.riskLevel && <span class="chip">{supplier.riskLevel}</span>}
-          </div>
-          <h3>{supplier.entityName}</h3>
-          <p class="metric-value">{supplier.publicContractCount.toLocaleString()}</p>
-          <p class="lede">Public money row{supplier.publicContractCount === 1 ? "" : "s"} tied to this profile.</p>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Linked sites</span>
-              <span class="data-row-value">{supplier.siteCount.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Published value</span>
-              <span class="data-row-value">{formatMoney(supplier.publicContractValueGbp)}</span>
-            </div>
-            <div class="data-row">
-              <span>Route families</span>
-              <span class="data-row-value">{supplier.routeFamilies.map(formatRouteFamily).join(", ") || "none"}</span>
-            </div>
-          </div>
-          {supplier.companyNumber && <p class="tiny">Company number: {supplier.companyNumber}</p>}
-        </article>
-      ))}
-    </div>
   </section>
 
   <section id="money-ledger" class="section section-anchor">

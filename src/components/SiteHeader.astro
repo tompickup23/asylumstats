@@ -1,13 +1,12 @@
 ---
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/compare", label: "Compare" },
+  { href: "/hotels", label: "Hotels", priority: true },
+  { href: "/spending", label: "Money", priority: true },
+  { href: "/compare", label: "Pressure", priority: true },
   { href: "/routes", label: "Routes" },
-  { href: "/hotels", label: "Hotels" },
-  { href: "/spending", label: "Spending" },
-  { href: "/releases", label: "Releases" },
   { href: "/sources", label: "Sources" },
-  { href: "/methodology", label: "Methodology" }
+  { href: "/releases", label: "Releases" },
+  { href: "/methodology", label: "Method" }
 ];
 
 const pathname = Astro.url.pathname;
@@ -44,7 +43,13 @@ function isActive(href: string): boolean {
 
     <nav class="site-nav" aria-label="Primary">
       {navItems.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>
+        <a
+          href={item.href}
+          class:list={{ priority: item.priority }}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          {item.label}
+        </a>
       ))}
     </nav>
   </div>

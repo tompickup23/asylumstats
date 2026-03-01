@@ -275,6 +275,7 @@ const comparePresetViews = [
   }
 ];
 const compareSections = [
+  { id: "compare-findings", label: "Findings" },
   { id: "supported-asylum-logic", label: "How to read" },
   { id: "default-compare-set", label: "Default set" },
   { id: "pathway-profiles", label: "Pathway mix" },
@@ -282,8 +283,7 @@ const compareSections = [
   ...(compareTrendProfiles.length > 0 ? [{ id: "compare-trends", label: "Trends" }] : []),
   { id: "cross-place-matrix", label: "Matrix" },
   { id: "compare-presets", label: "Presets" },
-  { id: "compare-explorer", label: "Explorer" },
-  { id: "compare-findings", label: "Findings" }
+  { id: "compare-explorer", label: "Explorer" }
 ];
 ---
 
@@ -346,7 +346,33 @@ const compareSections = [
     </aside>
   </section>
 
-  <PageContents sections={compareSections} />
+  <PageContents title="Jump to evidence" sections={compareSections} />
+
+  <section id="compare-findings" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>What this compare set already shows</h2>
+        <p class="lede">
+          Even a small compare field is enough to separate volume, rate, hotel-heavy contingency use, and the wider
+          humanitarian pathway load.
+        </p>
+      </div>
+    </div>
+    <div class="story-grid">
+      {compareEditorialCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+      {compareTrendCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
 
   <section id="supported-asylum-logic" class="section section-anchor">
     <div class="section-head">
@@ -866,26 +892,6 @@ const compareSections = [
             <div class="metric-fill" style={`width: ${(place.allThreePathwaysTotal / maxAllPathways) * 100}%`}></div>
           </div>
         </div>
-      ))}
-    </div>
-  </section>
-
-  <section id="compare-findings" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>What these four already prove</h2>
-        <p class="lede">
-          Even a small compare set exposes the difference between volume, rate, humanitarian pathway mix, and
-          contingency-heavy local pressure.
-        </p>
-      </div>
-    </div>
-    <div class="story-grid">
-      {compareEditorialCards.map((card) => (
-        <article class="story-card">
-          <h3>{card.title}</h3>
-          <p class="lede">{card.body}</p>
-        </article>
       ))}
     </div>
   </section>
