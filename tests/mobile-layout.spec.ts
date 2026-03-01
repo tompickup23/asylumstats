@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { disableMotion, stabilizePage } from "./layout-helpers";
 
 const pages = [
   { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
@@ -13,8 +14,8 @@ const pages = [
 ] as const;
 
 const placePages = [
-  { name: "birmingham", path: "/places/E08000025/", focus: "#stock-logic" },
-  { name: "north-yorkshire", path: "/places/E06000065/", focus: "#stock-logic" }
+  { name: "birmingham", path: "/places/E08000025/", focus: "#place-findings" },
+  { name: "north-yorkshire", path: "/places/E06000065/", focus: "#place-findings" }
 ] as const;
 
 const filteredViews = [
@@ -64,25 +65,6 @@ const filteredViews = [
     expectedLocation: "place_scope=national"
   }
 ] as const;
-
-async function stabilizePage(page: Page) {
-  await page.route("https://fonts.googleapis.com/**", (route) => route.abort());
-  await page.route("https://fonts.gstatic.com/**", (route) => route.abort());
-}
-
-async function disableMotion(page: Page) {
-  await page.addStyleTag({
-    content: `
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
-      }
-    `
-  });
-}
 
 test.describe("mobile evidence-first layout", () => {
   for (const pageConfig of pages) {

@@ -22,3 +22,32 @@ const { id, label = "Deep dive", title, summary, open = false } = Astro.props;
     <slot />
   </div>
 </details>
+
+<script>
+  const windowWithDrawerFlag = window as Window & { __asylumstatsDataDrawerInit?: boolean };
+
+  if (!windowWithDrawerFlag.__asylumstatsDataDrawerInit) {
+    windowWithDrawerFlag.__asylumstatsDataDrawerInit = true;
+
+    const openDrawerForHashTarget = () => {
+      if (!window.location.hash) {
+        return;
+      }
+
+      const target = document.querySelector(window.location.hash);
+      const drawer = target?.closest("details.data-drawer");
+
+      if (drawer instanceof HTMLDetailsElement) {
+        drawer.open = true;
+      }
+    };
+
+    window.addEventListener("hashchange", openDrawerForHashTarget);
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", openDrawerForHashTarget, { once: true });
+    } else {
+      openDrawerForHashTarget();
+    }
+  }
+</script>

@@ -2,7 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: /mobile-layout\.spec\.ts/,
+  testMatch: /.*layout\.spec\.ts/,
+  snapshotPathTemplate: "{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}",
   fullyParallel: false,
   workers: 1,
   timeout: 60000,
@@ -15,6 +16,21 @@ export default defineConfig({
         browserName: "chromium",
         baseURL: "http://127.0.0.1:4322",
         headless: true,
+        screenshot: "only-on-failure",
+        trace: "retain-on-failure"
+      }
+    },
+    {
+      name: "desktop-chromium",
+      use: {
+        browserName: "chromium",
+        baseURL: "http://127.0.0.1:4322",
+        headless: true,
+        viewport: {
+          width: 1440,
+          height: 1500
+        },
+        deviceScaleFactor: 1,
         screenshot: "only-on-failure",
         trace: "retain-on-failure"
       }

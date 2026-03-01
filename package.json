@@ -23,7 +23,8 @@
     "transform:money": "node scripts/transform/transform-money-ledger.mjs",
     "ingest:money": "npm run transform:money",
     "test": "vitest run",
-    "test:mobile": "playwright test",
+    "test:mobile": "playwright test tests/mobile-layout.spec.ts --project=mobile-chromium",
+    "test:desktop": "playwright test tests/desktop-layout.spec.ts --project=desktop-chromium",
     "test:watch": "vitest"
   },
   "dependencies": {
