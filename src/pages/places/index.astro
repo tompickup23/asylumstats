@@ -54,49 +54,39 @@ const pageDescription =
 ---
 
 <BaseLayout title="Places | asylumstats" description={pageDescription}>
-  <section class="page-top page-top-single">
-    <section class="page-head">
-      <span class="kicker">Place-led explorer</span>
-      <h1>Start with regions, then open places.</h1>
-      <p>
-        This is the main front door. Read the Britain map first, open a region page second, then use local authority
-        pages to keep count, rate, contingency accommodation, and any public hotel evidence on one reading surface.
-      </p>
-      <div class="chip-row">
-        <span class="chip">{placeDirectory.snapshotDate} snapshot</span>
-        <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
-        <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
+  <section id="place-map" class="section section-anchor priority-section map-front-door">
+    <div class="map-front-head">
+      <div class="map-front-copy">
+        <span class="kicker">Place-led explorer</span>
+        <h1>Britain first. Then open one region.</h1>
+        <p>
+          Read the national map for scale, rate, and hotel visibility. Open a region page second. Open a local authority
+          page third.
+        </p>
       </div>
-      <div class="stat-strip front-door-strip">
-        <article class="stat-tile">
+      <div class="map-front-stat-grid">
+        <article class="map-front-stat">
           <span class="tiny">Regional leader by total</span>
           <strong>{leadRegion.regionName}</strong>
           <p class="tiny">{leadRegion.supportedAsylum.toLocaleString()} people on supported asylum across the latest regional slice.</p>
         </article>
-        <article class="stat-tile">
+        <article class="map-front-stat">
           <span class="tiny">Regional leader by rate</span>
           <strong>{rateLeader.regionName}</strong>
           <p class="tiny">{rateLeader.supportedAsylumRate} per 10,000 residents in the weighted regional view.</p>
         </article>
-        <article class="stat-tile">
+        <article class="map-front-stat">
           <span class="tiny">Hotel visibility leader</span>
           <strong>{hotelLeader.regionName}</strong>
           <p class="tiny">{hotelLeader.hotelLinkedPlaceCount.toLocaleString()} place pages there already carry hotel evidence.</p>
         </article>
       </div>
-    </section>
-  </section>
-
-  <section id="place-map" class="section section-anchor priority-section">
-    <div class="section-head">
-      <div>
-        <h2>Read the regional map first</h2>
-        <p class="lede">
-          Regions tell you where pressure sits before you zoom into a single authority. The selected region panel then
-          tells you which place pages to open next.
-        </p>
-      </div>
-      <a class="chip accent" href="/routes#route-findings">Keep the system logic nearby</a>
+    </div>
+    <div class="chip-row">
+      <span class="chip">{placeDirectory.snapshotDate} snapshot</span>
+      <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
+      <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
+      <a class="chip" href="/routes#route-findings">Keep the system logic nearby</a>
     </div>
     <RegionMapExplorer
       id="place-map-explorer"

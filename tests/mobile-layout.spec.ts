@@ -87,7 +87,7 @@ test.describe("mobile evidence-first layout", () => {
       const firstContentSection = page.locator("main > section.section").first();
 
       await expect(prioritySection).toBeVisible();
-      await expect(prioritySection.locator("h2").first()).toBeVisible();
+      await expect(prioritySection.locator("h1, h2").first()).toBeVisible();
       await expect(firstContentSection).toHaveAttribute("id", pageConfig.focus.slice(1));
       await expect(firstContentSection).toHaveClass(/priority-section/);
 

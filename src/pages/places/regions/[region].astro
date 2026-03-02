@@ -80,29 +80,25 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
 ---
 
 <BaseLayout title={`${region.regionName} region | asylumstats`} description={pageDescription}>
-  <section class="page-top page-top-single">
-    <section class="page-head">
-      <span class="kicker">{region.countryName}</span>
-      <h1>{region.regionName} asylum pressure by place</h1>
-      <p>
-        Use this page to move from the national map into one region, then into the local authorities inside it. The
-        region tells you where supported asylum is concentrated, where the rate bites harder, and where hotel evidence
-        is already visible on public place pages.
-      </p>
-      <div class="chip-row">
-        <span class="chip">{localRouteLatest.snapshotDate} snapshot</span>
-        <span class="chip teal">{region.publicPlaceCount.toLocaleString()} public place pages</span>
-        <span class="chip accent">{region.supportedAsylum.toLocaleString()} supported asylum</span>
+  <section id="region-findings" class="section section-anchor priority-section map-front-door">
+    <div class="map-front-head">
+      <div class="map-front-copy">
+        <span class="kicker">{region.countryName}</span>
+        <h1>{region.regionName}: open one authority next.</h1>
+        <p>
+          Use this page to narrow the national map into one region, then into the authorities inside it. Keep scale,
+          rate, and hotel visibility together before you open one local page.
+        </p>
       </div>
-      <div class="stat-strip front-door-strip">
-        <article class="stat-tile">
+      <div class="map-front-stat-grid">
+        <article class="map-front-stat">
           <span class="tiny">Regional pressure</span>
           <strong>{region.supportedAsylum.toLocaleString()}</strong>
           <p class="tiny">
             People on supported asylum across the region, at {region.supportedAsylumRate} per 10,000 residents.
           </p>
         </article>
-        <article class="stat-tile">
+        <article class="map-front-stat">
           <span class="tiny">Open this place first</span>
           <strong>{region.leadArea?.area.areaName ?? "No public place page yet"}</strong>
           <p class="tiny">
@@ -111,7 +107,7 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
               : "The region currently has no public place page to lead with."}
           </p>
         </article>
-        <article class="stat-tile">
+        <article class="map-front-stat">
           <span class="tiny">Hotel visibility</span>
           <strong>{region.hotelLinkedPlaceCount.toLocaleString()} place pages already carry hotel evidence</strong>
           <p class="tiny">
@@ -119,20 +115,12 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
           </p>
         </article>
       </div>
-    </section>
-  </section>
-
-  <section id="region-findings" class="section section-anchor priority-section">
-    <div class="section-head">
-      <div>
-        <h2>What matters first in {region.regionName}</h2>
-        <p class="lede">
-          {region.regionName} currently carries {region.supportedAsylum.toLocaleString()} people on supported asylum
-          across {region.publicPlaceCount.toLocaleString()} public place pages. The regional rate is {region.supportedAsylumRate} per
-          10,000 residents, and the hotel signal is already visible on {region.hotelLinkedPlaceCount.toLocaleString()} of those pages.
-        </p>
-      </div>
-      <a class="chip accent" href="/places/">Back to the national place map</a>
+    </div>
+    <div class="chip-row">
+      <span class="chip">{localRouteLatest.snapshotDate} snapshot</span>
+      <span class="chip teal">{region.publicPlaceCount.toLocaleString()} public place pages</span>
+      <span class="chip accent">{region.supportedAsylum.toLocaleString()} supported asylum</span>
+      <a class="chip" href="/places/">Back to the national place map</a>
     </div>
     <div class="story-grid">
       <article class="story-card">

@@ -183,7 +183,7 @@ const homeEntries: Record<string, HomeEntry> = {
     scopeId: nationalScopeId,
     eyebrow: `National snapshot | ${latestQuarter.stockPeriodLabel ?? latestQuarter.quarterLabel ?? localRouteLatest.snapshotDate}`,
     title: "Britain now",
-    note: `${formatInteger(latestQuarter.supportedAsylum)} people were on supported asylum at ${latestQuarter.stockPeriodLabel ?? "the latest stock point"}. Read Britain first, then narrow to one region and one local authority.`,
+    note: `${formatInteger(latestQuarter.supportedAsylum)} people were on supported asylum at ${latestQuarter.stockPeriodLabel ?? "the latest stock point"}. Start with Britain, then narrow to one region and one local authority.`,
     ctaLabel: "Open system logic",
     ctaHref: "/routes#route-findings",
     linksLabel: "Start with these regions",
@@ -278,7 +278,7 @@ for (const region of placeDirectory.regions) {
     parentLabel: "Britain",
     eyebrow: `${region.countryName} region`,
     title: region.regionName,
-    note: `${formatInteger(region.supportedAsylum)} people are on supported asylum across ${formatInteger(region.publicPlaceCount)} local authority pages here. Open one borough or district next to see count, rate, contingency accommodation, and any hotel evidence on one local page.`,
+    note: `${formatInteger(region.supportedAsylum)} people are on supported asylum across ${formatInteger(region.publicPlaceCount)} public local pages here. Open one borough or district next.`,
     ctaLabel: `Open ${region.regionName}`,
     ctaHref: region.regionPath,
     linksLabel: "Then one town or borough page",
@@ -478,26 +478,20 @@ for (const region of placeDirectory.regions) {
 >
   <section class="section section-anchor priority-section home-screen" id="read-this-first">
     <div class="home-left">
-      <article class="home-hero">
-        <span class="kicker">Place-led asylum accountability</span>
-        <h1>Britain first. Then narrow.</h1>
-        <p>
-          Select one region on the map. The live deck then narrows from Britain to region to one local authority.
-        </p>
-        <div class="chip-row home-hero-meta">
-          <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
-          <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
-          <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} pages with hotel evidence</span>
-        </div>
-      </article>
-
       <article class="home-map-panel" id="homepage-britain-map">
-        <div class="home-panel-head">
-          <div>
-            <span class="tiny">Britain map</span>
-            <h2>Select a region, then narrow.</h2>
+        <div class="home-map-intro">
+          <div class="home-map-copy">
+            <span class="kicker">Place-led asylum accountability</span>
+            <h1>Britain. Then one region. Then one place.</h1>
+            <p>
+              Use the map on the left. The live deck on the right narrows from Britain to region to one local authority.
+            </p>
           </div>
-          {leadRegion && <a class="chip accent" href={leadRegion.regionPath}>Open {leadRegion.regionName}</a>}
+          <div class="chip-row home-map-meta">
+            <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
+            <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
+            <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} pages with hotel evidence</span>
+          </div>
         </div>
 
         <RegionMapExplorer
