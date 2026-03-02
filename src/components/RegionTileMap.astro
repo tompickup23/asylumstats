@@ -18,6 +18,9 @@ interface Props {
   summaries?: Record<string, RegionMapSummary>;
   tone?: "accent" | "teal" | "warm";
   compact?: boolean;
+  labelMode?: "all" | "essential" | "selected";
+  interactionMode?: "navigate" | "select";
+  showSummary?: boolean;
 }
 
 const {
@@ -29,8 +32,12 @@ const {
   highlightRegions = [],
   summaries = {},
   tone = "accent",
-  compact = false
+  compact = false,
+  labelMode = compact ? "essential" : "all",
+  interactionMode = "navigate",
+  showSummary = true
 } = Astro.props;
+const essentialLabelRegions = new Set(["Scotland", "Wales", "Northern Ireland", "London"]);
 
 const itemByRegion = new Map(items.map((item) => [item.regionName, item]));
 const renderedRegions = REGION_MAP_DRAW_ORDER.flatMap((regionName) => {
@@ -92,6 +99,10 @@ const summaryByRegion = Object.fromEntries(
   ])
 ) as Record<string, RegionMapSummary>;
 const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
+const mapInteractionCaption =
+  interactionMode === "select"
+    ? "Select a region on the map to update the panel. Use the action button there to open the region page."
+    : "Select a region on the map to open its region page.";
 ---
 
   <figure
@@ -99,6 +110,7 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
   data-region-map-root
   data-initial-region={initialRegionName ?? undefined}
   data-region-map-tone={tone}
+  data-region-map-link-mode={interactionMode}
 >
   {!compact && (
     <div class="viz-head">
@@ -109,19 +121,21 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
       <span class="chip">{valueLabel}</span>
     </div>
   )}
-  <div class:list={["region-map-stage", compact && "is-compact"]}>
+  <div class:list={["region-map-stage", compact && "is-compact", !showSummary && "is-summaryless"]}>
     <div class="region-map-canvas">
       <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
         {renderedRegions.map(({ geometry, item }) => {
           const active = activeRegions.has(item.regionName);
           const href = buildPublicPlaceRegionPath(item.regionName);
           const valueLabelText = formatValue(item.value);
+          const minimalLabels = labelMode !== "all";
+          const essentialLabel = labelMode === "essential" && essentialLabelRegions.has(item.regionName);
 
           return (
             <a
               href={href}
               class:list={["region-map-link", active && "is-active", item.regionName === initialRegionName && "is-selected"]}
-              aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. Open region page.`}
+              aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. ${interactionMode === "select" ? "Select this region." : "Open region page."}`}
               data-region-map-region={item.regionName}
               data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
             >
@@ -133,12 +147,26 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
                 stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
                 stroke-width={active ? "3" : "1.4"}
               ></path>
-              {geometry.calloutPath && <path class="region-map-callout" d={geometry.calloutPath}></path>}
+              {geometry.calloutPath && (
+                <path
+                  class:list={[
+                    "region-map-callout",
+                    minimalLabels && "is-minimal",
+                    essentialLabel && "is-essential"
+                  ]}
+                  d={geometry.calloutPath}
+                ></path>
+              )}
               <text
                 x={geometry.labelX}
                 y={geometry.labelY}
                 text-anchor={geometry.labelAnchor ?? "middle"}
-                class:list={["region-map-label", active && "is-active"]}
+                class:list={[
+                  "region-map-label",
+                  active && "is-active",
+                  minimalLabels && "is-minimal",
+                  essentialLabel && "is-essential"
+                ]}
               >
                 {geometry.labelLines.map((line, index) => (
                   <tspan x={geometry.labelX} dy={index === 0 ? 0 : 14}>
@@ -152,73 +180,78 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
       </svg>
       <figcaption class="tiny region-map-caption">
         {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
-        Select a region on the map to open its region page. Darker fills indicate higher values in the active map mode.
+        {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
       </figcaption>
     </div>
 
-    <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
-      <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
-        {(initialSummary?.chips ?? []).map((chip, index) => (
-          <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
-        ))}
-      </div>
-      <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
-      <p class="lede" data-region-map-summary-body>
-        {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
-      </p>
-
-      <div
-        class="region-map-summary-stats"
-        data-region-map-summary-stats
-        hidden={!initialSummary?.stats?.length}
-      >
-        {(initialSummary?.stats ?? []).map((stat) => (
-          <div class="region-map-summary-stat">
-            <span class="tiny">{stat.label}</span>
-            <strong>{stat.value}</strong>
-          </div>
-        ))}
-      </div>
-
-      <section
-        class="region-map-summary-links-section"
-        data-region-map-summary-links-section
-        hidden={!initialSummary?.links?.length}
-      >
-        <span class="tiny region-map-summary-label">Open these next</span>
-        <div class="region-map-summary-links" data-region-map-summary-links>
-          {(initialSummary?.links ?? []).map((link) => (
-            <a class="region-map-summary-link" href={link.href}>
-              <strong>{link.label}</strong>
-              {link.meta && <span class="tiny">{link.meta}</span>}
-            </a>
+    {showSummary && (
+      <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
+        <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+          {(initialSummary?.chips ?? []).map((chip, index) => (
+            <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
           ))}
         </div>
-      </section>
+        <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+        <p class="lede" data-region-map-summary-body>
+          {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+        </p>
 
-      <p
-        class="tiny region-map-summary-note"
-        data-region-map-summary-note
-        hidden={!initialSummary?.note}
-      >
-        {initialSummary?.note}
-      </p>
-
-      <p class="tiny">
-        <a
-          class="source-pill"
-          data-region-map-summary-link
-          href={initialSummary?.href ?? "/places/"}
-          hidden={!initialSummary?.href}
+        <div
+          class="region-map-summary-stats"
+          data-region-map-summary-stats
+          hidden={!initialSummary?.stats?.length}
         >
-          {initialSummary?.cta ?? "Open region page"}
-        </a>
-      </p>
-    </article>
+          {(initialSummary?.stats ?? []).map((stat) => (
+            <div class="region-map-summary-stat">
+              <span class="tiny">{stat.label}</span>
+              <strong>{stat.value}</strong>
+            </div>
+          ))}
+        </div>
+
+        <section
+          class="region-map-summary-links-section"
+          data-region-map-summary-links-section
+          hidden={!initialSummary?.links?.length}
+        >
+          <span class="tiny region-map-summary-label">Open these next</span>
+          <div class="region-map-summary-links" data-region-map-summary-links>
+            {(initialSummary?.links ?? []).map((link) => (
+              <a class="region-map-summary-link" href={link.href}>
+                <strong>{link.label}</strong>
+                {link.meta && <span class="tiny">{link.meta}</span>}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <p
+          class="tiny region-map-summary-note"
+          data-region-map-summary-note
+          hidden={!initialSummary?.note}
+        >
+          {initialSummary?.note}
+        </p>
+
+        <p class="tiny">
+          <a
+            class="source-pill"
+            data-region-map-summary-link
+            href={initialSummary?.href ?? "/places/"}
+            hidden={!initialSummary?.href}
+          >
+            {initialSummary?.cta ?? "Open region page"}
+          </a>
+        </p>
+      </article>
+    )}
   </div>
 </figure>
 
 <script>
+  type RegionMapRootElement = HTMLElement & {
+    __updateRegionMapSummary?: (regionName: string, trigger?: string) => void;
+  };
   type RegionMapSummaryPayload = {
     title?: string;
     body?: string;
@@ -247,7 +280,7 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
       }
     };
 
-    const updateRegionMapSummary = (root: HTMLElement, regionName: string) => {
+    const updateRegionMapSummary = (root: RegionMapRootElement, regionName: string, trigger = "program") => {
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
       const selectedLink = links.find((link) => link.dataset.regionMapRegion === regionName) ?? links[0];
 
@@ -352,14 +385,29 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
           linkElement.hidden = true;
         }
       }
+
+      root.dataset.regionMapSelectedRegion = selectedLink.dataset.regionMapRegion ?? regionName;
+      root.dispatchEvent(
+        new CustomEvent("region-map-change", {
+          bubbles: true,
+          detail: {
+            regionName: root.dataset.regionMapSelectedRegion,
+            summary,
+            trigger,
+            tone: root.dataset.regionMapTone ?? "accent"
+          }
+        })
+      );
     };
 
-    for (const root of document.querySelectorAll<HTMLElement>("[data-region-map-root]")) {
+    for (const root of document.querySelectorAll<RegionMapRootElement>("[data-region-map-root]")) {
       if (root.dataset.regionMapReady === "true") {
         continue;
       }
 
       root.dataset.regionMapReady = "true";
+      root.__updateRegionMapSummary = (regionName: string, trigger = "program") =>
+        updateRegionMapSummary(root, regionName, trigger);
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
 
       for (const link of links) {
@@ -369,9 +417,15 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
           continue;
         }
 
-        link.addEventListener("mouseenter", () => updateRegionMapSummary(root, regionName));
-        link.addEventListener("focus", () => updateRegionMapSummary(root, regionName));
-        link.addEventListener("click", () => updateRegionMapSummary(root, regionName));
+        link.addEventListener("mouseenter", () => updateRegionMapSummary(root, regionName, "hover"));
+        link.addEventListener("focus", () => updateRegionMapSummary(root, regionName, "focus"));
+        link.addEventListener("click", (event) => {
+          if (root.dataset.regionMapLinkMode === "select") {
+            event.preventDefault();
+          }
+
+          updateRegionMapSummary(root, regionName, "click");
+        });
       }
 
       updateRegionMapSummary(root, root.dataset.initialRegion ?? links[0]?.dataset.regionMapRegion ?? "");

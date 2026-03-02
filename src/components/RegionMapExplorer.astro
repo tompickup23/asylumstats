@@ -9,11 +9,29 @@ interface Props {
   views: RegionMapView[];
   defaultViewId?: string;
   compact?: boolean;
+  labelMode?: "all" | "essential" | "selected";
+  interactionMode?: "navigate" | "select";
+  showSummary?: boolean;
 }
 
-const { id, title, intro, views, defaultViewId, compact = false } = Astro.props;
+const {
+  id,
+  title,
+  intro,
+  views,
+  defaultViewId,
+  compact = false,
+  labelMode,
+  interactionMode = "navigate",
+  showSummary = true
+} = Astro.props;
 const fallbackViewId = defaultViewId ?? views[0]?.id ?? null;
 const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] ?? null;
+const mapActionLabel = interactionMode === "select" ? "Select a region" : "Click a region to open it";
+const mapSelectionLabel =
+  interactionMode === "select"
+    ? "Selected region updates the panel"
+    : "Selected region summary updates below the map";
 ---
 
 {activeView && (
@@ -46,7 +64,7 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
         <div class="region-map-legend-top">
           <div class="chip-row">
             <span class="chip accent">Map mode</span>
-            <span class="chip">Click a region to open it</span>
+            <span class="chip">{mapActionLabel}</span>
           </div>
           <div class="region-map-controls" role="toolbar" aria-label="Regional map metric">
             {views.map((view) => (
@@ -74,8 +92,8 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
       </div>
       {!compact && (
         <div class="chip-row">
-          <span class="chip accent">Click a region to open it</span>
-          <span class="chip">Selected region summary updates below the map</span>
+          <span class="chip accent">{mapActionLabel}</span>
+          <span class="chip">{mapSelectionLabel}</span>
         </div>
       )}
     </article>
@@ -92,6 +110,9 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
           summaries={view.summaries}
           tone={view.tone}
           compact={compact}
+          labelMode={labelMode}
+          interactionMode={interactionMode}
+          showSummary={showSummary}
         />
       </div>
     ))}
@@ -99,6 +120,13 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
 )}
 
 <script>
+  type RegionMapRootElement = HTMLElement & {
+    __updateRegionMapSummary?: (regionName: string, trigger?: string) => void;
+  };
+  type RegionMapChangeDetail = {
+    regionName?: string;
+    trigger?: string;
+  };
   const windowWithRegionMapExplorerFlag = window as Window & { __asylumstatsRegionMapExplorerInit?: boolean };
 
   if (!windowWithRegionMapExplorerFlag.__asylumstatsRegionMapExplorerInit) {
@@ -141,6 +169,13 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
       if (legendSwatch) {
         legendSwatch.dataset.tone = targetPanel.dataset.regionMapTone ?? "accent";
       }
+
+      const selectedRegion = root.dataset.regionMapSelectedRegion;
+      const activeRegionMap = targetPanel.querySelector<RegionMapRootElement>("[data-region-map-root]");
+
+      if (selectedRegion && activeRegionMap?.__updateRegionMapSummary) {
+        activeRegionMap.__updateRegionMapSummary(selectedRegion, "view");
+      }
     };
 
     for (const root of document.querySelectorAll<HTMLElement>("[data-region-map-explorer]")) {
@@ -149,6 +184,14 @@ const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] 
       }
 
       root.dataset.regionMapExplorerReady = "true";
+      root.addEventListener("region-map-change", (event) => {
+        const customEvent = event as CustomEvent<RegionMapChangeDetail>;
+        const regionName = customEvent.detail?.regionName;
+
+        if (regionName) {
+          root.dataset.regionMapSelectedRegion = regionName;
+        }
+      });
 
       const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-region-map-view]"));
 

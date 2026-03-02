@@ -16,6 +16,9 @@ interface Props {
   image?: string;
   noIndex?: boolean;
   structuredData?: StructuredDataNode[];
+  bodyClass?: string;
+  mainClass?: string;
+  hideFooter?: boolean;
 }
 
 const {
@@ -23,7 +26,10 @@ const {
   description = DEFAULT_DESCRIPTION,
   image = DEFAULT_SOCIAL_IMAGE_PATH,
   noIndex = false,
-  structuredData: pageStructuredData = []
+  structuredData: pageStructuredData = [],
+  bodyClass,
+  mainClass,
+  hideFooter = false
 } = Astro.props;
 const siteOrigin = Astro.site ?? new URL(SITE_URL);
 const pathname = Astro.url.pathname || "/";
@@ -125,15 +131,17 @@ const structuredData = [
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
     ))}
   </head>
-  <body>
+  <body class={bodyClass}>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <SiteHeader />
-    <main id="main-content" class="shell" tabindex="-1">
+    <main id="main-content" class:list={["shell", mainClass]} tabindex="-1">
       <slot />
     </main>
-    <footer class="shell footer">
-      asylumstats now leads with regions, places, hotel visibility inside local pages, and asylum-system logic with
-      source-linked evidence and explicit scope rules.
-    </footer>
+    {!hideFooter && (
+      <footer class="shell footer">
+        asylumstats now leads with regions, places, hotel visibility inside local pages, and asylum-system logic with
+        source-linked evidence and explicit scope rules.
+      </footer>
+    )}
   </body>
 </html>

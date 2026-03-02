@@ -2,7 +2,14 @@ import { expect, test } from "@playwright/test";
 import { disableMotion, limitToTopOfPage, stabilizePage, waitForFonts } from "./layout-helpers";
 
 const desktopPages = [
-  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false, hasRegionMapExplorer: true },
+  {
+    name: "home",
+    path: "/",
+    focus: "#read-this-first",
+    hasPageContents: false,
+    hasRegionMapExplorer: true,
+    hasRegionMapSummary: false
+  },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
@@ -37,7 +44,10 @@ test.describe("desktop layout snapshots", () => {
         await expect(page.locator("[data-region-map-explorer]")).toBeVisible();
         await expect(page.locator("[data-region-map-view-button]")).toHaveCount(3);
         await expect(page.locator("[data-region-map-legend]")).toBeVisible();
-        await expect(page.locator(".region-map-summary-stats").first()).toBeVisible();
+
+        if (!("hasRegionMapSummary" in pageConfig) || pageConfig.hasRegionMapSummary !== false) {
+          await expect(page.locator(".region-map-summary-stats").first()).toBeVisible();
+        }
       }
 
       await expect(page).toHaveScreenshot(`${pageConfig.name}-desktop.png`, {
@@ -48,4 +58,35 @@ test.describe("desktop layout snapshots", () => {
       });
     });
   }
+});
+
+test("home deck updates from Britain to region to local authority", async ({ page }) => {
+  await stabilizePage(page, { blockFonts: false });
+
+  await page.goto("/", { waitUntil: "networkidle" });
+  await waitForFonts(page);
+  await disableMotion(page);
+  await limitToTopOfPage(page, 5);
+
+  const deckTitle = page.locator("[data-home-title]");
+  const modeState = page.locator("[data-home-mode-state]");
+
+  await expect(deckTitle).toHaveText("Britain now");
+  await expect(page.locator("[data-home-parent]")).toBeHidden();
+  await expect(page.locator("[data-home-reset]")).toBeHidden();
+
+  await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
+
+  await expect(deckTitle).toHaveText("North West");
+  await expect(modeState).toHaveText("Manual");
+  await expect(page.locator("[data-home-parent]")).toContainText("Back to Britain");
+  await expect(page.locator("[data-home-reset]")).toBeVisible();
+
+  const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
+  const firstPlaceName = (await firstPlaceCard.locator("strong").first().textContent())?.trim() ?? "";
+
+  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
+
+  await expect(deckTitle).toHaveText(firstPlaceName);
+  await expect(page.locator("[data-home-parent]")).toContainText("Back to North West");
 });

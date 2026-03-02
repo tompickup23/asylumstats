@@ -1,0 +1,484 @@
+---
+type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
+
+export interface HomeDeckStat {
+  label: string;
+  value: string;
+  context: string;
+}
+
+export interface HomeDeckLink {
+  label: string;
+  href: string;
+  meta: string;
+  scopeId?: string;
+  actionLabel?: string;
+}
+
+export interface HomeDeckBar {
+  label: string;
+  value: string;
+  meta: string;
+  widthPct: number;
+  tone: HomeDeckTone;
+}
+
+export interface HomeDeckVisualGroup {
+  title: string;
+  bars: HomeDeckBar[];
+}
+
+export interface HomeDeckEntry {
+  scopeId: string;
+  parentScopeId?: string;
+  parentLabel?: string;
+  eyebrow: string;
+  title: string;
+  note: string;
+  ctaLabel: string;
+  ctaHref: string;
+  linksLabel: string;
+  stats: HomeDeckStat[];
+  links: HomeDeckLink[];
+  visualIntro: string;
+  visualGroups: HomeDeckVisualGroup[];
+}
+
+interface Props {
+  entries: Record<string, HomeDeckEntry>;
+  initialScopeId: string;
+  targetMapId: string;
+}
+
+const { entries, initialScopeId, targetMapId } = Astro.props;
+const initialEntry = entries[initialScopeId];
+const homeDeckData = JSON.stringify({ entries, initialScopeId });
+---
+
+{initialEntry && (
+  <article
+    class="home-panel home-panel-strong home-system-panel"
+    data-home-system
+    data-target-map-id={targetMapId}
+  >
+    <script type="application/json" data-home-system-data set:html={homeDeckData} is:inline></script>
+
+    <div class="home-panel-head home-system-head">
+      <div>
+        <span class="tiny" data-home-eyebrow>{initialEntry.eyebrow}</span>
+        <h2 data-home-title>{initialEntry.title}</h2>
+      </div>
+      <div class="home-tab-bar" role="tablist" aria-label="Homepage system view">
+        <button
+          type="button"
+          class="chip accent is-active"
+          data-home-tab="stats"
+          aria-selected="true"
+          role="tab"
+        >
+          Stats
+        </button>
+        <button
+          type="button"
+          class="chip"
+          data-home-tab="visuals"
+          aria-selected="false"
+          role="tab"
+        >
+          Visuals
+        </button>
+      </div>
+    </div>
+
+    <div class="home-system-summary">
+      <p class="lede" data-home-note>{initialEntry.note}</p>
+      <div class="chip-row home-system-controls">
+        <span class="chip" data-home-mode-state>Auto slide</span>
+        <button type="button" class="chip" data-home-parent hidden></button>
+        <button type="button" class="chip" data-home-reset hidden>Back to Britain</button>
+        <a class="chip accent" data-home-cta href={initialEntry.ctaHref}>{initialEntry.ctaLabel}</a>
+      </div>
+    </div>
+
+    <div class="home-deck-viewport">
+      <div class="home-deck-track" data-home-track>
+        <section class="home-deck-pane" data-home-pane="stats" role="tabpanel">
+          <div class="home-kpi-grid" data-home-stats></div>
+          <div class="home-follow-panel">
+            <div class="home-follow-head">
+              <strong data-home-links-label>{initialEntry.linksLabel}</strong>
+            </div>
+            <div class="home-next-grid" data-home-links></div>
+          </div>
+        </section>
+
+        <section class="home-deck-pane" data-home-pane="visuals" role="tabpanel">
+          <div class="home-visual-stack" data-home-visuals></div>
+        </section>
+      </div>
+    </div>
+  </article>
+)}
+
+<script>
+  type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
+  type HomeDeckStat = { label: string; value: string; context: string };
+  type HomeDeckLink = { label: string; href: string; meta: string; scopeId?: string; actionLabel?: string };
+  type HomeDeckBar = { label: string; value: string; meta: string; widthPct: number; tone: HomeDeckTone };
+  type HomeDeckVisualGroup = { title: string; bars: HomeDeckBar[] };
+  type HomeDeckEntry = {
+    scopeId: string;
+    parentScopeId?: string;
+    parentLabel?: string;
+    eyebrow: string;
+    title: string;
+    note: string;
+    ctaLabel: string;
+    ctaHref: string;
+    linksLabel: string;
+    stats: HomeDeckStat[];
+    links: HomeDeckLink[];
+    visualIntro: string;
+    visualGroups: HomeDeckVisualGroup[];
+  };
+  type HomeDeckPayload = {
+    entries: Record<string, HomeDeckEntry>;
+    initialScopeId: string;
+  };
+  type RegionMapChangeDetail = {
+    regionName?: string;
+    trigger?: string;
+  };
+
+  const windowWithHomeDeckFlag = window as Window & { __asylumstatsHomeDeckInit?: boolean };
+
+  if (!windowWithHomeDeckFlag.__asylumstatsHomeDeckInit) {
+    windowWithHomeDeckFlag.__asylumstatsHomeDeckInit = true;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clampWidth = (value: number) => `${Math.max(8, Math.min(100, value))}%`;
+
+    const renderStats = (container: HTMLElement, stats: HomeDeckStat[]) => {
+      container.innerHTML = "";
+
+      for (const stat of stats) {
+        const card = document.createElement("article");
+        card.className = "home-kpi-card";
+
+        const label = document.createElement("span");
+        label.className = "tiny";
+        label.textContent = stat.label;
+
+        const value = document.createElement("strong");
+        value.textContent = stat.value;
+
+        const context = document.createElement("p");
+        context.className = "tiny";
+        context.textContent = stat.context;
+
+        card.append(label, value, context);
+        container.append(card);
+      }
+    };
+
+    const renderLinks = (container: HTMLElement, links: HomeDeckLink[], onPreview: (scopeId: string) => void) => {
+      container.innerHTML = "";
+
+      for (const link of links) {
+        if (link.scopeId) {
+          const card = document.createElement("article");
+          card.className = "home-next-card home-next-card-action";
+
+          const copy = document.createElement("div");
+          copy.className = "home-next-copy";
+
+          const title = document.createElement("strong");
+          title.textContent = link.label;
+
+          const meta = document.createElement("p");
+          meta.textContent = link.meta;
+
+          copy.append(title, meta);
+
+          const actions = document.createElement("div");
+          actions.className = "home-next-actions";
+
+          const previewButton = document.createElement("button");
+          previewButton.type = "button";
+          previewButton.className = "chip accent";
+          previewButton.textContent = link.actionLabel ?? "Preview here";
+          previewButton.addEventListener("click", () => onPreview(link.scopeId as string));
+
+          const openLink = document.createElement("a");
+          openLink.className = "chip";
+          openLink.href = link.href;
+          openLink.textContent = "Open page";
+
+          actions.append(previewButton, openLink);
+          card.append(copy, actions);
+          container.append(card);
+          continue;
+        }
+
+        const anchor = document.createElement("a");
+        anchor.className = "home-next-card";
+        anchor.href = link.href;
+
+        const title = document.createElement("strong");
+        title.textContent = link.label;
+
+        const meta = document.createElement("p");
+        meta.textContent = link.meta;
+
+        anchor.append(title, meta);
+        container.append(anchor);
+      }
+    };
+
+    const renderVisuals = (container: HTMLElement, entry: HomeDeckEntry) => {
+      container.innerHTML = "";
+
+      const intro = document.createElement("p");
+      intro.className = "tiny home-visual-intro";
+      intro.textContent = entry.visualIntro;
+      container.append(intro);
+
+      for (const group of entry.visualGroups) {
+        const card = document.createElement("section");
+        card.className = "home-visual-card";
+
+        const head = document.createElement("div");
+        head.className = "home-visual-head";
+
+        const title = document.createElement("strong");
+        title.textContent = group.title;
+        head.append(title);
+
+        const list = document.createElement("div");
+        list.className = "home-bar-list";
+
+        for (const item of group.bars) {
+          const row = document.createElement("div");
+          row.className = "home-bar-row";
+
+          const copy = document.createElement("div");
+          copy.className = "home-bar-copy";
+
+          const label = document.createElement("span");
+          label.textContent = item.label;
+
+          const value = document.createElement("strong");
+          value.textContent = item.value;
+          copy.append(label, value);
+
+          const track = document.createElement("div");
+          track.className = "home-bar-track";
+
+          const fill = document.createElement("span");
+          fill.className = `home-bar-fill ${item.tone}`;
+          fill.style.width = clampWidth(item.widthPct);
+          track.append(fill);
+
+          const meta = document.createElement("span");
+          meta.className = "tiny";
+          meta.textContent = item.meta;
+
+          row.append(copy, track, meta);
+          list.append(row);
+        }
+
+        card.append(head, list);
+        container.append(card);
+      }
+    };
+
+    const setTrackState = (root: HTMLElement, panel: "stats" | "visuals") => {
+      root.dataset.homeActivePanel = panel;
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-tab]")) {
+        const active = button.dataset.homeTab === panel;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-selected", active ? "true" : "false");
+      }
+    };
+
+    for (const root of document.querySelectorAll<HTMLElement>("[data-home-system]")) {
+      if (root.dataset.homeSystemReady === "true") {
+        continue;
+      }
+
+      root.dataset.homeSystemReady = "true";
+      const dataNode = root.querySelector<HTMLScriptElement>("[data-home-system-data]");
+
+      if (!dataNode?.textContent) {
+        continue;
+      }
+
+      const payload = JSON.parse(dataNode.textContent) as HomeDeckPayload;
+      const targetMapId = root.dataset.targetMapId;
+      const mapRoot = targetMapId ? document.getElementById(targetMapId) : null;
+      const title = root.querySelector<HTMLElement>("[data-home-title]");
+      const eyebrow = root.querySelector<HTMLElement>("[data-home-eyebrow]");
+      const note = root.querySelector<HTMLElement>("[data-home-note]");
+      const modeState = root.querySelector<HTMLElement>("[data-home-mode-state]");
+      const cta = root.querySelector<HTMLAnchorElement>("[data-home-cta]");
+      const parentButton = root.querySelector<HTMLButtonElement>("[data-home-parent]");
+      const resetButton = root.querySelector<HTMLButtonElement>("[data-home-reset]");
+      const linksLabel = root.querySelector<HTMLElement>("[data-home-links-label]");
+      const statsContainer = root.querySelector<HTMLElement>("[data-home-stats]");
+      const linksContainer = root.querySelector<HTMLElement>("[data-home-links]");
+      const visualsContainer = root.querySelector<HTMLElement>("[data-home-visuals]");
+
+      if (
+        !title ||
+        !eyebrow ||
+        !note ||
+        !modeState ||
+        !cta ||
+        !parentButton ||
+        !resetButton ||
+        !linksLabel ||
+        !statsContainer ||
+        !linksContainer ||
+        !visualsContainer
+      ) {
+        continue;
+      }
+
+      let currentScopeId = payload.initialScopeId;
+      let activePanel: "stats" | "visuals" = "stats";
+      let autoRotate = !prefersReducedMotion;
+      let autoTimer: number | null = null;
+
+      const getEntry = () => payload.entries[currentScopeId] ?? payload.entries[payload.initialScopeId];
+
+      const stopAutoRotate = () => {
+        if (!autoRotate) {
+          modeState.textContent = "Manual";
+          return;
+        }
+
+        autoRotate = false;
+        modeState.textContent = "Manual";
+
+        if (autoTimer !== null) {
+          window.clearInterval(autoTimer);
+          autoTimer = null;
+        }
+      };
+
+      const startAutoRotate = () => {
+        if (!autoRotate) {
+          modeState.textContent = prefersReducedMotion ? "Reduced motion" : "Manual";
+          return;
+        }
+
+        modeState.textContent = "Auto slide";
+
+        if (autoTimer !== null) {
+          window.clearInterval(autoTimer);
+        }
+
+        autoTimer = window.setInterval(() => {
+          activePanel = activePanel === "stats" ? "visuals" : "stats";
+          setTrackState(root, activePanel);
+        }, 4800);
+      };
+
+      const setScope = (scopeId: string, panel?: "stats" | "visuals") => {
+        if (!payload.entries[scopeId]) {
+          return;
+        }
+
+        currentScopeId = scopeId;
+
+        if (panel) {
+          activePanel = panel;
+        }
+
+        render();
+      };
+
+      const render = () => {
+        const entry = getEntry();
+
+        eyebrow.textContent = entry.eyebrow;
+        title.textContent = entry.title;
+        note.textContent = entry.note;
+        cta.href = entry.ctaHref;
+        cta.textContent = entry.ctaLabel;
+        linksLabel.textContent = entry.linksLabel;
+
+        parentButton.hidden = !entry.parentScopeId;
+        parentButton.textContent = entry.parentLabel ? `Back to ${entry.parentLabel}` : "Back";
+        resetButton.hidden = entry.scopeId === payload.initialScopeId;
+
+        renderStats(statsContainer, entry.stats);
+        renderLinks(linksContainer, entry.links, (scopeId) => {
+          stopAutoRotate();
+          setScope(scopeId, "stats");
+        });
+        renderVisuals(visualsContainer, entry);
+        setTrackState(root, activePanel);
+      };
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-tab]")) {
+        button.addEventListener("click", () => {
+          const panel = button.dataset.homeTab === "visuals" ? "visuals" : "stats";
+          activePanel = panel;
+          stopAutoRotate();
+          render();
+        });
+      }
+
+      parentButton.addEventListener("click", () => {
+        const entry = getEntry();
+
+        if (!entry.parentScopeId) {
+          return;
+        }
+
+        stopAutoRotate();
+        setScope(entry.parentScopeId, "stats");
+      });
+
+      resetButton.addEventListener("click", () => {
+        stopAutoRotate();
+        setScope(payload.initialScopeId, "stats");
+      });
+
+      mapRoot?.addEventListener("region-map-change", (event) => {
+        const customEvent = event as CustomEvent<RegionMapChangeDetail>;
+
+        if (customEvent.detail?.trigger !== "click") {
+          return;
+        }
+
+        const regionName = customEvent.detail.regionName;
+
+        if (!regionName || !payload.entries[regionName]) {
+          return;
+        }
+
+        stopAutoRotate();
+        setScope(regionName, "stats");
+      });
+
+      mapRoot?.addEventListener("click", (event) => {
+        if ((event.target as HTMLElement | null)?.closest("[data-region-map-view-button]")) {
+          stopAutoRotate();
+        }
+      });
+
+      root.addEventListener("pointerdown", (event) => {
+        if ((event.target as HTMLElement | null)?.closest("button, a")) {
+          stopAutoRotate();
+        }
+      });
+
+      root.addEventListener("keydown", stopAutoRotate, { once: true });
+      render();
+      startAutoRotate();
+    }
+  }
+</script>

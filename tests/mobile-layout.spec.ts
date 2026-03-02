@@ -2,7 +2,14 @@ import { expect, test } from "@playwright/test";
 import { disableMotion, stabilizePage } from "./layout-helpers";
 
 const pages = [
-  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false, hasRegionMapExplorer: true },
+  {
+    name: "home",
+    path: "/",
+    focus: "#read-this-first",
+    hasPageContents: false,
+    hasRegionMapExplorer: true,
+    hasRegionMapSummary: false
+  },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
@@ -97,7 +104,10 @@ test.describe("mobile evidence-first layout", () => {
         await expect(page.locator("[data-region-map-explorer]")).toBeVisible();
         await expect(page.locator("[data-region-map-view-button]")).toHaveCount(3);
         await expect(page.locator("[data-region-map-legend]")).toBeVisible();
-        await expect(page.locator(".region-map-summary-stats").first()).toBeVisible();
+
+        if (!("hasRegionMapSummary" in pageConfig) || pageConfig.hasRegionMapSummary !== false) {
+          await expect(page.locator(".region-map-summary-stats").first()).toBeVisible();
+        }
       }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
