@@ -1,5 +1,6 @@
 ---
 type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
+type HomeDeckScopeKind = "national" | "region" | "place";
 
 export interface HomeDeckStat {
   label: string;
@@ -52,6 +53,18 @@ interface Props {
 
 const { entries, initialScopeId, targetMapId } = Astro.props;
 const initialEntry = entries[initialScopeId];
+const getScopeKind = (entry: HomeDeckEntry): HomeDeckScopeKind => {
+  if (entry.scopeId === initialScopeId) {
+    return "national";
+  }
+
+  if (entry.parentScopeId === initialScopeId) {
+    return "region";
+  }
+
+  return "place";
+};
+const initialScopeKind = initialEntry ? getScopeKind(initialEntry) : "national";
 const homeDeckData = JSON.stringify({ entries, initialScopeId });
 ---
 
@@ -59,6 +72,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
   <article
     class="home-panel home-panel-strong home-system-panel"
     data-home-system
+    data-home-scope-kind={initialScopeKind}
     data-target-map-id={targetMapId}
   >
     <script type="application/json" data-home-system-data set:html={homeDeckData} is:inline></script>
@@ -95,7 +109,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
       <div class="chip-row home-system-controls">
         <span class="chip" data-home-mode-state>Auto slide</span>
         <button type="button" class="chip" data-home-parent hidden></button>
-        <button type="button" class="chip" data-home-reset hidden>Back to Britain</button>
+        <button type="button" class="chip" data-home-reset hidden>Start over</button>
         <a class="chip accent" data-home-cta href={initialEntry.ctaHref}>{initialEntry.ctaLabel}</a>
       </div>
     </div>
@@ -121,6 +135,10 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
 )}
 
 <script>
+  type RegionMapRootElement = HTMLElement & {
+    __updateRegionMapSummary?: (regionName: string, trigger?: string) => void;
+  };
+  type HomeDeckScopeKind = "national" | "region" | "place";
   type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
   type HomeDeckStat = { label: string; value: string; context: string };
   type HomeDeckLink = { label: string; href: string; meta: string; scopeId?: string; actionLabel?: string };
@@ -296,6 +314,18 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
       }
     };
 
+    const getScopeKind = (entry: HomeDeckEntry, initialScopeId: string): HomeDeckScopeKind => {
+      if (entry.scopeId === initialScopeId) {
+        return "national";
+      }
+
+      if (entry.parentScopeId === initialScopeId) {
+        return "region";
+      }
+
+      return "place";
+    };
+
     const setTrackState = (root: HTMLElement, panel: "stats" | "visuals") => {
       root.dataset.homeActivePanel = panel;
 
@@ -321,9 +351,11 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
       const payload = JSON.parse(dataNode.textContent) as HomeDeckPayload;
       const targetMapId = root.dataset.targetMapId;
       const mapRoot = targetMapId ? document.getElementById(targetMapId) : null;
+      const mapPanel = mapRoot?.closest<HTMLElement>(".home-map-panel");
       const title = root.querySelector<HTMLElement>("[data-home-title]");
       const eyebrow = root.querySelector<HTMLElement>("[data-home-eyebrow]");
       const note = root.querySelector<HTMLElement>("[data-home-note]");
+      const deckViewport = root.querySelector<HTMLElement>(".home-deck-viewport");
       const modeState = root.querySelector<HTMLElement>("[data-home-mode-state]");
       const cta = root.querySelector<HTMLAnchorElement>("[data-home-cta]");
       const parentButton = root.querySelector<HTMLButtonElement>("[data-home-parent]");
@@ -337,6 +369,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
         !title ||
         !eyebrow ||
         !note ||
+        !deckViewport ||
         !modeState ||
         !cta ||
         !parentButton ||
@@ -403,8 +436,45 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
         render();
       };
 
+      const syncMapSelection = (scopeId: string) => {
+        const activeMapRoot = mapRoot?.querySelector<RegionMapRootElement>(
+          "[data-region-map-view]:not([hidden]) [data-region-map-root]"
+        );
+
+        if (!activeMapRoot?.__updateRegionMapSummary) {
+          return;
+        }
+
+        const entry = payload.entries[scopeId];
+
+        if (!entry) {
+          return;
+        }
+
+        const regionName =
+          scopeId !== payload.initialScopeId &&
+          entry.parentScopeId &&
+          entry.parentScopeId !== payload.initialScopeId
+            ? entry.parentScopeId
+            : scopeId;
+
+        if (!regionName || !payload.entries[regionName] || regionName === payload.initialScopeId) {
+          return;
+        }
+
+        activeMapRoot.__updateRegionMapSummary(regionName, "program");
+      };
+
       const render = () => {
         const entry = getEntry();
+        const scopeKind = getScopeKind(entry, payload.initialScopeId);
+        const showParentButton = Boolean(entry.parentScopeId && entry.parentScopeId !== payload.initialScopeId);
+        const parentButtonLabel =
+          scopeKind === "place"
+            ? "Back to region"
+            : entry.parentLabel
+              ? `Back to ${entry.parentLabel}`
+              : "Back";
 
         eyebrow.textContent = entry.eyebrow;
         title.textContent = entry.title;
@@ -412,18 +482,22 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
         cta.href = entry.ctaHref;
         cta.textContent = entry.ctaLabel;
         linksLabel.textContent = entry.linksLabel;
+        root.dataset.homeScopeKind = scopeKind;
 
-        parentButton.hidden = !entry.parentScopeId;
-        parentButton.textContent = entry.parentLabel ? `Back to ${entry.parentLabel}` : "Back";
+        parentButton.hidden = !showParentButton;
+        parentButton.textContent = parentButtonLabel;
         resetButton.hidden = entry.scopeId === payload.initialScopeId;
+        mapPanel?.classList.toggle("is-focused", entry.scopeId !== payload.initialScopeId);
 
         renderStats(statsContainer, entry.stats);
         renderLinks(linksContainer, entry.links, (scopeId) => {
           stopAutoRotate();
           setScope(scopeId, "stats");
+          syncMapSelection(scopeId);
         });
         renderVisuals(visualsContainer, entry);
         setTrackState(root, activePanel);
+        deckViewport.scrollTop = 0;
       };
 
       for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-tab]")) {
@@ -444,6 +518,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
 
         stopAutoRotate();
         setScope(entry.parentScopeId, "stats");
+        syncMapSelection(entry.parentScopeId);
       });
 
       resetButton.addEventListener("click", () => {
@@ -478,6 +553,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
 
         stopAutoRotate();
         setScope(scopeId, "stats");
+        syncMapSelection(scopeId);
       });
 
       mapRoot?.addEventListener("click", (event) => {

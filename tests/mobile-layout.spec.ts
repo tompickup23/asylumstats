@@ -110,6 +110,45 @@ test.describe("mobile evidence-first layout", () => {
         }
       }
 
+      if (pageConfig.name === "home") {
+        await expect(page.locator(".home-map-copy")).toBeVisible();
+        await expect(
+          page.locator(".home-map-panel [data-region-map-view]:not([hidden]) .region-map-canvas")
+        ).toBeVisible();
+
+        const homeMetrics = await page.evaluate(() => {
+          const intro = document.querySelector(".home-map-intro");
+          const canvas = document.querySelector(
+            ".home-map-panel [data-region-map-view]:not([hidden]) .region-map-canvas"
+          );
+          const map = document.querySelector(".home-map-panel [data-region-map-view]:not([hidden]) .region-map");
+
+          if (!intro || !canvas || !map) {
+            return null;
+          }
+
+          const introRect = intro.getBoundingClientRect();
+          const canvasRect = canvas.getBoundingClientRect();
+          const mapRect = map.getBoundingClientRect();
+
+          return {
+            introTop: introRect.top,
+            introBottom: introRect.bottom,
+            canvasTop: canvasRect.top,
+            mapTop: mapRect.top,
+            mapBottom: mapRect.bottom,
+            canvasBottom: canvasRect.bottom,
+            viewportHeight: window.innerHeight
+          };
+        });
+
+        expect(homeMetrics).not.toBeNull();
+        expect(homeMetrics!.introTop).toBeLessThanOrEqual(homeMetrics!.canvasTop + 1);
+        expect(homeMetrics!.introBottom).toBeLessThan(homeMetrics!.canvasBottom);
+        expect(homeMetrics!.mapTop).toBeLessThan(homeMetrics!.viewportHeight);
+        expect(homeMetrics!.mapBottom).toBeLessThanOrEqual(homeMetrics!.canvasBottom + 1);
+      }
+
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflowWidth).toBeLessThanOrEqual(2);
 

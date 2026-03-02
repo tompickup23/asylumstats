@@ -88,5 +88,120 @@ test("home deck updates from Britain to region to local authority", async ({ pag
   await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
 
   await expect(deckTitle).toHaveText(firstPlaceName);
-  await expect(page.locator("[data-home-parent]")).toContainText("Back to Scotland");
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to region");
+});
+
+test("home map stays fully contained on a MacBook-sized viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await stabilizePage(page, { blockFonts: false });
+
+  await page.goto("/", { waitUntil: "networkidle" });
+  await waitForFonts(page);
+  await disableMotion(page);
+  await limitToTopOfPage(page, 5);
+
+  const readMetrics = () =>
+    page.evaluate(() => {
+      const map = document.querySelector(".home-map-panel .region-map");
+      const canvas = document.querySelector(".home-map-panel .region-map-canvas");
+      const panel = document.querySelector(".home-map-panel");
+      const deckViewport = document.querySelector(".home-deck-viewport");
+      const lastCard = document.querySelector('[data-home-pane="stats"] [data-home-links] .home-next-card:last-child');
+      const firstCard = document.querySelector('[data-home-pane="stats"] [data-home-stats] .home-kpi-card:first-child');
+
+      if (!map || !canvas || !panel || !deckViewport) {
+        return null;
+      }
+
+      const mapRect = map.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const deckViewportRect = deckViewport.getBoundingClientRect();
+      const lastCardRect = lastCard?.getBoundingClientRect() ?? null;
+      const firstCardRect = firstCard?.getBoundingClientRect() ?? null;
+
+      return {
+        scrollHeight: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        mapTop: mapRect.top,
+        mapBottom: mapRect.bottom,
+        canvasTop: canvasRect.top,
+        canvasBottom: canvasRect.bottom,
+        panelBottom: panelRect.bottom,
+        deckViewportBottom: deckViewportRect.bottom,
+        deckViewportTop: deckViewportRect.top,
+        lastCardBottom: lastCardRect?.bottom ?? null,
+        firstCardTop: firstCardRect?.top ?? null,
+        deckScrollTop: (deckViewport as HTMLElement).scrollTop
+      };
+    });
+
+  const initialMetrics = await readMetrics();
+  expect(initialMetrics).not.toBeNull();
+  expect(initialMetrics!.scrollHeight).toBeLessThanOrEqual(initialMetrics!.innerHeight);
+  expect(initialMetrics!.mapTop).toBeGreaterThanOrEqual(initialMetrics!.canvasTop - 1);
+  expect(initialMetrics!.mapBottom).toBeLessThanOrEqual(initialMetrics!.canvasBottom + 1);
+  expect(initialMetrics!.mapBottom).toBeLessThanOrEqual(initialMetrics!.panelBottom + 1);
+
+  await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
+  await expect(page.locator("[data-home-title]")).toHaveText("North West");
+  await expect(page.getByRole("button", { name: "Start over" })).toHaveCount(1);
+
+  const selectedMetrics = await readMetrics();
+  expect(selectedMetrics).not.toBeNull();
+  expect(selectedMetrics!.mapTop).toBeGreaterThanOrEqual(selectedMetrics!.canvasTop - 1);
+  expect(selectedMetrics!.mapBottom).toBeLessThanOrEqual(selectedMetrics!.canvasBottom + 1);
+  expect(selectedMetrics!.mapBottom).toBeLessThanOrEqual(selectedMetrics!.panelBottom + 1);
+  expect(selectedMetrics!.deckScrollTop).toBe(0);
+
+  const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
+  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to region");
+  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(2);
+
+  const placeMetrics = await readMetrics();
+  expect(placeMetrics).not.toBeNull();
+  expect(placeMetrics!.mapTop).toBeGreaterThanOrEqual(placeMetrics!.canvasTop - 1);
+  expect(placeMetrics!.mapBottom).toBeLessThanOrEqual(placeMetrics!.canvasBottom + 1);
+  expect(placeMetrics!.deckScrollTop).toBe(0);
+  expect(placeMetrics!.firstCardTop).not.toBeNull();
+  expect(placeMetrics!.firstCardTop!).toBeGreaterThanOrEqual(placeMetrics!.deckViewportTop - 1);
+  expect(placeMetrics!.lastCardBottom).not.toBeNull();
+  expect(placeMetrics!.lastCardBottom!).toBeLessThanOrEqual(placeMetrics!.deckViewportBottom + 1);
+});
+
+test("home visible controls and links stay coherent for first-time use", async ({ page }) => {
+  await stabilizePage(page, { blockFonts: false });
+
+  await page.goto("/", { waitUntil: "networkidle" });
+  await waitForFonts(page);
+  await disableMotion(page);
+  await limitToTopOfPage(page, 5);
+
+  await expect(page.locator(".home-map-copy p")).toContainText(
+    "Pick one region on the map. The deck narrows from Britain to one region to one local authority."
+  );
+  await expect(page.locator("[data-home-cta]")).toHaveAttribute("href", "/routes#route-findings");
+
+  await page.locator('[data-home-tab="visuals"]').click();
+  await expect(page.locator("[data-home-system]")).toHaveAttribute("data-home-active-panel", "visuals");
+  await expect(page.locator("[data-home-visuals] .home-visual-card").first()).toBeVisible();
+
+  await page.locator('[data-home-tab="stats"]').click();
+  await expect(page.locator("[data-home-system]")).toHaveAttribute("data-home-active-panel", "stats");
+
+  await page.getByRole("button", { name: "Preview region" }).first().click();
+  await expect(page.locator("[data-home-title]")).not.toHaveText("Britain now");
+  await expect(page.locator("[data-home-reset]")).toBeVisible();
+  await expect(page.locator("[data-home-reset]")).toHaveText("Start over");
+  await expect(page.locator("[data-home-links-label]")).toHaveText("Open one local authority");
+
+  const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
+  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
+  await expect(page.locator("[data-home-links-label]")).toHaveText("Next steps");
+  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(2);
+  await expect(page.locator("[data-home-links] a").first()).toHaveAttribute("href", /\/places\/[A-Z0-9]+\/$/);
+
+  await page.locator("[data-home-reset]").click();
+  await expect(page.locator("[data-home-title]")).toHaveText("Britain now");
 });

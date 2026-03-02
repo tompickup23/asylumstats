@@ -14,6 +14,7 @@ interface Props {
   showSummary?: boolean;
   summaryMode?: "side" | "overlay";
   legendMode?: "card" | "overlay";
+  fitMode?: "fill-width" | "contain";
 }
 
 const {
@@ -27,7 +28,8 @@ const {
   interactionMode = "navigate",
   showSummary = true,
   summaryMode = "side",
-  legendMode = "card"
+  legendMode = "card",
+  fitMode = "fill-width"
 } = Astro.props;
 const fallbackViewId = defaultViewId ?? views[0]?.id ?? null;
 const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] ?? null;
@@ -127,6 +129,7 @@ const mapSelectionLabel =
           interactionMode={interactionMode}
           showSummary={showSummary}
           summaryMode={summaryMode}
+          fitMode={fitMode}
         />
       </div>
     ))}
@@ -136,6 +139,7 @@ const mapSelectionLabel =
 <script>
   type RegionMapRootElement = HTMLElement & {
     __updateRegionMapSummary?: (regionName: string, trigger?: string) => void;
+    __fitRegionMap?: () => void;
   };
   type RegionMapChangeDetail = {
     regionName?: string;
@@ -190,6 +194,8 @@ const mapSelectionLabel =
       if (selectedRegion && activeRegionMap?.__updateRegionMapSummary) {
         activeRegionMap.__updateRegionMapSummary(selectedRegion, "view");
       }
+
+      activeRegionMap?.__fitRegionMap?.();
     };
 
     for (const root of document.querySelectorAll<HTMLElement>("[data-region-map-explorer]")) {

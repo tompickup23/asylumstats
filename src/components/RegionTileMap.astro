@@ -22,6 +22,7 @@ interface Props {
   interactionMode?: "navigate" | "select";
   showSummary?: boolean;
   summaryMode?: "side" | "overlay";
+  fitMode?: "fill-width" | "contain";
 }
 
 const {
@@ -37,7 +38,8 @@ const {
   labelMode = compact ? "essential" : "all",
   interactionMode = "navigate",
   showSummary = true,
-  summaryMode = "side"
+  summaryMode = "side",
+  fitMode = "fill-width"
 } = Astro.props;
 const essentialLabelRegions = new Set(["Scotland", "Wales", "Northern Ireland", "London"]);
 
@@ -113,6 +115,9 @@ const mapInteractionCaption =
   data-initial-region={initialRegionName ?? undefined}
   data-region-map-tone={tone}
   data-region-map-link-mode={interactionMode}
+  data-region-map-fit-mode={fitMode}
+  data-region-map-width={REGION_MAP_WIDTH}
+  data-region-map-height={REGION_MAP_HEIGHT}
 >
   {!compact && (
     <div class="viz-head">
@@ -132,7 +137,13 @@ const mapInteractionCaption =
     ]}
   >
     <div class:list={["region-map-canvas", summaryMode === "overlay" && "has-summary-overlay"]}>
-      <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
+      <svg
+        class="region-map"
+        viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`}
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={title}
+      >
         <g class="region-map-base" aria-hidden="true">
           {renderedRegions.map(({ geometry }) => (
             <path class="region-map-base-region" d={geometry.path}></path>
@@ -371,6 +382,7 @@ const mapInteractionCaption =
 <script>
   type RegionMapRootElement = HTMLElement & {
     __updateRegionMapSummary?: (regionName: string, trigger?: string) => void;
+    __fitRegionMap?: () => void;
   };
   type RegionMapSummaryPayload = {
     title?: string;
@@ -568,6 +580,45 @@ const mapInteractionCaption =
       );
     };
 
+    const fitRegionMap = (root: RegionMapRootElement) => {
+      if (root.dataset.regionMapFitMode !== "contain") {
+        return;
+      }
+
+      const canvas = root.querySelector<HTMLElement>(".region-map-canvas");
+      const svg = root.querySelector<SVGSVGElement>(".region-map");
+
+      if (!canvas || !svg) {
+        return;
+      }
+
+      const canvasStyles = window.getComputedStyle(canvas);
+      const paddingX = Number.parseFloat(canvasStyles.paddingLeft) + Number.parseFloat(canvasStyles.paddingRight);
+      const paddingY = Number.parseFloat(canvasStyles.paddingTop) + Number.parseFloat(canvasStyles.paddingBottom);
+      const availableWidth = Math.max(canvas.clientWidth - paddingX, 0);
+      const availableHeight = Math.max(canvas.clientHeight - paddingY, 0);
+      const mapWidth = Number.parseFloat(root.dataset.regionMapWidth ?? "0") || svg.viewBox.baseVal.width || 1;
+      const mapHeight = Number.parseFloat(root.dataset.regionMapHeight ?? "0") || svg.viewBox.baseVal.height || 1;
+      const aspectRatio = mapWidth / mapHeight;
+
+      if (!(availableWidth > 0) || !(availableHeight > 0) || !(aspectRatio > 0)) {
+        svg.style.removeProperty("width");
+        svg.style.removeProperty("height");
+        return;
+      }
+
+      let targetWidth = availableWidth;
+      let targetHeight = targetWidth / aspectRatio;
+
+      if (targetHeight > availableHeight) {
+        targetHeight = availableHeight;
+        targetWidth = targetHeight * aspectRatio;
+      }
+
+      svg.style.width = `${targetWidth}px`;
+      svg.style.height = `${targetHeight}px`;
+    };
+
     for (const root of document.querySelectorAll<RegionMapRootElement>("[data-region-map-root]")) {
       if (root.dataset.regionMapReady === "true") {
         continue;
@@ -576,7 +627,16 @@ const mapInteractionCaption =
       root.dataset.regionMapReady = "true";
       root.__updateRegionMapSummary = (regionName: string, trigger = "program") =>
         updateRegionMapSummary(root, regionName, trigger);
+      root.__fitRegionMap = () => fitRegionMap(root);
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const resizeObserver =
+        typeof ResizeObserver === "undefined"
+          ? null
+          : new ResizeObserver(() => {
+              fitRegionMap(root);
+            });
+
+      resizeObserver?.observe(root);
 
       root.addEventListener("click", (event) => {
         const previewButton = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[data-region-map-preview]");
@@ -623,6 +683,7 @@ const mapInteractionCaption =
       }
 
       updateRegionMapSummary(root, root.dataset.initialRegion ?? links[0]?.dataset.regionMapRegion ?? "");
+      fitRegionMap(root);
     }
   }
 </script>

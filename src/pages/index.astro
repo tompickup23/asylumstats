@@ -122,6 +122,18 @@ function describeHotelSignal(row: (typeof placeDirectory.regions)[number]["areas
   return "No named current hotel site visible";
 }
 
+function describeHotelSignalShort(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {
+  if (row.hotelSignal === "named") {
+    return "Named current site visible";
+  }
+
+  if (row.hotelSignal === "unnamed") {
+    return "Unnamed hotel evidence only";
+  }
+
+  return "No named site visible";
+}
+
 function buildRegionPreviewRows(region: (typeof placeDirectory.regions)[number]) {
   const uniqueRows = new Map<string, (typeof region.areas)[number]>();
   const byRate = [...region.areas].sort(
@@ -148,14 +160,14 @@ function buildAreaNote(row: (typeof placeDirectory.regions)[number]["areas"][num
   const area = row.area;
 
   if (row.hotelSignal === "named") {
-    return `${area.areaName} currently has ${formatInteger(area.supportedAsylum)} people on supported asylum, with ${formatInteger(area.contingencyAccommodation)} in contingency accommodation and ${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible.`;
+    return `${area.areaName} has ${formatInteger(area.supportedAsylum)} on support, ${formatInteger(area.contingencyAccommodation)} in contingency, and ${row.namedCurrentSiteCount} named hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible.`;
   }
 
   if (row.hotelSignal === "unnamed") {
-    return `${area.areaName} currently has ${formatInteger(area.supportedAsylum)} people on supported asylum, with ${formatInteger(area.contingencyAccommodation)} in contingency accommodation. The place page already carries unnamed hotel evidence, but the public chain still stops short of a named current site.`;
+    return `${area.areaName} has ${formatInteger(area.supportedAsylum)} on support and ${formatInteger(area.contingencyAccommodation)} in contingency. Hotel evidence is visible, but no named current site yet.`;
   }
 
-  return `${area.areaName} currently has ${formatInteger(area.supportedAsylum)} people on supported asylum, with ${formatInteger(area.contingencyAccommodation)} in contingency accommodation. No named current hotel site is publicly visible in the place layer yet.`;
+  return `${area.areaName} has ${formatInteger(area.supportedAsylum)} on support and ${formatInteger(area.contingencyAccommodation)} in contingency. No named hotel site is visible yet.`;
 }
 
 const priorityRegions = (() => {
@@ -278,10 +290,10 @@ for (const region of placeDirectory.regions) {
     parentLabel: "Britain",
     eyebrow: `${region.countryName} region`,
     title: region.regionName,
-    note: `${formatInteger(region.supportedAsylum)} people are on supported asylum across ${formatInteger(region.publicPlaceCount)} public local pages here. Open one borough or district next.`,
-    ctaLabel: `Open ${region.regionName}`,
+    note: `${formatInteger(region.supportedAsylum)} people are on supported asylum across ${formatInteger(region.publicPlaceCount)} local authority pages here. Open one authority next.`,
+    ctaLabel: "Open region page",
     ctaHref: region.regionPath,
-    linksLabel: "Then one town or borough page",
+    linksLabel: "Open one local authority",
     stats: [
       {
         label: "Supported asylum",
@@ -358,9 +370,9 @@ for (const region of placeDirectory.regions) {
       eyebrow: `${region.regionName} local page`,
       title: area.areaName,
       note: buildAreaNote(row),
-      ctaLabel: `Open ${area.areaName}`,
+      ctaLabel: "Open place page",
       ctaHref: buildAreaPath(area.areaCode),
-      linksLabel: "Keep moving",
+      linksLabel: "Next steps",
       stats: [
         {
           label: "Supported asylum",
@@ -370,22 +382,22 @@ for (const region of placeDirectory.regions) {
         {
           label: "Local rate",
           value: area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate),
-          context: "Supported asylum per 10,000 residents"
+          context: "Per 10,000"
         },
         {
           label: "Contingency",
           value: formatInteger(area.contingencyAccommodation),
-          context: "People in contingency accommodation"
+          context: "In contingency"
         },
         {
-          label: "Hotel evidence",
+          label: "Hotel signal",
           value:
             row.hotelSignal === "named"
-              ? `${formatInteger(row.namedCurrentSiteCount)} named`
+              ? "Named"
               : row.hotelSignal === "unnamed"
-                ? `${formatInteger(row.unnamedSiteCount)} unnamed`
-                : "No named site",
-          context: describeHotelSignal(row)
+                ? "Unnamed"
+                : "None",
+          context: describeHotelSignalShort(row)
         }
       ],
       links: [
@@ -398,11 +410,6 @@ for (const region of placeDirectory.regions) {
           label: `Open ${region.regionName}`,
           href: region.regionPath,
           meta: "Return to the regional map and local directory"
-        },
-        {
-          label: "Keep system logic nearby",
-          href: "/routes#route-findings",
-          meta: "Claims, backlog, support, decisions, appeals, and returns"
         }
       ],
       visualIntro:
@@ -479,25 +486,12 @@ for (const region of placeDirectory.regions) {
   <section class="section section-anchor priority-section home-screen" id="read-this-first">
     <div class="home-left">
       <article class="home-map-panel" id="homepage-britain-map">
-        <RegionMapExplorer
-          id="homepage-region-map"
-          title="Britain map"
-          intro="Select a region to swap the right-hand deck from Britain to that region, then preview one local authority before opening the full page."
-          views={homepageRegionMapViews}
-          compact={true}
-          labelMode="selected"
-          interactionMode="select"
-          showSummary={false}
-          legendMode="overlay"
-        />
-
         <div class="home-map-intro">
           <div class="home-map-copy">
             <span class="kicker">Place-led asylum accountability</span>
             <h1>Britain first. Then narrow.</h1>
             <p>
-              Select one region on the map. The live deck on the right narrows from Britain to region to one local
-              authority.
+              Pick one region on the map. The deck narrows from Britain to one region to one local authority.
             </p>
           </div>
           <div class="chip-row home-map-meta">
@@ -508,6 +502,19 @@ for (const region of placeDirectory.regions) {
             </span>
           </div>
         </div>
+
+        <RegionMapExplorer
+          id="homepage-region-map"
+          title="Britain map"
+          intro="Select a region to swap the right-hand deck from Britain to that region, then preview one local authority before opening the full page."
+          views={homepageRegionMapViews}
+          compact={true}
+          labelMode="selected"
+          interactionMode="select"
+          showSummary={false}
+          legendMode="overlay"
+          fitMode="contain"
+        />
       </article>
     </div>
 
