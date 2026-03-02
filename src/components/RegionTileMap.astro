@@ -4,7 +4,6 @@ import type { RegionMapSummary, RegionMapValue } from "../lib/region-map-explore
 import {
   REGION_MAP_DRAW_ORDER,
   REGION_MAP_HEIGHT,
-  REGION_MAP_OUTLINES,
   REGION_MAP_WIDTH,
   getRegionMapGeometry
 } from "../lib/region-map";
@@ -113,14 +112,6 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
   <div class:list={["region-map-stage", compact && "is-compact"]}>
     <div class="region-map-canvas">
       <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
-        <path class="region-map-outline" d={REGION_MAP_OUTLINES.mainland}></path>
-        <path class="region-map-outline" d={REGION_MAP_OUTLINES.northernIreland}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.outerHebrides}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.orkney}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.shetland}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.isleOfMan}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.anglesey}></path>
-        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.isleOfWight}></path>
         {renderedRegions.map(({ geometry, item }) => {
           const active = activeRegions.has(item.regionName);
           const href = buildPublicPlaceRegionPath(item.regionName);
