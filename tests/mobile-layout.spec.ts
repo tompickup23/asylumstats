@@ -7,7 +7,8 @@ const pages = [
     path: "/",
     focus: "#read-this-first",
     hasPageContents: false,
-    hasRegionMapExplorer: true
+    hasRegionMapExplorer: true,
+    hasRegionMapSummary: false
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },

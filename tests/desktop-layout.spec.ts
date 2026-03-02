@@ -7,7 +7,8 @@ const desktopPages = [
     path: "/",
     focus: "#read-this-first",
     hasPageContents: false,
-    hasRegionMapExplorer: true
+    hasRegionMapExplorer: true,
+    hasRegionMapSummary: false
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
@@ -59,7 +60,7 @@ test.describe("desktop layout snapshots", () => {
   }
 });
 
-test("home deck updates from Britain to region to local authority from the map stage", async ({ page }) => {
+test("home deck updates from Britain to region to local authority", async ({ page }) => {
   await stabilizePage(page, { blockFonts: false });
 
   await page.goto("/", { waitUntil: "networkidle" });
@@ -81,10 +82,10 @@ test("home deck updates from Britain to region to local authority from the map s
   await expect(page.locator("[data-home-parent]")).toContainText("Back to Britain");
   await expect(page.locator("[data-home-reset]")).toBeVisible();
 
-  const mapPreviewButton = page.locator("[data-region-map-summary-links] [data-region-map-preview]").first();
-  const firstPlaceName = (await page.locator("[data-region-map-summary-links] strong").first().textContent())?.trim() ?? "";
+  const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
+  const firstPlaceName = (await firstPlaceCard.locator("strong").first().textContent())?.trim() ?? "";
 
-  await mapPreviewButton.click();
+  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
 
   await expect(deckTitle).toHaveText(firstPlaceName);
   await expect(page.locator("[data-home-parent]")).toContainText("Back to Scotland");
