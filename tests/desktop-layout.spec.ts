@@ -7,8 +7,7 @@ const desktopPages = [
     path: "/",
     focus: "#read-this-first",
     hasPageContents: false,
-    hasRegionMapExplorer: true,
-    hasRegionMapSummary: false
+    hasRegionMapExplorer: true
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
@@ -60,7 +59,7 @@ test.describe("desktop layout snapshots", () => {
   }
 });
 
-test("home deck updates from Britain to region to local authority", async ({ page }) => {
+test("home deck updates from Britain to region to local authority from the map stage", async ({ page }) => {
   await stabilizePage(page, { blockFonts: false });
 
   await page.goto("/", { waitUntil: "networkidle" });
@@ -75,18 +74,18 @@ test("home deck updates from Britain to region to local authority", async ({ pag
   await expect(page.locator("[data-home-parent]")).toBeHidden();
   await expect(page.locator("[data-home-reset]")).toBeHidden();
 
-  await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
+  await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="Scotland"]').click();
 
-  await expect(deckTitle).toHaveText("North West");
+  await expect(deckTitle).toHaveText("Scotland");
   await expect(modeState).toHaveText("Manual");
   await expect(page.locator("[data-home-parent]")).toContainText("Back to Britain");
   await expect(page.locator("[data-home-reset]")).toBeVisible();
 
-  const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
-  const firstPlaceName = (await firstPlaceCard.locator("strong").first().textContent())?.trim() ?? "";
+  const mapPreviewButton = page.locator("[data-region-map-summary-links] [data-region-map-preview]").first();
+  const firstPlaceName = (await page.locator("[data-region-map-summary-links] strong").first().textContent())?.trim() ?? "";
 
-  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
+  await mapPreviewButton.click();
 
   await expect(deckTitle).toHaveText(firstPlaceName);
-  await expect(page.locator("[data-home-parent]")).toContainText("Back to North West");
+  await expect(page.locator("[data-home-parent]")).toContainText("Back to Scotland");
 });

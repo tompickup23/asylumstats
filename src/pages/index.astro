@@ -479,21 +479,6 @@ for (const region of placeDirectory.regions) {
   <section class="section section-anchor priority-section home-screen" id="read-this-first">
     <div class="home-left">
       <article class="home-map-panel" id="homepage-britain-map">
-        <div class="home-map-intro">
-          <div class="home-map-copy">
-            <span class="kicker">Place-led asylum accountability</span>
-            <h1>Britain. Then one region. Then one place.</h1>
-            <p>
-              Use the map on the left. The live deck on the right narrows from Britain to region to one local authority.
-            </p>
-          </div>
-          <div class="chip-row home-map-meta">
-            <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
-            <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
-            <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} pages with hotel evidence</span>
-          </div>
-        </div>
-
         <RegionMapExplorer
           id="homepage-region-map"
           title="Britain map"
@@ -502,8 +487,28 @@ for (const region of placeDirectory.regions) {
           compact={true}
           labelMode="selected"
           interactionMode="select"
-          showSummary={false}
+          showSummary={true}
+          summaryMode="overlay"
+          legendMode="overlay"
         />
+
+        <div class="home-map-intro">
+          <div class="home-map-copy">
+            <span class="kicker">Place-led asylum accountability</span>
+            <h1>Britain first. Then narrow.</h1>
+            <p>
+              Select one region on the map. The live deck on the right narrows from Britain to region to one local
+              authority.
+            </p>
+          </div>
+          <div class="chip-row home-map-meta">
+            <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
+            <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
+            <span class="chip accent">
+              {placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence
+            </span>
+          </div>
+        </div>
       </article>
     </div>
 

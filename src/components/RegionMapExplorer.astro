@@ -12,6 +12,8 @@ interface Props {
   labelMode?: "all" | "essential" | "selected";
   interactionMode?: "navigate" | "select";
   showSummary?: boolean;
+  summaryMode?: "side" | "overlay";
+  legendMode?: "card" | "overlay";
 }
 
 const {
@@ -23,7 +25,9 @@ const {
   compact = false,
   labelMode,
   interactionMode = "navigate",
-  showSummary = true
+  showSummary = true,
+  summaryMode = "side",
+  legendMode = "card"
 } = Astro.props;
 const fallbackViewId = defaultViewId ?? views[0]?.id ?? null;
 const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] ?? null;
@@ -35,7 +39,16 @@ const mapSelectionLabel =
 ---
 
 {activeView && (
-  <section class:list={["region-map-explorer", compact && "is-compact"]} data-region-map-explorer data-initial-view={activeView.id} id={id}>
+  <section
+    class:list={[
+      "region-map-explorer",
+      compact && "is-compact",
+      legendMode === "overlay" && "is-legend-overlay"
+    ]}
+    data-region-map-explorer
+    data-initial-view={activeView.id}
+    id={id}
+  >
     {!compact && (
       <div class="region-map-explorer-head">
         <div>
@@ -59,7 +72,7 @@ const mapSelectionLabel =
       </div>
     )}
 
-    <article class="region-map-legend" data-region-map-legend>
+    <article class:list={["region-map-legend", legendMode === "overlay" && "is-overlay"]} data-region-map-legend>
       {compact && (
         <div class="region-map-legend-top">
           <div class="chip-row">
@@ -113,6 +126,7 @@ const mapSelectionLabel =
           labelMode={labelMode}
           interactionMode={interactionMode}
           showSummary={showSummary}
+          summaryMode={summaryMode}
         />
       </div>
     ))}

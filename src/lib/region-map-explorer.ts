@@ -28,6 +28,8 @@ export interface RegionMapSummaryLink {
   label: string;
   href: string;
   meta?: string;
+  scopeId?: string;
+  actionLabel?: string;
 }
 
 export interface RegionMapView {
@@ -72,7 +74,9 @@ function buildTopVolumeLinks(placeDirectory: PlaceDirectory, regionName: string)
   return region.areas.slice(0, 3).map((row) => ({
     label: row.area.areaName,
     href: `/places/${row.area.areaCode}/`,
-    meta: `${formatInteger(row.area.supportedAsylum)} supported asylum`
+    meta: `${formatInteger(row.area.supportedAsylum)} supported asylum`,
+    scopeId: row.area.areaCode,
+    actionLabel: "Preview authority"
   }));
 }
 
@@ -93,7 +97,9 @@ function buildTopRateLinks(placeDirectory: PlaceDirectory, regionName: string): 
     .map((row) => ({
       label: row.area.areaName,
       href: `/places/${row.area.areaCode}/`,
-      meta: `${row.area.supportedAsylumRate ?? "n/a"} per 10,000`
+      meta: `${row.area.supportedAsylumRate ?? "n/a"} per 10,000`,
+      scopeId: row.area.areaCode,
+      actionLabel: "Preview authority"
     }));
 }
 
@@ -110,7 +116,9 @@ function buildHotelLinks(placeDirectory: PlaceDirectory, regionName: string): Re
     .map((row) => ({
       label: row.area.areaName,
       href: `/places/${row.area.areaCode}/`,
-      meta: row.hotelSignal === "named" ? `${row.namedCurrentSiteCount} named current site${row.namedCurrentSiteCount === 1 ? "" : "s"}` : `${row.unnamedSiteCount} unnamed acknowledged site${row.unnamedSiteCount === 1 ? "" : "s"}`
+      meta: row.hotelSignal === "named" ? `${row.namedCurrentSiteCount} named current site${row.namedCurrentSiteCount === 1 ? "" : "s"}` : `${row.unnamedSiteCount} unnamed acknowledged site${row.unnamedSiteCount === 1 ? "" : "s"}`,
+      scopeId: row.area.areaCode,
+      actionLabel: "Preview authority"
     }));
 }
 

@@ -21,6 +21,7 @@ interface Props {
   labelMode?: "all" | "essential" | "selected";
   interactionMode?: "navigate" | "select";
   showSummary?: boolean;
+  summaryMode?: "side" | "overlay";
 }
 
 const {
@@ -35,7 +36,8 @@ const {
   compact = false,
   labelMode = compact ? "essential" : "all",
   interactionMode = "navigate",
-  showSummary = true
+  showSummary = true,
+  summaryMode = "side"
 } = Astro.props;
 const essentialLabelRegions = new Set(["Scotland", "Wales", "Northern Ireland", "London"]);
 
@@ -121,9 +123,21 @@ const mapInteractionCaption =
       <span class="chip">{valueLabel}</span>
     </div>
   )}
-  <div class:list={["region-map-stage", compact && "is-compact", !showSummary && "is-summaryless"]}>
-    <div class="region-map-canvas">
+  <div
+    class:list={[
+      "region-map-stage",
+      compact && "is-compact",
+      !showSummary && "is-summaryless",
+      showSummary && summaryMode === "overlay" && "is-summary-overlay"
+    ]}
+  >
+    <div class:list={["region-map-canvas", summaryMode === "overlay" && "has-summary-overlay"]}>
       <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
+        <g class="region-map-base" aria-hidden="true">
+          {renderedRegions.map(({ geometry }) => (
+            <path class="region-map-base-region" d={geometry.path}></path>
+          ))}
+        </g>
         {renderedRegions.map(({ geometry, item }) => {
           const active = activeRegions.has(item.regionName);
           const href = buildPublicPlaceRegionPath(item.regionName);
@@ -182,9 +196,93 @@ const mapInteractionCaption =
         {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
         {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
       </figcaption>
+
+      {showSummary && summaryMode === "overlay" && (
+        <article class="region-map-summary is-overlay" data-region-map-summary-panel aria-live="polite">
+          <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+            {(initialSummary?.chips ?? []).map((chip, index) => (
+              <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
+            ))}
+          </div>
+          <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+          <p class="lede" data-region-map-summary-body>
+            {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+          </p>
+
+          <div
+            class="region-map-summary-stats"
+            data-region-map-summary-stats
+            hidden={!initialSummary?.stats?.length}
+          >
+            {(initialSummary?.stats ?? []).map((stat) => (
+              <div class="region-map-summary-stat">
+                <span class="tiny">{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <section
+            class="region-map-summary-links-section"
+            data-region-map-summary-links-section
+            hidden={!initialSummary?.links?.length}
+          >
+            <span class="tiny region-map-summary-label">Open these next</span>
+            <div class="region-map-summary-links" data-region-map-summary-links>
+              {(initialSummary?.links ?? []).map((link) =>
+                interactionMode === "select" && link.scopeId ? (
+                  <article class="region-map-summary-link region-map-summary-link-action">
+                    <div class="region-map-summary-link-copy">
+                      <strong>{link.label}</strong>
+                      {link.meta && <span class="tiny">{link.meta}</span>}
+                    </div>
+                    <div class="region-map-summary-link-actions">
+                      <button
+                        type="button"
+                        class="chip accent"
+                        data-region-map-preview
+                        data-region-map-scope-id={link.scopeId}
+                        data-region-map-scope-label={link.label}
+                        data-region-map-scope-href={link.href}
+                      >
+                        {link.actionLabel ?? "Preview authority"}
+                      </button>
+                      <a class="chip" href={link.href}>Open page</a>
+                    </div>
+                  </article>
+                ) : (
+                  <a class="region-map-summary-link" href={link.href}>
+                    <strong>{link.label}</strong>
+                    {link.meta && <span class="tiny">{link.meta}</span>}
+                  </a>
+                )
+              )}
+            </div>
+          </section>
+
+          <p
+            class="tiny region-map-summary-note"
+            data-region-map-summary-note
+            hidden={!initialSummary?.note}
+          >
+            {initialSummary?.note}
+          </p>
+
+          <p class="tiny">
+            <a
+              class="source-pill"
+              data-region-map-summary-link
+              href={initialSummary?.href ?? "/places/"}
+              hidden={!initialSummary?.href}
+            >
+              {initialSummary?.cta ?? "Open region page"}
+            </a>
+          </p>
+        </article>
+      )}
     </div>
 
-    {showSummary && (
+    {showSummary && summaryMode !== "overlay" && (
       <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
         <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
           {(initialSummary?.chips ?? []).map((chip, index) => (
@@ -216,12 +314,34 @@ const mapInteractionCaption =
         >
           <span class="tiny region-map-summary-label">Open these next</span>
           <div class="region-map-summary-links" data-region-map-summary-links>
-            {(initialSummary?.links ?? []).map((link) => (
-              <a class="region-map-summary-link" href={link.href}>
-                <strong>{link.label}</strong>
-                {link.meta && <span class="tiny">{link.meta}</span>}
-              </a>
-            ))}
+            {(initialSummary?.links ?? []).map((link) =>
+              interactionMode === "select" && link.scopeId ? (
+                <article class="region-map-summary-link region-map-summary-link-action">
+                  <div class="region-map-summary-link-copy">
+                    <strong>{link.label}</strong>
+                    {link.meta && <span class="tiny">{link.meta}</span>}
+                  </div>
+                  <div class="region-map-summary-link-actions">
+                    <button
+                      type="button"
+                      class="chip accent"
+                      data-region-map-preview
+                      data-region-map-scope-id={link.scopeId}
+                      data-region-map-scope-label={link.label}
+                      data-region-map-scope-href={link.href}
+                    >
+                      {link.actionLabel ?? "Preview authority"}
+                    </button>
+                    <a class="chip" href={link.href}>Open page</a>
+                  </div>
+                </article>
+              ) : (
+                <a class="region-map-summary-link" href={link.href}>
+                  <strong>{link.label}</strong>
+                  {link.meta && <span class="tiny">{link.meta}</span>}
+                </a>
+              )
+            )}
           </div>
         </section>
 
@@ -259,7 +379,7 @@ const mapInteractionCaption =
     cta?: string;
     chips?: string[];
     stats?: { label: string; value: string }[];
-    links?: { label: string; href: string; meta?: string }[];
+    links?: { label: string; href: string; meta?: string; scopeId?: string; actionLabel?: string }[];
     note?: string;
   };
 
@@ -297,6 +417,69 @@ const mapInteractionCaption =
       const linksElement = root.querySelector<HTMLElement>("[data-region-map-summary-links]");
       const noteElement = root.querySelector<HTMLElement>("[data-region-map-summary-note]");
       const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
+
+      const appendSummaryLink = (
+        container: HTMLElement,
+        item: NonNullable<RegionMapSummaryPayload["links"]>[number]
+      ) => {
+        if (root.dataset.regionMapLinkMode === "select" && item.scopeId) {
+          const card = document.createElement("article");
+          card.className = "region-map-summary-link region-map-summary-link-action";
+
+          const copyNode = document.createElement("div");
+          copyNode.className = "region-map-summary-link-copy";
+
+          const titleNode = document.createElement("strong");
+          titleNode.textContent = item.label;
+          copyNode.append(titleNode);
+
+          if (item.meta) {
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = item.meta;
+            copyNode.append(metaNode);
+          }
+
+          const actionsNode = document.createElement("div");
+          actionsNode.className = "region-map-summary-link-actions";
+
+          const previewButton = document.createElement("button");
+          previewButton.type = "button";
+          previewButton.className = "chip accent";
+          previewButton.dataset.regionMapPreview = "";
+          previewButton.dataset.regionMapScopeId = item.scopeId;
+          previewButton.dataset.regionMapScopeLabel = item.label;
+          previewButton.dataset.regionMapScopeHref = item.href;
+          previewButton.textContent = item.actionLabel ?? "Preview authority";
+
+          const openLink = document.createElement("a");
+          openLink.className = "chip";
+          openLink.href = item.href;
+          openLink.textContent = "Open page";
+
+          actionsNode.append(previewButton, openLink);
+          card.append(copyNode, actionsNode);
+          container.append(card);
+          return;
+        }
+
+        const linkNode = document.createElement("a");
+        linkNode.className = "region-map-summary-link";
+        linkNode.href = item.href;
+
+        const titleNode = document.createElement("strong");
+        titleNode.textContent = item.label;
+        linkNode.append(titleNode);
+
+        if (item.meta) {
+          const metaNode = document.createElement("span");
+          metaNode.className = "tiny";
+          metaNode.textContent = item.meta;
+          linkNode.append(metaNode);
+        }
+
+        container.append(linkNode);
+      };
 
       for (const link of links) {
         link.classList.toggle("is-selected", link === selectedLink);
@@ -352,22 +535,7 @@ const mapInteractionCaption =
         linksSection.hidden = !(summary.links?.length);
 
         for (const item of summary.links ?? []) {
-          const linkNode = document.createElement("a");
-          linkNode.className = "region-map-summary-link";
-          linkNode.href = item.href;
-
-          const titleNode = document.createElement("strong");
-          titleNode.textContent = item.label;
-          linkNode.append(titleNode);
-
-          if (item.meta) {
-            const metaNode = document.createElement("span");
-            metaNode.className = "tiny";
-            metaNode.textContent = item.meta;
-            linkNode.append(metaNode);
-          }
-
-          linksElement.append(linkNode);
+          appendSummaryLink(linksElement, item);
         }
       }
 
@@ -409,6 +577,32 @@ const mapInteractionCaption =
       root.__updateRegionMapSummary = (regionName: string, trigger = "program") =>
         updateRegionMapSummary(root, regionName, trigger);
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+
+      root.addEventListener("click", (event) => {
+        const previewButton = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[data-region-map-preview]");
+
+        if (!previewButton) {
+          return;
+        }
+
+        const scopeId = previewButton.dataset.regionMapScopeId;
+
+        if (!scopeId) {
+          return;
+        }
+
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              label: previewButton.dataset.regionMapScopeLabel,
+              href: previewButton.dataset.regionMapScopeHref,
+              trigger: "preview"
+            }
+          })
+        );
+      });
 
       for (const link of links) {
         const regionName = link.dataset.regionMapRegion;

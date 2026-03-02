@@ -149,6 +149,10 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
     regionName?: string;
     trigger?: string;
   };
+  type RegionMapScopeDetail = {
+    scopeId?: string;
+    trigger?: string;
+  };
 
   const windowWithHomeDeckFlag = window as Window & { __asylumstatsHomeDeckInit?: boolean };
 
@@ -462,6 +466,18 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId });
 
         stopAutoRotate();
         setScope(regionName, "stats");
+      });
+
+      mapRoot?.addEventListener("region-map-scope", (event) => {
+        const customEvent = event as CustomEvent<RegionMapScopeDetail>;
+        const scopeId = customEvent.detail?.scopeId;
+
+        if (!scopeId || !payload.entries[scopeId]) {
+          return;
+        }
+
+        stopAutoRotate();
+        setScope(scopeId, "stats");
       });
 
       mapRoot?.addEventListener("click", (event) => {
