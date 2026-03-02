@@ -4,6 +4,7 @@ import { disableMotion, stabilizePage } from "./layout-helpers";
 const pages = [
   { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true },
+  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },

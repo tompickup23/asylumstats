@@ -1,7 +1,7 @@
 interface SiteSearchEntry {
   href: string;
   title: string;
-  kind: "page" | "entity" | "place";
+  kind: "page" | "region" | "place";
   kicker: string;
   description: string;
   priority: number;
@@ -68,7 +68,7 @@ function scoreEntry(entry: SiteSearchEntry, query: string): number {
 
   if (entry.kind === "page") {
     score += 14;
-  } else if (entry.kind === "entity") {
+  } else if (entry.kind === "region") {
     score += 8;
   }
 
@@ -140,8 +140,8 @@ export function initSiteSearch(): void {
   }
 
   function renderEntry(entry: SiteSearchEntry): string {
-    const kindLabel = entry.kind === "page" ? "Page" : entry.kind === "entity" ? "Entity" : "Place";
-    const kindTone = entry.kind === "page" ? "accent" : entry.kind === "entity" ? "warm" : "teal";
+    const kindLabel = entry.kind === "page" ? "Page" : entry.kind === "region" ? "Region" : "Place";
+    const kindTone = entry.kind === "page" ? "accent" : entry.kind === "region" ? "warm" : "teal";
 
     return `
       <a class="site-search-result" href="${escapeHtml(entry.href)}">
@@ -173,8 +173,8 @@ export function initSiteSearch(): void {
         statusElement.textContent = `No matches for "${trimmedQuery}"`;
         resultsElement.innerHTML = `
           <article class="site-search-empty">
-            <strong>No matching pages, places, or entities</strong>
-            <p>Try an area name, area code, provider, owner group, or topic like hotels or spending.</p>
+            <strong>No matching pages, regions, or places</strong>
+            <p>Try a region, local authority, area code, or topic like routes or sources.</p>
           </article>
         `;
         return;
@@ -182,7 +182,7 @@ export function initSiteSearch(): void {
 
       statusElement.textContent = trimmedQuery
         ? `${ranked.length} search result${ranked.length === 1 ? "" : "s"}`
-        : "Popular pages and place profiles";
+        : "Popular pages, regions, and place profiles";
       resultsElement.innerHTML = ranked.map(renderEntry).join("");
     } catch (error) {
       console.error(error);

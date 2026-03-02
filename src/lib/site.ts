@@ -27,6 +27,10 @@ const INDEXABLE_STATIC_PATHS = [
   "/methodology/"
 ] as const;
 
+function slugifyRegionName(regionName: string): string {
+  return regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export function normalisePageTitle(title: string): string {
   return /asylumstats/i.test(title) ? title : `${title} | ${SITE_NAME}`;
 }
@@ -34,6 +38,14 @@ export function normalisePageTitle(title: string): string {
 export function buildAbsoluteUrl(pathname: string): string {
   const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
   return new URL(normalizedPath, SITE_URL).toString();
+}
+
+export function buildPublicPlaceRegionSlug(regionName: string): string {
+  return slugifyRegionName(regionName);
+}
+
+export function buildPublicPlaceRegionPath(regionName: string): string {
+  return `/places/regions/${buildPublicPlaceRegionSlug(regionName)}/`;
 }
 
 export function getPublicPlaceAreas(): LocalRouteAreaSummary[] {
@@ -51,8 +63,31 @@ export function getPublicPlaceAreas(): LocalRouteAreaSummary[] {
   );
 }
 
+export function getPublicPlaceRegions(): Array<{ regionName: string; countryName: string; publicPlaceCount: number }> {
+  const regionMap = new Map<string, { regionName: string; countryName: string; publicPlaceCount: number }>();
+
+  for (const area of getPublicPlaceAreas()) {
+    const existing =
+      regionMap.get(area.regionName) ??
+      {
+        regionName: area.regionName,
+        countryName: area.countryName,
+        publicPlaceCount: 0
+      };
+
+    existing.publicPlaceCount += 1;
+    regionMap.set(area.regionName, existing);
+  }
+
+  return [...regionMap.values()].sort((left, right) => left.regionName.localeCompare(right.regionName));
+}
+
 export function getIndexableSitePaths(): string[] {
   const paths = new Set<string>(INDEXABLE_STATIC_PATHS);
+
+  for (const region of getPublicPlaceRegions()) {
+    paths.add(buildPublicPlaceRegionPath(region.regionName));
+  }
 
   for (const area of getPublicPlaceAreas()) {
     paths.add(`/places/${area.areaCode}/`);

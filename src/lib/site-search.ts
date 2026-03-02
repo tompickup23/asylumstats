@@ -1,9 +1,10 @@
+import { getPlaceDirectory } from "./place-directory";
 import { getPublicPlaceAreas } from "./site";
 
 export interface SiteSearchEntry {
   href: string;
   title: string;
-  kind: "page" | "place";
+  kind: "page" | "region" | "place";
   kicker: string;
   description: string;
   priority: number;
@@ -88,6 +89,7 @@ function buildPlaceDescription(
 }
 
 export function getPublicSearchEntries(): SiteSearchEntry[] {
+  const placeDirectory = getPlaceDirectory();
   const placeEntries = getPublicPlaceAreas().map((area) => ({
     href: `/places/${area.areaCode}/`,
     title: area.areaName,
@@ -114,10 +116,31 @@ export function getPublicSearchEntries(): SiteSearchEntry[] {
       .join(" ")
       .toLowerCase()
   }));
+  const regionEntries = placeDirectory.regions.map((region) => ({
+    href: region.regionPath,
+    title: region.regionName,
+    kind: "region" as const,
+    kicker: `${region.countryName} region`,
+    description: `${region.supportedAsylum.toLocaleString()} on supported asylum across ${region.publicPlaceCount.toLocaleString()} public place pages, with ${region.hotelLinkedPlaceCount.toLocaleString()} place pages already carrying hotel evidence.`,
+    priority: 112,
+    searchText: [
+      region.regionName,
+      region.countryName,
+      "region",
+      "regional map",
+      "regional pressure",
+      "supported asylum",
+      "contingency accommodation",
+      "hotel visibility",
+      "place directory"
+    ]
+      .join(" ")
+      .toLowerCase()
+  }));
 
-  const kindOrder: Record<SiteSearchEntry["kind"], number> = { page: 0, place: 1 };
+  const kindOrder: Record<SiteSearchEntry["kind"], number> = { page: 0, region: 1, place: 2 };
 
-  return [...STATIC_PAGE_ENTRIES, ...placeEntries].sort((left, right) => {
+  return [...STATIC_PAGE_ENTRIES, ...regionEntries, ...placeEntries].sort((left, right) => {
     if (left.kind !== right.kind) {
       return kindOrder[left.kind] - kindOrder[right.kind];
     }

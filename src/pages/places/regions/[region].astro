@@ -1,0 +1,310 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import DataDrawer from "../../../components/DataDrawer.astro";
+import PageContents from "../../../components/PageContents.astro";
+import PageGuide from "../../../components/PageGuide.astro";
+import RegionTileMap from "../../../components/RegionTileMap.astro";
+import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
+import { getRegionPressureSummaries } from "../../../lib/route-analytics";
+import { loadLocalRouteLatest } from "../../../lib/route-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+
+export function getStaticPaths() {
+  return getPlaceDirectory().regions.map((region) => ({
+    params: { region: region.regionSlug },
+    props: { region }
+  }));
+}
+
+const { region } = Astro.props as { region: PlaceDirectoryRegion };
+const featuredAreas = region.areas.slice(0, 8);
+const hotelLinkedAreas = region.areas.filter((row) => row.hotelSignal !== "none");
+const namedHotelAreas = hotelLinkedAreas.filter((row) => row.namedCurrentSiteCount > 0);
+const unnamedOnlyAreas = hotelLinkedAreas.filter((row) => row.hotelSignal === "unnamed");
+const rateLeader =
+  [...region.areas].sort(
+    (left, right) =>
+      (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
+      right.area.supportedAsylum - left.area.supportedAsylum
+  )[0] ?? region.leadArea;
+const regionSections = [
+  { id: "region-findings", label: "Findings" },
+  { id: "region-guide", label: "How to use" },
+  { id: "region-places", label: "Place leaders" },
+  ...(hotelLinkedAreas.length > 0 ? [{ id: "region-hotels", label: "Hotel visibility" }] : []),
+  { id: "region-data", label: "Full list" }
+];
+const regionGuideItems = [
+  {
+    eyebrow: "Start here",
+    title: "Read the regional pressure frame before opening a single authority",
+    body: "The region page tells you whether the story is mainly about scale, rate intensity, hotel visibility, or a smaller set of high-pressure places.",
+    href: "#region-findings",
+    cta: "Open findings"
+  },
+  {
+    eyebrow: "Then go local",
+    title: "Open the leading authorities inside this region",
+    body: "Each place card carries the local supported-asylum count, contingency position, and hotel visibility summary, so you can move from region to place without losing the thread.",
+    href: "#region-places",
+    cta: "Open place leaders"
+  },
+  {
+    eyebrow: "Only if needed",
+    title: "Use the full regional place list for verification",
+    body: "The deep-data drawer holds the full published place list for this region once you need the wider field rather than the leading authorities.",
+    href: "#region-data",
+    cta: "Open the full list"
+  }
+];
+const pageDescription = `${region.regionName} asylum pressure by place, with regional totals, local authority leaders, and hotel visibility carried through the place layer.`;
+---
+
+<BaseLayout title={`${region.regionName} region | asylumstats`} description={pageDescription}>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">{region.countryName}</span>
+      <h1>{region.regionName} asylum pressure by place</h1>
+      <p>
+        Use this page to move from the national map into one region, then into the local authorities inside it. The
+        region tells you where supported asylum is concentrated, where the rate bites harder, and where hotel evidence
+        is already visible on public place pages.
+      </p>
+      <div class="chip-row">
+        <span class="chip">{localRouteLatest.snapshotDate} snapshot</span>
+        <span class="chip teal">{region.publicPlaceCount.toLocaleString()} public place pages</span>
+        <span class="chip accent">{region.supportedAsylum.toLocaleString()} supported asylum</span>
+      </div>
+    </section>
+
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <span class="tiny">Regional pressure</span>
+        <h2 class="rail-title">{region.supportedAsylum.toLocaleString()}</h2>
+        <p class="rail-copy">
+          People on supported asylum across the region, at a weighted rate of {region.supportedAsylumRate} per 10,000
+          residents.
+        </p>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Open this place first</span>
+        <h2 class="rail-title">{region.leadArea?.area.areaName ?? "No public place page yet"}</h2>
+        <p class="rail-copy">
+          {region.leadArea
+            ? `${region.leadArea.area.supportedAsylum.toLocaleString()} people on supported asylum, with ${region.leadArea.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.`
+            : "The region currently has no public place page to lead with."}
+        </p>
+      </article>
+
+      <article class="panel panel-pad">
+        <span class="tiny">Hotel visibility</span>
+        <h2 class="rail-title">{region.hotelLinkedPlaceCount.toLocaleString()} place pages already carry hotel evidence</h2>
+        <p class="rail-copy">
+          {region.namedCurrentSiteCount.toLocaleString()} named current hotel sites are visible across the region-led
+          place layer, while {region.unnamedOnlyPlaceCount.toLocaleString()} place pages still sit in unnamed-only gaps.
+        </p>
+      </article>
+    </aside>
+  </section>
+
+  <PageContents title="Start here" sections={regionSections} variant="priority" />
+
+  <section id="region-findings" class="section section-anchor priority-section">
+    <div class="section-head">
+      <div>
+        <h2>What matters first in {region.regionName}</h2>
+        <p class="lede">
+          {region.regionName} currently carries {region.supportedAsylum.toLocaleString()} people on supported asylum
+          across {region.publicPlaceCount.toLocaleString()} public place pages. The regional rate is {region.supportedAsylumRate} per
+          10,000 residents, and the hotel signal is already visible on {region.hotelLinkedPlaceCount.toLocaleString()} of those pages.
+        </p>
+      </div>
+      <a class="chip accent" href="/places/">Back to the national place map</a>
+    </div>
+    <div class="story-grid">
+      <article class="story-card">
+        <div class="chip-row">
+          <span class="chip accent">Scale</span>
+        </div>
+        <h3>{region.leadArea?.area.areaName ?? region.regionName} is the first authority to read</h3>
+        <p class="lede">
+          {region.leadArea
+            ? `${region.leadArea.area.areaName} currently leads the region by supported asylum count at ${region.leadArea.area.supportedAsylum.toLocaleString()}, which is why the regional story should narrow into that authority first.`
+            : "This region currently has no lead authority in the published place layer."}
+        </p>
+      </article>
+      <article class="story-card">
+        <div class="chip-row">
+          <span class="chip warm">Intensity</span>
+        </div>
+        <h3>{rateLeader?.area.areaName ?? region.regionName} carries the sharpest rate pressure in this published field</h3>
+        <p class="lede">
+          {rateLeader
+            ? `${rateLeader.area.supportedAsylumRate ?? "n/a"} per 10,000 residents, which helps separate local intensity from the larger raw totals elsewhere in the region.`
+            : "Rate pressure cannot be ranked because no public place pages are attached to this region."}
+        </p>
+      </article>
+      <article class="story-card">
+        <div class="chip-row">
+          <span class="chip teal">Visibility</span>
+        </div>
+        <h3>Hotel evidence is visible, but not evenly resolved</h3>
+        <p class="lede">
+          {namedHotelAreas.length > 0
+            ? `${namedHotelAreas.length.toLocaleString()} place pages already carry named current hotel evidence, while ${unnamedOnlyAreas.length.toLocaleString()} still only have unnamed acknowledged use.`
+            : hotelLinkedAreas.length > 0
+              ? `Hotel use is visible on ${hotelLinkedAreas.length.toLocaleString()} place pages here, but the public record still stops at unnamed acknowledged use.`
+              : "No place page in this regional slice carries publishable hotel evidence yet, which is an evidence gap rather than proof of no hotel use."}
+        </p>
+      </article>
+    </div>
+    <div class="split">
+      <RegionTileMap
+        items={regionalPressure.map((entry) => ({ regionName: entry.regionName, value: entry.supportedAsylum }))}
+        title="Supported asylum by region"
+        description={`${region.regionName} is highlighted here so the regional page stays tied back to the national map.`}
+        valueLabel="supported asylum total"
+        highlightRegion={region.regionName}
+      />
+      <article class="panel panel-pad">
+        <div class="chip-row">
+          <span class="chip accent">Open these next</span>
+        </div>
+        <h2>Regional places worth opening first</h2>
+        <div class="data-list">
+          {featuredAreas.slice(0, 5).map((row) => (
+            <div class="data-row">
+              <span>
+                <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+              </span>
+              <span class="data-row-value">{row.area.supportedAsylum.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+        <p class="tiny">These are the highest-volume public place pages in the region-led slice.</p>
+      </article>
+    </div>
+  </section>
+
+  <PageGuide
+    id="region-guide"
+    title={`Use ${region.regionName} in three moves`}
+    intro="The region page narrows the field before you open individual authorities, so the place layer feels readable instead of overwhelming."
+    items={regionGuideItems}
+  />
+
+  <section id="region-places" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Place leaders inside {region.regionName}</h2>
+        <p class="lede">
+          These are the first place pages to open in this region. They keep the local count, rate, contingency use,
+          and hotel visibility on a single surface.
+        </p>
+      </div>
+      <span class="chip accent">{featuredAreas.length.toLocaleString()} featured authorities</span>
+    </div>
+    <div class="place-grid">
+      {featuredAreas.map((row) => (
+        <article class="place-card">
+          <div class="chip-row">
+            <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
+            <span class="chip">{row.area.contingencyAccommodation.toLocaleString()} contingency</span>
+            {row.hotelSignal !== "none" && (
+              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
+                {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+              </span>
+            )}
+          </div>
+          <h3>
+            <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+          </h3>
+          <p class="lede">
+            {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
+            {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
+          </p>
+          <p class="tiny">Hotels: {row.hotelSummary}.</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {hotelLinkedAreas.length > 0 && (
+    <section id="region-hotels" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Where hotel evidence is already visible</h2>
+          <p class="lede">
+            Hotel evidence stays inside the place layer. Use these authorities when you need a regional route into named
+            current sites or unnamed acknowledged hotel use.
+          </p>
+        </div>
+        <a class="chip accent" href="/hotels/">Open the hotel notebook only if needed</a>
+      </div>
+      <div class="feature-grid">
+        {hotelLinkedAreas.slice(0, 8).map((row) => (
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
+                {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+              </span>
+              <span class="chip teal">{row.area.supportedAsylum.toLocaleString()} supported asylum</span>
+            </div>
+            <h3>
+              <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+            </h3>
+            <p class="lede">{row.hotelSummary} are already visible on the public record for this authority.</p>
+            <p class="tiny">
+              Contingency accommodation {row.area.contingencyAccommodation.toLocaleString()} | rate{" "}
+              {row.area.supportedAsylumRate ?? "n/a"} per 10,000.
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <DataDrawer
+    id="region-data"
+    label="Deep data"
+    title={`Open the full ${region.regionName} place list`}
+    summary="Use the full regional ledger when you need every published authority in this slice, not just the first pages worth opening."
+  >
+    <section class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>All published place pages in {region.regionName}</h2>
+          <p class="lede">
+            The full regional place list stays here so the main reading surface can stay selective and legible.
+          </p>
+        </div>
+      </div>
+      <div class="place-grid">
+        {region.areas.map((row) => (
+          <article class="place-card">
+            <div class="chip-row">
+              <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
+              <span class="chip">{row.area.contingencyAccommodation.toLocaleString()} contingency</span>
+              {row.hotelSignal !== "none" && (
+                <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
+                  {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+                </span>
+              )}
+            </div>
+            <h3>
+              <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+            </h3>
+            <p class="lede">
+              {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
+              {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
+            </p>
+            <p class="tiny">Hotels: {row.hotelSummary}.</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </DataDrawer>
+</BaseLayout>

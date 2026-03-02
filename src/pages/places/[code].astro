@@ -45,8 +45,13 @@ const hotelSites = hotelLedger.sites.filter(
 const hotelArea = hotelLedger.areas.find(
   (a) => a.areaCode === area.areaCode || a.areaName === area.areaName
 );
-const namedSiteCount = hotelSites.filter((s) => s.status === "current").length;
+const currentHotelSites = hotelSites.filter((site) => site.status === "current");
+const historicalHotelSites = hotelSites.filter((site) => site.status !== "current");
+const namedSiteCount = currentHotelSites.length;
 const unnamedSiteCount = hotelArea?.unnamedSiteCount ?? 0;
+const unresolvedCurrentHotelSites = currentHotelSites.filter((site) => site.entityCoverage === "unresolved");
+const partiallyResolvedCurrentHotelSites = currentHotelSites.filter((site) => site.entityCoverage === "partial");
+const hotelNarrativeSites = currentHotelSites.slice(0, 4);
 const regionalAreas = [...localRouteLatest.areas]
   .filter((candidate) => candidate.regionName === area.regionName)
   .sort((a, b) => b.supportedAsylum - a.supportedAsylum);
@@ -137,6 +142,55 @@ const hotelEvidenceSummary =
       : unnamedSiteCount > 0
         ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}`
     : null;
+const hotelSectionLead =
+  namedSiteCount > 0
+    ? `${namedSiteCount} named current hotel site${namedSiteCount === 1 ? "" : "s"} are publicly visible in ${area.areaName}. ${unresolvedCurrentHotelSites.length > 0 ? `${unresolvedCurrentHotelSites.length} of those named current site${unresolvedCurrentHotelSites.length === 1 ? "" : "s"} still break at owner or operator level.` : partiallyResolvedCurrentHotelSites.length > 0 ? `${partiallyResolvedCurrentHotelSites.length} named current site${partiallyResolvedCurrentHotelSites.length === 1 ? "" : "s"} already carry at least partial owner or operator coverage.` : "The visible named estate is not yet fully chain-resolved in the public ledger."}`
+    : unnamedSiteCount > 0
+      ? `${area.areaName} has no named current hotel in the live ledger, but ${unnamedSiteCount} site${unnamedSiteCount === 1 ? "" : "s"} are publicly acknowledged without names.`
+      : `No publishable hotel row is attached to ${area.areaName} yet. That is an evidence gap, not proof that no hotel use exists.`;
+const hotelPrimaryActionHref =
+  namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0 ? "#hotel-visibility" : "#stock-logic";
+const hotelVisibilityCards = [
+  {
+    title: namedSiteCount > 0 ? "Named current estate is public here" : "No named current hotel is pinned down yet",
+    body:
+      namedSiteCount > 0
+        ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} sit inside the local profile, so hotel visibility is part of the place reading rather than a separate notebook.`
+        : unnamedSiteCount > 0
+          ? `Public evidence has reached the area level but not the hotel names, so the local signal is visible without a clean site list yet.`
+          : `The public ledger has no named current site and no unnamed acknowledged row attached here yet.`
+  },
+  {
+    title:
+      unresolvedCurrentHotelSites.length > 0
+        ? "Chain resolution still breaks on the visible estate"
+        : partiallyResolvedCurrentHotelSites.length > 0
+          ? "Some of the visible chain is resolved"
+          : "Regional responsibility stays separate from local proof",
+    body:
+      unresolvedCurrentHotelSites.length > 0
+        ? `${unresolvedCurrentHotelSites.length} named current site${unresolvedCurrentHotelSites.length === 1 ? "" : "s"} still sit in unresolved owner or operator territory, which is why naming a hotel does not automatically resolve the local chain.`
+        : partiallyResolvedCurrentHotelSites.length > 0
+          ? `${partiallyResolvedCurrentHotelSites.length} named current site${partiallyResolvedCurrentHotelSites.length === 1 ? "" : "s"} already carry at least partial ownership or operator evidence, but the full local chain can still remain incomplete.`
+          : regionalPrimeProviderCoverage
+            ? `${regionalPrimeProviderCoverage.profile.entityName} is the regional contract holder here, but that contract geography is not the same thing as a named local hotel row.`
+            : "No regional provider or local site chain is yet strong enough to stand in for a named local hotel row."
+  },
+  {
+    title:
+      unnamedSiteCount > 0
+        ? "Unnamed acknowledged hotel use still matters"
+        : historicalHotelSites.length > 0
+          ? "Historic named evidence exists even if the current picture is thinner"
+          : "Absence of public evidence is not absence of hotel use",
+    body:
+      unnamedSiteCount > 0
+        ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} still sit inside the local hotel field, which means part of the area's hotel use remains visible only as an official count.`
+        : historicalHotelSites.length > 0
+          ? `${historicalHotelSites.length} named historic or non-current site${historicalHotelSites.length === 1 ? "" : "s"} remain in the ledger for this area, so the current visibility gap sits inside a longer local record.`
+          : "If no hotel row appears here, treat that as a publication gap until independent public evidence lands."
+  }
+];
 const placeOpeningFocus =
   areaRank <= 10
     ? `${area.areaName} is one of the UK's highest-volume asylum support authorities, with ${area.supportedAsylum.toLocaleString()} people on support at quarter end and a national rank of ${areaRank.toLocaleString()}.`
@@ -225,12 +279,24 @@ const placeGuideItems = [
   },
   {
     eyebrow: "Then check",
-    title: "Keep the stock logic and evidence chain nearby",
+    title:
+      namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
+        ? "Keep the stock logic and hotel visibility nearby"
+        : "Keep the stock logic and evidence chain nearby",
     body: placeInvestigationTrails.length > 0
-      ? "The numbers only make sense if you keep the quarter-end stock logic in view and then follow the named evidence chain for this place."
-      : "The numbers only make sense if you keep the quarter-end stock logic in view before widening out into the rest of the page.",
-    href: placeInvestigationTrails.length > 0 ? "#evidence-chain" : "#stock-logic",
-    cta: placeInvestigationTrails.length > 0 ? "Open the evidence chain" : "Open the reading rules"
+      ? namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
+        ? "The numbers only make sense if you keep the quarter-end stock logic in view and then read the local hotel evidence before widening out into the cross-page trails."
+        : "The numbers only make sense if you keep the quarter-end stock logic in view and then follow the named evidence chain for this place."
+      : namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
+        ? "The numbers only make sense if you keep the quarter-end stock logic in view and then read the local hotel evidence in the same place profile."
+        : "The numbers only make sense if you keep the quarter-end stock logic in view before widening out into the rest of the page.",
+    href: hotelPrimaryActionHref,
+    cta:
+      namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
+        ? "Open hotel visibility"
+        : placeInvestigationTrails.length > 0
+          ? "Open the evidence chain"
+          : "Open the reading rules"
   },
   {
     eyebrow: "Only if needed",
@@ -245,6 +311,7 @@ const placeSections = [
   { id: "place-guide", label: "How to use" },
   { id: "stock-logic", label: "How to read" },
   ...(regionalPrimeProviderCoverage ? [{ id: "provider-coverage", label: "Actor coverage" }] : []),
+  { id: "hotel-visibility", label: "Hotel visibility" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   ...(placeInvestigationTrails.length > 0 ? [{ id: "evidence-chain", label: "Evidence chain" }] : []),
   { id: "place-data", label: "Deep data" }
@@ -435,6 +502,96 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </section>
   )}
 
+  <section id="hotel-visibility" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Hotel visibility in this place</h2>
+        <p class="lede">{hotelSectionLead}</p>
+      </div>
+      <a class="chip accent" href="#hotel-evidence">Open the detailed hotel ledger</a>
+    </div>
+    <div class="story-grid">
+      {hotelVisibilityCards.map((card) => (
+        <article class="story-card">
+          <h3>{card.title}</h3>
+          <p class="lede">{card.body}</p>
+        </article>
+      ))}
+    </div>
+    {hotelNarrativeSites.length > 0 ? (
+      <div class="feature-grid">
+        {hotelNarrativeSites.map((site) => {
+          const entityProfiles = getSiteEntityProfiles(site);
+          const providerProfile = site.primeProvider
+            ? getEntityProfileByReference(site.primeProvider.provider, null)
+            : null;
+          const leadLinkedProfile =
+            entityProfiles.find((profile) => profile.entityId !== providerProfile?.entityId) ?? null;
+
+          return (
+            <article class="feature-card">
+              <div class="chip-row">
+                <span class="chip accent">Named current site</span>
+                <span class:list={["chip", site.entityCoverage === "partial" ? "teal" : "warm"]}>
+                  {site.entityCoverage === "partial" ? "Partial chain" : "Unresolved chain"}
+                </span>
+              </div>
+              <h3>{site.siteName}</h3>
+              <p class="lede">
+                Publicly named on {site.lastPublicDate} via {site.sourceTitle}.{" "}
+                {site.ownerName || site.operatorName
+                  ? `${site.ownerName ? `Owner: ${site.ownerName}. ` : ""}${site.operatorName ? `Operator: ${site.operatorName}.` : ""}`
+                  : "The owner or operator chain is not fully public yet."}
+              </p>
+              <div class="chip-row">
+                <a class="source-pill" href={site.sourceUrl}>Open evidence</a>
+                {providerProfile ? (
+                  <a class="source-pill" href={`/entities/${providerProfile.entityId}/`}>
+                    Open {providerProfile.entityName} profile
+                  </a>
+                ) : (
+                  site.primeProvider && (
+                    <a class="source-pill" href={site.primeProvider.sourceUrl}>
+                      Provider source
+                    </a>
+                  )
+                )}
+                {leadLinkedProfile && (
+                  <a class="source-pill" href={`/entities/${leadLinkedProfile.entityId}/`}>
+                    Open {leadLinkedProfile.entityName} profile
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <article class="feature-card">
+        <div class="chip-row">
+          <span class="chip warm">No named current site</span>
+        </div>
+        <h3>The local hotel signal is still incomplete</h3>
+        <p class="lede">
+          {unnamedSiteCount > 0
+            ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} keep hotel use visible in this area, but the public record does not yet identify the sites.`
+            : `No publishable hotel row is attached to ${area.areaName} yet, so the place profile has to hold that as an evidence gap rather than infer a clean absence.`}
+        </p>
+      </article>
+    )}
+    {hotelSignals.length > 0 && (
+      <div class="signal-list">
+        {hotelSignals.map((signal) => (
+          <article class={`signal-card${signal.severity === "high" ? " accent" : ""}`}>
+            <span class="tiny">{signal.siteName}</span>
+            <h3>{signal.headline ?? "Integrity signal"}</h3>
+            <p class="tiny">{signal.detail ?? "A public integrity signal is attached to this visible local site."}</p>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+
   {areaTrend && (
     <section id="recent-trend" class="split section section-anchor">
       <TrendChart
@@ -535,8 +692,8 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <DataDrawer
     id="place-data"
     label="Deep data"
-    title="Open the drill-downs, route metrics, benchmarks, peer bars, and hotel table"
-    summary="Once the local finding is clear, use this section to verify the ranking, inspect the route mix, compare peers, and read the detailed hotel evidence for this area."
+    title="Open the drill-downs, route metrics, benchmarks, peer bars, and detailed ledgers"
+    summary="Once the local finding is clear, use this section to verify the ranking, inspect the route mix, compare peers, and read the full hotel evidence ledger for this area."
   >
     <section id="place-drilldown" class="section section-anchor">
       <div class="section-head">
@@ -970,31 +1127,6 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       )}
     </section>
 
-    {hotelSignals.length > 0 && (
-      <section id="integrity-signals" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>Integrity signals already visible</h2>
-            <p class="lede">
-              These signals are attached to publicly evidenced sites in this area. They are place-level accountability
-              leads, not background noise.
-            </p>
-          </div>
-        </div>
-        <div class="story-grid">
-          {hotelSignals.map((signal) => (
-            <article class="story-card">
-              <div class="chip-row">
-                <span class={`chip ${signal.severity === "warning" ? "accent" : ""}`}>{signal.severity}</span>
-                <span class="chip">{signal.siteName}</span>
-              </div>
-              <h3>{signal.headline ?? "Integrity signal"}</h3>
-              {signal.detail && <p class="lede">{signal.detail}</p>}
-            </article>
-          ))}
-        </div>
-      </section>
-    )}
   </DataDrawer>
 
   <script>

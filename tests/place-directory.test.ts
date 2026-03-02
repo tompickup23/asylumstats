@@ -11,6 +11,8 @@ describe("place directory", () => {
     expect(directory.regions[0].supportedAsylum).toBeGreaterThanOrEqual(directory.regions[1].supportedAsylum);
     expect(directory.regions.every((region) => region.publicPlaceCount === region.areas.length)).toBe(true);
     expect(directory.regions.every((region) => region.anchorId.startsWith("region-"))).toBe(true);
+    expect(directory.regions.every((region) => region.regionSlug.length > 0)).toBe(true);
+    expect(directory.regions.every((region) => region.regionPath.startsWith("/places/regions/"))).toBe(true);
     expect(directory.featuredAreas[0].nationalRank).toBeGreaterThan(0);
     expect(directory.featuredAreas.every((row) => row.hotelSummary.length > 0)).toBe(true);
   });

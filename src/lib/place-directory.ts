@@ -1,7 +1,7 @@
 import { loadHotelEntityLedger } from "./hotel-data";
 import { getRegionPressureSummaries } from "./route-analytics";
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
-import { getPublicPlaceAreas } from "./site";
+import { buildPublicPlaceRegionPath, buildPublicPlaceRegionSlug, getPublicPlaceAreas } from "./site";
 
 export interface PlaceDirectoryArea {
   area: LocalRouteAreaSummary;
@@ -15,6 +15,8 @@ export interface PlaceDirectoryArea {
 export interface PlaceDirectoryRegion {
   regionName: string;
   countryName: string;
+  regionSlug: string;
+  regionPath: string;
   anchorId: string;
   supportedAsylum: number;
   supportedAsylumRate: number;
@@ -38,7 +40,7 @@ export interface PlaceDirectory {
 }
 
 function buildRegionAnchorId(regionName: string): string {
-  return `region-${regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
+  return `region-${buildPublicPlaceRegionSlug(regionName)}`;
 }
 
 function formatHotelSummary(namedCurrentSiteCount: number, unnamedSiteCount: number): string {
@@ -108,6 +110,8 @@ export function getPlaceDirectory(): PlaceDirectory {
       ({
         regionName: row.area.regionName,
         countryName: row.area.countryName,
+        regionSlug: buildPublicPlaceRegionSlug(row.area.regionName),
+        regionPath: buildPublicPlaceRegionPath(row.area.regionName),
         anchorId: buildRegionAnchorId(row.area.regionName),
         supportedAsylum: regionalPressure.get(row.area.regionName)?.supportedAsylum ?? 0,
         supportedAsylumRate: regionalPressure.get(row.area.regionName)?.supportedAsylumRate ?? 0,

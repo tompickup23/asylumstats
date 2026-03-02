@@ -31,10 +31,10 @@ const placeGuideItems = [
   },
   {
     eyebrow: "Then go local",
-    title: "Open a place page to separate count, rate, contingency, and hotel visibility",
-    body: "A place page is now the main reading surface. It keeps the local pressure claim, the stock logic, and any public hotel evidence together.",
-    href: "#featured-places",
-    cta: "Open place leaders"
+    title: "Open a region page, then move into the places inside it",
+    body: "Each region page now acts as the bridge between the national map and individual local authorities, so the place layer no longer feels like one long national list.",
+    href: "#regional-directory",
+    cta: "Open regions"
   },
   {
     eyebrow: "Only if needed",
@@ -150,7 +150,9 @@ const pageDescription =
             <span class="chip teal">{region.countryName}</span>
             <span class="chip">{region.publicPlaceCount.toLocaleString()} place pages</span>
           </div>
-          <h3>{region.regionName}</h3>
+          <h3>
+            <a href={region.regionPath}>{region.regionName}</a>
+          </h3>
           <p class="lede">
             {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, at a weighted rate
             of {region.supportedAsylumRate} per 10,000 residents.
@@ -179,7 +181,7 @@ const pageDescription =
             ))}
           </div>
           <p class="tiny">
-            <a class="source-pill" href={`#${region.anchorId}`}>Open full {region.regionName} place list</a>
+            <a class="source-pill" href={region.regionPath}>Open {region.regionName} region page</a>
           </p>
         </article>
       ))}
@@ -227,49 +229,38 @@ const pageDescription =
   <DataDrawer
     id="advanced-place-tools"
     label="Advanced tools"
-    title="Open the full region directory and secondary notebooks"
-    summary="Use this when the preview cards are not enough: the full place directory sits here, alongside the secondary compare, hotel, money, and actor notebooks."
+    title="Open all region pages and the secondary notebooks"
+    summary="The main route is now region to place. Use this section for a compact directory of every region page and then the deeper compare, hotel, money, and actor notebooks."
   >
-    {placeDirectory.regions.map((region) => (
-      <section id={region.anchorId} class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>{region.regionName}</h2>
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>All region pages</h2>
+          <p class="lede">
+            Use these as the second step after the national map. Each region page narrows the field before you open
+            individual authorities.
+          </p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        {placeDirectory.regions.map((region) => (
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{region.regionName}</span>
+              <span class="chip">{region.countryName}</span>
+            </div>
+            <h3>
+              <a href={region.regionPath}>Open {region.regionName}</a>
+            </h3>
             <p class="lede">
-              {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, with{" "}
-              {region.hotelLinkedPlaceCount.toLocaleString()} public place pages already carrying hotel evidence.
+              {region.publicPlaceCount.toLocaleString()} place pages, {region.supportedAsylum.toLocaleString()} people
+              on supported asylum, and {region.hotelLinkedPlaceCount.toLocaleString()} places already carrying hotel
+              evidence.
             </p>
-          </div>
-          <div class="chip-row">
-            <span class="chip">{region.countryName}</span>
-            <span class="chip teal">{region.supportedAsylumRate} per 10,000</span>
-          </div>
-        </div>
-        <div class="place-grid">
-          {region.areas.map((row) => (
-            <article class="place-card">
-              <div class="chip-row">
-                <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
-                <span class="chip">{row.area.contingencyAccommodation.toLocaleString()} contingency</span>
-                {row.hotelSignal !== "none" && (
-                  <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
-                    {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
-                  </span>
-                )}
-              </div>
-              <h3>
-                <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
-              </h3>
-              <p class="lede">
-                {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
-                {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
-              </p>
-              <p class="tiny">Hotels: {row.hotelSummary}.</p>
-            </article>
-          ))}
-        </div>
-      </section>
-    ))}
+          </article>
+        ))}
+      </div>
+    </section>
 
     <section class="section">
       <div class="section-head">
