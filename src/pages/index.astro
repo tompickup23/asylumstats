@@ -14,6 +14,8 @@ const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
 const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
+const leadRegionPage = placeDirectory.regions.find((region) => region.regionName === leadRegion.regionName) ?? placeDirectory.regions[0];
+const rateLeaderPage = placeDirectory.regions.find((region) => region.regionName === rateLeader.regionName) ?? null;
 const previewRegions = placeDirectory.regions.slice(0, 4);
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 6);
 const homepageStockFlowCards = routeDashboard.nationalSystemDynamics.stockFlowCards;
@@ -49,15 +51,15 @@ const homepagePriorityCards = [
       previewRegions[0]?.leadArea
         ? `${previewRegions[0].leadArea.area.areaName} is the clearest current place page to open first inside that regional field.`
         : "Regional totals should come before a single local headline.",
-    href: "/places#regional-directory",
-    cta: "Browse regions"
+    href: leadRegionPage?.regionPath ?? "/places/",
+    cta: leadRegionPage ? `Open ${leadRegionPage.regionName}` : "Browse regions"
   },
   {
     kicker: "Local reading",
     title: "Place pages now carry the main local accountability load",
     body: `${placeDirectory.hotelLinkedPlaceCount.toLocaleString()} public place pages already carry hotel evidence, and ${placeDirectory.unnamedOnlyPlaceCount.toLocaleString()} still sit in unnamed-only hotel visibility gaps.`,
     detail: "Open a place page to keep count, rate, contingency use, and hotel visibility on one surface.",
-    href: "/places#featured-places",
+    href: leadRegionPage?.regionPath ?? "/places/",
     cta: "Open place leaders"
   },
   {
@@ -184,7 +186,7 @@ const advancedSurfaces = [
       </p>
       <div class="hero-actions">
         <a class="chip accent" href="/places#place-map">Browse the map</a>
-        <a class="chip teal" href="/places#regional-directory">Browse regions</a>
+        <a class="chip teal" href={leadRegionPage?.regionPath ?? "/places/"}>Open top region</a>
         <a class="chip" href="/routes#route-findings">Check the system</a>
         <a class="chip" href="/sources">Check the sources</a>
       </div>
@@ -221,12 +223,22 @@ const advancedSurfaces = [
           {leadRegion.supportedAsylum.toLocaleString()} people on supported asylum, with{" "}
           {leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.
         </p>
+        {leadRegionPage && (
+          <p class="tiny">
+            <a class="source-pill" href={leadRegionPage.regionPath}>Open {leadRegionPage.regionName}</a>
+          </p>
+        )}
       </article>
 
       <article class="hero-callout accent">
         <span class="tiny">Regional rate leader</span>
         <strong>{rateLeader.regionName}</strong>
         <p class="lede">{rateLeader.supportedAsylumRate} per 10,000 residents in the latest weighted regional view.</p>
+        {rateLeaderPage && (
+          <p class="tiny">
+            <a class="source-pill" href={rateLeaderPage.regionPath}>Open {rateLeaderPage.regionName}</a>
+          </p>
+        )}
       </article>
     </aside>
   </section>
@@ -272,10 +284,11 @@ const advancedSurfaces = [
       <div>
         <h2>Start with the regional map</h2>
         <p class="lede">
-          Total and rate answer different questions. Use both before you decide which local authority page to open.
+          This is now a clickable map of Britain with the published UK regions. Use total and rate together, then open a
+          region directly from the map before narrowing into one authority.
         </p>
       </div>
-      <a class="chip accent" href="/places#place-map">Open the full place map</a>
+      <a class="chip accent" href={leadRegionPage?.regionPath ?? "/places/"}>Open the lead region</a>
     </div>
     <div class="viz-grid">
       <RegionTileMap
@@ -315,7 +328,9 @@ const advancedSurfaces = [
             <span class="chip teal">{region.countryName}</span>
             <span class="chip">{region.publicPlaceCount.toLocaleString()} place pages</span>
           </div>
-          <h3>{region.regionName}</h3>
+          <h3>
+            <a href={region.regionPath}>{region.regionName}</a>
+          </h3>
           <p class="lede">
             {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, at {region.supportedAsylumRate} per 10,000 residents.
           </p>
@@ -334,6 +349,9 @@ const advancedSurfaces = [
               <a class="source-pill" href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
             ))}
           </div>
+          <p class="tiny">
+            <a class="source-pill" href={region.regionPath}>Open {region.regionName}</a>
+          </p>
         </article>
       ))}
     </div>
