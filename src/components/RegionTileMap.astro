@@ -1,5 +1,6 @@
 ---
 import { buildPublicPlaceRegionPath } from "../lib/site";
+import type { RegionMapSummary, RegionMapValue } from "../lib/region-map-explorer";
 import {
   REGION_MAP_DRAW_ORDER,
   REGION_MAP_HEIGHT,
@@ -8,22 +9,8 @@ import {
   getRegionMapGeometry
 } from "../lib/region-map";
 
-interface RegionValue {
-  regionName: string;
-  value: number;
-  note?: string;
-}
-
-interface RegionMapSummary {
-  title: string;
-  body: string;
-  href?: string;
-  cta?: string;
-  chips?: string[];
-}
-
 interface Props {
-  items: RegionValue[];
+  items: RegionMapValue[];
   title: string;
   description?: string;
   valueLabel: string;
@@ -31,6 +18,7 @@ interface Props {
   highlightRegions?: string[];
   summaries?: Record<string, RegionMapSummary>;
   tone?: "accent" | "teal" | "warm";
+  compact?: boolean;
 }
 
 const {
@@ -41,7 +29,8 @@ const {
   highlightRegion,
   highlightRegions = [],
   summaries = {},
-  tone = "accent"
+  tone = "accent",
+  compact = false
 } = Astro.props;
 
 const itemByRegion = new Map(items.map((item) => [item.regionName, item]));
@@ -84,7 +73,7 @@ function getFill(value: number): string {
   return `rgba(125, 211, 252, ${0.18 + ratio * 0.56})`;
 }
 
-function buildDefaultSummary(item: RegionValue): RegionMapSummary {
+function buildDefaultSummary(item: RegionMapValue): RegionMapSummary {
   return {
     title: item.regionName,
     body: item.note ?? `${formatValue(item.value)} ${valueLabel} in this regional view.`,
@@ -107,18 +96,20 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
 ---
 
 <figure
-  class={`viz-card tone-${tone}`}
+  class:list={[`viz-card tone-${tone}`, compact && "viz-card-compact"]}
   data-region-map-root
   data-initial-region={initialRegionName ?? undefined}
   data-region-map-tone={tone}
 >
-  <div class="viz-head">
-    <div>
-      <h3>{title}</h3>
-      {description && <p class="tiny">{description}</p>}
+  {!compact && (
+    <div class="viz-head">
+      <div>
+        <h3>{title}</h3>
+        {description && <p class="tiny">{description}</p>}
+      </div>
+      <span class="chip">{valueLabel}</span>
     </div>
-    <span class="chip">{valueLabel}</span>
-  </div>
+  )}
   <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
     <path class="region-map-outline" d={REGION_MAP_OUTLINES.mainland}></path>
     <path class="region-map-outline" d={REGION_MAP_OUTLINES.northernIreland}></path>

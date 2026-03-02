@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   getCurrentLocalEvidencePoints,
-  getFeaturedLocalEvidencePoints,
-  getRegionLocalEvidenceLayers
+  getFeaturedLocalEvidenceTimeline,
+  getRegionLocalEvidenceLayers,
+  getRegionLocalEvidenceTimeline
 } from "../src/lib/local-evidence";
 
 describe("local evidence layer", () => {
@@ -22,10 +23,19 @@ describe("local evidence layer", () => {
     expect(eastMidlands?.points.every((point) => point.regionName === "East Midlands")).toBe(true);
   });
 
-  it("features one lead local evidence point per visible region", () => {
-    const featured = getFeaturedLocalEvidencePoints();
+  it("builds a dated regional timeline for named local evidence", () => {
+    const eastMidlandsTimeline = getRegionLocalEvidenceTimeline("East Midlands");
+
+    expect(eastMidlandsTimeline.length).toBeGreaterThan(0);
+    expect(eastMidlandsTimeline[0].lastPublicDateLabel).toBeTruthy();
+    expect(eastMidlandsTimeline.every((point) => point.regionName === "East Midlands")).toBe(true);
+  });
+
+  it("features one dated lead local evidence row per visible region", () => {
+    const featured = getFeaturedLocalEvidenceTimeline();
 
     expect(featured.length).toBeGreaterThan(0);
     expect(new Set(featured.map((point) => point.regionName)).size).toBe(featured.length);
+    expect(featured.every((point) => point.lastPublicDateLabel.length > 0)).toBe(true);
   });
 });

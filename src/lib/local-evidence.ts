@@ -25,6 +25,10 @@ export interface LocalEvidencePoint {
   chainSummary: string;
 }
 
+export interface LocalEvidenceTimelineEntry extends LocalEvidencePoint {
+  lastPublicDateLabel: string;
+}
+
 export interface RegionLocalEvidenceLayer {
   regionName: string;
   countryName: string;
@@ -52,6 +56,33 @@ function buildChainSummary(
   return primeProviderName
     ? `The site is public, but the local owner or operator chain still breaks. Regional provider: ${primeProviderName}.`
     : "The site is public, but the local owner or operator chain still breaks in the live ledger.";
+}
+
+function formatEvidenceDateLabel(value: string): string {
+  return new Date(`${value}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
+
+function sortEvidencePoints(left: LocalEvidencePoint, right: LocalEvidencePoint): number {
+  return (
+    right.lastPublicDate.localeCompare(left.lastPublicDate) ||
+    (right.supportedAsylum ?? -1) - (left.supportedAsylum ?? -1) ||
+    left.areaName.localeCompare(right.areaName) ||
+    left.siteName.localeCompare(right.siteName)
+  );
+}
+
+function buildTimelineEntries(points: LocalEvidencePoint[]): LocalEvidenceTimelineEntry[] {
+  return [...points]
+    .sort(sortEvidencePoints)
+    .map((point) => ({
+      ...point,
+      lastPublicDateLabel: formatEvidenceDateLabel(point.lastPublicDate)
+    }));
 }
 
 export function getCurrentLocalEvidencePoints(): LocalEvidencePoint[] {
@@ -96,13 +127,7 @@ export function getCurrentLocalEvidencePoints(): LocalEvidencePoint[] {
         )
       } satisfies LocalEvidencePoint;
     })
-    .sort((left, right) => {
-      return (
-        (right.supportedAsylum ?? -1) - (left.supportedAsylum ?? -1) ||
-        left.areaName.localeCompare(right.areaName) ||
-        left.siteName.localeCompare(right.siteName)
-      );
-    });
+    .sort(sortEvidencePoints);
 }
 
 export function getRegionLocalEvidenceLayers(): RegionLocalEvidenceLayer[] {
@@ -140,22 +165,24 @@ export function getRegionLocalEvidenceLayers(): RegionLocalEvidenceLayer[] {
   );
 }
 
-export function getFeaturedLocalEvidencePoints(limit = 4): LocalEvidencePoint[] {
+export function getLocalEvidenceTimeline(limit = 6): LocalEvidenceTimelineEntry[] {
+  return buildTimelineEntries(getCurrentLocalEvidencePoints()).slice(0, limit);
+}
+
+export function getRegionLocalEvidenceTimeline(regionName: string, limit = 8): LocalEvidenceTimelineEntry[] {
+  return buildTimelineEntries(
+    getCurrentLocalEvidencePoints().filter((point) => point.regionName === regionName)
+  ).slice(0, limit);
+}
+
+export function getFeaturedLocalEvidenceTimeline(limit = 4): LocalEvidenceTimelineEntry[] {
   const regionLeads = new Map<string, LocalEvidencePoint>();
 
-  for (const point of getCurrentLocalEvidencePoints()) {
+  for (const point of buildTimelineEntries(getCurrentLocalEvidencePoints())) {
     if (!regionLeads.has(point.regionName)) {
       regionLeads.set(point.regionName, point);
     }
   }
 
-  return [...regionLeads.values()]
-    .sort((left, right) => {
-      return (
-        (right.supportedAsylum ?? -1) - (left.supportedAsylum ?? -1) ||
-        left.regionName.localeCompare(right.regionName) ||
-        left.siteName.localeCompare(right.siteName)
-      );
-    })
-    .slice(0, limit);
+  return buildTimelineEntries([...regionLeads.values()]).slice(0, limit);
 }

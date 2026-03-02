@@ -1,0 +1,175 @@
+---
+import RegionTileMap from "./RegionTileMap.astro";
+import type { RegionMapView } from "../lib/region-map-explorer";
+
+interface Props {
+  id?: string;
+  title: string;
+  intro: string;
+  views: RegionMapView[];
+  defaultViewId?: string;
+  compact?: boolean;
+}
+
+const { id, title, intro, views, defaultViewId, compact = false } = Astro.props;
+const fallbackViewId = defaultViewId ?? views[0]?.id ?? null;
+const activeView = views.find((view) => view.id === fallbackViewId) ?? views[0] ?? null;
+---
+
+{activeView && (
+  <section class:list={["region-map-explorer", compact && "is-compact"]} data-region-map-explorer data-initial-view={activeView.id} id={id}>
+    {!compact && (
+      <div class="region-map-explorer-head">
+        <div>
+          <h3>{title}</h3>
+          <p class="lede">{intro}</p>
+        </div>
+        <div class="region-map-controls" role="toolbar" aria-label="Regional map metric">
+          {views.map((view) => (
+            <button
+              type="button"
+              class:list={["chip", view.tone ?? "accent", view.id === activeView.id && "is-active"]}
+              data-region-map-view-button={view.id}
+              data-region-map-legend-title={view.legendTitle}
+              data-region-map-legend-body={view.legendBody}
+              aria-pressed={view.id === activeView.id ? "true" : "false"}
+            >
+              {view.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <article class="region-map-legend" data-region-map-legend>
+      {compact && (
+        <div class="region-map-legend-top">
+          <div class="chip-row">
+            <span class="chip accent">Map mode</span>
+            <span class="chip">Click a region to open it</span>
+          </div>
+          <div class="region-map-controls" role="toolbar" aria-label="Regional map metric">
+            {views.map((view) => (
+              <button
+                type="button"
+                class:list={["chip", view.tone ?? "accent", view.id === activeView.id && "is-active"]}
+                data-region-map-view-button={view.id}
+                data-region-map-legend-title={view.legendTitle}
+                data-region-map-legend-body={view.legendBody}
+                aria-pressed={view.id === activeView.id ? "true" : "false"}
+              >
+                {view.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <div class="region-map-legend-swatch" data-region-map-legend-swatch data-tone={activeView.tone ?? "accent"}>
+        <span>Lower</span>
+        <span>Higher</span>
+      </div>
+      <div class="region-map-legend-copy">
+        <strong data-region-map-legend-title>{activeView.legendTitle}</strong>
+        <p class="tiny" data-region-map-legend-body>{activeView.legendBody}</p>
+      </div>
+      {!compact && (
+        <div class="chip-row">
+          <span class="chip accent">Click a region to open it</span>
+          <span class="chip">Selected region summary updates below the map</span>
+        </div>
+      )}
+    </article>
+
+    {views.map((view) => (
+      <div data-region-map-view={view.id} hidden={view.id !== activeView.id}>
+        <RegionTileMap
+          items={view.items}
+          title={view.title}
+          description={view.description}
+          valueLabel={view.valueLabel}
+          highlightRegion={view.highlightRegion}
+          highlightRegions={view.highlightRegions}
+          summaries={view.summaries}
+          tone={view.tone}
+          compact={compact}
+        />
+      </div>
+    ))}
+  </section>
+)}
+
+<script>
+  const windowWithRegionMapExplorerFlag = window as Window & { __asylumstatsRegionMapExplorerInit?: boolean };
+
+  if (!windowWithRegionMapExplorerFlag.__asylumstatsRegionMapExplorerInit) {
+    windowWithRegionMapExplorerFlag.__asylumstatsRegionMapExplorerInit = true;
+
+    const activateView = (root: HTMLElement, viewId: string) => {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-region-map-view-button]"));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-region-map-view]"));
+      const targetPanel = panels.find((panel) => panel.dataset.regionMapView === viewId) ?? panels[0];
+      const targetButton =
+        buttons.find((button) => button.dataset.regionMapViewButton === targetPanel?.dataset.regionMapView) ?? buttons[0];
+
+      if (!targetPanel || !targetButton) {
+        return;
+      }
+
+      for (const button of buttons) {
+        const isActive = button.dataset.regionMapViewButton === targetPanel.dataset.regionMapView;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      }
+
+      for (const panel of panels) {
+        panel.hidden = panel !== targetPanel;
+      }
+
+      const legendTitle = root.querySelector<HTMLElement>("[data-region-map-legend-title]");
+      const legendBody = root.querySelector<HTMLElement>("[data-region-map-legend-body]");
+      const legendSwatch = root.querySelector<HTMLElement>("[data-region-map-legend-swatch]");
+
+      if (legendTitle) {
+        legendTitle.textContent = targetButton.dataset.regionMapLegendTitle ?? "Read the region map";
+      }
+
+      if (legendBody) {
+        legendBody.textContent =
+          targetButton.dataset.regionMapLegendBody ?? "Use the active metric to decide which regional page to open next.";
+      }
+
+      if (legendSwatch) {
+        legendSwatch.dataset.tone = targetPanel.dataset.regionMapTone ?? "accent";
+      }
+    };
+
+    for (const root of document.querySelectorAll<HTMLElement>("[data-region-map-explorer]")) {
+      if (root.dataset.regionMapExplorerReady === "true") {
+        continue;
+      }
+
+      root.dataset.regionMapExplorerReady = "true";
+
+      const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-region-map-view]"));
+
+      for (const panel of panels) {
+        const regionMapFigure = panel.querySelector<HTMLElement>("[data-region-map-root]");
+        panel.dataset.regionMapTone = regionMapFigure?.dataset.regionMapTone ?? "accent";
+      }
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-map-view-button]")) {
+        button.addEventListener("click", () => {
+          const viewId = button.dataset.regionMapViewButton;
+
+          if (!viewId) {
+            return;
+          }
+
+          activateView(root, viewId);
+        });
+      }
+
+      activateView(root, root.dataset.initialView ?? panels[0]?.dataset.regionMapView ?? "");
+    }
+  }
+</script>

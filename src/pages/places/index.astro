@@ -3,8 +3,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import DataDrawer from "../../components/DataDrawer.astro";
 import PageContents from "../../components/PageContents.astro";
 import PageGuide from "../../components/PageGuide.astro";
-import RegionTileMap from "../../components/RegionTileMap.astro";
+import RegionMapExplorer from "../../components/RegionMapExplorer.astro";
 import { getPlaceDirectory } from "../../lib/place-directory";
+import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../lib/route-analytics";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 
@@ -14,22 +15,7 @@ const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
 const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
-const placeRegionMapSummaries = Object.fromEntries(
-  placeDirectory.regions.map((region) => [
-    region.regionName,
-    {
-      title: `${region.regionName} region`,
-      body: `${region.supportedAsylum.toLocaleString()} people on supported asylum across ${region.publicPlaceCount.toLocaleString()} public place pages. ${region.leadArea ? `${region.leadArea.area.areaName} is the first authority to open, and ${region.hotelLinkedPlaceCount.toLocaleString()} place pages in the region already carry hotel evidence.` : "No lead authority is currently attached to this regional slice."}`,
-      href: region.regionPath,
-      cta: `Open ${region.regionName}`,
-      chips: [
-        `${region.supportedAsylumRate} per 10,000`,
-        `${region.publicPlaceCount.toLocaleString()} place pages`,
-        `${region.hotelLinkedPlaceCount.toLocaleString()} with hotel evidence`
-      ]
-    }
-  ])
-);
+const placeRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const placeSections = [
   { id: "place-map", label: "Map" },
   { id: "place-guide", label: "How to use" },
@@ -115,31 +101,19 @@ const pageDescription =
       <div>
         <h2>Read the regional map first</h2>
         <p class="lede">
-          Regions tell you where pressure sits before you zoom into a single authority. Use total to find scale and
-          rate to find intensity.
+          Regions tell you where pressure sits before you zoom into a single authority. Use total for scale, rate for
+          intensity, and hotel visibility to see where the local place layer already carries evidence.
         </p>
       </div>
       <a class="chip accent" href="/routes#route-findings">Keep the system logic nearby</a>
     </div>
-    <div class="viz-grid">
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
-        title="Supported asylum by region"
-        description={`${leadRegion.regionName} currently has the largest regional supported-asylum total in the live local-authority snapshot.`}
-        valueLabel="supported asylum total"
-        highlightRegion={leadRegion.regionName}
-        summaries={placeRegionMapSummaries}
-      />
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
-        title="Supported asylum rate by region"
-        description={`${rateLeader.regionName} currently has the highest weighted regional rate per 10,000 residents.`}
-        valueLabel="rate per 10,000"
-        highlightRegion={rateLeader.regionName}
-        summaries={placeRegionMapSummaries}
-        tone="teal"
-      />
-    </div>
+    <RegionMapExplorer
+      id="place-map-explorer"
+      title="Switch the regional reading mode"
+      intro="One mode is not enough. Total tells you where the biggest stock sits, rate tells you where it bites harder, and hotel visibility tells you where the place layer already has named or unnamed hotel evidence."
+      views={placeRegionMapViews}
+      compact={true}
+    />
   </section>
 
   <PageGuide

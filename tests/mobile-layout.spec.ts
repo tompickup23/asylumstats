@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 import { disableMotion, stabilizePage } from "./layout-helpers";
 
 const pages = [
-  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
-  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true },
-  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true },
+  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false, hasRegionMapExplorer: true },
+  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
+  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
@@ -91,6 +91,12 @@ test.describe("mobile evidence-first layout", () => {
 
         const pageContentsPosition = await pageContents.evaluate((node) => getComputedStyle(node).position);
         expect(pageContentsPosition).toBe("static");
+      }
+
+      if ("hasRegionMapExplorer" in pageConfig && pageConfig.hasRegionMapExplorer) {
+        await expect(page.locator("[data-region-map-explorer]")).toBeVisible();
+        await expect(page.locator("[data-region-map-view-button]")).toHaveCount(3);
+        await expect(page.locator("[data-region-map-legend]")).toBeVisible();
       }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

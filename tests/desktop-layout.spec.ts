@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 import { disableMotion, limitToTopOfPage, stabilizePage, waitForFonts } from "./layout-helpers";
 
 const desktopPages = [
-  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false },
-  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true },
-  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true },
+  { name: "home", path: "/", focus: "#read-this-first", hasPageContents: false, hasRegionMapExplorer: true },
+  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
+  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
@@ -31,6 +31,12 @@ test.describe("desktop layout snapshots", () => {
       if (pageConfig.hasPageContents) {
         await expect(page.locator(".page-contents")).toBeVisible();
         await expect(page.locator(".page-contents-links a").first()).toHaveAttribute("href", pageConfig.focus);
+      }
+
+      if ("hasRegionMapExplorer" in pageConfig && pageConfig.hasRegionMapExplorer) {
+        await expect(page.locator("[data-region-map-explorer]")).toBeVisible();
+        await expect(page.locator("[data-region-map-view-button]")).toHaveCount(3);
+        await expect(page.locator("[data-region-map-legend]")).toBeVisible();
       }
 
       await expect(page).toHaveScreenshot(`${pageConfig.name}-desktop.png`, {

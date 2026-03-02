@@ -1,11 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataDrawer from "../components/DataDrawer.astro";
+import LocalEvidenceTimeline from "../components/LocalEvidenceTimeline.astro";
 import PageGuide from "../components/PageGuide.astro";
-import RegionTileMap from "../components/RegionTileMap.astro";
+import RegionMapExplorer from "../components/RegionMapExplorer.astro";
 import releases from "../data/mock/releases.json";
-import { getFeaturedLocalEvidencePoints } from "../lib/local-evidence";
+import { getFeaturedLocalEvidenceTimeline } from "../lib/local-evidence";
 import { getPlaceDirectory } from "../lib/place-directory";
+import { buildPlaceRegionMapViews } from "../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 
@@ -19,25 +21,10 @@ const leadRegionPage = placeDirectory.regions.find((region) => region.regionName
 const rateLeaderPage = placeDirectory.regions.find((region) => region.regionName === rateLeader.regionName) ?? null;
 const previewRegions = placeDirectory.regions.slice(0, 4);
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 6);
-const featuredLocalEvidencePoints = getFeaturedLocalEvidencePoints(4);
+const featuredLocalEvidenceTimeline = getFeaturedLocalEvidenceTimeline(5);
+const homepageRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const homepageStockFlowCards = routeDashboard.nationalSystemDynamics.stockFlowCards;
 const homepagePostDecisionPath = routeDashboard.nationalSystemDynamics.postDecisionPath;
-const homepageRegionMapSummaries = Object.fromEntries(
-  placeDirectory.regions.map((region) => [
-    region.regionName,
-    {
-      title: `${region.regionName} region`,
-      body: `${region.supportedAsylum.toLocaleString()} people on supported asylum across ${region.publicPlaceCount.toLocaleString()} public place pages. ${region.leadArea ? `${region.leadArea.area.areaName} is the first authority to open, and ${region.hotelLinkedPlaceCount.toLocaleString()} place pages in the region already carry hotel evidence.` : "No lead place page is currently attached to the region."}`,
-      href: region.regionPath,
-      cta: `Open ${region.regionName}`,
-      chips: [
-        `${region.supportedAsylumRate} per 10,000`,
-        `${region.publicPlaceCount.toLocaleString()} place pages`,
-        `${region.hotelLinkedPlaceCount.toLocaleString()} with hotel evidence`
-      ]
-    }
-  ])
-);
 const heroStats = [
   {
     label: "Public place pages",
@@ -302,31 +289,19 @@ const advancedSurfaces = [
       <div>
         <h2>Start with the regional map</h2>
         <p class="lede">
-          This is now a clickable map of Britain with the published UK regions. Use total and rate together, then open a
-          region directly from the map before narrowing into one authority.
+          This is now a clickable map of Britain with the published UK regions. Switch between total, rate, and hotel
+          visibility, then open a region directly from the map before narrowing into one authority.
         </p>
       </div>
       <a class="chip accent" href={leadRegionPage?.regionPath ?? "/places/"}>Open the lead region</a>
     </div>
-    <div class="viz-grid">
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
-        title="Supported asylum by region"
-        description={`${leadRegion.regionName} currently has the largest regional supported-asylum total in the live local-authority snapshot.`}
-        valueLabel="supported asylum total"
-        highlightRegion={leadRegion.regionName}
-        summaries={homepageRegionMapSummaries}
-      />
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
-        title="Supported asylum rate by region"
-        description={`${rateLeader.regionName} currently has the highest weighted regional rate per 10,000 residents.`}
-        valueLabel="rate per 10,000"
-        highlightRegion={rateLeader.regionName}
-        summaries={homepageRegionMapSummaries}
-        tone="teal"
-      />
-    </div>
+    <RegionMapExplorer
+      id="homepage-region-map"
+      title="Open the right region first"
+      intro="Switch the map mode instead of guessing from one headline number. Total shows scale, rate shows intensity, and hotel visibility shows where the place layer already carries named or unnamed hotel evidence."
+      views={homepageRegionMapViews}
+      compact={true}
+    />
   </section>
 
   <section id="regional-preview" class="section section-anchor">
@@ -414,42 +389,19 @@ const advancedSurfaces = [
     </div>
   </section>
 
-  {featuredLocalEvidencePoints.length > 0 && (
+  {featuredLocalEvidenceTimeline.length > 0 && (
     <section id="local-evidence" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>Evidence-backed local layer</h2>
+          <h2>Named local evidence over time</h2>
           <p class="lede">
-            This is the only lower-level layer the site can publish honestly today: named local hotel sites already on
-            the public record. It is not a full town map and it does not claim town-level coverage where none exists.
+            This is the honest lower-level layer. It is a dated timeline of named public hotel evidence, not a fake town
+            map and not a claim of complete local site coverage.
           </p>
         </div>
+        <span class="chip accent">Named public sites only</span>
       </div>
-      <div class="feature-grid">
-        {featuredLocalEvidencePoints.map((point) => (
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">{point.regionName}</span>
-              <span class:list={["chip", point.entityCoverage === "partial" ? "teal" : "warm"]}>
-                {point.chainLabel}
-              </span>
-            </div>
-            <h3>{point.siteName}</h3>
-            <p class="lede">
-              {point.areaName} is the evidence-backed local authority anchor for this named site.{" "}
-              {point.supportedAsylum !== null
-                ? `${point.supportedAsylum.toLocaleString()} people are on supported asylum there at quarter end.`
-                : "The site is publishable even where the local route row is not carrying a numeric anchor here."}
-            </p>
-            <p class="tiny">{point.chainSummary}</p>
-            <div class="chip-row">
-              {point.placeHref && <a class="source-pill" href={point.placeHref}>Open {point.areaName}</a>}
-              <a class="source-pill" href={point.regionHref}>Open {point.regionName}</a>
-              <a class="source-pill" href={point.sourceUrl}>Open source</a>
-            </div>
-          </article>
-        ))}
-      </div>
+      <LocalEvidenceTimeline items={featuredLocalEvidenceTimeline} showRegionChip={true} />
     </section>
   )}
 
