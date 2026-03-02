@@ -4,10 +4,12 @@ import DataDrawer from "../../../components/DataDrawer.astro";
 import PageContents from "../../../components/PageContents.astro";
 import PageGuide from "../../../components/PageGuide.astro";
 import RegionTileMap from "../../../components/RegionTileMap.astro";
+import { getRegionLocalEvidenceLayers } from "../../../lib/local-evidence";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { getRegionPressureSummaries } from "../../../lib/route-analytics";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 
+const placeDirectory = getPlaceDirectory();
 const localRouteLatest = loadLocalRouteLatest();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 
@@ -23,6 +25,7 @@ const featuredAreas = region.areas.slice(0, 8);
 const hotelLinkedAreas = region.areas.filter((row) => row.hotelSignal !== "none");
 const namedHotelAreas = hotelLinkedAreas.filter((row) => row.namedCurrentSiteCount > 0);
 const unnamedOnlyAreas = hotelLinkedAreas.filter((row) => row.hotelSignal === "unnamed");
+const regionLocalEvidenceLayer = getRegionLocalEvidenceLayers().find((layer) => layer.regionName === region.regionName) ?? null;
 const rateLeader =
   [...region.areas].sort(
     (left, right) =>
@@ -34,6 +37,7 @@ const regionSections = [
   { id: "region-guide", label: "How to use" },
   { id: "region-places", label: "Place leaders" },
   ...(hotelLinkedAreas.length > 0 ? [{ id: "region-hotels", label: "Hotel visibility" }] : []),
+  ...(regionLocalEvidenceLayer ? [{ id: "region-local-evidence", label: "Local sites" }] : []),
   { id: "region-data", label: "Full list" }
 ];
 const regionGuideItems = [
@@ -59,6 +63,22 @@ const regionGuideItems = [
     cta: "Open the full list"
   }
 ];
+const regionMapSummaries = Object.fromEntries(
+  placeDirectory.regions.map((entry) => [
+    entry.regionName,
+    {
+      title: `${entry.regionName} region`,
+      body: `${entry.supportedAsylum.toLocaleString()} people on supported asylum across ${entry.publicPlaceCount.toLocaleString()} public place pages. ${entry.leadArea ? `${entry.leadArea.area.areaName} is the first authority to open, and ${entry.hotelLinkedPlaceCount.toLocaleString()} place pages in the region already carry hotel evidence.` : "No lead authority is currently attached to this region page set."}`,
+      href: entry.regionPath,
+      cta: `Open ${entry.regionName}`,
+      chips: [
+        `${entry.supportedAsylumRate} per 10,000`,
+        `${entry.publicPlaceCount.toLocaleString()} place pages`,
+        `${entry.hotelLinkedPlaceCount.toLocaleString()} with hotel evidence`
+      ]
+    }
+  ])
+);
 const pageDescription = `${region.regionName} asylum pressure by place, with regional totals, local authority leaders, and hotel visibility carried through the place layer.`;
 ---
 
@@ -168,6 +188,7 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
         description={`${region.regionName} is highlighted here so the regional page stays tied back to the national map.`}
         valueLabel="supported asylum total"
         highlightRegion={region.regionName}
+        summaries={regionMapSummaries}
       />
       <article class="panel panel-pad">
         <div class="chip-row">
@@ -261,6 +282,49 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
               Contingency accommodation {row.area.contingencyAccommodation.toLocaleString()} | rate{" "}
               {row.area.supportedAsylumRate ?? "n/a"} per 10,000.
             </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {regionLocalEvidenceLayer && (
+    <section id="region-local-evidence" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Evidence-backed local sites in {region.regionName}</h2>
+          <p class="lede">
+            This is the lower-level local layer the site can publish honestly here: named current hotel sites already
+            on the public record. It is not a complete town map and it does not imply site-level coverage outside these
+            evidence-backed rows.
+          </p>
+        </div>
+        <span class="chip accent">
+          {regionLocalEvidenceLayer.currentNamedSiteCount.toLocaleString()} named current site
+          {regionLocalEvidenceLayer.currentNamedSiteCount === 1 ? "" : "s"}
+        </span>
+      </div>
+      <div class="feature-grid">
+        {regionLocalEvidenceLayer.points.map((point) => (
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{point.areaName}</span>
+              <span class:list={["chip", point.entityCoverage === "partial" ? "teal" : "warm"]}>
+                {point.chainLabel}
+              </span>
+            </div>
+            <h3>{point.siteName}</h3>
+            <p class="lede">
+              Publicly visible in {point.areaName}, last named on {point.lastPublicDate}.{" "}
+              {point.supportedAsylum !== null
+                ? `${point.supportedAsylum.toLocaleString()} people are on supported asylum there at quarter end.`
+                : "The site is still publishable even without a local numeric anchor on this card."}
+            </p>
+            <p class="tiny">{point.chainSummary}</p>
+            <div class="chip-row">
+              {point.placeHref && <a class="source-pill" href={point.placeHref}>Open {point.areaName}</a>}
+              <a class="source-pill" href={point.sourceUrl}>Open source</a>
+            </div>
           </article>
         ))}
       </div>

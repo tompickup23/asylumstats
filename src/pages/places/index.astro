@@ -14,6 +14,22 @@ const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
 const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
+const placeRegionMapSummaries = Object.fromEntries(
+  placeDirectory.regions.map((region) => [
+    region.regionName,
+    {
+      title: `${region.regionName} region`,
+      body: `${region.supportedAsylum.toLocaleString()} people on supported asylum across ${region.publicPlaceCount.toLocaleString()} public place pages. ${region.leadArea ? `${region.leadArea.area.areaName} is the first authority to open, and ${region.hotelLinkedPlaceCount.toLocaleString()} place pages in the region already carry hotel evidence.` : "No lead authority is currently attached to this regional slice."}`,
+      href: region.regionPath,
+      cta: `Open ${region.regionName}`,
+      chips: [
+        `${region.supportedAsylumRate} per 10,000`,
+        `${region.publicPlaceCount.toLocaleString()} place pages`,
+        `${region.hotelLinkedPlaceCount.toLocaleString()} with hotel evidence`
+      ]
+    }
+  ])
+);
 const placeSections = [
   { id: "place-map", label: "Map" },
   { id: "place-guide", label: "How to use" },
@@ -112,6 +128,7 @@ const pageDescription =
         description={`${leadRegion.regionName} currently has the largest regional supported-asylum total in the live local-authority snapshot.`}
         valueLabel="supported asylum total"
         highlightRegion={leadRegion.regionName}
+        summaries={placeRegionMapSummaries}
       />
       <RegionTileMap
         items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylumRate }))}
@@ -119,6 +136,7 @@ const pageDescription =
         description={`${rateLeader.regionName} currently has the highest weighted regional rate per 10,000 residents.`}
         valueLabel="rate per 10,000"
         highlightRegion={rateLeader.regionName}
+        summaries={placeRegionMapSummaries}
         tone="teal"
       />
     </div>

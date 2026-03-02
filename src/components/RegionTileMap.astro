@@ -14,6 +14,14 @@ interface RegionValue {
   note?: string;
 }
 
+interface RegionMapSummary {
+  title: string;
+  body: string;
+  href?: string;
+  cta?: string;
+  chips?: string[];
+}
+
 interface Props {
   items: RegionValue[];
   title: string;
@@ -21,10 +29,20 @@ interface Props {
   valueLabel: string;
   highlightRegion?: string;
   highlightRegions?: string[];
+  summaries?: Record<string, RegionMapSummary>;
   tone?: "accent" | "teal" | "warm";
 }
 
-const { items, title, description, valueLabel, highlightRegion, highlightRegions = [], tone = "accent" } = Astro.props;
+const {
+  items,
+  title,
+  description,
+  valueLabel,
+  highlightRegion,
+  highlightRegions = [],
+  summaries = {},
+  tone = "accent"
+} = Astro.props;
 
 const itemByRegion = new Map(items.map((item) => [item.regionName, item]));
 const renderedRegions = REGION_MAP_DRAW_ORDER.flatMap((regionName) => {
@@ -42,6 +60,8 @@ const minValue = Math.min(...values, 0);
 const maxValue = Math.max(...values, 1);
 const range = Math.max(maxValue - minValue, 1);
 const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
+const orderedItems = renderedRegions.map(({ item }) => item);
+const initialRegionName = highlightRegion ?? orderedItems[0]?.regionName ?? null;
 
 function formatValue(value: number): string {
   return new Intl.NumberFormat("en-GB", {
@@ -63,9 +83,35 @@ function getFill(value: number): string {
 
   return `rgba(125, 211, 252, ${0.18 + ratio * 0.56})`;
 }
+
+function buildDefaultSummary(item: RegionValue): RegionMapSummary {
+  return {
+    title: item.regionName,
+    body: item.note ?? `${formatValue(item.value)} ${valueLabel} in this regional view.`,
+    href: buildPublicPlaceRegionPath(item.regionName),
+    cta: "Open region page",
+    chips: [valueLabel]
+  };
+}
+
+const summaryByRegion = Object.fromEntries(
+  orderedItems.map((item) => [
+    item.regionName,
+    {
+      ...buildDefaultSummary(item),
+      ...(summaries[item.regionName] ?? {})
+    }
+  ])
+) as Record<string, RegionMapSummary>;
+const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
 ---
 
-<figure class={`viz-card tone-${tone}`}>
+<figure
+  class={`viz-card tone-${tone}`}
+  data-region-map-root
+  data-initial-region={initialRegionName ?? undefined}
+  data-region-map-tone={tone}
+>
   <div class="viz-head">
     <div>
       <h3>{title}</h3>
@@ -84,8 +130,10 @@ function getFill(value: number): string {
       return (
         <a
           href={href}
-          class:list={["region-map-link", active && "is-active"]}
+          class:list={["region-map-link", active && "is-active", item.regionName === initialRegionName && "is-selected"]}
           aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. Open region page.`}
+          data-region-map-region={item.regionName}
+          data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
         >
           <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
           <path
@@ -120,8 +168,134 @@ function getFill(value: number): string {
       );
     })}
   </svg>
+  <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
+    <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+      {(initialSummary?.chips ?? []).map((chip, index) => (
+        <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
+      ))}
+    </div>
+    <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+    <p class="lede" data-region-map-summary-body>
+      {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+    </p>
+    <p class="tiny">
+      <a
+        class="source-pill"
+        data-region-map-summary-link
+        href={initialSummary?.href ?? "/places/"}
+        hidden={!initialSummary?.href}
+      >
+        {initialSummary?.cta ?? "Open region page"}
+      </a>
+    </p>
+  </article>
   <figcaption class="tiny">
     {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
     Select a region on the map to open its region page. Darker fills indicate higher values in the latest local-authority snapshot.
   </figcaption>
 </figure>
+
+<script>
+  type RegionMapSummaryPayload = {
+    title?: string;
+    body?: string;
+    href?: string;
+    cta?: string;
+    chips?: string[];
+  };
+
+  const windowWithRegionMapFlag = window as Window & { __asylumstatsRegionMapInit?: boolean };
+
+  if (!windowWithRegionMapFlag.__asylumstatsRegionMapInit) {
+    windowWithRegionMapFlag.__asylumstatsRegionMapInit = true;
+
+    const parseSummaryPayload = (value: string | undefined): RegionMapSummaryPayload => {
+      if (!value) {
+        return {};
+      }
+
+      try {
+        return JSON.parse(value) as RegionMapSummaryPayload;
+      } catch {
+        return {};
+      }
+    };
+
+    const updateRegionMapSummary = (root: HTMLElement, regionName: string) => {
+      const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const selectedLink = links.find((link) => link.dataset.regionMapRegion === regionName) ?? links[0];
+
+      if (!selectedLink) {
+        return;
+      }
+
+      const summary = parseSummaryPayload(selectedLink.dataset.regionMapSummary);
+      const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
+      const bodyElement = root.querySelector<HTMLElement>("[data-region-map-summary-body]");
+      const chipsElement = root.querySelector<HTMLElement>("[data-region-map-summary-chips]");
+      const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
+
+      for (const link of links) {
+        link.classList.toggle("is-selected", link === selectedLink);
+      }
+
+      if (titleElement) {
+        titleElement.textContent = summary.title ?? regionName;
+      }
+
+      if (bodyElement) {
+        bodyElement.textContent =
+          summary.body ?? "Use the regional map to open a region page and see the first local authorities worth reading.";
+      }
+
+      if (chipsElement) {
+        chipsElement.innerHTML = "";
+
+        for (const chip of summary.chips ?? []) {
+          const chipNode = document.createElement("span");
+          chipNode.className = "chip";
+
+          if (chipsElement.childElementCount === 0) {
+            chipNode.classList.add(root.dataset.regionMapTone ?? "accent");
+          }
+
+          chipNode.textContent = chip;
+          chipsElement.append(chipNode);
+        }
+      }
+
+      if (linkElement) {
+        if (summary.href) {
+          linkElement.hidden = false;
+          linkElement.href = summary.href;
+          linkElement.textContent = summary.cta ?? "Open region page";
+        } else {
+          linkElement.hidden = true;
+        }
+      }
+    };
+
+    for (const root of document.querySelectorAll<HTMLElement>("[data-region-map-root]")) {
+      if (root.dataset.regionMapReady === "true") {
+        continue;
+      }
+
+      root.dataset.regionMapReady = "true";
+      const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+
+      for (const link of links) {
+        const regionName = link.dataset.regionMapRegion;
+
+        if (!regionName) {
+          continue;
+        }
+
+        link.addEventListener("mouseenter", () => updateRegionMapSummary(root, regionName));
+        link.addEventListener("focus", () => updateRegionMapSummary(root, regionName));
+        link.addEventListener("click", () => updateRegionMapSummary(root, regionName));
+      }
+
+      updateRegionMapSummary(root, root.dataset.initialRegion ?? links[0]?.dataset.regionMapRegion ?? "");
+    }
+  }
+</script>
