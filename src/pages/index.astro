@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataDrawer from "../components/DataDrawer.astro";
 import LocalEvidenceTimeline from "../components/LocalEvidenceTimeline.astro";
-import PageGuide from "../components/PageGuide.astro";
 import RegionMapExplorer from "../components/RegionMapExplorer.astro";
 import releases from "../data/mock/releases.json";
 import { getFeaturedLocalEvidenceTimeline } from "../lib/local-evidence";
@@ -18,115 +17,107 @@ const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
 const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
 const leadRegionPage = placeDirectory.regions.find((region) => region.regionName === leadRegion.regionName) ?? placeDirectory.regions[0];
-const rateLeaderPage = placeDirectory.regions.find((region) => region.regionName === rateLeader.regionName) ?? null;
+const hotelLeaderRegion =
+  [...placeDirectory.regions].sort(
+    (left, right) =>
+      right.hotelLinkedPlaceCount - left.hotelLinkedPlaceCount ||
+      right.namedCurrentSiteCount - left.namedCurrentSiteCount ||
+      right.supportedAsylum - left.supportedAsylum
+  )[0] ?? placeDirectory.regions[0];
 const previewRegions = placeDirectory.regions.slice(0, 4);
-const featuredPlaces = placeDirectory.featuredAreas.slice(0, 6);
-const featuredLocalEvidenceTimeline = getFeaturedLocalEvidenceTimeline(5);
+const featuredPlaces = placeDirectory.featuredAreas.slice(0, 4);
+const featuredLocalEvidenceTimeline = getFeaturedLocalEvidenceTimeline(4);
 const homepageRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const homepageStockFlowCards = routeDashboard.nationalSystemDynamics.stockFlowCards;
 const homepagePostDecisionPath = routeDashboard.nationalSystemDynamics.postDecisionPath;
-const heroStats = [
+const frontDoorSignals = [
   {
-    label: "Public place pages",
-    value: placeDirectory.publicPlaceCount.toLocaleString(),
-    detail: `Local-authority pages in the ${localRouteLatest.snapshotDate} snapshot.`
+    label: "Regional leader by total",
+    value: leadRegion.regionName,
+    detail: `${leadRegion.supportedAsylum.toLocaleString()} people on supported asylum across the latest published regional slice.`
   },
   {
-    label: "Regions covered",
-    value: placeDirectory.regions.length.toLocaleString(),
-    detail: "Grouped first as regions, then opened as place pages."
+    label: "Regional leader by rate",
+    value: rateLeader.regionName,
+    detail: `${rateLeader.supportedAsylumRate} per 10,000 residents. The sharpest regional load is not always the biggest raw total.`
   },
   {
-    label: "Place pages with hotel evidence",
-    value: placeDirectory.hotelLinkedPlaceCount.toLocaleString(),
-    detail: "Named or unnamed hotel evidence folded into the local page."
-  },
-  {
-    label: "Named current hotel sites",
+    label: "Named current hotel sites in the place layer",
     value: placeDirectory.namedCurrentSiteCount.toLocaleString(),
-    detail: "Visible through the place layer instead of the homepage."
+    detail: `${hotelLeaderRegion.regionName} currently has the widest named local hotel footprint visible through public place pages.`
   }
 ];
-const homepagePriorityCards = [
+const mapJourneyCards = [
   {
-    kicker: "Regional view",
-    title: `${leadRegion.regionName} is the first region to open`,
-    body: `${leadRegion.supportedAsylum.toLocaleString()} people are on supported asylum across the region, with ${leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.`,
-    detail:
-      previewRegions[0]?.leadArea
-        ? `${previewRegions[0].leadArea.area.areaName} is the clearest current place page to open first inside that regional field.`
-        : "Regional totals should come before a single local headline.",
+    kicker: "1. Read Britain first",
+    title: "Use the regional map to decide where to open next",
+    body: "Start with total for scale, switch to rate for intensity, and use hotel visibility only as a publication footprint of what the place layer already carries.",
+    href: "#homepage-region-map",
+    cta: "Use the map"
+  },
+  {
+    kicker: "2. Open one region, then one place",
+    title: "Let the region narrow the field before you read a local authority",
+    body: `${leadRegionPage?.regionName ?? "The lead region"} is the first region to open, and ${leadRegionPage?.leadArea?.area.areaName ?? "its lead place"} is the first authority to read inside it.`,
     href: leadRegionPage?.regionPath ?? "/places/",
     cta: leadRegionPage ? `Open ${leadRegionPage.regionName}` : "Browse regions"
   },
   {
-    kicker: "Local reading",
-    title: "Place pages now carry the main local accountability load",
-    body: `${placeDirectory.hotelLinkedPlaceCount.toLocaleString()} public place pages already carry hotel evidence, and ${placeDirectory.unnamedOnlyPlaceCount.toLocaleString()} still sit in unnamed-only hotel visibility gaps.`,
-    detail: "Open a place page to keep count, rate, contingency use, and hotel visibility on one surface.",
-    href: leadRegionPage?.regionPath ?? "/places/",
-    cta: "Open place leaders"
-  },
-  {
-    kicker: "System logic",
-    title: "Claims, backlog, support, appeals, and returns stay separate",
+    kicker: "3. Keep system logic separate",
+    title: "Local place pages are about stock and visibility, not throughput",
     body: routeDashboard.nationalSystemDynamics.readingNotes[0],
-    detail: `Appeals are only complete through ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "the latest available quarter"}, while returns remain broader than asylum exits alone.`,
     href: "/routes#route-findings",
-    cta: "Open system"
-  }
-];
-const homepageGuideItems = [
-  {
-    eyebrow: "Map first",
-    title: "Start with the regional map",
-    body: "Use the region totals and rates to see where pressure sits before you decide which authority to open.",
-    href: "#place-map",
-    cta: "Open the map"
-  },
-  {
-    eyebrow: "Then go local",
-    title: "Open a place page, not a side notebook",
-    body: "The place page is now the main route for local accountability because it holds the local claim, the stock logic, and the hotel line together.",
-    href: "#featured-places",
-    cta: "Open place leaders"
-  },
-  {
-    eyebrow: "Keep it honest",
-    title: "Use the system page when you need flow, churn, or backlog context",
-    body: "The place layer is about local stock and visibility. Use the system page when the question shifts to claims, decisions, appeals, or returns.",
-    href: "#system-logic",
     cta: "Open system logic"
   }
 ];
 const guidedPaths = [
   {
-    kicker: "Place map",
-    title: "Browse regions and places",
-    body: "The new front door is geographic: map first, region cards second, and place pages third.",
-    href: "/places",
-    cta: "Open places"
-  },
-  {
     kicker: "System",
-    title: "Keep stock and flow separate",
-    body: "Use the system page for claims, backlog, support, appeals, and returns once the geography is clear.",
+    title: "Keep claims, backlog, support, appeals, and returns separate",
+    body: "Use the system page when the question shifts from place pressure to national flow, churn, decisions, or post-decision outcomes.",
     href: "/routes",
     cta: "Open system"
   },
   {
+    kicker: "Compare",
+    title: "Use advanced filters only after the geography is clear",
+    body: "The compare explorer is useful for saved filtered views and wider place sets, but it should come after the map and region pages.",
+    href: "/compare",
+    cta: "Open compare"
+  },
+  {
     kicker: "Sources",
-    title: "Check source scope and regional feeds",
-    body: "Use the source ledger to see where the place data comes from and which regional workbook families are in scope.",
+    title: "Check what is in scope before drawing conclusions",
+    body: "Use the sources page to see which regional workbook families, archived hotel inputs, and traced local tables are actually feeding the site.",
     href: "/sources",
     cta: "Open sources"
   },
   {
     kicker: "Method",
-    title: "Check the publishing rules",
-    body: "Use the methodology page when you need the boundary between stock, visibility, route specificity, and publishable evidence.",
+    title: "Use the publishing rules when the data looks deceptively simple",
+    body: "The methodology page states the stock-vs-flow rules, evidence boundaries, and why flat local lines can still hide churn underneath.",
     href: "/methodology",
     cta: "Open methodology"
+  }
+];
+const advancedSurfaces = [
+  {
+    title: "Hotels notebook",
+    body: "Raw hotel watchlists, unresolved chains, and archive-led leads.",
+    href: "/hotels/",
+    cta: "Open hotels"
+  },
+  {
+    title: "Money notebook",
+    body: "Contract and supplier ledger when the place reading points toward public spending.",
+    href: "/spending/",
+    cta: "Open money"
+  },
+  {
+    title: "Actors notebook",
+    body: "Provider and owner profiles once the local place context is already clear.",
+    href: "/entities/",
+    cta: "Open actors"
   }
 ];
 const systemLogicCards = [
@@ -148,127 +139,67 @@ const systemLogicCards = [
     body: `Appeals are asylum-specific but the latest machine-readable quarter is ${homepagePostDecisionPath.appeals.dataCompleteThroughLabel ?? "older"}. Returns are current to ${homepagePostDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"}, but they cover all returns, not just asylum exits.`
   }
 ];
-const advancedSurfaces = [
-  {
-    title: "Compare",
-    body: "Advanced filtered place explorer for query-state views once the map and directory are already clear.",
-    href: "/compare/",
-    cta: "Open compare"
-  },
-  {
-    title: "Hotels",
-    body: "Raw hotel notebook for unresolved chains, archive-led leads, and the wider named-site ledger.",
-    href: "/hotels/",
-    cta: "Open hotels"
-  },
-  {
-    title: "Money",
-    body: "Contract and supplier notebook for disclosed spending rows and linked site trails.",
-    href: "/spending/",
-    cta: "Open money"
-  },
-  {
-    title: "Actors",
-    body: "Provider and owner profile notebook for named-actor chains and entity timelines.",
-    href: "/entities/",
-    cta: "Open actors"
-  }
-];
 ---
 
 <BaseLayout
   title="asylumstats | UK asylum accountability"
-  description="Place-led UK asylum accountability covering regions, local authorities, hotel visibility inside place pages, and asylum-system logic with source-linked evidence."
+  description="Place-led UK asylum accountability covering Britain by region, local authority place pages, visible hotel evidence inside places, and asylum-system logic with source-linked evidence."
 >
-  <section class="hero">
-    <div class="hero-copy">
+  <section class="hero hero-single">
+    <div class="hero-copy hero-frontdoor">
       <span class="kicker">Place-led asylum accountability</span>
-      <h1>Start with the map, then the place.</h1>
+      <h1>Start with Britain, then open one region, then one place.</h1>
       <p>
-        The front door is now geographic. Start with the regional map, open a place page to read local pressure
-        properly, and only then drop into the deeper hotel, money, or actor notebooks if the place layer no longer
-        answers the question.
+        The front door is now the Britain map. Read the regional pattern first, open a region page to narrow the
+        field, then open a place page to keep count, rate, contingency accommodation, and any public hotel evidence on
+        one reading surface.
       </p>
       <div class="hero-actions">
-        <a class="chip accent" href="/places#place-map">Browse the map</a>
+        <a class="chip accent" href="#read-this-first">Open the Britain map</a>
         <a class="chip teal" href={leadRegionPage?.regionPath ?? "/places/"}>Open top region</a>
-        <a class="chip" href="/routes#route-findings">Check the system</a>
-        <a class="chip" href="/sources">Check the sources</a>
+        <a class="chip" href="/places/">Browse all regions</a>
+        <a class="chip" href="/routes#route-findings">Check system logic</a>
       </div>
       <div class="chip-row">
         <span class="chip">{localRouteLatest.snapshotDate} local snapshot</span>
         <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
         <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
       </div>
-    </div>
-
-    <aside class="hero-panel">
-      <div class="hero-panel-header">
-        <div>
-          <span class="tiny">New front door</span>
-          <span class="hero-panel-title">Regions first, place pages second, system logic alongside.</span>
-        </div>
-        <span class="chip">{localRouteLatest.snapshotDate}</span>
-      </div>
-
-      <div class="hero-stat-grid">
-        {heroStats.map((item) => (
-          <article class="hero-stat">
+      <div class="stat-strip front-door-strip">
+        {frontDoorSignals.map((item) => (
+          <article class="stat-tile">
             <span class="tiny">{item.label}</span>
             <strong>{item.value}</strong>
             <p class="tiny">{item.detail}</p>
           </article>
         ))}
       </div>
-
-      <article class="hero-callout">
-        <span class="tiny">Regional total leader</span>
-        <strong>{leadRegion.regionName}</strong>
-        <p class="lede">
-          {leadRegion.supportedAsylum.toLocaleString()} people on supported asylum, with{" "}
-          {leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.
-        </p>
-        {leadRegionPage && (
-          <p class="tiny">
-            <a class="source-pill" href={leadRegionPage.regionPath}>Open {leadRegionPage.regionName}</a>
-          </p>
-        )}
-      </article>
-
-      <article class="hero-callout accent">
-        <span class="tiny">Regional rate leader</span>
-        <strong>{rateLeader.regionName}</strong>
-        <p class="lede">{rateLeader.supportedAsylumRate} per 10,000 residents in the latest weighted regional view.</p>
-        {rateLeaderPage && (
-          <p class="tiny">
-            <a class="source-pill" href={rateLeaderPage.regionPath}>Open {rateLeaderPage.regionName}</a>
-          </p>
-        )}
-      </article>
-    </aside>
+    </div>
   </section>
 
   <section class="section section-anchor priority-section" id="read-this-first">
     <div class="section-head">
       <div>
-        <h2>Read this first</h2>
+        <h2>The Britain map is the front door</h2>
         <p class="lede">
-          The homepage now starts with geography and reading rules. Hotel, money, and actor notebooks still exist, but
-          they no longer sit in front of the place layer.
+          Stop guessing from one headline number. Switch between regional total, regional rate, and visible hotel
+          footprint, then open the region that actually matches the question you are asking.
         </p>
       </div>
-      <a class="chip accent" href="/places">Open the place-led front door</a>
+      <a class="chip accent" href={leadRegionPage?.regionPath ?? "/places/"}>Open {leadRegionPage?.regionName ?? "the lead region"}</a>
     </div>
-    <div class="feature-grid">
-      {homepagePriorityCards.map((card, index) => (
-        <article class="feature-card priority-card accent">
-          <span class="priority-rank">{String(index + 1).padStart(2, "0")}</span>
-          <div class="chip-row">
-            <span class="chip accent">{card.kicker}</span>
-          </div>
+    <RegionMapExplorer
+      id="homepage-region-map"
+      title="Read Britain by the right mode"
+      intro="Total shows scale, rate shows intensity, and hotel visibility shows where the published place layer already carries named or unnamed hotel evidence. The selected region panel gives the next places worth opening."
+      views={homepageRegionMapViews}
+    />
+    <div class="guide-grid">
+      {mapJourneyCards.map((card) => (
+        <article class="guide-card">
+          <span class="chip accent">{card.kicker}</span>
           <h3>{card.title}</h3>
-          <p class="lede">{card.body}</p>
-          <p class="tiny">{card.detail}</p>
+          <p>{card.body}</p>
           <p class="tiny">
             <a class="source-pill" href={card.href}>{card.cta}</a>
           </p>
@@ -277,43 +208,16 @@ const advancedSurfaces = [
     </div>
   </section>
 
-  <PageGuide
-    id="start-here"
-    title="Use the site in three moves"
-    intro="A good session now starts broad, then goes local, then reaches for the system page when you need to interpret churn, backlog, appeals, or returns."
-    items={homepageGuideItems}
-  />
-
-  <section id="place-map" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Start with the regional map</h2>
-        <p class="lede">
-          This is now a clickable map of Britain with the published UK regions. Switch between total, rate, and hotel
-          visibility, then open a region directly from the map before narrowing into one authority.
-        </p>
-      </div>
-      <a class="chip accent" href={leadRegionPage?.regionPath ?? "/places/"}>Open the lead region</a>
-    </div>
-    <RegionMapExplorer
-      id="homepage-region-map"
-      title="Open the right region first"
-      intro="Switch the map mode instead of guessing from one headline number. Total shows scale, rate shows intensity, and hotel visibility shows where the place layer already carries named or unnamed hotel evidence."
-      views={homepageRegionMapViews}
-      compact={true}
-    />
-  </section>
-
   <section id="regional-preview" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Then open a region</h2>
+        <h2>Regions worth opening next</h2>
         <p class="lede">
-          These are the first region cards to open if you want the strongest current public place pages without dropping
-          straight into every notebook.
+          These region pages are the cleanest next step after the Britain map. Each one narrows the field before you
+          jump into an individual authority.
         </p>
       </div>
-      <a class="chip accent" href="/places#regional-directory">Open all regions</a>
+      <a class="chip accent" href="/places#regional-directory">Open the full region directory</a>
     </div>
     <div class="feature-grid">
       {previewRegions.map((region) => (
@@ -321,28 +225,24 @@ const advancedSurfaces = [
           <div class="chip-row">
             <span class="chip accent">{region.regionName}</span>
             <span class="chip teal">{region.countryName}</span>
-            <span class="chip">{region.publicPlaceCount.toLocaleString()} place pages</span>
           </div>
           <h3>
             <a href={region.regionPath}>{region.regionName}</a>
           </h3>
           <p class="lede">
-            {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, at {region.supportedAsylumRate} per 10,000 residents.
+            {region.supportedAsylum.toLocaleString()} people on supported asylum, {region.supportedAsylumRate} per
+            10,000 residents, and {region.hotelLinkedPlaceCount.toLocaleString()} place pages already carrying hotel
+            evidence.
           </p>
           <div class="data-list">
             <div class="data-row">
-              <span>Lead place to open first</span>
+              <span>Open this place first</span>
               <span class="data-row-value">{region.leadArea?.area.areaName ?? "No public place page yet"}</span>
             </div>
             <div class="data-row">
-              <span>Place pages with hotel evidence</span>
-              <span class="data-row-value">{region.hotelLinkedPlaceCount.toLocaleString()}</span>
+              <span>Named current sites visible</span>
+              <span class="data-row-value">{region.namedCurrentSiteCount.toLocaleString()}</span>
             </div>
-          </div>
-          <div class="chip-row">
-            {region.areas.slice(0, 3).map((row) => (
-              <a class="source-pill" href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
-            ))}
           </div>
           <p class="tiny">
             <a class="source-pill" href={region.regionPath}>Open {region.regionName}</a>
@@ -355,9 +255,10 @@ const advancedSurfaces = [
   <section id="featured-places" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Featured place pages</h2>
+        <h2>Open a place page when the region is clear</h2>
         <p class="lede">
-          Open a place page when you need the local finding, the stock logic, and any public hotel evidence in one place.
+          A place page is where the local count, the rate, the contingency position, the stock-vs-flow warning, and any
+          public hotel evidence stay together.
         </p>
       </div>
       <a class="chip accent" href="/places#featured-places">Open more place pages</a>
@@ -395,8 +296,8 @@ const advancedSurfaces = [
         <div>
           <h2>Named local evidence over time</h2>
           <p class="lede">
-            This is the honest lower-level layer. It is a dated timeline of named public hotel evidence, not a fake town
-            map and not a claim of complete local site coverage.
+            This is the honest lower-level layer: dated named public hotel evidence. It is not a complete town map and
+            it does not claim site-level coverage outside these evidence-backed rows.
           </p>
         </div>
         <span class="chip accent">Named public sites only</span>
@@ -414,7 +315,7 @@ const advancedSurfaces = [
           backlog, decisions, appeals, or returns.
         </p>
       </div>
-      <a class="chip accent" href="/routes#post-decision-path">Open the full stock-flow model</a>
+      <a class="chip accent" href="/routes#post-decision-path">Open the stock-flow model</a>
     </div>
     <div class="stat-strip">
       {homepageStockFlowCards.map((item) => (
@@ -437,37 +338,15 @@ const advancedSurfaces = [
 
   <DataDrawer
     id="home-background"
-    label="Advanced notebooks"
-    title="Open the secondary pages and release diary"
-    summary="Hotels, money, actors, and the advanced compare surface still exist, but they now sit behind the map-first place layer."
+    label="Beyond the map"
+    title="Open the wider system and deeper notebooks"
+    summary="The map, the region page, and the place page should answer most first questions. Use this section when you need system logic, source scope, or the raw notebooks behind the place layer."
   >
     <section class="section">
       <div class="section-head">
         <div>
-          <h2>Secondary pages</h2>
-          <p class="lede">
-            These are still useful, but they are no longer the first thing a reader has to decode when arriving on the site.
-          </p>
-        </div>
-      </div>
-      <div class="guide-grid">
-        {advancedSurfaces.map((surface) => (
-          <article class="guide-card">
-            <h3>{surface.title}</h3>
-            <p>{surface.body}</p>
-            <p class="tiny">
-              <a class="source-pill" href={surface.href}>{surface.cta}</a>
-            </p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Choose the page you need</h2>
-          <p class="lede">These are the remaining routes once the map, region cards, and place pages are already clear.</p>
+          <h2>If the Britain map is not enough</h2>
+          <p class="lede">These pages explain the system or the data scope without taking over the front door.</p>
         </div>
       </div>
       <div class="guide-grid">
@@ -480,6 +359,26 @@ const advancedSurfaces = [
             <p>{path.body}</p>
             <p class="tiny">
               <a class="source-pill" href={path.href}>{path.cta}</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Raw notebooks</h2>
+          <p class="lede">These are still useful, but they now sit behind the place-led journey rather than in front of it.</p>
+        </div>
+      </div>
+      <div class="guide-grid">
+        {advancedSurfaces.map((surface) => (
+          <article class="guide-card">
+            <h3>{surface.title}</h3>
+            <p>{surface.body}</p>
+            <p class="tiny">
+              <a class="source-pill" href={surface.href}>{surface.cta}</a>
             </p>
           </article>
         ))}

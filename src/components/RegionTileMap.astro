@@ -95,7 +95,7 @@ const summaryByRegion = Object.fromEntries(
 const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
 ---
 
-<figure
+  <figure
   class:list={[`viz-card tone-${tone}`, compact && "viz-card-compact"]}
   data-region-map-root
   data-initial-region={initialRegionName ?? undefined}
@@ -110,80 +110,121 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
       <span class="chip">{valueLabel}</span>
     </div>
   )}
-  <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
-    <path class="region-map-outline" d={REGION_MAP_OUTLINES.mainland}></path>
-    <path class="region-map-outline" d={REGION_MAP_OUTLINES.northernIreland}></path>
-    {renderedRegions.map(({ geometry, item }) => {
-      const active = activeRegions.has(item.regionName);
-      const href = buildPublicPlaceRegionPath(item.regionName);
-      const valueLabelText = formatValue(item.value);
+  <div class:list={["region-map-stage", compact && "is-compact"]}>
+    <div class="region-map-canvas">
+      <svg class="region-map" viewBox={`0 0 ${REGION_MAP_WIDTH} ${REGION_MAP_HEIGHT}`} role="img" aria-label={title}>
+        <path class="region-map-outline" d={REGION_MAP_OUTLINES.mainland}></path>
+        <path class="region-map-outline" d={REGION_MAP_OUTLINES.northernIreland}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.outerHebrides}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.orkney}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.shetland}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.isleOfMan}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.anglesey}></path>
+        <path class="region-map-outline region-map-island" d={REGION_MAP_OUTLINES.isleOfWight}></path>
+        {renderedRegions.map(({ geometry, item }) => {
+          const active = activeRegions.has(item.regionName);
+          const href = buildPublicPlaceRegionPath(item.regionName);
+          const valueLabelText = formatValue(item.value);
 
-      return (
-        <a
-          href={href}
-          class:list={["region-map-link", active && "is-active", item.regionName === initialRegionName && "is-selected"]}
-          aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. Open region page.`}
-          data-region-map-region={item.regionName}
-          data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
-        >
-          <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
-          <path
-            class="region-map-region"
-            d={geometry.path}
-            fill={getFill(item.value)}
-            stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
-            stroke-width={active ? "3" : "1.4"}
-          ></path>
-          {geometry.calloutPath && <path class="region-map-callout" d={geometry.calloutPath}></path>}
-          <text
-            x={geometry.labelX}
-            y={geometry.labelY}
-            text-anchor={geometry.labelAnchor ?? "middle"}
-            class:list={["region-map-label", active && "is-active"]}
-          >
-            {geometry.labelLines.map((line, index) => (
-              <tspan x={geometry.labelX} dy={index === 0 ? 0 : 14}>
-                {line}
-              </tspan>
-            ))}
-          </text>
-          <text
-            x={geometry.valueX}
-            y={geometry.valueY}
-            text-anchor={geometry.labelAnchor ?? "middle"}
-            class:list={["region-map-value", active && "is-active"]}
-          >
-            {valueLabelText}
-          </text>
-        </a>
-      );
-    })}
-  </svg>
-  <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
-    <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
-      {(initialSummary?.chips ?? []).map((chip, index) => (
-        <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
-      ))}
+          return (
+            <a
+              href={href}
+              class:list={["region-map-link", active && "is-active", item.regionName === initialRegionName && "is-selected"]}
+              aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. Open region page.`}
+              data-region-map-region={item.regionName}
+              data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
+            >
+              <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
+              <path
+                class="region-map-region"
+                d={geometry.path}
+                fill={getFill(item.value)}
+                stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
+                stroke-width={active ? "3" : "1.4"}
+              ></path>
+              {geometry.calloutPath && <path class="region-map-callout" d={geometry.calloutPath}></path>}
+              <text
+                x={geometry.labelX}
+                y={geometry.labelY}
+                text-anchor={geometry.labelAnchor ?? "middle"}
+                class:list={["region-map-label", active && "is-active"]}
+              >
+                {geometry.labelLines.map((line, index) => (
+                  <tspan x={geometry.labelX} dy={index === 0 ? 0 : 14}>
+                    {line}
+                  </tspan>
+                ))}
+              </text>
+            </a>
+          );
+        })}
+      </svg>
+      <figcaption class="tiny region-map-caption">
+        {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
+        Select a region on the map to open its region page. Darker fills indicate higher values in the active map mode.
+      </figcaption>
     </div>
-    <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
-    <p class="lede" data-region-map-summary-body>
-      {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
-    </p>
-    <p class="tiny">
-      <a
-        class="source-pill"
-        data-region-map-summary-link
-        href={initialSummary?.href ?? "/places/"}
-        hidden={!initialSummary?.href}
+
+    <article class="region-map-summary" data-region-map-summary-panel aria-live="polite">
+      <div class="chip-row region-map-summary-chips" data-region-map-summary-chips>
+        {(initialSummary?.chips ?? []).map((chip, index) => (
+          <span class:list={["chip", index === 0 ? tone : undefined]}>{chip}</span>
+        ))}
+      </div>
+      <h4 data-region-map-summary-title>{initialSummary?.title ?? "Select a region"}</h4>
+      <p class="lede" data-region-map-summary-body>
+        {initialSummary?.body ?? "Use the regional map to open a region page and see the first local authorities worth reading."}
+      </p>
+
+      <div
+        class="region-map-summary-stats"
+        data-region-map-summary-stats
+        hidden={!initialSummary?.stats?.length}
       >
-        {initialSummary?.cta ?? "Open region page"}
-      </a>
-    </p>
-  </article>
-  <figcaption class="tiny">
-    {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
-    Select a region on the map to open its region page. Darker fills indicate higher values in the latest local-authority snapshot.
-  </figcaption>
+        {(initialSummary?.stats ?? []).map((stat) => (
+          <div class="region-map-summary-stat">
+            <span class="tiny">{stat.label}</span>
+            <strong>{stat.value}</strong>
+          </div>
+        ))}
+      </div>
+
+      <section
+        class="region-map-summary-links-section"
+        data-region-map-summary-links-section
+        hidden={!initialSummary?.links?.length}
+      >
+        <span class="tiny region-map-summary-label">Open these next</span>
+        <div class="region-map-summary-links" data-region-map-summary-links>
+          {(initialSummary?.links ?? []).map((link) => (
+            <a class="region-map-summary-link" href={link.href}>
+              <strong>{link.label}</strong>
+              {link.meta && <span class="tiny">{link.meta}</span>}
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <p
+        class="tiny region-map-summary-note"
+        data-region-map-summary-note
+        hidden={!initialSummary?.note}
+      >
+        {initialSummary?.note}
+      </p>
+
+      <p class="tiny">
+        <a
+          class="source-pill"
+          data-region-map-summary-link
+          href={initialSummary?.href ?? "/places/"}
+          hidden={!initialSummary?.href}
+        >
+          {initialSummary?.cta ?? "Open region page"}
+        </a>
+      </p>
+    </article>
+  </div>
 </figure>
 
 <script>
@@ -193,6 +234,9 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
     href?: string;
     cta?: string;
     chips?: string[];
+    stats?: { label: string; value: string }[];
+    links?: { label: string; href: string; meta?: string }[];
+    note?: string;
   };
 
   const windowWithRegionMapFlag = window as Window & { __asylumstatsRegionMapInit?: boolean };
@@ -224,6 +268,10 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
       const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
       const bodyElement = root.querySelector<HTMLElement>("[data-region-map-summary-body]");
       const chipsElement = root.querySelector<HTMLElement>("[data-region-map-summary-chips]");
+      const statsElement = root.querySelector<HTMLElement>("[data-region-map-summary-stats]");
+      const linksSection = root.querySelector<HTMLElement>("[data-region-map-summary-links-section]");
+      const linksElement = root.querySelector<HTMLElement>("[data-region-map-summary-links]");
+      const noteElement = root.querySelector<HTMLElement>("[data-region-map-summary-note]");
       const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
 
       for (const link of links) {
@@ -253,6 +301,55 @@ const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ??
           chipNode.textContent = chip;
           chipsElement.append(chipNode);
         }
+      }
+
+      if (statsElement) {
+        statsElement.innerHTML = "";
+        statsElement.hidden = !(summary.stats?.length);
+
+        for (const stat of summary.stats ?? []) {
+          const statNode = document.createElement("div");
+          statNode.className = "region-map-summary-stat";
+
+          const labelNode = document.createElement("span");
+          labelNode.className = "tiny";
+          labelNode.textContent = stat.label;
+
+          const valueNode = document.createElement("strong");
+          valueNode.textContent = stat.value;
+
+          statNode.append(labelNode, valueNode);
+          statsElement.append(statNode);
+        }
+      }
+
+      if (linksSection && linksElement) {
+        linksElement.innerHTML = "";
+        linksSection.hidden = !(summary.links?.length);
+
+        for (const item of summary.links ?? []) {
+          const linkNode = document.createElement("a");
+          linkNode.className = "region-map-summary-link";
+          linkNode.href = item.href;
+
+          const titleNode = document.createElement("strong");
+          titleNode.textContent = item.label;
+          linkNode.append(titleNode);
+
+          if (item.meta) {
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = item.meta;
+            linkNode.append(metaNode);
+          }
+
+          linksElement.append(linkNode);
+        }
+      }
+
+      if (noteElement) {
+        noteElement.hidden = !summary.note;
+        noteElement.textContent = summary.note ?? "";
       }
 
       if (linkElement) {

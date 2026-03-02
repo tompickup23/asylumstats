@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getCurrentLocalEvidencePoints,
   getFeaturedLocalEvidenceTimeline,
+  getRegionLocalEvidenceAreaSummaries,
   getRegionLocalEvidenceLayers,
   getRegionLocalEvidenceTimeline
 } from "../src/lib/local-evidence";
@@ -29,6 +30,15 @@ describe("local evidence layer", () => {
     expect(eastMidlandsTimeline.length).toBeGreaterThan(0);
     expect(eastMidlandsTimeline[0].lastPublicDateLabel).toBeTruthy();
     expect(eastMidlandsTimeline.every((point) => point.regionName === "East Midlands")).toBe(true);
+  });
+
+  it("groups named local evidence by area for region pages", () => {
+    const eastMidlandsAreas = getRegionLocalEvidenceAreaSummaries("East Midlands");
+
+    expect(eastMidlandsAreas.length).toBeGreaterThan(0);
+    expect(eastMidlandsAreas[0].latestPublicDateLabel).toBeTruthy();
+    expect(eastMidlandsAreas[0].siteNames.length).toBeGreaterThan(0);
+    expect(eastMidlandsAreas[0].placeHref).toBe("/places/E06000062/");
   });
 
   it("features one dated lead local evidence row per visible region", () => {

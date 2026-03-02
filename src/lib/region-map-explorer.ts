@@ -1,4 +1,5 @@
 import type { PlaceDirectory } from "./place-directory";
+import { getRegionLocalEvidenceTimeline } from "./local-evidence";
 import type { RegionPressureSummary } from "./route-analytics";
 
 export interface RegionMapValue {
@@ -13,6 +14,20 @@ export interface RegionMapSummary {
   href?: string;
   cta?: string;
   chips?: string[];
+  stats?: RegionMapSummaryStat[];
+  links?: RegionMapSummaryLink[];
+  note?: string;
+}
+
+export interface RegionMapSummaryStat {
+  label: string;
+  value: string;
+}
+
+export interface RegionMapSummaryLink {
+  label: string;
+  href: string;
+  meta?: string;
 }
 
 export interface RegionMapView {
@@ -39,6 +54,76 @@ function getHotelVisibilityLeader(placeDirectory: PlaceDirectory) {
   )[0];
 }
 
+function formatInteger(value: number): string {
+  return value.toLocaleString();
+}
+
+function formatRate(value: number): string {
+  return `${value} per 10,000`;
+}
+
+function buildTopVolumeLinks(placeDirectory: PlaceDirectory, regionName: string): RegionMapSummaryLink[] {
+  const region = placeDirectory.regions.find((candidate) => candidate.regionName === regionName);
+
+  if (!region) {
+    return [];
+  }
+
+  return region.areas.slice(0, 3).map((row) => ({
+    label: row.area.areaName,
+    href: `/places/${row.area.areaCode}/`,
+    meta: `${formatInteger(row.area.supportedAsylum)} supported asylum`
+  }));
+}
+
+function buildTopRateLinks(placeDirectory: PlaceDirectory, regionName: string): RegionMapSummaryLink[] {
+  const region = placeDirectory.regions.find((candidate) => candidate.regionName === regionName);
+
+  if (!region) {
+    return [];
+  }
+
+  return [...region.areas]
+    .sort(
+      (left, right) =>
+        (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
+        right.area.supportedAsylum - left.area.supportedAsylum
+    )
+    .slice(0, 3)
+    .map((row) => ({
+      label: row.area.areaName,
+      href: `/places/${row.area.areaCode}/`,
+      meta: `${row.area.supportedAsylumRate ?? "n/a"} per 10,000`
+    }));
+}
+
+function buildHotelLinks(placeDirectory: PlaceDirectory, regionName: string): RegionMapSummaryLink[] {
+  const region = placeDirectory.regions.find((candidate) => candidate.regionName === regionName);
+
+  if (!region) {
+    return [];
+  }
+
+  return region.areas
+    .filter((row) => row.hotelSignal !== "none")
+    .slice(0, 3)
+    .map((row) => ({
+      label: row.area.areaName,
+      href: `/places/${row.area.areaCode}/`,
+      meta: row.hotelSignal === "named" ? `${row.namedCurrentSiteCount} named current site${row.namedCurrentSiteCount === 1 ? "" : "s"}` : `${row.unnamedSiteCount} unnamed acknowledged site${row.unnamedSiteCount === 1 ? "" : "s"}`
+    }));
+}
+
+function buildEvidenceNote(regionName: string): string {
+  const latestEvidence = getRegionLocalEvidenceTimeline(regionName, 1)[0];
+
+  if (!latestEvidence) {
+    return "No named current hotel site is publicly visible here yet. That is a publication gap, not proof of no hotel use.";
+  }
+
+  return `Latest named public site: ${latestEvidence.siteName} in ${latestEvidence.areaName}, last public on ${latestEvidence.lastPublicDateLabel}.`;
+}
+
 function buildTotalSummaries(placeDirectory: PlaceDirectory): Record<string, RegionMapSummary> {
   return Object.fromEntries(
     placeDirectory.regions.map((region) => [
@@ -52,7 +137,14 @@ function buildTotalSummaries(placeDirectory: PlaceDirectory): Record<string, Reg
           `${region.supportedAsylum.toLocaleString()} supported asylum`,
           `${region.supportedAsylumRate} per 10,000`,
           `${region.publicPlaceCount.toLocaleString()} place pages`
-        ]
+        ],
+        stats: [
+          { label: "Supported asylum", value: formatInteger(region.supportedAsylum) },
+          { label: "Regional rate", value: formatRate(region.supportedAsylumRate) },
+          { label: "Place pages", value: formatInteger(region.publicPlaceCount) }
+        ],
+        links: buildTopVolumeLinks(placeDirectory, region.regionName),
+        note: buildEvidenceNote(region.regionName)
       }
     ])
   );
@@ -71,7 +163,14 @@ function buildRateSummaries(placeDirectory: PlaceDirectory): Record<string, Regi
           `${region.supportedAsylumRate} per 10,000`,
           `${region.supportedAsylum.toLocaleString()} supported asylum`,
           `${region.contingencyAccommodation.toLocaleString()} contingency`
-        ]
+        ],
+        stats: [
+          { label: "Regional rate", value: formatRate(region.supportedAsylumRate) },
+          { label: "Supported asylum", value: formatInteger(region.supportedAsylum) },
+          { label: "Contingency", value: formatInteger(region.contingencyAccommodation) }
+        ],
+        links: buildTopRateLinks(placeDirectory, region.regionName),
+        note: buildEvidenceNote(region.regionName)
       }
     ])
   );
@@ -90,7 +189,14 @@ function buildHotelSummaries(placeDirectory: PlaceDirectory): Record<string, Reg
           `${region.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence`,
           `${region.namedCurrentSiteCount.toLocaleString()} named current sites`,
           `${region.unnamedOnlyPlaceCount.toLocaleString()} unnamed-only place pages`
-        ]
+        ],
+        stats: [
+          { label: "Hotel-linked place pages", value: formatInteger(region.hotelLinkedPlaceCount) },
+          { label: "Named current sites", value: formatInteger(region.namedCurrentSiteCount) },
+          { label: "Unnamed-only gaps", value: formatInteger(region.unnamedOnlyPlaceCount) }
+        ],
+        links: buildHotelLinks(placeDirectory, region.regionName),
+        note: buildEvidenceNote(region.regionName)
       }
     ])
   );

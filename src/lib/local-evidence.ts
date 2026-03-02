@@ -39,6 +39,21 @@ export interface RegionLocalEvidenceLayer {
   points: LocalEvidencePoint[];
 }
 
+export interface RegionLocalEvidenceAreaSummary {
+  areaName: string;
+  areaCode: string | null;
+  placeHref: string | null;
+  currentNamedSiteCount: number;
+  partiallyResolvedSiteCount: number;
+  unresolvedSiteCount: number;
+  latestPublicDate: string;
+  latestPublicDateLabel: string;
+  siteNames: string[];
+  supportedAsylum: number | null;
+  supportedAsylumRate: number | null;
+  chainLabel: string;
+}
+
 function buildChainLabel(entityCoverage: string): string {
   return entityCoverage === "partial" ? "Partial chain" : "Unresolved chain";
 }
@@ -173,6 +188,69 @@ export function getRegionLocalEvidenceTimeline(regionName: string, limit = 8): L
   return buildTimelineEntries(
     getCurrentLocalEvidencePoints().filter((point) => point.regionName === regionName)
   ).slice(0, limit);
+}
+
+export function getRegionLocalEvidenceAreaSummaries(
+  regionName: string,
+  limit = 6
+): RegionLocalEvidenceAreaSummary[] {
+  const buckets = new Map<string, RegionLocalEvidenceAreaSummary>();
+
+  for (const point of getCurrentLocalEvidencePoints().filter((candidate) => candidate.regionName === regionName)) {
+    const key = point.areaCode ?? point.areaName;
+    const existing =
+      buckets.get(key) ??
+      ({
+        areaName: point.areaName,
+        areaCode: point.areaCode,
+        placeHref: point.placeHref,
+        currentNamedSiteCount: 0,
+        partiallyResolvedSiteCount: 0,
+        unresolvedSiteCount: 0,
+        latestPublicDate: point.lastPublicDate,
+        latestPublicDateLabel: formatEvidenceDateLabel(point.lastPublicDate),
+        siteNames: [],
+        supportedAsylum: point.supportedAsylum,
+        supportedAsylumRate: point.supportedAsylumRate,
+        chainLabel: point.chainLabel
+      } satisfies RegionLocalEvidenceAreaSummary);
+
+    existing.currentNamedSiteCount += 1;
+    existing.latestPublicDate =
+      point.lastPublicDate > existing.latestPublicDate ? point.lastPublicDate : existing.latestPublicDate;
+    existing.latestPublicDateLabel = formatEvidenceDateLabel(existing.latestPublicDate);
+    existing.supportedAsylum = point.supportedAsylum ?? existing.supportedAsylum;
+    existing.supportedAsylumRate = point.supportedAsylumRate ?? existing.supportedAsylumRate;
+
+    if (!existing.siteNames.includes(point.siteName)) {
+      existing.siteNames.push(point.siteName);
+    }
+
+    if (point.entityCoverage === "partial") {
+      existing.partiallyResolvedSiteCount += 1;
+    } else {
+      existing.unresolvedSiteCount += 1;
+    }
+
+    existing.chainLabel =
+      existing.partiallyResolvedSiteCount > 0 && existing.unresolvedSiteCount > 0
+        ? "Mixed chain visibility"
+        : existing.partiallyResolvedSiteCount > 0
+          ? "Partial chain"
+          : "Unresolved chain";
+
+    buckets.set(key, existing);
+  }
+
+  return [...buckets.values()]
+    .sort(
+      (left, right) =>
+        right.currentNamedSiteCount - left.currentNamedSiteCount ||
+        right.latestPublicDate.localeCompare(left.latestPublicDate) ||
+        (right.supportedAsylum ?? -1) - (left.supportedAsylum ?? -1) ||
+        left.areaName.localeCompare(right.areaName)
+    )
+    .slice(0, limit);
 }
 
 export function getFeaturedLocalEvidenceTimeline(limit = 4): LocalEvidenceTimelineEntry[] {

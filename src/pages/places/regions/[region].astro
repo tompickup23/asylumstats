@@ -5,7 +5,11 @@ import LocalEvidenceTimeline from "../../../components/LocalEvidenceTimeline.ast
 import PageContents from "../../../components/PageContents.astro";
 import PageGuide from "../../../components/PageGuide.astro";
 import RegionMapExplorer from "../../../components/RegionMapExplorer.astro";
-import { getRegionLocalEvidenceLayers, getRegionLocalEvidenceTimeline } from "../../../lib/local-evidence";
+import {
+  getRegionLocalEvidenceAreaSummaries,
+  getRegionLocalEvidenceLayers,
+  getRegionLocalEvidenceTimeline
+} from "../../../lib/local-evidence";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { buildPlaceRegionMapViews } from "../../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../../lib/route-analytics";
@@ -28,6 +32,7 @@ const hotelLinkedAreas = region.areas.filter((row) => row.hotelSignal !== "none"
 const namedHotelAreas = hotelLinkedAreas.filter((row) => row.namedCurrentSiteCount > 0);
 const unnamedOnlyAreas = hotelLinkedAreas.filter((row) => row.hotelSignal === "unnamed");
 const regionLocalEvidenceLayer = getRegionLocalEvidenceLayers().find((layer) => layer.regionName === region.regionName) ?? null;
+const regionLocalEvidenceAreas = getRegionLocalEvidenceAreaSummaries(region.regionName, 6);
 const regionLocalEvidenceTimeline = getRegionLocalEvidenceTimeline(region.regionName, 8);
 const rateLeader =
   [...region.areas].sort(
@@ -75,7 +80,7 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
 ---
 
 <BaseLayout title={`${region.regionName} region | asylumstats`} description={pageDescription}>
-  <section class="page-top">
+  <section class="page-top page-top-single">
     <section class="page-head">
       <span class="kicker">{region.countryName}</span>
       <h1>{region.regionName} asylum pressure by place</h1>
@@ -89,40 +94,33 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
         <span class="chip teal">{region.publicPlaceCount.toLocaleString()} public place pages</span>
         <span class="chip accent">{region.supportedAsylum.toLocaleString()} supported asylum</span>
       </div>
+      <div class="stat-strip front-door-strip">
+        <article class="stat-tile">
+          <span class="tiny">Regional pressure</span>
+          <strong>{region.supportedAsylum.toLocaleString()}</strong>
+          <p class="tiny">
+            People on supported asylum across the region, at {region.supportedAsylumRate} per 10,000 residents.
+          </p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Open this place first</span>
+          <strong>{region.leadArea?.area.areaName ?? "No public place page yet"}</strong>
+          <p class="tiny">
+            {region.leadArea
+              ? `${region.leadArea.area.supportedAsylum.toLocaleString()} people on supported asylum, with ${region.leadArea.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.`
+              : "The region currently has no public place page to lead with."}
+          </p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Hotel visibility</span>
+          <strong>{region.hotelLinkedPlaceCount.toLocaleString()} place pages already carry hotel evidence</strong>
+          <p class="tiny">
+            {region.namedCurrentSiteCount.toLocaleString()} named current hotel sites are visible here, while {region.unnamedOnlyPlaceCount.toLocaleString()} place pages still sit in unnamed-only gaps.
+          </p>
+        </article>
+      </div>
     </section>
-
-    <aside class="page-rail">
-      <article class="panel panel-pad">
-        <span class="tiny">Regional pressure</span>
-        <h2 class="rail-title">{region.supportedAsylum.toLocaleString()}</h2>
-        <p class="rail-copy">
-          People on supported asylum across the region, at a weighted rate of {region.supportedAsylumRate} per 10,000
-          residents.
-        </p>
-      </article>
-
-      <article class="panel panel-pad">
-        <span class="tiny">Open this place first</span>
-        <h2 class="rail-title">{region.leadArea?.area.areaName ?? "No public place page yet"}</h2>
-        <p class="rail-copy">
-          {region.leadArea
-            ? `${region.leadArea.area.supportedAsylum.toLocaleString()} people on supported asylum, with ${region.leadArea.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.`
-            : "The region currently has no public place page to lead with."}
-        </p>
-      </article>
-
-      <article class="panel panel-pad">
-        <span class="tiny">Hotel visibility</span>
-        <h2 class="rail-title">{region.hotelLinkedPlaceCount.toLocaleString()} place pages already carry hotel evidence</h2>
-        <p class="rail-copy">
-          {region.namedCurrentSiteCount.toLocaleString()} named current hotel sites are visible across the region-led
-          place layer, while {region.unnamedOnlyPlaceCount.toLocaleString()} place pages still sit in unnamed-only gaps.
-        </p>
-      </article>
-    </aside>
   </section>
-
-  <PageContents title="Start here" sections={regionSections} variant="priority" />
 
   <section id="region-findings" class="section section-anchor priority-section">
     <div class="section-head">
@@ -200,6 +198,8 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
       </article>
     </div>
   </section>
+
+  <PageContents title="Start here" sections={regionSections} variant="priority" />
 
   <PageGuide
     id="region-guide"
@@ -295,6 +295,28 @@ const pageDescription = `${region.regionName} asylum pressure by place, with reg
           {regionLocalEvidenceLayer.currentNamedSiteCount === 1 ? "" : "s"}
         </span>
       </div>
+      {regionLocalEvidenceAreas.length > 0 && (
+        <div class="feature-grid">
+          {regionLocalEvidenceAreas.map((area) => (
+            <article class="feature-card">
+              <div class="chip-row">
+                <span class="chip accent">{area.areaName}</span>
+                <span class:list={["chip", area.partiallyResolvedSiteCount > 0 ? "teal" : "warm"]}>{area.chainLabel}</span>
+              </div>
+              <h3>{area.currentNamedSiteCount.toLocaleString()} named current site{area.currentNamedSiteCount === 1 ? "" : "s"}</h3>
+              <p class="lede">
+                Latest public naming on {area.latestPublicDateLabel}. {area.supportedAsylum !== null ? `${area.supportedAsylum.toLocaleString()} people are on supported asylum there at quarter end.` : "The site evidence is public even where the local route row is not carrying a numeric anchor here."}
+              </p>
+              <p class="tiny">{area.siteNames.slice(0, 2).join(" | ")}</p>
+              {area.placeHref && (
+                <p class="tiny">
+                  <a class="source-pill" href={area.placeHref}>Open {area.areaName}</a>
+                </p>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
       <LocalEvidenceTimeline items={regionLocalEvidenceTimeline} />
     </section>
   )}

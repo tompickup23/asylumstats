@@ -97,6 +97,7 @@ test.describe("mobile evidence-first layout", () => {
         await expect(page.locator("[data-region-map-explorer]")).toBeVisible();
         await expect(page.locator("[data-region-map-view-button]")).toHaveCount(3);
         await expect(page.locator("[data-region-map-legend]")).toBeVisible();
+        await expect(page.locator(".region-map-summary-stats").first()).toBeVisible();
       }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

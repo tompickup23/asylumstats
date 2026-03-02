@@ -24,4 +24,15 @@ describe("region map explorer", () => {
     expect(hotelView?.legendBody).toMatch(/publication footprint/i);
     expect(hotelView?.valueLabel).toBe("place pages with hotel evidence");
   });
+
+  it("builds selected-region summaries with stats, next links, and an evidence note", () => {
+    const placeDirectory = getPlaceDirectory();
+    const regionalPressure = getRegionPressureSummaries(loadLocalRouteLatest().areas);
+    const totalView = buildPlaceRegionMapViews(placeDirectory, regionalPressure).find((view) => view.id === "supported_total");
+    const northWestSummary = totalView?.summaries?.["North West"];
+
+    expect(northWestSummary?.stats?.length).toBeGreaterThan(0);
+    expect(northWestSummary?.links?.length).toBeGreaterThan(0);
+    expect(northWestSummary?.note).toMatch(/latest named public site|publication gap/i);
+  });
 });

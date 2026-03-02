@@ -2,7 +2,6 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DataDrawer from "../../components/DataDrawer.astro";
 import PageContents from "../../components/PageContents.astro";
-import PageGuide from "../../components/PageGuide.astro";
 import RegionMapExplorer from "../../components/RegionMapExplorer.astro";
 import { getPlaceDirectory } from "../../lib/place-directory";
 import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
@@ -14,6 +13,13 @@ const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const leadRegion = regionalPressure[0];
 const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
+const hotelLeader =
+  [...placeDirectory.regions].sort(
+    (left, right) =>
+      right.hotelLinkedPlaceCount - left.hotelLinkedPlaceCount ||
+      right.namedCurrentSiteCount - left.namedCurrentSiteCount ||
+      right.supportedAsylum - left.supportedAsylum
+  )[0] ?? placeDirectory.regions[0];
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
 const placeRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const placeSections = [
@@ -23,25 +29,22 @@ const placeSections = [
   { id: "featured-places", label: "Place leaders" },
   { id: "advanced-place-tools", label: "Advanced tools" }
 ];
-const placeGuideItems = [
+const placeGuideCards = [
   {
-    eyebrow: "Start here",
-    title: "Read the regional map before opening a single place page",
-    body: "The map tells you where supported asylum is concentrated by total and by rate, so you do not mistake one large city for the whole geography.",
+    title: "Read the Britain map first",
+    body: "Do not open an authority blind. Start with total for scale, switch to rate for intensity, and use hotel visibility only as a publication footprint.",
     href: "#place-map",
-    cta: "Open the map"
+    cta: "Use the map"
   },
   {
-    eyebrow: "Then go local",
-    title: "Open a region page, then move into the places inside it",
-    body: "Each region page now acts as the bridge between the national map and individual local authorities, so the place layer no longer feels like one long national list.",
+    title: "Open one region before one authority",
+    body: "The region page is the bridge between Britain and the local authority. It narrows the field before the place layer gets specific.",
     href: "#regional-directory",
     cta: "Open regions"
   },
   {
-    eyebrow: "Only if needed",
-    title: "Use the secondary notebooks for raw ledgers and deeper investigations",
-    body: "The compare, hotels, money, and actor pages still exist, but they now sit behind the place layer instead of acting as the first route through the site.",
+    title: "Use raw notebooks only after the place page",
+    body: "Compare, hotels, money, and actors still exist, but they now sit behind the map-led route through the publication.",
     href: "#advanced-place-tools",
     cta: "Open advanced tools"
   }
@@ -51,58 +54,46 @@ const pageDescription =
 ---
 
 <BaseLayout title="Places | asylumstats" description={pageDescription}>
-  <section class="page-top">
+  <section class="page-top page-top-single">
     <section class="page-head">
       <span class="kicker">Place-led explorer</span>
       <h1>Start with regions, then open places.</h1>
       <p>
-        This is now the front door. Use the regional map to find pressure, then open local authority pages to keep
-        count, rate, contingency accommodation, and any public hotel evidence on one reading surface.
+        This is the main front door. Read the Britain map first, open a region page second, then use local authority
+        pages to keep count, rate, contingency accommodation, and any public hotel evidence on one reading surface.
       </p>
       <div class="chip-row">
         <span class="chip">{placeDirectory.snapshotDate} snapshot</span>
         <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
         <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
       </div>
+      <div class="stat-strip front-door-strip">
+        <article class="stat-tile">
+          <span class="tiny">Regional leader by total</span>
+          <strong>{leadRegion.regionName}</strong>
+          <p class="tiny">{leadRegion.supportedAsylum.toLocaleString()} people on supported asylum across the latest regional slice.</p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Regional leader by rate</span>
+          <strong>{rateLeader.regionName}</strong>
+          <p class="tiny">{rateLeader.supportedAsylumRate} per 10,000 residents in the weighted regional view.</p>
+        </article>
+        <article class="stat-tile">
+          <span class="tiny">Hotel visibility leader</span>
+          <strong>{hotelLeader.regionName}</strong>
+          <p class="tiny">{hotelLeader.hotelLinkedPlaceCount.toLocaleString()} place pages there already carry hotel evidence.</p>
+        </article>
+      </div>
     </section>
-
-    <aside class="page-rail">
-      <article class="panel panel-pad">
-        <span class="tiny">Regional leader by total</span>
-        <h2 class="rail-title">{leadRegion.regionName}</h2>
-        <p class="rail-copy">
-          {leadRegion.supportedAsylum.toLocaleString()} people on supported asylum across the region, with{" "}
-          {leadRegion.contingencyAccommodation.toLocaleString()} in contingency accommodation.
-        </p>
-      </article>
-
-      <article class="panel panel-pad">
-        <span class="tiny">Regional leader by rate</span>
-        <h2 class="rail-title">{rateLeader.regionName}</h2>
-        <p class="rail-copy">
-          {rateLeader.supportedAsylumRate} per 10,000 residents. The sharpest regional load is not always the biggest raw total.
-        </p>
-      </article>
-
-      <article class="panel panel-pad">
-        <span class="tiny">Hotel visibility in the place layer</span>
-        <h2 class="rail-title">{placeDirectory.namedCurrentSiteCount.toLocaleString()} named current hotel sites</h2>
-        <p class="rail-copy">
-          These now surface through the relevant place pages first, with {placeDirectory.unnamedOnlyPlaceCount.toLocaleString()} public place pages still sitting in unnamed-only hotel visibility gaps.
-        </p>
-      </article>
-    </aside>
   </section>
-
-  <PageContents title="Start here" sections={placeSections} variant="priority" />
 
   <section id="place-map" class="section section-anchor priority-section">
     <div class="section-head">
       <div>
         <h2>Read the regional map first</h2>
         <p class="lede">
-          Regions tell you where pressure sits before you zoom into a single authority. Use total for scale, rate for
-          intensity, and hotel visibility to see where the local place layer already carries evidence.
+          Regions tell you where pressure sits before you zoom into a single authority. The selected region panel then
+          tells you which place pages to open next.
         </p>
       </div>
       <a class="chip accent" href="/routes#route-findings">Keep the system logic nearby</a>
@@ -110,26 +101,43 @@ const pageDescription =
     <RegionMapExplorer
       id="place-map-explorer"
       title="Switch the regional reading mode"
-      intro="One mode is not enough. Total tells you where the biggest stock sits, rate tells you where it bites harder, and hotel visibility tells you where the place layer already has named or unnamed hotel evidence."
+      intro="One mode is not enough. Total shows scale, rate shows intensity, and hotel visibility shows where the published place layer already carries named or unnamed hotel evidence."
       views={placeRegionMapViews}
-      compact={true}
     />
   </section>
 
-  <PageGuide
-    id="place-guide"
-    title="Use the place layer in three moves"
-    intro="Start broad, then go local, then reach for the deeper notebooks only when the place page no longer answers the question."
-    items={placeGuideItems}
-  />
+  <PageContents title="Start here" sections={placeSections} variant="priority" />
+
+  <section id="place-guide" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Use the place layer in three moves</h2>
+        <p class="lede">
+          Start broad, narrow to one region, then open a local authority. The deeper notebooks only matter when the
+          place page stops answering the question.
+        </p>
+      </div>
+    </div>
+    <div class="guide-grid">
+      {placeGuideCards.map((card) => (
+        <article class="guide-card">
+          <h3>{card.title}</h3>
+          <p>{card.body}</p>
+          <p class="tiny">
+            <a class="source-pill" href={card.href}>{card.cta}</a>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
 
   <section id="regional-directory" class="section section-anchor">
     <div class="section-head">
       <div>
         <h2>Browse by region</h2>
         <p class="lede">
-          Each region card gives the regional total, the rate, the visible hotel footprint inside the published place
-          layer, and the first authorities worth opening.
+          Each region card keeps the regional total, the rate, the visible hotel footprint, and the first authorities
+          worth opening.
         </p>
       </div>
       <span class="chip">{placeDirectory.regions.length} regions with public place pages</span>
@@ -151,26 +159,17 @@ const pageDescription =
           </p>
           <div class="data-list">
             <div class="data-row">
-              <span>Lead place to open first</span>
+              <span>Open this place first</span>
               <span class="data-row-value">{region.leadArea?.area.areaName ?? "No public place page yet"}</span>
             </div>
             <div class="data-row">
-              <span>Contingency accommodation in region</span>
+              <span>Contingency accommodation</span>
               <span class="data-row-value">{region.contingencyAccommodation.toLocaleString()}</span>
             </div>
             <div class="data-row">
-              <span>Place pages with hotel evidence</span>
-              <span class="data-row-value">{region.hotelLinkedPlaceCount.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Named current hotel sites on those place pages</span>
+              <span>Named current sites visible</span>
               <span class="data-row-value">{region.namedCurrentSiteCount.toLocaleString()}</span>
             </div>
-          </div>
-          <div class="chip-row">
-            {region.areas.slice(0, 4).map((row) => (
-              <a class="source-pill" href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
-            ))}
           </div>
           <p class="tiny">
             <a class="source-pill" href={region.regionPath}>Open {region.regionName} region page</a>
@@ -185,8 +184,8 @@ const pageDescription =
       <div>
         <h2>Place leaders to open next</h2>
         <p class="lede">
-          These are the biggest public place pages by supported asylum count. The hotel line stays local: where public
-          hotel evidence exists, it is summarised inside the place card.
+          These are the biggest public place pages by supported asylum count. Where hotel evidence exists, it stays
+          visible inside the local reading surface.
         </p>
       </div>
       <a class="chip accent" href="/compare#compare-findings">Open the advanced compare surface</a>
@@ -222,7 +221,7 @@ const pageDescription =
     id="advanced-place-tools"
     label="Advanced tools"
     title="Open all region pages and the secondary notebooks"
-    summary="The main route is now region to place. Use this section for a compact directory of every region page and then the deeper compare, hotel, money, and actor notebooks."
+    summary="The main route is now Britain to region to place. Use this section for the full region directory and then the deeper compare, hotel, money, and actor notebooks."
   >
     <section class="section">
       <div class="section-head">
@@ -276,7 +275,7 @@ const pageDescription =
         <article class="guide-card">
           <span class="chip">Hotel notebook</span>
           <h3>Raw hotel ledger</h3>
-          <p>Use this only when the place page is not enough and you need the unresolved chain watchlists or archive queue.</p>
+          <p>Use this only when the place page is not enough and you need unresolved chains or the archive queue.</p>
           <p class="tiny">
             <a class="source-pill" href="/hotels/">Open hotels</a>
           </p>
