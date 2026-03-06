@@ -11,7 +11,7 @@ const pages = [
     hasRegionMapSummary: false
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
-  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
+  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
@@ -110,43 +110,61 @@ test.describe("mobile evidence-first layout", () => {
         }
       }
 
+      if ("hasAuthorityStage" in pageConfig && pageConfig.hasAuthorityStage) {
+        await expect(page.locator("[data-region-authority-stage]")).toBeVisible();
+        await expect(page.locator("[data-region-authority-svg]")).toBeVisible();
+        await expect(page.locator("[data-home-system]")).toBeVisible();
+      }
+
       if (pageConfig.name === "home") {
         await expect(page.locator(".home-map-copy")).toBeVisible();
         await expect(
-          page.locator(".home-map-panel [data-region-map-view]:not([hidden]) .region-map-canvas")
+          page.locator(
+            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map-canvas'
+          )
         ).toBeVisible();
 
         const homeMetrics = await page.evaluate(() => {
           const intro = document.querySelector(".home-map-intro");
+          const stage = document.querySelector(".home-map-stage");
           const canvas = document.querySelector(
-            ".home-map-panel [data-region-map-view]:not([hidden]) .region-map-canvas"
+            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map-canvas'
           );
-          const map = document.querySelector(".home-map-panel [data-region-map-view]:not([hidden]) .region-map");
+          const map = document.querySelector(
+            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map'
+          );
 
-          if (!intro || !canvas || !map) {
+          if (!intro || !canvas || !map || !stage) {
             return null;
           }
 
           const introRect = intro.getBoundingClientRect();
+          const stageRect = stage.getBoundingClientRect();
           const canvasRect = canvas.getBoundingClientRect();
           const mapRect = map.getBoundingClientRect();
 
           return {
+            stageTop: stageRect.top,
+            stageBottom: stageRect.bottom,
             introTop: introRect.top,
             introBottom: introRect.bottom,
             canvasTop: canvasRect.top,
             mapTop: mapRect.top,
             mapBottom: mapRect.bottom,
-            canvasBottom: canvasRect.bottom,
-            viewportHeight: window.innerHeight
+            canvasBottom: canvasRect.bottom
           };
         });
 
         expect(homeMetrics).not.toBeNull();
-        expect(homeMetrics!.introTop).toBeLessThanOrEqual(homeMetrics!.canvasTop + 1);
-        expect(homeMetrics!.introBottom).toBeLessThan(homeMetrics!.canvasBottom);
-        expect(homeMetrics!.mapTop).toBeLessThan(homeMetrics!.viewportHeight);
+        expect(homeMetrics!.introTop).toBeGreaterThanOrEqual(homeMetrics!.stageTop - 1);
+        expect(homeMetrics!.introTop).toBeLessThan(homeMetrics!.canvasBottom);
         expect(homeMetrics!.mapBottom).toBeLessThanOrEqual(homeMetrics!.canvasBottom + 1);
+        expect(homeMetrics!.mapTop).toBeGreaterThanOrEqual(homeMetrics!.canvasTop - 1);
+
+        await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
+        await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
+        await expect(page.locator("[data-home-title]")).toHaveText("North West");
+        await expect(page.locator(".home-authority-map")).toBeVisible();
       }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

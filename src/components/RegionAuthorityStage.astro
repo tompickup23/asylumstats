@@ -1,0 +1,458 @@
+---
+import type { PlaceDirectoryRegion } from "../lib/place-directory";
+
+interface Props {
+  id?: string;
+  region: PlaceDirectoryRegion;
+  snapshotDate: string;
+}
+
+type ScopeMeta = {
+  scopeId: string;
+  scopeKind: "region" | "place";
+  eyebrow: string;
+  title: string;
+  note: string;
+};
+
+const { id, region, snapshotDate } = Astro.props;
+
+const scopeMeta: Record<string, ScopeMeta> = {
+  [region.regionName]: {
+    scopeId: region.regionName,
+    scopeKind: "region",
+    eyebrow: `${region.countryName} region`,
+    title: region.regionName,
+    note: "Pick one authority on the map."
+  }
+};
+
+const payload = JSON.stringify({
+  boundariesUrl: "/place-boundaries.json",
+  regionName: region.regionName,
+  scopeMeta: {
+    ...scopeMeta,
+    ...Object.fromEntries(
+      region.areas.map((row) => [
+        row.area.areaCode,
+        {
+          scopeId: row.area.areaCode,
+          scopeKind: "place",
+          eyebrow: `${region.regionName} local page`,
+          title: row.area.areaName,
+          note: "Local preview."
+        }
+      ])
+    )
+  },
+  areas: region.areas.map((row) => ({
+    areaCode: row.area.areaCode,
+    areaName: row.area.areaName,
+    supportedAsylum: row.area.supportedAsylum,
+    supportedAsylumRate: row.area.supportedAsylumRate,
+    contingencyAccommodation: row.area.contingencyAccommodation,
+    hotelSignalValue: row.hotelSignal === "named" ? 2 : row.hotelSignal === "unnamed" ? 1 : 0,
+    hotelSignalLabel:
+      row.hotelSignal === "named"
+        ? `${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"}`
+        : row.hotelSignal === "unnamed"
+          ? `${row.unnamedSiteCount} unnamed acknowledged hotel site${row.unnamedSiteCount === 1 ? "" : "s"}`
+          : "No named current hotel site visible"
+  }))
+});
+---
+
+<section class="home-map-stage region-authority-stage" data-region-authority-stage id={id}>
+  <script type="application/json" data-region-authority-data set:html={payload} is:inline></script>
+
+  <div class="home-map-intro">
+    <div class="home-map-copy">
+      <span class="kicker" data-region-authority-eyebrow>{region.countryName} region</span>
+      <h1 data-region-authority-title>{region.regionName}</h1>
+      <p data-region-authority-note>Pick one authority on the map.</p>
+    </div>
+    <div class="chip-row home-map-meta">
+      <span class="chip">{snapshotDate} local snapshot</span>
+      <span class="chip teal">{region.publicPlaceCount.toLocaleString()} public place pages</span>
+      <span class="chip accent">{region.supportedAsylum.toLocaleString()} on support</span>
+    </div>
+  </div>
+
+  <section class="home-authority-stage">
+    <article class="region-map-legend is-overlay home-authority-legend" data-region-authority-legend>
+      <div class="region-map-legend-top">
+        <div class="chip-row">
+          <span class="chip accent">Authority map</span>
+        </div>
+        <div class="region-map-controls" role="toolbar" aria-label="Regional authority map metric">
+          <button type="button" class="chip accent is-active" data-region-authority-view="total">
+            Total
+          </button>
+          <button type="button" class="chip" data-region-authority-view="rate">
+            Rate
+          </button>
+          <button type="button" class="chip" data-region-authority-view="hotel">
+            Hotel visibility
+          </button>
+        </div>
+      </div>
+      <div class="region-map-legend-swatch" data-region-authority-swatch data-tone="accent">
+        <span>Lower</span>
+        <span>Higher</span>
+      </div>
+      <div class="region-map-legend-copy">
+        <strong data-region-authority-legend-title>Scale first</strong>
+        <p class="tiny" data-region-authority-legend-body>
+          Use total to see where the largest supported-asylum stock sits before you narrow into one authority.
+        </p>
+      </div>
+    </article>
+
+    <div class="home-authority-canvas">
+      <svg
+        class="region-map home-authority-map"
+        data-region-authority-svg
+        viewBox="0 0 620 760"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={`${region.regionName} authority map`}
+      ></svg>
+      <figcaption class="tiny region-map-caption home-authority-caption" data-region-authority-caption>
+        Select one authority to update the right-hand deck without leaving the region page.
+      </figcaption>
+    </div>
+  </section>
+</section>
+
+<script>
+  type ScopeMeta = {
+    scopeId: string;
+    scopeKind: "region" | "place";
+    eyebrow: string;
+    title: string;
+    note: string;
+  };
+
+  type AreaPayload = {
+    areaCode: string;
+    areaName: string;
+    supportedAsylum: number;
+    supportedAsylumRate: number | null;
+    contingencyAccommodation: number;
+    hotelSignalValue: number;
+    hotelSignalLabel: string;
+  };
+
+  type RegionAuthorityPayload = {
+    boundariesUrl: string;
+    regionName: string;
+    scopeMeta: Record<string, ScopeMeta>;
+    areas: AreaPayload[];
+  };
+
+  type BoundaryArea = {
+    areaCode: string;
+    areaName: string;
+    path: string;
+    labelX: number;
+    labelY: number;
+  };
+
+  type BoundaryPayload = {
+    width: number;
+    height: number;
+    regions: Record<string, { countryName: string; areaCount: number; areas: BoundaryArea[] }>;
+  };
+
+  type AuthorityMetricId = "total" | "rate" | "hotel";
+
+  const windowWithRegionAuthorityFlag = window as Window & { __asylumstatsRegionAuthorityInit?: boolean };
+
+  if (!windowWithRegionAuthorityFlag.__asylumstatsRegionAuthorityInit) {
+    windowWithRegionAuthorityFlag.__asylumstatsRegionAuthorityInit = true;
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const metricConfig: Record<
+      AuthorityMetricId,
+      { tone: "accent" | "teal" | "warm"; body: string; title: string }
+    > = {
+      total: {
+        tone: "accent",
+        title: "Scale first",
+        body: "Use total to see where the largest supported-asylum stock sits before you narrow into one authority."
+      },
+      rate: {
+        tone: "teal",
+        title: "Intensity first",
+        body: "Use rate to find where supported asylum is biting harder relative to the resident population."
+      },
+      hotel: {
+        tone: "warm",
+        title: "Visibility first",
+        body: "Use hotel visibility to find where named or acknowledged hotel evidence is already on the public record."
+      }
+    };
+
+    const formatInteger = (value: number) => value.toLocaleString("en-GB");
+    const formatNumber = (value: number) =>
+      new Intl.NumberFormat("en-GB", {
+        minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+        maximumFractionDigits: Number.isInteger(value) ? 0 : 2
+      }).format(value);
+
+    const clampOpacity = (ratio: number) => Math.max(0.18, Math.min(0.84, 0.18 + ratio * 0.58));
+
+    const getFill = (value: number, minValue: number, maxValue: number, tone: "accent" | "teal" | "warm") => {
+      const range = Math.max(maxValue - minValue, 1);
+      const ratio = (value - minValue) / range;
+      const alpha = clampOpacity(ratio);
+
+      if (tone === "teal") {
+        return `rgba(78, 228, 195, ${alpha})`;
+      }
+
+      if (tone === "warm") {
+        return `rgba(255, 139, 97, ${alpha})`;
+      }
+
+      return `rgba(125, 211, 252, ${alpha})`;
+    };
+
+    const buildAreaHref = (areaCode: string) => `/places/${areaCode}/`;
+
+    const loadBoundaryPayload = (() => {
+      let promise: Promise<BoundaryPayload> | null = null;
+
+      return (url: string) => {
+        if (!promise) {
+          promise = fetch(url, { headers: { accept: "application/json" } }).then((response) => {
+            if (!response.ok) {
+              throw new Error(`Boundary payload failed with ${response.status}`);
+            }
+
+            return response.json() as Promise<BoundaryPayload>;
+          });
+        }
+
+        return promise;
+      };
+    })();
+
+    for (const root of document.querySelectorAll<HTMLElement>("[data-region-authority-stage]")) {
+      if (root.dataset.regionAuthorityReady === "true") {
+        continue;
+      }
+
+      root.dataset.regionAuthorityReady = "true";
+      const dataNode = root.querySelector<HTMLScriptElement>("[data-region-authority-data]");
+
+      if (!dataNode?.textContent) {
+        continue;
+      }
+
+      const payload = JSON.parse(dataNode.textContent) as RegionAuthorityPayload;
+      const authoritySvg = root.querySelector<SVGSVGElement>("[data-region-authority-svg]");
+      const eyebrow = root.querySelector<HTMLElement>("[data-region-authority-eyebrow]");
+      const title = root.querySelector<HTMLElement>("[data-region-authority-title]");
+      const note = root.querySelector<HTMLElement>("[data-region-authority-note]");
+      const legendTitle = root.querySelector<HTMLElement>("[data-region-authority-legend-title]");
+      const legendBody = root.querySelector<HTMLElement>("[data-region-authority-legend-body]");
+      const legendSwatch = root.querySelector<HTMLElement>("[data-region-authority-swatch]");
+      const caption = root.querySelector<HTMLElement>("[data-region-authority-caption]");
+
+      if (!authoritySvg || !eyebrow || !title || !note || !legendTitle || !legendBody || !legendSwatch || !caption) {
+        continue;
+      }
+
+      let currentMetric: AuthorityMetricId = "total";
+      let currentAreaCode: string | null = null;
+
+      const updateCopy = (scopeId: string) => {
+        const meta = payload.scopeMeta[scopeId] ?? payload.scopeMeta[payload.regionName];
+        eyebrow.textContent = meta.eyebrow;
+        title.textContent = meta.title;
+        note.textContent = meta.note;
+      };
+
+      const renderMap = async (selectedAreaCode: string | null) => {
+        const boundaryPayload = await loadBoundaryPayload(payload.boundariesUrl);
+        const boundaryRegion = boundaryPayload.regions[payload.regionName];
+
+        if (!boundaryRegion) {
+          return;
+        }
+
+        const metric = metricConfig[currentMetric];
+        const areaMetaByCode = new Map(payload.areas.map((area) => [area.areaCode, area]));
+        const values = payload.areas.map((area) => {
+          if (currentMetric === "rate") {
+            return area.supportedAsylumRate ?? 0;
+          }
+
+          if (currentMetric === "hotel") {
+            return area.hotelSignalValue;
+          }
+
+          return area.supportedAsylum;
+        });
+        const minValue = Math.min(...values, 0);
+        const maxValue = Math.max(...values, 1);
+
+        authoritySvg.innerHTML = "";
+        authoritySvg.setAttribute("viewBox", `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`);
+        authoritySvg.setAttribute("aria-label", `${payload.regionName} authority map`);
+
+        const baseGroup = document.createElementNS(SVG_NS, "g");
+        baseGroup.setAttribute("class", "region-map-base");
+
+        for (const area of boundaryRegion.areas) {
+          const path = document.createElementNS(SVG_NS, "path");
+          path.setAttribute("class", "region-map-base-region");
+          path.setAttribute("d", area.path);
+          baseGroup.append(path);
+        }
+
+        authoritySvg.append(baseGroup);
+
+        for (const boundaryArea of boundaryRegion.areas) {
+          const areaMeta = areaMetaByCode.get(boundaryArea.areaCode);
+
+          if (!areaMeta) {
+            continue;
+          }
+
+          const metricValue =
+            currentMetric === "rate"
+              ? areaMeta.supportedAsylumRate ?? 0
+              : currentMetric === "hotel"
+                ? areaMeta.hotelSignalValue
+                : areaMeta.supportedAsylum;
+          const selected = boundaryArea.areaCode === selectedAreaCode;
+          const link = document.createElementNS(SVG_NS, "a");
+          const path = document.createElementNS(SVG_NS, "path");
+          const titleNode = document.createElementNS(SVG_NS, "title");
+          const valueLabel =
+            currentMetric === "rate"
+              ? `${formatNumber(metricValue)} per 10,000`
+              : currentMetric === "hotel"
+                ? areaMeta.hotelSignalLabel
+                : `${formatInteger(metricValue)} on support`;
+
+          link.setAttribute("href", buildAreaHref(boundaryArea.areaCode));
+          link.setAttribute("class", `region-map-link ${selected ? "is-selected" : ""}`);
+          link.dataset.homeAuthorityScope = boundaryArea.areaCode;
+          link.dataset.homeAuthorityRegion = payload.regionName;
+          link.dataset.homeAuthorityLabel = boundaryArea.areaName;
+          link.setAttribute("aria-label", `${boundaryArea.areaName}: ${valueLabel}. Select this authority.`);
+
+          path.setAttribute("class", `home-authority-region ${selected ? "is-selected" : ""}`);
+          path.setAttribute("d", boundaryArea.path);
+          path.setAttribute("fill", getFill(metricValue, minValue, maxValue, metric.tone));
+          path.setAttribute("stroke", selected ? "#F5F7FB" : "rgba(255,255,255,0.16)");
+          path.setAttribute("stroke-width", selected ? "3.2" : "1.2");
+
+          titleNode.textContent = `${boundaryArea.areaName}: ${valueLabel}`;
+          link.append(titleNode, path);
+
+          if (selected) {
+            const label = document.createElementNS(SVG_NS, "text");
+            label.setAttribute("x", String(boundaryArea.labelX));
+            label.setAttribute("y", String(boundaryArea.labelY));
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("class", "region-map-label is-active home-authority-label");
+            label.textContent = boundaryArea.areaName;
+            link.append(label);
+          }
+
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            currentAreaCode = boundaryArea.areaCode;
+            updateCopy(boundaryArea.areaCode);
+
+            root.dispatchEvent(
+              new CustomEvent("region-map-scope", {
+                bubbles: true,
+                detail: {
+                  scopeId: boundaryArea.areaCode,
+                  trigger: "click"
+                }
+              })
+            );
+
+            void renderMap(boundaryArea.areaCode);
+          });
+
+          authoritySvg.append(link);
+        }
+
+        caption.textContent =
+          selectedAreaCode && areaMetaByCode.get(selectedAreaCode)
+            ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected on the ${payload.regionName} map.`
+            : `Select one authority inside ${payload.regionName} to update the right-hand deck without leaving the region page.`;
+      };
+
+      const setMetric = (metricId: AuthorityMetricId) => {
+        currentMetric = metricId;
+
+        for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-authority-view]")) {
+          const active = button.dataset.regionAuthorityView === metricId;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        }
+
+        const config = metricConfig[metricId];
+        legendTitle.textContent = config.title;
+        legendBody.textContent = config.body;
+        legendSwatch.dataset.tone = config.tone;
+        void renderMap(currentAreaCode);
+      };
+
+      root.addEventListener("home-map-set-scope", (event) => {
+        const scopeId = (event as CustomEvent<{ scopeId?: string }>).detail?.scopeId;
+
+        if (!scopeId || scopeId === payload.regionName) {
+          currentAreaCode = null;
+          updateCopy(payload.regionName);
+          void renderMap(null);
+          return;
+        }
+
+        if (!payload.scopeMeta[scopeId]) {
+          return;
+        }
+
+        currentAreaCode = scopeId;
+        updateCopy(scopeId);
+        void renderMap(scopeId);
+      });
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-authority-view]")) {
+        button.addEventListener("click", () => {
+          const metricId = button.dataset.regionAuthorityView;
+
+          if (metricId === "rate" || metricId === "hotel") {
+            setMetric(metricId);
+            return;
+          }
+
+          setMetric("total");
+        });
+      }
+
+      updateCopy(payload.regionName);
+      setMetric("total");
+
+      const warmup = () => {
+        void loadBoundaryPayload(payload.boundariesUrl).catch(() => {
+          /* noop */
+        });
+      };
+
+      if ("requestIdleCallback" in window) {
+        (window as Window & { requestIdleCallback: (callback: () => void) => number }).requestIdleCallback(warmup);
+      } else {
+        globalThis.setTimeout(warmup, 800);
+      }
+    }
+  }
+</script>

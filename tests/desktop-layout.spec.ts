@@ -11,7 +11,7 @@ const desktopPages = [
     hasRegionMapSummary: false
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
-  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasRegionMapExplorer: true },
+  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
@@ -50,6 +50,12 @@ test.describe("desktop layout snapshots", () => {
         }
       }
 
+      if ("hasAuthorityStage" in pageConfig && pageConfig.hasAuthorityStage) {
+        await expect(page.locator("[data-region-authority-stage]")).toBeVisible();
+        await expect(page.locator("[data-region-authority-svg]")).toBeVisible();
+        await expect(page.locator("[data-home-system]")).toBeVisible();
+      }
+
       await expect(page).toHaveScreenshot(`${pageConfig.name}-desktop.png`, {
         animations: "disabled",
         caret: "hide",
@@ -69,7 +75,6 @@ test("home deck updates from Britain to region to local authority", async ({ pag
   await limitToTopOfPage(page, 5);
 
   const deckTitle = page.locator("[data-home-title]");
-  const modeState = page.locator("[data-home-mode-state]");
 
   await expect(deckTitle).toHaveText("Britain now");
   await expect(page.locator("[data-home-parent]")).toBeHidden();
@@ -78,17 +83,26 @@ test("home deck updates from Britain to region to local authority", async ({ pag
   await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="Scotland"]').click();
 
   await expect(deckTitle).toHaveText("Scotland");
-  await expect(modeState).toHaveText("Manual");
-  await expect(page.locator("[data-home-parent]")).toContainText("Back to Britain");
+  await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
+  await expect(page.locator('[data-home-map-pane="national"]')).toBeHidden();
+  await expect(page.locator("[data-home-parent]")).toBeHidden();
+  await expect(page.locator("[data-home-open]")).toBeVisible();
+  await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
   await expect(page.locator("[data-home-reset]")).toBeVisible();
+  await expect(page.locator("[data-home-reset]")).toHaveText("Britain map");
 
   const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
   const firstPlaceName = (await firstPlaceCard.locator("strong").first().textContent())?.trim() ?? "";
+  const firstPlaceHref = await firstPlaceCard.locator("a").getAttribute("href");
+  const firstPlaceScopeId = firstPlaceHref?.match(/\/places\/([^/]+)\//)?.[1];
 
-  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
+  expect(firstPlaceScopeId).toBeTruthy();
+
+  await page.locator(`[data-home-authority-scope="${firstPlaceScopeId}"]`).click();
 
   await expect(deckTitle).toHaveText(firstPlaceName);
-  await expect(page.locator("[data-home-parent]")).toHaveText("Back to region");
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to Scotland");
+  await expect(page.locator("[data-home-open]")).toHaveText("Open place page");
 });
 
 test("home map stays fully contained on a MacBook-sized viewport", async ({ page }) => {
@@ -102,8 +116,12 @@ test("home map stays fully contained on a MacBook-sized viewport", async ({ page
 
   const readMetrics = () =>
     page.evaluate(() => {
-      const map = document.querySelector(".home-map-panel .region-map");
-      const canvas = document.querySelector(".home-map-panel .region-map-canvas");
+      const map =
+        document.querySelector(".home-map-panel [data-home-map-pane=\"national\"] .region-map:not([hidden])") ??
+        document.querySelector(".home-map-panel .home-authority-map");
+      const canvas =
+        document.querySelector(".home-map-panel [data-home-map-pane=\"national\"] .region-map-canvas") ??
+        document.querySelector(".home-map-panel .home-authority-canvas");
       const panel = document.querySelector(".home-map-panel");
       const deckViewport = document.querySelector(".home-deck-viewport");
       const lastCard = document.querySelector('[data-home-pane="stats"] [data-home-links] .home-next-card:last-child');
@@ -145,7 +163,9 @@ test("home map stays fully contained on a MacBook-sized viewport", async ({ page
 
   await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
   await expect(page.locator("[data-home-title]")).toHaveText("North West");
-  await expect(page.getByRole("button", { name: "Start over" })).toHaveCount(1);
+  await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
+  await expect(page.getByRole("button", { name: "Britain map" })).toHaveCount(1);
+  await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
 
   const selectedMetrics = await readMetrics();
   expect(selectedMetrics).not.toBeNull();
@@ -156,8 +176,9 @@ test("home map stays fully contained on a MacBook-sized viewport", async ({ page
 
   const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
   await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
-  await expect(page.locator("[data-home-parent]")).toHaveText("Back to region");
-  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(2);
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to North West");
+  await expect(page.locator("[data-home-open]")).toHaveText("Open place page");
+  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(1);
 
   const placeMetrics = await readMetrics();
   expect(placeMetrics).not.toBeNull();
@@ -181,7 +202,7 @@ test("home visible controls and links stay coherent for first-time use", async (
   await expect(page.locator(".home-map-copy p")).toContainText(
     "Pick one region on the map. The deck narrows from Britain to one region to one local authority."
   );
-  await expect(page.locator("[data-home-cta]")).toHaveAttribute("href", "/routes#route-findings");
+  await expect(page.locator("[data-home-controls]")).toBeHidden();
 
   await page.locator('[data-home-tab="visuals"]').click();
   await expect(page.locator("[data-home-system]")).toHaveAttribute("data-home-active-panel", "visuals");
@@ -192,16 +213,20 @@ test("home visible controls and links stay coherent for first-time use", async (
 
   await page.getByRole("button", { name: "Preview region" }).first().click();
   await expect(page.locator("[data-home-title]")).not.toHaveText("Britain now");
+  await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
   await expect(page.locator("[data-home-reset]")).toBeVisible();
-  await expect(page.locator("[data-home-reset]")).toHaveText("Start over");
+  await expect(page.locator("[data-home-reset]")).toHaveText("Britain map");
   await expect(page.locator("[data-home-links-label]")).toHaveText("Open one local authority");
+  await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
 
   const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
   await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
-  await expect(page.locator("[data-home-links-label]")).toHaveText("Next steps");
-  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(2);
-  await expect(page.locator("[data-home-links] a").first()).toHaveAttribute("href", /\/places\/[A-Z0-9]+\/$/);
+  await expect(page.locator("[data-home-open]")).toHaveText("Open place page");
+  await expect(page.locator("[data-home-links-label]")).toHaveText("Also open");
+  await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(1);
+  await expect(page.locator("[data-home-links] a").first()).toHaveAttribute("href", /\/places\/regions\/.+\/$/);
 
   await page.locator("[data-home-reset]").click();
   await expect(page.locator("[data-home-title]")).toHaveText("Britain now");
+  await expect(page.locator('[data-home-map-pane="national"]')).toBeVisible();
 });
