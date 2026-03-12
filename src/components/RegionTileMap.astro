@@ -118,6 +118,7 @@ const mapInteractionCaption =
   data-region-map-fit-mode={fitMode}
   data-region-map-width={REGION_MAP_WIDTH}
   data-region-map-height={REGION_MAP_HEIGHT}
+  data-region-map-value-label={valueLabel}
 >
   {!compact && (
     <div class="viz-head">
@@ -207,6 +208,38 @@ const mapInteractionCaption =
         {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
         {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
       </figcaption>
+
+      <section class="region-map-hud" data-region-map-hud>
+        <article class="region-map-hud-card">
+          <span class="tiny" data-region-map-hud-label-1>Region</span>
+          <strong data-region-map-hud-value-1>{initialSummary?.title ?? initialRegionName ?? "Britain"}</strong>
+          <p data-region-map-hud-meta-1>{(initialSummary?.chips ?? [valueLabel])[0] ?? valueLabel}</p>
+        </article>
+        <article class="region-map-hud-card">
+          <span class="tiny" data-region-map-hud-label-2>
+            {initialSummary?.stats?.[0]?.label ?? "Current signal"}
+          </span>
+          <strong data-region-map-hud-value-2>{initialSummary?.stats?.[0]?.value ?? valueLabel}</strong>
+          <p data-region-map-hud-meta-2>{initialSummary?.stats?.[1]?.value ?? initialSummary?.body ?? ""}</p>
+        </article>
+        <article class="region-map-hud-card">
+          <span class="tiny" data-region-map-hud-label-3>
+            {initialSummary?.links?.length ? "Open next" : "Reading note"}
+          </span>
+          <strong data-region-map-hud-value-3>
+            {initialSummary?.links?.[0]?.label ?? initialSummary?.cta ?? "Open region page"}
+          </strong>
+          <p data-region-map-hud-meta-3>{initialSummary?.note ?? initialSummary?.body ?? ""}</p>
+        </article>
+      </section>
+
+      <section class="region-map-shortlist" data-region-map-shortlist>
+        <div class="region-map-shortlist-head">
+          <span class="tiny">Quick shortlist</span>
+          <strong data-region-map-shortlist-title>Top regions in this view</strong>
+        </div>
+        <div class="region-map-shortlist-links" data-region-map-shortlist-links></div>
+      </section>
 
       {showSummary && summaryMode === "overlay" && (
         <article class="region-map-summary is-overlay" data-region-map-summary-panel aria-live="polite">
@@ -598,6 +631,91 @@ const mapInteractionCaption =
       const linksElement = root.querySelector<HTMLElement>("[data-region-map-summary-links]");
       const noteElement = root.querySelector<HTMLElement>("[data-region-map-summary-note]");
       const linkElement = root.querySelector<HTMLAnchorElement>("[data-region-map-summary-link]");
+      const mapValueLabel = root.dataset.regionMapValueLabel ?? "Regional signal";
+      const hudLabelOne = root.querySelector<HTMLElement>("[data-region-map-hud-label-1]");
+      const hudValueOne = root.querySelector<HTMLElement>("[data-region-map-hud-value-1]");
+      const hudMetaOne = root.querySelector<HTMLElement>("[data-region-map-hud-meta-1]");
+      const hudLabelTwo = root.querySelector<HTMLElement>("[data-region-map-hud-label-2]");
+      const hudValueTwo = root.querySelector<HTMLElement>("[data-region-map-hud-value-2]");
+      const hudMetaTwo = root.querySelector<HTMLElement>("[data-region-map-hud-meta-2]");
+      const hudLabelThree = root.querySelector<HTMLElement>("[data-region-map-hud-label-3]");
+      const hudValueThree = root.querySelector<HTMLElement>("[data-region-map-hud-value-3]");
+      const hudMetaThree = root.querySelector<HTMLElement>("[data-region-map-hud-meta-3]");
+      const shortlistTitle = root.querySelector<HTMLElement>("[data-region-map-shortlist-title]");
+      const shortlistLinks = root.querySelector<HTMLElement>("[data-region-map-shortlist-links]");
+
+      const setHudCard = (
+        labelNode: HTMLElement | null,
+        valueNode: HTMLElement | null,
+        metaNode: HTMLElement | null,
+        labelText: string,
+        valueText: string,
+        metaText: string
+      ) => {
+        if (!labelNode || !valueNode || !metaNode) {
+          return;
+        }
+
+        labelNode.textContent = labelText;
+        valueNode.textContent = valueText;
+        metaNode.textContent = metaText;
+      };
+
+      const renderShortlist = (selectedRegionName: string) => {
+        if (!shortlistLinks || !shortlistTitle) {
+          return;
+        }
+
+        shortlistLinks.innerHTML = "";
+        shortlistTitle.textContent = root.dataset.regionMapLinkMode === "select" ? "Preview one region here" : "Open one region next";
+
+        const rankedLinks = links
+          .map((link) => ({
+            link,
+            regionName: link.dataset.regionMapRegion ?? "",
+            summary: parseSummaryPayload(link.dataset.regionMapSummary)
+          }))
+          .slice(0, 3);
+
+        for (const item of rankedLinks) {
+          if (!item.regionName) {
+            continue;
+          }
+
+          if (root.dataset.regionMapLinkMode === "select") {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = `region-map-shortlist-link${item.regionName === selectedRegionName ? " is-active" : ""}`;
+            button.setAttribute("aria-pressed", item.regionName === selectedRegionName ? "true" : "false");
+
+            const titleNode = document.createElement("strong");
+            titleNode.textContent = item.regionName;
+
+            const metaNode = document.createElement("span");
+            metaNode.className = "tiny";
+            metaNode.textContent = item.summary.stats?.[0]?.value ?? item.summary.chips?.[0] ?? mapValueLabel;
+
+            button.append(titleNode, metaNode);
+            button.addEventListener("click", () => updateRegionMapSummary(root, item.regionName, "click"));
+            shortlistLinks.append(button);
+            continue;
+          }
+
+          const anchor = document.createElement("a");
+          anchor.className = `region-map-shortlist-link${item.regionName === selectedRegionName ? " is-active" : ""}`;
+          anchor.href = item.link.getAttribute("href") ?? "#";
+
+          const titleNode = document.createElement("strong");
+          titleNode.textContent = item.regionName;
+
+          const metaNode = document.createElement("span");
+          metaNode.className = "tiny";
+          metaNode.textContent = item.summary.stats?.[0]?.value ?? item.summary.chips?.[0] ?? mapValueLabel;
+
+          anchor.append(titleNode, metaNode);
+          shortlistLinks.append(anchor);
+        }
+      };
 
       const appendSummaryLink = (
         container: HTMLElement,
@@ -731,8 +849,34 @@ const mapInteractionCaption =
         }
       }
 
+      setHudCard(
+        hudLabelOne,
+        hudValueOne,
+        hudMetaOne,
+        "Region",
+        summary.title ?? regionName,
+        summary.chips?.[0] ?? mapValueLabel
+      );
+      setHudCard(
+        hudLabelTwo,
+        hudValueTwo,
+        hudMetaTwo,
+        summary.stats?.[0]?.label ?? "Current signal",
+        summary.stats?.[0]?.value ?? mapValueLabel,
+        summary.stats?.[1]?.value ?? summary.body ?? ""
+      );
+      setHudCard(
+        hudLabelThree,
+        hudValueThree,
+        hudMetaThree,
+        summary.links?.length ? "Open next" : "Reading note",
+        summary.links?.[0]?.label ?? summary.cta ?? "Open region page",
+        summary.note ?? summary.body ?? ""
+      );
+
       root.dataset.regionMapSelectedRegion = selectedLink.dataset.regionMapRegion ?? regionName;
       setRegionMapFocus(root, root.dataset.regionMapSelectedRegion, trigger as FocusTrigger);
+      renderShortlist(root.dataset.regionMapSelectedRegion);
       root.dispatchEvent(
         new CustomEvent("region-map-change", {
           bubbles: true,

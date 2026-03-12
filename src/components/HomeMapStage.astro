@@ -98,7 +98,15 @@ const payload = JSON.stringify({
         <span class="chip" data-home-map-path-region hidden></span>
         <span class="chip teal" data-home-map-path-area hidden></span>
       </div>
-      <span class="chip warm home-map-depth-chip" data-home-map-depth-chip>National lens</span>
+      <div class="home-map-nav">
+        <button type="button" class="chip" data-home-map-back disabled aria-label="Zoom out to the previous map view">
+          Zoom out
+        </button>
+        <button type="button" class="chip" data-home-map-forward disabled aria-label="Zoom in to the next map view">
+          Zoom in
+        </button>
+        <span class="chip warm home-map-depth-chip" data-home-map-depth-chip>National lens</span>
+      </div>
     </div>
     <div class="home-map-copy">
       <span class="kicker" data-home-map-eyebrow>{scopeMeta.national.eyebrow}</span>
@@ -412,10 +420,11 @@ const payload = JSON.stringify({
       const height = Math.max(payloadHeight, 1);
       const mapAspect = width / height;
 
-      const minimumFocusWidth = width * 0.22;
-      const minimumFocusHeight = height * 0.22;
-      let focusWidth = Math.max(bounds.width * 1.8 + 20, minimumFocusWidth);
-      let focusHeight = Math.max(bounds.height * 1.8 + 20, minimumFocusHeight);
+      const minimumFocusWidth = width * 0.18;
+      const minimumFocusHeight = height * 0.18;
+      const basePadding = clampNumber(Math.min(bounds.width, bounds.height) * 0.32, 10, 34);
+      let focusWidth = Math.max(bounds.width + basePadding * 2, minimumFocusWidth);
+      let focusHeight = Math.max(bounds.height + basePadding * 2, minimumFocusHeight);
 
       if (focusWidth / focusHeight > mapAspect) {
         focusHeight = focusWidth / mapAspect;
@@ -485,6 +494,8 @@ const payload = JSON.stringify({
       const caption = root.querySelector<HTMLElement>("[data-home-authority-caption]");
       const pathRegion = root.querySelector<HTMLElement>("[data-home-map-path-region]");
       const pathArea = root.querySelector<HTMLElement>("[data-home-map-path-area]");
+      const backButton = root.querySelector<HTMLButtonElement>("[data-home-map-back]");
+      const forwardButton = root.querySelector<HTMLButtonElement>("[data-home-map-forward]");
       const depthChip = root.querySelector<HTMLElement>("[data-home-map-depth-chip]");
       const focusCard = root.querySelector<HTMLElement>("[data-home-authority-focus]");
       const focusKicker = root.querySelector<HTMLElement>("[data-home-authority-focus-kicker]");
@@ -519,6 +530,8 @@ const payload = JSON.stringify({
         !caption ||
         !pathRegion ||
         !pathArea ||
+        !backButton ||
+        !forwardButton ||
         !depthChip ||
         !focusCard ||
         !focusKicker ||
@@ -550,9 +563,36 @@ const payload = JSON.stringify({
       let currentMetric: AuthorityMetricId = "total";
       let currentRegionName: string | null = null;
       let currentAreaCode: string | null = null;
+      let scopeHistory = [payload.initialScopeId];
+      let historyIndex = 0;
 
       const formatRateText = (value: number | null) =>
         value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
+
+      const updateMapNav = () => {
+        const previousScopeId = scopeHistory[historyIndex - 1];
+        const nextScopeId = scopeHistory[historyIndex + 1];
+        backButton.disabled = !previousScopeId;
+        forwardButton.disabled = !nextScopeId;
+        backButton.title = previousScopeId
+          ? `Zoom out to ${payload.scopeMeta[previousScopeId]?.title ?? "the previous view"}`
+          : "No broader saved view";
+        forwardButton.title = nextScopeId
+          ? `Zoom in to ${payload.scopeMeta[nextScopeId]?.title ?? "the next view"}`
+          : "No deeper saved view";
+      };
+
+      const rememberScope = (scopeId: string) => {
+        if (scopeHistory[historyIndex] === scopeId) {
+          updateMapNav();
+          return;
+        }
+
+        scopeHistory = scopeHistory.slice(0, historyIndex + 1);
+        scopeHistory.push(scopeId);
+        historyIndex = scopeHistory.length - 1;
+        updateMapNav();
+      };
 
       const setChip = (node: HTMLElement, text: string | null, tone?: "accent" | "teal" | "warm") => {
         if (!text) {
@@ -1085,6 +1125,46 @@ const payload = JSON.stringify({
         await renderAuthorityMap(regionName, selectedAreaCode);
       };
 
+      const applyScope = async (scopeId: string, remember = true) => {
+        if (!scopeId || scopeId === payload.initialScopeId) {
+          if (remember) {
+            rememberScope(payload.initialScopeId);
+          } else {
+            updateMapNav();
+          }
+
+          showNationalStage();
+          return;
+        }
+
+        const meta = payload.scopeMeta[scopeId];
+
+        if (!meta) {
+          return;
+        }
+
+        if (remember) {
+          rememberScope(scopeId);
+        } else {
+          updateMapNav();
+        }
+
+        if (meta.scopeKind === "region") {
+          setStageDepth("region");
+          await showRegionStage(scopeId);
+          return;
+        }
+
+        const regionName = meta.regionName ?? areaRegionLookup.get(scopeId);
+
+        if (!regionName) {
+          return;
+        }
+
+        setStageDepth("place");
+        await showRegionStage(regionName, scopeId);
+      };
+
       root.addEventListener("region-map-change", (event) => {
         const detail = (event as CustomEvent<RegionMapChangeDetail>).detail;
         const regionName = detail?.regionName;
@@ -1103,37 +1183,30 @@ const payload = JSON.stringify({
           setMetric("total");
         }
 
-        void showRegionStage(regionName);
+        void applyScope(regionName);
       });
 
       root.addEventListener("home-map-set-scope", (event) => {
         const scopeId = (event as CustomEvent<{ scopeId?: string }>).detail?.scopeId;
+        void applyScope(scopeId ?? payload.initialScopeId);
+      });
 
-        if (!scopeId || scopeId === payload.initialScopeId) {
-          showNationalStage();
+      backButton.addEventListener("click", () => {
+        if (historyIndex === 0) {
           return;
         }
 
-        const meta = payload.scopeMeta[scopeId];
+        historyIndex -= 1;
+        void applyScope(scopeHistory[historyIndex] ?? payload.initialScopeId, false);
+      });
 
-        if (!meta) {
+      forwardButton.addEventListener("click", () => {
+        if (historyIndex >= scopeHistory.length - 1) {
           return;
         }
 
-        if (meta.scopeKind === "region") {
-          setStageDepth("region");
-          void showRegionStage(scopeId);
-          return;
-        }
-
-        const regionName = meta.regionName ?? areaRegionLookup.get(scopeId);
-
-        if (!regionName) {
-          return;
-        }
-
-        setStageDepth("place");
-        void showRegionStage(regionName, scopeId);
+        historyIndex += 1;
+        void applyScope(scopeHistory[historyIndex] ?? payload.initialScopeId, false);
       });
 
       for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-authority-view]")) {
@@ -1152,6 +1225,7 @@ const payload = JSON.stringify({
       updateCopy(payload.initialScopeId);
       setStageDepth("national");
       setMetric("total");
+      updateMapNav();
 
       const warmup = () => {
         void loadBoundaryPayload(payload.boundariesUrl).catch(() => {

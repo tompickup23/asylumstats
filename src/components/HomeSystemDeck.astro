@@ -139,8 +139,10 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
         </section>
 
         <section class="home-deck-pane" data-home-pane="visuals" role="tabpanel">
+          <div class="home-comparison-band" data-home-comparison-band></div>
           <div class="home-visual-hero" data-home-visual-hero></div>
           <div class="home-visual-stack" data-home-visuals></div>
+          <ul class="home-note-list" data-home-insight-notes></ul>
         </section>
       </div>
     </div>
@@ -503,6 +505,8 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
       const visualHero = root.querySelector<HTMLElement>("[data-home-visual-hero]");
       const scopePath = root.querySelector<HTMLElement>("[data-home-scope-path]");
       const scopeKindChip = root.querySelector<HTMLElement>("[data-home-scope-kind-chip]");
+      const comparisonBand = root.querySelector<HTMLElement>("[data-home-comparison-band]");
+      const insightNotes = root.querySelector<HTMLElement>("[data-home-insight-notes]");
 
       if (
         !title ||
@@ -520,10 +524,79 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
         !storyBand ||
         !visualHero ||
         !scopePath ||
-        !scopeKindChip
+        !scopeKindChip ||
+        !comparisonBand ||
+        !insightNotes
       ) {
         continue;
       }
+
+      const renderComparisonBand = (container: HTMLElement, entry: HomeDeckEntry) => {
+        container.innerHTML = "";
+
+        const leadGroup = entry.visualGroups[0];
+
+        if (!leadGroup?.bars.length) {
+          return;
+        }
+
+        const card = document.createElement("section");
+        card.className = "home-visual-card home-visual-card-comparison";
+
+        const head = document.createElement("div");
+        head.className = "home-visual-head";
+
+        const title = document.createElement("strong");
+        title.textContent = `${leadGroup.title} at a glance`;
+        head.append(title);
+
+        const list = document.createElement("div");
+        list.className = "home-segment-list";
+
+        leadGroup.bars.slice(0, 3).forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "home-segment-row";
+
+          const dot = document.createElement("span");
+          dot.className = `home-dot ${item.tone}`;
+
+          const label = document.createElement("span");
+          label.textContent = item.label;
+
+          const value = document.createElement("strong");
+          value.textContent = item.value;
+
+          const track = document.createElement("div");
+          track.className = "home-segment-track";
+
+          const segment = document.createElement("span");
+          segment.className = `home-segment ${item.tone}`;
+          segment.style.width = clampWidth(item.widthPct);
+          track.append(segment);
+
+          row.append(dot, label, value, track);
+          list.append(row);
+        });
+
+        card.append(head, list);
+        container.append(card);
+      };
+
+      const renderInsightNotes = (container: HTMLElement, entry: HomeDeckEntry) => {
+        container.innerHTML = "";
+
+        const notes = [
+          entry.note,
+          entry.visualGroups[0]?.bars[0]?.meta,
+          entry.links[0]?.meta ? `${entry.linksLabel}: ${entry.links[0].meta}` : null
+        ].filter((value): value is string => Boolean(value));
+
+        for (const noteText of notes.slice(0, 3)) {
+          const item = document.createElement("li");
+          item.textContent = noteText;
+          container.append(item);
+        }
+      };
 
       let currentScopeId = payload.initialScopeId;
       let activePanel: "stats" | "visuals" = "stats";
@@ -699,8 +772,10 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
           setScope(scopeId, "stats");
           syncMapSelection(scopeId);
         });
+        renderComparisonBand(comparisonBand, entry);
         renderVisualHero(visualHero, entry);
         renderVisuals(visualsContainer, entry);
+        renderInsightNotes(insightNotes, entry);
         setTrackState(root, activePanel);
         deckViewport.scrollTop = 0;
         syncMapSelection(entry.scopeId);

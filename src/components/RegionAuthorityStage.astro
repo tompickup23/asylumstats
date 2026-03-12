@@ -71,7 +71,27 @@ const payload = JSON.stringify({
         <span class="chip accent" data-region-authority-path-root>{region.regionName}</span>
         <span class="chip teal" data-region-authority-path-area hidden></span>
       </div>
-      <span class="chip warm home-map-depth-chip" data-region-authority-depth-chip>Regional lens</span>
+      <div class="home-map-nav">
+        <button
+          type="button"
+          class="chip"
+          data-region-authority-back
+          disabled
+          aria-label="Zoom out to the previous regional map view"
+        >
+          Zoom out
+        </button>
+        <button
+          type="button"
+          class="chip"
+          data-region-authority-forward
+          disabled
+          aria-label="Zoom in to the next regional map view"
+        >
+          Zoom in
+        </button>
+        <span class="chip warm home-map-depth-chip" data-region-authority-depth-chip>Regional lens</span>
+      </div>
     </div>
     <div class="home-map-copy">
       <span class="kicker" data-region-authority-eyebrow>{region.countryName} region</span>
@@ -343,10 +363,11 @@ const payload = JSON.stringify({
       const height = Math.max(payloadHeight, 1);
       const mapAspect = width / height;
 
-      const minimumFocusWidth = width * 0.22;
-      const minimumFocusHeight = height * 0.22;
-      let focusWidth = Math.max(bounds.width * 1.8 + 20, minimumFocusWidth);
-      let focusHeight = Math.max(bounds.height * 1.8 + 20, minimumFocusHeight);
+      const minimumFocusWidth = width * 0.18;
+      const minimumFocusHeight = height * 0.18;
+      const basePadding = clampNumber(Math.min(bounds.width, bounds.height) * 0.32, 10, 34);
+      let focusWidth = Math.max(bounds.width + basePadding * 2, minimumFocusWidth);
+      let focusHeight = Math.max(bounds.height + basePadding * 2, minimumFocusHeight);
 
       if (focusWidth / focusHeight > mapAspect) {
         focusHeight = focusWidth / mapAspect;
@@ -429,6 +450,8 @@ const payload = JSON.stringify({
       const legendSwatch = root.querySelector<HTMLElement>("[data-region-authority-swatch]");
       const caption = root.querySelector<HTMLElement>("[data-region-authority-caption]");
       const pathArea = root.querySelector<HTMLElement>("[data-region-authority-path-area]");
+      const backButton = root.querySelector<HTMLButtonElement>("[data-region-authority-back]");
+      const forwardButton = root.querySelector<HTMLButtonElement>("[data-region-authority-forward]");
       const depthChip = root.querySelector<HTMLElement>("[data-region-authority-depth-chip]");
       const focusCard = root.querySelector<HTMLElement>("[data-region-authority-focus]");
       const focusKicker = root.querySelector<HTMLElement>("[data-region-authority-focus-kicker]");
@@ -459,6 +482,8 @@ const payload = JSON.stringify({
         !legendSwatch ||
         !caption ||
         !pathArea ||
+        !backButton ||
+        !forwardButton ||
         !depthChip ||
         !focusCard ||
         !focusKicker ||
@@ -484,6 +509,8 @@ const payload = JSON.stringify({
 
       let currentMetric: AuthorityMetricId = "total";
       let currentAreaCode: string | null = null;
+      let scopeHistory = [payload.regionName];
+      let historyIndex = 0;
 
       const setChip = (node: HTMLElement, text: string | null, tone?: "accent" | "teal" | "warm") => {
         if (!text) {
@@ -509,6 +536,31 @@ const payload = JSON.stringify({
         labelNode.textContent = labelText;
         valueNode.textContent = valueText;
         metaNode.textContent = metaText;
+      };
+
+      const updateMapNav = () => {
+        const previousScopeId = scopeHistory[historyIndex - 1];
+        const nextScopeId = scopeHistory[historyIndex + 1];
+        backButton.disabled = !previousScopeId;
+        forwardButton.disabled = !nextScopeId;
+        backButton.title = previousScopeId
+          ? `Zoom out to ${payload.scopeMeta[previousScopeId]?.title ?? "the previous view"}`
+          : "No broader saved view";
+        forwardButton.title = nextScopeId
+          ? `Zoom in to ${payload.scopeMeta[nextScopeId]?.title ?? "the next view"}`
+          : "No deeper saved view";
+      };
+
+      const rememberScope = (scopeId: string) => {
+        if (scopeHistory[historyIndex] === scopeId) {
+          updateMapNav();
+          return;
+        }
+
+        scopeHistory = scopeHistory.slice(0, historyIndex + 1);
+        scopeHistory.push(scopeId);
+        historyIndex = scopeHistory.length - 1;
+        updateMapNav();
       };
 
       const updateCopy = (scopeId: string) => {
@@ -905,13 +957,17 @@ const payload = JSON.stringify({
         void renderMap(currentAreaCode);
       };
 
-      root.addEventListener("home-map-set-scope", (event) => {
-        const scopeId = (event as CustomEvent<{ scopeId?: string }>).detail?.scopeId;
-
+      const applyScope = async (scopeId: string, remember = true) => {
         if (!scopeId || scopeId === payload.regionName) {
+          if (remember) {
+            rememberScope(payload.regionName);
+          } else {
+            updateMapNav();
+          }
+
           currentAreaCode = null;
           updateCopy(payload.regionName);
-          void renderMap(null);
+          await renderMap(null);
           return;
         }
 
@@ -919,9 +975,38 @@ const payload = JSON.stringify({
           return;
         }
 
+        if (remember) {
+          rememberScope(scopeId);
+        } else {
+          updateMapNav();
+        }
+
         currentAreaCode = scopeId;
         updateCopy(scopeId);
-        void renderMap(scopeId);
+        await renderMap(scopeId);
+      };
+
+      root.addEventListener("home-map-set-scope", (event) => {
+        const scopeId = (event as CustomEvent<{ scopeId?: string }>).detail?.scopeId;
+        void applyScope(scopeId ?? payload.regionName);
+      });
+
+      backButton.addEventListener("click", () => {
+        if (historyIndex === 0) {
+          return;
+        }
+
+        historyIndex -= 1;
+        void applyScope(scopeHistory[historyIndex] ?? payload.regionName, false);
+      });
+
+      forwardButton.addEventListener("click", () => {
+        if (historyIndex >= scopeHistory.length - 1) {
+          return;
+        }
+
+        historyIndex += 1;
+        void applyScope(scopeHistory[historyIndex] ?? payload.regionName, false);
       });
 
       for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-authority-view]")) {
@@ -939,6 +1024,7 @@ const payload = JSON.stringify({
 
       updateCopy(payload.regionName);
       setMetric("total");
+      updateMapNav();
 
       const warmup = () => {
         void loadBoundaryPayload(payload.boundariesUrl).catch(() => {
