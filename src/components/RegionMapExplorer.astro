@@ -114,7 +114,12 @@ const mapSelectionLabel =
     </article>
 
     {views.map((view) => (
-      <div data-region-map-view={view.id} hidden={view.id !== activeView.id}>
+      <div
+        data-region-map-view={view.id}
+        hidden={view.id !== activeView.id}
+        aria-hidden={view.id !== activeView.id ? "true" : "false"}
+        inert={view.id !== activeView.id ? true : undefined}
+      >
         <RegionTileMap
           items={view.items}
           title={view.title}
@@ -168,7 +173,15 @@ const mapSelectionLabel =
       }
 
       for (const panel of panels) {
-        panel.hidden = panel !== targetPanel;
+        const isActive = panel === targetPanel;
+        panel.hidden = !isActive;
+        panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+
+        if (isActive) {
+          panel.removeAttribute("inert");
+        } else {
+          panel.setAttribute("inert", "");
+        }
       }
 
       const legendTitle = root.querySelector<HTMLElement>("[data-region-map-legend-title]");
