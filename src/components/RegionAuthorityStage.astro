@@ -358,14 +358,64 @@ const payload = JSON.stringify({
     const getMetricLabel = (metricId: AuthorityMetricId) =>
       metricId === "rate" ? "rate" : metricId === "hotel" ? "hotel visibility" : "total";
 
-    const buildAuthorityViewBox = (bounds: DOMRect, payloadWidth: number, payloadHeight: number): ViewBox => {
+    type AuthorityFocusProfile = {
+      biasX?: number;
+      biasY?: number;
+      maxSpanRatio?: number;
+      minSpanRatio?: number;
+      paddingMax?: number;
+      paddingMin?: number;
+      paddingScale?: number;
+    };
+
+    const regionalAuthorityFocusProfiles: Record<string, AuthorityFocusProfile> = {
+      "East Midlands": { minSpanRatio: 0.14, paddingScale: 0.24 },
+      "East of England": { biasX: 0.04, minSpanRatio: 0.15, paddingScale: 0.24 },
+      London: { minSpanRatio: 0.1, paddingScale: 0.2 },
+      "North East": { biasY: -0.03, minSpanRatio: 0.14, paddingScale: 0.22 },
+      "North West": { biasY: -0.04, minSpanRatio: 0.15, paddingScale: 0.26 },
+      "Northern Ireland": { minSpanRatio: 0.12, paddingScale: 0.2 },
+      Scotland: { biasY: -0.08, minSpanRatio: 0.14, paddingScale: 0.22 },
+      "South East": { biasX: 0.02, minSpanRatio: 0.14, paddingScale: 0.23 },
+      "South West": { biasX: -0.06, biasY: -0.02, minSpanRatio: 0.16, paddingScale: 0.24 },
+      Wales: { biasX: -0.04, minSpanRatio: 0.14, paddingScale: 0.24 },
+      "West Midlands": { minSpanRatio: 0.12, paddingScale: 0.22 },
+      "Yorkshire and The Humber": { minSpanRatio: 0.15, paddingScale: 0.25 }
+    };
+
+    const authorityFocusProfiles: Record<string, AuthorityFocusProfile> = {
+      E06000063: { biasY: -0.03, minSpanRatio: 0.17, paddingScale: 0.2 },
+      E06000064: { biasY: -0.04, minSpanRatio: 0.17, paddingScale: 0.2 },
+      E06000065: { biasY: -0.06, minSpanRatio: 0.18, paddingScale: 0.18 },
+      E07000117: { biasY: -0.03, minSpanRatio: 0.12, paddingScale: 0.22 },
+      E08000003: { minSpanRatio: 0.12, paddingScale: 0.2 },
+      E08000012: { biasX: -0.02, minSpanRatio: 0.14, paddingScale: 0.2 },
+      E08000025: { minSpanRatio: 0.12, paddingScale: 0.2 },
+      N09000003: { minSpanRatio: 0.11, paddingScale: 0.18 }
+    };
+
+    const getAuthorityFocusProfile = (regionName: string, areaCode: string | null): AuthorityFocusProfile => ({
+      ...(regionalAuthorityFocusProfiles[regionName] ?? {}),
+      ...(areaCode ? authorityFocusProfiles[areaCode] ?? {} : {})
+    });
+
+    const buildAuthorityViewBox = (
+      bounds: DOMRect,
+      payloadWidth: number,
+      payloadHeight: number,
+      focusProfile: AuthorityFocusProfile = {}
+    ): ViewBox => {
       const width = Math.max(payloadWidth, 1);
       const height = Math.max(payloadHeight, 1);
       const mapAspect = width / height;
 
-      const minimumFocusWidth = width * 0.18;
-      const minimumFocusHeight = height * 0.18;
-      const basePadding = clampNumber(Math.min(bounds.width, bounds.height) * 0.32, 10, 34);
+      const minimumFocusWidth = width * (focusProfile.minSpanRatio ?? 0.18);
+      const minimumFocusHeight = height * (focusProfile.minSpanRatio ?? 0.18);
+      const basePadding = clampNumber(
+        Math.min(bounds.width, bounds.height) * (focusProfile.paddingScale ?? 0.32),
+        focusProfile.paddingMin ?? 10,
+        focusProfile.paddingMax ?? 34
+      );
       let focusWidth = Math.max(bounds.width + basePadding * 2, minimumFocusWidth);
       let focusHeight = Math.max(bounds.height + basePadding * 2, minimumFocusHeight);
 
@@ -375,8 +425,8 @@ const payload = JSON.stringify({
         focusWidth = focusHeight * mapAspect;
       }
 
-      focusWidth = clampNumber(focusWidth, minimumFocusWidth, width * 0.98);
-      focusHeight = clampNumber(focusHeight, minimumFocusHeight, height * 0.98);
+      focusWidth = clampNumber(focusWidth, minimumFocusWidth, width * (focusProfile.maxSpanRatio ?? 0.98));
+      focusHeight = clampNumber(focusHeight, minimumFocusHeight, height * (focusProfile.maxSpanRatio ?? 0.98));
 
       if (focusWidth / focusHeight > mapAspect) {
         focusWidth = focusHeight * mapAspect;
@@ -384,8 +434,8 @@ const payload = JSON.stringify({
         focusHeight = focusWidth / mapAspect;
       }
 
-      const centerX = bounds.x + bounds.width / 2;
-      const centerY = bounds.y + bounds.height / 2;
+      const centerX = bounds.x + bounds.width / 2 + bounds.width * (focusProfile.biasX ?? 0);
+      const centerY = bounds.y + bounds.height / 2 + bounds.height * (focusProfile.biasY ?? 0);
       const viewX = clampNumber(centerX - focusWidth / 2, 0, Math.max(0, width - focusWidth));
       const viewY = clampNumber(centerY - focusHeight / 2, 0, Math.max(0, height - focusHeight));
 
@@ -509,6 +559,7 @@ const payload = JSON.stringify({
 
       let currentMetric: AuthorityMetricId = "total";
       let currentAreaCode: string | null = null;
+      let renderSequence = 0;
       let scopeHistory = [payload.regionName];
       let historyIndex = 0;
 
@@ -803,7 +854,13 @@ const payload = JSON.stringify({
       };
 
       const renderMap = async (selectedAreaCode: string | null) => {
+        const renderId = ++renderSequence;
         const boundaryPayload = await loadBoundaryPayload(payload.boundariesUrl);
+
+        if (renderId !== renderSequence) {
+          return;
+        }
+
         const boundaryRegion = boundaryPayload.regions[payload.regionName];
 
         if (!boundaryRegion) {
@@ -924,7 +981,12 @@ const payload = JSON.stringify({
           const selectedBounds = selectedAreaPath.getBBox();
           setAuthorityViewBox(
             authoritySvg,
-            buildAuthorityViewBox(selectedBounds, boundaryPayload.width, boundaryPayload.height),
+            buildAuthorityViewBox(
+              selectedBounds,
+              boundaryPayload.width,
+              boundaryPayload.height,
+              getAuthorityFocusProfile(payload.regionName, selectedAreaCode)
+            ),
             520
           );
         } else {
