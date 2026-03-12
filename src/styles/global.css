@@ -1805,7 +1805,7 @@ button.source-pill {
 }
 
 .home-system-head {
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.2rem;
 }
 
 .home-scope-rail {
@@ -1814,14 +1814,12 @@ button.source-pill {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.7rem;
-  margin-bottom: 0.55rem;
-  padding: 0.68rem 0.78rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.14), transparent 58%),
-    rgba(255, 255, 255, 0.035);
+  gap: 0.55rem;
+  margin-bottom: 0.4rem;
+  padding: 0.5rem 0.62rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .home-scope-path {
@@ -1906,26 +1904,28 @@ button.home-scope-crumb:focus-visible {
 .home-tab-bar {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 0.18rem;
+  padding: 0.16rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .home-tab-bar .chip {
-  min-width: 4.8rem;
+  min-width: auto;
+  padding-inline: 0.82rem;
   justify-content: center;
   border-color: transparent;
   background: transparent;
   color: var(--muted);
+  box-shadow: none;
 }
 
 .home-tab-bar .chip.is-active {
   color: #041019;
   border-color: transparent;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  box-shadow: 0 12px 24px rgba(78, 228, 195, 0.18);
+  box-shadow: 0 8px 18px rgba(78, 228, 195, 0.12);
 }
 
 .home-deck-viewport {
@@ -2244,13 +2244,12 @@ button.home-scope-crumb:focus-visible {
 }
 
 .home-map-focus-card {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 4;
+  position: static;
+  z-index: 1;
   display: grid;
   gap: 0.5rem;
-  width: min(18rem, calc(100% - 2rem));
+  width: auto;
+  margin-top: 0.75rem;
   padding: 0.85rem 0.92rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 22px;
@@ -2336,14 +2335,13 @@ button.home-scope-crumb:focus-visible {
 }
 
 .region-map-hud {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  z-index: 4;
+  position: static;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.55rem;
-  width: min(31rem, calc(100% - 18rem));
+  width: auto;
+  margin-top: 0.75rem;
   pointer-events: none;
 }
 
@@ -2379,13 +2377,12 @@ button.home-scope-crumb:focus-visible {
 }
 
 .region-map-shortlist {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 4;
+  position: static;
+  z-index: 1;
   display: grid;
   gap: 0.6rem;
-  width: min(15rem, calc(100% - 34rem));
+  width: auto;
+  margin-top: 0.75rem;
   padding: 0.8rem 0.86rem;
 }
 
@@ -2427,14 +2424,13 @@ button.region-map-shortlist-link {
 }
 
 .home-map-signal-band {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  z-index: 4;
+  position: static;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.55rem;
-  width: min(31rem, calc(100% - 21rem));
+  width: auto;
+  margin-top: 0.75rem;
   pointer-events: none;
 }
 
@@ -2470,13 +2466,12 @@ button.region-map-shortlist-link {
 }
 
 .home-map-quick-panel {
-  position: absolute;
-  left: 1rem;
-  bottom: 7.2rem;
-  z-index: 4;
+  position: static;
+  z-index: 1;
   display: grid;
   gap: 0.7rem;
-  width: min(18rem, calc(100% - 21rem));
+  width: auto;
+  margin-top: 0.75rem;
   padding: 0.85rem 0.92rem;
 }
 

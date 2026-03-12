@@ -986,7 +986,6 @@ const mapInteractionCaption =
           continue;
         }
 
-        link.addEventListener("mouseenter", () => updateRegionMapSummary(root, regionName, "hover"));
         link.addEventListener("focus", () => updateRegionMapSummary(root, regionName, "focus"));
         link.addEventListener("click", (event) => {
           if (root.dataset.regionMapLinkMode === "select") {

@@ -355,9 +355,6 @@ const payload = JSON.stringify({
     const formatRateText = (value: number | null) =>
       value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
 
-    const getMetricLabel = (metricId: AuthorityMetricId) =>
-      metricId === "rate" ? "rate" : metricId === "hotel" ? "hotel visibility" : "total";
-
     type AuthorityFocusProfile = {
       biasX?: number;
       biasY?: number;
@@ -811,37 +808,19 @@ const payload = JSON.stringify({
 
       const updateFocusCard = (selectedAreaCode: string | null) => {
         if (!selectedAreaCode) {
-          const metricLeader = payload.areas.reduce<AreaPayload | null>(
-            (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
-            null
-          );
-
-          focusCard.dataset.scopeKind = "region";
-          focusKicker.textContent = "Regional overview";
-          focusTitle.textContent = payload.regionName;
-          focusBody.textContent = metricLeader
-            ? `${metricLeader.areaName} currently leads on ${getMetricLabel(currentMetric)}. Pick one authority to update the deck.`
-            : `Pick one authority to update the deck inside ${payload.regionName}.`;
-          setChip(focusPrimary, `${payload.areas.length.toLocaleString("en-GB")} authorities`);
-          setChip(
-            focusSecondary,
-            metricLeader ? `Lead: ${metricLeader.areaName}` : null,
-            currentMetric === "rate" ? "teal" : currentMetric === "hotel" ? "warm" : "accent"
-          );
-          focusLink.hidden = true;
-          focusLink.removeAttribute("href");
-          focusLink.textContent = "";
+          focusCard.hidden = true;
           return;
         }
 
         const area = payload.areas.find((entry) => entry.areaCode === selectedAreaCode);
 
         if (!area) {
-          updateFocusCard(null);
+          focusCard.hidden = true;
           return;
         }
 
         const primaryMetric = buildAreaMetricChip(area);
+        focusCard.hidden = false;
         focusCard.dataset.scopeKind = "place";
         focusKicker.textContent = `${payload.regionName} authority`;
         focusTitle.textContent = area.areaName;

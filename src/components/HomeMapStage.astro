@@ -967,7 +967,7 @@ const payload = JSON.stringify({
       };
 
       const updateFocusCard = (regionName: string | null, selectedAreaCode: string | null) => {
-        if (!regionName) {
+        if (!regionName || !selectedAreaCode) {
           focusCard.hidden = true;
           return;
         }
@@ -979,49 +979,24 @@ const payload = JSON.stringify({
           return;
         }
 
-        focusCard.hidden = false;
+        const area = regionPayload.areas.find((entry) => entry.areaCode === selectedAreaCode);
 
-        if (selectedAreaCode) {
-          const area = regionPayload.areas.find((entry) => entry.areaCode === selectedAreaCode);
-
-          if (!area) {
-            updateFocusCard(regionName, null);
-            return;
-          }
-
-          const primaryMetric = buildAreaMetricChip(area);
-          focusCard.dataset.scopeKind = "place";
-          focusKicker.textContent = `${regionName} authority`;
-          focusTitle.textContent = area.areaName;
-          focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
-          setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
-          setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
-          focusLink.hidden = false;
-          focusLink.href = buildAreaHref(area.areaCode);
-          focusLink.textContent = "Open place page";
+        if (!area) {
+          focusCard.hidden = true;
           return;
         }
 
-        const metricLeader = regionPayload.areas.reduce<HomeMapAreaPayload | null>(
-          (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
-          null
-        );
-
-        focusCard.dataset.scopeKind = "region";
-        focusKicker.textContent = `${regionPayload.countryName} region`;
-        focusTitle.textContent = regionName;
-        focusBody.textContent = metricLeader
-          ? `Use the authority map to narrow this region. ${metricLeader.areaName} currently leads on ${metricConfig[currentMetric].label.toLowerCase()}.`
-          : "Use the authority map to narrow this region.";
-        setChip(focusPrimary, `${regionPayload.areas.length.toLocaleString("en-GB")} authorities`);
-        setChip(
-          focusSecondary,
-          metricLeader ? `Lead: ${metricLeader.areaName}` : null,
-          currentMetric === "rate" ? "teal" : currentMetric === "hotel" ? "warm" : "accent"
-        );
+        const primaryMetric = buildAreaMetricChip(area);
+        focusCard.hidden = false;
+        focusCard.dataset.scopeKind = "place";
+        focusKicker.textContent = `${regionName} authority`;
+        focusTitle.textContent = area.areaName;
+        focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+        setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+        setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
         focusLink.hidden = false;
-        focusLink.href = regionPayload.regionPath;
-        focusLink.textContent = "Open region page";
+        focusLink.href = buildAreaHref(area.areaCode);
+        focusLink.textContent = "Open place page";
       };
 
       const renderAuthorityMap = async (regionName: string, selectedAreaCode: string | null) => {
