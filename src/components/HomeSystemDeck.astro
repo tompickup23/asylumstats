@@ -668,7 +668,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
         const entry = getEntry();
         const scopeKind = getScopeKind(entry, payload.initialScopeId, payload.rootScopeKind);
         const showResetButton = entry.scopeId !== payload.initialScopeId;
-        const showParentButton = Boolean(entry.parentScopeId && entry.parentScopeId !== payload.initialScopeId);
+        const showParentButton = Boolean(entry.parentScopeId);
         const rootEntry = payload.entries[payload.initialScopeId];
         const resetButtonLabel = payload.resetLabel ?? (rootEntry ? `${rootEntry.title} map` : "Reset");
         const parentButtonLabel = entry.parentLabel ? `Back to ${entry.parentLabel}` : "Back";
