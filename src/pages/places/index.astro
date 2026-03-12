@@ -1,25 +1,19 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DataDrawer from "../../components/DataDrawer.astro";
+import HomeMapStage from "../../components/HomeMapStage.astro";
+import HomeSystemDeck from "../../components/HomeSystemDeck.astro";
 import PageContents from "../../components/PageContents.astro";
-import RegionMapExplorer from "../../components/RegionMapExplorer.astro";
 import { getPlaceDirectory } from "../../lib/place-directory";
 import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../lib/route-analytics";
-import { loadLocalRouteLatest } from "../../lib/route-data";
+import { loadLocalRouteLatest, loadRouteDashboard } from "../../lib/route-data";
 
 const localRouteLatest = loadLocalRouteLatest();
+const routeDashboard = loadRouteDashboard();
 const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
-const leadRegion = regionalPressure[0];
-const rateLeader = [...regionalPressure].sort((left, right) => right.supportedAsylumRate - left.supportedAsylumRate)[0];
-const hotelLeader =
-  [...placeDirectory.regions].sort(
-    (left, right) =>
-      right.hotelLinkedPlaceCount - left.hotelLinkedPlaceCount ||
-      right.namedCurrentSiteCount - left.namedCurrentSiteCount ||
-      right.supportedAsylum - left.supportedAsylum
-  )[0] ?? placeDirectory.regions[0];
+const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
 const placeRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const placeSections = [
@@ -49,55 +43,322 @@ const placeGuideCards = [
     cta: "Open advanced tools"
   }
 ];
+
+type PlaceDeckEntry = {
+  scopeId: string;
+  parentScopeId?: string;
+  parentLabel?: string;
+  eyebrow: string;
+  title: string;
+  note: string;
+  scopeHref?: string;
+  scopeActionLabel?: string;
+  linksLabel: string;
+  stats: Array<{
+    label: string;
+    value: string;
+    context: string;
+  }>;
+  links: Array<{
+    label: string;
+    href: string;
+    meta: string;
+    scopeId?: string;
+    actionLabel?: string;
+  }>;
+  visualIntro: string;
+  visualGroups: Array<{
+    title: string;
+    bars: Array<{
+      label: string;
+      value: string;
+      meta: string;
+      widthPct: number;
+      tone: "accent" | "teal" | "warm" | "slate";
+    }>;
+  }>;
+};
+
+function formatInteger(value: number): string {
+  return value.toLocaleString();
+}
+
+function formatNumber(value: number): string {
+  return new Intl.NumberFormat("en-GB", {
+    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    maximumFractionDigits: Number.isInteger(value) ? 0 : 2
+  }).format(value);
+}
+
+function formatPct(value: number): string {
+  return `${formatNumber(value)}%`;
+}
+
+function buildBar(
+  label: string,
+  value: number,
+  scale: number,
+  tone: "accent" | "teal" | "warm" | "slate",
+  meta: string
+) {
+  return {
+    label,
+    value: Number.isInteger(value) ? formatInteger(value) : formatNumber(value),
+    meta,
+    widthPct: scale > 0 ? (value / scale) * 100 : 0,
+    tone
+  };
+}
+
+function buildAreaPath(areaCode: string): string {
+  return `/places/${areaCode}/`;
+}
+
+function describeHotelSignal(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {
+  if (row.hotelSignal === "named") {
+    return `${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible`;
+  }
+
+  if (row.hotelSignal === "unnamed") {
+    return `${row.unnamedSiteCount} unnamed acknowledged hotel site${row.unnamedSiteCount === 1 ? "" : "s"}`;
+  }
+
+  return "No named current hotel site visible";
+}
+
+function describeHotelSignalShort(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {
+  if (row.hotelSignal === "named") {
+    return "Named current site visible";
+  }
+
+  if (row.hotelSignal === "unnamed") {
+    return "Unnamed hotel evidence only";
+  }
+
+  return "No named site visible";
+}
+
+function buildRegionAreaRows(region: (typeof placeDirectory.regions)[number]) {
+  return [...region.areas].sort(
+    (left, right) =>
+      right.area.supportedAsylum - left.area.supportedAsylum ||
+      (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
+      left.area.areaName.localeCompare(right.area.areaName)
+  );
+}
+
+function buildAreaNote(row: (typeof placeDirectory.regions)[number]["areas"][number]) {
+  const area = row.area;
+
+  if (row.hotelSignal === "named") {
+    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. ${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible.`;
+  }
+
+  if (row.hotelSignal === "unnamed") {
+    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. Hotel use is visible but unnamed.`;
+  }
+
+  return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. No named hotel site is public yet.`;
+}
+
+const placeDeckEntries: Record<string, PlaceDeckEntry> = {
+  national: {
+    scopeId: "national",
+    eyebrow: `National snapshot | ${latestQuarter.stockPeriodLabel ?? latestQuarter.quarterLabel ?? localRouteLatest.snapshotDate}`,
+    title: "Britain now",
+    note: `${formatInteger(latestQuarter.supportedAsylum)} on support. ${formatInteger(latestQuarter.hotelAccommodation)} in hotels.`,
+    linksLabel: "Start with these regions",
+    stats: [
+      {
+        label: "Supported asylum",
+        value: formatInteger(latestQuarter.supportedAsylum),
+        context: `Stock | ${latestQuarter.stockPeriodLabel ?? "latest stock point"}`
+      },
+      {
+        label: "Awaiting decision",
+        value: formatInteger(latestQuarter.awaitingInitialDecision),
+        context: "Initial-decision stock"
+      },
+      {
+        label: "Hotel accommodation",
+        value: formatInteger(latestQuarter.hotelAccommodation),
+        context: `${formatPct(latestQuarter.hotelShareOfSupportPct ?? 0)} of support`
+      }
+    ],
+    links: placeDirectory.regions.map((region) => ({
+      label: region.regionName,
+      href: region.regionPath,
+      meta: `${formatInteger(region.supportedAsylum)} on support · ${formatNumber(region.supportedAsylumRate)} per 10,000`,
+      scopeId: region.regionName,
+      actionLabel: "Preview region"
+    })),
+    visualIntro: "The map gives geography. This view shows the biggest regional stock first.",
+    visualGroups: [
+      {
+        title: "Largest regional totals",
+        bars: [...placeDirectory.regions]
+          .sort((left, right) => right.supportedAsylum - left.supportedAsylum || left.regionName.localeCompare(right.regionName))
+          .slice(0, 4)
+          .map((region) =>
+            buildBar(
+              region.regionName,
+              region.supportedAsylum,
+              placeDirectory.regions[0]?.supportedAsylum ?? 1,
+              "accent",
+              `${formatInteger(region.publicPlaceCount)} place pages`
+            )
+          )
+      }
+    ]
+  }
+};
+
+for (const region of placeDirectory.regions) {
+  const areaRows = buildRegionAreaRows(region);
+  const accommodationAverage = Math.round(region.supportedAsylum / Math.max(region.publicPlaceCount, 1));
+
+  placeDeckEntries[region.regionName] = {
+    scopeId: region.regionName,
+    parentScopeId: "national",
+    parentLabel: "Britain",
+    eyebrow: `${region.countryName} region`,
+    title: region.regionName,
+    note: `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Pick one on the map.`,
+    scopeHref: region.regionPath,
+    scopeActionLabel: "Open region page",
+    linksLabel: "Open one local authority",
+    stats: [
+      {
+        label: "Supported asylum",
+        value: formatInteger(region.supportedAsylum),
+        context: `${formatInteger(region.publicPlaceCount)} public place pages`
+      },
+      {
+        label: "Regional rate",
+        value: formatNumber(region.supportedAsylumRate),
+        context: "Supported asylum per 10,000 residents"
+      },
+      {
+        label: "Contingency",
+        value: formatInteger(region.contingencyAccommodation),
+        context: "People in contingency accommodation"
+      }
+    ],
+    links: areaRows.map((row) => ({
+      label: row.area.areaName,
+      href: buildAreaPath(row.area.areaCode),
+      meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
+      scopeId: row.area.areaCode,
+      actionLabel: "Preview place"
+    })),
+    visualIntro: "The regional map tells you where to open next.",
+    visualGroups: [
+      {
+        title: `Largest local totals in ${region.regionName}`,
+        bars: region.areas.slice(0, 3).map((row) =>
+          buildBar(
+            row.area.areaName,
+            row.area.supportedAsylum,
+            region.leadArea?.area.supportedAsylum ?? 1,
+            "accent",
+            describeHotelSignal(row)
+          )
+        )
+      }
+    ]
+  };
+
+  for (const row of region.areas) {
+    const area = row.area;
+    const regionalLead = region.leadArea?.area ?? area;
+    const comparisonScale = Math.max(regionalLead.supportedAsylum, accommodationAverage, area.supportedAsylum, 1);
+
+    placeDeckEntries[area.areaCode] = {
+      scopeId: area.areaCode,
+      parentScopeId: region.regionName,
+      parentLabel: region.regionName,
+      eyebrow: `${region.regionName} local page`,
+      title: area.areaName,
+      note: buildAreaNote(row),
+      scopeHref: buildAreaPath(area.areaCode),
+      scopeActionLabel: "Open place page",
+      linksLabel: "Also open",
+      stats: [
+        {
+          label: "Supported asylum",
+          value: formatInteger(area.supportedAsylum),
+          context: area.snapshotDate
+        },
+        {
+          label: "Local rate",
+          value: area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate),
+          context: "Per 10,000"
+        },
+        {
+          label: "Contingency",
+          value: formatInteger(area.contingencyAccommodation),
+          context: "In contingency"
+        }
+      ],
+      links: [
+        {
+          label: `Open ${region.regionName}`,
+          href: region.regionPath,
+          meta: "Regional page"
+        }
+      ],
+      visualIntro: "This is the last narrowing step on the places landing.",
+      visualGroups: [
+        {
+          title: `Within ${region.regionName}`,
+          bars: [
+            buildBar(area.areaName, area.supportedAsylum, comparisonScale, "accent", "This local authority"),
+            buildBar(
+              regionalLead.areaName,
+              regionalLead.supportedAsylum,
+              comparisonScale,
+              "slate",
+              "Regional lead by supported asylum"
+            ),
+            buildBar(
+              "Regional average",
+              accommodationAverage,
+              comparisonScale,
+              "teal",
+              `${formatInteger(region.publicPlaceCount)} place pages in view`
+            )
+          ]
+        }
+      ]
+    };
+  }
+}
+
 const pageDescription =
   "Browse UK asylum pressure by region and place, with hotel visibility folded into local place pages and the national system logic kept separate.";
 ---
 
 <BaseLayout title="Places | asylumstats" description={pageDescription}>
-  <section id="place-map" class="section section-anchor priority-section map-front-door">
-    <div class="map-front-head">
-      <div class="map-front-copy">
-        <span class="kicker">Place-led explorer</span>
-        <h1>Britain first. Then open one region.</h1>
-        <p>
-          Read the national map for scale, rate, and hotel visibility. Open a region page second. Open a local authority
-          page third.
-        </p>
-      </div>
-      <div class="map-front-stat-grid">
-        <article class="map-front-stat">
-          <span class="tiny">Regional leader by total</span>
-          <strong>{leadRegion.regionName}</strong>
-          <p class="tiny">{leadRegion.supportedAsylum.toLocaleString()} people on supported asylum across the latest regional slice.</p>
-        </article>
-        <article class="map-front-stat">
-          <span class="tiny">Regional leader by rate</span>
-          <strong>{rateLeader.regionName}</strong>
-          <p class="tiny">{rateLeader.supportedAsylumRate} per 10,000 residents in the weighted regional view.</p>
-        </article>
-        <article class="map-front-stat">
-          <span class="tiny">Hotel visibility leader</span>
-          <strong>{hotelLeader.regionName}</strong>
-          <p class="tiny">{hotelLeader.hotelLinkedPlaceCount.toLocaleString()} place pages there already carry hotel evidence.</p>
-        </article>
-      </div>
+  <section id="place-map" class="section section-anchor priority-section region-stage-screen">
+    <div class="home-left">
+      <article class="home-map-panel">
+        <HomeMapStage
+          id="places-britain-map"
+          placeDirectory={placeDirectory}
+          snapshotDate={localRouteLatest.snapshotDate}
+          views={placeRegionMapViews}
+        />
+      </article>
     </div>
-    <div class="chip-row">
-      <span class="chip">{placeDirectory.snapshotDate} snapshot</span>
-      <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
-      <span class="chip accent">{placeDirectory.hotelLinkedPlaceCount.toLocaleString()} place pages with hotel evidence</span>
-      <a class="chip" href="/routes#route-findings">Keep the system logic nearby</a>
-    </div>
-    <RegionMapExplorer
-      id="place-map-explorer"
-      title="Switch the regional reading mode"
-      intro="One mode is not enough. Total shows scale, rate shows intensity, and hotel visibility shows where the published place layer already carries named or unnamed hotel evidence."
-      views={placeRegionMapViews}
-      compact={true}
-      labelMode="selected"
-      summaryMode="overlay"
-      legendMode="overlay"
-    />
+
+    <aside class="home-right">
+      <HomeSystemDeck
+        entries={placeDeckEntries}
+        initialScopeId="national"
+        targetMapId="places-britain-map"
+        resetLabel="Back to the UK"
+      />
+    </aside>
   </section>
 
   <PageContents title="Start here" sections={placeSections} variant="priority" />

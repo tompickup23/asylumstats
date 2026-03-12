@@ -62,10 +62,17 @@ const payload = JSON.stringify({
 });
 ---
 
-<section class="home-map-stage region-authority-stage" data-region-authority-stage id={id}>
+<section class="home-map-stage region-authority-stage" data-region-authority-stage data-home-map-depth="region" id={id}>
   <script type="application/json" data-region-authority-data set:html={payload} is:inline></script>
 
   <div class="home-map-intro">
+    <div class="home-map-topline">
+      <div class="chip-row home-map-path">
+        <span class="chip accent" data-region-authority-path-root>{region.regionName}</span>
+        <span class="chip teal" data-region-authority-path-area hidden></span>
+      </div>
+      <span class="chip warm home-map-depth-chip" data-region-authority-depth-chip>Regional lens</span>
+    </div>
     <div class="home-map-copy">
       <span class="kicker" data-region-authority-eyebrow>{region.countryName} region</span>
       <h1 data-region-authority-title>{region.regionName}</h1>
@@ -121,6 +128,21 @@ const payload = JSON.stringify({
         Select one authority to update the right-hand deck without leaving the region page.
       </figcaption>
     </div>
+
+    <aside class="home-map-focus-card" data-region-authority-focus>
+      <p class="tiny home-map-focus-kicker" data-region-authority-focus-kicker>{region.countryName} region</p>
+      <strong data-region-authority-focus-title>{region.regionName}</strong>
+      <p data-region-authority-focus-body>
+        Use the authority map to narrow inside {region.regionName} before opening any full local page.
+      </p>
+      <div class="chip-row home-map-focus-meta">
+        <span class="chip" data-region-authority-focus-primary>{region.publicPlaceCount.toLocaleString()} authorities</span>
+        <span class="chip accent" data-region-authority-focus-secondary>
+          {region.supportedAsylum.toLocaleString()} on support
+        </span>
+        <a class="chip accent" data-region-authority-focus-link hidden></a>
+      </div>
+    </aside>
   </section>
 </section>
 
@@ -201,6 +223,127 @@ const payload = JSON.stringify({
       }).format(value);
 
     const clampOpacity = (ratio: number) => Math.max(0.18, Math.min(0.84, 0.18 + ratio * 0.58));
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const authorityViewBoxAnimations = new WeakMap<SVGSVGElement, number>();
+
+    type ViewBox = {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+
+    const clampNumber = (value: number, minimum: number, maximum: number) =>
+      Math.max(minimum, Math.min(maximum, value));
+
+    const parseViewBox = (raw: string): ViewBox => {
+      const parts = raw.split(" ").map((value) => Number.parseFloat(value));
+
+      return {
+        x: Number.isFinite(parts[0] ?? NaN) ? parts[0] : 0,
+        y: Number.isFinite(parts[1] ?? NaN) ? parts[1] : 0,
+        width: Number.isFinite(parts[2] ?? NaN) ? parts[2] : 0,
+        height: Number.isFinite(parts[3] ?? NaN) ? parts[3] : 0
+      };
+    };
+
+    const getCurrentAuthorityViewBox = (svg: SVGSVGElement): ViewBox => {
+      const viewBox = svg.viewBox.baseVal;
+
+      if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+        return {
+          x: viewBox.x,
+          y: viewBox.y,
+          width: viewBox.width,
+          height: viewBox.height
+        };
+      }
+
+      return parseViewBox(svg.getAttribute("viewBox") ?? "0 0 620 760");
+    };
+
+    const setAuthorityViewBox = (svg: SVGSVGElement, target: ViewBox, durationMs = 0) => {
+      if (durationMs <= 0 || prefersReducedMotion) {
+        svg.setAttribute("viewBox", `${target.x} ${target.y} ${target.width} ${target.height}`);
+        return;
+      }
+
+      const activeFrame = authorityViewBoxAnimations.get(svg);
+
+      if (activeFrame !== undefined) {
+        window.cancelAnimationFrame(activeFrame);
+      }
+
+      const start = getCurrentAuthorityViewBox(svg);
+      const deltaX = target.x - start.x;
+      const deltaY = target.y - start.y;
+      const deltaWidth = target.width - start.width;
+      const deltaHeight = target.height - start.height;
+      const startTime = performance.now();
+
+      const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+
+      const step = (time: number) => {
+        const progress = Math.min(1, (time - startTime) / durationMs);
+        const eased = easeOutCubic(progress);
+        const x = start.x + deltaX * eased;
+        const y = start.y + deltaY * eased;
+        const width = start.width + deltaWidth * eased;
+        const height = start.height + deltaHeight * eased;
+
+        svg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
+
+        if (progress < 1) {
+          const nextFrame = window.requestAnimationFrame(step);
+          authorityViewBoxAnimations.set(svg, nextFrame);
+          return;
+        }
+
+        authorityViewBoxAnimations.delete(svg);
+      };
+
+      const firstFrame = window.requestAnimationFrame(step);
+      authorityViewBoxAnimations.set(svg, firstFrame);
+    };
+
+    const formatRateText = (value: number | null) =>
+      value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
+
+    const getMetricLabel = (metricId: AuthorityMetricId) =>
+      metricId === "rate" ? "rate" : metricId === "hotel" ? "hotel visibility" : "total";
+
+    const buildAuthorityViewBox = (bounds: DOMRect, payloadWidth: number, payloadHeight: number): ViewBox => {
+      const width = Math.max(payloadWidth, 1);
+      const height = Math.max(payloadHeight, 1);
+      const mapAspect = width / height;
+
+      const minimumFocusWidth = width * 0.22;
+      const minimumFocusHeight = height * 0.22;
+      let focusWidth = Math.max(bounds.width * 1.8 + 20, minimumFocusWidth);
+      let focusHeight = Math.max(bounds.height * 1.8 + 20, minimumFocusHeight);
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusHeight = focusWidth / mapAspect;
+      } else {
+        focusWidth = focusHeight * mapAspect;
+      }
+
+      focusWidth = clampNumber(focusWidth, minimumFocusWidth, width * 0.98);
+      focusHeight = clampNumber(focusHeight, minimumFocusHeight, height * 0.98);
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusWidth = focusHeight * mapAspect;
+      } else {
+        focusHeight = focusWidth / mapAspect;
+      }
+
+      const centerX = bounds.x + bounds.width / 2;
+      const centerY = bounds.y + bounds.height / 2;
+      const viewX = clampNumber(centerX - focusWidth / 2, 0, Math.max(0, width - focusWidth));
+      const viewY = clampNumber(centerY - focusHeight / 2, 0, Math.max(0, height - focusHeight));
+
+      return { x: viewX, y: viewY, width: focusWidth, height: focusHeight };
+    };
 
     const getFill = (value: number, minValue: number, maxValue: number, tone: "accent" | "teal" | "warm") => {
       const range = Math.max(maxValue - minValue, 1);
@@ -259,19 +402,144 @@ const payload = JSON.stringify({
       const legendBody = root.querySelector<HTMLElement>("[data-region-authority-legend-body]");
       const legendSwatch = root.querySelector<HTMLElement>("[data-region-authority-swatch]");
       const caption = root.querySelector<HTMLElement>("[data-region-authority-caption]");
+      const pathArea = root.querySelector<HTMLElement>("[data-region-authority-path-area]");
+      const depthChip = root.querySelector<HTMLElement>("[data-region-authority-depth-chip]");
+      const focusCard = root.querySelector<HTMLElement>("[data-region-authority-focus]");
+      const focusKicker = root.querySelector<HTMLElement>("[data-region-authority-focus-kicker]");
+      const focusTitle = root.querySelector<HTMLElement>("[data-region-authority-focus-title]");
+      const focusBody = root.querySelector<HTMLElement>("[data-region-authority-focus-body]");
+      const focusPrimary = root.querySelector<HTMLElement>("[data-region-authority-focus-primary]");
+      const focusSecondary = root.querySelector<HTMLElement>("[data-region-authority-focus-secondary]");
+      const focusLink = root.querySelector<HTMLAnchorElement>("[data-region-authority-focus-link]");
 
-      if (!authoritySvg || !eyebrow || !title || !note || !legendTitle || !legendBody || !legendSwatch || !caption) {
+      if (
+        !authoritySvg ||
+        !eyebrow ||
+        !title ||
+        !note ||
+        !legendTitle ||
+        !legendBody ||
+        !legendSwatch ||
+        !caption ||
+        !pathArea ||
+        !depthChip ||
+        !focusCard ||
+        !focusKicker ||
+        !focusTitle ||
+        !focusBody ||
+        !focusPrimary ||
+        !focusSecondary ||
+        !focusLink
+      ) {
         continue;
       }
 
       let currentMetric: AuthorityMetricId = "total";
       let currentAreaCode: string | null = null;
 
+      const setChip = (node: HTMLElement, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        if (!text) {
+          node.hidden = true;
+          node.textContent = "";
+          node.className = "chip";
+          return;
+        }
+
+        node.hidden = false;
+        node.textContent = text;
+        node.className = tone ? `chip ${tone}` : "chip";
+      };
+
       const updateCopy = (scopeId: string) => {
         const meta = payload.scopeMeta[scopeId] ?? payload.scopeMeta[payload.regionName];
         eyebrow.textContent = meta.eyebrow;
         title.textContent = meta.title;
         note.textContent = meta.note;
+        depthChip.textContent = meta.scopeKind === "place" ? "Authority lens" : "Regional lens";
+        root.dataset.homeMapDepth = meta.scopeKind === "place" ? "place" : "region";
+        setChip(pathArea, meta.scopeKind === "place" ? meta.title : null, "teal");
+      };
+
+      const buildAreaMetricChip = (area: AreaPayload) => {
+        if (currentMetric === "rate") {
+          return {
+            text: area.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(area.supportedAsylumRate)} / 10k`,
+            tone: "teal" as const
+          };
+        }
+
+        if (currentMetric === "hotel") {
+          return {
+            text:
+              area.hotelSignalValue === 2
+                ? "Named hotel site"
+                : area.hotelSignalValue === 1
+                  ? "Unnamed hotel evidence"
+                  : "No named hotel site",
+            tone: "warm" as const
+          };
+        }
+
+        return {
+          text: `${formatInteger(area.supportedAsylum)} on support`,
+          tone: "accent" as const
+        };
+      };
+
+      const updateFocusCard = (selectedAreaCode: string | null) => {
+        if (!selectedAreaCode) {
+          const getMetricValue = (area: AreaPayload) => {
+            if (currentMetric === "rate") {
+              return area.supportedAsylumRate ?? -1;
+            }
+
+            if (currentMetric === "hotel") {
+              return area.hotelSignalValue;
+            }
+
+            return area.supportedAsylum;
+          };
+
+          const metricLeader = payload.areas.reduce<AreaPayload | null>(
+            (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
+            null
+          );
+
+          focusCard.dataset.scopeKind = "region";
+          focusKicker.textContent = "Regional overview";
+          focusTitle.textContent = payload.regionName;
+          focusBody.textContent = metricLeader
+            ? `${metricLeader.areaName} currently leads on ${getMetricLabel(currentMetric)}. Pick one authority to update the deck.`
+            : `Pick one authority to update the deck inside ${payload.regionName}.`;
+          setChip(focusPrimary, `${payload.areas.length.toLocaleString("en-GB")} authorities`);
+          setChip(
+            focusSecondary,
+            metricLeader ? `Lead: ${metricLeader.areaName}` : null,
+            currentMetric === "rate" ? "teal" : currentMetric === "hotel" ? "warm" : "accent"
+          );
+          focusLink.hidden = true;
+          focusLink.removeAttribute("href");
+          focusLink.textContent = "";
+          return;
+        }
+
+        const area = payload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+
+        if (!area) {
+          updateFocusCard(null);
+          return;
+        }
+
+        const primaryMetric = buildAreaMetricChip(area);
+        focusCard.dataset.scopeKind = "place";
+        focusKicker.textContent = `${payload.regionName} authority`;
+        focusTitle.textContent = area.areaName;
+        focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+        setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+        setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
+        focusLink.hidden = false;
+        focusLink.href = buildAreaHref(area.areaCode);
+        focusLink.textContent = "Open place page";
       };
 
       const renderMap = async (selectedAreaCode: string | null) => {
@@ -297,13 +565,16 @@ const payload = JSON.stringify({
         });
         const minValue = Math.min(...values, 0);
         const maxValue = Math.max(...values, 1);
+        const baseViewBox = `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`;
 
         authoritySvg.innerHTML = "";
-        authoritySvg.setAttribute("viewBox", `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`);
+        authoritySvg.setAttribute("viewBox", baseViewBox);
         authoritySvg.setAttribute("aria-label", `${payload.regionName} authority map`);
 
         const baseGroup = document.createElementNS(SVG_NS, "g");
         baseGroup.setAttribute("class", "region-map-base");
+
+        let selectedAreaPath: SVGPathElement | null = null;
 
         for (const area of boundaryRegion.areas) {
           const path = document.createElementNS(SVG_NS, "path");
@@ -355,6 +626,10 @@ const payload = JSON.stringify({
           link.append(titleNode, path);
 
           if (selected) {
+            selectedAreaPath = path;
+          }
+
+          if (selected) {
             const label = document.createElementNS(SVG_NS, "text");
             label.setAttribute("x", String(boundaryArea.labelX));
             label.setAttribute("y", String(boundaryArea.labelY));
@@ -385,10 +660,22 @@ const payload = JSON.stringify({
           authoritySvg.append(link);
         }
 
+        if (selectedAreaCode && selectedAreaPath) {
+          const selectedBounds = selectedAreaPath.getBBox();
+          setAuthorityViewBox(
+            authoritySvg,
+            buildAuthorityViewBox(selectedBounds, boundaryPayload.width, boundaryPayload.height),
+            520
+          );
+        } else {
+          setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentAreaCode ? 420 : 0);
+        }
+
         caption.textContent =
           selectedAreaCode && areaMetaByCode.get(selectedAreaCode)
             ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected on the ${payload.regionName} map.`
             : `Select one authority inside ${payload.regionName} to update the right-hand deck without leaving the region page.`;
+        updateFocusCard(selectedAreaCode);
       };
 
       const setMetric = (metricId: AuthorityMetricId) => {
@@ -404,6 +691,7 @@ const payload = JSON.stringify({
         legendTitle.textContent = config.title;
         legendBody.textContent = config.body;
         legendSwatch.dataset.tone = config.tone;
+        root.dataset.regionAuthorityMetric = metricId;
         void renderMap(currentAreaCode);
       };
 

@@ -73,6 +73,7 @@ const regionPayload = placeDirectory.regions.map((region) => {
   return {
     regionName: region.regionName,
     countryName: region.countryName,
+    regionPath: region.regionPath,
     areas
   };
 });
@@ -85,10 +86,18 @@ const payload = JSON.stringify({
 });
 ---
 
-<section class="home-map-stage" data-home-map-stage id={id}>
+<section class="home-map-stage" data-home-map-stage data-home-map-depth="national" id={id}>
   <script type="application/json" data-home-map-data set:html={payload} is:inline></script>
 
   <div class="home-map-intro">
+    <div class="home-map-topline">
+      <div class="chip-row home-map-path">
+        <span class="chip accent" data-home-map-path-root>Britain</span>
+        <span class="chip" data-home-map-path-region hidden></span>
+        <span class="chip teal" data-home-map-path-area hidden></span>
+      </div>
+      <span class="chip warm home-map-depth-chip" data-home-map-depth-chip>National lens</span>
+    </div>
     <div class="home-map-copy">
       <span class="kicker" data-home-map-eyebrow>{scopeMeta.national.eyebrow}</span>
       <h1 data-home-map-title>{scopeMeta.national.title}</h1>
@@ -161,6 +170,17 @@ const payload = JSON.stringify({
         Select one authority to update the right-hand deck without leaving the homepage.
       </figcaption>
     </div>
+
+    <aside class="home-map-focus-card" data-home-authority-focus hidden>
+      <p class="tiny home-map-focus-kicker" data-home-authority-focus-kicker></p>
+      <strong data-home-authority-focus-title></strong>
+      <p data-home-authority-focus-body></p>
+      <div class="chip-row home-map-focus-meta">
+        <span class="chip" data-home-authority-focus-primary hidden></span>
+        <span class="chip" data-home-authority-focus-secondary hidden></span>
+        <a class="chip accent" data-home-authority-focus-link hidden></a>
+      </div>
+    </aside>
   </section>
 </section>
 
@@ -188,6 +208,7 @@ const payload = JSON.stringify({
   type HomeMapRegionPayload = {
     regionName: string;
     countryName: string;
+    regionPath: string;
     areas: HomeMapAreaPayload[];
   };
 
@@ -257,6 +278,85 @@ const payload = JSON.stringify({
       }).format(value);
 
     const clampOpacity = (ratio: number) => Math.max(0.18, Math.min(0.84, 0.18 + ratio * 0.58));
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const authorityViewBoxAnimations = new WeakMap<SVGSVGElement, number>();
+
+    type ViewBox = {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+
+    const parseViewBox = (raw: string): ViewBox => {
+      const parts = raw.split(" ").map((value) => Number.parseFloat(value));
+
+      return {
+        x: Number.isFinite(parts[0] ?? NaN) ? parts[0] : 0,
+        y: Number.isFinite(parts[1] ?? NaN) ? parts[1] : 0,
+        width: Number.isFinite(parts[2] ?? NaN) ? parts[2] : 0,
+        height: Number.isFinite(parts[3] ?? NaN) ? parts[3] : 0
+      };
+    };
+
+    const getCurrentAuthorityViewBox = (svg: SVGSVGElement): ViewBox => {
+      const viewBox = svg.viewBox.baseVal;
+
+      if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+        return {
+          x: viewBox.x,
+          y: viewBox.y,
+          width: viewBox.width,
+          height: viewBox.height
+        };
+      }
+
+      return parseViewBox(svg.getAttribute("viewBox") ?? "0 0 620 760");
+    };
+
+    const setAuthorityViewBox = (svg: SVGSVGElement, target: ViewBox, durationMs = 0) => {
+      if (durationMs <= 0 || prefersReducedMotion) {
+        svg.setAttribute("viewBox", `${target.x} ${target.y} ${target.width} ${target.height}`);
+        return;
+      }
+
+      const activeFrame = authorityViewBoxAnimations.get(svg);
+
+      if (activeFrame !== undefined) {
+        window.cancelAnimationFrame(activeFrame);
+      }
+
+      const start = getCurrentAuthorityViewBox(svg);
+      const deltaX = target.x - start.x;
+      const deltaY = target.y - start.y;
+      const deltaWidth = target.width - start.width;
+      const deltaHeight = target.height - start.height;
+      const startTime = performance.now();
+
+      const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+
+      const step = (time: number) => {
+        const progress = Math.min(1, (time - startTime) / durationMs);
+        const eased = easeOutCubic(progress);
+        const x = start.x + deltaX * eased;
+        const y = start.y + deltaY * eased;
+        const width = start.width + deltaWidth * eased;
+        const height = start.height + deltaHeight * eased;
+
+        svg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
+
+        if (progress < 1) {
+          const nextFrame = window.requestAnimationFrame(step);
+          authorityViewBoxAnimations.set(svg, nextFrame);
+          return;
+        }
+
+        authorityViewBoxAnimations.delete(svg);
+      };
+
+      const firstFrame = window.requestAnimationFrame(step);
+      authorityViewBoxAnimations.set(svg, firstFrame);
+    };
 
     const getFill = (value: number, minValue: number, maxValue: number, tone: "accent" | "teal" | "warm") => {
       const range = Math.max(maxValue - minValue, 1);
@@ -272,6 +372,42 @@ const payload = JSON.stringify({
       }
 
       return `rgba(125, 211, 252, ${alpha})`;
+    };
+
+    const clampNumber = (value: number, minimum: number, maximum: number) =>
+      Math.max(minimum, Math.min(maximum, value));
+
+    const buildAuthorityViewBox = (bounds: DOMRect, payloadWidth: number, payloadHeight: number): ViewBox => {
+      const width = Math.max(payloadWidth, 1);
+      const height = Math.max(payloadHeight, 1);
+      const mapAspect = width / height;
+
+      const minimumFocusWidth = width * 0.22;
+      const minimumFocusHeight = height * 0.22;
+      let focusWidth = Math.max(bounds.width * 1.8 + 20, minimumFocusWidth);
+      let focusHeight = Math.max(bounds.height * 1.8 + 20, minimumFocusHeight);
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusHeight = focusWidth / mapAspect;
+      } else {
+        focusWidth = focusHeight * mapAspect;
+      }
+
+      focusWidth = clampNumber(focusWidth, minimumFocusWidth, width * 0.98);
+      focusHeight = clampNumber(focusHeight, minimumFocusHeight, height * 0.98);
+
+      if (focusWidth / focusHeight > mapAspect) {
+        focusWidth = focusHeight * mapAspect;
+      } else {
+        focusHeight = focusWidth / mapAspect;
+      }
+
+      const centerX = bounds.x + bounds.width / 2;
+      const centerY = bounds.y + bounds.height / 2;
+      const viewX = clampNumber(centerX - focusWidth / 2, 0, Math.max(0, width - focusWidth));
+      const viewY = clampNumber(centerY - focusHeight / 2, 0, Math.max(0, height - focusHeight));
+
+      return { x: viewX, y: viewY, width: focusWidth, height: focusHeight };
     };
 
     const buildAreaHref = (areaCode: string) => `/places/${areaCode}/`;
@@ -317,8 +453,39 @@ const payload = JSON.stringify({
       const legendBody = root.querySelector<HTMLElement>("[data-home-authority-legend-body]");
       const legendSwatch = root.querySelector<HTMLElement>("[data-home-authority-swatch]");
       const caption = root.querySelector<HTMLElement>("[data-home-authority-caption]");
+      const pathRegion = root.querySelector<HTMLElement>("[data-home-map-path-region]");
+      const pathArea = root.querySelector<HTMLElement>("[data-home-map-path-area]");
+      const depthChip = root.querySelector<HTMLElement>("[data-home-map-depth-chip]");
+      const focusCard = root.querySelector<HTMLElement>("[data-home-authority-focus]");
+      const focusKicker = root.querySelector<HTMLElement>("[data-home-authority-focus-kicker]");
+      const focusTitle = root.querySelector<HTMLElement>("[data-home-authority-focus-title]");
+      const focusBody = root.querySelector<HTMLElement>("[data-home-authority-focus-body]");
+      const focusPrimary = root.querySelector<HTMLElement>("[data-home-authority-focus-primary]");
+      const focusSecondary = root.querySelector<HTMLElement>("[data-home-authority-focus-secondary]");
+      const focusLink = root.querySelector<HTMLAnchorElement>("[data-home-authority-focus-link]");
 
-      if (!nationalPane || !authorityStage || !authoritySvg || !eyebrow || !title || !note || !legendTitle || !legendBody || !legendSwatch || !caption) {
+      if (
+        !nationalPane ||
+        !authorityStage ||
+        !authoritySvg ||
+        !eyebrow ||
+        !title ||
+        !note ||
+        !legendTitle ||
+        !legendBody ||
+        !legendSwatch ||
+        !caption ||
+        !pathRegion ||
+        !pathArea ||
+        !depthChip ||
+        !focusCard ||
+        !focusKicker ||
+        !focusTitle ||
+        !focusBody ||
+        !focusPrimary ||
+        !focusSecondary ||
+        !focusLink
+      ) {
         continue;
       }
 
@@ -330,11 +497,49 @@ const payload = JSON.stringify({
       let currentRegionName: string | null = null;
       let currentAreaCode: string | null = null;
 
+      const formatRateText = (value: number | null) =>
+        value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
+
+      const setChip = (node: HTMLElement, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        if (!text) {
+          node.hidden = true;
+          node.textContent = "";
+          node.className = "chip";
+          return;
+        }
+
+        node.hidden = false;
+        node.textContent = text;
+        node.className = tone ? `chip ${tone}` : "chip";
+      };
+
+      const updatePath = (meta: HomeMapScopeMeta) => {
+        depthChip.textContent =
+          meta.scopeKind === "national" ? "National lens" : meta.scopeKind === "region" ? "Regional lens" : "Authority lens";
+        setChip(pathRegion, null);
+        setChip(pathArea, null);
+
+        if (meta.scopeKind === "region") {
+          setChip(pathRegion, meta.title);
+          return;
+        }
+
+        if (meta.scopeKind === "place") {
+          setChip(pathRegion, meta.regionName ?? currentRegionName ?? "Region");
+          setChip(pathArea, meta.title, "teal");
+        }
+      };
+
       const updateCopy = (scopeId: string) => {
         const meta = payload.scopeMeta[scopeId] ?? payload.scopeMeta[payload.initialScopeId];
         eyebrow.textContent = meta.eyebrow;
         title.textContent = meta.title;
         note.textContent = meta.note;
+        updatePath(meta);
+      };
+
+      const setStageDepth = (depth: "national" | "region" | "place") => {
+        root.dataset.homeMapDepth = depth;
       };
 
       const setMetric = (metricId: AuthorityMetricId) => {
@@ -350,6 +555,7 @@ const payload = JSON.stringify({
         legendTitle.textContent = config.title;
         legendBody.textContent = config.body;
         legendSwatch.dataset.tone = config.tone;
+        authorityStage.dataset.homeAuthorityMetric = metricId;
 
         if (currentRegionName) {
           void renderAuthorityMap(currentRegionName, currentAreaCode);
@@ -361,7 +567,105 @@ const payload = JSON.stringify({
         authorityStage.hidden = true;
         currentRegionName = null;
         currentAreaCode = null;
+        focusCard.hidden = true;
+        setStageDepth("national");
         updateCopy(payload.initialScopeId);
+      };
+
+      const buildAreaMetricChip = (area: HomeMapAreaPayload) => {
+        if (currentMetric === "rate") {
+          return {
+            text: area.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(area.supportedAsylumRate)} / 10k`,
+            tone: "teal" as const
+          };
+        }
+
+        if (currentMetric === "hotel") {
+          return {
+            text:
+              area.hotelSignalValue === 2
+                ? "Named hotel site"
+                : area.hotelSignalValue === 1
+                  ? "Unnamed hotel evidence"
+                  : "No named hotel site",
+            tone: "warm" as const
+          };
+        }
+
+        return {
+          text: `${formatInteger(area.supportedAsylum)} on support`,
+          tone: "accent" as const
+        };
+      };
+
+      const updateFocusCard = (regionName: string | null, selectedAreaCode: string | null) => {
+        if (!regionName) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        const regionPayload = regionDataByName.get(regionName);
+
+        if (!regionPayload) {
+          focusCard.hidden = true;
+          return;
+        }
+
+        focusCard.hidden = false;
+
+        if (selectedAreaCode) {
+          const area = regionPayload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+
+          if (!area) {
+            updateFocusCard(regionName, null);
+            return;
+          }
+
+          const primaryMetric = buildAreaMetricChip(area);
+          focusCard.dataset.scopeKind = "place";
+          focusKicker.textContent = `${regionName} authority`;
+          focusTitle.textContent = area.areaName;
+          focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+          setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+          setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
+          focusLink.hidden = false;
+          focusLink.href = buildAreaHref(area.areaCode);
+          focusLink.textContent = "Open place page";
+          return;
+        }
+
+        const getMetricValue = (area: HomeMapAreaPayload) => {
+          if (currentMetric === "rate") {
+            return area.supportedAsylumRate ?? -1;
+          }
+
+          if (currentMetric === "hotel") {
+            return area.hotelSignalValue;
+          }
+
+          return area.supportedAsylum;
+        };
+
+        const metricLeader = regionPayload.areas.reduce<HomeMapAreaPayload | null>(
+          (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
+          null
+        );
+
+        focusCard.dataset.scopeKind = "region";
+        focusKicker.textContent = `${regionPayload.countryName} region`;
+        focusTitle.textContent = regionName;
+        focusBody.textContent = metricLeader
+          ? `Use the authority map to narrow this region. ${metricLeader.areaName} currently leads on ${metricConfig[currentMetric].label.toLowerCase()}.`
+          : "Use the authority map to narrow this region.";
+        setChip(focusPrimary, `${regionPayload.areas.length.toLocaleString("en-GB")} authorities`);
+        setChip(
+          focusSecondary,
+          metricLeader ? `Lead: ${metricLeader.areaName}` : null,
+          currentMetric === "rate" ? "teal" : currentMetric === "hotel" ? "warm" : "accent"
+        );
+        focusLink.hidden = false;
+        focusLink.href = regionPayload.regionPath;
+        focusLink.textContent = "Open region page";
       };
 
       const renderAuthorityMap = async (regionName: string, selectedAreaCode: string | null) => {
@@ -392,13 +696,16 @@ const payload = JSON.stringify({
         });
         const minValue = Math.min(...values, 0);
         const maxValue = Math.max(...values, 1);
+        const baseViewBox = `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`;
 
         authoritySvg.innerHTML = "";
-        authoritySvg.setAttribute("viewBox", `0 0 ${boundaryPayload.width} ${boundaryPayload.height}`);
+        authoritySvg.setAttribute("viewBox", baseViewBox);
         authoritySvg.setAttribute("aria-label", `${regionName} authority map`);
 
         const baseGroup = document.createElementNS(SVG_NS, "g");
         baseGroup.setAttribute("class", "region-map-base");
+
+        let selectedAreaPath: SVGPathElement | null = null;
 
         for (const area of boundaryRegion.areas) {
           const path = document.createElementNS(SVG_NS, "path");
@@ -450,6 +757,10 @@ const payload = JSON.stringify({
           link.append(titleNode, path);
 
           if (selected) {
+            selectedAreaPath = path;
+          }
+
+          if (selected) {
             const label = document.createElementNS(SVG_NS, "text");
             label.setAttribute("x", String(boundaryArea.labelX));
             label.setAttribute("y", String(boundaryArea.labelY));
@@ -480,10 +791,22 @@ const payload = JSON.stringify({
           authoritySvg.append(link);
         }
 
+        if (selectedAreaCode && selectedAreaPath) {
+          const selectedBounds = selectedAreaPath.getBBox();
+          setAuthorityViewBox(
+            authoritySvg,
+            buildAuthorityViewBox(selectedBounds, boundaryPayload.width, boundaryPayload.height),
+            520
+          );
+        } else {
+          setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentRegionName ? 420 : 0);
+        }
+
         caption.textContent =
           selectedAreaCode && areaMetaByCode.get(selectedAreaCode)
             ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected on the ${regionName} map.`
             : `Select one authority inside ${regionName} to update the right-hand deck without leaving the homepage.`;
+        updateFocusCard(regionName, selectedAreaCode);
       };
 
       const showRegionStage = async (regionName: string, selectedAreaCode: string | null = null) => {
@@ -491,6 +814,7 @@ const payload = JSON.stringify({
         currentAreaCode = selectedAreaCode;
         nationalPane.hidden = true;
         authorityStage.hidden = false;
+        setStageDepth(selectedAreaCode ? "place" : "region");
         updateCopy(selectedAreaCode ?? regionName);
         await renderAuthorityMap(regionName, selectedAreaCode);
       };
@@ -531,6 +855,7 @@ const payload = JSON.stringify({
         }
 
         if (meta.scopeKind === "region") {
+          setStageDepth("region");
           void showRegionStage(scopeId);
           return;
         }
@@ -541,6 +866,7 @@ const payload = JSON.stringify({
           return;
         }
 
+        setStageDepth("place");
         void showRegionStage(regionName, scopeId);
       });
 
@@ -558,6 +884,7 @@ const payload = JSON.stringify({
       }
 
       updateCopy(payload.initialScopeId);
+      setStageDepth("national");
       setMetric("total");
 
       const warmup = () => {

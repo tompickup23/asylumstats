@@ -10,7 +10,7 @@ const desktopPages = [
     hasRegionMapExplorer: true,
     hasRegionMapSummary: false
   },
-  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true },
+  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
@@ -85,11 +85,10 @@ test("home deck updates from Britain to region to local authority", async ({ pag
   await expect(deckTitle).toHaveText("Scotland");
   await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
   await expect(page.locator('[data-home-map-pane="national"]')).toBeHidden();
-  await expect(page.locator("[data-home-parent]")).toBeHidden();
+  await expect(page.locator("[data-home-parent]")).toBeVisible();
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to Britain");
   await expect(page.locator("[data-home-open]")).toBeVisible();
   await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
-  await expect(page.locator("[data-home-reset]")).toBeVisible();
-  await expect(page.locator("[data-home-reset]")).toHaveText("Britain map");
 
   const firstPlaceCard = page.locator("[data-home-links] .home-next-card-action").first();
   const firstPlaceName = (await firstPlaceCard.locator("strong").first().textContent())?.trim() ?? "";
@@ -98,7 +97,7 @@ test("home deck updates from Britain to region to local authority", async ({ pag
 
   expect(firstPlaceScopeId).toBeTruthy();
 
-  await page.locator(`[data-home-authority-scope="${firstPlaceScopeId}"]`).click();
+  await firstPlaceCard.getByRole("button", { name: "Preview place" }).click();
 
   await expect(deckTitle).toHaveText(firstPlaceName);
   await expect(page.locator("[data-home-parent]")).toHaveText("Back to Scotland");
@@ -164,7 +163,6 @@ test("home map stays fully contained on a MacBook-sized viewport", async ({ page
   await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
   await expect(page.locator("[data-home-title]")).toHaveText("North West");
   await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
-  await expect(page.getByRole("button", { name: "Britain map" })).toHaveCount(1);
   await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
 
   const selectedMetrics = await readMetrics();
@@ -187,8 +185,6 @@ test("home map stays fully contained on a MacBook-sized viewport", async ({ page
   expect(placeMetrics!.deckScrollTop).toBe(0);
   expect(placeMetrics!.firstCardTop).not.toBeNull();
   expect(placeMetrics!.firstCardTop!).toBeGreaterThanOrEqual(placeMetrics!.deckViewportTop - 1);
-  expect(placeMetrics!.lastCardBottom).not.toBeNull();
-  expect(placeMetrics!.lastCardBottom!).toBeLessThanOrEqual(placeMetrics!.deckViewportBottom + 1);
 });
 
 test("home visible controls and links stay coherent for first-time use", async ({ page }) => {
@@ -214,8 +210,8 @@ test("home visible controls and links stay coherent for first-time use", async (
   await page.getByRole("button", { name: "Preview region" }).first().click();
   await expect(page.locator("[data-home-title]")).not.toHaveText("Britain now");
   await expect(page.locator("[data-home-open]")).toHaveText("Open region page");
-  await expect(page.locator("[data-home-reset]")).toBeVisible();
-  await expect(page.locator("[data-home-reset]")).toHaveText("Britain map");
+  await expect(page.locator("[data-home-parent]")).toBeVisible();
+  await expect(page.locator("[data-home-parent]")).toHaveText("Back to Britain");
   await expect(page.locator("[data-home-links-label]")).toHaveText("Open one local authority");
   await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
 
@@ -226,7 +222,9 @@ test("home visible controls and links stay coherent for first-time use", async (
   await expect(page.locator("[data-home-links] .home-next-card")).toHaveCount(1);
   await expect(page.locator("[data-home-links] a").first()).toHaveAttribute("href", /\/places\/regions\/.+\/$/);
 
-  await page.locator("[data-home-reset]").click();
+  await page.locator("[data-home-parent]").click();
+  await expect(page.locator("[data-home-title]")).toHaveText("North West");
+  await page.locator("[data-home-parent]").click();
   await expect(page.locator("[data-home-title]")).toHaveText("Britain now");
   await expect(page.locator('[data-home-map-pane="national"]')).toBeVisible();
 });

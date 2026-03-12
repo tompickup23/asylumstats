@@ -154,30 +154,7 @@ function buildAreaNote(row: PlaceDirectoryRegion["areas"][number]) {
   return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. No named hotel site is public yet.`;
 }
 
-function buildRegionPreviewRows(region: PlaceDirectoryRegion) {
-  const uniqueRows = new Map<string, PlaceDirectoryRegion["areas"][number]>();
-  const byRate = [...region.areas].sort(
-    (left, right) =>
-      (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
-      right.area.supportedAsylum - left.area.supportedAsylum
-  );
-  const hotelRows = region.areas.filter((row) => row.hotelSignal !== "none");
-
-  for (const row of [...region.areas, ...byRate, ...hotelRows]) {
-    if (!uniqueRows.has(row.area.areaCode)) {
-      uniqueRows.set(row.area.areaCode, row);
-    }
-
-    if (uniqueRows.size >= 2) {
-      break;
-    }
-  }
-
-  return [...uniqueRows.values()];
-}
-
 const regionStageId = `region-authority-stage-${region.regionSlug}`;
-const previewRows = buildRegionPreviewRows(region);
 const accommodationAverage = Math.round(region.supportedAsylum / Math.max(region.publicPlaceCount, 1));
 const regionDeckEntries: Record<string, RegionDeckEntry> = {
   [region.regionName]: {
@@ -203,7 +180,7 @@ const regionDeckEntries: Record<string, RegionDeckEntry> = {
         context: "People in contingency accommodation"
       }
     ],
-    links: previewRows.map((row) => ({
+    links: region.areas.map((row) => ({
       label: row.area.areaName,
       href: buildAreaPath(row.area.areaCode),
       meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,

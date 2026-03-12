@@ -51,9 +51,10 @@ interface Props {
   initialScopeId: string;
   targetMapId: string;
   rootScopeKind?: HomeDeckScopeKind;
+  resetLabel?: string;
 }
 
-const { entries, initialScopeId, targetMapId, rootScopeKind = "national" } = Astro.props;
+const { entries, initialScopeId, targetMapId, rootScopeKind = "national", resetLabel } = Astro.props;
 const initialEntry = entries[initialScopeId];
 const getScopeKind = (entry: HomeDeckEntry): HomeDeckScopeKind => {
   if (entry.scopeId === initialScopeId) {
@@ -67,7 +68,7 @@ const getScopeKind = (entry: HomeDeckEntry): HomeDeckScopeKind => {
   return "place";
 };
 const initialScopeKind = initialEntry ? getScopeKind(initialEntry) : "national";
-const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
+const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, resetLabel });
 ---
 
 {initialEntry && (
@@ -106,10 +107,20 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
       </div>
     </div>
 
+    <div class="home-scope-rail">
+      <div class="home-scope-path" data-home-scope-path>
+        <span class="home-scope-crumb is-current">{initialEntry.title}</span>
+      </div>
+      <span class="chip warm home-scope-kind-chip" data-home-scope-kind-chip>
+        {initialScopeKind === "national" ? "National lens" : initialScopeKind === "region" ? "Regional lens" : "Local lens"}
+      </span>
+    </div>
+
     <div class="home-system-summary">
       <p class="lede" data-home-note>{initialEntry.note}</p>
       <div class="chip-row home-system-controls" data-home-controls hidden>
         <a class="chip accent" data-home-open hidden></a>
+        <button type="button" class="chip" data-home-reset hidden></button>
         <button type="button" class="chip" data-home-parent hidden></button>
       </div>
     </div>
@@ -117,6 +128,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
     <div class="home-deck-viewport">
       <div class="home-deck-track" data-home-track>
         <section class="home-deck-pane" data-home-pane="stats" role="tabpanel">
+          <div class="home-story-band" data-home-story-band></div>
           <div class="home-kpi-grid" data-home-stats></div>
           <div class="home-follow-panel">
             <div class="home-follow-head">
@@ -127,6 +139,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
         </section>
 
         <section class="home-deck-pane" data-home-pane="visuals" role="tabpanel">
+          <div class="home-visual-hero" data-home-visual-hero></div>
           <div class="home-visual-stack" data-home-visuals></div>
         </section>
       </div>
@@ -167,6 +180,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
     entries: Record<string, HomeDeckEntry>;
     initialScopeId: string;
     rootScopeKind: HomeDeckScopeKind;
+    resetLabel?: string;
   };
   type RegionMapChangeDetail = {
     regionName?: string;
@@ -188,9 +202,9 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
     const renderStats = (container: HTMLElement, stats: HomeDeckStat[]) => {
       container.innerHTML = "";
 
-      for (const stat of stats) {
+      stats.forEach((stat, index) => {
         const card = document.createElement("article");
-        card.className = "home-kpi-card";
+        card.className = `home-kpi-card${index === 0 ? " is-primary" : ""}`;
 
         const label = document.createElement("span");
         label.className = "tiny";
@@ -205,14 +219,76 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
 
         card.append(label, value, context);
         container.append(card);
-      }
+      });
     };
 
-    const renderLinks = (container: HTMLElement, links: HomeDeckLink[], onPreview: (scopeId: string) => void) => {
+    const renderStoryBand = (container: HTMLElement, entry: HomeDeckEntry) => {
+      container.innerHTML = "";
+
+      const [leadStat, ...secondaryStats] = entry.stats;
+
+      if (!leadStat) {
+        return;
+      }
+
+      const card = document.createElement("article");
+      card.className = "home-story-card";
+
+      const primary = document.createElement("div");
+      primary.className = "home-story-primary";
+
+      const eyebrow = document.createElement("span");
+      eyebrow.className = "tiny";
+      eyebrow.textContent = leadStat.label;
+
+      const value = document.createElement("strong");
+      value.textContent = leadStat.value;
+
+      const context = document.createElement("p");
+      context.textContent = leadStat.context;
+
+      primary.append(eyebrow, value, context);
+      card.append(primary);
+
+      if (secondaryStats.length > 0) {
+        const secondary = document.createElement("div");
+        secondary.className = "home-story-secondary";
+
+        for (const stat of secondaryStats) {
+          const item = document.createElement("div");
+          item.className = "home-mini-stat";
+
+          const itemLabel = document.createElement("span");
+          itemLabel.className = "tiny";
+          itemLabel.textContent = stat.label;
+
+          const itemValue = document.createElement("strong");
+          itemValue.textContent = stat.value;
+
+          const itemContext = document.createElement("p");
+          itemContext.textContent = stat.context;
+
+          item.append(itemLabel, itemValue, itemContext);
+          secondary.append(item);
+        }
+
+        card.append(secondary);
+      }
+
+      container.append(card);
+    };
+
+    const renderLinks = (
+      container: HTMLElement,
+      links: HomeDeckLink[],
+      currentScopeId: string,
+      onPreview: (scopeId: string) => void
+    ) => {
       container.innerHTML = "";
 
       for (const link of links) {
         if (link.scopeId) {
+          const isCurrent = link.scopeId === currentScopeId;
           const card = document.createElement("article");
           card.className = "home-next-card home-next-card-action";
 
@@ -232,9 +308,13 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
 
           const previewButton = document.createElement("button");
           previewButton.type = "button";
-          previewButton.className = "chip accent";
-          previewButton.textContent = link.actionLabel ?? "Preview here";
-          previewButton.addEventListener("click", () => onPreview(link.scopeId as string));
+          previewButton.className = `chip accent${isCurrent ? " is-current" : ""}`;
+          previewButton.textContent = isCurrent ? "In view" : link.actionLabel ?? "Preview here";
+          previewButton.disabled = isCurrent;
+
+          if (!isCurrent) {
+            previewButton.addEventListener("click", () => onPreview(link.scopeId as string));
+          }
 
           const openLink = document.createElement("a");
           openLink.className = "chip";
@@ -262,6 +342,45 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
       }
     };
 
+    const renderVisualHero = (container: HTMLElement, entry: HomeDeckEntry) => {
+      container.innerHTML = "";
+
+      const leadGroup = entry.visualGroups[0];
+      const leadBar = leadGroup?.bars[0];
+
+      if (!leadGroup || !leadBar) {
+        return;
+      }
+
+      const card = document.createElement("article");
+      card.className = "home-visual-hero-card";
+
+      const eyebrow = document.createElement("span");
+      eyebrow.className = "tiny";
+      eyebrow.textContent = leadGroup.title;
+
+      const title = document.createElement("strong");
+      title.textContent = leadBar.label;
+
+      const value = document.createElement("div");
+      value.className = "home-visual-hero-value";
+      value.textContent = leadBar.value;
+
+      const meta = document.createElement("p");
+      meta.textContent = leadBar.meta;
+
+      const meter = document.createElement("div");
+      meter.className = "home-visual-hero-meter";
+
+      const fill = document.createElement("span");
+      fill.className = `home-visual-hero-fill ${leadBar.tone}`;
+      fill.style.width = clampWidth(leadBar.widthPct);
+      meter.append(fill);
+
+      card.append(eyebrow, title, value, meta, meter);
+      container.append(card);
+    };
+
     const renderVisuals = (container: HTMLElement, entry: HomeDeckEntry) => {
       container.innerHTML = "";
 
@@ -284,19 +403,23 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
         const list = document.createElement("div");
         list.className = "home-bar-list";
 
-        for (const item of group.bars) {
+        group.bars.forEach((item, index) => {
           const row = document.createElement("div");
           row.className = "home-bar-row";
 
           const copy = document.createElement("div");
           copy.className = "home-bar-copy";
 
+          const rank = document.createElement("span");
+          rank.className = "home-bar-rank";
+          rank.textContent = `${index + 1}`;
+
           const label = document.createElement("span");
           label.textContent = item.label;
 
           const value = document.createElement("strong");
           value.textContent = item.value;
-          copy.append(label, value);
+          copy.append(rank, label, value);
 
           const track = document.createElement("div");
           track.className = "home-bar-track";
@@ -312,7 +435,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
 
           row.append(copy, track, meta);
           list.append(row);
-        }
+        });
 
         card.append(head, list);
         container.append(card);
@@ -334,6 +457,9 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
 
       return "place";
     };
+
+    const getScopeKindLabel = (scopeKind: HomeDeckScopeKind) =>
+      scopeKind === "national" ? "National lens" : scopeKind === "region" ? "Regional lens" : "Local lens";
 
     const setTrackState = (root: HTMLElement, panel: "stats" | "visuals") => {
       root.dataset.homeActivePanel = panel;
@@ -367,11 +493,16 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
       const deckViewport = root.querySelector<HTMLElement>(".home-deck-viewport");
       const controls = root.querySelector<HTMLElement>("[data-home-controls]");
       const openLink = root.querySelector<HTMLAnchorElement>("[data-home-open]");
+      const resetButton = root.querySelector<HTMLButtonElement>("[data-home-reset]");
       const parentButton = root.querySelector<HTMLButtonElement>("[data-home-parent]");
       const linksLabel = root.querySelector<HTMLElement>("[data-home-links-label]");
       const statsContainer = root.querySelector<HTMLElement>("[data-home-stats]");
       const linksContainer = root.querySelector<HTMLElement>("[data-home-links]");
       const visualsContainer = root.querySelector<HTMLElement>("[data-home-visuals]");
+      const storyBand = root.querySelector<HTMLElement>("[data-home-story-band]");
+      const visualHero = root.querySelector<HTMLElement>("[data-home-visual-hero]");
+      const scopePath = root.querySelector<HTMLElement>("[data-home-scope-path]");
+      const scopeKindChip = root.querySelector<HTMLElement>("[data-home-scope-kind-chip]");
 
       if (
         !title ||
@@ -380,11 +511,16 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
         !deckViewport ||
         !controls ||
         !openLink ||
+        !resetButton ||
         !parentButton ||
         !linksLabel ||
         !statsContainer ||
         !linksContainer ||
-        !visualsContainer
+        !visualsContainer ||
+        !storyBand ||
+        !visualHero ||
+        !scopePath ||
+        !scopeKindChip
       ) {
         continue;
       }
@@ -393,8 +529,78 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
       let activePanel: "stats" | "visuals" = "stats";
       let autoRotate = !prefersReducedMotion;
       let autoTimer: number | null = null;
+      let transitionTimer: number | null = null;
 
       const getEntry = () => payload.entries[currentScopeId] ?? payload.entries[payload.initialScopeId];
+
+      const buildTrail = (entry: HomeDeckEntry) => {
+        const trail: HomeDeckEntry[] = [entry];
+        let cursor = entry;
+
+        while (cursor.parentScopeId) {
+          const parent = payload.entries[cursor.parentScopeId];
+
+          if (!parent) {
+            break;
+          }
+
+          trail.unshift(parent);
+          cursor = parent;
+        }
+
+        return trail;
+      };
+
+      const pulseScopeChange = () => {
+        if (prefersReducedMotion) {
+          return;
+        }
+
+        root.classList.remove("is-transitioning");
+        window.requestAnimationFrame(() => {
+          root.classList.add("is-transitioning");
+        });
+
+        if (transitionTimer !== null) {
+          window.clearTimeout(transitionTimer);
+        }
+
+        transitionTimer = window.setTimeout(() => {
+          root.classList.remove("is-transitioning");
+          transitionTimer = null;
+        }, 420);
+      };
+
+      const renderScopePath = (entry: HomeDeckEntry) => {
+        scopePath.innerHTML = "";
+
+        const trail = buildTrail(entry);
+
+        trail.forEach((item, index) => {
+          const isCurrent = index === trail.length - 1;
+          const node = isCurrent ? document.createElement("span") : document.createElement("button");
+          node.className = `home-scope-crumb${isCurrent ? " is-current" : ""}`;
+          node.textContent = item.title;
+
+          if (node instanceof HTMLButtonElement) {
+            node.type = "button";
+            node.addEventListener("click", () => {
+              stopAutoRotate();
+              setScope(item.scopeId, "stats");
+              syncMapSelection(item.scopeId);
+            });
+          }
+
+          scopePath.append(node);
+
+          if (!isCurrent) {
+            const separator = document.createElement("span");
+            separator.className = "home-scope-separator";
+            separator.textContent = "/";
+            scopePath.append(separator);
+          }
+        });
+      };
 
       const stopAutoRotate = () => {
         if (!autoRotate) {
@@ -429,10 +635,15 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
           return;
         }
 
+        const scopeChanged = currentScopeId !== scopeId;
         currentScopeId = scopeId;
 
         if (panel) {
           activePanel = panel;
+        }
+
+        if (scopeChanged) {
+          pulseScopeChange();
         }
 
         render();
@@ -456,7 +667,10 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
       const render = () => {
         const entry = getEntry();
         const scopeKind = getScopeKind(entry, payload.initialScopeId, payload.rootScopeKind);
-        const showParentButton = Boolean(entry.parentScopeId);
+        const showResetButton = entry.scopeId !== payload.initialScopeId;
+        const showParentButton = Boolean(entry.parentScopeId && entry.parentScopeId !== payload.initialScopeId);
+        const rootEntry = payload.entries[payload.initialScopeId];
+        const resetButtonLabel = payload.resetLabel ?? (rootEntry ? `${rootEntry.title} map` : "Reset");
         const parentButtonLabel = entry.parentLabel ? `Back to ${entry.parentLabel}` : "Back";
         const showOpenLink = Boolean(entry.scopeHref && entry.scopeId !== payload.initialScopeId);
 
@@ -465,21 +679,27 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
         note.textContent = entry.note;
         linksLabel.textContent = entry.linksLabel;
         root.dataset.homeScopeKind = scopeKind;
+        scopeKindChip.textContent = getScopeKindLabel(scopeKind);
+        renderScopePath(entry);
 
         openLink.hidden = !showOpenLink;
         openLink.href = entry.scopeHref ?? "#";
         openLink.textContent = entry.scopeActionLabel ?? "Open page";
+        resetButton.hidden = !showResetButton;
+        resetButton.textContent = resetButtonLabel;
         parentButton.hidden = !showParentButton;
         parentButton.textContent = parentButtonLabel;
-        controls.hidden = openLink.hidden && parentButton.hidden;
+        controls.hidden = openLink.hidden && resetButton.hidden && parentButton.hidden;
         mapPanel?.classList.toggle("is-focused", entry.scopeId !== payload.initialScopeId);
 
+        renderStoryBand(storyBand, entry);
         renderStats(statsContainer, entry.stats);
-        renderLinks(linksContainer, entry.links, (scopeId) => {
+        renderLinks(linksContainer, entry.links, entry.scopeId, (scopeId) => {
           stopAutoRotate();
           setScope(scopeId, "stats");
           syncMapSelection(scopeId);
         });
+        renderVisualHero(visualHero, entry);
         renderVisuals(visualsContainer, entry);
         setTrackState(root, activePanel);
         deckViewport.scrollTop = 0;
@@ -505,6 +725,12 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind });
         stopAutoRotate();
         setScope(entry.parentScopeId, "stats");
         syncMapSelection(entry.parentScopeId);
+      });
+
+      resetButton.addEventListener("click", () => {
+        stopAutoRotate();
+        setScope(payload.initialScopeId, "stats");
+        syncMapSelection(payload.initialScopeId);
       });
 
       mapRoot?.addEventListener("region-map-change", (event) => {
