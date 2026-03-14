@@ -3214,9 +3214,9 @@ button.region-map-shortlist-link {
 
 .region-map-inset-node {
   position: absolute;
-  min-width: 4.9rem;
-  max-width: 6rem;
-  padding: 0.5rem 0.58rem 0.5rem 0.92rem;
+  min-width: 4.3rem;
+  max-width: 5.2rem;
+  padding: 0.42rem 0.5rem 0.42rem 0.82rem;
   box-shadow: 0 8px 18px rgba(3, 8, 16, 0.2);
   transform: translate(-50%, -50%);
 }
