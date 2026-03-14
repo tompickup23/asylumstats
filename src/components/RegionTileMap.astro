@@ -209,6 +209,18 @@ const mapInteractionCaption =
                   </tspan>
                 ))}
               </text>
+              {interactionMode === "select" && (
+                <a
+                  href={href}
+                  class:list={["region-map-hotspot-link", active && "is-active", selected && "is-selected"]}
+                  data-region-map-hotspot={item.regionName}
+                  aria-hidden="true"
+                  tabindex="-1"
+                >
+                  <circle class="region-map-hotspot-ring" cx={geometry.labelX} cy={geometry.labelY + 4} r="19"></circle>
+                  <circle class="region-map-hotspot-core" cx={geometry.labelX} cy={geometry.labelY + 4} r="7.5"></circle>
+                </a>
+              )}
             </g>
           );
         })}
@@ -599,6 +611,7 @@ const mapInteractionCaption =
     ) => {
       const svg = root.querySelector<SVGSVGElement>(".region-map");
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const hotspots = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-hotspot]"));
       const selectedLink = links.find((link) => link.dataset.regionMapRegion === regionName) ?? links[0];
 
       if (!svg || !selectedLink) {
@@ -616,6 +629,12 @@ const mapInteractionCaption =
         link.classList.toggle("is-focused", link === selectedLink);
       }
 
+      for (const hotspot of hotspots) {
+        const selected = hotspot.dataset.regionMapHotspot === regionName;
+        hotspot.classList.toggle("is-selected", selected);
+        hotspot.classList.toggle("is-focused", selected);
+      }
+
       const focusBox = buildMapFocusViewBox(root, svg, regionPath);
 
       if (!focusBox) {
@@ -629,6 +648,7 @@ const mapInteractionCaption =
 
     const updateRegionMapSummary = (root: RegionMapRootElement, regionName?: string, trigger = "program") => {
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const hotspots = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-hotspot]"));
       const selectedLink = regionName ? links.find((link) => link.dataset.regionMapRegion === regionName) ?? null : null;
 
       if (!selectedLink) {
@@ -656,6 +676,10 @@ const mapInteractionCaption =
 
         for (const link of links) {
           link.classList.remove("is-selected", "is-focused");
+        }
+
+        for (const hotspot of hotspots) {
+          hotspot.classList.remove("is-selected", "is-focused");
         }
 
         if (titleElement) {
@@ -1074,7 +1098,7 @@ const mapInteractionCaption =
       svg.style.height = `${targetHeight}px`;
     };
 
-    for (const root of document.querySelectorAll<RegionMapRootElement>("[data-region-map-root]")) {
+      for (const root of document.querySelectorAll<RegionMapRootElement>("[data-region-map-root]")) {
       if (root.dataset.regionMapReady === "true") {
         continue;
       }
@@ -1162,6 +1186,40 @@ const mapInteractionCaption =
 
           updateRegionMapSummary(root, regionName, "click");
           promoteScopeSelection("click");
+        });
+      }
+
+      for (const hotspot of root.querySelectorAll<SVGAElement>("[data-region-map-hotspot]")) {
+        const regionName = hotspot.dataset.regionMapHotspot;
+
+        if (!regionName) {
+          continue;
+        }
+
+        const promoteScopeSelection = () => {
+          if (root.dataset.regionMapLinkMode !== "select") {
+            return;
+          }
+
+          root.dispatchEvent(
+            new CustomEvent("region-map-scope", {
+              bubbles: true,
+              detail: {
+                scopeId: regionName,
+                trigger: "map-click"
+              }
+            })
+          );
+
+          root
+            .closest<HTMLElement>("[data-home-map-stage]")
+            ?.dispatchEvent(new CustomEvent("home-map-set-scope", { bubbles: true, detail: { scopeId: regionName } }));
+        };
+
+        hotspot.addEventListener("click", (event) => {
+          event.preventDefault();
+          updateRegionMapSummary(root, regionName, "click");
+          promoteScopeSelection();
         });
       }
 
