@@ -60,6 +60,7 @@ const maxValue = Math.max(...values, 1);
 const range = Math.max(maxValue - minValue, 1);
 const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
 const orderedItems = renderedRegions.map(({ item }) => item);
+const denseClusterShortcutRegions = new Set(["London", "South East", "East of England", "East Midlands"]);
 const showSupportChrome = !compact || interactionMode !== "select" || showSummary;
 const initialRegionName =
   interactionMode === "select" && fitMode === "contain" ? null : highlightRegion ?? orderedItems[0]?.regionName ?? null;
@@ -104,6 +105,10 @@ const summaryByRegion = Object.fromEntries(
     }
   ])
 ) as Record<string, RegionMapSummary>;
+const overlayShortcutItems =
+  compact && interactionMode === "select" && fitMode === "contain"
+    ? renderedRegions.filter(({ item }) => denseClusterShortcutRegions.has(item.regionName))
+    : [];
 const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
 const mapInteractionCaption =
   interactionMode === "select"
@@ -112,12 +117,17 @@ const mapInteractionCaption =
 ---
 
   <figure
-  class:list={[`viz-card tone-${tone}`, compact && "viz-card-compact"]}
+  class:list={[
+    `viz-card tone-${tone}`,
+    compact && "viz-card-compact",
+    overlayShortcutItems.length > 0 && "has-region-map-shortcuts"
+  ]}
   data-region-map-root
   data-initial-region={initialRegionName ?? undefined}
   data-region-map-tone={tone}
   data-region-map-link-mode={interactionMode}
   data-region-map-fit-mode={fitMode}
+  data-region-map-shortcuts={overlayShortcutItems.length > 0 ? "dense-cluster" : undefined}
   data-region-map-width={REGION_MAP_WIDTH}
   data-region-map-height={REGION_MAP_HEIGHT}
   data-region-map-value-label={valueLabel}
@@ -219,6 +229,30 @@ const mapInteractionCaption =
           );
         })}
       </svg>
+      {overlayShortcutItems.length > 0 && (
+        <section class="region-map-overlay-controls" aria-label="South and east region shortcuts">
+          <div class="region-map-overlay-controls-head">
+            <span class="tiny">South and east shortcuts</span>
+          </div>
+          <div class="region-map-overlay-controls-list">
+            {overlayShortcutItems.map(({ item }) => {
+              const summary = summaryByRegion[item.regionName] ?? buildDefaultSummary(item);
+              const selected = item.regionName === initialRegionName;
+              return (
+                <button
+                  type="button"
+                  class:list={["region-map-overlay-control", selected && "is-selected"]}
+                  data-region-map-overlay-control={item.regionName}
+                  aria-pressed={selected ? "true" : "false"}
+                >
+                  <strong>{item.regionName}</strong>
+                  <span class="tiny">{summary.stats?.[0]?.value ?? summary.chips?.[0] ?? valueLabel}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
       <figcaption class="tiny region-map-caption">
         {activeRegions.size > 0 ? "Highlighted regions mark the current focus. " : ""}
         {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
@@ -635,7 +669,17 @@ const mapInteractionCaption =
 
     const updateRegionMapSummary = (root: RegionMapRootElement, regionName?: string, trigger = "program") => {
       const links = Array.from(root.querySelectorAll<SVGAElement>("[data-region-map-region]"));
+      const overlayControls = Array.from(
+        root.querySelectorAll<HTMLButtonElement>("[data-region-map-overlay-control]")
+      );
       const selectedLink = regionName ? links.find((link) => link.dataset.regionMapRegion === regionName) ?? null : null;
+      const syncOverlayControls = (selectedRegionName?: string) => {
+        for (const control of overlayControls) {
+          const isSelected = !!selectedRegionName && control.dataset.regionMapOverlayControl === selectedRegionName;
+          control.classList.toggle("is-selected", isSelected);
+          control.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        }
+      };
 
       if (!selectedLink) {
         const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
@@ -663,6 +707,7 @@ const mapInteractionCaption =
         for (const link of links) {
           link.classList.remove("is-selected", "is-focused");
         }
+        syncOverlayControls();
 
         if (titleElement) {
           titleElement.textContent = "Britain";
@@ -772,6 +817,7 @@ const mapInteractionCaption =
       }
 
       const summary = parseSummaryPayload(selectedLink.dataset.regionMapSummary);
+      syncOverlayControls(selectedLink.dataset.regionMapRegion ?? regionName);
       const titleElement = root.querySelector<HTMLElement>("[data-region-map-summary-title]");
       const bodyElement = root.querySelector<HTMLElement>("[data-region-map-summary-body]");
       const chipsElement = root.querySelector<HTMLElement>("[data-region-map-summary-chips]");
@@ -1103,11 +1149,46 @@ const mapInteractionCaption =
             });
 
       resizeObserver?.observe(root);
+      const promoteScopeSelection = (scopeId: string, trigger: "focus" | "click") => {
+        if (root.dataset.regionMapLinkMode !== "select") {
+          return;
+        }
+
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              trigger: trigger === "focus" ? "map-focus" : "map-click"
+            }
+          })
+        );
+
+        root
+          .closest<HTMLElement>("[data-home-map-stage]")
+          ?.dispatchEvent(new CustomEvent("home-map-set-scope", { bubbles: true, detail: { scopeId } }));
+      };
 
       root.addEventListener("click", (event) => {
         const previewButton = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[data-region-map-preview]");
 
         if (!previewButton) {
+          const overlayControl = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>(
+            "[data-region-map-overlay-control]"
+          );
+
+          if (!overlayControl) {
+            return;
+          }
+
+          const regionName = overlayControl.dataset.regionMapOverlayControl;
+
+          if (!regionName) {
+            return;
+          }
+
+          updateRegionMapSummary(root, regionName, "click");
+          promoteScopeSelection(regionName, "click");
           return;
         }
 
@@ -1129,6 +1210,24 @@ const mapInteractionCaption =
           })
         );
       });
+      root.addEventListener("focusin", (event) => {
+        const overlayControl = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>(
+          "[data-region-map-overlay-control]"
+        );
+
+        if (!overlayControl) {
+          return;
+        }
+
+        const regionName = overlayControl.dataset.regionMapOverlayControl;
+
+        if (!regionName) {
+          return;
+        }
+
+        updateRegionMapSummary(root, regionName, "focus");
+        promoteScopeSelection(regionName, "focus");
+      });
 
       for (const link of links) {
         const regionName = link.dataset.regionMapRegion;
@@ -1137,29 +1236,9 @@ const mapInteractionCaption =
           continue;
         }
 
-        const promoteScopeSelection = (trigger: "focus" | "click") => {
-          if (root.dataset.regionMapLinkMode !== "select") {
-            return;
-          }
-
-          root.dispatchEvent(
-            new CustomEvent("region-map-scope", {
-              bubbles: true,
-              detail: {
-                scopeId: regionName,
-                trigger: trigger === "focus" ? "map-focus" : "map-click"
-              }
-            })
-          );
-
-          root
-            .closest<HTMLElement>("[data-home-map-stage]")
-            ?.dispatchEvent(new CustomEvent("home-map-set-scope", { bubbles: true, detail: { scopeId: regionName } }));
-        };
-
         link.addEventListener("focus", () => {
           updateRegionMapSummary(root, regionName, "focus");
-          promoteScopeSelection("focus");
+          promoteScopeSelection(regionName, "focus");
         });
         link.addEventListener("click", (event) => {
           if (root.dataset.regionMapLinkMode === "select") {
@@ -1167,7 +1246,7 @@ const mapInteractionCaption =
           }
 
           updateRegionMapSummary(root, regionName, "click");
-          promoteScopeSelection("click");
+          promoteScopeSelection(regionName, "click");
         });
       }
 
