@@ -1171,8 +1171,8 @@ const mapInteractionCaption =
         });
       }
 
-      const initial = root.dataset.initialRegion ?? links[0]?.dataset.regionMapRegion ?? "";
-      updateRegionMapSummary(root, initial);
+      const initial = root.dataset.initialRegion ?? "";
+      updateRegionMapSummary(root, initial || undefined);
       fitRegionMap(root);
       if (initial) {
         setRegionMapFocus(root, initial, "program");
