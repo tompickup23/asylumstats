@@ -438,6 +438,16 @@ const payload = JSON.stringify({
       paddingScale?: number;
     };
 
+    type SubregionRenderProfile = {
+      labelBiasX?: number;
+      labelBiasY?: number;
+      focusBiasX?: number;
+      focusBiasY?: number;
+      maxSpanRatio?: number;
+      minSpanRatio?: number;
+      paddingScale?: number;
+    };
+
     const regionalAuthorityFocusProfiles: Record<string, AuthorityFocusProfile> = {
       "East Midlands": { minSpanRatio: 0.14, paddingScale: 0.24 },
       "East of England": { biasX: 0.04, minSpanRatio: 0.15, paddingScale: 0.24 },
@@ -464,10 +474,41 @@ const payload = JSON.stringify({
       N09000003: { minSpanRatio: 0.11, paddingScale: 0.18 }
     };
 
+    const subregionRenderProfiles: Record<string, Record<string, SubregionRenderProfile>> = {
+      "East of England": {
+        Essex: { labelBiasX: 0.1, labelBiasY: 0.08, focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.18, paddingScale: 0.24 },
+        Hertfordshire: { labelBiasX: -0.1, labelBiasY: -0.06, focusBiasX: -0.03, minSpanRatio: 0.16, paddingScale: 0.22 },
+        "Beds and Luton": { labelBiasX: -0.14, labelBiasY: 0.04, focusBiasX: -0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
+        "East Anglia": { labelBiasX: 0.08, labelBiasY: -0.12, focusBiasX: 0.05, focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.24 }
+      },
+      "North West": {
+        Cumbria: { labelBiasX: -0.04, labelBiasY: -0.14, focusBiasY: -0.08, minSpanRatio: 0.2, paddingScale: 0.24 },
+        Lancashire: { labelBiasX: -0.03, labelBiasY: 0.05, focusBiasY: 0.04, minSpanRatio: 0.19, paddingScale: 0.24 },
+        "Greater Manchester": { labelBiasX: 0.12, labelBiasY: 0.03, focusBiasX: 0.06, minSpanRatio: 0.18, paddingScale: 0.22 },
+        Merseyside: { labelBiasX: -0.14, labelBiasY: -0.02, focusBiasX: -0.08, minSpanRatio: 0.17, paddingScale: 0.22 },
+        "Cheshire corridor": { labelBiasX: 0.12, labelBiasY: 0.18, focusBiasX: 0.08, focusBiasY: 0.08, minSpanRatio: 0.18, paddingScale: 0.23 }
+      },
+      "South East": {
+        "Thames Valley": { labelBiasX: -0.02, labelBiasY: -0.08, focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
+        "South Coast": { labelBiasX: 0.08, labelBiasY: 0.18, focusBiasY: 0.08, minSpanRatio: 0.17, paddingScale: 0.23 },
+        "Sussex and Surrey": { labelBiasX: 0.04, labelBiasY: 0.06, focusBiasX: 0.04, minSpanRatio: 0.17, paddingScale: 0.22 },
+        Kent: { labelBiasX: 0.16, labelBiasY: 0.02, focusBiasX: 0.08, minSpanRatio: 0.17, paddingScale: 0.22 }
+      },
+      "South West": {
+        "West of England": { labelBiasX: 0.02, labelBiasY: -0.04, focusBiasX: 0.02, minSpanRatio: 0.17, paddingScale: 0.22 },
+        Devon: { labelBiasX: -0.02, labelBiasY: 0.08, focusBiasY: 0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
+        "South coast": { labelBiasX: 0.08, labelBiasY: 0.16, focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
+        Somerset: { labelBiasX: 0.06, labelBiasY: -0.08, focusBiasY: -0.02, minSpanRatio: 0.16, paddingScale: 0.21 }
+      }
+    };
+
     const getAuthorityFocusProfile = (regionName: string, areaCode: string | null): AuthorityFocusProfile => ({
       ...(regionalAuthorityFocusProfiles[regionName] ?? {}),
       ...(areaCode ? authorityFocusProfiles[areaCode] ?? {} : {})
     });
+
+    const getSubregionRenderProfile = (regionName: string, subregionLabel: string): SubregionRenderProfile =>
+      subregionRenderProfiles[regionName]?.[subregionLabel] ?? {};
 
     const buildAuthorityViewBox = (
       bounds: DOMRect,
@@ -1152,17 +1193,34 @@ const payload = JSON.stringify({
         };
       };
 
-      const getSubregionBadgePosition = (bounds: Bounds) => ({
-        x: bounds.x + bounds.width / 2,
-        y: bounds.y + bounds.height / 2
+      const getSubregionLabelPosition = (bounds: Bounds, profile: SubregionRenderProfile) => ({
+        x: bounds.x + bounds.width / 2 + bounds.width * (profile.labelBiasX ?? 0),
+        y: bounds.y + bounds.height / 2 + bounds.height * (profile.labelBiasY ?? 0)
       });
 
-      const buildSubregionViewBox = (bounds: Bounds, payloadWidth: number, payloadHeight: number) =>
+      const buildSubregionViewBox = (
+        bounds: Bounds,
+        payloadWidth: number,
+        payloadHeight: number,
+        subregionLabel: string
+      ) =>
         buildAuthorityViewBox(new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height), payloadWidth, payloadHeight, {
           ...getAuthorityFocusProfile(payload.regionName, null),
-          minSpanRatio: Math.max(regionalAuthorityFocusProfiles[payload.regionName]?.minSpanRatio ?? 0.18, 0.22),
-          paddingScale: Math.max(regionalAuthorityFocusProfiles[payload.regionName]?.paddingScale ?? 0.24, 0.28),
-          maxSpanRatio: 0.92
+          biasX:
+            getSubregionRenderProfile(payload.regionName, subregionLabel).focusBiasX ??
+            getAuthorityFocusProfile(payload.regionName, null).biasX,
+          biasY:
+            getSubregionRenderProfile(payload.regionName, subregionLabel).focusBiasY ??
+            getAuthorityFocusProfile(payload.regionName, null).biasY,
+          minSpanRatio: Math.max(
+            regionalAuthorityFocusProfiles[payload.regionName]?.minSpanRatio ?? 0.18,
+            getSubregionRenderProfile(payload.regionName, subregionLabel).minSpanRatio ?? 0.22
+          ),
+          paddingScale: Math.max(
+            regionalAuthorityFocusProfiles[payload.regionName]?.paddingScale ?? 0.24,
+            getSubregionRenderProfile(payload.regionName, subregionLabel).paddingScale ?? 0.28
+          ),
+          maxSpanRatio: getSubregionRenderProfile(payload.regionName, subregionLabel).maxSpanRatio ?? 0.92
         });
 
       const renderMap = async (selectedSubregionId: string | null, selectedAreaCode: string | null) => {
@@ -1181,6 +1239,7 @@ const payload = JSON.stringify({
 
         const metric = metricConfig[currentMetric];
         const areaMetaByCode = new Map(payload.areas.map((area) => [area.areaCode, area]));
+        const areaPathDataByCode = new Map(boundaryRegion.areas.map((area) => [area.areaCode, area.path] as const));
         const pathByCode = new Map<string, SVGPathElement>();
         const values = payload.areas.map((area) => {
           if (currentMetric === "rate") {
@@ -1208,6 +1267,8 @@ const payload = JSON.stringify({
 
         const baseGroup = document.createElementNS(SVG_NS, "g");
         baseGroup.setAttribute("class", "region-map-base");
+        const subregionShapeLayer = document.createElementNS(SVG_NS, "g");
+        subregionShapeLayer.setAttribute("class", "home-authority-group-shape-layer");
 
         let selectedAreaPath: SVGPathElement | null = null;
 
@@ -1218,7 +1279,30 @@ const payload = JSON.stringify({
           baseGroup.append(path);
         }
 
-        authoritySvg.append(baseGroup);
+        authoritySvg.append(baseGroup, subregionShapeLayer);
+
+        if (payload.subregions.length > 0) {
+          for (const subregion of payload.subregions) {
+            const compoundPath = subregion.areaCodes
+              .map((areaCode) => areaPathDataByCode.get(areaCode) ?? "")
+              .filter(Boolean)
+              .join(" ");
+
+            if (!compoundPath) {
+              continue;
+            }
+
+            const selected = subregion.scopeId === selectedSubregionId;
+            const containsArea = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
+            const surface = document.createElementNS(SVG_NS, "path");
+            surface.setAttribute(
+              "class",
+              `home-authority-group-surface tone-${metric.tone} ${selected ? "is-selected" : ""} ${containsArea ? "has-selected-area" : ""} ${selectedSubregionId && !selected && !containsArea ? "is-muted" : ""}`
+            );
+            surface.setAttribute("d", compoundPath);
+            subregionShapeLayer.append(surface);
+          }
+        }
 
         for (const boundaryArea of boundaryRegion.areas) {
           const areaMeta = areaMetaByCode.get(boundaryArea.areaCode);
@@ -1234,6 +1318,7 @@ const payload = JSON.stringify({
                 ? areaMeta.hotelSignalValue
                 : areaMeta.supportedAsylum;
           const selected = boundaryArea.areaCode === selectedAreaCode;
+          const areaSubregionId = areaMeta.subregionScopeId;
           const inSelectedSubregion = Boolean(selectedSubregionId && areaMeta.subregionScopeId === selectedSubregionId);
           const link = document.createElementNS(SVG_NS, "a");
           const path = document.createElementNS(SVG_NS, "path");
@@ -1244,13 +1329,22 @@ const payload = JSON.stringify({
               : currentMetric === "hotel"
                 ? areaMeta.hotelSignalLabel
                 : `${formatInteger(metricValue)} on support`;
+          const proxiesToSubregion =
+            Boolean(areaSubregionId) && (!selectedSubregionId || areaSubregionId !== selectedSubregionId);
 
           link.setAttribute("href", buildAreaHref(boundaryArea.areaCode));
           link.setAttribute("class", `region-map-link ${selected ? "is-selected" : ""}`);
           link.dataset.homeAuthorityScope = boundaryArea.areaCode;
           link.dataset.homeAuthorityRegion = payload.regionName;
           link.dataset.homeAuthorityLabel = boundaryArea.areaName;
-          link.setAttribute("aria-label", `${boundaryArea.areaName}: ${valueLabel}. Select this authority.`);
+          link.setAttribute(
+            "aria-label",
+            `${boundaryArea.areaName}: ${valueLabel}. ${
+              proxiesToSubregion && areaMeta.subregionName
+                ? `Select the ${areaMeta.subregionName} cluster first.`
+                : "Select this authority."
+            }`
+          );
 
           path.setAttribute("class", `home-authority-region ${selected ? "is-selected" : ""}`);
           path.setAttribute("d", boundaryArea.path);
@@ -1262,6 +1356,8 @@ const payload = JSON.stringify({
           path.setAttribute("stroke-width", selected ? "3.2" : inSelectedSubregion ? "1.9" : "1.2");
           if (selectedSubregionId && !inSelectedSubregion) {
             path.setAttribute("opacity", "0.45");
+          } else if (!selectedSubregionId && areaSubregionId) {
+            path.setAttribute("opacity", "0.74");
           }
 
           titleNode.textContent = `${boundaryArea.areaName}: ${valueLabel}`;
@@ -1284,7 +1380,16 @@ const payload = JSON.stringify({
 
           link.addEventListener("click", (event) => {
             event.preventDefault();
-            currentSubregionId = areaMeta.subregionScopeId ?? selectedSubregionId;
+            if (areaSubregionId && (!selectedSubregionId || areaSubregionId !== selectedSubregionId)) {
+              currentSubregionId = areaSubregionId;
+              currentAreaCode = null;
+              updateCopy(areaSubregionId);
+              syncDeckScope(areaSubregionId, "cluster-proxy");
+              void renderMap(areaSubregionId, null);
+              return;
+            }
+
+            currentSubregionId = areaSubregionId ?? selectedSubregionId;
             currentAreaCode = boundaryArea.areaCode;
             updateCopy(boundaryArea.areaCode);
             syncDeckScope(boundaryArea.areaCode, "click");
@@ -1295,8 +1400,8 @@ const payload = JSON.stringify({
         }
 
         if (payload.subregions.length > 0) {
-          const badgeLayer = document.createElementNS(SVG_NS, "g");
-          badgeLayer.setAttribute("class", "home-authority-group-layer");
+          const labelLayer = document.createElementNS(SVG_NS, "g");
+          labelLayer.setAttribute("class", "home-authority-group-layer");
 
           for (const subregion of payload.subregions) {
             const bounds = getUnionBounds(subregion.areaCodes, pathByCode);
@@ -1305,44 +1410,43 @@ const payload = JSON.stringify({
               continue;
             }
 
-            const badgeLink = document.createElementNS(SVG_NS, "a");
-            const badgeGroup = document.createElementNS(SVG_NS, "g");
-            const badgeRect = document.createElementNS(SVG_NS, "rect");
-            const badgeText = document.createElementNS(SVG_NS, "text");
+            const profile = getSubregionRenderProfile(payload.regionName, subregion.label);
+            const labelLink = document.createElementNS(SVG_NS, "a");
+            const hitRect = document.createElementNS(SVG_NS, "rect");
+            const labelText = document.createElementNS(SVG_NS, "text");
             const selected = subregion.scopeId === selectedSubregionId;
             const areaSelectedInside = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
-            const badgeWidth = Math.max(82, subregion.label.length * 7.8 + 26);
-            const badgeHeight = 28;
-            const position = getSubregionBadgePosition(bounds);
-            const x = position.x - badgeWidth / 2;
-            const y = position.y - badgeHeight / 2;
+            const position = getSubregionLabelPosition(bounds, profile);
+            const labelWidth = Math.max(72, subregion.label.length * 6.9 + 14);
+            const labelHeight = 20;
+            const x = position.x - labelWidth / 2;
+            const y = position.y - labelHeight / 2;
 
-            badgeLink.setAttribute("href", payload.regionPath);
-            badgeLink.setAttribute(
+            labelLink.setAttribute("href", payload.regionPath);
+            labelLink.setAttribute(
               "class",
               `home-authority-group-link ${selected ? "is-selected" : ""} ${areaSelectedInside ? "has-selected-area" : ""}`
             );
-            badgeLink.setAttribute(
+            labelLink.setAttribute(
               "aria-label",
               `${subregion.label}: ${formatInteger(subregion.publicPlaceCount)} authorities. Select this cluster.`
             );
 
-            badgeRect.setAttribute("x", `${x}`);
-            badgeRect.setAttribute("y", `${y}`);
-            badgeRect.setAttribute("width", `${badgeWidth}`);
-            badgeRect.setAttribute("height", `${badgeHeight}`);
-            badgeRect.setAttribute("rx", "14");
-            badgeRect.setAttribute("class", "home-authority-group-badge");
+            hitRect.setAttribute("x", `${x}`);
+            hitRect.setAttribute("y", `${y}`);
+            hitRect.setAttribute("width", `${labelWidth}`);
+            hitRect.setAttribute("height", `${labelHeight}`);
+            hitRect.setAttribute("rx", "10");
+            hitRect.setAttribute("class", "home-authority-group-hitbox");
 
-            badgeText.setAttribute("x", `${position.x}`);
-            badgeText.setAttribute("y", `${position.y + 4}`);
-            badgeText.setAttribute("text-anchor", "middle");
-            badgeText.setAttribute("class", "home-authority-group-text");
-            badgeText.textContent = subregion.label;
+            labelText.setAttribute("x", `${position.x}`);
+            labelText.setAttribute("y", `${position.y + 4}`);
+            labelText.setAttribute("text-anchor", "middle");
+            labelText.setAttribute("class", "home-authority-group-text");
+            labelText.textContent = subregion.label;
 
-            badgeGroup.append(badgeRect, badgeText);
-            badgeLink.append(badgeGroup);
-            badgeLink.addEventListener("click", (event) => {
+            labelLink.append(hitRect, labelText);
+            labelLink.addEventListener("click", (event) => {
               event.preventDefault();
               currentSubregionId = subregion.scopeId;
               currentAreaCode = null;
@@ -1351,10 +1455,10 @@ const payload = JSON.stringify({
               void renderMap(subregion.scopeId, null);
             });
 
-            badgeLayer.append(badgeLink);
+            labelLayer.append(labelLink);
           }
 
-          authoritySvg.append(badgeLayer);
+          authoritySvg.append(labelLayer);
         }
 
         if (selectedAreaCode && selectedAreaPath) {
@@ -1373,10 +1477,10 @@ const payload = JSON.stringify({
           const subregion = subregionByScopeId.get(selectedSubregionId);
           const subregionBounds = subregion ? getUnionBounds(subregion.areaCodes, pathByCode) : null;
 
-          if (subregionBounds) {
+          if (subregion && subregionBounds) {
             setAuthorityViewBox(
               authoritySvg,
-              buildSubregionViewBox(subregionBounds, boundaryPayload.width, boundaryPayload.height),
+              buildSubregionViewBox(subregionBounds, boundaryPayload.width, boundaryPayload.height, subregion.label),
               480
             );
           } else {

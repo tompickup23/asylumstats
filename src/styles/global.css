@@ -4760,20 +4760,63 @@ tr:last-child td {
 }
 /* subregional drilldown */
 
+.home-authority-group-shape-layer {
+  pointer-events: none;
+}
+
+.home-authority-group-surface {
+  fill: rgba(125, 211, 252, 0.08);
+  stroke: rgba(125, 211, 252, 0.34);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.88;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    opacity 180ms ease;
+}
+
+.home-authority-group-surface.tone-teal {
+  fill: rgba(78, 228, 195, 0.08);
+  stroke: rgba(78, 228, 195, 0.34);
+}
+
+.home-authority-group-surface.tone-warm {
+  fill: rgba(255, 139, 97, 0.08);
+  stroke: rgba(255, 139, 97, 0.34);
+}
+
+.home-authority-group-surface.is-selected,
+.home-authority-group-surface.has-selected-area {
+  fill: rgba(125, 211, 252, 0.16);
+  stroke: rgba(245, 247, 251, 0.72);
+  opacity: 1;
+}
+
+.home-authority-group-surface.tone-teal.is-selected,
+.home-authority-group-surface.tone-teal.has-selected-area {
+  fill: rgba(78, 228, 195, 0.16);
+  stroke: rgba(78, 228, 195, 0.8);
+}
+
+.home-authority-group-surface.tone-warm.is-selected,
+.home-authority-group-surface.tone-warm.has-selected-area {
+  fill: rgba(255, 139, 97, 0.16);
+  stroke: rgba(255, 139, 97, 0.82);
+}
+
+.home-authority-group-surface.is-muted {
+  opacity: 0.34;
+}
+
 .home-authority-group-link {
   cursor: pointer;
   text-decoration: none;
 }
 
-.home-authority-group-badge {
-  fill: rgba(4, 10, 18, 0.84);
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1.2;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.28));
-  transition:
-    fill 180ms ease,
-    stroke 180ms ease,
-    opacity 180ms ease;
+.home-authority-group-hitbox {
+  fill: transparent;
 }
 
 .home-authority-group-text {
@@ -4782,19 +4825,20 @@ tr:last-child td {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: rgba(4, 10, 18, 0.96);
+  stroke-width: 6px;
+  stroke-linejoin: round;
 }
 
-.home-authority-group-link:hover .home-authority-group-badge,
-.home-authority-group-link:focus-visible .home-authority-group-badge,
-.home-authority-group-link.has-selected-area .home-authority-group-badge {
-  fill: rgba(18, 36, 58, 0.9);
-  stroke: rgba(125, 211, 252, 0.5);
+.home-authority-group-link:hover .home-authority-group-text,
+.home-authority-group-link:focus-visible .home-authority-group-text,
+.home-authority-group-link.has-selected-area .home-authority-group-text {
+  fill: #ffffff;
 }
 
-.home-authority-group-link.is-selected .home-authority-group-badge {
-  fill: rgba(78, 228, 195, 0.18);
-  stroke: rgba(78, 228, 195, 0.92);
+.home-authority-group-link.is-selected .home-authority-group-text {
+  fill: var(--accent-2);
 }
 
 .home-map-focus-card[data-scope-kind="subregion"] {
