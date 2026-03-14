@@ -3076,10 +3076,6 @@ button.region-map-shortlist-link {
   cursor: pointer;
 }
 
-.region-map-hotspot-link {
-  cursor: pointer;
-}
-
 .region-map-region,
 .region-map-callout {
   transition:
@@ -3115,19 +3111,19 @@ button.region-map-shortlist-link {
   stroke-width: 2.4;
 }
 
-.region-map-hotspot-link:hover .region-map-hotspot-ring,
-.region-map-hotspot-link:focus-visible .region-map-hotspot-ring,
-.region-map-hotspot-link.is-active .region-map-hotspot-ring,
-.region-map-hotspot-link.is-selected .region-map-hotspot-ring {
+.region-map-link:hover .region-map-hotspot-ring,
+.region-map-link:focus-visible .region-map-hotspot-ring,
+.region-map-link.is-active .region-map-hotspot-ring,
+.region-map-link.is-selected .region-map-hotspot-ring {
   fill: rgba(125, 211, 252, 0.16);
   stroke: rgba(255, 255, 255, 0.72);
   transform: scale(1.06);
 }
 
-.region-map-hotspot-link:hover .region-map-hotspot-core,
-.region-map-hotspot-link:focus-visible .region-map-hotspot-core,
-.region-map-hotspot-link.is-active .region-map-hotspot-core,
-.region-map-hotspot-link.is-selected .region-map-hotspot-core {
+.region-map-link:hover .region-map-hotspot-core,
+.region-map-link:focus-visible .region-map-hotspot-core,
+.region-map-link.is-active .region-map-hotspot-core,
+.region-map-link.is-selected .region-map-hotspot-core {
   fill: #ffffff;
 }
 
