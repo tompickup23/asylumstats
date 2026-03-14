@@ -3111,13 +3111,19 @@ button.region-map-shortlist-link {
   stroke-width: 2.4;
 }
 
-.region-map-overlay-controls {
+.region-map-insets {
   position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 6;
   display: none;
-  width: min(13.5rem, calc(100% - 2rem));
+  width: min(15rem, calc(100% - 2rem));
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+.region-map-inset-cluster {
+  display: grid;
   gap: 0.55rem;
   padding: 0.75rem;
   border-radius: 18px;
@@ -3129,24 +3135,48 @@ button.region-map-shortlist-link {
   backdrop-filter: blur(16px);
 }
 
-.region-map-overlay-controls-head {
+.region-map-inset-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.region-map-overlay-controls-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.45rem;
+.region-map-inset-map {
+  position: relative;
+  min-height: 7.75rem;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 18% 22%, rgba(125, 211, 252, 0.18), transparent 42%),
+    radial-gradient(circle at 76% 70%, rgba(125, 211, 252, 0.16), transparent 44%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.region-map-inset-map::before,
+.region-map-inset-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.region-map-inset-map::before {
+  background:
+    linear-gradient(90deg, transparent 0, transparent 14%, rgba(255, 255, 255, 0.06) 14%, rgba(255, 255, 255, 0.06) 15%, transparent 15%, transparent 100%),
+    linear-gradient(180deg, transparent 0, transparent 18%, rgba(255, 255, 255, 0.06) 18%, rgba(255, 255, 255, 0.06) 19%, transparent 19%, transparent 100%);
+  opacity: 0.55;
+}
+
+.region-map-inset-map::after {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
 }
 
 .region-map-overlay-control {
   appearance: none;
   display: grid;
   gap: 0.12rem;
-  width: 100%;
-  padding: 0.58rem 0.62rem;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.05);
@@ -3180,6 +3210,38 @@ button.region-map-shortlist-link {
 
 .region-map-overlay-control:focus-visible {
   outline: none;
+}
+
+.region-map-inset-node {
+  position: absolute;
+  min-width: 4.9rem;
+  max-width: 6rem;
+  padding: 0.5rem 0.58rem 0.5rem 0.92rem;
+  box-shadow: 0 8px 18px rgba(3, 8, 16, 0.2);
+  transform: translate(-50%, -50%);
+}
+
+.region-map-inset-node strong,
+.region-map-inset-node .tiny {
+  position: relative;
+  z-index: 1;
+}
+
+.region-map-inset-node .tiny {
+  line-height: 1.15;
+}
+
+.region-map-inset-node-pin {
+  position: absolute;
+  top: 50%;
+  left: 0.46rem;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.94);
+  border: 2px solid rgba(4, 10, 18, 0.86);
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.14);
 }
 
 .region-map-link:hover .region-map-hotspot-ring,
@@ -3229,14 +3291,15 @@ button.region-map-shortlist-link {
 }
 
 @media (min-width: 768px) {
-  [data-region-map-shortcuts="dense-cluster"] .region-map-overlay-controls {
+  [data-region-map-shortcuts="cluster-insets"] .region-map-insets {
     display: grid;
   }
 
-  [data-region-map-shortcuts="dense-cluster"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="London"],
-  [data-region-map-shortcuts="dense-cluster"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="South East"],
-  [data-region-map-shortcuts="dense-cluster"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="East of England"],
-  [data-region-map-shortcuts="dense-cluster"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="East Midlands"] {
+  [data-region-map-shortcuts="cluster-insets"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="London"],
+  [data-region-map-shortcuts="cluster-insets"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="South East"],
+  [data-region-map-shortcuts="cluster-insets"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="East of England"],
+  [data-region-map-shortcuts="cluster-insets"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="East Midlands"],
+  [data-region-map-shortcuts="cluster-insets"][data-region-map-link-mode="select"][data-region-map-fit-mode="contain"] [data-region-map-region="West Midlands"] {
     pointer-events: none;
   }
 }

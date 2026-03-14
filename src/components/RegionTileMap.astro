@@ -60,7 +60,20 @@ const maxValue = Math.max(...values, 1);
 const range = Math.max(maxValue - minValue, 1);
 const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
 const orderedItems = renderedRegions.map(({ item }) => item);
-const denseClusterShortcutRegions = new Set(["London", "South East", "East of England", "East Midlands"]);
+const compactInsetGroups = [
+  {
+    id: "south-east-cluster",
+    kicker: "Inset map",
+    title: "South and east",
+    regions: ["South East", "East of England"]
+  },
+  {
+    id: "london-midlands-cluster",
+    kicker: "Inset map",
+    title: "London and Midlands",
+    regions: ["London", "East Midlands", "West Midlands"]
+  }
+] as const;
 const showSupportChrome = !compact || interactionMode !== "select" || showSummary;
 const initialRegionName =
   interactionMode === "select" && fitMode === "contain" ? null : highlightRegion ?? orderedItems[0]?.regionName ?? null;
@@ -105,9 +118,39 @@ const summaryByRegion = Object.fromEntries(
     }
   ])
 ) as Record<string, RegionMapSummary>;
-const overlayShortcutItems =
+const renderedRegionByName = new Map(renderedRegions.map((entry) => [entry.item.regionName, entry]));
+const overlayShortcutGroups =
   compact && interactionMode === "select" && fitMode === "contain"
-    ? renderedRegions.filter(({ item }) => denseClusterShortcutRegions.has(item.regionName))
+    ? compactInsetGroups.flatMap((group) => {
+          const items = group.regions.flatMap((regionName) => {
+            const entry = renderedRegionByName.get(regionName);
+            return entry ? [entry] : [];
+          });
+
+          if (!items.length) {
+            return [];
+          }
+
+          const labelXs = items.map(({ geometry }) => geometry.labelX);
+          const labelYs = items.map(({ geometry }) => geometry.labelY);
+          const minLabelX = Math.min(...labelXs);
+          const maxLabelX = Math.max(...labelXs);
+          const minLabelY = Math.min(...labelYs);
+          const maxLabelY = Math.max(...labelYs);
+          const labelWidth = Math.max(maxLabelX - minLabelX, 1);
+          const labelHeight = Math.max(maxLabelY - minLabelY, 1);
+
+          return [
+            {
+              ...group,
+              items: items.map((entry) => ({
+                ...entry,
+                insetLeft: `${12 + ((entry.geometry.labelX - minLabelX) / labelWidth) * 76}%`,
+                insetTop: `${18 + ((entry.geometry.labelY - minLabelY) / labelHeight) * 58}%`
+              }))
+            }
+          ];
+        })
     : [];
 const initialSummary = initialRegionName ? summaryByRegion[initialRegionName] ?? null : null;
 const mapInteractionCaption =
@@ -120,14 +163,14 @@ const mapInteractionCaption =
   class:list={[
     `viz-card tone-${tone}`,
     compact && "viz-card-compact",
-    overlayShortcutItems.length > 0 && "has-region-map-shortcuts"
+    overlayShortcutGroups.length > 0 && "has-region-map-shortcuts"
   ]}
   data-region-map-root
   data-initial-region={initialRegionName ?? undefined}
   data-region-map-tone={tone}
   data-region-map-link-mode={interactionMode}
   data-region-map-fit-mode={fitMode}
-  data-region-map-shortcuts={overlayShortcutItems.length > 0 ? "dense-cluster" : undefined}
+  data-region-map-shortcuts={overlayShortcutGroups.length > 0 ? "cluster-insets" : undefined}
   data-region-map-width={REGION_MAP_WIDTH}
   data-region-map-height={REGION_MAP_HEIGHT}
   data-region-map-value-label={valueLabel}
@@ -229,28 +272,35 @@ const mapInteractionCaption =
           );
         })}
       </svg>
-      {overlayShortcutItems.length > 0 && (
-        <section class="region-map-overlay-controls" aria-label="South and east region shortcuts">
-          <div class="region-map-overlay-controls-head">
-            <span class="tiny">South and east shortcuts</span>
-          </div>
-          <div class="region-map-overlay-controls-list">
-            {overlayShortcutItems.map(({ item }) => {
-              const summary = summaryByRegion[item.regionName] ?? buildDefaultSummary(item);
-              const selected = item.regionName === initialRegionName;
-              return (
-                <button
-                  type="button"
-                  class:list={["region-map-overlay-control", selected && "is-selected"]}
-                  data-region-map-overlay-control={item.regionName}
-                  aria-pressed={selected ? "true" : "false"}
-                >
-                  <strong>{item.regionName}</strong>
-                  <span class="tiny">{summary.stats?.[0]?.value ?? summary.chips?.[0] ?? valueLabel}</span>
-                </button>
-              );
-            })}
-          </div>
+      {overlayShortcutGroups.length > 0 && (
+        <section class="region-map-insets" aria-label="Dense region inset controls">
+          {overlayShortcutGroups.map((group) => (
+            <article class="region-map-inset-cluster" data-region-map-inset={group.id}>
+              <div class="region-map-inset-head">
+                <span class="tiny">{group.kicker}</span>
+                <strong>{group.title}</strong>
+              </div>
+              <div class="region-map-inset-map">
+                {group.items.map(({ item, insetLeft, insetTop }) => {
+                  const summary = summaryByRegion[item.regionName] ?? buildDefaultSummary(item);
+                  const selected = item.regionName === initialRegionName;
+                  return (
+                    <button
+                      type="button"
+                      class:list={["region-map-overlay-control", "region-map-inset-node", selected && "is-selected"]}
+                      data-region-map-overlay-control={item.regionName}
+                      aria-pressed={selected ? "true" : "false"}
+                      style={`left:${insetLeft};top:${insetTop};`}
+                    >
+                      <span class="region-map-inset-node-pin" aria-hidden="true"></span>
+                      <strong>{item.regionName}</strong>
+                      <span class="tiny">{summary.stats?.[0]?.value ?? summary.chips?.[0] ?? valueLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </article>
+          ))}
         </section>
       )}
       <figcaption class="tiny region-map-caption">
