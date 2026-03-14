@@ -154,27 +154,31 @@ const mapInteractionCaption =
         </g>
         {renderedRegions.map(({ geometry, item }) => {
           const active = activeRegions.has(item.regionName);
+          const selected = item.regionName === initialRegionName;
           const href = buildPublicPlaceRegionPath(item.regionName);
           const valueLabelText = formatValue(item.value);
           const minimalLabels = labelMode !== "all";
           const essentialLabel = labelMode === "essential" && essentialLabelRegions.has(item.regionName);
 
           return (
-            <a
-              href={href}
-              class:list={["region-map-link", active && "is-active", item.regionName === initialRegionName && "is-selected"]}
-              aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. ${interactionMode === "select" ? "Select this region." : "Open region page."}`}
-              data-region-map-region={item.regionName}
-              data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
-            >
-              <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
-              <path
-                class="region-map-region"
-                d={geometry.path}
-                fill={getFill(item.value)}
-                stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
-                stroke-width={active ? "3" : "1.4"}
-              ></path>
+            <g class:list={["region-map-region-entry", active && "is-active", selected && "is-selected"]}>
+              <a
+                href={href}
+                class:list={["region-map-link", active && "is-active", selected && "is-selected"]}
+                aria-label={`${item.regionName}: ${valueLabelText} ${valueLabel}. ${interactionMode === "select" ? "Select this region." : "Open region page."}`}
+                data-region-map-region={item.regionName}
+                data-region-map-summary={JSON.stringify(summaryByRegion[item.regionName] ?? buildDefaultSummary(item))}
+              >
+                <title>{`${item.regionName}: ${valueLabelText} ${valueLabel}${item.note ? `. ${item.note}` : ""}`}</title>
+                <path class="region-map-hit-area" d={geometry.path}></path>
+                <path
+                  class="region-map-region"
+                  d={geometry.path}
+                  fill={getFill(item.value)}
+                  stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
+                  stroke-width={active ? "3" : "1.4"}
+                ></path>
+              </a>
               {geometry.calloutPath && (
                 <path
                   class:list={[
@@ -183,6 +187,7 @@ const mapInteractionCaption =
                     essentialLabel && "is-essential"
                   ]}
                   d={geometry.calloutPath}
+                  aria-hidden="true"
                 ></path>
               )}
               <text
@@ -192,9 +197,11 @@ const mapInteractionCaption =
                 class:list={[
                   "region-map-label",
                   active && "is-active",
+                  selected && "is-selected",
                   minimalLabels && "is-minimal",
                   essentialLabel && "is-essential"
                 ]}
+                aria-hidden="true"
               >
                 {geometry.labelLines.map((line, index) => (
                   <tspan x={geometry.labelX} dy={index === 0 ? 0 : 14}>
@@ -202,7 +209,7 @@ const mapInteractionCaption =
                   </tspan>
                 ))}
               </text>
-            </a>
+            </g>
           );
         })}
       </svg>

@@ -497,6 +497,7 @@ const payload = JSON.stringify({
     type SubregionRenderProfile = {
       labelBiasX?: number;
       labelBiasY?: number;
+      labelLines?: string[];
       focusBiasX?: number;
       focusBiasY?: number;
       maxSpanRatio?: number;
@@ -531,30 +532,125 @@ const payload = JSON.stringify({
     };
 
     const subregionRenderProfiles: Record<string, Record<string, SubregionRenderProfile>> = {
+      "East Midlands": {
+        Nottinghamshire: { labelBiasX: 0.04, labelBiasY: -0.06, focusBiasY: -0.03, minSpanRatio: 0.15, paddingScale: 0.22 },
+        Leicestershire: { labelBiasX: -0.02, labelBiasY: 0.1, focusBiasY: 0.05, minSpanRatio: 0.15, paddingScale: 0.21 },
+        Derbyshire: { labelBiasX: -0.14, labelBiasY: -0.04, focusBiasX: -0.07, minSpanRatio: 0.14, paddingScale: 0.2 },
+        Northamptonshire: { labelBiasX: 0.16, labelBiasY: 0.14, focusBiasX: 0.08, focusBiasY: 0.07, minSpanRatio: 0.15, paddingScale: 0.22 },
+        Lincolnshire: { labelBiasX: 0.16, labelBiasY: -0.12, focusBiasX: 0.08, focusBiasY: -0.05, minSpanRatio: 0.14, paddingScale: 0.21 }
+      },
       "East of England": {
         Essex: { labelBiasX: 0.1, labelBiasY: 0.08, focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.18, paddingScale: 0.24 },
         Hertfordshire: { labelBiasX: -0.1, labelBiasY: -0.06, focusBiasX: -0.03, minSpanRatio: 0.16, paddingScale: 0.22 },
-        "Beds and Luton": { labelBiasX: -0.14, labelBiasY: 0.04, focusBiasX: -0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
+        "Beds and Luton": {
+          labelBiasX: -0.14,
+          labelBiasY: 0.04,
+          labelLines: ["Beds and", "Luton"],
+          focusBiasX: -0.06,
+          minSpanRatio: 0.16,
+          paddingScale: 0.22
+        },
         "East Anglia": { labelBiasX: 0.08, labelBiasY: -0.12, focusBiasX: 0.05, focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.24 }
+      },
+      London: {
+        "West London": { labelBiasX: -0.16, labelBiasY: -0.08, focusBiasX: -0.08, minSpanRatio: 0.13, paddingScale: 0.18, labelLines: ["West", "London"] },
+        "North London": { labelBiasX: 0.04, labelBiasY: -0.16, focusBiasY: -0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["North", "London"] },
+        "East London": { labelBiasX: 0.16, labelBiasY: 0.02, focusBiasX: 0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["East", "London"] },
+        "South London": { labelBiasX: 0.02, labelBiasY: 0.18, focusBiasY: 0.08, minSpanRatio: 0.12, paddingScale: 0.18, labelLines: ["South", "London"] }
+      },
+      "North East": {
+        "Tyne and Wear": { labelBiasX: 0.04, labelBiasY: -0.08, focusBiasY: -0.04, minSpanRatio: 0.15, paddingScale: 0.21, labelLines: ["Tyne and", "Wear"] },
+        "Tees Valley": { labelBiasX: 0.12, labelBiasY: 0.14, focusBiasY: 0.07, minSpanRatio: 0.15, paddingScale: 0.21 },
+        "Northumberland and Durham": {
+          labelBiasX: -0.08,
+          labelBiasY: -0.12,
+          labelLines: ["Northumberland", "and Durham"],
+          focusBiasY: -0.06,
+          minSpanRatio: 0.18,
+          paddingScale: 0.23
+        }
       },
       "North West": {
         Cumbria: { labelBiasX: -0.04, labelBiasY: -0.14, focusBiasY: -0.08, minSpanRatio: 0.2, paddingScale: 0.24 },
         Lancashire: { labelBiasX: -0.03, labelBiasY: 0.05, focusBiasY: 0.04, minSpanRatio: 0.19, paddingScale: 0.24 },
-        "Greater Manchester": { labelBiasX: 0.12, labelBiasY: 0.03, focusBiasX: 0.06, minSpanRatio: 0.18, paddingScale: 0.22 },
+        "Greater Manchester": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.03,
+          labelLines: ["Greater", "Manchester"],
+          focusBiasX: 0.06,
+          minSpanRatio: 0.18,
+          paddingScale: 0.22
+        },
         Merseyside: { labelBiasX: -0.14, labelBiasY: -0.02, focusBiasX: -0.08, minSpanRatio: 0.17, paddingScale: 0.22 },
-        "Cheshire corridor": { labelBiasX: 0.12, labelBiasY: 0.18, focusBiasX: 0.08, focusBiasY: 0.08, minSpanRatio: 0.18, paddingScale: 0.23 }
+        "Cheshire corridor": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.18,
+          labelLines: ["Cheshire", "corridor"],
+          focusBiasX: 0.08,
+          focusBiasY: 0.08,
+          minSpanRatio: 0.18,
+          paddingScale: 0.23
+        }
+      },
+      "Northern Ireland": {
+        "Belfast metro": { labelBiasX: 0.08, labelBiasY: 0.06, focusBiasY: 0.02, minSpanRatio: 0.13, paddingScale: 0.18, labelLines: ["Belfast", "metro"] },
+        "North west": { labelBiasX: -0.12, labelBiasY: -0.04, focusBiasX: -0.06, minSpanRatio: 0.14, paddingScale: 0.19, labelLines: ["North", "west"] }
+      },
+      Scotland: {
+        "Glasgow and west": { labelBiasX: -0.18, labelBiasY: 0.18, focusBiasX: -0.09, focusBiasY: 0.08, minSpanRatio: 0.14, paddingScale: 0.2, labelLines: ["Glasgow", "and west"] },
+        "North east": { labelBiasX: 0.1, labelBiasY: -0.14, focusBiasY: -0.06, minSpanRatio: 0.16, paddingScale: 0.23, labelLines: ["North", "east"] },
+        "Edinburgh and east": {
+          labelBiasX: 0.16,
+          labelBiasY: 0.1,
+          labelLines: ["Edinburgh", "and east"],
+          focusBiasX: 0.08,
+          focusBiasY: 0.04,
+          minSpanRatio: 0.15,
+          paddingScale: 0.22
+        }
       },
       "South East": {
-        "Thames Valley": { labelBiasX: -0.02, labelBiasY: -0.08, focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
-        "South Coast": { labelBiasX: 0.08, labelBiasY: 0.18, focusBiasY: 0.08, minSpanRatio: 0.17, paddingScale: 0.23 },
-        "Sussex and Surrey": { labelBiasX: 0.04, labelBiasY: 0.06, focusBiasX: 0.04, minSpanRatio: 0.17, paddingScale: 0.22 },
+        "Thames Valley": { labelBiasX: -0.02, labelBiasY: -0.08, labelLines: ["Thames", "Valley"], focusBiasY: -0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
+        "South Coast": { labelBiasX: 0.08, labelBiasY: 0.18, labelLines: ["South", "Coast"], focusBiasY: 0.08, minSpanRatio: 0.17, paddingScale: 0.23 },
+        "Sussex and Surrey": { labelBiasX: 0.04, labelBiasY: 0.06, labelLines: ["Sussex", "and Surrey"], focusBiasX: 0.04, minSpanRatio: 0.17, paddingScale: 0.22 },
         Kent: { labelBiasX: 0.16, labelBiasY: 0.02, focusBiasX: 0.08, minSpanRatio: 0.17, paddingScale: 0.22 }
       },
       "South West": {
-        "West of England": { labelBiasX: 0.02, labelBiasY: -0.04, focusBiasX: 0.02, minSpanRatio: 0.17, paddingScale: 0.22 },
+        "West of England": { labelBiasX: 0.02, labelBiasY: -0.04, labelLines: ["West of", "England"], focusBiasX: 0.02, minSpanRatio: 0.17, paddingScale: 0.22 },
         Devon: { labelBiasX: -0.02, labelBiasY: 0.08, focusBiasY: 0.04, minSpanRatio: 0.18, paddingScale: 0.23 },
-        "South coast": { labelBiasX: 0.08, labelBiasY: 0.16, focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
+        "South coast": { labelBiasX: 0.08, labelBiasY: 0.16, labelLines: ["South", "coast"], focusBiasX: 0.05, focusBiasY: 0.06, minSpanRatio: 0.16, paddingScale: 0.22 },
         Somerset: { labelBiasX: 0.06, labelBiasY: -0.08, focusBiasY: -0.02, minSpanRatio: 0.16, paddingScale: 0.21 }
+      },
+      Wales: {
+        "South east Wales": { labelBiasX: 0.04, labelBiasY: 0.1, focusBiasY: 0.05, minSpanRatio: 0.15, paddingScale: 0.22, labelLines: ["South east", "Wales"] },
+        "South west Wales": { labelBiasX: -0.06, labelBiasY: 0.02, focusBiasX: -0.03, minSpanRatio: 0.15, paddingScale: 0.22, labelLines: ["South west", "Wales"] }
+      },
+      "West Midlands": {
+        "West Midlands core": { labelBiasX: 0.02, labelBiasY: 0.04, focusBiasX: 0.02, minSpanRatio: 0.14, paddingScale: 0.21, labelLines: ["West Midlands", "core"] },
+        "Staffordshire edge": {
+          labelBiasX: -0.08,
+          labelBiasY: -0.14,
+          labelLines: ["Staffordshire", "edge"],
+          focusBiasX: -0.04,
+          focusBiasY: -0.06,
+          minSpanRatio: 0.15,
+          paddingScale: 0.22
+        },
+        "Warwickshire belt": {
+          labelBiasX: 0.12,
+          labelBiasY: 0.16,
+          labelLines: ["Warwickshire", "belt"],
+          focusBiasX: 0.06,
+          focusBiasY: 0.08,
+          minSpanRatio: 0.14,
+          paddingScale: 0.21
+        }
+      },
+      "Yorkshire and The Humber": {
+        "West Yorkshire": { labelBiasX: -0.06, labelBiasY: 0.02, focusBiasX: -0.03, minSpanRatio: 0.16, paddingScale: 0.22, labelLines: ["West", "Yorkshire"] },
+        "South Yorkshire": { labelBiasX: 0.06, labelBiasY: 0.14, focusBiasY: 0.06, minSpanRatio: 0.15, paddingScale: 0.21, labelLines: ["South", "Yorkshire"] },
+        Humber: { labelBiasX: 0.18, labelBiasY: 0.01, focusBiasX: 0.08, minSpanRatio: 0.14, paddingScale: 0.2 },
+        "North Yorkshire": { labelBiasX: 0.02, labelBiasY: -0.14, focusBiasY: -0.06, minSpanRatio: 0.17, paddingScale: 0.24, labelLines: ["North", "Yorkshire"] }
       }
     };
 
@@ -565,6 +661,9 @@ const payload = JSON.stringify({
 
     const getSubregionRenderProfile = (regionName: string, subregionLabel: string): SubregionRenderProfile =>
       subregionRenderProfiles[regionName]?.[subregionLabel] ?? {};
+
+    const getSubregionLabelLines = (subregionLabel: string, profile: SubregionRenderProfile) =>
+      profile.labelLines?.length ? profile.labelLines : [subregionLabel];
 
     const buildAuthorityViewBox = (
       bounds: DOMRect,
@@ -1611,8 +1710,10 @@ const payload = JSON.stringify({
             const selected = subregion.scopeId === selectedSubregionId;
             const areaSelectedInside = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
             const position = getSubregionLabelPosition(bounds, profile);
-            const labelWidth = Math.max(72, subregion.label.length * 6.9 + 14);
-            const labelHeight = 20;
+            const labelLines = getSubregionLabelLines(subregion.label, profile);
+            const lineHeight = labelLines.length > 1 ? 11 : 12;
+            const labelWidth = Math.max(72, Math.max(...labelLines.map((line) => line.length)) * 6.6 + 18);
+            const labelHeight = Math.max(20, labelLines.length * lineHeight + 8);
             const x = position.x - labelWidth / 2;
             const y = position.y - labelHeight / 2;
 
@@ -1634,10 +1735,17 @@ const payload = JSON.stringify({
             hitRect.setAttribute("class", "home-authority-group-hitbox");
 
             labelText.setAttribute("x", `${position.x}`);
-            labelText.setAttribute("y", `${position.y + 4}`);
+            labelText.setAttribute("y", `${position.y - ((labelLines.length - 1) * lineHeight) / 2 + 4}`);
             labelText.setAttribute("text-anchor", "middle");
-            labelText.setAttribute("class", "home-authority-group-text");
-            labelText.textContent = subregion.label;
+            labelText.setAttribute("class", `home-authority-group-text${labelLines.length > 1 ? " is-stacked" : ""}`);
+
+            for (const [index, line] of labelLines.entries()) {
+              const tspan = document.createElementNS(SVG_NS, "tspan");
+              tspan.setAttribute("x", `${position.x}`);
+              tspan.setAttribute("dy", index === 0 ? "0" : `${lineHeight}`);
+              tspan.textContent = line;
+              labelText.append(tspan);
+            }
 
             labelLink.append(hitRect, labelText);
             labelLink.addEventListener("click", (event) => {

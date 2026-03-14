@@ -3034,14 +3034,14 @@ button.region-map-shortlist-link {
 
 .region-map-label.is-minimal.is-essential,
 .region-map-callout.is-minimal.is-essential,
-.region-map-link.is-selected .region-map-label.is-minimal,
-.region-map-link.is-selected .region-map-callout.is-minimal,
-.region-map-link.is-active .region-map-label.is-minimal,
-.region-map-link.is-active .region-map-callout.is-minimal,
-.region-map-link:hover .region-map-label.is-minimal,
-.region-map-link:hover .region-map-callout.is-minimal,
-.region-map-link:focus-visible .region-map-label.is-minimal,
-.region-map-link:focus-visible .region-map-callout.is-minimal {
+.region-map-region-entry.is-selected .region-map-label.is-minimal,
+.region-map-region-entry.is-selected .region-map-callout.is-minimal,
+.region-map-region-entry.is-active .region-map-label.is-minimal,
+.region-map-region-entry.is-active .region-map-callout.is-minimal,
+.region-map-region-entry:hover .region-map-label.is-minimal,
+.region-map-region-entry:hover .region-map-callout.is-minimal,
+.region-map-region-entry:focus-within .region-map-label.is-minimal,
+.region-map-region-entry:focus-within .region-map-callout.is-minimal {
   opacity: 1;
 }
 
@@ -3068,6 +3068,10 @@ button.region-map-shortlist-link {
   fill: rgba(255, 255, 255, 0.02);
 }
 
+.region-map-hit-area {
+  fill: transparent;
+}
+
 .region-map-link {
   cursor: pointer;
 }
@@ -3081,6 +3085,10 @@ button.region-map-shortlist-link {
     opacity 180ms ease;
 }
 
+.region-map-region {
+  pointer-events: none;
+}
+
 .region-map-callout {
   fill: none;
   stroke: rgba(255, 255, 255, 0.28);
@@ -3089,20 +3097,21 @@ button.region-map-shortlist-link {
   pointer-events: none;
 }
 
-.region-map-link:hover .region-map-region,
-.region-map-link:focus-visible .region-map-region {
+.region-map-region-entry:hover .region-map-region,
+.region-map-region-entry:focus-within .region-map-region {
   filter: brightness(1.08);
   stroke: rgba(255, 255, 255, 0.9);
 }
 
-.region-map-link:hover .region-map-callout,
-.region-map-link:focus-visible .region-map-callout,
-.region-map-link.is-active .region-map-callout {
+.region-map-region-entry:hover .region-map-callout,
+.region-map-region-entry:focus-within .region-map-callout,
+.region-map-region-entry.is-active .region-map-callout {
   stroke: rgba(255, 255, 255, 0.72);
 }
 
-.region-map-link.is-active .region-map-label,
-.region-map-link.is-active .region-map-value {
+.region-map-region-entry.is-active .region-map-label,
+.region-map-region-entry.is-selected .region-map-label,
+.region-map-region-entry.is-active .region-map-value {
   fill: #ffffff;
 }
 
@@ -4817,6 +4826,7 @@ tr:last-child td {
 
 .home-authority-group-hitbox {
   fill: transparent;
+  pointer-events: fill;
 }
 
 .home-authority-group-text {
@@ -4829,6 +4839,11 @@ tr:last-child td {
   stroke: rgba(4, 10, 18, 0.96);
   stroke-width: 6px;
   stroke-linejoin: round;
+}
+
+.home-authority-group-text.is-stacked {
+  font-size: 10px;
+  letter-spacing: 0.05em;
 }
 
 .home-authority-group-link:hover .home-authority-group-text,
