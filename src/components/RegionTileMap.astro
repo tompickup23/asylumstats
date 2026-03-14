@@ -60,7 +60,8 @@ const maxValue = Math.max(...values, 1);
 const range = Math.max(maxValue - minValue, 1);
 const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
 const orderedItems = renderedRegions.map(({ item }) => item);
-const initialRegionName = highlightRegion ?? orderedItems[0]?.regionName ?? null;
+const initialRegionName =
+  interactionMode === "select" && fitMode === "contain" ? null : highlightRegion ?? orderedItems[0]?.regionName ?? null;
 
 function formatValue(value: number): string {
   return new Intl.NumberFormat("en-GB", {
