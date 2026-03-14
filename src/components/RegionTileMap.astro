@@ -1119,13 +1119,37 @@ const mapInteractionCaption =
           continue;
         }
 
-        link.addEventListener("focus", () => updateRegionMapSummary(root, regionName, "focus"));
+        const promoteScopeSelection = (trigger: "focus" | "click") => {
+          if (root.dataset.regionMapLinkMode !== "select") {
+            return;
+          }
+
+          root.dispatchEvent(
+            new CustomEvent("region-map-scope", {
+              bubbles: true,
+              detail: {
+                scopeId: regionName,
+                trigger: trigger === "focus" ? "map-focus" : "map-click"
+              }
+            })
+          );
+
+          root
+            .closest<HTMLElement>("[data-home-map-stage]")
+            ?.dispatchEvent(new CustomEvent("home-map-set-scope", { bubbles: true, detail: { scopeId: regionName } }));
+        };
+
+        link.addEventListener("focus", () => {
+          updateRegionMapSummary(root, regionName, "focus");
+          promoteScopeSelection("focus");
+        });
         link.addEventListener("click", (event) => {
           if (root.dataset.regionMapLinkMode === "select") {
             event.preventDefault();
           }
 
           updateRegionMapSummary(root, regionName, "click");
+          promoteScopeSelection("click");
         });
       }
 

@@ -1239,7 +1239,11 @@ const payload = JSON.stringify({
         const detail = (event as CustomEvent<RegionMapChangeDetail>).detail;
         const regionName = detail?.regionName;
 
-        if (detail?.trigger !== "click" || !regionName || !regionDataByName.has(regionName)) {
+        if (!regionName || !regionDataByName.has(regionName)) {
+          return;
+        }
+
+        if (detail?.trigger !== "click" && detail?.trigger !== "focus") {
           return;
         }
 
@@ -1254,6 +1258,7 @@ const payload = JSON.stringify({
         }
 
         void applyScope(regionName);
+        syncDeckScope(regionName, detail.trigger === "focus" ? "map-focus" : "map-click");
       });
 
       root.addEventListener("home-map-set-scope", (event) => {
