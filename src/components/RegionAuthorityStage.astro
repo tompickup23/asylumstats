@@ -107,7 +107,7 @@ const payload = JSON.stringify({
 });
 ---
 
-<section class="home-map-stage region-authority-stage" data-region-authority-stage data-home-map-depth="region" id={id}>
+<section class="home-map-stage region-authority-stage" data-home-map-stage data-region-authority-stage data-home-map-depth="region" id={id}>
   <script type="application/json" data-region-authority-data set:html={payload} is:inline></script>
 
   <div class="home-map-intro">
@@ -1119,13 +1119,6 @@ const payload = JSON.stringify({
         focusLink.removeAttribute("href");
         focusLink.textContent = "";
       };
-
-      const toBounds = (box: DOMRect | Bounds): Bounds => ({
-        x: box.x,
-        y: box.y,
-        width: box.width,
-        height: box.height
-      });
 
       const getUnionBounds = (codes: string[], pathByCode: Map<string, SVGPathElement>): Bounds | null => {
         let minX = Number.POSITIVE_INFINITY;

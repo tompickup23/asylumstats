@@ -2215,6 +2215,7 @@ button.home-scope-crumb:focus-visible {
 }
 
 [data-home-map-stage][data-home-map-depth="region"] .home-authority-stage,
+[data-home-map-stage][data-home-map-depth="subregion"] .home-authority-stage,
 [data-home-map-stage][data-home-map-depth="place"] .home-authority-stage {
   grid-template-rows: auto minmax(21rem, 1fr) auto auto auto;
   align-content: start;
@@ -2230,6 +2231,7 @@ button.home-scope-crumb:focus-visible {
 }
 
 [data-home-map-stage][data-home-map-depth="region"] .home-authority-canvas,
+[data-home-map-stage][data-home-map-depth="subregion"] .home-authority-canvas,
 [data-home-map-stage][data-home-map-depth="place"] .home-authority-canvas {
   min-height: clamp(21rem, 48vh, 28rem);
   padding: 5.4rem 0.9rem 0.85rem;
@@ -2238,9 +2240,11 @@ button.home-scope-crumb:focus-visible {
 .home-authority-map {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: 100%;
   max-height: 100%;
+  aspect-ratio: 620 / 760;
+  margin: 0 auto;
 }
 
 .home-authority-region {
@@ -2523,6 +2527,7 @@ button.region-map-shortlist-link {
 }
 
 [data-home-map-stage][data-home-map-depth="region"] .home-map-quick-grid,
+[data-home-map-stage][data-home-map-depth="subregion"] .home-map-quick-grid,
 [data-home-map-stage][data-home-map-depth="place"] .home-map-quick-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -2542,12 +2547,14 @@ button.region-map-shortlist-link {
 }
 
 [data-home-map-stage][data-home-map-depth="region"] .home-map-quick-panel,
+[data-home-map-stage][data-home-map-depth="subregion"] .home-map-quick-panel,
 [data-home-map-stage][data-home-map-depth="place"] .home-map-quick-panel {
   gap: 0.55rem;
   padding: 0.72rem 0.8rem;
 }
 
 [data-home-map-stage][data-home-map-depth="region"] .home-map-quick-button,
+[data-home-map-stage][data-home-map-depth="subregion"] .home-map-quick-button,
 [data-home-map-stage][data-home-map-depth="place"] .home-map-quick-button {
   min-height: 0;
   padding: 0.62rem 0.68rem;
@@ -2657,6 +2664,7 @@ button.region-map-shortlist-link {
   }
 
   [data-home-map-stage][data-home-map-depth="region"] .home-authority-stage,
+  [data-home-map-stage][data-home-map-depth="subregion"] .home-authority-stage,
   [data-home-map-stage][data-home-map-depth="place"] .home-authority-stage {
     grid-template-rows: auto minmax(18.5rem, 1fr) auto auto auto;
   }
@@ -4564,6 +4572,7 @@ tr:last-child td {
   }
 
   [data-home-map-stage][data-home-map-depth="region"] .home-map-quick-grid,
+  [data-home-map-stage][data-home-map-depth="subregion"] .home-map-quick-grid,
   [data-home-map-stage][data-home-map-depth="place"] .home-map-quick-grid {
     grid-template-columns: 1fr;
   }
@@ -4671,6 +4680,7 @@ tr:last-child td {
   }
 
   [data-home-map-stage][data-home-map-depth="region"] .home-authority-stage,
+  [data-home-map-stage][data-home-map-depth="subregion"] .home-authority-stage,
   [data-home-map-stage][data-home-map-depth="place"] .home-authority-stage {
     grid-template-rows: auto minmax(14rem, auto) auto auto auto;
   }
