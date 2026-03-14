@@ -1,5 +1,6 @@
 ---
 import type { PlaceDirectoryRegion } from "../lib/place-directory";
+import { buildPlaceSubregions } from "../lib/place-subregions";
 
 interface Props {
   id?: string;
@@ -9,18 +10,26 @@ interface Props {
 
 type ScopeMeta = {
   scopeId: string;
-  scopeKind: "region" | "place";
+  scopeKind: "region" | "subregion" | "place";
+  regionName?: string;
+  subregionScopeId?: string;
+  subregionName?: string;
   eyebrow: string;
   title: string;
   note: string;
 };
 
 const { id, region, snapshotDate } = Astro.props;
+const subregions = buildPlaceSubregions(region);
+const subregionByAreaCode = new Map(
+  subregions.flatMap((subregion) => subregion.areaCodes.map((areaCode) => [areaCode, subregion] as const))
+);
 
 const scopeMeta: Record<string, ScopeMeta> = {
   [region.regionName]: {
     scopeId: region.regionName,
     scopeKind: "region",
+    regionName: region.regionName,
     eyebrow: `${region.countryName} region`,
     title: region.regionName,
     note: "Pick one authority on the map."
@@ -30,14 +39,33 @@ const scopeMeta: Record<string, ScopeMeta> = {
 const payload = JSON.stringify({
   boundariesUrl: "/place-boundaries.json",
   regionName: region.regionName,
+  regionPath: region.regionPath,
   scopeMeta: {
     ...scopeMeta,
+    ...Object.fromEntries(
+      subregions.map((subregion) => [
+        subregion.scopeId,
+        {
+          scopeId: subregion.scopeId,
+          scopeKind: "subregion",
+          regionName: region.regionName,
+          subregionScopeId: subregion.scopeId,
+          subregionName: subregion.label,
+          eyebrow: `${region.regionName} cluster`,
+          title: subregion.label,
+          note: `Choose one authority inside ${subregion.label}.`
+        }
+      ])
+    ),
     ...Object.fromEntries(
       region.areas.map((row) => [
         row.area.areaCode,
         {
           scopeId: row.area.areaCode,
           scopeKind: "place",
+          regionName: region.regionName,
+          subregionScopeId: subregionByAreaCode.get(row.area.areaCode)?.scopeId,
+          subregionName: subregionByAreaCode.get(row.area.areaCode)?.label,
           eyebrow: `${region.regionName} local page`,
           title: row.area.areaName,
           note: "Local preview."
@@ -48,6 +76,8 @@ const payload = JSON.stringify({
   areas: region.areas.map((row) => ({
     areaCode: row.area.areaCode,
     areaName: row.area.areaName,
+    subregionScopeId: subregionByAreaCode.get(row.area.areaCode)?.scopeId ?? null,
+    subregionName: subregionByAreaCode.get(row.area.areaCode)?.label ?? null,
     supportedAsylum: row.area.supportedAsylum,
     supportedAsylumRate: row.area.supportedAsylumRate,
     contingencyAccommodation: row.area.contingencyAccommodation,
@@ -58,6 +88,21 @@ const payload = JSON.stringify({
         : row.hotelSignal === "unnamed"
           ? `${row.unnamedSiteCount} unnamed acknowledged hotel site${row.unnamedSiteCount === 1 ? "" : "s"}`
           : "No named current hotel site visible"
+  })),
+  subregions: subregions.map((subregion) => ({
+    scopeId: subregion.scopeId,
+    label: subregion.label,
+    supportedAsylum: subregion.supportedAsylum,
+    supportedAsylumRate: subregion.supportedAsylumRate,
+    contingencyAccommodation: subregion.contingencyAccommodation,
+    hotelSignalValue: subregion.hotelSignalValue,
+    hotelSignalLabel: subregion.hotelSignalLabel,
+    publicPlaceCount: subregion.publicPlaceCount,
+    namedCurrentSiteCount: subregion.namedCurrentSiteCount,
+    unnamedSiteCount: subregion.unnamedSiteCount,
+    leadAreaCode: subregion.leadArea?.area.areaCode ?? null,
+    leadAreaName: subregion.leadArea?.area.areaName ?? null,
+    areaCodes: subregion.areaCodes
   }))
 });
 ---
@@ -68,8 +113,11 @@ const payload = JSON.stringify({
   <div class="home-map-intro">
     <div class="home-map-topline">
       <div class="chip-row home-map-path">
-        <span class="chip accent" data-region-authority-path-root>{region.regionName}</span>
-        <span class="chip teal" data-region-authority-path-area hidden></span>
+        <button type="button" class="chip accent" data-region-authority-path-root data-region-authority-scope-button={region.regionName}>
+          {region.regionName}
+        </button>
+        <button type="button" class="chip warm" data-region-authority-path-group data-region-authority-scope-button="" hidden></button>
+        <button type="button" class="chip teal" data-region-authority-path-area data-region-authority-scope-button="" hidden></button>
       </div>
       <div class="home-map-nav">
         <button
@@ -175,7 +223,7 @@ const payload = JSON.stringify({
       <div class="home-map-quick-grid" data-region-authority-quick-grid></div>
     </section>
 
-    <aside class="home-map-focus-card" data-region-authority-focus>
+    <aside class="home-map-focus-card" data-region-authority-focus hidden>
       <p class="tiny home-map-focus-kicker" data-region-authority-focus-kicker>{region.countryName} region</p>
       <strong data-region-authority-focus-title>{region.regionName}</strong>
       <p data-region-authority-focus-body>
@@ -195,15 +243,36 @@ const payload = JSON.stringify({
 <script>
   type ScopeMeta = {
     scopeId: string;
-    scopeKind: "region" | "place";
+    scopeKind: "region" | "subregion" | "place";
+    regionName?: string;
+    subregionScopeId?: string;
+    subregionName?: string;
     eyebrow: string;
     title: string;
     note: string;
   };
 
+  type SubregionPayload = {
+    scopeId: string;
+    label: string;
+    supportedAsylum: number;
+    supportedAsylumRate: number | null;
+    contingencyAccommodation: number;
+    hotelSignalValue: number;
+    hotelSignalLabel: string;
+    publicPlaceCount: number;
+    namedCurrentSiteCount: number;
+    unnamedSiteCount: number;
+    leadAreaCode: string | null;
+    leadAreaName: string | null;
+    areaCodes: string[];
+  };
+
   type AreaPayload = {
     areaCode: string;
     areaName: string;
+    subregionScopeId: string | null;
+    subregionName: string | null;
     supportedAsylum: number;
     supportedAsylumRate: number | null;
     contingencyAccommodation: number;
@@ -214,8 +283,10 @@ const payload = JSON.stringify({
   type RegionAuthorityPayload = {
     boundariesUrl: string;
     regionName: string;
+    regionPath: string;
     scopeMeta: Record<string, ScopeMeta>;
     areas: AreaPayload[];
+    subregions: SubregionPayload[];
   };
 
   type BoundaryArea = {
@@ -278,6 +349,8 @@ const payload = JSON.stringify({
       width: number;
       height: number;
     };
+
+    type Bounds = ViewBox;
 
     const clampNumber = (value: number, minimum: number, maximum: number) =>
       Math.max(minimum, Math.min(maximum, value));
@@ -496,6 +569,8 @@ const payload = JSON.stringify({
       const legendBody = root.querySelector<HTMLElement>("[data-region-authority-legend-body]");
       const legendSwatch = root.querySelector<HTMLElement>("[data-region-authority-swatch]");
       const caption = root.querySelector<HTMLElement>("[data-region-authority-caption]");
+      const pathRoot = root.querySelector<HTMLButtonElement>("[data-region-authority-path-root]");
+      const pathGroup = root.querySelector<HTMLButtonElement>("[data-region-authority-path-group]");
       const pathArea = root.querySelector<HTMLElement>("[data-region-authority-path-area]");
       const backButton = root.querySelector<HTMLButtonElement>("[data-region-authority-back]");
       const forwardButton = root.querySelector<HTMLButtonElement>("[data-region-authority-forward]");
@@ -528,6 +603,8 @@ const payload = JSON.stringify({
         !legendBody ||
         !legendSwatch ||
         !caption ||
+        !pathRoot ||
+        !pathGroup ||
         !pathArea ||
         !backButton ||
         !forwardButton ||
@@ -554,7 +631,9 @@ const payload = JSON.stringify({
         continue;
       }
 
+      const subregionByScopeId = new Map(payload.subregions.map((subregion) => [subregion.scopeId, subregion]));
       let currentMetric: AuthorityMetricId = "total";
+      let currentSubregionId: string | null = null;
       let currentAreaCode: string | null = null;
       let renderSequence = 0;
       let scopeHistory = [payload.regionName];
@@ -586,6 +665,54 @@ const payload = JSON.stringify({
         metaNode.textContent = metaText;
       };
 
+      const syncDeckScope = (scopeId: string, trigger = "map-nav") => {
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              trigger
+            }
+          })
+        );
+      };
+
+      const getSubregionMetricValue = (subregion: SubregionPayload) => {
+        if (currentMetric === "rate") {
+          return subregion.supportedAsylumRate ?? -1;
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalValue;
+        }
+
+        return subregion.supportedAsylum;
+      };
+
+      const formatSubregionMetricValue = (subregion: SubregionPayload) => {
+        if (currentMetric === "rate") {
+          return subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate);
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalValue === 2 ? "Named" : subregion.hotelSignalValue === 1 ? "Flagged" : "None";
+        }
+
+        return formatInteger(subregion.supportedAsylum);
+      };
+
+      const formatSubregionMetricMeta = (subregion: SubregionPayload) => {
+        if (currentMetric === "rate") {
+          return "supported asylum per 10,000";
+        }
+
+        if (currentMetric === "hotel") {
+          return subregion.hotelSignalLabel;
+        }
+
+        return `${formatInteger(subregion.publicPlaceCount)} authorities`;
+      };
+
       const updateMapNav = () => {
         const previousScopeId = scopeHistory[historyIndex - 1];
         const nextScopeId = scopeHistory[historyIndex + 1];
@@ -611,14 +738,44 @@ const payload = JSON.stringify({
         updateMapNav();
       };
 
+      const setScopeChip = (node: HTMLButtonElement | HTMLElement, scopeId: string | null, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        setChip(node, text, tone);
+
+        if ("dataset" in node) {
+          if (scopeId) {
+            node.dataset.regionAuthorityScopeButton = scopeId;
+          } else {
+            delete node.dataset.regionAuthorityScopeButton;
+          }
+        }
+      };
+
       const updateCopy = (scopeId: string) => {
         const meta = payload.scopeMeta[scopeId] ?? payload.scopeMeta[payload.regionName];
         eyebrow.textContent = meta.eyebrow;
         title.textContent = meta.title;
         note.textContent = meta.note;
-        depthChip.textContent = meta.scopeKind === "place" ? "Authority lens" : "Regional lens";
-        root.dataset.homeMapDepth = meta.scopeKind === "place" ? "place" : "region";
-        setChip(pathArea, meta.scopeKind === "place" ? meta.title : null, "teal");
+        depthChip.textContent =
+          meta.scopeKind === "place" ? "Authority lens" : meta.scopeKind === "subregion" ? "Subregional lens" : "Regional lens";
+        root.dataset.homeMapDepth = meta.scopeKind === "place" ? "place" : meta.scopeKind === "subregion" ? "subregion" : "region";
+        setScopeChip(pathRoot, payload.regionName, payload.regionName, "accent");
+        setScopeChip(pathGroup, null, null, "warm");
+        setScopeChip(pathArea, null, null, "teal");
+
+        if (meta.scopeKind === "subregion") {
+          setScopeChip(pathGroup, meta.scopeId, meta.title, "warm");
+          return;
+        }
+
+        if (meta.scopeKind === "place") {
+          setScopeChip(
+            pathGroup,
+            meta.subregionScopeId ?? currentSubregionId,
+            meta.subregionName ?? payload.scopeMeta[currentSubregionId ?? ""]?.title ?? null,
+            "warm"
+          );
+          setScopeChip(pathArea, meta.scopeId, meta.title, "teal");
+        }
       };
 
       const buildAreaMetricChip = (area: AreaPayload) => {
@@ -643,6 +800,32 @@ const payload = JSON.stringify({
 
         return {
           text: `${formatInteger(area.supportedAsylum)} on support`,
+          tone: "accent" as const
+        };
+      };
+
+      const buildSubregionMetricChip = (subregion: SubregionPayload) => {
+        if (currentMetric === "rate") {
+          return {
+            text: subregion.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(subregion.supportedAsylumRate)} / 10k`,
+            tone: "teal" as const
+          };
+        }
+
+        if (currentMetric === "hotel") {
+          return {
+            text:
+              subregion.hotelSignalValue === 2
+                ? "Named hotel evidence"
+                : subregion.hotelSignalValue === 1
+                  ? "Unnamed hotel evidence"
+                  : "No named hotel evidence",
+            tone: "warm" as const
+          };
+        }
+
+        return {
+          text: `${formatInteger(subregion.supportedAsylum)} on support`,
           tone: "accent" as const
         };
       };
@@ -683,21 +866,70 @@ const payload = JSON.stringify({
         return "on support";
       };
 
-      const renderQuickPicks = (selectedAreaCode: string | null) => {
+      const getAreaRowsForScope = (subregionScopeId: string | null) =>
+        subregionScopeId ? payload.areas.filter((area) => area.subregionScopeId === subregionScopeId) : payload.areas;
+
+      const renderQuickPicks = (selectedSubregionId: string | null, selectedAreaCode: string | null) => {
         quickGrid.innerHTML = "";
+        if (!selectedSubregionId && payload.subregions.length > 0) {
+          quickTitle.textContent = `Start with a cluster inside ${payload.regionName}`;
+
+          const rankedSubregions = [...payload.subregions]
+            .sort(
+              (left, right) =>
+                getSubregionMetricValue(right) - getSubregionMetricValue(left) ||
+                right.supportedAsylum - left.supportedAsylum ||
+                left.label.localeCompare(right.label)
+            )
+            .slice(0, 4);
+
+          for (const subregion of rankedSubregions) {
+            const button = document.createElement("button");
+            const selected = subregion.scopeId === selectedSubregionId;
+            button.type = "button";
+            button.className = `home-map-quick-button${selected ? " is-active" : ""}`;
+            button.setAttribute("aria-pressed", selected ? "true" : "false");
+            button.dataset.scopeKind = "subregion";
+
+            const label = document.createElement("strong");
+            label.textContent = subregion.label;
+
+            const value = document.createElement("span");
+            value.className = "tiny";
+            value.textContent = `${formatSubregionMetricValue(subregion)} ${currentMetric === "rate" ? "/ 10k" : ""}`;
+
+            const meta = document.createElement("p");
+            meta.textContent = `${formatSubregionMetricMeta(subregion)}${subregion.leadAreaName ? ` · lead ${subregion.leadAreaName}` : ""}`;
+
+            button.append(label, value, meta);
+            button.addEventListener("click", () => {
+              currentSubregionId = subregion.scopeId;
+              currentAreaCode = null;
+              updateCopy(subregion.scopeId);
+              syncDeckScope(subregion.scopeId, "quick-pick");
+              void renderMap(subregion.scopeId, null);
+            });
+
+            quickGrid.append(button);
+          }
+
+          return;
+        }
+
+        const selectedSubregion = selectedSubregionId ? subregionByScopeId.get(selectedSubregionId) ?? null : null;
         quickTitle.textContent =
           selectedAreaCode && payload.scopeMeta[selectedAreaCode]
-            ? `Compare ${payload.scopeMeta[selectedAreaCode].title} with the regional leaders`
-            : `Jump straight into ${payload.regionName}`;
+            ? `Compare ${payload.scopeMeta[selectedAreaCode].title} within ${selectedSubregion?.label ?? payload.regionName}`
+            : `Jump straight into ${selectedSubregion?.label ?? payload.regionName}`;
 
-        const rankedAreas = [...payload.areas]
+        const rankedAreas = [...getAreaRowsForScope(selectedSubregionId)]
           .sort(
             (left, right) =>
               getMetricValue(right) - getMetricValue(left) ||
               right.supportedAsylum - left.supportedAsylum ||
               left.areaName.localeCompare(right.areaName)
           )
-          .slice(0, 3);
+          .slice(0, 4);
 
         for (const area of rankedAreas) {
           const button = document.createElement("button");
@@ -718,28 +950,19 @@ const payload = JSON.stringify({
 
           button.append(label, value, meta);
           button.addEventListener("click", () => {
+            currentSubregionId = area.subregionScopeId ?? selectedSubregionId;
             currentAreaCode = area.areaCode;
             updateCopy(area.areaCode);
-
-            root.dispatchEvent(
-              new CustomEvent("region-map-scope", {
-                bubbles: true,
-                detail: {
-                  scopeId: area.areaCode,
-                  trigger: "quick-pick"
-                }
-              })
-            );
-
-            void renderMap(area.areaCode);
+            syncDeckScope(area.areaCode, "quick-pick");
+            void renderMap(currentSubregionId, area.areaCode);
           });
 
           quickGrid.append(button);
         }
       };
 
-      const updateSignalBand = (selectedAreaCode: string | null) => {
-        if (!selectedAreaCode) {
+      const updateSignalBand = (selectedSubregionId: string | null, selectedAreaCode: string | null) => {
+        if (!selectedAreaCode && !selectedSubregionId) {
           const metricLeader = payload.areas.reduce<AreaPayload | null>(
             (best, candidate) => (!best || getMetricValue(candidate) > getMetricValue(best) ? candidate : best),
             null
@@ -765,9 +988,52 @@ const payload = JSON.stringify({
             signalLabelThree,
             signalValueThree,
             signalMetaThree,
-            "Authorities",
-            formatInteger(payload.areas.length),
-            "available for drilldown"
+            payload.subregions.length > 0 ? "Clusters" : "Authorities",
+            formatInteger(payload.subregions.length > 0 ? payload.subregions.length : payload.areas.length),
+            payload.subregions.length > 0 ? "available before authority drilldown" : "available for drilldown"
+          );
+          return;
+        }
+
+        if (selectedSubregionId && !selectedAreaCode) {
+          const subregion = subregionByScopeId.get(selectedSubregionId);
+
+          if (!subregion) {
+            updateSignalBand(null, null);
+            return;
+          }
+
+          setSignalCard(
+            signalLabelOne,
+            signalValueOne,
+            signalMetaOne,
+            "Cluster in focus",
+            subregion.label,
+            `${formatInteger(subregion.publicPlaceCount)} authorities`
+          );
+          setSignalCard(
+            signalLabelTwo,
+            signalValueTwo,
+            signalMetaTwo,
+            "Support",
+            formatInteger(subregion.supportedAsylum),
+            "people on support"
+          );
+          setSignalCard(
+            signalLabelThree,
+            signalValueThree,
+            signalMetaThree,
+            currentMetric === "hotel" ? "Hotel signal" : "Pressure",
+            currentMetric === "hotel"
+              ? subregion.hotelSignalValue === 2
+                ? "Named"
+                : subregion.hotelSignalValue === 1
+                  ? "Flagged"
+                  : "None"
+              : subregion.supportedAsylumRate === null
+                ? "n/a"
+                : formatNumber(subregion.supportedAsylumRate),
+            currentMetric === "hotel" ? subregion.hotelSignalLabel : "per 10,000 residents"
           );
           return;
         }
@@ -775,7 +1041,7 @@ const payload = JSON.stringify({
         const area = payload.areas.find((entry) => entry.areaCode === selectedAreaCode);
 
         if (!area) {
-          updateSignalBand(null);
+          updateSignalBand(null, null);
           return;
         }
 
@@ -806,33 +1072,107 @@ const payload = JSON.stringify({
         );
       };
 
-      const updateFocusCard = (selectedAreaCode: string | null) => {
-        if (!selectedAreaCode) {
+      const updateFocusCard = (selectedSubregionId: string | null, selectedAreaCode: string | null) => {
+        if (selectedAreaCode) {
+          const area = payload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+
+          if (!area) {
+            focusCard.hidden = true;
+            return;
+          }
+
+          const primaryMetric = buildAreaMetricChip(area);
+          focusCard.hidden = false;
+          focusCard.dataset.scopeKind = "place";
+          focusKicker.textContent = `${payload.regionName}${area.subregionName ? ` · ${area.subregionName}` : ""}`;
+          focusTitle.textContent = area.areaName;
+          focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+          setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
+          setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
+          focusLink.hidden = false;
+          focusLink.href = buildAreaHref(area.areaCode);
+          focusLink.textContent = "Open place page";
+          return;
+        }
+
+        if (!selectedSubregionId) {
           focusCard.hidden = true;
           return;
         }
 
-        const area = payload.areas.find((entry) => entry.areaCode === selectedAreaCode);
+        const subregion = subregionByScopeId.get(selectedSubregionId);
 
-        if (!area) {
+        if (!subregion) {
           focusCard.hidden = true;
           return;
         }
 
-        const primaryMetric = buildAreaMetricChip(area);
+        const primaryMetric = buildSubregionMetricChip(subregion);
         focusCard.hidden = false;
-        focusCard.dataset.scopeKind = "place";
-        focusKicker.textContent = `${payload.regionName} authority`;
-        focusTitle.textContent = area.areaName;
-        focusBody.textContent = `${formatInteger(area.supportedAsylum)} on support. ${formatRateText(area.supportedAsylumRate)}. ${area.hotelSignalLabel}.`;
+        focusCard.dataset.scopeKind = "subregion";
+        focusKicker.textContent = `${payload.regionName} cluster`;
+        focusTitle.textContent = subregion.label;
+        focusBody.textContent = `${formatInteger(subregion.supportedAsylum)} on support across ${formatInteger(subregion.publicPlaceCount)} authorities. ${formatRateText(subregion.supportedAsylumRate)}. ${subregion.hotelSignalLabel}.`;
         setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
-        setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
-        focusLink.hidden = false;
-        focusLink.href = buildAreaHref(area.areaCode);
-        focusLink.textContent = "Open place page";
+        setChip(focusSecondary, `${formatInteger(subregion.publicPlaceCount)} authorities`);
+        focusLink.hidden = true;
+        focusLink.removeAttribute("href");
+        focusLink.textContent = "";
       };
 
-      const renderMap = async (selectedAreaCode: string | null) => {
+      const toBounds = (box: DOMRect | Bounds): Bounds => ({
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height
+      });
+
+      const getUnionBounds = (codes: string[], pathByCode: Map<string, SVGPathElement>): Bounds | null => {
+        let minX = Number.POSITIVE_INFINITY;
+        let minY = Number.POSITIVE_INFINITY;
+        let maxX = Number.NEGATIVE_INFINITY;
+        let maxY = Number.NEGATIVE_INFINITY;
+
+        for (const code of codes) {
+          const path = pathByCode.get(code);
+
+          if (!path) {
+            continue;
+          }
+
+          const bounds = path.getBBox();
+          minX = Math.min(minX, bounds.x);
+          minY = Math.min(minY, bounds.y);
+          maxX = Math.max(maxX, bounds.x + bounds.width);
+          maxY = Math.max(maxY, bounds.y + bounds.height);
+        }
+
+        if (!Number.isFinite(minX) || !Number.isFinite(minY) || !Number.isFinite(maxX) || !Number.isFinite(maxY)) {
+          return null;
+        }
+
+        return {
+          x: minX,
+          y: minY,
+          width: maxX - minX,
+          height: maxY - minY
+        };
+      };
+
+      const getSubregionBadgePosition = (bounds: Bounds) => ({
+        x: bounds.x + bounds.width / 2,
+        y: bounds.y + bounds.height / 2
+      });
+
+      const buildSubregionViewBox = (bounds: Bounds, payloadWidth: number, payloadHeight: number) =>
+        buildAuthorityViewBox(new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height), payloadWidth, payloadHeight, {
+          ...getAuthorityFocusProfile(payload.regionName, null),
+          minSpanRatio: Math.max(regionalAuthorityFocusProfiles[payload.regionName]?.minSpanRatio ?? 0.18, 0.22),
+          paddingScale: Math.max(regionalAuthorityFocusProfiles[payload.regionName]?.paddingScale ?? 0.24, 0.28),
+          maxSpanRatio: 0.92
+        });
+
+      const renderMap = async (selectedSubregionId: string | null, selectedAreaCode: string | null) => {
         const renderId = ++renderSequence;
         const boundaryPayload = await loadBoundaryPayload(payload.boundariesUrl);
 
@@ -848,6 +1188,7 @@ const payload = JSON.stringify({
 
         const metric = metricConfig[currentMetric];
         const areaMetaByCode = new Map(payload.areas.map((area) => [area.areaCode, area]));
+        const pathByCode = new Map<string, SVGPathElement>();
         const values = payload.areas.map((area) => {
           if (currentMetric === "rate") {
             return area.supportedAsylumRate ?? 0;
@@ -865,7 +1206,12 @@ const payload = JSON.stringify({
 
         authoritySvg.innerHTML = "";
         authoritySvg.setAttribute("viewBox", baseViewBox);
-        authoritySvg.setAttribute("aria-label", `${payload.regionName} authority map`);
+        authoritySvg.setAttribute(
+          "aria-label",
+          selectedSubregionId && subregionByScopeId.get(selectedSubregionId)
+            ? `${subregionByScopeId.get(selectedSubregionId)?.label} authority map within ${payload.regionName}`
+            : `${payload.regionName} authority map`
+        );
 
         const baseGroup = document.createElementNS(SVG_NS, "g");
         baseGroup.setAttribute("class", "region-map-base");
@@ -895,6 +1241,7 @@ const payload = JSON.stringify({
                 ? areaMeta.hotelSignalValue
                 : areaMeta.supportedAsylum;
           const selected = boundaryArea.areaCode === selectedAreaCode;
+          const inSelectedSubregion = Boolean(selectedSubregionId && areaMeta.subregionScopeId === selectedSubregionId);
           const link = document.createElementNS(SVG_NS, "a");
           const path = document.createElementNS(SVG_NS, "path");
           const titleNode = document.createElementNS(SVG_NS, "title");
@@ -915,11 +1262,18 @@ const payload = JSON.stringify({
           path.setAttribute("class", `home-authority-region ${selected ? "is-selected" : ""}`);
           path.setAttribute("d", boundaryArea.path);
           path.setAttribute("fill", getFill(metricValue, minValue, maxValue, metric.tone));
-          path.setAttribute("stroke", selected ? "#F5F7FB" : "rgba(255,255,255,0.16)");
-          path.setAttribute("stroke-width", selected ? "3.2" : "1.2");
+          path.setAttribute(
+            "stroke",
+            selected ? "#F5F7FB" : inSelectedSubregion ? "rgba(255,255,255,0.44)" : "rgba(255,255,255,0.16)"
+          );
+          path.setAttribute("stroke-width", selected ? "3.2" : inSelectedSubregion ? "1.9" : "1.2");
+          if (selectedSubregionId && !inSelectedSubregion) {
+            path.setAttribute("opacity", "0.45");
+          }
 
           titleNode.textContent = `${boundaryArea.areaName}: ${valueLabel}`;
           link.append(titleNode, path);
+          pathByCode.set(boundaryArea.areaCode, path);
 
           if (selected) {
             selectedAreaPath = path;
@@ -937,23 +1291,77 @@ const payload = JSON.stringify({
 
           link.addEventListener("click", (event) => {
             event.preventDefault();
+            currentSubregionId = areaMeta.subregionScopeId ?? selectedSubregionId;
             currentAreaCode = boundaryArea.areaCode;
             updateCopy(boundaryArea.areaCode);
-
-            root.dispatchEvent(
-              new CustomEvent("region-map-scope", {
-                bubbles: true,
-                detail: {
-                  scopeId: boundaryArea.areaCode,
-                  trigger: "click"
-                }
-              })
-            );
-
-            void renderMap(boundaryArea.areaCode);
+            syncDeckScope(boundaryArea.areaCode, "click");
+            void renderMap(currentSubregionId, boundaryArea.areaCode);
           });
 
           authoritySvg.append(link);
+        }
+
+        if (payload.subregions.length > 0) {
+          const badgeLayer = document.createElementNS(SVG_NS, "g");
+          badgeLayer.setAttribute("class", "home-authority-group-layer");
+
+          for (const subregion of payload.subregions) {
+            const bounds = getUnionBounds(subregion.areaCodes, pathByCode);
+
+            if (!bounds) {
+              continue;
+            }
+
+            const badgeLink = document.createElementNS(SVG_NS, "a");
+            const badgeGroup = document.createElementNS(SVG_NS, "g");
+            const badgeRect = document.createElementNS(SVG_NS, "rect");
+            const badgeText = document.createElementNS(SVG_NS, "text");
+            const selected = subregion.scopeId === selectedSubregionId;
+            const areaSelectedInside = Boolean(selectedAreaCode && subregion.areaCodes.includes(selectedAreaCode));
+            const badgeWidth = Math.max(82, subregion.label.length * 7.8 + 26);
+            const badgeHeight = 28;
+            const position = getSubregionBadgePosition(bounds);
+            const x = position.x - badgeWidth / 2;
+            const y = position.y - badgeHeight / 2;
+
+            badgeLink.setAttribute("href", payload.regionPath);
+            badgeLink.setAttribute(
+              "class",
+              `home-authority-group-link ${selected ? "is-selected" : ""} ${areaSelectedInside ? "has-selected-area" : ""}`
+            );
+            badgeLink.setAttribute(
+              "aria-label",
+              `${subregion.label}: ${formatInteger(subregion.publicPlaceCount)} authorities. Select this cluster.`
+            );
+
+            badgeRect.setAttribute("x", `${x}`);
+            badgeRect.setAttribute("y", `${y}`);
+            badgeRect.setAttribute("width", `${badgeWidth}`);
+            badgeRect.setAttribute("height", `${badgeHeight}`);
+            badgeRect.setAttribute("rx", "14");
+            badgeRect.setAttribute("class", "home-authority-group-badge");
+
+            badgeText.setAttribute("x", `${position.x}`);
+            badgeText.setAttribute("y", `${position.y + 4}`);
+            badgeText.setAttribute("text-anchor", "middle");
+            badgeText.setAttribute("class", "home-authority-group-text");
+            badgeText.textContent = subregion.label;
+
+            badgeGroup.append(badgeRect, badgeText);
+            badgeLink.append(badgeGroup);
+            badgeLink.addEventListener("click", (event) => {
+              event.preventDefault();
+              currentSubregionId = subregion.scopeId;
+              currentAreaCode = null;
+              updateCopy(subregion.scopeId);
+              syncDeckScope(subregion.scopeId, "click");
+              void renderMap(subregion.scopeId, null);
+            });
+
+            badgeLayer.append(badgeLink);
+          }
+
+          authoritySvg.append(badgeLayer);
         }
 
         if (selectedAreaCode && selectedAreaPath) {
@@ -968,17 +1376,33 @@ const payload = JSON.stringify({
             ),
             520
           );
+        } else if (selectedSubregionId) {
+          const subregion = subregionByScopeId.get(selectedSubregionId);
+          const subregionBounds = subregion ? getUnionBounds(subregion.areaCodes, pathByCode) : null;
+
+          if (subregionBounds) {
+            setAuthorityViewBox(
+              authoritySvg,
+              buildSubregionViewBox(subregionBounds, boundaryPayload.width, boundaryPayload.height),
+              480
+            );
+          } else {
+            setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentAreaCode ? 420 : 0);
+          }
         } else {
           setAuthorityViewBox(authoritySvg, parseViewBox(baseViewBox), currentAreaCode ? 420 : 0);
         }
 
+        const selectedSubregion = selectedSubregionId ? subregionByScopeId.get(selectedSubregionId) ?? null : null;
         caption.textContent =
           selectedAreaCode && areaMetaByCode.get(selectedAreaCode)
-            ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected on the ${payload.regionName} map.`
-            : `Select one authority inside ${payload.regionName} to update the right-hand deck without leaving the region page.`;
-        updateFocusCard(selectedAreaCode);
-        updateSignalBand(selectedAreaCode);
-        renderQuickPicks(selectedAreaCode);
+            ? `${areaMetaByCode.get(selectedAreaCode)?.areaName} is selected inside ${selectedSubregion?.label ?? payload.regionName}.`
+            : selectedSubregion
+              ? `${selectedSubregion.label} is in focus inside ${payload.regionName}. Select one authority to narrow again.`
+              : `Select one cluster inside ${payload.regionName} to narrow the map before choosing an authority.`;
+        updateFocusCard(selectedSubregionId, selectedAreaCode);
+        updateSignalBand(selectedSubregionId, selectedAreaCode);
+        renderQuickPicks(selectedSubregionId, selectedAreaCode);
       };
 
       const setMetric = (metricId: AuthorityMetricId) => {
@@ -995,7 +1419,7 @@ const payload = JSON.stringify({
         legendBody.textContent = config.body;
         legendSwatch.dataset.tone = config.tone;
         root.dataset.regionAuthorityMetric = metricId;
-        void renderMap(currentAreaCode);
+        void renderMap(currentSubregionId, currentAreaCode);
       };
 
       const applyScope = async (scopeId: string, remember = true) => {
@@ -1006,9 +1430,10 @@ const payload = JSON.stringify({
             updateMapNav();
           }
 
+          currentSubregionId = null;
           currentAreaCode = null;
           updateCopy(payload.regionName);
-          await renderMap(null);
+          await renderMap(null, null);
           return;
         }
 
@@ -1022,9 +1447,20 @@ const payload = JSON.stringify({
           updateMapNav();
         }
 
+        const meta = payload.scopeMeta[scopeId];
+
+        if (meta.scopeKind === "subregion") {
+          currentSubregionId = scopeId;
+          currentAreaCode = null;
+          updateCopy(scopeId);
+          await renderMap(scopeId, null);
+          return;
+        }
+
+        currentSubregionId = meta.subregionScopeId ?? null;
         currentAreaCode = scopeId;
         updateCopy(scopeId);
-        await renderMap(scopeId);
+        await renderMap(currentSubregionId, scopeId);
       };
 
       root.addEventListener("home-map-set-scope", (event) => {
@@ -1038,7 +1474,9 @@ const payload = JSON.stringify({
         }
 
         historyIndex -= 1;
-        void applyScope(scopeHistory[historyIndex] ?? payload.regionName, false);
+        const scopeId = scopeHistory[historyIndex] ?? payload.regionName;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-back");
       });
 
       forwardButton.addEventListener("click", () => {
@@ -1047,8 +1485,23 @@ const payload = JSON.stringify({
         }
 
         historyIndex += 1;
-        void applyScope(scopeHistory[historyIndex] ?? payload.regionName, false);
+        const scopeId = scopeHistory[historyIndex] ?? payload.regionName;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-forward");
       });
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-authority-scope-button]")) {
+        button.addEventListener("click", () => {
+          const scopeId = button.dataset.regionAuthorityScopeButton;
+
+          if (!scopeId) {
+            return;
+          }
+
+          void applyScope(scopeId);
+          syncDeckScope(scopeId, "map-path");
+        });
+      }
 
       for (const button of root.querySelectorAll<HTMLButtonElement>("[data-region-authority-view]")) {
         button.addEventListener("click", () => {

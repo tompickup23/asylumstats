@@ -1,6 +1,6 @@
 ---
 type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
-type HomeDeckScopeKind = "national" | "region" | "place";
+type HomeDeckScopeKind = "national" | "region" | "subregion" | "place";
 
 export interface HomeDeckStat {
   label: string;
@@ -56,13 +56,20 @@ interface Props {
 
 const { entries, initialScopeId, targetMapId, rootScopeKind = "national", resetLabel } = Astro.props;
 const initialEntry = entries[initialScopeId];
+const entryById = entries;
 const getScopeKind = (entry: HomeDeckEntry): HomeDeckScopeKind => {
   if (entry.scopeId === initialScopeId) {
     return rootScopeKind;
   }
 
   if (entry.parentScopeId === initialScopeId) {
-    return rootScopeKind === "national" ? "region" : "place";
+    return rootScopeKind === "national" ? "region" : "subregion";
+  }
+
+  const parentEntry = entry.parentScopeId ? entryById[entry.parentScopeId] : undefined;
+
+  if (parentEntry?.parentScopeId === initialScopeId) {
+    return rootScopeKind === "national" ? "subregion" : "place";
   }
 
   return "place";
@@ -112,7 +119,15 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
         <span class="home-scope-crumb is-current">{initialEntry.title}</span>
       </div>
       <span class="chip warm home-scope-kind-chip" data-home-scope-kind-chip>
-        {initialScopeKind === "national" ? "National lens" : initialScopeKind === "region" ? "Regional lens" : "Local lens"}
+        {
+          initialScopeKind === "national"
+            ? "National lens"
+            : initialScopeKind === "region"
+              ? "Regional lens"
+              : initialScopeKind === "subregion"
+                ? "Subregional lens"
+                : "Local lens"
+        }
       </span>
     </div>
 
@@ -150,7 +165,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
 )}
 
 <script>
-  type HomeDeckScopeKind = "national" | "region" | "place";
+  type HomeDeckScopeKind = "national" | "region" | "subregion" | "place";
   type HomeDeckTone = "accent" | "teal" | "warm" | "slate";
   type HomeDeckStat = { label: string; value: string; context: string };
   type HomeDeckLink = {
@@ -447,21 +462,34 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
     const getScopeKind = (
       entry: HomeDeckEntry,
       initialScopeId: string,
-      rootScopeKind: HomeDeckScopeKind
+      rootScopeKind: HomeDeckScopeKind,
+      entries: Record<string, HomeDeckEntry>
     ): HomeDeckScopeKind => {
       if (entry.scopeId === initialScopeId) {
         return rootScopeKind;
       }
 
       if (entry.parentScopeId === initialScopeId) {
-        return rootScopeKind === "national" ? "region" : "place";
+        return rootScopeKind === "national" ? "region" : "subregion";
+      }
+
+      const parentEntry = entry.parentScopeId ? entries[entry.parentScopeId] : undefined;
+
+      if (parentEntry?.parentScopeId === initialScopeId) {
+        return rootScopeKind === "national" ? "subregion" : "place";
       }
 
       return "place";
     };
 
     const getScopeKindLabel = (scopeKind: HomeDeckScopeKind) =>
-      scopeKind === "national" ? "National lens" : scopeKind === "region" ? "Regional lens" : "Local lens";
+      scopeKind === "national"
+        ? "National lens"
+        : scopeKind === "region"
+          ? "Regional lens"
+          : scopeKind === "subregion"
+            ? "Subregional lens"
+            : "Local lens";
 
     const setTrackState = (root: HTMLElement, panel: "stats" | "visuals") => {
       root.dataset.homeActivePanel = panel;
@@ -739,7 +767,7 @@ const homeDeckData = JSON.stringify({ entries, initialScopeId, rootScopeKind, re
 
       const render = () => {
         const entry = getEntry();
-        const scopeKind = getScopeKind(entry, payload.initialScopeId, payload.rootScopeKind);
+      const scopeKind = getScopeKind(entry, payload.initialScopeId, payload.rootScopeKind, payload.entries);
         const showResetButton = entry.scopeId !== payload.initialScopeId;
         const showParentButton = Boolean(entry.parentScopeId);
         const rootEntry = payload.entries[payload.initialScopeId];

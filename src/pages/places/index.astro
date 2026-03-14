@@ -5,6 +5,7 @@ import HomeMapStage from "../../components/HomeMapStage.astro";
 import HomeSystemDeck from "../../components/HomeSystemDeck.astro";
 import PageContents from "../../components/PageContents.astro";
 import { getPlaceDirectory } from "../../lib/place-directory";
+import { buildPlaceSubregions } from "../../lib/place-subregions";
 import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../lib/route-analytics";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../../lib/route-data";
@@ -216,6 +217,16 @@ const placeDeckEntries: Record<string, PlaceDeckEntry> = {
 for (const region of placeDirectory.regions) {
   const areaRows = buildRegionAreaRows(region);
   const accommodationAverage = Math.round(region.supportedAsylum / Math.max(region.publicPlaceCount, 1));
+  const subregions = buildPlaceSubregions(region);
+  const subregionByAreaCode = new Map(
+    subregions.flatMap((subregion) => subregion.areaCodes.map((areaCode) => [areaCode, subregion] as const))
+  );
+  const rankedSubregions = [...subregions].sort(
+    (left, right) =>
+      right.supportedAsylum - left.supportedAsylum ||
+      (right.supportedAsylumRate ?? 0) - (left.supportedAsylumRate ?? 0) ||
+      left.label.localeCompare(right.label)
+  );
 
   placeDeckEntries[region.regionName] = {
     scopeId: region.regionName,
@@ -223,10 +234,13 @@ for (const region of placeDirectory.regions) {
     parentLabel: "Britain",
     eyebrow: `${region.countryName} region`,
     title: region.regionName,
-    note: `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Pick one on the map.`,
+    note:
+      subregions.length > 0
+        ? `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Start with one cluster before picking an authority.`
+        : `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Pick one on the map.`,
     scopeHref: region.regionPath,
     scopeActionLabel: "Open region page",
-    linksLabel: "Open one local authority",
+    linksLabel: subregions.length > 0 ? "Open one subregion first" : "Open one local authority",
     stats: [
       {
         label: "Supported asylum",
@@ -244,39 +258,123 @@ for (const region of placeDirectory.regions) {
         context: "People in contingency accommodation"
       }
     ],
-    links: areaRows.map((row) => ({
-      label: row.area.areaName,
-      href: buildAreaPath(row.area.areaCode),
-      meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
-      scopeId: row.area.areaCode,
-      actionLabel: "Preview place"
-    })),
-    visualIntro: "The regional map tells you where to open next.",
+    links:
+      subregions.length > 0
+        ? rankedSubregions.map((subregion) => ({
+            label: subregion.label,
+            href: region.regionPath,
+            meta: `${formatInteger(subregion.supportedAsylum)} on support · ${formatInteger(subregion.publicPlaceCount)} authorities`,
+            scopeId: subregion.scopeId,
+            actionLabel: "Preview subregion"
+          }))
+        : areaRows.map((row) => ({
+            label: row.area.areaName,
+            href: buildAreaPath(row.area.areaCode),
+            meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
+            scopeId: row.area.areaCode,
+            actionLabel: "Preview place"
+          })),
+    visualIntro:
+      subregions.length > 0
+        ? "Use the cluster layer first. It makes long regional maps legible before you narrow into one authority."
+        : "The regional map tells you where to open next.",
     visualGroups: [
       {
-        title: `Largest local totals in ${region.regionName}`,
-        bars: region.areas.slice(0, 3).map((row) =>
-          buildBar(
-            row.area.areaName,
-            row.area.supportedAsylum,
-            region.leadArea?.area.supportedAsylum ?? 1,
-            "accent",
-            describeHotelSignal(row)
-          )
-        )
+        title: subregions.length > 0 ? `Largest subregional totals in ${region.regionName}` : `Largest local totals in ${region.regionName}`,
+        bars:
+          subregions.length > 0
+            ? rankedSubregions.slice(0, 4).map((subregion) =>
+                buildBar(
+                  subregion.label,
+                  subregion.supportedAsylum,
+                  rankedSubregions[0]?.supportedAsylum ?? 1,
+                  "accent",
+                  `${formatInteger(subregion.publicPlaceCount)} authorities · ${subregion.hotelSignalLabel}`
+                )
+              )
+            : region.areas.slice(0, 3).map((row) =>
+                buildBar(
+                  row.area.areaName,
+                  row.area.supportedAsylum,
+                  region.leadArea?.area.supportedAsylum ?? 1,
+                  "accent",
+                  describeHotelSignal(row)
+                )
+              )
       }
     ]
   };
+
+  for (const subregion of rankedSubregions) {
+    const subregionRows = areaRows.filter((row) => subregion.areaCodes.includes(row.area.areaCode));
+    const comparisonScale = Math.max(
+      subregion.leadArea?.area.supportedAsylum ?? 0,
+      Math.round(subregion.supportedAsylum / Math.max(subregion.publicPlaceCount, 1)),
+      1
+    );
+
+    placeDeckEntries[subregion.scopeId] = {
+      scopeId: subregion.scopeId,
+      parentScopeId: region.regionName,
+      parentLabel: region.regionName,
+      eyebrow: `${region.regionName} cluster`,
+      title: subregion.label,
+      note: `${formatInteger(subregion.supportedAsylum)} on support across ${formatInteger(subregion.publicPlaceCount)} authorities. Narrow again to one authority.`,
+      scopeHref: region.regionPath,
+      scopeActionLabel: `Open ${region.regionName}`,
+      linksLabel: "Open one local authority",
+      stats: [
+        {
+          label: "Supported asylum",
+          value: formatInteger(subregion.supportedAsylum),
+          context: `${formatInteger(subregion.publicPlaceCount)} authorities in this cluster`
+        },
+        {
+          label: "Cluster rate",
+          value: subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate),
+          context: "Supported asylum per 10,000 residents"
+        },
+        {
+          label: "Contingency",
+          value: formatInteger(subregion.contingencyAccommodation),
+          context: "People in contingency accommodation"
+        }
+      ],
+      links: subregionRows.map((row) => ({
+        label: row.area.areaName,
+        href: buildAreaPath(row.area.areaCode),
+        meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
+        scopeId: row.area.areaCode,
+        actionLabel: "Preview place"
+      })),
+      visualIntro: "This cluster view shortens the geography so the next authority choice is legible.",
+      visualGroups: [
+        {
+          title: `Largest local totals in ${subregion.label}`,
+          bars: subregionRows.slice(0, 4).map((row) =>
+            buildBar(
+              row.area.areaName,
+              row.area.supportedAsylum,
+              comparisonScale,
+              "accent",
+              describeHotelSignal(row)
+            )
+          )
+        }
+      ]
+    };
+  }
 
   for (const row of region.areas) {
     const area = row.area;
     const regionalLead = region.leadArea?.area ?? area;
     const comparisonScale = Math.max(regionalLead.supportedAsylum, accommodationAverage, area.supportedAsylum, 1);
+    const parentSubregion = subregionByAreaCode.get(area.areaCode);
 
     placeDeckEntries[area.areaCode] = {
       scopeId: area.areaCode,
-      parentScopeId: region.regionName,
-      parentLabel: region.regionName,
+      parentScopeId: parentSubregion?.scopeId ?? region.regionName,
+      parentLabel: parentSubregion?.label ?? region.regionName,
       eyebrow: `${region.regionName} local page`,
       title: area.areaName,
       note: buildAreaNote(row),
@@ -307,10 +405,12 @@ for (const region of placeDirectory.regions) {
           meta: "Regional page"
         }
       ],
-      visualIntro: "This is the last narrowing step on the places landing.",
+      visualIntro: parentSubregion
+        ? `This is the last narrowing step after ${parentSubregion.label}.`
+        : "This is the last narrowing step on the places landing.",
       visualGroups: [
         {
-          title: `Within ${region.regionName}`,
+          title: parentSubregion ? `Within ${parentSubregion.label}` : `Within ${region.regionName}`,
           bars: [
             buildBar(area.areaName, area.supportedAsylum, comparisonScale, "accent", "This local authority"),
             buildBar(
