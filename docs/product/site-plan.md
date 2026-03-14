@@ -17,6 +17,8 @@ The public prototype already has live versions of:
 - spending and funding ledger rows
 - supplier profiles
 - scope-aware sources and methodology
+- fixed two-panel place-entry surfaces on home, `/places/`, and region pages
+- staged Britain -> region -> subregion -> place navigation on the live map system
 
 The next build should extend these live marts, not replace them with a fresh mock redesign.
 
@@ -41,6 +43,7 @@ Purpose:
 Core live blocks:
 
 - hero with compare CTA
+- two-panel Britain map stage with zoom history and a right-hand briefing deck
 - route cards from the official route mart
 - pressure ranking from local authority route data
 - named current hotel cards with entity coverage
@@ -51,6 +54,7 @@ Next additions:
 - money-ledger teaser rows
 - biggest unresolved hotel/operator leads
 - what changed since the last refresh
+- calmer navigation and visual treatment shared with the other analysis surfaces
 
 ### Compare
 
@@ -62,6 +66,7 @@ Current direction:
 
 - switch between asylum support, contingency accommodation, Afghan programmes, Homes for Ukraine, and related route metrics
 - keep count/rate comparison prominent
+- adopt the same panel discipline and calmer navigation model now used on the place-entry surfaces
 
 Next additions:
 
@@ -85,7 +90,7 @@ Target blocks:
 
 Current note:
 
-- some place pages are still mock-backed and should be replaced with generated outputs from live marts
+- the entry surfaces are now live and drilldown-driven; the next job is richer generated place analysis and stronger county-aware geographic framing
 
 ### Routes
 
@@ -171,6 +176,7 @@ Prioritize:
 - route trend lines
 - ranked bars for latest pressure
 - compact KPI cards
+- staged geographic drilldown where it improves place finding and story framing
 - supplier and site cards with evidence chips
 - tables where evidence links matter more than decorative graphics
 
@@ -208,7 +214,8 @@ Examples:
 
 Do next:
 
-1. Replace mock place pages with generated live pages.
-2. Add supplier detail pages and contract/detail templates fed from the money ledger.
-3. Expand the hotel and money ledgers with more entity links and local response contracts.
-4. Keep the current editorial tone and evidence-first structure intact.
+1. Extend the fixed two-panel navigation and calmer data-nav treatment into compare, hotels, and spending.
+2. Add stronger county- and cluster-aware geographic treatment beyond the current inset cards.
+3. Upgrade place and region panels with richer comparative visuals and auto-written analysis.
+4. Expand the hotel and money ledgers with more entity links and local response contracts.
+5. Keep the current editorial tone and evidence-first structure intact.

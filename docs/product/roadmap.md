@@ -1,6 +1,6 @@
 # Roadmap
 
-## Current state as of 2026-02-28
+## Current state as of 2026-03-14
 
 The repo has moved past concept stage.
 
@@ -10,8 +10,11 @@ Live now:
 - hotel entity ledger with owner and operator evidence
 - public money ledger with prime-provider scope, funding instructions, and scrutiny cost rows
 - Astro pages for home, compare, routes, hotels, spending, sources, and methodology
+- fixed two-panel place entry surfaces on home, `/places/`, and region pages
+- Britain -> region -> subregion -> authority drilldown with reversible zoom controls
+- desktop/tablet inset controls for dense Britain-map clusters
 
-The job is no longer to prove the idea. It is to deepen the ledgers and replace the remaining mocked place outputs.
+The job is no longer to prove the idea. It is to harden the live interaction model across the whole site and deepen the ledgers behind it.
 
 ## Phase 1: current accountability MVP
 
@@ -24,15 +27,27 @@ Already in place:
 - prime-provider mapping for visible current hotels
 - public money ledger with route labels and supplier profiles
 - source and methodology pages with hard scope rules
+- staged geographic drilldown on the main place-entry surfaces
 
 Main weaknesses still inside the MVP:
 
-- some place pages remain mock-backed
+- the stronger place drilldown system is not yet carried consistently across compare, hotels, and spending
+- county/cluster geography is still stronger in some regions than others
+- right-hand place and region panels still need richer comparative visual treatment
 - local response contracts are largely missing
 - several refugee funding instruction tables still need full normalization
 - subcontractor and council procurement joins are still thin
 
-## Phase 2: deepen the money layer
+## Phase 2: finish the spatial analysis system
+
+Build next:
+
+- extend the same fixed-panel navigation model into compare, hotels, and spending
+- add county- or cluster-aware geographic treatment beyond the current inset cards, starting with long regions
+- strengthen place and region decks with clearer comparative visuals and more explicit story framing
+- keep mobile on the simpler uncluttered interaction path while desktop/tablet carry denser navigation aids
+
+## Phase 3: deepen the money layer
 
 Build next:
 
@@ -42,7 +57,7 @@ Build next:
 - create supplier pages that combine prime providers, hotel entities, and public money rows
 - add a clear split between `published value`, `tariff rate`, `forecast`, and `derived estimate`
 
-## Phase 3: extend the site and supplier chain
+## Phase 4: extend the site and supplier chain
 
 Add:
 
@@ -52,7 +67,7 @@ Add:
 - supplier network views using AI DOGE integrity techniques
 - secrecy-gap ranking by area and provider region
 
-## Phase 4: archive and investigative advantage
+## Phase 5: archive and investigative advantage
 
 Add:
 

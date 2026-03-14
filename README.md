@@ -163,26 +163,32 @@ That is where the “scandalous” energy should go: toward waste, opacity, and 
 
 As of `2026-02-28`, the latest national asylum statistics chapters were published for the year ending `December 2025` on `2026-02-26`, while the latest public local-authority and regional tables surfaced in the researched GOV.UK pages were still the year ending `September 2025`, updated `2025-11-27`. Build the site so release calendars can differ by dataset family.
 
-## Current state (28 Feb 2026)
+## Current state (14 Mar 2026)
 
 The site is **live at asylumstats.co.uk** with automated GitHub Pages deployment.
 
-- **157 pages** built from live data in ~900ms
+- **183 pages** built from live data
 - **147 area place pages** generated from live GOV.UK local authority route data (areas with ≥200 supported asylum)
 - Routes, hotels, spending, compare, sources, methodology all use live data
+- Homepage, `/places/`, and `/places/regions/*` now use a fixed two-panel drilldown system
+- Britain -> region -> subregion -> place drilldown is live on the places entry surfaces, with zoom history and breadcrumb reset
+- Desktop and tablet now use inset controls for dense Britain-map clusters such as South East / East of England and London / Midlands
+- Mobile stays on a simpler uncluttered raw-map flow
 - Homepage uses live top areas, route cards, hotel entity coverage, and money ledger preview
 - **26 tests** (vitest) covering CSV parser, data loaders, and source scope integrity
+- GitHub Pages deploy now runs `npm test`, `npm run check`, `npm run build`, `npm run test:mobile`, and `npm run test:desktop`
 - **Zero references** to AI DOGE or ECA CRM on any published page (enforced by tests)
 - Weekly data refresh workflow (manual dispatch or Monday 8am cron)
 - See `AGENTS.md` for full agent/developer guide
 
 ### Next priorities
 
+- Extend the same map/data-navigation discipline into compare, hotels, and spending so those surfaces stop behaving like separate UI systems
+- Add stronger county- and cluster-aware geographic treatment beyond the current inset controls, especially for long English regions
+- Upgrade the right-hand place and region panels with richer comparative visuals and clearer auto-written analysis
 - Deeper normalization of refugee funding instruction tariff tables
 - Local response contracts and council procurement tied to named hotels or schemes
 - Subcontractor ingestion and supplier network expansion
-- Observable Plot charts for route trends and area comparisons
-- MapLibre/Leaflet geographic visualisation
 - SEO (OpenGraph, structured data, sitemap.xml)
 - Accessibility audit (ARIA labels, screen reader testing)
-- E2E tests with Playwright
+- E2E tests with Playwright against production-critical flows
