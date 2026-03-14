@@ -60,6 +60,7 @@ const maxValue = Math.max(...values, 1);
 const range = Math.max(maxValue - minValue, 1);
 const activeRegions = new Set([highlightRegion, ...highlightRegions].filter(Boolean));
 const orderedItems = renderedRegions.map(({ item }) => item);
+const showSupportChrome = !compact || interactionMode !== "select" || showSummary;
 const initialRegionName =
   interactionMode === "select" && fitMode === "contain" ? null : highlightRegion ?? orderedItems[0]?.regionName ?? null;
 
@@ -210,37 +211,41 @@ const mapInteractionCaption =
         {mapInteractionCaption} Darker fills indicate higher values in the active map mode.
       </figcaption>
 
-      <section class="region-map-hud" data-region-map-hud>
-        <article class="region-map-hud-card">
-          <span class="tiny" data-region-map-hud-label-1>Region</span>
-          <strong data-region-map-hud-value-1>{initialSummary?.title ?? initialRegionName ?? "Britain"}</strong>
-          <p data-region-map-hud-meta-1>{(initialSummary?.chips ?? [valueLabel])[0] ?? valueLabel}</p>
-        </article>
-        <article class="region-map-hud-card">
-          <span class="tiny" data-region-map-hud-label-2>
-            {initialSummary?.stats?.[0]?.label ?? "Current signal"}
-          </span>
-          <strong data-region-map-hud-value-2>{initialSummary?.stats?.[0]?.value ?? valueLabel}</strong>
-          <p data-region-map-hud-meta-2>{initialSummary?.stats?.[1]?.value ?? initialSummary?.body ?? ""}</p>
-        </article>
-        <article class="region-map-hud-card">
-          <span class="tiny" data-region-map-hud-label-3>
-            {initialSummary?.links?.length ? "Open next" : "Reading note"}
-          </span>
-          <strong data-region-map-hud-value-3>
-            {initialSummary?.links?.[0]?.label ?? initialSummary?.cta ?? "Open region page"}
-          </strong>
-          <p data-region-map-hud-meta-3>{initialSummary?.note ?? initialSummary?.body ?? ""}</p>
-        </article>
-      </section>
+      {showSupportChrome && (
+        <section class="region-map-hud" data-region-map-hud>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-1>Region</span>
+            <strong data-region-map-hud-value-1>{initialSummary?.title ?? initialRegionName ?? "Britain"}</strong>
+            <p data-region-map-hud-meta-1>{(initialSummary?.chips ?? [valueLabel])[0] ?? valueLabel}</p>
+          </article>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-2>
+              {initialSummary?.stats?.[0]?.label ?? "Current signal"}
+            </span>
+            <strong data-region-map-hud-value-2>{initialSummary?.stats?.[0]?.value ?? valueLabel}</strong>
+            <p data-region-map-hud-meta-2>{initialSummary?.stats?.[1]?.value ?? initialSummary?.body ?? ""}</p>
+          </article>
+          <article class="region-map-hud-card">
+            <span class="tiny" data-region-map-hud-label-3>
+              {initialSummary?.links?.length ? "Open next" : "Reading note"}
+            </span>
+            <strong data-region-map-hud-value-3>
+              {initialSummary?.links?.[0]?.label ?? initialSummary?.cta ?? "Open region page"}
+            </strong>
+            <p data-region-map-hud-meta-3>{initialSummary?.note ?? initialSummary?.body ?? ""}</p>
+          </article>
+        </section>
+      )}
 
-      <section class="region-map-shortlist" data-region-map-shortlist>
-        <div class="region-map-shortlist-head">
-          <span class="tiny">Quick shortlist</span>
-          <strong data-region-map-shortlist-title>Top regions in this view</strong>
-        </div>
-        <div class="region-map-shortlist-links" data-region-map-shortlist-links></div>
-      </section>
+      {showSupportChrome && (
+        <section class="region-map-shortlist" data-region-map-shortlist>
+          <div class="region-map-shortlist-head">
+            <span class="tiny">Quick shortlist</span>
+            <strong data-region-map-shortlist-title>Top regions in this view</strong>
+          </div>
+          <div class="region-map-shortlist-links" data-region-map-shortlist-links></div>
+        </section>
+      )}
 
       {showSummary && summaryMode === "overlay" && (
         <article class="region-map-summary is-overlay" data-region-map-summary-panel aria-live="polite">

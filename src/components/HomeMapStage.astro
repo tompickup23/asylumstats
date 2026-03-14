@@ -115,7 +115,7 @@ const payload = JSON.stringify({
       <h1 data-home-map-title>{scopeMeta.national.title}</h1>
       <p data-home-map-note>{scopeMeta.national.note}</p>
     </div>
-    <div class="chip-row home-map-meta">
+    <div class="chip-row home-map-meta" hidden>
       <span class="chip">{snapshotDate} local snapshot</span>
       <span class="chip teal">{placeDirectory.publicPlaceCount.toLocaleString()} public place pages</span>
       <span class="chip accent">

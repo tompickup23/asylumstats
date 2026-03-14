@@ -77,18 +77,14 @@ const mapSelectionLabel =
     <article class:list={["region-map-legend", legendMode === "overlay" && "is-overlay"]} data-region-map-legend>
       {compact && (
         <div class="region-map-legend-top">
-          <div class="chip-row">
-            <span class="chip accent">Map mode</span>
-            <span class="chip">{mapActionLabel}</span>
-          </div>
           <div class="region-map-controls" role="toolbar" aria-label="Regional map metric">
             {views.map((view) => (
               <button
                 type="button"
                 class:list={["chip", view.tone ?? "accent", view.id === activeView.id && "is-active"]}
                 data-region-map-view-button={view.id}
-                data-region-map-legend-title={view.legendTitle}
-                data-region-map-legend-body={view.legendBody}
+                data-region-map-button-legend-title={view.legendTitle}
+                data-region-map-button-legend-body={view.legendBody}
                 aria-pressed={view.id === activeView.id ? "true" : "false"}
               >
                 {view.label}
@@ -102,8 +98,8 @@ const mapSelectionLabel =
         <span>Higher</span>
       </div>
       <div class="region-map-legend-copy">
-        <strong data-region-map-legend-title>{activeView.legendTitle}</strong>
-        <p class="tiny" data-region-map-legend-body>{activeView.legendBody}</p>
+        <strong data-region-map-active-legend-title>{compact ? "Scale first" : activeView.legendTitle}</strong>
+        {!compact && <p class="tiny" data-region-map-active-legend-body>{activeView.legendBody}</p>}
       </div>
       {!compact && (
         <div class="chip-row">
@@ -184,17 +180,19 @@ const mapSelectionLabel =
         }
       }
 
-      const legendTitle = root.querySelector<HTMLElement>("[data-region-map-legend-title]");
-      const legendBody = root.querySelector<HTMLElement>("[data-region-map-legend-body]");
+      const legendTitle = root.querySelector<HTMLElement>("[data-region-map-active-legend-title]");
+      const legendBody = root.querySelector<HTMLElement>("[data-region-map-active-legend-body]");
       const legendSwatch = root.querySelector<HTMLElement>("[data-region-map-legend-swatch]");
 
       if (legendTitle) {
-        legendTitle.textContent = targetButton.dataset.regionMapLegendTitle ?? "Read the region map";
+        legendTitle.textContent = root.classList.contains("is-compact")
+          ? "Scale first"
+          : targetButton.dataset.regionMapButtonLegendTitle ?? "Read the region map";
       }
 
       if (legendBody) {
         legendBody.textContent =
-          targetButton.dataset.regionMapLegendBody ?? "Use the active metric to decide which regional page to open next.";
+          targetButton.dataset.regionMapButtonLegendBody ?? "Use the active metric to decide which regional page to open next.";
       }
 
       if (legendSwatch) {
