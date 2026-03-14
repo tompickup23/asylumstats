@@ -1063,9 +1063,19 @@ const payload = JSON.stringify({
         });
       }
 
+      const syncResponsiveMapFit = () => {
+        const preserveAspectRatio = window.matchMedia("(max-width: 560px)").matches ? "xMidYMin meet" : "xMidYMid meet";
+
+        for (const svg of root.querySelectorAll<SVGSVGElement>("[data-region-authority-svg]")) {
+          svg.setAttribute("preserveAspectRatio", preserveAspectRatio);
+        }
+      };
+
       updateCopy(payload.regionName);
       setMetric("total");
       updateMapNav();
+      syncResponsiveMapFit();
+      window.addEventListener("resize", syncResponsiveMapFit, { passive: true });
 
       const warmup = () => {
         void loadBoundaryPayload(payload.boundariesUrl).catch(() => {

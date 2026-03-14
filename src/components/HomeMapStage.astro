@@ -94,9 +94,11 @@ const payload = JSON.stringify({
   <div class="home-map-intro">
     <div class="home-map-topline">
       <div class="chip-row home-map-path">
-        <span class="chip accent" data-home-map-path-root>Britain</span>
-        <span class="chip" data-home-map-path-region hidden></span>
-        <span class="chip teal" data-home-map-path-area hidden></span>
+        <button type="button" class="chip accent" data-home-map-path-root data-home-map-scope-button="national">
+          Britain
+        </button>
+        <button type="button" class="chip" data-home-map-path-region data-home-map-scope-button="" hidden></button>
+        <button type="button" class="chip teal" data-home-map-path-area data-home-map-scope-button="" hidden></button>
       </div>
       <div class="home-map-nav">
         <button type="button" class="chip" data-home-map-back disabled aria-label="Zoom out to the previous map view">
@@ -534,6 +536,9 @@ const payload = JSON.stringify({
       const payload = JSON.parse(dataNode.textContent) as HomeMapPayload;
       const nationalPane = root.querySelector<HTMLElement>('[data-home-map-pane="national"]');
       const authorityStage = root.querySelector<HTMLElement>("[data-home-authority-stage]");
+      const nationalRegionMap = nationalPane?.querySelector<HTMLElement>("[data-region-map-root]") as
+        | (HTMLElement & { __updateRegionMapSummary?: (regionName?: string, trigger?: string) => void })
+        | null;
       const authoritySvg = root.querySelector<SVGSVGElement>("[data-home-authority-svg]");
       const eyebrow = root.querySelector<HTMLElement>("[data-home-map-eyebrow]");
       const title = root.querySelector<HTMLElement>("[data-home-map-title]");
@@ -542,6 +547,7 @@ const payload = JSON.stringify({
       const legendBody = root.querySelector<HTMLElement>("[data-home-authority-legend-body]");
       const legendSwatch = root.querySelector<HTMLElement>("[data-home-authority-swatch]");
       const caption = root.querySelector<HTMLElement>("[data-home-authority-caption]");
+      const pathRoot = root.querySelector<HTMLButtonElement>("[data-home-map-path-root]");
       const pathRegion = root.querySelector<HTMLElement>("[data-home-map-path-region]");
       const pathArea = root.querySelector<HTMLElement>("[data-home-map-path-area]");
       const backButton = root.querySelector<HTMLButtonElement>("[data-home-map-back]");
@@ -578,6 +584,7 @@ const payload = JSON.stringify({
         !legendBody ||
         !legendSwatch ||
         !caption ||
+        !pathRoot ||
         !pathRegion ||
         !pathArea ||
         !backButton ||
@@ -633,6 +640,18 @@ const payload = JSON.stringify({
           : "No deeper saved view";
       };
 
+      const syncDeckScope = (scopeId: string, trigger = "map-nav") => {
+        root.dispatchEvent(
+          new CustomEvent("region-map-scope", {
+            bubbles: true,
+            detail: {
+              scopeId,
+              trigger
+            }
+          })
+        );
+      };
+
       const rememberScope = (scopeId: string) => {
         if (scopeHistory[historyIndex] === scopeId) {
           updateMapNav();
@@ -658,6 +677,18 @@ const payload = JSON.stringify({
         node.className = tone ? `chip ${tone}` : "chip";
       };
 
+      const setScopeChip = (node: HTMLButtonElement | HTMLElement, scopeId: string | null, text: string | null, tone?: "accent" | "teal" | "warm") => {
+        setChip(node, text, tone);
+
+        if ("dataset" in node) {
+          if (scopeId) {
+            node.dataset.homeMapScopeButton = scopeId;
+          } else {
+            delete node.dataset.homeMapScopeButton;
+          }
+        }
+      };
+
       const setSignalCard = (
         labelNode: HTMLElement,
         valueNode: HTMLElement,
@@ -674,17 +705,18 @@ const payload = JSON.stringify({
       const updatePath = (meta: HomeMapScopeMeta) => {
         depthChip.textContent =
           meta.scopeKind === "national" ? "National lens" : meta.scopeKind === "region" ? "Regional lens" : "Authority lens";
-        setChip(pathRegion, null);
-        setChip(pathArea, null);
+        setScopeChip(pathRoot, payload.initialScopeId, "Britain", "accent");
+        setScopeChip(pathRegion, null, null);
+        setScopeChip(pathArea, null, null, "teal");
 
         if (meta.scopeKind === "region") {
-          setChip(pathRegion, meta.title);
+          setScopeChip(pathRegion, meta.scopeId, meta.title);
           return;
         }
 
         if (meta.scopeKind === "place") {
-          setChip(pathRegion, meta.regionName ?? currentRegionName ?? "Region");
-          setChip(pathArea, meta.title, "teal");
+          setScopeChip(pathRegion, meta.regionName ?? currentRegionName ?? "Region", meta.regionName ?? currentRegionName ?? "Region");
+          setScopeChip(pathArea, meta.scopeId, meta.title, "teal");
         }
       };
 
@@ -938,6 +970,7 @@ const payload = JSON.stringify({
         updateCopy(payload.initialScopeId);
         updateSignalBand(null, null);
         renderQuickPicks(null, null);
+        nationalRegionMap?.__updateRegionMapSummary?.("", "program");
       };
 
       const buildAreaMetricChip = (area: HomeMapAreaPayload) => {
@@ -1234,7 +1267,9 @@ const payload = JSON.stringify({
         }
 
         historyIndex -= 1;
-        void applyScope(scopeHistory[historyIndex] ?? payload.initialScopeId, false);
+        const scopeId = scopeHistory[historyIndex] ?? payload.initialScopeId;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-back");
       });
 
       forwardButton.addEventListener("click", () => {
@@ -1243,8 +1278,23 @@ const payload = JSON.stringify({
         }
 
         historyIndex += 1;
-        void applyScope(scopeHistory[historyIndex] ?? payload.initialScopeId, false);
+        const scopeId = scopeHistory[historyIndex] ?? payload.initialScopeId;
+        void applyScope(scopeId, false);
+        syncDeckScope(scopeId, "map-forward");
       });
+
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-map-scope-button]")) {
+        button.addEventListener("click", () => {
+          const scopeId = button.dataset.homeMapScopeButton;
+
+          if (!scopeId) {
+            return;
+          }
+
+          void applyScope(scopeId);
+          syncDeckScope(scopeId, "map-path");
+        });
+      }
 
       for (const button of root.querySelectorAll<HTMLButtonElement>("[data-home-authority-view]")) {
         button.addEventListener("click", () => {
@@ -1259,10 +1309,20 @@ const payload = JSON.stringify({
         });
       }
 
+      const syncResponsiveMapFit = () => {
+        const preserveAspectRatio = window.matchMedia("(max-width: 560px)").matches ? "xMidYMin meet" : "xMidYMid meet";
+
+        for (const svg of root.querySelectorAll<SVGSVGElement>(".region-map-canvas svg, [data-home-authority-svg]")) {
+          svg.setAttribute("preserveAspectRatio", preserveAspectRatio);
+        }
+      };
+
       updateCopy(payload.initialScopeId);
       setStageDepth("national");
       setMetric("total");
       updateMapNav();
+      syncResponsiveMapFit();
+      window.addEventListener("resize", syncResponsiveMapFit, { passive: true });
 
       const warmup = () => {
         void loadBoundaryPayload(payload.boundariesUrl).catch(() => {
