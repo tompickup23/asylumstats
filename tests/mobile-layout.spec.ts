@@ -49,15 +49,7 @@ const filteredViews = [
     expectedFocus: "prime_provider",
     expectedLocation: "entity_footprint=named_estate"
   },
-  {
-    name: "place-drilldown",
-    path: "/places/E09000028/?place_metric=contingency_accommodation&place_scope=national#place-drilldown",
-    root: "#place-drilldown",
-    summary: "[data-place-drill-summary]",
-    expectedSummary: /ranks \d+ of \d+ nationally|nationally on contingency accommodation/i,
-    expectedFocus: "contingency_accommodation",
-    expectedLocation: "place_scope=national"
-  }
+  // place-drilldown removed — section removed in place page trim
 ] as const;
 
 test.describe("mobile evidence-first layout", () => {
