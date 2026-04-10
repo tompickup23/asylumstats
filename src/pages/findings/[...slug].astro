@@ -1,0 +1,164 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const findings = await getCollection("findings");
+  return findings.map((finding) => {
+    const slug = finding.id.replace(/\.md$/, "");
+    return {
+      params: { slug },
+      props: { finding }
+    };
+  });
+}
+
+const { finding } = Astro.props;
+const { Content } = await render(finding);
+const findingSlug = finding.id.replace(/\.md$/, "");
+const ogImage = `/og/findings/${findingSlug}.png`;
+
+const verdictColor: Record<string, string> = {
+  alert: "#f59e0b",
+  critical: "#ef4444",
+  resolved: "#10b981",
+  info: "var(--accent)"
+};
+const verdictLabel: Record<string, string> = {
+  alert: "Alert",
+  critical: "Critical",
+  resolved: "Resolved",
+  info: "Info"
+};
+---
+
+<BaseLayout
+  title={`${finding.data.headline} — asylumstats`}
+  description={finding.data.summary}
+  image={ogImage}
+>
+  <article class="finding-detail shell">
+    <div class="finding-detail-meta">
+      <span
+        class="finding-verdict-badge"
+        style={`background: ${verdictColor[finding.data.verdict]}20; color: ${verdictColor[finding.data.verdict]};`}
+      >
+        {verdictLabel[finding.data.verdict]}
+      </span>
+      <span class="finding-detail-date">{finding.data.date}</span>
+    </div>
+
+    <h1 class="finding-detail-headline">{finding.data.headline}</h1>
+
+    <div class="finding-detail-stat">
+      <span class="fds-value" style={`color: ${verdictColor[finding.data.verdict]};`}>
+        {finding.data.stat_value}
+      </span>
+      <span class="fds-label">{finding.data.stat_label}</span>
+    </div>
+
+    <div class="finding-detail-body">
+      <Content />
+    </div>
+
+    <footer class="finding-detail-footer">
+      <a href={finding.data.source_url} target="_blank" rel="noopener" class="finding-detail-source">
+        {finding.data.source_label} — verify this &rarr;
+      </a>
+      <a href="/findings/" class="finding-back">&larr; All findings</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .finding-detail {
+    max-width: 720px;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .finding-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .finding-verdict-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+  }
+  .finding-detail-date {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .finding-detail-headline {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+  }
+
+  .finding-detail-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .fds-value {
+    font-family: "Sora", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .fds-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .finding-detail-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .finding-detail-body :global(strong) {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .finding-detail-body :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .finding-detail-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .finding-detail-source {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .finding-detail-source:hover { text-decoration: underline; }
+  .finding-back {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .finding-back:hover { color: var(--ink); }
+</style>

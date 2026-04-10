@@ -113,20 +113,15 @@ const structuredData = [
     {socialImageMime && <meta property="og:image:type" content={socialImageMime} />}
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="asylumstats social card for UK asylum accountability data." />
+    <meta property="og:image:alt" content={`${pageTitle} — asylumstats.co.uk`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
-    <meta name="twitter:image:alt" content="asylumstats social card for UK asylum accountability data." />
+    <meta name="twitter:image:alt" content={`${pageTitle} — asylumstats.co.uk`} />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fonts self-hosted via Fontsource (imported in global.css) -->
     {structuredData.map((item) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
     ))}
@@ -139,8 +134,9 @@ const structuredData = [
     </main>
     {!hideFooter && (
       <footer class="shell footer">
-        asylumstats now leads with regions, places, hotel visibility inside local pages, and asylum-system logic with
-        source-linked evidence and explicit scope rules.
+        Every number on this site links to its source. No spin. No hedging. Just data. &middot;
+        <a href="/sources/">Sources</a> &middot;
+        <a href="/methodology/">Methodology</a>
       </footer>
     )}
   </body>

@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const findings = (await getCollection("findings")).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const verdictColor: Record<string, string> = {
+  alert: "var(--accent-3)",
+  critical: "#ef4444",
+  resolved: "#10b981",
+  info: "var(--accent)"
+};
+
+const categoryLabel: Record<string, string> = {
+  spending: "Spending",
+  routes: "Routes",
+  demographics: "Demographics",
+  backlog: "Backlog",
+  accountability: "Accountability"
+};
+---
+
+<BaseLayout
+  title="Findings — asylumstats"
+  description="Data-backed findings on UK asylum costs, routes, and the system. Every number sourced. No spin."
+>
+  <section class="findings-header shell">
+    <h1>Findings</h1>
+    <p class="findings-intro">
+      Every finding is backed by data. Every number links to its source.
+      Share them. Challenge them. Hold the government to account.
+    </p>
+  </section>
+
+  <section class="findings-grid shell">
+    {findings.map((finding) => (
+      <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-card">
+        <div class="finding-meta">
+          <span class="finding-category">{categoryLabel[finding.data.category] ?? finding.data.category}</span>
+          <span class="finding-date">{finding.data.date}</span>
+        </div>
+        <h2 class="finding-headline">{finding.data.headline}</h2>
+        <div class="finding-stat-row">
+          <span class="finding-stat" style={`color: ${verdictColor[finding.data.verdict]}`}>
+            {finding.data.stat_value}
+          </span>
+          <span class="finding-stat-label">{finding.data.stat_label}</span>
+        </div>
+        <p class="finding-summary">{finding.data.summary}</p>
+        <span class="finding-source">{finding.data.source_label} &rarr;</span>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .findings-header {
+    padding-top: 2.5rem;
+  }
+  .findings-header h1 {
+    font-family: "Sora", sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+  }
+  .findings-intro {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 550px;
+    margin: 0.5rem 0 0;
+  }
+
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .finding-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 180ms, box-shadow 180ms, transform 120ms;
+  }
+  .finding-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+
+  .finding-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .finding-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: rgba(125, 211, 252, 0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+  }
+  .finding-date {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .finding-headline {
+    font-family: "Sora", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .finding-stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .finding-stat {
+    font-family: "Sora", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .finding-stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .finding-summary {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .finding-source {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: auto;
+  }
+</style>

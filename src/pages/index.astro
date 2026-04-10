@@ -1,382 +1,609 @@
 ---
-import HomeMapStage from "../components/HomeMapStage.astro";
-import HomeSystemDeck from "../components/HomeSystemDeck.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
-import { buildPlaceRegionMapViews } from "../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
+import { loadMoneyLedger } from "../lib/money-data";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
+const moneyLedger = loadMoneyLedger();
 const placeDirectory = getPlaceDirectory();
-const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
-const homepageRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
+
+const dailyCostRecord = moneyLedger.records.find(
+  (r: any) => r.valueKind === "daily_cost_average" && r.valueGbp > 0
+);
+const dailyCostGbp = dailyCostRecord?.valueGbp ?? 5_770_000;
+const dailyCostSource = dailyCostRecord?.sourceUrl ?? "";
+
+const tenYearRecord = moneyLedger.records.find(
+  (r: any) => r.valueKind === "forecast_total" && r.valueGbp > 0
+);
+const tenYearGbp = tenYearRecord?.valueGbp ?? 15_300_000_000;
+
+function fmtInt(n: number) { return n.toLocaleString("en-GB"); }
+function fmtGbp(n: number) {
+  if (n >= 1_000_000_000) return `£${(n / 1_000_000_000).toFixed(1)}B`;
+  if (n >= 1_000_000) return `£${(n / 1_000_000).toFixed(2)}M`;
+  return `£${fmtInt(n)}`;
+}
+
 const regionalByTotal = [...placeDirectory.regions].sort(
-  (left, right) => right.supportedAsylum - left.supportedAsylum || left.regionName.localeCompare(right.regionName)
+  (a, b) => b.supportedAsylum - a.supportedAsylum
 );
-const regionalByRate = [...placeDirectory.regions].sort(
-  (left, right) =>
-    right.supportedAsylumRate - left.supportedAsylumRate || right.supportedAsylum - left.supportedAsylum
-);
-const regionalByHotel = [...placeDirectory.regions].sort(
-  (left, right) =>
-    right.hotelLinkedPlaceCount - left.hotelLinkedPlaceCount ||
-    right.namedCurrentSiteCount - left.namedCurrentSiteCount ||
-    right.supportedAsylum - left.supportedAsylum
-);
-const leadRegion = regionalByTotal[0];
-const leadHotelRegion = regionalByHotel[0];
-const leadRateRegion = regionalByRate[0];
-const hotelShare = latestQuarter.hotelShareOfSupportPct ?? 0;
-const nationalScopeId = "national";
-
-type HomeEntry = {
-  scopeId: string;
-  parentScopeId?: string;
-  parentLabel?: string;
-  eyebrow: string;
-  title: string;
-  note: string;
-  scopeHref?: string;
-  scopeActionLabel?: string;
-  linksLabel: string;
-  stats: Array<{
-    label: string;
-    value: string;
-    context: string;
-  }>;
-  links: Array<{
-    label: string;
-    href: string;
-    meta: string;
-    scopeId?: string;
-    actionLabel?: string;
-  }>;
-  visualIntro: string;
-  visualGroups: Array<{
-    title: string;
-    bars: Array<{
-      label: string;
-      value: string;
-      meta: string;
-      widthPct: number;
-      tone: "accent" | "teal" | "warm" | "slate";
-    }>;
-  }>;
-};
-
-function formatInteger(value: number): string {
-  return value.toLocaleString();
-}
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("en-GB", {
-    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
-    maximumFractionDigits: Number.isInteger(value) ? 0 : 2
-  }).format(value);
-}
-
-function formatPct(value: number): string {
-  return `${formatNumber(value)}%`;
-}
-
-function buildBar(
-  label: string,
-  value: number,
-  scale: number,
-  tone: "accent" | "teal" | "warm" | "slate",
-  meta: string
-) {
-  return {
-    label,
-    value: Number.isInteger(value) ? formatInteger(value) : formatNumber(value),
-    meta,
-    widthPct: scale > 0 ? (value / scale) * 100 : 0,
-    tone
-  };
-}
-
-function buildAreaPath(areaCode: string): string {
-  return `/places/${areaCode}/`;
-}
-
-function describeHotelSignal(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {
-  if (row.hotelSignal === "named") {
-    return `${row.namedCurrentSiteCount} named current hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible`;
-  }
-
-  if (row.hotelSignal === "unnamed") {
-    return `${row.unnamedSiteCount} unnamed acknowledged hotel site${row.unnamedSiteCount === 1 ? "" : "s"}`;
-  }
-
-  return "No named current hotel site visible";
-}
-
-function describeHotelSignalShort(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {
-  if (row.hotelSignal === "named") {
-    return "Named current site visible";
-  }
-
-  if (row.hotelSignal === "unnamed") {
-    return "Unnamed hotel evidence only";
-  }
-
-  return "No named site visible";
-}
-
-function buildRegionPreviewRows(region: (typeof placeDirectory.regions)[number]) {
-  const uniqueRows = new Map<string, (typeof region.areas)[number]>();
-  const byRate = [...region.areas].sort(
-    (left, right) =>
-      (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
-      right.area.supportedAsylum - left.area.supportedAsylum
-  );
-  const hotelRows = region.areas.filter((row) => row.hotelSignal !== "none");
-
-  for (const row of [...region.areas, ...byRate, ...hotelRows]) {
-    if (!uniqueRows.has(row.area.areaCode)) {
-      uniqueRows.set(row.area.areaCode, row);
-    }
-
-    if (uniqueRows.size >= 2) {
-      break;
-    }
-  }
-
-  return [...uniqueRows.values()];
-}
-
-function buildAreaNote(row: (typeof placeDirectory.regions)[number]["areas"][number]) {
-  const area = row.area;
-
-  if (row.hotelSignal === "named") {
-    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. ${row.namedCurrentSiteCount} named hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible.`;
-  }
-
-  if (row.hotelSignal === "unnamed") {
-    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. Hotel use is visible but unnamed.`;
-  }
-
-  return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. No named hotel site is public yet.`;
-}
-
-const priorityRegions = (() => {
-  const seen = new Set<string>();
-  const picks: (typeof placeDirectory.regions)[number][] = [];
-
-  for (const candidate of [leadRegion, leadRateRegion, leadHotelRegion, ...regionalByTotal]) {
-    if (!candidate || seen.has(candidate.regionName)) {
-      continue;
-    }
-
-    picks.push(candidate);
-    seen.add(candidate.regionName);
-
-    if (picks.length >= 2) {
-      break;
-    }
-  }
-
-  return picks;
-})();
-
-const homeEntries: Record<string, HomeEntry> = {
-  [nationalScopeId]: {
-    scopeId: nationalScopeId,
-    eyebrow: `National snapshot | ${latestQuarter.stockPeriodLabel ?? latestQuarter.quarterLabel ?? localRouteLatest.snapshotDate}`,
-    title: "Britain now",
-    note: `${formatInteger(latestQuarter.supportedAsylum)} on support. ${formatInteger(latestQuarter.hotelAccommodation)} in hotels.`,
-    linksLabel: "Start with these regions",
-    stats: [
-      {
-        label: "Supported asylum",
-        value: formatInteger(latestQuarter.supportedAsylum),
-        context: `Stock | ${latestQuarter.stockPeriodLabel ?? "latest stock point"}`
-      },
-      {
-        label: "Awaiting decision",
-        value: formatInteger(latestQuarter.awaitingInitialDecision),
-        context: "Initial-decision stock"
-      },
-      {
-        label: "Hotel accommodation",
-        value: formatInteger(latestQuarter.hotelAccommodation),
-        context: `${formatPct(hotelShare)} of support`
-      }
-    ],
-    links: priorityRegions.map((region) => ({
-      label: region.regionName,
-      href: region.regionPath,
-      meta: `${formatInteger(region.supportedAsylum)} on support · ${formatNumber(region.supportedAsylumRate)} per 10,000`,
-      scopeId: region.regionName,
-      actionLabel: "Preview region"
-    })),
-    visualIntro:
-      "The map gives geography. This view shows the biggest regional stock first.",
-    visualGroups: [
-      {
-        title: "Largest regional totals",
-        bars: regionalByTotal.slice(0, 4).map((region) =>
-          buildBar(
-            region.regionName,
-            region.supportedAsylum,
-            regionalByTotal[0]?.supportedAsylum ?? 1,
-            "accent",
-            `${formatInteger(region.publicPlaceCount)} place pages`
-          )
-        )
-      }
-    ]
-  }
-};
-
-for (const region of placeDirectory.regions) {
-  const previewRows = buildRegionPreviewRows(region);
-  const accommodationAverage = Math.round(region.supportedAsylum / Math.max(region.publicPlaceCount, 1));
-
-  homeEntries[region.regionName] = {
-    scopeId: region.regionName,
-    parentScopeId: nationalScopeId,
-    parentLabel: "Britain",
-    eyebrow: `${region.countryName} region`,
-    title: region.regionName,
-    note: `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Pick one on the map.`,
-    scopeHref: region.regionPath,
-    scopeActionLabel: "Open region page",
-    linksLabel: "Open one local authority",
-    stats: [
-      {
-        label: "Supported asylum",
-        value: formatInteger(region.supportedAsylum),
-        context: `${formatInteger(region.publicPlaceCount)} public place pages`
-      },
-      {
-        label: "Regional rate",
-        value: region.supportedAsylumRate === null ? "n/a" : formatNumber(region.supportedAsylumRate),
-        context: "Supported asylum per 10,000 residents"
-      },
-      {
-        label: "Contingency",
-        value: formatInteger(region.contingencyAccommodation),
-        context: "People in contingency accommodation"
-      }
-    ],
-    links: previewRows.map((row) => ({
-      label: row.area.areaName,
-      href: buildAreaPath(row.area.areaCode),
-      meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
-      scopeId: row.area.areaCode,
-      actionLabel: "Preview place"
-    })),
-    visualIntro:
-      "The regional map tells you where to open next.",
-    visualGroups: [
-      {
-        title: `Largest local totals in ${region.regionName}`,
-        bars: region.areas.slice(0, 3).map((row) =>
-          buildBar(
-            row.area.areaName,
-            row.area.supportedAsylum,
-            region.leadArea?.area.supportedAsylum ?? 1,
-            "accent",
-            describeHotelSignal(row)
-          )
-        )
-      }
-    ]
-  };
-
-  for (const row of region.areas) {
-    const area = row.area;
-    const regionalLead = region.leadArea?.area ?? area;
-    const comparisonScale = Math.max(regionalLead.supportedAsylum, accommodationAverage, area.supportedAsylum, 1);
-
-    homeEntries[area.areaCode] = {
-      scopeId: area.areaCode,
-      parentScopeId: region.regionName,
-      parentLabel: region.regionName,
-      eyebrow: `${region.regionName} local page`,
-      title: area.areaName,
-      note: buildAreaNote(row),
-      scopeHref: buildAreaPath(area.areaCode),
-      scopeActionLabel: "Open place page",
-      linksLabel: "Also open",
-      stats: [
-        {
-          label: "Supported asylum",
-          value: formatInteger(area.supportedAsylum),
-          context: area.snapshotDate
-        },
-        {
-          label: "Local rate",
-          value: area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate),
-          context: "Per 10,000"
-        },
-        {
-          label: "Contingency",
-          value: formatInteger(area.contingencyAccommodation),
-          context: "In contingency"
-        }
-      ],
-      links: [
-        {
-          label: `Open ${region.regionName}`,
-          href: region.regionPath,
-          meta: "Regional page"
-        }
-      ],
-      visualIntro:
-        "This is the last narrowing step on the homepage.",
-      visualGroups: [
-        {
-          title: `Within ${region.regionName}`,
-          bars: [
-            buildBar(area.areaName, area.supportedAsylum, comparisonScale, "accent", "This local authority"),
-            buildBar(
-              regionalLead.areaName,
-              regionalLead.supportedAsylum,
-              comparisonScale,
-              "slate",
-              "Regional lead by supported asylum"
-            ),
-            buildBar(
-              "Regional average",
-              accommodationAverage,
-              comparisonScale,
-              "teal",
-              `${formatInteger(region.publicPlaceCount)} place pages in view`
-            )
-          ]
-        }
-      ]
-    };
-  }
-}
+const topAreas = localRouteLatest.areas
+  .filter((a) => a.supportedAsylum >= 200)
+  .sort((a, b) => (b.supportedAsylumRate ?? 0) - (a.supportedAsylumRate ?? 0))
+  .slice(0, 8);
 ---
 
 <BaseLayout
-  title="asylumstats | UK asylum accountability"
-  description="A map-led UK asylum accountability site. Start with Britain, then open one region and one place while keeping national asylum-system logic separate."
-  bodyClass="home-layout"
-  mainClass="home-main"
-  hideFooter={true}
+  title="asylumstats — Follow YOUR money"
+  description={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. ${fmtInt(latestQuarter.awaitingInitialDecision)} people waiting for a decision. Track where YOUR money goes.`}
+  image="/og/home.png"
 >
-  <section class="section section-anchor priority-section home-screen" id="read-this-first">
-    <div class="home-left">
-      <article class="home-map-panel">
-        <HomeMapStage
-          id="homepage-britain-map"
-          placeDirectory={placeDirectory}
-          snapshotDate={localRouteLatest.snapshotDate}
-          views={homepageRegionMapViews}
-        />
-      </article>
+  <!-- HERO: Impact-first -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Home Office asylum spending</div>
+      <h1 class="hero-headline">
+        <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
+        <span class="hero-label">spent PER DAY on asylum accommodation</span>
+      </h1>
+      <p class="hero-subline">
+        That's YOUR money. {fmtGbp(tenYearGbp)} committed over 10 years.
+        {fmtInt(latestQuarter.awaitingInitialDecision)} people still waiting for a decision.
+      </p>
+      {dailyCostSource && (
+        <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
+          Source: NAO / Home Office &rarr;
+        </a>
+      )}
     </div>
+  </section>
 
-    <aside class="home-right">
-      <HomeSystemDeck entries={homeEntries} initialScopeId={nationalScopeId} targetMapId="homepage-britain-map" />
-    </aside>
+  <!-- KEY STATS -->
+  <section class="stats-grid shell" id="headline-stats">
+    <article class="stat-card stat-card--accent">
+      <span class="stat-value">{fmtInt(latestQuarter.supportedAsylum)}</span>
+      <span class="stat-label">On asylum support</span>
+      <span class="stat-context">Stock at {latestQuarter.stockPeriodLabel}</span>
+    </article>
+    <article class="stat-card stat-card--warn">
+      <span class="stat-value">{fmtInt(latestQuarter.awaitingInitialDecision)}</span>
+      <span class="stat-label">Awaiting a decision</span>
+      <span class="stat-context">Initial-decision backlog</span>
+    </article>
+    <article class="stat-card stat-card--coral">
+      <span class="stat-value">{fmtInt(latestQuarter.hotelAccommodation)}</span>
+      <span class="stat-label">In hotel accommodation</span>
+      <span class="stat-context">{latestQuarter.hotelShareOfSupportPct}% of all support</span>
+    </article>
+    <article class="stat-card stat-card--teal">
+      <span class="stat-value">{fmtInt(routeDashboard.nationalCards[0]?.value ?? 0)}</span>
+      <span class="stat-label">Small boat arrivals</span>
+      <span class="stat-context">{routeDashboard.nationalCards[0]?.period ?? "2025"}</span>
+    </article>
+  </section>
+
+  <!-- YOUR AREA LOOKUP -->
+  <section class="lookup-section shell" id="your-area">
+    <div class="lookup-inner">
+      <h2 class="lookup-title">What's happening in YOUR area?</h2>
+      <p class="lookup-desc">Search for any local authority to see asylum seekers, costs, and demographic data.</p>
+      <div class="lookup-field">
+        <input
+          type="search"
+          id="area-search"
+          placeholder="Type a council name — e.g. Birmingham, Burnley, Glasgow..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <div class="lookup-results" id="area-results"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGIONAL PRESSURE -->
+  <section class="pressure-section shell" id="regional-pressure">
+    <h2 class="section-title">Where the pressure falls</h2>
+    <p class="section-desc">
+      Asylum seekers are not evenly distributed. Some regions carry far more than their share.
+    </p>
+    <div class="region-grid">
+      {regionalByTotal.slice(0, 6).map((region) => (
+        <a href={region.regionPath} class="region-card">
+          <span class="region-name">{region.regionName}</span>
+          <span class="region-stat">{fmtInt(region.supportedAsylum)}</span>
+          <span class="region-rate">{region.supportedAsylumRate?.toFixed(1) ?? "—"} per 10,000</span>
+        </a>
+      ))}
+    </div>
+    <a href="/places/" class="cta-link">See all 361 areas &rarr;</a>
+  </section>
+
+  <!-- TOP AREAS BY RATE -->
+  <section class="top-areas-section shell" id="top-areas">
+    <h2 class="section-title">Highest concentration areas</h2>
+    <p class="section-desc">Local authorities with the most asylum seekers per 10,000 population.</p>
+    <div class="area-table">
+      <div class="area-table-header">
+        <span>Area</span>
+        <span>Per 10,000</span>
+        <span>Total</span>
+      </div>
+      {topAreas.map((area, i) => (
+        <a href={`/places/${area.areaCode}/`} class="area-row">
+          <span class="area-rank">{i + 1}</span>
+          <span class="area-name">{area.areaName}</span>
+          <span class="area-rate">{area.supportedAsylumRate?.toFixed(1)}</span>
+          <span class="area-total">{fmtInt(area.supportedAsylum)}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ROUTE BREAKDOWN -->
+  <section class="routes-section shell" id="routes">
+    <h2 class="section-title">How they get here</h2>
+    <p class="section-desc">
+      Not all asylum routes are the same. The government treats them differently. So should you.
+    </p>
+    <div class="route-cards">
+      {routeDashboard.routeFamilies.slice(0, 6).map((route) => (
+        <div class="route-card">
+          <span class="route-label">{route.label}</span>
+          <span class="route-value">{fmtInt(route.latestValue)}</span>
+          <span class="route-period">{route.latestPeriod}</span>
+        </div>
+      ))}
+    </div>
+    <a href="/routes/" class="cta-link">Full route analysis &rarr;</a>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section class="cta-section shell">
+    <div class="cta-inner">
+      <h2>This is YOUR money.</h2>
+      <p>Every number on this site links to its official source. Share it. Challenge it. Hold them to account.</p>
+      <div class="cta-buttons">
+        <a href="/places/" class="cta-btn cta-btn--primary">Search your area</a>
+        <a href="/routes/" class="cta-btn cta-btn--secondary">Follow the routes</a>
+        <a href="/sources/" class="cta-btn cta-btn--ghost">Check our sources</a>
+      </div>
+    </div>
   </section>
 </BaseLayout>
+
+<script>
+  const searchInput = document.getElementById("area-search") as HTMLInputElement | null;
+  const resultsContainer = document.getElementById("area-results");
+
+  if (searchInput && resultsContainer) {
+    let areas: Array<{ areaCode: string; areaName: string; regionName: string; supportedAsylum: number; supportedAsylumRate: number | null }> = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          areas = data;
+        } else if (data.areas) {
+          areas = data.areas;
+        }
+      })
+      .catch(() => {});
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      resultsContainer.innerHTML = "";
+
+      if (query.length < 2) {
+        resultsContainer.hidden = true;
+        return;
+      }
+
+      const matches = areas
+        .filter((a) => a.areaName.toLowerCase().includes(query))
+        .slice(0, 8);
+
+      if (matches.length === 0) {
+        resultsContainer.hidden = true;
+        return;
+      }
+
+      resultsContainer.hidden = false;
+      for (const area of matches) {
+        const link = document.createElement("a");
+        link.href = `/places/${area.areaCode}/`;
+        link.className = "lookup-result";
+        link.innerHTML = `
+          <strong>${area.areaName}</strong>
+          <span>${area.regionName} &middot; ${area.supportedAsylum.toLocaleString()} on support</span>
+        `;
+        resultsContainer.appendChild(link);
+      }
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        resultsContainer.hidden = true;
+        searchInput.value = "";
+      }
+    });
+  }
+</script>
+
+<style>
+  /* HERO */
+  .hero-section {
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+  }
+  .hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: "Sora", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .hero-headline {
+    margin: 0;
+    line-height: 1.1;
+  }
+  .hero-stat {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .hero-label {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.25rem;
+  }
+  .hero-subline {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 1.25rem auto 0;
+    line-height: 1.6;
+  }
+  .hero-source {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 180ms;
+  }
+  .hero-source:hover { opacity: 1; }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .stat-value {
+    font-family: "Sora", sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-card--accent .stat-value { color: var(--accent); }
+  .stat-card--warn .stat-value { color: #f59e0b; }
+  .stat-card--coral .stat-value { color: var(--accent-3); }
+  .stat-card--teal .stat-value { color: var(--accent-2); }
+  .stat-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .stat-context {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* AREA LOOKUP */
+  .lookup-section {
+    margin-top: 3rem;
+    padding: 2.5rem 0;
+  }
+  .lookup-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .lookup-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+  }
+  .lookup-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0.5rem 0 1.5rem;
+  }
+  .lookup-field {
+    position: relative;
+  }
+  .lookup-field input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 180ms;
+  }
+  .lookup-field input::placeholder {
+    color: var(--muted);
+    opacity: 0.7;
+  }
+  .lookup-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .lookup-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 50;
+  }
+  .lookup-results[hidden] { display: none; }
+  .lookup-results :global(.lookup-result) {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms;
+  }
+  .lookup-results :global(.lookup-result:hover) {
+    background: rgba(125, 211, 252, 0.08);
+  }
+  .lookup-results :global(.lookup-result strong) {
+    font-size: 0.95rem;
+  }
+  .lookup-results :global(.lookup-result span) {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* REGIONAL PRESSURE */
+  .pressure-section, .top-areas-section, .routes-section {
+    margin-top: 3rem;
+  }
+  .section-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 0.25rem;
+  }
+  .section-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 1.5rem;
+    max-width: 600px;
+  }
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  .region-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-decoration: none;
+    transition: border-color 180ms, box-shadow 180ms;
+  }
+  .region-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+  .region-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .region-stat {
+    font-family: "Sora", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .region-rate {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* TOP AREAS TABLE */
+  .area-table {
+    max-width: 640px;
+  }
+  .area-table-header {
+    display: grid;
+    grid-template-columns: 1fr 100px 100px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .area-row {
+    display: grid;
+    grid-template-columns: auto 1fr 100px 100px;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms;
+  }
+  .area-row:hover {
+    background: rgba(125, 211, 252, 0.06);
+  }
+  .area-rank {
+    width: 24px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .area-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .area-rate {
+    font-family: "Sora", sans-serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  .area-total {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ROUTE CARDS */
+  .route-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+  .route-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .route-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .route-value {
+    font-family: "Sora", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .route-period {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  /* CTA */
+  .cta-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .cta-link:hover { text-decoration: underline; }
+
+  .cta-section {
+    margin-top: 4rem;
+    padding: 3rem 0 4rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .cta-inner h2 {
+    font-family: "Sora", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+  }
+  .cta-inner p {
+    color: var(--muted);
+    margin: 0.75rem 0 1.5rem;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 120ms, box-shadow 120ms;
+  }
+  .cta-btn:hover {
+    transform: translateY(-1px);
+  }
+  .cta-btn--primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .cta-btn--secondary {
+    background: rgba(125, 211, 252, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(125, 211, 252, 0.3);
+  }
+  .cta-btn--ghost {
+    color: var(--muted);
+    border: 1px solid var(--border-strong);
+  }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    .hero-section { padding: 2.5rem 1rem 2rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .area-table-header, .area-row { grid-template-columns: auto 1fr 70px 70px; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+  }
+</style>

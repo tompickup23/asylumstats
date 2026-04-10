@@ -1,9 +1,9 @@
 ---
 const navItems = [
   { href: "/places", label: "Places", priority: true },
-  { href: "/routes", label: "System", priority: true },
-  { href: "/sources", label: "Sources" },
-  { href: "/methodology", label: "Method" }
+  { href: "/routes", label: "Routes", priority: true },
+  { href: "/findings", label: "Findings", priority: true },
+  { href: "/sources", label: "Sources" }
 ];
 
 const pathname = Astro.url.pathname;
@@ -22,7 +22,7 @@ function isActive(href: string): boolean {
     <span class="brand-mark">AS</span>
     <span class="brand-copy">
       <span>asylumstats</span>
-      <small>UK asylum accountability</small>
+      <small>Follow YOUR money</small>
     </span>
   </a>
 
