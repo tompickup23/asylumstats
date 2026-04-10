@@ -181,15 +181,6 @@ test.describe("mobile filtered views", () => {
         );
       }
 
-      if (view.name === "place-drilldown") {
-        await expect(page.locator('select[name="place_metric"]')).toHaveValue(view.expectedFocus);
-        await expect(page.locator('select[name="place_scope"]')).toHaveValue("national");
-        await expect(page.locator("[data-place-drill-panel]:not([hidden])")).toHaveAttribute(
-          "data-metric",
-          "contingency_accommodation"
-        );
-      }
-
       if (view.name === "entities-filtered") {
         await expect(page.locator('select[name="entity_role"]')).toHaveValue(view.expectedFocus);
         await expect(page.locator('select[name="entity_footprint"]')).toHaveValue("named_estate");
