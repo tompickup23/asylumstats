@@ -279,7 +279,7 @@ export const GET: APIRoute = async ({ props }) => {
 
   const png = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer();
 
-  return new Response(png, {
+  return new Response(png as unknown as BodyInit, {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control": "public, max-age=86400"
