@@ -16,8 +16,8 @@ const pages = [
 ] as const;
 
 const placePages = [
-  { name: "birmingham", path: "/places/E08000025/", focus: "#place-findings" },
-  { name: "north-yorkshire", path: "/places/E06000065/", focus: "#place-findings" }
+  { name: "birmingham", path: "/places/E08000025/", focus: "#place-summary" },
+  { name: "north-yorkshire", path: "/places/E06000065/", focus: "#place-summary" }
 ] as const;
 
 const filteredViews = [

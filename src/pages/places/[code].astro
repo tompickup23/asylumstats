@@ -1,25 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import DataDrawer from "../../components/DataDrawer.astro";
-import InvestigationTrail from "../../components/InvestigationTrail.astro";
-import PageGuide from "../../components/PageGuide.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
-import RegionTileMap from "../../components/RegionTileMap.astro";
 import TrendChart from "../../components/TrendChart.astro";
-import {
-  buildSupportedAsylumStockDescription,
-  supportedAsylumReadingRules
-} from "../../lib/asylum-support-logic";
+import { buildSupportedAsylumStockDescription } from "../../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
-import { getEntityProfileByReference, getEntityProfiles, getLeadEntityProfileForTrail } from "../../lib/entities";
+import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
-import { getPlaceInvestigationTrails } from "../../lib/investigations";
-import { loadMoneyLedger } from "../../lib/money-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
-import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
 import { getEthnicProjection, getEthnicCompositionTimeline } from "../../lib/ethnic-projections";
 import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
 import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
@@ -28,13 +18,11 @@ import { computePressureScore } from "../../lib/pressure-index";
 import {
   formatOrdinal,
   getDistributionStats,
-  getPercentileRank,
-  getRegionPressureSummaries
+  getPercentileRank
 } from "../../lib/route-analytics";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
-const moneyLedger = loadMoneyLedger();
 
 export function getStaticPaths() {
   return getPublicPlaceAreas().map((area) => ({
@@ -51,25 +39,19 @@ const hotelArea = hotelLedger.areas.find(
   (a) => a.areaCode === area.areaCode || a.areaName === area.areaName
 );
 const currentHotelSites = hotelSites.filter((site) => site.status === "current");
-const historicalHotelSites = hotelSites.filter((site) => site.status !== "current");
 const namedSiteCount = currentHotelSites.length;
 const unnamedSiteCount = hotelArea?.unnamedSiteCount ?? 0;
-const unresolvedCurrentHotelSites = currentHotelSites.filter((site) => site.entityCoverage === "unresolved");
-const partiallyResolvedCurrentHotelSites = currentHotelSites.filter((site) => site.entityCoverage === "partial");
-const hotelNarrativeSites = currentHotelSites.slice(0, 4);
+
 const regionalAreas = [...localRouteLatest.areas]
   .filter((candidate) => candidate.regionName === area.regionName)
   .sort((a, b) => b.supportedAsylum - a.supportedAsylum);
 const regionalRank = regionalAreas.findIndex((candidate) => candidate.areaCode === area.areaCode) + 1;
 const regionalPeerRows = (() => {
   const leadingPeers = regionalAreas.slice(0, 5);
-
-  if (leadingPeers.some((candidate) => candidate.areaCode === area.areaCode)) {
-    return leadingPeers;
-  }
-
+  if (leadingPeers.some((candidate) => candidate.areaCode === area.areaCode)) return leadingPeers;
   return [...leadingPeers, area];
 })();
+
 const areaRank =
   [...localRouteLatest.areas]
     .sort((a, b) => b.supportedAsylum - a.supportedAsylum)
@@ -78,6 +60,7 @@ const contingencyRank =
   [...localRouteLatest.areas]
     .sort((a, b) => b.contingencyAccommodation - a.contingencyAccommodation)
     .findIndex((candidate) => candidate.areaCode === area.areaCode) + 1;
+
 const pathwayBreakdown = [
   { label: "Supported asylum", value: area.supportedAsylum },
   { label: "Homes for Ukraine", value: area.homesForUkraineArrivals },
@@ -85,232 +68,25 @@ const pathwayBreakdown = [
   { label: "Resettlement cumulative", value: area.resettlementCumulativeTotal ?? 0 }
 ];
 const maxPathwayValue = Math.max(...pathwayBreakdown.map((item) => item.value), 1);
-const hotelSignals = hotelSites
-  .flatMap((site) =>
-    site.integritySignals.map((signal) => ({
-      siteName: site.siteName,
-      headline: signal.headline,
-      detail: signal.detail,
-      severity: signal.severity
-    }))
-  )
-  .slice(0, 3);
+
 const areaTrend = getAreaTrendSummary(area.areaCode);
-const previousTrendPoint = areaTrend ? areaTrend.points[areaTrend.points.length - 2] ?? null : null;
-const placeDrilldownMetrics = getPlaceDrilldownMetrics(localRouteLatest.areas, area);
-const placeInvestigationTrails = getPlaceInvestigationTrails(area, hotelLedger, moneyLedger, localRouteLatest.areas, 3);
+
 const regionalPrimeProviderCoverage = getAreaRegionalPrimeProviderCoverage(
-  area,
-  getEntityProfiles(),
-  localRouteLatest.areas,
-  hotelLedger.areas
+  area, getEntityProfiles(), localRouteLatest.areas, hotelLedger.areas
 );
-const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
-const currentRegion = regionalPressure.find((region) => region.regionName === area.regionName);
-const supportedStats = getDistributionStats(localRouteLatest.areas.map((candidate) => candidate.supportedAsylum));
-const supportedRateStats = getDistributionStats(
-  localRouteLatest.areas.map((candidate) => candidate.supportedAsylumRate ?? 0)
-);
-const contingencyStats = getDistributionStats(
-  localRouteLatest.areas.map((candidate) => candidate.contingencyAccommodation)
-);
-const supportedPercentile = getPercentileRank(
-  localRouteLatest.areas.map((candidate) => candidate.supportedAsylum),
-  area.supportedAsylum
-);
-const ratePercentile = getPercentileRank(
-  localRouteLatest.areas.map((candidate) => candidate.supportedAsylumRate ?? 0),
-  area.supportedAsylumRate ?? 0
-);
-const contingencyPercentile = getPercentileRank(
-  localRouteLatest.areas.map((candidate) => candidate.contingencyAccommodation),
-  area.contingencyAccommodation
-);
+
+const supportedStats = getDistributionStats(localRouteLatest.areas.map((c) => c.supportedAsylum));
+const supportedRateStats = getDistributionStats(localRouteLatest.areas.map((c) => c.supportedAsylumRate ?? 0));
+const contingencyStats = getDistributionStats(localRouteLatest.areas.map((c) => c.contingencyAccommodation));
+const supportedPercentile = getPercentileRank(localRouteLatest.areas.map((c) => c.supportedAsylum), area.supportedAsylum);
+const ratePercentile = getPercentileRank(localRouteLatest.areas.map((c) => c.supportedAsylumRate ?? 0), area.supportedAsylumRate ?? 0);
 const contingencySharePct = area.supportedAsylum
   ? Number(((area.contingencyAccommodation / area.supportedAsylum) * 100).toFixed(1))
   : 0;
 const supportedPercentileLabel = formatOrdinal(supportedPercentile);
 const ratePercentileLabel = formatOrdinal(ratePercentile);
-const contingencyPercentileLabel = formatOrdinal(contingencyPercentile);
-const regionalPeerMax = Math.max(...regionalPeerRows.map((candidate) => candidate.supportedAsylum), 1);
-const secondaryPathways = [
-  { label: "Homes for Ukraine", value: area.homesForUkraineArrivals },
-  { label: "Afghan programme", value: area.afghanProgrammePopulation },
-  { label: "Resettlement cumulative", value: area.resettlementCumulativeTotal ?? 0 }
-].sort((a, b) => b.value - a.value);
-const leadingSecondaryPathway = secondaryPathways[0];
-const hotelEvidenceSummary =
-  namedSiteCount > 0 && unnamedSiteCount > 0
-    ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} and ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}`
-    : namedSiteCount > 0
-      ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"}`
-      : unnamedSiteCount > 0
-        ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}`
-    : null;
-const hotelSectionLead =
-  namedSiteCount > 0
-    ? `${namedSiteCount} named current hotel site${namedSiteCount === 1 ? "" : "s"} are publicly visible in ${area.areaName}. ${unresolvedCurrentHotelSites.length > 0 ? `${unresolvedCurrentHotelSites.length} of those named current site${unresolvedCurrentHotelSites.length === 1 ? "" : "s"} still break at owner or operator level.` : partiallyResolvedCurrentHotelSites.length > 0 ? `${partiallyResolvedCurrentHotelSites.length} named current site${partiallyResolvedCurrentHotelSites.length === 1 ? "" : "s"} already carry at least partial owner or operator coverage.` : "The visible named estate is not yet fully chain-resolved in the public ledger."}`
-    : unnamedSiteCount > 0
-      ? `${area.areaName} has no named current hotel in the live ledger, but ${unnamedSiteCount} site${unnamedSiteCount === 1 ? "" : "s"} are publicly acknowledged without names.`
-      : `No publishable hotel row is attached to ${area.areaName} yet. That is an evidence gap, not proof that no hotel use exists.`;
-const hotelPrimaryActionHref =
-  namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0 ? "#hotel-visibility" : "#stock-logic";
-const hotelVisibilityCards = [
-  {
-    title: namedSiteCount > 0 ? "Named current estate is public here" : "No named current hotel is pinned down yet",
-    body:
-      namedSiteCount > 0
-        ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} sit inside the local profile, so hotel visibility is part of the place reading rather than a separate notebook.`
-        : unnamedSiteCount > 0
-          ? `Public evidence has reached the area level but not the hotel names, so the local signal is visible without a clean site list yet.`
-          : `The public ledger has no named current site and no unnamed acknowledged row attached here yet.`
-  },
-  {
-    title:
-      unresolvedCurrentHotelSites.length > 0
-        ? "Chain resolution still breaks on the visible estate"
-        : partiallyResolvedCurrentHotelSites.length > 0
-          ? "Some of the visible chain is resolved"
-          : "Regional responsibility stays separate from local proof",
-    body:
-      unresolvedCurrentHotelSites.length > 0
-        ? `${unresolvedCurrentHotelSites.length} named current site${unresolvedCurrentHotelSites.length === 1 ? "" : "s"} still sit in unresolved owner or operator territory, which is why naming a hotel does not automatically resolve the local chain.`
-        : partiallyResolvedCurrentHotelSites.length > 0
-          ? `${partiallyResolvedCurrentHotelSites.length} named current site${partiallyResolvedCurrentHotelSites.length === 1 ? "" : "s"} already carry at least partial ownership or operator evidence, but the full local chain can still remain incomplete.`
-          : regionalPrimeProviderCoverage
-            ? `${regionalPrimeProviderCoverage.profile.entityName} is the regional contract holder here, but that contract geography is not the same thing as a named local hotel row.`
-            : "No regional provider or local site chain is yet strong enough to stand in for a named local hotel row."
-  },
-  {
-    title:
-      unnamedSiteCount > 0
-        ? "Unnamed acknowledged hotel use still matters"
-        : historicalHotelSites.length > 0
-          ? "Historic named evidence exists even if the current picture is thinner"
-          : "Absence of public evidence is not absence of hotel use",
-    body:
-      unnamedSiteCount > 0
-        ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} still sit inside the local hotel field, which means part of the area's hotel use remains visible only as an official count.`
-        : historicalHotelSites.length > 0
-          ? `${historicalHotelSites.length} named historic or non-current site${historicalHotelSites.length === 1 ? "" : "s"} remain in the ledger for this area, so the current visibility gap sits inside a longer local record.`
-          : "If no hotel row appears here, treat that as a publication gap until independent public evidence lands."
-  }
-];
-const placeOpeningFocus =
-  areaRank <= 10
-    ? `${area.areaName} is one of the UK's highest-volume asylum support authorities, with ${area.supportedAsylum.toLocaleString()} people on support at quarter end and a national rank of ${areaRank.toLocaleString()}.`
-    : ratePercentile >= 90
-      ? `${area.areaName} carries a sharper asylum-support load than the raw count alone suggests, with ${area.supportedAsylumRate ?? "n/a"} people per 10,000 residents on support and a rate around the ${ratePercentileLabel} percentile nationally.`
-      : contingencySharePct >= 35
-        ? `${area.areaName} is currently shaped heavily by contingency accommodation, with ${area.contingencyAccommodation.toLocaleString()} people in that setting, about ${contingencySharePct}% of the local supported asylum total.`
-        : `${area.areaName} currently has ${area.supportedAsylum.toLocaleString()} people on asylum support, ranking ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName}.`;
-const placeOpeningVisibility = hotelEvidenceSummary
-  ? `Public hotel evidence is already visible here: ${hotelEvidenceSummary}.`
-  : regionalPrimeProviderCoverage
-    ? `${regionalPrimeProviderCoverage.profile.entityName} holds the public regional asylum accommodation contract for this area, but no named current local hotel is attached to ${area.areaName} in the live ledger yet.`
-    : `No named current local hotel is attached to ${area.areaName} in the live public ledger yet.`;
-const placeOpeningParagraph = `${placeOpeningFocus} ${placeOpeningVisibility} These are quarter-end stock numbers, not a count of everyone who has passed through the area.`;
-const editorialSignals = [
-  {
-    kicker: "Volume",
-    title:
-      areaRank <= 10
-        ? `${area.areaName} is one of the highest-volume asylum support areas in the UK`
-        : `${area.areaName} is outside the top ten by volume, but still carries a material local load`,
-    body: `${area.areaName} ranks ${areaRank.toLocaleString()} nationally and ${regionalRank.toLocaleString()} in ${area.regionName} for supported asylum count, placing it around the ${supportedPercentileLabel} percentile of local authorities by volume.`
-  },
-  {
-    kicker: "Intensity",
-    title:
-      ratePercentile >= 90
-        ? "Intensity is stronger than the raw count alone suggests"
-        : "The rate picture is important, even where the headline count is lower",
-    body: `The supported asylum rate here is ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents, around the ${ratePercentileLabel} percentile nationally. This matters because smaller places can carry a sharper load than bigger city totals imply.`
-  },
-  {
-    kicker: "Accommodation model",
-    title:
-      contingencySharePct >= 35
-        ? "A large share of support is sitting in contingency accommodation"
-        : "The local picture leans more toward dispersal than contingency pressure",
-    body:
-      contingencySharePct > 0
-        ? `${area.contingencyAccommodation.toLocaleString()} people are in contingency accommodation here, around ${contingencySharePct}% of the supported asylum population and roughly the ${contingencyPercentileLabel} percentile by contingency count.`
-        : "No contingency accommodation is recorded for this area in the latest local-authority snapshot, which makes it structurally different from hotel-heavy pressure points."
-  },
-  {
-    kicker: "Visibility",
-    title:
-      namedSiteCount > 0 || unnamedSiteCount > 0
-        ? "There is already enough public hotel evidence here to make the secrecy gap concrete"
-        : "The hotel layer is still mostly invisible in public records here",
-    body:
-      namedSiteCount > 0 || unnamedSiteCount > 0
-        ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} and ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} are attached to this area in the starter ledger.`
-        : "No named current site or unnamed acknowledged count is attached to this area yet, which is itself a reminder that absence of public evidence is not evidence of absence."
-  }
-];
-const editorialParagraphs = [
-  `${area.areaName} sits ${areaRank.toLocaleString()} nationally by supported asylum count and ${regionalRank.toLocaleString()} within ${area.regionName}. The raw volume is ${area.supportedAsylum.toLocaleString()}, but the rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents gives a cleaner sense of local intensity than the headline count on its own.`,
-  leadingSecondaryPathway.value > 0
-    ? `${leadingSecondaryPathway.label} is the largest non-asylum pathway in this area at ${leadingSecondaryPathway.value.toLocaleString()}. That matters because the local story is not just about one route family; it is about how asylum support, humanitarian schemes, and historic resettlement stack together in one place.`
-    : `The main local story here is concentrated in asylum support rather than the other humanitarian pathways, which makes accommodation mode and contingency use especially important.`,
-  currentRegion
-    ? `${area.regionName} as a whole currently carries ${currentRegion.supportedAsylum.toLocaleString()} people on supported asylum, with a weighted regional rate of ${currentRegion.supportedAsylumRate} per 10,000 residents. This page puts ${area.areaName} inside that wider regional pressure field instead of treating it as an isolated case.`
-    : `${area.regionName} is part of a wider regional pressure pattern that matters as much as the local area headline alone.`
-];
-const placeLead =
-  namedSiteCount > 0 || unnamedSiteCount > 0
-    ? `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count, sits around the ${ratePercentileLabel} percentile by rate, and already has ${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"}${unnamedSiteCount > 0 ? ` plus ${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"}` : ""} in the live hotel evidence field.`
-    : `${area.areaName} ranks ${areaRank.toLocaleString()} nationally by supported asylum count and sits around the ${ratePercentileLabel} percentile by rate, but the live hotel evidence field still has no named current site or unnamed acknowledged count attached here.`;
-const pageDescription = `${area.areaName} asylum profile with supported asylum counts, contingency accommodation, route pathway context, and hotel evidence as at ${localRouteLatest.snapshotDate}.`;
-const pageStructuredData = buildPlaceStructuredData(area, {
-  canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
-  description: pageDescription,
-  socialImageUrl: buildAbsoluteUrl("/og-card.png"),
-  snapshotDate: localRouteLatest.snapshotDate,
-  areaRank,
-  contingencyRank,
-  namedSiteCount,
-  unnamedSiteCount
-});
-const placeGuideItems = [
-  {
-    eyebrow: "Start here",
-    title: "Read the local finding before the controls",
-    body: "The top section tells you the defensible claim this site can make about the place right now: volume, intensity, accommodation model, and public visibility.",
-    href: "#place-findings",
-    cta: "Open findings"
-  },
-  {
-    eyebrow: "Then check",
-    title:
-      namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
-        ? "Keep the stock logic and hotel visibility nearby"
-        : "Keep the stock logic and evidence chain nearby",
-    body: placeInvestigationTrails.length > 0
-      ? namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
-        ? "The numbers only make sense if you keep the quarter-end stock logic in view and then read the local hotel evidence before widening out into the cross-page trails."
-        : "The numbers only make sense if you keep the quarter-end stock logic in view and then follow the named evidence chain for this place."
-      : namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
-        ? "The numbers only make sense if you keep the quarter-end stock logic in view and then read the local hotel evidence in the same place profile."
-        : "The numbers only make sense if you keep the quarter-end stock logic in view before widening out into the rest of the page.",
-    href: hotelPrimaryActionHref,
-    cta:
-      namedSiteCount > 0 || unnamedSiteCount > 0 || hotelSignals.length > 0
-        ? "Open hotel visibility"
-        : placeInvestigationTrails.length > 0
-          ? "Open the evidence chain"
-          : "Open the reading rules"
-  },
-  {
-    eyebrow: "Only if needed",
-    title: "Open the deep data when you need verification",
-    body: "The drill-down, route metrics, benchmarks, hotel table, and peer bars are there to verify or extend the story, not to be the first thing a reader has to decode.",
-    href: "#place-data",
-    cta: "Open the deep data"
-  }
-];
+const regionalPeerMax = Math.max(...regionalPeerRows.map((c) => c.supportedAsylum), 1);
+
 const ethnicProjection = getEthnicProjection(area.areaCode);
 const ethnicTimeline = getEthnicCompositionTimeline(area.areaCode);
 const wbThreshold = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
@@ -321,23 +97,37 @@ const sendProfile = getSendProfile(area.areaCode);
 const sendPercentile = getSendGrowthPercentile(area.areaCode);
 const ascProfile = getAscProfile(area.areaCode);
 const ascPercentile = getAscSpendPercentile(area.areaCode);
-const allAsylumRates = localRouteLatest.areas.map((a: any) => a.supportedAsylumRate ?? 0);
-const pressureScore = computePressureScore(area.areaCode, area.areaName, area.supportedAsylumRate ?? null, allAsylumRates);
+const pressureScore = computePressureScore(
+  area.areaCode,
+  area.areaName,
+  area.supportedAsylumRate,
+  localRouteLatest.areas.map((a) => a.supportedAsylumRate ?? 0)
+);
+
+const pageDescription = `${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally. Hotels, demographics, crime, SEND, social care.`;
+const pageStructuredData = buildPlaceStructuredData(area, {
+  canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
+  description: pageDescription,
+  socialImageUrl: buildAbsoluteUrl("/og-card.png"),
+  snapshotDate: localRouteLatest.snapshotDate,
+  areaRank,
+  contingencyRank,
+  namedSiteCount,
+  unnamedSiteCount
+});
 
 const placeSections = [
-  { id: "place-findings", label: "Findings" },
-  { id: "place-guide", label: "How to use" },
-  { id: "stock-logic", label: "How to read" },
-  ...(regionalPrimeProviderCoverage ? [{ id: "provider-coverage", label: "Actor coverage" }] : []),
-  { id: "hotel-visibility", label: "Hotel visibility" },
+  { id: "place-summary", label: "Summary" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
-  ...(placeInvestigationTrails.length > 0 ? [{ id: "evidence-chain", label: "Evidence chain" }] : []),
+  { id: "local-numbers", label: "Local numbers" },
+  { id: "hotel-evidence", label: "Hotels" },
   ...(ethnicProjection ? [{ id: "demographic-profile", label: "Demographics" }] : []),
   ...(crimeProfile ? [{ id: "crime-profile", label: "Crime" }] : []),
   ...(sendProfile ? [{ id: "send-profile", label: "SEND" }] : []),
   ...(ascProfile ? [{ id: "asc-profile", label: "Social care" }] : []),
   ...(pressureScore.availableModules >= 3 ? [{ id: "pressure-index", label: "Pressure index" }] : []),
-  { id: "place-data", label: "Deep data" }
+  { id: "local-benchmarks", label: "Benchmarks" },
+  { id: "regional-peers", label: "Regional peers" }
 ];
 
 function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
@@ -345,7 +135,6 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     ...site.entityLinks.map((link) => getEntityProfileByReference(link.entityName, link.companyNumber)),
     site.primeProvider ? getEntityProfileByReference(site.primeProvider.provider, null) : null
   ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
-
   return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
 }
 ---
@@ -355,473 +144,145 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   description={pageDescription}
   structuredData={pageStructuredData}
 >
+  <!-- HEADER -->
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">{area.regionName}</span>
-      <h1>{area.areaName} asylum pressure profile</h1>
-      <p>{placeOpeningParagraph}</p>
+      <h1>{area.areaName}</h1>
+      <p>
+        {area.supportedAsylum.toLocaleString()} on asylum support. Rank {areaRank} nationally, {regionalRank} in {area.regionName}.
+        Rate: {area.supportedAsylumRate ?? "n/a"} per 10,000 ({ratePercentileLabel} percentile).
+        {namedSiteCount > 0 ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s" : ""}.` : ""}
+        {regionalPrimeProviderCoverage ? ` Regional provider: ${regionalPrimeProviderCoverage.profile.entityName}.` : ""}
+      </p>
       <div class="chip-row">
-        <span class="chip">{area.countryName}</span>
-        <span class="chip teal">Population {area.population?.toLocaleString() ?? "n/a"}</span>
-        <span class="chip accent">Supported asylum {area.supportedAsylum.toLocaleString()}</span>
+        <span class="chip accent">{localRouteLatest.snapshotDate}</span>
+        <a class="chip" href={`/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/`}>
+          {area.regionName} region
+        </a>
+        {contingencySharePct > 0 && <span class="chip">{contingencySharePct}% contingency</span>}
       </div>
     </section>
 
     <aside class="page-rail">
       <article class="panel panel-pad">
-        <span class="tiny">Local pressure position</span>
         <div class="stat-strip">
           <article class="stat-tile">
-            <span class="tiny">UK area rank by supported asylum</span>
+            <span class="tiny">UK rank</span>
             <strong>{areaRank.toLocaleString()}</strong>
-            <p class="tiny">Across all local authority rows in the live dataset.</p>
           </article>
           <article class="stat-tile">
-            <span class="tiny">Supported asylum rate</span>
+            <span class="tiny">On support</span>
+            <strong>{area.supportedAsylum.toLocaleString()}</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Rate /10k</span>
             <strong>{area.supportedAsylumRate ?? "n/a"}</strong>
-            <p class="tiny">Per 10,000 residents.</p>
           </article>
           <article class="stat-tile">
-            <span class="tiny">Contingency rank</span>
-            <strong>{contingencyRank.toLocaleString()}</strong>
-            <p class="tiny">By contingency accommodation count.</p>
+            <span class="tiny">Contingency</span>
+            <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
           </article>
         </div>
       </article>
-
-      <article class="panel panel-pad">
-        <span class="tiny">Hotel visibility</span>
-        <h2 class="rail-title">
-          {namedSiteCount > 0 ? `${namedSiteCount} named current site${namedSiteCount > 1 ? "s" : ""}` : "No named current sites"}
-        </h2>
-        <p class="rail-copy">
-          {hotelArea && hotelArea.unnamedSiteCount > 0
-            ? `${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} also publicly acknowledged here.`
-            : "No unnamed hotel count is attached to this area in the starter ledger."}
-        </p>
-      </article>
-
-      {regionalPrimeProviderCoverage && (
-        <article class="panel panel-pad">
-          <span class="tiny">Regional prime provider</span>
-          <h2 class="rail-title">{regionalPrimeProviderCoverage.profile.entityName}</h2>
-          <p class="rail-copy">
-            This is the current public contract holder for asylum accommodation in {area.areaName}. It is regional
-            provider responsibility, not proof of a named local hotel.
-          </p>
-          <p class="tiny">
-            <a class="source-pill" href={`/entities/${regionalPrimeProviderCoverage.profile.entityId}/`}>
-              Open provider profile
-            </a>
-          </p>
-        </article>
-      )}
     </aside>
   </section>
 
-  <PageContents title="Start here" sections={placeSections} variant="priority" />
+  <PageContents title="Sections" sections={placeSections} />
 
-  <section id="place-findings" class="section section-anchor priority-section">
+  <!-- SUMMARY -->
+  <section id="place-summary" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>What matters first</h2>
-        <p class="lede">{placeLead}</p>
+        <h2>Summary</h2>
       </div>
-      <span class="chip accent">{localRouteLatest.snapshotDate} snapshot</span>
     </div>
-    <div class="story-grid">
-      {editorialSignals.map((signal) => (
-        <article class="story-card">
-          <div class="chip-row">
-            <span class="chip accent">{signal.kicker}</span>
-          </div>
-          <h3>{signal.title}</h3>
-          <p class="lede">{signal.body}</p>
-        </article>
-      ))}
-    </div>
-    <article class="editor-note prose-stack">
-      <div class="chip-row">
-        <span class="chip accent">Local reading</span>
-        <span class="chip">{area.regionName}</span>
-      </div>
-      <h3>How this place reads in context</h3>
-      {editorialParagraphs.map((paragraph) => (
-        <p>{paragraph}</p>
-      ))}
-    </article>
+    <p class="lede">
+      {area.areaName} has {area.supportedAsylum.toLocaleString()} people on asylum support at quarter end,
+      ranking {areaRank.toLocaleString()} out of {localRouteLatest.areas.length} local authorities nationally.
+      The rate of {area.supportedAsylumRate ?? "n/a"} per 10,000 residents places it around the {ratePercentileLabel} percentile.
+      {area.contingencyAccommodation > 0
+        ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation (${contingencySharePct}% of total).`
+        : " No contingency accommodation recorded."}
+      {namedSiteCount > 0
+        ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s are" : " is"} publicly documented.`
+        : unnamedSiteCount > 0
+          ? ` ${unnamedSiteCount} hotel site${unnamedSiteCount > 1 ? "s" : ""} acknowledged but not publicly named.`
+          : " No hotel evidence attached yet."}
+      These are quarter-end stock numbers, not throughput.
+    </p>
   </section>
 
-  <PageGuide
-    id="place-guide"
-    title="Use the place page in three moves"
-    intro="A place page should tell you what the strongest local claim is before it asks you to use controls or decode multiple ledgers."
-    items={placeGuideItems}
-  />
-
-  <section id="stock-logic" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>How to read the asylum numbers here</h2>
-        <p class="lede">
-          A flat or slowly moving local line does not prove the same people stayed on support, and it does not prove
-          claims were not being processed. It only shows the quarter-end stock that remained on support, which overlaps
-          with but is not identical to the awaiting-decision backlog.
-        </p>
-      </div>
-      <span class="chip accent">Core logic</span>
-    </div>
-    <div class="story-grid">
-      {supportedAsylumReadingRules.map((rule) => (
-        <article class="story-card">
-          <h3>{rule.title}</h3>
-          <p class="lede">{rule.body}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  {regionalPrimeProviderCoverage && (
-    <section id="provider-coverage" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Named actor coverage in this place</h2>
-          <p class="lede">
-            This page separates named local estate from regional contract responsibility. A regional provider link means
-            the Home Office contract structure reaches this area, not that the public ledger has named every hotel here.
-          </p>
-        </div>
-        <a class="chip accent" href={`/entities/${regionalPrimeProviderCoverage.profile.entityId}/`}>
-          {regionalPrimeProviderCoverage.profile.entityName}
-        </a>
-      </div>
-      <div class="story-grid">
-        <article class="story-card">
-          <h3>Regional contract holder</h3>
-          <p class="lede">
-            {regionalPrimeProviderCoverage.profile.entityName} currently holds the public regional asylum
-            accommodation contract covering {area.areaName}.
-          </p>
-        </article>
-        <article class="story-card">
-          <h3>Named local estate stays separate</h3>
-          <p class="lede">
-            {namedSiteCount > 0
-              ? `${namedSiteCount} named current site${namedSiteCount === 1 ? "" : "s"} are already visible here in the hotel ledger.`
-              : `No named current site is publicly pinned down for ${area.areaName} in the live hotel ledger yet.`}{" "}
-            {unnamedSiteCount > 0
-              ? `${unnamedSiteCount} unnamed site${unnamedSiteCount === 1 ? "" : "s"} are still publicly acknowledged without full naming.`
-              : "No unnamed hotel count is attached to this area in the starter ledger."}
-          </p>
-        </article>
-        <article class="story-card">
-          <h3>Coverage field</h3>
-          <p class="lede">
-            {regionalPrimeProviderCoverage.coverage.coveredAreaCount.toLocaleString()} local authority rows fall
-            inside this published contract geography, with {regionalPrimeProviderCoverage.coverage.namedCurrentAreaCount.toLocaleString()} areas already carrying named current hotel evidence and {regionalPrimeProviderCoverage.coverage.unnamedOnlyAreaCount.toLocaleString()} still sitting in unnamed-only visibility gaps.
-          </p>
-        </article>
-      </div>
-    </section>
-  )}
-
-  <section id="hotel-visibility" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Hotel visibility in this place</h2>
-        <p class="lede">{hotelSectionLead}</p>
-      </div>
-      <a class="chip accent" href="#hotel-evidence">Open the detailed hotel ledger</a>
-    </div>
-    <div class="story-grid">
-      {hotelVisibilityCards.map((card) => (
-        <article class="story-card">
-          <h3>{card.title}</h3>
-          <p class="lede">{card.body}</p>
-        </article>
-      ))}
-    </div>
-    {hotelNarrativeSites.length > 0 ? (
-      <div class="feature-grid">
-        {hotelNarrativeSites.map((site) => {
-          const entityProfiles = getSiteEntityProfiles(site);
-          const providerProfile = site.primeProvider
-            ? getEntityProfileByReference(site.primeProvider.provider, null)
-            : null;
-          const leadLinkedProfile =
-            entityProfiles.find((profile) => profile.entityId !== providerProfile?.entityId) ?? null;
-
-          return (
-            <article class="feature-card">
-              <div class="chip-row">
-                <span class="chip accent">Named current site</span>
-                <span class:list={["chip", site.entityCoverage === "partial" ? "teal" : "warm"]}>
-                  {site.entityCoverage === "partial" ? "Partial chain" : "Unresolved chain"}
-                </span>
-              </div>
-              <h3>{site.siteName}</h3>
-              <p class="lede">
-                Publicly named on {site.lastPublicDate} via {site.sourceTitle}.{" "}
-                {site.ownerName || site.operatorName
-                  ? `${site.ownerName ? `Owner: ${site.ownerName}. ` : ""}${site.operatorName ? `Operator: ${site.operatorName}.` : ""}`
-                  : "The owner or operator chain is not fully public yet."}
-              </p>
-              <div class="chip-row">
-                <a class="source-pill" href={site.sourceUrl}>Open evidence</a>
-                {providerProfile ? (
-                  <a class="source-pill" href={`/entities/${providerProfile.entityId}/`}>
-                    Open {providerProfile.entityName} profile
-                  </a>
-                ) : (
-                  site.primeProvider && (
-                    <a class="source-pill" href={site.primeProvider.sourceUrl}>
-                      Provider source
-                    </a>
-                  )
-                )}
-                {leadLinkedProfile && (
-                  <a class="source-pill" href={`/entities/${leadLinkedProfile.entityId}/`}>
-                    Open {leadLinkedProfile.entityName} profile
-                  </a>
-                )}
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    ) : (
-      <article class="feature-card">
-        <div class="chip-row">
-          <span class="chip warm">No named current site</span>
-        </div>
-        <h3>The local hotel signal is still incomplete</h3>
-        <p class="lede">
-          {unnamedSiteCount > 0
-            ? `${unnamedSiteCount} unnamed publicly acknowledged site${unnamedSiteCount === 1 ? "" : "s"} keep hotel use visible in this area, but the public record does not yet identify the sites.`
-            : `No publishable hotel row is attached to ${area.areaName} yet, so the place profile has to hold that as an evidence gap rather than infer a clean absence.`}
-        </p>
-      </article>
-    )}
-    {hotelSignals.length > 0 && (
-      <div class="signal-list">
-        {hotelSignals.map((signal) => (
-          <article class={`signal-card${signal.severity === "high" ? " accent" : ""}`}>
-            <span class="tiny">{signal.siteName}</span>
-            <h3>{signal.headline ?? "Integrity signal"}</h3>
-            <p class="tiny">{signal.detail ?? "A public integrity signal is attached to this visible local site."}</p>
-          </article>
-        ))}
-      </div>
-    )}
-  </section>
-
+  <!-- TREND -->
   {areaTrend && (
     <section id="recent-trend" class="split section section-anchor">
       <TrendChart
         points={areaTrend.points.map((point) => ({ label: point.label, value: point.value }))}
-        title={`Quarter-end supported asylum stock in ${area.areaName}`}
-        description={buildSupportedAsylumStockDescription(
-          areaTrend.latestPeriodLabel,
-          areaTrend.hasIllustrativeData
-        )}
+        title={`Supported asylum in ${area.areaName}`}
+        description={buildSupportedAsylumStockDescription(areaTrend.latestPeriodLabel, areaTrend.hasIllustrativeData)}
         tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
       />
-
       <article class="panel panel-pad">
-        <div class="chip-row">
-          <span class="chip accent">Trend readout</span>
-          <span class="chip">{areaTrend.latestPeriodLabel}</span>
-        </div>
-        <h2>Recent path and evidence quality</h2>
-        <div class="signal-list">
-          <article class={`signal-card${(areaTrend.deltaFromPrevious ?? 0) > 0 ? " accent" : ""}`}>
-            <span class="tiny">Latest net stock move</span>
-            <h3>
+        <h2>Trend</h2>
+        <div class="metric-list">
+          <div class="metric-item">
+            <span class="metric-value">
               {areaTrend.deltaFromPrevious !== null
-                ? `${areaTrend.deltaFromPrevious >= 0 ? "+" : ""}${areaTrend.deltaFromPrevious.toLocaleString()} since ${previousTrendPoint?.label ?? "the previous point"}`
-                : "Only one published trend point"}
-            </h3>
-            <p class="tiny">
-              {areaTrend.changePctFromPrevious !== null
-                ? `${areaTrend.changePctFromPrevious >= 0 ? "+" : ""}${areaTrend.changePctFromPrevious}% net change in quarter-end stock by the latest step.`
-                : "Quarter-on-quarter change cannot be calculated from a single point."}
-            </p>
-          </article>
-          <article class="signal-card">
-            <span class="tiny">Net change across visible series</span>
-            <h3>
-              {areaTrend.deltaFromFirst >= 0 ? "+" : ""}
-              {areaTrend.deltaFromFirst.toLocaleString()} across the visible series
-            </h3>
-            <p class="tiny">
-              {areaTrend.changePctFromFirst !== null
-                ? `${areaTrend.changePctFromFirst >= 0 ? "+" : ""}${areaTrend.changePctFromFirst}% change in quarter-end stock from the first visible point to ${areaTrend.latestPeriodLabel}.`
-                : "Percentage change from the first visible point cannot be calculated."}
-            </p>
-          </article>
-          <article class="signal-card">
-            <span class="tiny">Series quality</span>
-            <h3>
-              {areaTrend.officialAnchorCount} official quarter point{areaTrend.officialAnchorCount === 1 ? "" : "s"}
-            </h3>
-            <p class="tiny">
-              {areaTrend.hasIllustrativeData
-                ? `${areaTrend.illustrativeCount} illustrative bridge point${areaTrend.illustrativeCount === 1 ? "" : "s"} remain in the visible series, so this section is a directional reading rather than a full official quarterly run.`
-                : "The visible trend line is built entirely from official quarter-end supported asylum values in the local area series."}
-            </p>
-          </article>
+                ? `${areaTrend.deltaFromPrevious >= 0 ? "+" : ""}${areaTrend.deltaFromPrevious.toLocaleString()}`
+                : "—"}
+            </span>
+            <span class="metric-label">Latest quarter change</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-value">
+              {areaTrend.deltaFromFirst >= 0 ? "+" : ""}{areaTrend.deltaFromFirst.toLocaleString()}
+            </span>
+            <span class="metric-label">Change across series</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-value">{areaTrend.officialAnchorCount}</span>
+            <span class="metric-label">Official data points</span>
+          </div>
         </div>
       </article>
     </section>
   )}
 
-  {placeInvestigationTrails.length > 0 && (
-    <section id="evidence-chain" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Evidence chain in this place</h2>
-          <p class="lede">
-            These trails connect the visible hotel estate, the linked money surface, and the local pressure frame so the
-            area can be read as one investigation rather than separate ledgers.
-          </p>
+  <!-- LOCAL NUMBERS -->
+  <section id="local-numbers" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Local numbers</h2>
+      </div>
+    </div>
+    <div class="grid-2">
+      <article class="feature-card accent">
+        <h3>Accommodation split</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>Dispersal accommodation</span>
+            <span class="data-row-value">{area.dispersalAccommodation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Initial accommodation</span>
+            <span class="data-row-value">{area.initialAccommodation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Subsistence only</span>
+            <span class="data-row-value">{area.subsistenceOnly.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Contingency accommodation</span>
+            <span class="data-row-value">{area.contingencyAccommodation.toLocaleString()}</span>
+          </div>
         </div>
-        <a class="source-pill" href="/spending#money-site-trails">Open site-linked money trails</a>
-      </div>
-      <div class="feature-grid">
-        {placeInvestigationTrails.map((trail) => {
-          const leadEntity = getLeadEntityProfileForTrail(trail);
+      </article>
 
-          return (
-            <InvestigationTrail
-              kicker={trail.kicker}
-              title={trail.title}
-              summary={trail.summary}
-              chips={trail.chips}
-              tone={trail.tone}
-              steps={trail.steps}
-              footnote={trail.footnote}
-              footerLinks={
-                leadEntity
-                  ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
-                  : []
-              }
-            />
-          );
-        })}
-      </div>
-    </section>
-  )}
-
-  <DataDrawer
-    id="place-data"
-    label="Deep data"
-    title="Open the drill-downs, route metrics, benchmarks, peer bars, and detailed ledgers"
-    summary="Once the local finding is clear, use this section to verify the ranking, inspect the route mix, compare peers, and read the full hotel evidence ledger for this area."
-  >
-    <section id="place-drilldown" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Interactive place drill-down</h2>
-          <p class="lede">
-            Switch metric and comparison frame to read {area.areaName} as a pressure leader, rate outlier, contingency
-            site, or three-pathway case without leaving the page.
-          </p>
-        </div>
-        <span class="chip accent">Shareable place lens</span>
-      </div>
-
-      <div class="filter-panel">
-        <form class="filter-grid" data-place-drill-form>
-          <label class="filter-field">
-            <span class="tiny">Metric</span>
-            <select name="place_metric">
-              {placeDrilldownMetrics.map((metric) => (
-                <option value={metric.id}>{metric.label}</option>
-              ))}
-            </select>
-          </label>
-          <label class="filter-field">
-            <span class="tiny">Comparison frame</span>
-            <select name="place_scope">
-              <option value="regional">Regional peers</option>
-              <option value="national">National ranking</option>
-            </select>
-          </label>
-        </form>
-        <div class="filter-actions">
-          <button class="source-pill" type="button" data-place-drill-reset>Reset lens</button>
-          <span class="tiny" data-place-drill-summary>
-            {placeDrilldownMetrics[0]?.views[0]?.summary ?? `${area.areaName} in regional context.`}
-          </span>
-        </div>
-      </div>
-
-      <div class="drilldown-grid">
-        {placeDrilldownMetrics.map((metric) =>
-          metric.views.map((view) => (
-            <article
-              class="drilldown-card"
-              data-place-drill-panel
-              data-metric={metric.id}
-              data-scope={view.scope}
-              data-summary={view.summary}
-              hidden={!(metric.id === "supported_asylum" && view.scope === "regional")}
-            >
-              <div class="chip-row">
-                <span class="chip accent">{metric.label}</span>
-                <span class="chip">{view.scope === "regional" ? area.regionName : "United Kingdom"}</span>
-              </div>
-              <h3>{metric.description}</h3>
-              <p class="lede">{view.summary}</p>
-              <div class="drilldown-meta">
-                <article class="signal-card">
-                  <span class="tiny">Current value</span>
-                  <strong>{metric.currentValueLabel}</strong>
-                </article>
-                <article class="signal-card">
-                  <span class="tiny">{view.scope === "regional" ? "Regional rank" : "National rank"}</span>
-                  <strong>
-                    #{view.scope === "regional" ? metric.regionalRank.toLocaleString() : metric.nationalRank.toLocaleString()}
-                  </strong>
-                </article>
-                <article class="signal-card">
-                  <span class="tiny">National percentile</span>
-                  <strong>{formatOrdinal(metric.percentile)}</strong>
-                </article>
-              </div>
-              <div class="drilldown-list">
-                {view.rows.map((row) => (
-                  <a class="drilldown-row-link" href={row.href}>
-                    <div class="metric-bar">
-                      <div style="min-width: 12rem;">
-                        <strong>{row.areaName}</strong>
-                        <div class="tiny">
-                          {row.secondaryLabel} | {row.valueLabel}
-                        </div>
-                      </div>
-                      <div class="metric-track">
-                        <div class="metric-fill" style={`width: ${row.widthPct}%`}></div>
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </article>
-          ))
-        )}
-      </div>
-    </section>
-
-    <section id="pathway-breakdown" class="split section">
-      <div class="panel panel-pad">
-        <h2>Pathway breakdown</h2>
-        <p class="lede">
-          The local picture only becomes legible when supported asylum, contingency use, Ukraine arrivals, and Afghan
-          programme population are kept distinct.
-        </p>
+      <article class="feature-card">
+        <h3>Pathway breakdown</h3>
         {pathwayBreakdown.map((item) => (
           <div class="metric-bar">
-            <div style="min-width: 11rem;">
+            <div style="min-width: 10rem;">
               <strong>{item.label}</strong>
               <div class="tiny">{item.value.toLocaleString()}</div>
             </div>
@@ -830,715 +291,516 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             </div>
           </div>
         ))}
-      </div>
+      </article>
+    </div>
 
-      <div class="panel panel-pad">
-        <h2>What stands out here</h2>
-        <div class="signal-list">
-          <article class="signal-card accent">
-            <span class="tiny">Pressure profile</span>
-            <h3>{area.areaName} is carrying a real asylum-support load</h3>
-            <p class="tiny">
-              {area.supportedAsylum.toLocaleString()} people are on asylum support here at quarter end, with a rate of{" "}
-              {area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
-              {area.contingencyAccommodation > 0
-                ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation.`
-                : " No contingency accommodation is recorded for this area."}
-            </p>
-          </article>
-          <article class="signal-card">
-            <span class="tiny">Three-pathway load</span>
-            <h3>{area.allThreePathwaysTotal.toLocaleString()} people across the main local pathways</h3>
-            <p class="tiny">
-              This combines supported asylum, Homes for Ukraine arrivals, and Afghan programme population, representing{" "}
-              {area.shareOfPopulationPct ?? "n/a"}% of the local population.
-            </p>
-          </article>
-          <article class="signal-card">
-            <span class="tiny">Hotel visibility</span>
-            <h3>{namedSiteCount > 0 ? "Public hotel evidence exists here" : "Public hotel evidence is still thin here"}</h3>
-            <p class="tiny">
-              {namedSiteCount > 0
-                ? `${namedSiteCount} named current hotel site${namedSiteCount > 1 ? "s are" : " is"} logged in the entity ledger for this area.`
-                : "No named current hotel site is attached to this area in the starter ledger yet."}
-              {hotelArea && hotelArea.unnamedSiteCount > 0
-                ? ` ${hotelArea.unnamedSiteCount} unnamed site${hotelArea.unnamedSiteCount > 1 ? "s are" : " is"} publicly acknowledged as well.`
-                : ""}
-            </p>
-          </article>
+    <div class="grid-2" style="margin-top: 1rem;">
+      <article class="feature-card">
+        <h3>Other routes</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>Homes for Ukraine</span>
+            <span class="data-row-value">{area.homesForUkraineArrivals.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Afghan programme</span>
+            <span class="data-row-value">{area.afghanProgrammePopulation.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Resettlement cumulative</span>
+            <span class="data-row-value">{(area.resettlementCumulativeTotal ?? 0).toLocaleString()}</span>
+          </div>
         </div>
-      </div>
-    </section>
+      </article>
+      <article class="feature-card">
+        <h3>Population context</h3>
+        <div class="data-list">
+          <div class="data-row">
+            <span>All pathways total</span>
+            <span class="data-row-value">{area.allThreePathwaysTotal.toLocaleString()}</span>
+          </div>
+          <div class="data-row">
+            <span>Share of local population</span>
+            <span class="data-row-value">{area.shareOfPopulationPct ?? "n/a"}%</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
 
-    <section id="local-benchmarks" class="split section section-anchor">
-      <div class="panel panel-pad">
-        <h2>National benchmarks</h2>
+  <!-- HOTEL EVIDENCE -->
+  <section id="hotel-evidence" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Hotel evidence</h2>
         <p class="lede">
-          These strips show where {area.areaName} sits in the national distribution for the most important place-level
-          pressure measures.
+          {namedSiteCount > 0
+            ? `${namedSiteCount} named site${namedSiteCount > 1 ? "s" : ""} publicly documented.`
+            : unnamedSiteCount > 0
+              ? `${unnamedSiteCount} site${unnamedSiteCount > 1 ? "s" : ""} acknowledged but not publicly named.`
+              : "No public hotel evidence attached to this area yet."}
         </p>
-        <div class="benchmark-grid">
-          <BenchmarkStrip
-            label="Supported asylum count"
-            description="National distribution across all local-authority rows."
-            value={area.supportedAsylum}
-            min={supportedStats.min}
-            median={supportedStats.median}
-            p90={supportedStats.p90}
-            max={supportedStats.max}
-            valueLabel={area.supportedAsylum.toLocaleString()}
-          />
-          <BenchmarkStrip
-            label="Supported asylum rate"
-            description="Rate per 10,000 residents."
-            value={area.supportedAsylumRate ?? 0}
-            min={supportedRateStats.min}
-            median={supportedRateStats.median}
-            p90={supportedRateStats.p90}
-            max={supportedRateStats.max}
-            valueLabel={area.supportedAsylumRate !== null ? `${area.supportedAsylumRate}` : "n/a"}
-            tone="teal"
-          />
-          <BenchmarkStrip
-            label="Contingency accommodation"
-            description="Hotel and other contingency placements."
-            value={area.contingencyAccommodation}
-            min={contingencyStats.min}
-            median={contingencyStats.median}
-            p90={contingencyStats.p90}
-            max={contingencyStats.max}
-            valueLabel={area.contingencyAccommodation.toLocaleString()}
-            tone="warm"
-          />
-        </div>
       </div>
+    </div>
+    {hotelSites.length > 0 || hotelArea ? (
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Site</th>
+              <th scope="col">Status</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Last public date</th>
+              <th scope="col">Entity coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hotelSites.map((site) => (
+              (() => {
+                const entityProfiles = getSiteEntityProfiles(site);
+                return (
+                  <tr>
+                    <th scope="row">
+                      <strong>{site.siteName}</strong>
+                      <div class="tiny"><a class="source-pill" href={site.sourceUrl}>Evidence</a></div>
+                    </th>
+                    <td>{site.status}</td>
+                    <td>{site.evidenceClass}</td>
+                    <td>{site.lastPublicDate}</td>
+                    <td>
+                      <span class="chip tiny">{site.entityCoverage}</span>
+                      {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
+                      {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
+                      {site.primeProvider && (
+                        <div class="tiny">
+                          Provider: {site.primeProvider.provider}
+                          {getEntityProfileByReference(site.primeProvider.provider, null) && (
+                            <> <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>profile</a></>
+                          )}
+                        </div>
+                      )}
+                      {site.entityLinks.map((link) => {
+                        const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
+                        return (
+                          <div class="tiny">
+                            {link.entityName} ({link.linkRole})
+                            {profile && <> <a href={`/entities/${profile.entityId}/`}>profile</a></>}
+                          </div>
+                        );
+                      })}
+                    </td>
+                  </tr>
+                );
+              })()
+            ))}
+            {hotelArea && hotelArea.unnamedSiteCount > 0 && (
+              <tr>
+                <th scope="row">
+                  <strong>Unnamed sites</strong>
+                  <div class="tiny"><a class="source-pill" href={hotelArea.sourceUrl}>Source</a></div>
+                </th>
+                <td>acknowledged</td>
+                <td>area sighting</td>
+                <td>{hotelArea.lastPublicDate}</td>
+                <td><span class="tiny">{hotelArea.unnamedSiteCount} site{hotelArea.unnamedSiteCount > 1 ? "s" : ""} without names</span></td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <p class="lede" style="opacity: 0.6;">No public hotel evidence logged for this area yet.</p>
+    )}
+  </section>
 
-      <RegionTileMap
-        items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
-        title="Regional pressure context"
-        description={`${area.regionName} is highlighted so this place can be read inside the wider regional supported asylum map.`}
-        valueLabel="supported asylum total"
-        highlightRegion={area.regionName}
-      />
-    </section>
-
-    <section id="route-metrics" class="section section-anchor">
+  <!-- DEMOGRAPHICS -->
+  {ethnicProjection && ethnicTimeline && (
+    <section id="demographic-profile" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>Local route metrics</h2>
+          <h2>Demographics</h2>
           <p class="lede">
-            The area profile should show route composition, not force users to infer it from a single asylum count.
+            Census-based ethnic composition for {area.areaName} (ONS 2011 & 2021).
+            {significantShift
+              ? ` If 2011-2021 rates continue, White British estimated below 50% by ~${wbThreshold!.year}. This is a trend extrapolation, not a forecast.`
+              : ""}
           </p>
         </div>
       </div>
-      <div class="feature-grid">
-        <article class="feature-card accent">
-          <div class="chip-row">
-            <span class="chip accent">Asylum support</span>
-          </div>
-          <h3>Accommodation split</h3>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Dispersal accommodation</span>
-              <span class="data-row-value">{area.dispersalAccommodation.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Initial accommodation</span>
-              <span class="data-row-value">{area.initialAccommodation.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Subsistence only</span>
-              <span class="data-row-value">{area.subsistenceOnly.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Contingency accommodation</span>
-              <span class="data-row-value">{area.contingencyAccommodation.toLocaleString()}</span>
-            </div>
-          </div>
-        </article>
-
+      <div class="grid-2">
         <article class="feature-card">
           <div class="chip-row">
-            <span class="chip teal">Ukraine and Afghan pathways</span>
+            <span class="chip accent">Census 2021</span>
+            {significantShift && <span class="chip coral">Significant shift</span>}
           </div>
-          <h3>Other current routes in this place</h3>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Homes for Ukraine arrivals</span>
-              <span class="data-row-value">{area.homesForUkraineArrivals.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Afghan programme population</span>
-              <span class="data-row-value">{area.afghanProgrammePopulation.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Afghan local authority housing</span>
-              <span class="data-row-value">{area.afghanProgrammeLaHousing.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Afghan private rented housing</span>
-              <span class="data-row-value">{area.afghanProgrammePrsHousing.toLocaleString()}</span>
-            </div>
+          <h3>Ethnic composition</h3>
+          <div class="stacked-bars">
+            {ethnicTimeline.filter((t) => !t.isProjection || t.year === "2030" || t.year === "2040" || t.year === "2050").map((point) => (
+              <div class="stacked-bar-row">
+                <div class="stacked-bar-label">
+                  <strong>{point.year}</strong>
+                  {point.isProjection && <span class="chip tiny">projected</span>}
+                </div>
+                <div class="stacked-bar" title={`WB: ${point.groups.white_british.toFixed(1)}%, Asian: ${point.groups.asian.toFixed(1)}%, Black: ${point.groups.black.toFixed(1)}%`}>
+                  <div class="bar-seg wb" style={`width: ${point.groups.white_british}%`}></div>
+                  <div class="bar-seg wo" style={`width: ${point.groups.white_other}%`}></div>
+                  <div class="bar-seg asian" style={`width: ${point.groups.asian}%`}></div>
+                  <div class="bar-seg black" style={`width: ${point.groups.black}%`}></div>
+                  <div class="bar-seg mixed" style={`width: ${point.groups.mixed}%`}></div>
+                  <div class="bar-seg other" style={`width: ${point.groups.other}%`}></div>
+                </div>
+                <div class="stacked-bar-pct">{point.groups.white_british.toFixed(1)}% WB</div>
+              </div>
+            ))}
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch wb"></span> White British</span>
+            <span class="legend-item"><span class="legend-swatch wo"></span> White Other</span>
+            <span class="legend-item"><span class="legend-swatch asian"></span> Asian</span>
+            <span class="legend-item"><span class="legend-swatch black"></span> Black</span>
+            <span class="legend-item"><span class="legend-swatch mixed"></span> Mixed</span>
+            <span class="legend-item"><span class="legend-swatch other"></span> Other</span>
           </div>
         </article>
-
         <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip">Historical routes</span>
-          </div>
-          <h3>Resettlement history</h3>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Resettlement cumulative total</span>
-              <span class="data-row-value">{(area.resettlementCumulativeTotal ?? 0).toLocaleString()}</span>
+          <h3>Key metrics</h3>
+          <div class="metric-list">
+            <div class="metric-item">
+              <span class="metric-value">{ethnicProjection.current.groups.white_british.toFixed(1)}%</span>
+              <span class="metric-label">White British ({ethnicProjection.current.year})</span>
             </div>
-            <div class="data-row">
-              <span>UK resettlement and family reunion cumulative</span>
-              <span class="data-row-value">{area.ukResettlementFamilyCumulative.toLocaleString()}</span>
+            <div class="metric-item">
+              <span class="metric-value">{ethnicProjection.baseline.groups.white_british.toFixed(1)}%</span>
+              <span class="metric-label">White British ({ethnicProjection.baseline.year})</span>
             </div>
-            <div class="data-row">
-              <span>Community sponsorship cumulative</span>
-              <span class="data-row-value">{area.communitySponsorshipCumulative.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Latest resettlement quarter</span>
-              <span class="data-row-value">
-                {area.latestResettlementQuarterLabel} ({area.latestResettlementQuarterValue.toLocaleString()})
+            <div class="metric-item">
+              <span class="metric-value" style={`color: ${Math.abs(ethnicProjection.annualChangePp.white_british) > 0.5 ? "var(--coral)" : "var(--text-secondary)"}`}>
+                {ethnicProjection.annualChangePp.white_british > 0 ? "+" : ""}{ethnicProjection.annualChangePp.white_british.toFixed(2)}pp
               </span>
+              <span class="metric-label">Annual change (WB)</span>
             </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="regional-peers" class="split section section-anchor">
-      <div class="panel panel-pad">
-        <h2>Regional peer frame</h2>
-        <p class="lede">
-          The regional ranking matters because high-pressure areas compete for attention with their nearest peers, not
-          just with the national top ten.
-        </p>
-        {regionalPeerRows.map((peer) => (
-          <div class="metric-bar">
-            <div style="min-width: 11rem;">
-              <strong>{peer.areaName}</strong>
-              <div class="tiny">
-                {peer.areaCode === area.areaCode
-                  ? `Current page | ${peer.supportedAsylum.toLocaleString()} supported asylum`
-                  : `${peer.supportedAsylum.toLocaleString()} supported asylum`}
-              </div>
-            </div>
-            <div class="metric-track">
-              <div class="metric-fill" style={`width: ${(peer.supportedAsylum / regionalPeerMax) * 100}%`}></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {ethnicProjection && ethnicTimeline && (
-      <section id="demographic-profile" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>Demographic profile</h2>
-            <p class="lede">
-              Census-based ethnic composition estimates for {area.areaName}, derived from ONS 2011 and 2021 Census data.
-              {significantShift
-                ? ` If 2011–2021 rates of change were to continue, White British residents are estimated to fall below 50% by approximately ${wbThreshold!.year}. This is a trend extrapolation, not a forecast.`
-                : ""
-              }
-            </p>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">Census 2021</span>
-              {significantShift && <span class="chip coral">Significant shift</span>}
-            </div>
-            <h3>Ethnic composition</h3>
-            <div class="stacked-bars">
-              {ethnicTimeline.filter((t) => !t.isProjection || t.year === "2030" || t.year === "2040" || t.year === "2050").map((point) => (
-                <div class="stacked-bar-row">
-                  <div class="stacked-bar-label">
-                    <strong>{point.year}</strong>
-                    {point.isProjection && <span class="chip tiny">projected</span>}
-                  </div>
-                  <div class="stacked-bar" title={`White British: ${point.groups.white_british.toFixed(1)}%, Asian: ${point.groups.asian.toFixed(1)}%, Black: ${point.groups.black.toFixed(1)}%, Mixed: ${point.groups.mixed.toFixed(1)}%, White Other: ${point.groups.white_other.toFixed(1)}%, Other: ${point.groups.other.toFixed(1)}%`}>
-                    <div class="bar-seg wb" style={`width: ${point.groups.white_british}%`}></div>
-                    <div class="bar-seg wo" style={`width: ${point.groups.white_other}%`}></div>
-                    <div class="bar-seg asian" style={`width: ${point.groups.asian}%`}></div>
-                    <div class="bar-seg black" style={`width: ${point.groups.black}%`}></div>
-                    <div class="bar-seg mixed" style={`width: ${point.groups.mixed}%`}></div>
-                    <div class="bar-seg other" style={`width: ${point.groups.other}%`}></div>
-                  </div>
-                  <div class="stacked-bar-pct">{point.groups.white_british.toFixed(1)}% WB</div>
-                </div>
-              ))}
-            </div>
-            <div class="legend-row">
-              <span class="legend-item"><span class="legend-swatch wb"></span> White British</span>
-              <span class="legend-item"><span class="legend-swatch wo"></span> White Other</span>
-              <span class="legend-item"><span class="legend-swatch asian"></span> Asian</span>
-              <span class="legend-item"><span class="legend-swatch black"></span> Black</span>
-              <span class="legend-item"><span class="legend-swatch mixed"></span> Mixed</span>
-              <span class="legend-item"><span class="legend-swatch other"></span> Other</span>
-            </div>
-          </article>
-
-          <article class="feature-card">
-            <h3>Key metrics</h3>
-            <div class="metric-list">
+            {ethnicProjection.current.groups.asian > 5 && (
               <div class="metric-item">
-                <span class="metric-value">{ethnicProjection.current.groups.white_british.toFixed(1)}%</span>
-                <span class="metric-label">White British ({ethnicProjection.current.year})</span>
+                <span class="metric-value">{ethnicProjection.current.groups.asian.toFixed(1)}%</span>
+                <span class="metric-label">Asian ({ethnicProjection.current.year})</span>
               </div>
+            )}
+            {wbThreshold && (
               <div class="metric-item">
-                <span class="metric-value">{ethnicProjection.baseline.groups.white_british.toFixed(1)}%</span>
-                <span class="metric-label">White British ({ethnicProjection.baseline.year})</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value" style={`color: ${Math.abs(ethnicProjection.annualChangePp.white_british) > 0.5 ? "var(--coral)" : "var(--text-secondary)"}`}>
-                  {ethnicProjection.annualChangePp.white_british > 0 ? "+" : ""}{ethnicProjection.annualChangePp.white_british.toFixed(2)}pp
+                <span class="metric-value" style={`color: ${significantShift ? "var(--coral)" : "var(--text-secondary)"}`}>
+                  {wbThreshold.year}
                 </span>
-                <span class="metric-label">Annual change (WB)</span>
-              </div>
-              {ethnicProjection.current.groups.asian > 5 && (
-                <div class="metric-item">
-                  <span class="metric-value">{ethnicProjection.current.groups.asian.toFixed(1)}%</span>
-                  <span class="metric-label">Asian ({ethnicProjection.current.year})</span>
-                </div>
-              )}
-              {wbThreshold && (
-                <div class="metric-item">
-                  <span class="metric-value" style={`color: ${significantShift ? "var(--coral)" : "var(--text-secondary)"}`}>
-                    {wbThreshold.year}
-                  </span>
-                  <span class="metric-label">Projected WB &lt;50% ({wbThreshold.confidence} confidence)</span>
-                </div>
-              )}
-            </div>
-            <details class="method-note">
-              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
-              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-                Baseline: ONS Census 2011 &amp; 2021 (TS021). Trend model: linear extrapolation of decadal percentage-point change rates. Validated against Rees &amp; Norman (University of Leeds) NEWETHPOP cohort-component projections and Goodwin &amp; Sherwood (CHSS, 2025). This model does not account for changes in fertility, mortality, or migration policy. It is a trend indication, not a demographic forecast.
-              </p>
-            </details>
-          </article>
-        </div>
-
-        {ethnicProjection.thresholds.length > 0 && (
-          <article class="feature-card" style="margin-top: 1rem;">
-            <h3>Projected thresholds</h3>
-            <p class="lede">
-              Estimated milestones if 2011–2021 Census rates of change were to continue unchanged. These are trend extrapolations subject to significant uncertainty — actual outcomes depend on migration policy, economic conditions, and local factors. Confidence reflects proximity to observed data.
-            </p>
-            <div class="table-card">
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col">Milestone</th>
-                    <th scope="col">Projected year</th>
-                    <th scope="col">Confidence</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ethnicProjection.thresholds.map((threshold) => (
-                    <tr>
-                      <td>{threshold.label}</td>
-                      <td><strong>{threshold.year}</strong></td>
-                      <td>
-                        <span class={`chip tiny ${threshold.confidence === "medium" ? "coral" : ""}`}>
-                          {threshold.confidence}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </article>
-        )}
-      </section>
-    )}
-
-    {crimeProfile && (
-      <section id="crime-profile" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>Crime profile</h2>
-            <p class="lede">
-              Police recorded crime for {area.areaName}. Total crime rate of {crimeProfile.totalCrimeRate.toFixed(1)} per 1,000 residents
-              {crimePercentile !== null ? ` (${crimePercentile}th percentile among tracked areas)` : ""}.
-              {crimeProfile.yearOnYearChange < 0
-                ? ` Recorded crime fell ${Math.abs(crimeProfile.yearOnYearChange).toFixed(1)}% year-on-year.`
-                : crimeProfile.yearOnYearChange > 0
-                  ? ` Recorded crime rose ${crimeProfile.yearOnYearChange.toFixed(1)}% year-on-year.`
-                  : ""
-              }
-            </p>
-          </div>
-        </div>
-        <div class="grid-2">
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">{crimeProfile.period}</span>
-              {crimeProfile.totalCrimeRate > 90 && <span class="chip coral">Above average</span>}
-            </div>
-            <h3>Crime breakdown</h3>
-            <div class="stacked-bars">
-              {crimeProfile.breakdown.map((item) => {
-                const maxRate = Math.max(...crimeProfile.breakdown.map((b) => b.rate));
-                return (
-                  <div class="stacked-bar-row">
-                    <div class="stacked-bar-label" style="min-width: 8rem;">
-                      <span style="font-size: 0.78rem;">{item.type}</span>
-                    </div>
-                    <div class="stacked-bar" style="background: var(--panel-soft);">
-                      <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
-                    </div>
-                    <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </article>
-          <article class="feature-card">
-            <h3>Key metrics</h3>
-            <div class="metric-list">
-              <div class="metric-item">
-                <span class="metric-value">{crimeProfile.totalCrimeRate.toFixed(1)}</span>
-                <span class="metric-label">Crimes per 1,000 residents</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value" style={`color: ${crimeProfile.yearOnYearChange > 0 ? "var(--accent-3)" : "var(--accent-2)"}`}>
-                  {crimeProfile.yearOnYearChange > 0 ? "+" : ""}{crimeProfile.yearOnYearChange.toFixed(1)}%
-                </span>
-                <span class="metric-label">Year-on-year change</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{crimeProfile.hateCrimeCount.toLocaleString()}</span>
-                <span class="metric-label">Hate crimes recorded</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{crimeProfile.violentCrimeRate.toFixed(1)}</span>
-                <span class="metric-label">Violent crime rate per 1,000</span>
-              </div>
-            </div>
-            <details class="method-note">
-              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
-              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-                ONS recorded crime statistics, {crimeProfile.period}. Crime recording practices vary between forces. Hate crime from Home Office annual statistics. Correlation with asylum dispersal does not imply causation — deprivation, urbanisation, and policing levels are confounders.
-              </p>
-            </details>
-          </article>
-        </div>
-      </section>
-    )}
-
-    {sendProfile && (
-      <section id="send-profile" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>SEND pressure</h2>
-            <p class="lede">
-              Special educational needs and disabilities demand in {area.areaName}. EHCP rate of {sendProfile.ehcpRatePer10k} per 10,000 school-age children
-              {sendPercentile !== null ? ` (${sendPercentile}th percentile)` : ""}.
-              Demand grew {sendProfile.fiveYearGrowthPct.toFixed(1)}% over five years.
-            </p>
-          </div>
-        </div>
-        <div class="grid-2">
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">{sendProfile.period}</span>
-              {sendProfile.fiveYearGrowthPct > 40 && <span class="chip coral">Rapid growth</span>}
-            </div>
-            <h3>Primary need types</h3>
-            <div class="stacked-bars">
-              {sendProfile.primaryNeeds.filter((n) => n.pct > 5).map((need) => (
-                <div class="stacked-bar-row">
-                  <div class="stacked-bar-label" style="min-width: 8rem;">
-                    <span style="font-size: 0.78rem;">{need.need}</span>
-                  </div>
-                  <div class="stacked-bar" style="background: var(--panel-soft);">
-                    <div class="bar-seg mixed" style={`width: ${need.pct}%`}></div>
-                  </div>
-                  <div class="stacked-bar-pct">{need.pct.toFixed(1)}%</div>
-                </div>
-              ))}
-            </div>
-          </article>
-          <article class="feature-card">
-            <h3>Key metrics</h3>
-            <div class="metric-list">
-              <div class="metric-item">
-                <span class="metric-value">{sendProfile.ehcpRatePer10k}</span>
-                <span class="metric-label">EHCPs per 10,000 pupils</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value" style={`color: ${sendProfile.fiveYearGrowthPct > 40 ? "var(--accent-3)" : "var(--accent-2)"}`}>
-                  +{sendProfile.fiveYearGrowthPct.toFixed(1)}%
-                </span>
-                <span class="metric-label">5-year EHCP growth</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{sendProfile.totalEhcps.toLocaleString()}</span>
-                <span class="metric-label">Total EHCPs maintained</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{sendProfile.asdPrevalencePct.toFixed(1)}%</span>
-                <span class="metric-label">ASD as primary need</span>
-              </div>
-            </div>
-            <details class="method-note">
-              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
-              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-                DfE SEN2 return, {sendProfile.period}. Rising EHCP numbers reflect multiple factors including improved identification, changing diagnostic criteria, and increased parental awareness — not solely population change.
-              </p>
-            </details>
-          </article>
-        </div>
-      </section>
-    )}
-
-    {ascProfile && (
-      <section id="asc-profile" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>Social care pressure</h2>
-            <p class="lede">
-              Adult social care in {area.areaName}. Gross spend of £{ascProfile.grossSpendPerCapita} per capita
-              {ascPercentile !== null ? ` (${ascPercentile}th percentile)` : ""}.
-            </p>
-          </div>
-        </div>
-        <div class="grid-2">
-          <article class="feature-card">
-            <h3>Key metrics</h3>
-            <div class="metric-list">
-              <div class="metric-item">
-                <span class="metric-value">£{ascProfile.grossSpendPerCapita}</span>
-                <span class="metric-label">Gross spend per capita</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{ascProfile.residentialRatePer10k65}</span>
-                <span class="metric-label">Residential placements per 10k 65+</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{ascProfile.qualityOfLifeScore.toFixed(1)}</span>
-                <span class="metric-label">Quality of life score (ASCOF 1A)</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-value">{ascProfile.dtocDaysAnnual.toLocaleString()}</span>
-                <span class="metric-label">Delayed transfer days (annual)</span>
-              </div>
-            </div>
-            <details class="method-note">
-              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
-              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-                NHS Digital SALT collection and ASCOF, {ascProfile.period}. Spending reflects local policy decisions, demographic composition, and deprivation. Direct comparison between areas must account for differences in population age structure.
-              </p>
-            </details>
-          </article>
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">{ascProfile.period}</span>
-            </div>
-            <h3>What this means</h3>
-            <p class="lede" style="font-size: 0.9rem;">
-              {ascProfile.grossSpendPerCapita > 580
-                ? `${area.areaName} spends above the median on adult social care per head. Higher spend often correlates with older population profiles and higher deprivation.`
-                : `${area.areaName} spends around or below the median on adult social care per head. This may reflect a younger population profile or different service commissioning models.`
-              }
-              {ethnicProjection && Math.abs(ethnicProjection.annualChangePp.white_british) > 0.4
-                ? ` Rapid demographic change may affect future social care demand as the age profile of the population shifts.`
-                : ""
-              }
-            </p>
-          </article>
-        </div>
-      </section>
-    )}
-
-    {pressureScore.availableModules >= 3 && (
-      <section id="pressure-index" class="section section-anchor">
-        <div class="section-head">
-          <div>
-            <h2>Combined pressure index</h2>
-            <p class="lede">
-              Composite score across {pressureScore.availableModules} domains: asylum dispersal, demographic change, crime, SEND demand, and social care spend. {area.areaName} scores {pressureScore.compositeScore.toFixed(1)} out of 100.
-            </p>
-          </div>
-        </div>
-        <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip accent">Multi-domain</span>
-            {pressureScore.compositeScore > 70 && <span class="chip coral">High pressure</span>}
-          </div>
-          <h3>Domain breakdown</h3>
-          <div class="metric-list" style="grid-template-columns: repeat(3, 1fr);">
-            {pressureScore.components.asylumRate !== null && (
-              <div class="metric-item">
-                <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.asylumRate.toFixed(1)}</span>
-                <span class="metric-label">Asylum rate per 10k</span>
-              </div>
-            )}
-            {pressureScore.components.demographicChangeRate !== null && (
-              <div class="metric-item">
-                <span class="metric-value" style="font-size: 1.3rem;">-{pressureScore.components.demographicChangeRate.toFixed(2)}pp</span>
-                <span class="metric-label">WB annual change</span>
-              </div>
-            )}
-            {pressureScore.components.crimeRate !== null && (
-              <div class="metric-item">
-                <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.crimeRate.toFixed(1)}</span>
-                <span class="metric-label">Crime per 1,000</span>
-              </div>
-            )}
-            {pressureScore.components.sendGrowth !== null && (
-              <div class="metric-item">
-                <span class="metric-value" style="font-size: 1.3rem;">+{pressureScore.components.sendGrowth.toFixed(1)}%</span>
-                <span class="metric-label">SEND 5yr growth</span>
-              </div>
-            )}
-            {pressureScore.components.ascSpend !== null && (
-              <div class="metric-item">
-                <span class="metric-value" style="font-size: 1.3rem;">£{pressureScore.components.ascSpend}</span>
-                <span class="metric-label">ASC spend per capita</span>
+                <span class="metric-label">Projected WB &lt;50% ({wbThreshold.confidence})</span>
               </div>
             )}
           </div>
           <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Index methodology</summary>
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source & methodology</summary>
             <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-              Each domain is converted to a percentile rank (0–100) among tracked areas. The composite score is the unweighted mean of available domain percentiles. Higher scores indicate greater combined pressure across multiple domains. This index measures correlation of pressures, not causation between them.
+              ONS Census 2011 & 2021 (TS021). Linear extrapolation of decadal change rates. Not a demographic forecast.
             </p>
           </details>
         </article>
-      </section>
-    )}
-
-    <section id="hotel-evidence" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Hotel evidence for this place</h2>
-          <p class="lede">
-            Place pages should merge live route data with the named and unnamed hotel evidence already on the public
-            record.
-          </p>
-        </div>
       </div>
-      {hotelSites.length > 0 || hotelArea ? (
-        <div class="table-card">
-          <table>
-            <caption>Public hotel evidence currently attached to {area.areaName}, including named sites and unnamed acknowledged use.</caption>
-            <thead>
-              <tr>
-                <th scope="col">Site</th>
-                <th scope="col">Status</th>
-                <th scope="col">Evidence</th>
-                <th scope="col">Last public date</th>
-                <th scope="col">Entity coverage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hotelSites.map((site) => (
-                (() => {
-                  const entityProfiles = getSiteEntityProfiles(site);
-
-                  return (
-                    <tr>
-                      <th scope="row">
-                        <strong>{site.siteName}</strong>
-                        <div class="tiny">
-                          <a class="source-pill" href={site.sourceUrl}>Evidence</a>
-                        </div>
-                      </th>
-                      <td>{site.status}</td>
-                      <td>{site.evidenceClass}</td>
-                      <td>{site.lastPublicDate}</td>
-                      <td>
-                        <div class="chip-row">
-                          <span class="chip">{site.entityCoverage}</span>
-                        </div>
-                        {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
-                        {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
-                        {site.primeProvider && (
-                          <div class="tiny">
-                            Prime provider: {site.primeProvider.provider}
-                            {getEntityProfileByReference(site.primeProvider.provider, null) && (
-                              <>
-                                {" "}
-                                <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>
-                                  profile
-                                </a>
-                              </>
-                            )}
-                          </div>
-                        )}
-                        {site.entityLinks.map((link) => {
-                          const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
-
-                          return (
-                            <div class="tiny">
-                              {link.entityName} ({link.linkRole})
-                              {profile && (
-                                <>
-                                  {" "}
-                                  <a href={`/entities/${profile.entityId}/`}>profile</a>
-                                </>
-                              )}
-                            </div>
-                          );
-                        })}
-                        {site.entityLinks.length === 0 &&
-                          !site.primeProvider &&
-                          entityProfiles.length === 0 && <div class="tiny">No linked entity profile yet.</div>}
-                      </td>
-                    </tr>
-                  );
-                })()
-              ))}
-              {hotelArea && hotelArea.unnamedSiteCount > 0 && (
-                <tr>
-                  <th scope="row">
-                    <strong>Unnamed sites</strong>
-                    <div class="tiny">
-                      <a class="source-pill" href={hotelArea.sourceUrl}>Source</a>
-                    </div>
-                  </th>
-                  <td>acknowledged</td>
-                  <td>area sighting</td>
-                  <td>{hotelArea.lastPublicDate}</td>
-                  <td>
-                    <span class="tiny">{hotelArea.unnamedSiteCount} site{hotelArea.unnamedSiteCount > 1 ? "s" : ""} without public names</span>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip">Evidence gap</span>
+      {ethnicProjection.thresholds.length > 0 && (
+        <article class="feature-card" style="margin-top: 1rem;">
+          <h3>Projected thresholds</h3>
+          <p class="tiny" style="opacity: 0.6;">If 2011-2021 Census rates continue unchanged. Subject to significant uncertainty.</p>
+          <div class="table-card">
+            <table>
+              <thead><tr><th>Milestone</th><th>Year</th><th>Confidence</th></tr></thead>
+              <tbody>
+                {ethnicProjection.thresholds.map((t) => (
+                  <tr>
+                    <td>{t.label}</td>
+                    <td><strong>{t.year}</strong></td>
+                    <td><span class={`chip tiny ${t.confidence === "medium" ? "coral" : ""}`}>{t.confidence}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <h3>No public hotel evidence logged yet</h3>
-          <p class="lede">
-            That does not mean the area has no hotel use. It means the ledger has no publishable public evidence row
-            attached yet.
-          </p>
         </article>
       )}
     </section>
+  )}
 
-  </DataDrawer>
+  <!-- CRIME -->
+  {crimeProfile && (
+    <section id="crime-profile" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Crime</h2>
+          <p class="lede">
+            {crimeProfile.totalCrimeRate.toFixed(1)} crimes per 1,000 residents
+            {crimePercentile !== null ? ` (${crimePercentile}th percentile)` : ""}.
+            {crimeProfile.yearOnYearChange !== 0
+              ? ` ${crimeProfile.yearOnYearChange > 0 ? "Up" : "Down"} ${Math.abs(crimeProfile.yearOnYearChange).toFixed(1)}% year-on-year.`
+              : ""}
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="feature-card">
+          <h3>Crime breakdown</h3>
+          <div class="stacked-bars">
+            {crimeProfile.breakdown.map((item) => {
+              const maxRate = Math.max(...crimeProfile.breakdown.map((b) => b.rate));
+              return (
+                <div class="stacked-bar-row">
+                  <div class="stacked-bar-label" style="min-width: 8rem;">
+                    <span style="font-size: 0.78rem;">{item.type}</span>
+                  </div>
+                  <div class="stacked-bar" style="background: var(--panel-soft);">
+                    <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
+                  </div>
+                  <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
+                </div>
+              );
+            })}
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>Key metrics</h3>
+          <div class="metric-list">
+            <div class="metric-item">
+              <span class="metric-value">{crimeProfile.totalCrimeRate.toFixed(1)}</span>
+              <span class="metric-label">Per 1,000 residents</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">{crimeProfile.hateCrimeCount.toLocaleString()}</span>
+              <span class="metric-label">Hate crimes</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">{crimeProfile.violentCrimeRate.toFixed(1)}</span>
+              <span class="metric-label">Violent crime /1,000</span>
+            </div>
+          </div>
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">ONS recorded crime, {crimeProfile.period}. Correlation with asylum dispersal does not imply causation.</p>
+          </details>
+        </article>
+      </div>
+    </section>
+  )}
 
-  <script>
-    import { initPlaceDrilldown } from "../../scripts/place-drilldown";
+  <!-- SEND -->
+  {sendProfile && (
+    <section id="send-profile" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>SEND pressure</h2>
+          <p class="lede">
+            EHCP rate: {sendProfile.ehcpRatePer10k} per 10,000 pupils{sendPercentile !== null ? ` (${sendPercentile}th percentile)` : ""}.
+            5-year growth: +{sendProfile.fiveYearGrowthPct.toFixed(1)}%.
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">{sendProfile.period}</span>
+            {sendProfile.fiveYearGrowthPct > 40 && <span class="chip coral">Rapid growth</span>}
+          </div>
+          <h3>Primary need types</h3>
+          <div class="stacked-bars">
+            {sendProfile.primaryNeeds.filter((n) => n.pct > 5).map((need) => (
+              <div class="stacked-bar-row">
+                <div class="stacked-bar-label" style="min-width: 8rem;">
+                  <span style="font-size: 0.78rem;">{need.need}</span>
+                </div>
+                <div class="stacked-bar" style="background: var(--panel-soft);">
+                  <div class="bar-seg mixed" style={`width: ${need.pct}%`}></div>
+                </div>
+                <div class="stacked-bar-pct">{need.pct.toFixed(1)}%</div>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>Key metrics</h3>
+          <div class="metric-list">
+            <div class="metric-item">
+              <span class="metric-value">{sendProfile.totalEhcps.toLocaleString()}</span>
+              <span class="metric-label">Total EHCPs</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">{sendProfile.asdPrevalencePct.toFixed(1)}%</span>
+              <span class="metric-label">ASD as primary need</span>
+            </div>
+          </div>
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">DfE SEN2 return, {sendProfile.period}. Rising EHCPs reflect multiple factors, not solely population change.</p>
+          </details>
+        </article>
+      </div>
+    </section>
+  )}
 
-    initPlaceDrilldown();
-  </script>
+  <!-- SOCIAL CARE -->
+  {ascProfile && (
+    <section id="asc-profile" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Social care</h2>
+          <p class="lede">
+            Adult social care: £{ascProfile.grossSpendPerCapita} per capita{ascPercentile !== null ? ` (${ascPercentile}th percentile)` : ""}.
+          </p>
+        </div>
+      </div>
+      <article class="feature-card">
+        <div class="metric-list" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="metric-item">
+            <span class="metric-value">£{ascProfile.grossSpendPerCapita}</span>
+            <span class="metric-label">Gross spend per capita</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-value">{ascProfile.residentialRatePer10k65}</span>
+            <span class="metric-label">Residential per 10k 65+</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-value">{ascProfile.qualityOfLifeScore.toFixed(1)}</span>
+            <span class="metric-label">Quality of life (ASCOF 1A)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-value">{ascProfile.dtocDaysAnnual.toLocaleString()}</span>
+            <span class="metric-label">Delayed transfer days</span>
+          </div>
+        </div>
+        <details class="method-note">
+          <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+          <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">NHS Digital SALT/ASCOF, {ascProfile.period}.</p>
+        </details>
+      </article>
+    </section>
+  )}
+
+  <!-- PRESSURE INDEX -->
+  {pressureScore.availableModules >= 3 && (
+    <section id="pressure-index" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Pressure index</h2>
+          <p class="lede">
+            Combined score across {pressureScore.availableModules} domains: {pressureScore.compositeScore.toFixed(1)}/100.
+          </p>
+        </div>
+      </div>
+      <article class="feature-card">
+        <div class="chip-row">
+          {pressureScore.compositeScore > 70 && <span class="chip coral">High pressure</span>}
+        </div>
+        <div class="metric-list" style="grid-template-columns: repeat(3, 1fr);">
+          {pressureScore.components.asylumRate !== null && (
+            <div class="metric-item">
+              <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.asylumRate.toFixed(1)}</span>
+              <span class="metric-label">Asylum rate /10k</span>
+            </div>
+          )}
+          {pressureScore.components.demographicChangeRate !== null && (
+            <div class="metric-item">
+              <span class="metric-value" style="font-size: 1.3rem;">-{pressureScore.components.demographicChangeRate.toFixed(2)}pp</span>
+              <span class="metric-label">WB annual change</span>
+            </div>
+          )}
+          {pressureScore.components.crimeRate !== null && (
+            <div class="metric-item">
+              <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.crimeRate.toFixed(1)}</span>
+              <span class="metric-label">Crime /1,000</span>
+            </div>
+          )}
+          {pressureScore.components.sendGrowth !== null && (
+            <div class="metric-item">
+              <span class="metric-value" style="font-size: 1.3rem;">+{pressureScore.components.sendGrowth.toFixed(1)}%</span>
+              <span class="metric-label">SEND 5yr growth</span>
+            </div>
+          )}
+          {pressureScore.components.ascSpend !== null && (
+            <div class="metric-item">
+              <span class="metric-value" style="font-size: 1.3rem;">£{pressureScore.components.ascSpend}</span>
+              <span class="metric-label">ASC /capita</span>
+            </div>
+          )}
+        </div>
+        <details class="method-note">
+          <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Methodology</summary>
+          <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+            Each domain converted to percentile rank (0-100). Composite = unweighted mean. Measures correlation, not causation.
+          </p>
+        </details>
+      </article>
+    </section>
+  )}
+
+  <!-- BENCHMARKS -->
+  <section id="local-benchmarks" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>National benchmarks</h2>
+      </div>
+    </div>
+    <div class="benchmark-grid">
+      <BenchmarkStrip
+        label="Supported asylum count"
+        description="National distribution."
+        value={area.supportedAsylum}
+        min={supportedStats.min}
+        median={supportedStats.median}
+        p90={supportedStats.p90}
+        max={supportedStats.max}
+        valueLabel={area.supportedAsylum.toLocaleString()}
+      />
+      <BenchmarkStrip
+        label="Supported asylum rate"
+        description="Per 10,000 residents."
+        value={area.supportedAsylumRate ?? 0}
+        min={supportedRateStats.min}
+        median={supportedRateStats.median}
+        p90={supportedRateStats.p90}
+        max={supportedRateStats.max}
+        valueLabel={area.supportedAsylumRate !== null ? `${area.supportedAsylumRate}` : "n/a"}
+        tone="teal"
+      />
+      <BenchmarkStrip
+        label="Contingency accommodation"
+        description="Hotel and contingency placements."
+        value={area.contingencyAccommodation}
+        min={contingencyStats.min}
+        median={contingencyStats.median}
+        p90={contingencyStats.p90}
+        max={contingencyStats.max}
+        valueLabel={area.contingencyAccommodation.toLocaleString()}
+        tone="warm"
+      />
+    </div>
+  </section>
+
+  <!-- REGIONAL PEERS -->
+  <section id="regional-peers" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Regional peers</h2>
+        <p class="lede">Top {regionalPeerRows.length} in {area.regionName} by supported asylum.</p>
+      </div>
+    </div>
+    <div class="panel panel-pad">
+      {regionalPeerRows.map((peer) => (
+        <div class="metric-bar">
+          <div style="min-width: 11rem;">
+            <strong>{peer.areaName}</strong>
+            <div class="tiny">
+              {peer.areaCode === area.areaCode
+                ? `This area | ${peer.supportedAsylum.toLocaleString()}`
+                : peer.supportedAsylum.toLocaleString()}
+            </div>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style={`width: ${(peer.supportedAsylum / regionalPeerMax) * 100}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
 </BaseLayout>

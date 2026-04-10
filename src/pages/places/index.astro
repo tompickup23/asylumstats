@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import DataDrawer from "../../components/DataDrawer.astro";
 import HomeMapStage from "../../components/HomeMapStage.astro";
 import HomeSystemDeck from "../../components/HomeSystemDeck.astro";
 import PageContents from "../../components/PageContents.astro";
@@ -19,30 +18,7 @@ const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
 const placeRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const placeSections = [
   { id: "place-map", label: "Map" },
-  { id: "place-guide", label: "How to use" },
-  { id: "regional-directory", label: "Regions" },
-  { id: "featured-places", label: "Place leaders" },
-  { id: "advanced-place-tools", label: "Advanced tools" }
-];
-const placeGuideCards = [
-  {
-    title: "Read the Britain map first",
-    body: "Do not open an authority blind. Start with total for scale, switch to rate for intensity, and use hotel visibility only as a publication footprint.",
-    href: "#place-map",
-    cta: "Use the map"
-  },
-  {
-    title: "Open one region before one authority",
-    body: "The region page is the bridge between Britain and the local authority. It narrows the field before the place layer gets specific.",
-    href: "#regional-directory",
-    cta: "Open regions"
-  },
-  {
-    title: "Use raw notebooks only after the place page",
-    body: "Compare, hotels, money, and actors still exist, but they now sit behind the map-led route through the publication.",
-    href: "#advanced-place-tools",
-    cta: "Open advanced tools"
-  }
+  { id: "featured-places", label: "Top areas" }
 ];
 
 type PlaceDeckEntry = {
@@ -463,85 +439,10 @@ const pageDescription =
 
   <PageContents title="Start here" sections={placeSections} variant="priority" />
 
-  <section id="place-guide" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Use the place layer in three moves</h2>
-        <p class="lede">
-          Start broad, narrow to one region, then open a local authority. The deeper notebooks only matter when the
-          place page stops answering the question.
-        </p>
-      </div>
-    </div>
-    <div class="guide-grid">
-      {placeGuideCards.map((card) => (
-        <article class="guide-card">
-          <h3>{card.title}</h3>
-          <p>{card.body}</p>
-          <p class="tiny">
-            <a class="source-pill" href={card.href}>{card.cta}</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section id="regional-directory" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Browse by region</h2>
-        <p class="lede">
-          Each region card keeps the regional total, the rate, the visible hotel footprint, and the first authorities
-          worth opening.
-        </p>
-      </div>
-      <span class="chip">{placeDirectory.regions.length} regions with public place pages</span>
-    </div>
-    <div class="feature-grid">
-      {placeDirectory.regions.map((region) => (
-        <article class="feature-card accent">
-          <div class="chip-row">
-            <span class="chip accent">{region.regionName}</span>
-            <span class="chip teal">{region.countryName}</span>
-            <span class="chip">{region.publicPlaceCount.toLocaleString()} place pages</span>
-          </div>
-          <h3>
-            <a href={region.regionPath}>{region.regionName}</a>
-          </h3>
-          <p class="lede">
-            {region.supportedAsylum.toLocaleString()} people on supported asylum across the region, at a weighted rate
-            of {region.supportedAsylumRate} per 10,000 residents.
-          </p>
-          <div class="data-list">
-            <div class="data-row">
-              <span>Open this place first</span>
-              <span class="data-row-value">{region.leadArea?.area.areaName ?? "No public place page yet"}</span>
-            </div>
-            <div class="data-row">
-              <span>Contingency accommodation</span>
-              <span class="data-row-value">{region.contingencyAccommodation.toLocaleString()}</span>
-            </div>
-            <div class="data-row">
-              <span>Named current sites visible</span>
-              <span class="data-row-value">{region.namedCurrentSiteCount.toLocaleString()}</span>
-            </div>
-          </div>
-          <p class="tiny">
-            <a class="source-pill" href={region.regionPath}>Open {region.regionName} region page</a>
-          </p>
-        </article>
-      ))}
-    </div>
-  </section>
-
   <section id="featured-places" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Place leaders to open next</h2>
-        <p class="lede">
-          These are the biggest public place pages by supported asylum count. Where hotel evidence exists, it stays
-          visible inside the local reading surface.
-        </p>
+        <h2>Top areas by asylum support</h2>
       </div>
       <a class="chip accent" href="/compare#compare-findings">Open the advanced compare surface</a>
     </div>
@@ -572,86 +473,11 @@ const pageDescription =
     </div>
   </section>
 
-  <DataDrawer
-    id="advanced-place-tools"
-    label="Advanced tools"
-    title="Open all region pages and the secondary notebooks"
-    summary="The main route is now Britain to region to place. Use this section for the full region directory and then the deeper compare, hotel, money, and actor notebooks."
-  >
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>All region pages</h2>
-          <p class="lede">
-            Use these as the second step after the national map. Each region page narrows the field before you open
-            individual authorities.
-          </p>
-        </div>
-      </div>
-      <div class="feature-grid">
-        {placeDirectory.regions.map((region) => (
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class="chip accent">{region.regionName}</span>
-              <span class="chip">{region.countryName}</span>
-            </div>
-            <h3>
-              <a href={region.regionPath}>Open {region.regionName}</a>
-            </h3>
-            <p class="lede">
-              {region.publicPlaceCount.toLocaleString()} place pages, {region.supportedAsylum.toLocaleString()} people
-              on supported asylum, and {region.hotelLinkedPlaceCount.toLocaleString()} places already carrying hotel
-              evidence.
-            </p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Secondary notebooks</h2>
-          <p class="lede">
-            These pages still exist, but they now sit behind the place layer rather than acting as the first route
-            through the publication.
-          </p>
-        </div>
-      </div>
-      <div class="guide-grid">
-        <article class="guide-card">
-          <span class="chip accent">Advanced compare</span>
-          <h3>Filtered compare views</h3>
-          <p>Use this when you need model-based filters, saved query states, and the wider compare explorer.</p>
-          <p class="tiny">
-            <a class="source-pill" href="/compare/">Open compare</a>
-          </p>
-        </article>
-        <article class="guide-card">
-          <span class="chip">Hotel notebook</span>
-          <h3>Raw hotel ledger</h3>
-          <p>Use this only when the place page is not enough and you need unresolved chains or the archive queue.</p>
-          <p class="tiny">
-            <a class="source-pill" href="/hotels/">Open hotels</a>
-          </p>
-        </article>
-        <article class="guide-card">
-          <span class="chip">Money notebook</span>
-          <h3>Contract and supplier ledger</h3>
-          <p>Use this when the local reading points toward public money and you need the disclosed ledger rows directly.</p>
-          <p class="tiny">
-            <a class="source-pill" href="/spending/">Open money</a>
-          </p>
-        </article>
-        <article class="guide-card">
-          <span class="chip">Actor notebook</span>
-          <h3>Provider and owner profiles</h3>
-          <p>Use this for named provider chains and entity timelines after the place context is already clear.</p>
-          <p class="tiny">
-            <a class="source-pill" href="/entities/">Open actors</a>
-          </p>
-        </article>
-      </div>
-    </section>
-  </DataDrawer>
+  <section class="section shell" style="padding-bottom: 3rem;">
+    <div class="chip-row" style="flex-wrap: wrap; gap: 0.5rem;">
+      <a class="source-pill" href="/regional/">Browse by region</a>
+      <a class="source-pill" href="/national/">National overview</a>
+      <a class="source-pill" href="/compare/">Compare places</a>
+    </div>
+  </section>
 </BaseLayout>

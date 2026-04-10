@@ -1,0 +1,124 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RegionTileMap from "../components/RegionTileMap.astro";
+import { getPlaceDirectory } from "../lib/place-directory";
+import { getRegionPressureSummaries } from "../lib/route-analytics";
+import { loadLocalRouteLatest } from "../lib/route-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const placeDirectory = getPlaceDirectory();
+const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
+---
+
+<BaseLayout
+  title="Regional Overview — asylumstats"
+  description="Browse asylum data by UK region. See which regions carry the most pressure and drill into local authorities."
+>
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">Regional</span>
+      <h1>Browse by region</h1>
+      <p>{placeDirectory.regions.length} regions with public data. Click any region to see its local authorities.</p>
+    </section>
+  </section>
+
+  <!-- REGION MAP -->
+  <section class="section shell">
+    <RegionTileMap
+      items={regionalPressure.map((region) => ({ regionName: region.regionName, value: region.supportedAsylum }))}
+      title="Regional asylum support totals"
+      description="Supported asylum count by region at the latest quarter end."
+      valueLabel="supported asylum total"
+    />
+  </section>
+
+  <!-- REGION CARDS -->
+  <section class="section shell">
+    <div class="region-grid">
+      {placeDirectory.regions.map((region) => (
+        <a href={region.regionPath} class="region-card">
+          <div class="region-card-head">
+            <h2>{region.regionName}</h2>
+            <span class="chip tiny">{region.countryName}</span>
+          </div>
+          <div class="region-stats">
+            <div class="region-stat">
+              <strong>{region.supportedAsylum.toLocaleString()}</strong>
+              <span>on support</span>
+            </div>
+            <div class="region-stat">
+              <strong>{region.supportedAsylumRate}</strong>
+              <span>per 10k</span>
+            </div>
+            <div class="region-stat">
+              <strong>{region.publicPlaceCount}</strong>
+              <span>places</span>
+            </div>
+          </div>
+          <div class="region-lead">
+            {region.leadArea && (
+              <span class="tiny">Top area: <strong>{region.leadArea.area.areaName}</strong> ({region.leadArea.area.supportedAsylum.toLocaleString()})</span>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding-bottom: 3rem;
+  }
+  .region-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 180ms, transform 120ms;
+  }
+  .region-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .region-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .region-card-head h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .region-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .region-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .region-stat strong {
+    font-family: "Sora", sans-serif;
+    font-size: 1.1rem;
+  }
+  .region-stat span {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .region-lead {
+    border-top: 1px solid var(--border);
+    padding-top: 0.5rem;
+  }
+</style>
