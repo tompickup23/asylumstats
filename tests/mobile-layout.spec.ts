@@ -5,14 +5,14 @@ const pages = [
   {
     name: "home",
     path: "/",
-    focus: "#read-this-first",
+    focus: "#headline-stats",
     hasPageContents: false,
-    hasRegionMapExplorer: true,
+    hasRegionMapExplorer: false,
     hasRegionMapSummary: false
   },
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
-  { name: "hotels", path: "/hotels/", focus: "#hotel-findings", hasPageContents: true },
+  // hotels page disabled (renamed to _hotels.astro.disabled) — data pipeline intact
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
   { name: "entity-serco", path: "/entities/supplier_serco/", focus: "#entity-findings", hasPageContents: true },
@@ -37,15 +37,7 @@ const filteredViews = [
     expectedFocus: "contingency",
     expectedLocation: "compare_model=hotel-heavy"
   },
-  {
-    name: "hotels-filtered",
-    path: "/hotels/?hotel_status=current&hotel_coverage=unresolved#hotel-filters",
-    root: "#hotel-filters",
-    summary: "[data-hotel-site-summary]",
-    expectedSummary: /Showing \d+ matching site rows/,
-    expectedFocus: "current",
-    expectedLocation: "hotel_coverage=unresolved"
-  },
+  // hotels-filtered removed — hotels page disabled
   {
     name: "spending-filtered",
     path: "/spending/?money_route=asylum_support&money_value=with_value&money_sort=value#money-explorer",
