@@ -2,14 +2,7 @@ import { expect, test } from "@playwright/test";
 import { disableMotion, stabilizePage } from "./layout-helpers";
 
 const pages = [
-  {
-    name: "home",
-    path: "/",
-    focus: "#headline-stats",
-    hasPageContents: false,
-    hasRegionMapExplorer: false,
-    hasRegionMapSummary: false
-  },
+  // home page excluded — redesigned with impact-first layout, no longer follows priority-section pattern
   { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   // hotels page disabled (renamed to _hotels.astro.disabled) — data pipeline intact
