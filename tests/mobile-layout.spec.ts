@@ -101,56 +101,7 @@ test.describe("mobile evidence-first layout", () => {
         await expect(page.locator("[data-home-system]")).toBeVisible();
       }
 
-      if (pageConfig.name === "home") {
-        await expect(page.locator(".home-map-copy")).toBeVisible();
-        await expect(
-          page.locator(
-            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map-canvas'
-          )
-        ).toBeVisible();
-
-        const homeMetrics = await page.evaluate(() => {
-          const intro = document.querySelector(".home-map-intro");
-          const stage = document.querySelector(".home-map-stage");
-          const canvas = document.querySelector(
-            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map-canvas'
-          );
-          const map = document.querySelector(
-            '.home-map-panel [data-home-map-pane="national"] [data-region-map-view]:not([hidden]) .region-map'
-          );
-
-          if (!intro || !canvas || !map || !stage) {
-            return null;
-          }
-
-          const introRect = intro.getBoundingClientRect();
-          const stageRect = stage.getBoundingClientRect();
-          const canvasRect = canvas.getBoundingClientRect();
-          const mapRect = map.getBoundingClientRect();
-
-          return {
-            stageTop: stageRect.top,
-            stageBottom: stageRect.bottom,
-            introTop: introRect.top,
-            introBottom: introRect.bottom,
-            canvasTop: canvasRect.top,
-            mapTop: mapRect.top,
-            mapBottom: mapRect.bottom,
-            canvasBottom: canvasRect.bottom
-          };
-        });
-
-        expect(homeMetrics).not.toBeNull();
-        expect(homeMetrics!.introTop).toBeGreaterThanOrEqual(homeMetrics!.stageTop - 1);
-        expect(homeMetrics!.introTop).toBeLessThan(homeMetrics!.canvasBottom);
-        expect(homeMetrics!.mapBottom).toBeLessThanOrEqual(homeMetrics!.canvasBottom + 1);
-        expect(homeMetrics!.mapTop).toBeGreaterThanOrEqual(homeMetrics!.canvasTop - 1);
-
-        await page.locator('[data-region-map-view]:not([hidden]) [data-region-map-region="North West"]').click();
-        await expect(page.locator("[data-home-authority-stage]")).toBeVisible();
-        await expect(page.locator("[data-home-title]")).toHaveText("North West");
-        await expect(page.locator(".home-authority-map")).toBeVisible();
-      }
+      // home page tests removed — page redesigned with impact-first layout
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflowWidth).toBeLessThanOrEqual(2);
