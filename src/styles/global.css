@@ -5075,3 +5075,127 @@ tr:last-child td {
     font-size: 10px;
   }
 }
+
+/* ── Demographic profile (stacked bars + metrics) ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stacked-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.stacked-bar-row {
+  display: grid;
+  grid-template-columns: 5rem 1fr 4.5rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stacked-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stacked-bar {
+  display: flex;
+  height: 1.4rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-seg {
+  min-width: 0;
+  transition: width 0.3s;
+}
+
+.bar-seg.wb { background: #7dd3fc; }
+.bar-seg.wo { background: #a5b4c8; }
+.bar-seg.asian { background: #ff8b61; }
+.bar-seg.black { background: #4ee4c3; }
+.bar-seg.mixed { background: #c084fc; }
+.bar-seg.other { background: #facc15; }
+
+.stacked-bar-pct {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin-top: 0.8rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.legend-swatch.wb { background: #7dd3fc; }
+.legend-swatch.wo { background: #a5b4c8; }
+.legend-swatch.asian { background: #ff8b61; }
+.legend-swatch.black { background: #4ee4c3; }
+.legend-swatch.mixed { background: #c084fc; }
+.legend-swatch.other { background: #facc15; }
+
+.metric-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-item .metric-value {
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  margin-top: 0;
+}
+
+.metric-item .metric-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.chip.coral {
+  border-color: rgba(255, 139, 97, 0.3);
+  background: rgba(255, 139, 97, 0.2);
+  color: #ffaa88;
+}
+
+.chip.tiny {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.4rem;
+}

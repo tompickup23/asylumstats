@@ -20,6 +20,7 @@ import { getPlaceInvestigationTrails } from "../../lib/investigations";
 import { loadMoneyLedger } from "../../lib/money-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
 import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
+import { getEthnicProjection, getEthnicCompositionTimeline } from "../../lib/ethnic-projections";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -306,6 +307,11 @@ const placeGuideItems = [
     cta: "Open the deep data"
   }
 ];
+const ethnicProjection = getEthnicProjection(area.areaCode);
+const ethnicTimeline = getEthnicCompositionTimeline(area.areaCode);
+const wbThreshold = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
+const significantShift = wbThreshold && wbThreshold.year <= 2070;
+
 const placeSections = [
   { id: "place-findings", label: "Findings" },
   { id: "place-guide", label: "How to use" },
@@ -314,6 +320,7 @@ const placeSections = [
   { id: "hotel-visibility", label: "Hotel visibility" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   ...(placeInvestigationTrails.length > 0 ? [{ id: "evidence-chain", label: "Evidence chain" }] : []),
+  ...(ethnicProjection ? [{ id: "demographic-profile", label: "Demographics" }] : []),
   { id: "place-data", label: "Deep data" }
 ];
 
@@ -1012,6 +1019,131 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         ))}
       </div>
     </section>
+
+    {ethnicProjection && ethnicTimeline && (
+      <section id="demographic-profile" class="section section-anchor">
+        <div class="section-head">
+          <div>
+            <h2>Demographic profile</h2>
+            <p class="lede">
+              Census-based ethnic composition trend for {area.areaName}, extrapolated from ONS 2011 and 2021 data.
+              {significantShift
+                ? ` At current rates, White British residents are projected to fall below 50% by ${wbThreshold!.year}.`
+                : ""
+              }
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">Census 2021</span>
+              {significantShift && <span class="chip coral">Significant shift</span>}
+            </div>
+            <h3>Ethnic composition</h3>
+            <div class="stacked-bars">
+              {ethnicTimeline.filter((t) => !t.isProjection || t.year === "2030" || t.year === "2040" || t.year === "2050").map((point) => (
+                <div class="stacked-bar-row">
+                  <div class="stacked-bar-label">
+                    <strong>{point.year}</strong>
+                    {point.isProjection && <span class="chip tiny">projected</span>}
+                  </div>
+                  <div class="stacked-bar" title={`White British: ${point.groups.white_british.toFixed(1)}%, Asian: ${point.groups.asian.toFixed(1)}%, Black: ${point.groups.black.toFixed(1)}%, Mixed: ${point.groups.mixed.toFixed(1)}%, White Other: ${point.groups.white_other.toFixed(1)}%, Other: ${point.groups.other.toFixed(1)}%`}>
+                    <div class="bar-seg wb" style={`width: ${point.groups.white_british}%`}></div>
+                    <div class="bar-seg wo" style={`width: ${point.groups.white_other}%`}></div>
+                    <div class="bar-seg asian" style={`width: ${point.groups.asian}%`}></div>
+                    <div class="bar-seg black" style={`width: ${point.groups.black}%`}></div>
+                    <div class="bar-seg mixed" style={`width: ${point.groups.mixed}%`}></div>
+                    <div class="bar-seg other" style={`width: ${point.groups.other}%`}></div>
+                  </div>
+                  <div class="stacked-bar-pct">{point.groups.white_british.toFixed(1)}% WB</div>
+                </div>
+              ))}
+            </div>
+            <div class="legend-row">
+              <span class="legend-item"><span class="legend-swatch wb"></span> White British</span>
+              <span class="legend-item"><span class="legend-swatch wo"></span> White Other</span>
+              <span class="legend-item"><span class="legend-swatch asian"></span> Asian</span>
+              <span class="legend-item"><span class="legend-swatch black"></span> Black</span>
+              <span class="legend-item"><span class="legend-swatch mixed"></span> Mixed</span>
+              <span class="legend-item"><span class="legend-swatch other"></span> Other</span>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <h3>Key metrics</h3>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-value">{ethnicProjection.current.groups.white_british.toFixed(1)}%</span>
+                <span class="metric-label">White British ({ethnicProjection.current.year})</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{ethnicProjection.baseline.groups.white_british.toFixed(1)}%</span>
+                <span class="metric-label">White British ({ethnicProjection.baseline.year})</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value" style={`color: ${Math.abs(ethnicProjection.annualChangePp.white_british) > 0.5 ? "var(--coral)" : "var(--text-secondary)"}`}>
+                  {ethnicProjection.annualChangePp.white_british > 0 ? "+" : ""}{ethnicProjection.annualChangePp.white_british.toFixed(2)}pp
+                </span>
+                <span class="metric-label">Annual change (WB)</span>
+              </div>
+              {ethnicProjection.current.groups.asian > 5 && (
+                <div class="metric-item">
+                  <span class="metric-value">{ethnicProjection.current.groups.asian.toFixed(1)}%</span>
+                  <span class="metric-label">Asian ({ethnicProjection.current.year})</span>
+                </div>
+              )}
+              {wbThreshold && (
+                <div class="metric-item">
+                  <span class="metric-value" style={`color: ${significantShift ? "var(--coral)" : "var(--text-secondary)"}`}>
+                    {wbThreshold.year}
+                  </span>
+                  <span class="metric-label">Projected WB &lt;50% ({wbThreshold.confidence} confidence)</span>
+                </div>
+              )}
+            </div>
+            <p class="tiny" style="margin-top: 1rem; opacity: 0.7;">
+              Source: ONS Census 2011 &amp; 2021. Linear extrapolation of decadal rates. Not a prediction.
+            </p>
+          </article>
+        </div>
+
+        {ethnicProjection.thresholds.length > 0 && (
+          <article class="feature-card" style="margin-top: 1rem;">
+            <h3>Projected thresholds</h3>
+            <p class="lede">
+              If 2011-2021 trends continue at the same rate, these demographic milestones are projected for {area.areaName}.
+              Confidence reflects how close the threshold is to current data.
+            </p>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Milestone</th>
+                    <th scope="col">Projected year</th>
+                    <th scope="col">Confidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ethnicProjection.thresholds.map((threshold) => (
+                    <tr>
+                      <td>{threshold.label}</td>
+                      <td><strong>{threshold.year}</strong></td>
+                      <td>
+                        <span class={`chip tiny ${threshold.confidence === "medium" ? "coral" : ""}`}>
+                          {threshold.confidence}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </article>
+        )}
+      </section>
+    )}
 
     <section id="hotel-evidence" class="section section-anchor">
       <div class="section-head">
