@@ -2,6 +2,8 @@ import type { APIRoute, GetStaticPaths } from "astro";
 import satori from "satori";
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { getCollection } from "astro:content";
 import { loadRouteDashboard } from "../../lib/route-data";
 
@@ -30,11 +32,10 @@ let manropeBold: ArrayBuffer | null = null;
 let soraBold: ArrayBuffer | null = null;
 
 function loadFont(name: string): ArrayBuffer {
-  const fontDir = new URL("../../assets/fonts/", import.meta.url);
-  const target = name === "Manrope"
-    ? new URL("Manrope-Bold.ttf", fontDir)
-    : new URL("Sora-ExtraBold.ttf", fontDir);
-  return readFileSync(target).buffer as ArrayBuffer;
+  // Resolve fonts from process.cwd() (project root) — works in both dev and build
+  const fontFile = name === "Manrope" ? "Manrope-Bold.ttf" : "Sora-ExtraBold.ttf";
+  const fontPath = join(process.cwd(), "src", "assets", "fonts", fontFile);
+  return readFileSync(fontPath).buffer as ArrayBuffer;
 }
 
 function ensureFonts() {
