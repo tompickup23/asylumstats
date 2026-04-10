@@ -227,20 +227,7 @@ test.describe("mobile filtered views", () => {
         expect(visibleModels.every((value) => value === "hotel-heavy")).toBe(true);
       }
 
-      if (view.name === "hotels-filtered") {
-        const visibleHotelRows = await page
-          .locator("[data-hotel-site-row]:not([hidden])")
-          .evaluateAll((elements) =>
-            elements.map((element) => ({
-              status: element.getAttribute("data-status") ?? "",
-              coverage: element.getAttribute("data-coverage") ?? ""
-            }))
-          );
-        expect(visibleHotelRows.length).toBeGreaterThan(0);
-        expect(visibleHotelRows.every((row) => row.status === "current" && row.coverage === "unresolved")).toBe(
-          true
-        );
-      }
+      // hotels-filtered block removed — hotels page disabled
 
       if (view.name === "spending-filtered") {
         await expect(page.locator('select[name="money_route"]')).toHaveValue(view.expectedFocus);
