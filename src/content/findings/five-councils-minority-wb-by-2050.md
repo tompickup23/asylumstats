@@ -1,5 +1,5 @@
 ---
-headline: "5 councils projected minority White British before 2050"
+headline: "5 councils estimated to reach minority White British before 2050 if Census trends continue"
 date: "2026-04-10"
 category: demographics
 stat_value: "5"
@@ -7,7 +7,7 @@ stat_label: "Councils WB <50% by 2050"
 verdict: alert
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/ethnicity/bulletins/ethnicgroupenglandandwales/census2021"
 source_label: "ONS Census 2021"
-summary: "Census 2011-2021 trend data shows 5 local authorities on track to become minority White British before 2050: Blackburn (2028), Pendle (2036), Preston (2038), West Northamptonshire (2049), and Burnley (2058). These are areas where asylum dispersal intersects with existing demographic pressure."
+summary: "If 2011–2021 Census rates of change were to continue, 5 tracked local authorities are estimated to fall below 50% White British before 2050: Blackburn (~2028), Pendle (~2036), Preston (~2038), West Northamptonshire (~2049), and Burnley (~2058). These are trend extrapolations, not forecasts."
 ---
 
 Five local authorities in our tracking set are projected to become minority White British before 2050, based on linear extrapolation of ONS Census 2011 to 2021 ethnic composition change rates:

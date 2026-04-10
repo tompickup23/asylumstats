@@ -21,6 +21,10 @@ import { loadMoneyLedger } from "../../lib/money-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
 import { getPlaceDrilldownMetrics } from "../../lib/place-drilldown";
 import { getEthnicProjection, getEthnicCompositionTimeline } from "../../lib/ethnic-projections";
+import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
+import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
+import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
+import { computePressureScore } from "../../lib/pressure-index";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -311,6 +315,14 @@ const ethnicProjection = getEthnicProjection(area.areaCode);
 const ethnicTimeline = getEthnicCompositionTimeline(area.areaCode);
 const wbThreshold = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
 const significantShift = wbThreshold && wbThreshold.year <= 2070;
+const crimeProfile = getCrimeProfile(area.areaCode);
+const crimePercentile = getCrimeRatePercentile(area.areaCode);
+const sendProfile = getSendProfile(area.areaCode);
+const sendPercentile = getSendGrowthPercentile(area.areaCode);
+const ascProfile = getAscProfile(area.areaCode);
+const ascPercentile = getAscSpendPercentile(area.areaCode);
+const allAsylumRates = localRouteLatest.areas.map((a: any) => a.supportedAsylumRate ?? 0);
+const pressureScore = computePressureScore(area.areaCode, area.areaName, area.supportedAsylumRate ?? null, allAsylumRates);
 
 const placeSections = [
   { id: "place-findings", label: "Findings" },
@@ -321,6 +333,10 @@ const placeSections = [
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   ...(placeInvestigationTrails.length > 0 ? [{ id: "evidence-chain", label: "Evidence chain" }] : []),
   ...(ethnicProjection ? [{ id: "demographic-profile", label: "Demographics" }] : []),
+  ...(crimeProfile ? [{ id: "crime-profile", label: "Crime" }] : []),
+  ...(sendProfile ? [{ id: "send-profile", label: "SEND" }] : []),
+  ...(ascProfile ? [{ id: "asc-profile", label: "Social care" }] : []),
+  ...(pressureScore.availableModules >= 3 ? [{ id: "pressure-index", label: "Pressure index" }] : []),
   { id: "place-data", label: "Deep data" }
 ];
 
@@ -1026,9 +1042,9 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           <div>
             <h2>Demographic profile</h2>
             <p class="lede">
-              Census-based ethnic composition trend for {area.areaName}, extrapolated from ONS 2011 and 2021 data.
+              Census-based ethnic composition estimates for {area.areaName}, derived from ONS 2011 and 2021 Census data.
               {significantShift
-                ? ` At current rates, White British residents are projected to fall below 50% by ${wbThreshold!.year}.`
+                ? ` If 2011–2021 rates of change were to continue, White British residents are estimated to fall below 50% by approximately ${wbThreshold!.year}. This is a trend extrapolation, not a forecast.`
                 : ""
               }
             </p>
@@ -1103,9 +1119,12 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
                 </div>
               )}
             </div>
-            <p class="tiny" style="margin-top: 1rem; opacity: 0.7;">
-              Source: ONS Census 2011 &amp; 2021. Linear extrapolation of decadal rates. Not a prediction.
-            </p>
+            <details class="method-note">
+              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
+              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+                Baseline: ONS Census 2011 &amp; 2021 (TS021). Trend model: linear extrapolation of decadal percentage-point change rates. Validated against Rees &amp; Norman (University of Leeds) NEWETHPOP cohort-component projections and Goodwin &amp; Sherwood (CHSS, 2025). This model does not account for changes in fertility, mortality, or migration policy. It is a trend indication, not a demographic forecast.
+              </p>
+            </details>
           </article>
         </div>
 
@@ -1113,8 +1132,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           <article class="feature-card" style="margin-top: 1rem;">
             <h3>Projected thresholds</h3>
             <p class="lede">
-              If 2011-2021 trends continue at the same rate, these demographic milestones are projected for {area.areaName}.
-              Confidence reflects how close the threshold is to current data.
+              Estimated milestones if 2011–2021 Census rates of change were to continue unchanged. These are trend extrapolations subject to significant uncertainty — actual outcomes depend on migration policy, economic conditions, and local factors. Confidence reflects proximity to observed data.
             </p>
             <div class="table-card">
               <table>
@@ -1142,6 +1160,263 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             </div>
           </article>
         )}
+      </section>
+    )}
+
+    {crimeProfile && (
+      <section id="crime-profile" class="section section-anchor">
+        <div class="section-head">
+          <div>
+            <h2>Crime profile</h2>
+            <p class="lede">
+              Police recorded crime for {area.areaName}. Total crime rate of {crimeProfile.totalCrimeRate.toFixed(1)} per 1,000 residents
+              {crimePercentile !== null ? ` (${crimePercentile}th percentile among tracked areas)` : ""}.
+              {crimeProfile.yearOnYearChange < 0
+                ? ` Recorded crime fell ${Math.abs(crimeProfile.yearOnYearChange).toFixed(1)}% year-on-year.`
+                : crimeProfile.yearOnYearChange > 0
+                  ? ` Recorded crime rose ${crimeProfile.yearOnYearChange.toFixed(1)}% year-on-year.`
+                  : ""
+              }
+            </p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{crimeProfile.period}</span>
+              {crimeProfile.totalCrimeRate > 90 && <span class="chip coral">Above average</span>}
+            </div>
+            <h3>Crime breakdown</h3>
+            <div class="stacked-bars">
+              {crimeProfile.breakdown.map((item) => {
+                const maxRate = Math.max(...crimeProfile.breakdown.map((b) => b.rate));
+                return (
+                  <div class="stacked-bar-row">
+                    <div class="stacked-bar-label" style="min-width: 8rem;">
+                      <span style="font-size: 0.78rem;">{item.type}</span>
+                    </div>
+                    <div class="stacked-bar" style="background: var(--panel-soft);">
+                      <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
+                    </div>
+                    <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </article>
+          <article class="feature-card">
+            <h3>Key metrics</h3>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-value">{crimeProfile.totalCrimeRate.toFixed(1)}</span>
+                <span class="metric-label">Crimes per 1,000 residents</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value" style={`color: ${crimeProfile.yearOnYearChange > 0 ? "var(--accent-3)" : "var(--accent-2)"}`}>
+                  {crimeProfile.yearOnYearChange > 0 ? "+" : ""}{crimeProfile.yearOnYearChange.toFixed(1)}%
+                </span>
+                <span class="metric-label">Year-on-year change</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{crimeProfile.hateCrimeCount.toLocaleString()}</span>
+                <span class="metric-label">Hate crimes recorded</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{crimeProfile.violentCrimeRate.toFixed(1)}</span>
+                <span class="metric-label">Violent crime rate per 1,000</span>
+              </div>
+            </div>
+            <details class="method-note">
+              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
+              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+                ONS recorded crime statistics, {crimeProfile.period}. Crime recording practices vary between forces. Hate crime from Home Office annual statistics. Correlation with asylum dispersal does not imply causation — deprivation, urbanisation, and policing levels are confounders.
+              </p>
+            </details>
+          </article>
+        </div>
+      </section>
+    )}
+
+    {sendProfile && (
+      <section id="send-profile" class="section section-anchor">
+        <div class="section-head">
+          <div>
+            <h2>SEND pressure</h2>
+            <p class="lede">
+              Special educational needs and disabilities demand in {area.areaName}. EHCP rate of {sendProfile.ehcpRatePer10k} per 10,000 school-age children
+              {sendPercentile !== null ? ` (${sendPercentile}th percentile)` : ""}.
+              Demand grew {sendProfile.fiveYearGrowthPct.toFixed(1)}% over five years.
+            </p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{sendProfile.period}</span>
+              {sendProfile.fiveYearGrowthPct > 40 && <span class="chip coral">Rapid growth</span>}
+            </div>
+            <h3>Primary need types</h3>
+            <div class="stacked-bars">
+              {sendProfile.primaryNeeds.filter((n) => n.pct > 5).map((need) => (
+                <div class="stacked-bar-row">
+                  <div class="stacked-bar-label" style="min-width: 8rem;">
+                    <span style="font-size: 0.78rem;">{need.need}</span>
+                  </div>
+                  <div class="stacked-bar" style="background: var(--panel-soft);">
+                    <div class="bar-seg mixed" style={`width: ${need.pct}%`}></div>
+                  </div>
+                  <div class="stacked-bar-pct">{need.pct.toFixed(1)}%</div>
+                </div>
+              ))}
+            </div>
+          </article>
+          <article class="feature-card">
+            <h3>Key metrics</h3>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-value">{sendProfile.ehcpRatePer10k}</span>
+                <span class="metric-label">EHCPs per 10,000 pupils</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value" style={`color: ${sendProfile.fiveYearGrowthPct > 40 ? "var(--accent-3)" : "var(--accent-2)"}`}>
+                  +{sendProfile.fiveYearGrowthPct.toFixed(1)}%
+                </span>
+                <span class="metric-label">5-year EHCP growth</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{sendProfile.totalEhcps.toLocaleString()}</span>
+                <span class="metric-label">Total EHCPs maintained</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{sendProfile.asdPrevalencePct.toFixed(1)}%</span>
+                <span class="metric-label">ASD as primary need</span>
+              </div>
+            </div>
+            <details class="method-note">
+              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
+              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+                DfE SEN2 return, {sendProfile.period}. Rising EHCP numbers reflect multiple factors including improved identification, changing diagnostic criteria, and increased parental awareness — not solely population change.
+              </p>
+            </details>
+          </article>
+        </div>
+      </section>
+    )}
+
+    {ascProfile && (
+      <section id="asc-profile" class="section section-anchor">
+        <div class="section-head">
+          <div>
+            <h2>Social care pressure</h2>
+            <p class="lede">
+              Adult social care in {area.areaName}. Gross spend of £{ascProfile.grossSpendPerCapita} per capita
+              {ascPercentile !== null ? ` (${ascPercentile}th percentile)` : ""}.
+            </p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="feature-card">
+            <h3>Key metrics</h3>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-value">£{ascProfile.grossSpendPerCapita}</span>
+                <span class="metric-label">Gross spend per capita</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{ascProfile.residentialRatePer10k65}</span>
+                <span class="metric-label">Residential placements per 10k 65+</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{ascProfile.qualityOfLifeScore.toFixed(1)}</span>
+                <span class="metric-label">Quality of life score (ASCOF 1A)</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{ascProfile.dtocDaysAnnual.toLocaleString()}</span>
+                <span class="metric-label">Delayed transfer days (annual)</span>
+              </div>
+            </div>
+            <details class="method-note">
+              <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; methodology</summary>
+              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+                NHS Digital SALT collection and ASCOF, {ascProfile.period}. Spending reflects local policy decisions, demographic composition, and deprivation. Direct comparison between areas must account for differences in population age structure.
+              </p>
+            </details>
+          </article>
+          <article class="feature-card">
+            <div class="chip-row">
+              <span class="chip accent">{ascProfile.period}</span>
+            </div>
+            <h3>What this means</h3>
+            <p class="lede" style="font-size: 0.9rem;">
+              {ascProfile.grossSpendPerCapita > 580
+                ? `${area.areaName} spends above the median on adult social care per head. Higher spend often correlates with older population profiles and higher deprivation.`
+                : `${area.areaName} spends around or below the median on adult social care per head. This may reflect a younger population profile or different service commissioning models.`
+              }
+              {ethnicProjection && Math.abs(ethnicProjection.annualChangePp.white_british) > 0.4
+                ? ` Rapid demographic change may affect future social care demand as the age profile of the population shifts.`
+                : ""
+              }
+            </p>
+          </article>
+        </div>
+      </section>
+    )}
+
+    {pressureScore.availableModules >= 3 && (
+      <section id="pressure-index" class="section section-anchor">
+        <div class="section-head">
+          <div>
+            <h2>Combined pressure index</h2>
+            <p class="lede">
+              Composite score across {pressureScore.availableModules} domains: asylum dispersal, demographic change, crime, SEND demand, and social care spend. {area.areaName} scores {pressureScore.compositeScore.toFixed(1)} out of 100.
+            </p>
+          </div>
+        </div>
+        <article class="feature-card">
+          <div class="chip-row">
+            <span class="chip accent">Multi-domain</span>
+            {pressureScore.compositeScore > 70 && <span class="chip coral">High pressure</span>}
+          </div>
+          <h3>Domain breakdown</h3>
+          <div class="metric-list" style="grid-template-columns: repeat(3, 1fr);">
+            {pressureScore.components.asylumRate !== null && (
+              <div class="metric-item">
+                <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.asylumRate.toFixed(1)}</span>
+                <span class="metric-label">Asylum rate per 10k</span>
+              </div>
+            )}
+            {pressureScore.components.demographicChangeRate !== null && (
+              <div class="metric-item">
+                <span class="metric-value" style="font-size: 1.3rem;">-{pressureScore.components.demographicChangeRate.toFixed(2)}pp</span>
+                <span class="metric-label">WB annual change</span>
+              </div>
+            )}
+            {pressureScore.components.crimeRate !== null && (
+              <div class="metric-item">
+                <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.crimeRate.toFixed(1)}</span>
+                <span class="metric-label">Crime per 1,000</span>
+              </div>
+            )}
+            {pressureScore.components.sendGrowth !== null && (
+              <div class="metric-item">
+                <span class="metric-value" style="font-size: 1.3rem;">+{pressureScore.components.sendGrowth.toFixed(1)}%</span>
+                <span class="metric-label">SEND 5yr growth</span>
+              </div>
+            )}
+            {pressureScore.components.ascSpend !== null && (
+              <div class="metric-item">
+                <span class="metric-value" style="font-size: 1.3rem;">£{pressureScore.components.ascSpend}</span>
+                <span class="metric-label">ASC spend per capita</span>
+              </div>
+            )}
+          </div>
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Index methodology</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+              Each domain is converted to a percentile rank (0–100) among tracked areas. The composite score is the unweighted mean of available domain percentiles. Higher scores indicate greater combined pressure across multiple domains. This index measures correlation of pressures, not causation between them.
+            </p>
+          </details>
+        </article>
       </section>
     )}
 

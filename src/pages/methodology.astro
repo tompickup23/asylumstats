@@ -45,7 +45,9 @@ const methodSections = [
   { id: "asylum-number-logic", label: "Asylum logic" },
   { id: "method-scope-classes", label: "Scope" },
   { id: "method-route-families", label: "Route split" },
-  { id: "publication-rules", label: "Publish rules" }
+  { id: "publication-rules", label: "Publish rules" },
+  { id: "method-demographics", label: "Demographics" },
+  { id: "method-cross-domain", label: "Cross-domain" }
 ];
 ---
 
@@ -325,5 +327,67 @@ const methodSections = [
         </article>
       </div>
     </div>
+  </section>
+
+  <section id="method-demographics" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Demographic projections</h2>
+        <p class="lede">
+          Place pages include ethnic composition estimates derived from ONS Census data. These are trend extrapolations, not demographic forecasts.
+        </p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <article class="signal-card">
+        <span class="tiny">Trend model</span>
+        <p class="tiny">
+          Linear extrapolation of ONS Census 2011 to 2021 decadal percentage-point change rates per ethnic group per local authority. Assumes 2011–2021 rates continue unchanged. Does not model fertility, mortality, internal migration, or policy changes. Produces estimated thresholds (e.g. approximate year White British share falls below 50%) with confidence ratings based on proximity to observed data.
+        </p>
+      </article>
+      <article class="signal-card">
+        <span class="tiny">Academic reference</span>
+        <p class="tiny">
+          Trend estimates are validated against the NEWETHPOP cohort-component model (Rees &amp; Norman, University of Leeds, CC BY 4.0) which projects ethnic group populations for all UK local authorities from 2011 to 2061 using age-specific fertility, mortality, and migration rates. Also cross-referenced with Goodwin &amp; Sherwood (Centre for Heterodox Social Sciences, 2025) national trajectory.
+        </p>
+      </article>
+    </div>
+    <article class="signal-card" style="margin-top: 0.5rem;">
+      <span class="tiny">Limitations</span>
+      <p class="tiny">
+        Neither model accounts for future policy changes, economic shocks, local planning decisions, or shifts in migration patterns. Mixed-ethnicity classification follows Census self-identification conventions. The trend model is structurally simpler than cohort-component approaches and should be read as directional indication only. All projections carry greater uncertainty at longer time horizons.
+      </p>
+    </article>
+  </section>
+
+  <section id="method-cross-domain" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Cross-domain analysis</h2>
+        <p class="lede">
+          Place pages combine asylum, demographic, crime, SEND, and social care data. This section explains how domains are combined and what the pressure index represents.
+        </p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <article class="signal-card">
+        <span class="tiny">Data sources</span>
+        <p class="tiny">
+          Crime: ONS police recorded crime statistics via Police Force Area tables. SEND: DfE SEN2 return (Education, Health and Care Plans by local authority). Adult social care: NHS Digital SALT collection and ASCOF framework. Each domain uses the most recent annual publication at time of last update.
+        </p>
+      </article>
+      <article class="signal-card">
+        <span class="tiny">Pressure index</span>
+        <p class="tiny">
+          The composite pressure index converts each domain metric to a percentile rank (0–100) among tracked areas, then takes the unweighted mean of available domains. It measures co-occurrence of pressures across asylum dispersal, demographic change, crime rates, SEND demand, and social care spend. A high score indicates multiple domains showing elevated readings simultaneously — it does not imply that any domain causes another.
+        </p>
+      </article>
+    </div>
+    <article class="signal-card" style="margin-top: 0.5rem;">
+      <span class="tiny">Causation caveat</span>
+      <p class="tiny">
+        This site presents correlations between local authority characteristics. Correlation does not establish causation. Areas with high asylum dispersal rates also tend to have higher deprivation, lower property values, and different age profiles — all of which independently affect crime rates, SEND demand, and social care costs. The data is presented to inform public accountability, not to attribute causes.
+      </p>
+    </article>
   </section>
 </BaseLayout>

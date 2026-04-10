@@ -5,7 +5,7 @@ const findings = defineCollection({
   schema: z.object({
     headline: z.string(),
     date: z.string(),
-    category: z.enum(["spending", "routes", "demographics", "backlog", "accountability"]),
+    category: z.enum(["spending", "routes", "demographics", "backlog", "accountability", "crime", "send", "social-care", "pressure-index"]),
     stat_value: z.string(),
     stat_label: z.string(),
     verdict: z.enum(["alert", "critical", "resolved", "info"]).default("info"),
