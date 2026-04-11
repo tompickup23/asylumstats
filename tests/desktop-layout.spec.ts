@@ -74,6 +74,6 @@ test("home page renders hero and stats grid", async ({ page }) => {
   await expect(page.locator(".hero-section")).toBeVisible();
   await expect(page.locator(".hero-headline")).toBeVisible();
   await expect(page.locator("#headline-stats")).toBeVisible();
-  await expect(page.locator(".stat-card")).toHaveCount(4);
+  await expect(page.locator(".stat-card")).toHaveCount(7);
   await expect(page.locator("#your-area")).toBeVisible();
 });
