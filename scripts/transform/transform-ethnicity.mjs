@@ -32,16 +32,21 @@ function mapEthnicGroup(groupName) {
   if (name === "total" || name === "total: all usual residents" || name.includes("all categories")) return "total";
 
   // Skip parent/summary rows (Census 2021 has both parent + child rows)
-  // Parent rows: "White", "Asian, Asian British or Asian Welsh", "Black, ..." etc.
-  // We want the detailed child rows to avoid double-counting
-  if (name === "white" || name === "asian" || name === "black" ||
-      name === "mixed or multiple ethnic groups" || name === "other ethnic group" ||
-      name.startsWith("asian, asian british") ||
-      name.startsWith("black, black british") ||
-      // 2011 parent rows
-      name === "mixed/multiple ethnic groups" ||
-      name === "asian/asian british" ||
-      name === "black/african/caribbean/black british") return null;
+  // Parent rows are exact matches — children have ": subcategory" suffix
+  const PARENT_ROWS = new Set([
+    "white",
+    "asian",
+    "black",
+    "mixed or multiple ethnic groups",
+    "other ethnic group",
+    "asian, asian british or asian welsh",
+    "black, black british, black welsh, caribbean or african",
+    // 2011 parent rows
+    "mixed/multiple ethnic groups",
+    "asian/asian british",
+    "black/african/caribbean/black british"
+  ]);
+  if (PARENT_ROWS.has(name)) return null;
 
   // White British (the specific detailed row)
   if (name.includes("english") || name.includes("welsh, scottish") ||
