@@ -69,6 +69,18 @@ export interface AreaEthnicProjection {
   qualifications?: EthGroupMetric;
   health?: EthGroupMetric;
   smoothedProjections?: Record<string, EthnicGroup>;
+  schoolEthnicity?: {
+    year: string;
+    totalPupils: number;
+    groups: Record<string, number>;
+    wbiGap: number;
+    insight: string;
+  };
+  impactProjections?: {
+    schoolDiversity: { currentMinorityPupilsPct: number; projectedMinorityPupils2041Pct: number; ealDemandGrowthPp: number; implication: string };
+    housingDemand: { foreignBornGrowthPp: number; implication: string };
+    interpreterDemand: { currentNonEnglishPct: number; implication: string };
+  };
 }
 
 interface EthnicProjectionsData {

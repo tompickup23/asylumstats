@@ -142,6 +142,8 @@ const placeSections = [
   ...(sendProfile ? [{ id: "send-profile", label: "SEND" }] : []),
   ...(ascProfile ? [{ id: "asc-profile", label: "Social care" }] : []),
   ...(socioData?.economicActivity ? [{ id: "socioeconomic", label: "Economy & housing" }] : []),
+  ...(ethnicProjection?.schoolEthnicity ? [{ id: "school-ethnicity", label: "Schools" }] : []),
+  ...(ethnicProjection?.impactProjections ? [{ id: "impact-projections", label: "Service impact" }] : []),
   ...(pressureScore.availableModules >= 3 ? [{ id: "pressure-index", label: "Pressure index" }] : []),
   { id: "local-benchmarks", label: "Benchmarks" },
   { id: "regional-peers", label: "Regional peers" }
@@ -793,6 +795,99 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </details>
         </article>
       )}
+    </section>
+  )}
+
+  <!-- SCHOOL ETHNICITY -->
+  {ethnicProjection?.schoolEthnicity && (
+    <section id="school-ethnicity" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>School ethnicity</h2>
+          <p class="lede">
+            DfE School Census {ethnicProjection.schoolEthnicity.year}: {ethnicProjection.schoolEthnicity.totalPupils?.toLocaleString()} pupils.
+            {ethnicProjection.schoolEthnicity.groups?.["White British"] !== undefined
+              ? ` ${ethnicProjection.schoolEthnicity.groups["White British"]}% White British.`
+              : ""}
+            {ethnicProjection.schoolEthnicity.wbiGap > 5
+              ? ` Schools are ${ethnicProjection.schoolEthnicity.wbiGap}pp more diverse than the general population.`
+              : ""}
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="feature-card">
+          <h3>Pupil ethnicity</h3>
+          <div class="data-list">
+            {Object.entries(ethnicProjection.schoolEthnicity.groups || {}).sort((a, b) => (b[1] as number) - (a[1] as number)).map(([group, pct]) => (
+              <div class="data-row">
+                <span style="font-size: 0.85rem;">{group}</span>
+                <span class="data-row-value">{pct}%</span>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>What this means</h3>
+          <p class="lede" style="font-size: 0.9rem;">
+            {ethnicProjection.schoolEthnicity.insight ?? ""}
+          </p>
+          {ethnicProjection.impactProjections?.schoolDiversity && (
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-value">{ethnicProjection.impactProjections.schoolDiversity.currentMinorityPupilsPct}%</span>
+                <span class="metric-label">Minority pupils now</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-value">{ethnicProjection.impactProjections.schoolDiversity.projectedMinorityPupils2041Pct}%</span>
+                <span class="metric-label">Projected 2041</span>
+              </div>
+            </div>
+          )}
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">DfE School Census 2024/25. State-funded schools. Upper-tier LA level.</p>
+          </details>
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- IMPACT PROJECTIONS -->
+  {ethnicProjection?.impactProjections && (
+    <section id="impact-projections" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Service demand impact</h2>
+          <p class="lede">Projected impact of demographic change on local services.</p>
+        </div>
+      </div>
+      <div class="story-grid">
+        {ethnicProjection.impactProjections.interpreterDemand && (
+          <article class="story-card">
+            <span class="tiny">Language services</span>
+            <strong style="font-size: 1.2rem;">{ethnicProjection.impactProjections.interpreterDemand.currentNonEnglishPct}%</strong>
+            <p class="tiny">non-English speakers</p>
+            <p class="tiny" style="opacity: 0.6;">{ethnicProjection.impactProjections.interpreterDemand.implication}</p>
+          </article>
+        )}
+        {ethnicProjection.impactProjections.housingDemand && (
+          <article class="story-card">
+            <span class="tiny">Housing pressure</span>
+            <strong style="font-size: 1.2rem;">+{ethnicProjection.impactProjections.housingDemand.foreignBornGrowthPp}pp</strong>
+            <p class="tiny">foreign-born growth to 2051</p>
+            <p class="tiny" style="opacity: 0.6;">{ethnicProjection.impactProjections.housingDemand.implication}</p>
+          </article>
+        )}
+        {ethnicProjection.impactProjections.schoolDiversity && (
+          <article class="story-card">
+            <span class="tiny">EAL demand</span>
+            <strong style="font-size: 1.2rem;">+{ethnicProjection.impactProjections.schoolDiversity.ealDemandGrowthPp}pp</strong>
+            <p class="tiny">EAL growth</p>
+            <p class="tiny" style="opacity: 0.6;">{ethnicProjection.impactProjections.schoolDiversity.implication}</p>
+          </article>
+        )}
+      </div>
     </section>
   )}
 
