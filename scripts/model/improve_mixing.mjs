@@ -106,6 +106,12 @@ for (const [code, area] of Object.entries(existing.areas)) {
     2051: Math.round((currentMixed + rates[2051] * 0.7 * 0.9) * 10) / 10
   };
 
+  // FIX 7: Do NOT apply Kaufmann intermarriage to religion projections
+  // Muslim out-marriage is <5% — the intermarriage mechanism doesn't operate
+  // for religiously-defined groups where endogamy is culturally enforced.
+  // Mixing module applies to ETHNIC projections only.
+  area.kaufmannMixingNote = "Intermarriage acceleration applied to ethnic projections only. NOT applied to religion projections — Muslim out-marriage <5% (Census 2021 TS023). See Kaufmann (2018) Ch.12 on endogamy.";
+
   area.kaufmannMixing = {
     interEthnicPartnershipRate2021: rates[2021],
     projectedRates: rates,

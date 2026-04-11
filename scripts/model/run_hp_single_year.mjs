@@ -106,6 +106,28 @@ for (const code of areaCodes) {
     }
   }
 }
+// FIX 3: White Other (WHO) Brexit adjustment
+// EU net migration turned negative post-2021 (-162K 2021-2025)
+// Reduce WHO CCRs by 15% for migration-heavy ages (20-44)
+let brexitAdjusted = 0;
+for (const code of areaCodes) {
+  for (const sex of SEXES) {
+    for (let fromAge = 10; fromAge <= 34; fromAge++) { // Ages 20-44 in 2021 (fromAge+10)
+      const key = `${code}|WHO|${sex}|${fromAge}`;
+      const ccr = ccrs.get(key);
+      if (ccr && ccr > 1.0) {
+        ccrs.set(key, 1.0 + (ccr - 1.0) * 0.85); // Reduce growth component by 15%
+        brexitAdjusted++;
+      }
+    }
+  }
+}
+console.log(`  FIX 3: Brexit-adjusted ${brexitAdjusted} WHO CCRs (ages 20-44, -15% growth)`);
+
+// FIX 10: Roma reclassification — already handled in ETH_MAP_2021 which maps Roma → WHO
+// The CCR computation uses the combined WHO group. No further action needed here.
+// Document: 103K Roma in 2021 were previously coded as White Other in 2011.
+
 console.log(`  ${ccrs.size} CCRs, ${cwrs.size} CWRs`);
 
 // ============================================================

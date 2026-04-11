@@ -36,11 +36,17 @@ const SEXES = ["M", "F"];
 const N_SIMULATIONS = 1000;
 const PROJ_YEARS = [2031, 2041, 2051, 2061];
 
-// CCR perturbation σ — calibrated from NEWETHPOP validation error
-// MAE 3.94pp across ~300 areas, errors distributed across ~90 age cohorts
-// Per-cohort σ ≈ sqrt(MAE² / n_cohorts) ≈ sqrt(15.5 / 90) ≈ 0.04
-const CCR_SIGMA = 0.04;
-const CWR_SIGMA = 0.03;
+// FIX 1: Cell-size-dependent σ (replaces flat 0.04)
+// Base σ calibrated from NEWETHPOP validation: MAE 3.94pp → base σ = 0.04
+// Additional uncertainty for small populations: 0.25 / sqrt(pop)
+// pop=10000 → σ=0.04, pop=100 → σ=0.065, pop=10 → σ=0.12, pop=1 → σ=0.29
+const CCR_SIGMA_BASE = 0.04;
+const CCR_SIGMA_SMALL_POP = 0.25; // additional σ per 1/sqrt(pop)
+const CWR_SIGMA_BASE = 0.03;
+
+// James-Stein shrinkage constant: CCR_shrunk = w * CCR_local + (1-w) * CCR_national
+// where w = pop / (pop + k). k=50 means pop=50 gets 50% shrinkage toward national.
+const SHRINKAGE_K = 50;
 
 function parseCsvLine(line) {
   const f = []; let c = ""; let q = false;
@@ -83,6 +89,35 @@ const areaCodes = Object.keys(base2021.areas).filter(c => pop2011.has(`${c}|WBI|
 const ccrs = new Map();
 const cwrs = new Map();
 
+// Compute national-average CCRs for James-Stein shrinkage target
+const nationalCCRs = new Map(); // "eth|sex|age" → { sumRatio, sumPop }
+for (const code of areaCodes) {
+  for (const eth of ETHNIC_GROUPS) {
+    for (const sex of SEXES) {
+      for (let fromAge = 0; fromAge <= 80; fromAge++) {
+        const pop11 = pop2011.get(`${code}|${eth}|${sex}|${fromAge}`)||0;
+        const pop21 = base2021.areas[code][eth]?.[sex]?.[fromAge+10]||0;
+        if (pop11 > 10) {
+          const key = `${eth}|${sex}|${fromAge}`;
+          if (!nationalCCRs.has(key)) nationalCCRs.set(key, { sumRatio: 0, sumPop: 0, count: 0 });
+          const n = nationalCCRs.get(key);
+          n.sumRatio += pop21 / pop11 * pop11; // population-weighted
+          n.sumPop += pop11;
+          n.count++;
+        }
+      }
+    }
+  }
+}
+const natCCR = new Map();
+for (const [key, data] of nationalCCRs) {
+  natCCR.set(key, data.sumPop > 0 ? data.sumRatio / data.sumPop : 1.0);
+}
+console.log(`  Computed ${natCCR.size} national-average CCRs for shrinkage`);
+
+// Store base populations for cell-size-dependent σ
+const ccrPops = new Map(); // "code|eth|sex|age" → pop11
+
 for (const code of areaCodes) {
   for (const eth of ETHNIC_GROUPS) {
     let children = 0, women = 0;
@@ -94,8 +129,16 @@ for (const code of areaCodes) {
       for (let fromAge = 0; fromAge <= 80; fromAge++) {
         const pop11 = pop2011.get(`${code}|${eth}|${sex}|${fromAge}`)||0;
         const pop21 = base2021.areas[code][eth]?.[sex]?.[fromAge+10]||0;
-        const ccr = pop11 > 5 ? Math.max(0.05, Math.min(5.0, pop21/pop11)) : 1.0;
-        ccrs.set(`${code}|${eth}|${sex}|${fromAge}`, ccr);
+
+        let rawCCR = pop11 > 5 ? Math.max(0.05, Math.min(5.0, pop21/pop11)) : 1.0;
+
+        // FIX 1: James-Stein shrinkage — pull extreme CCRs toward national average
+        const natAvg = natCCR.get(`${eth}|${sex}|${fromAge}`) || 1.0;
+        const w = pop11 / (pop11 + SHRINKAGE_K); // shrinkage weight: 0 (full shrinkage) to 1 (no shrinkage)
+        const shrunkCCR = w * rawCCR + (1 - w) * natAvg;
+
+        ccrs.set(`${code}|${eth}|${sex}|${fromAge}`, shrunkCCR);
+        ccrPops.set(`${code}|${eth}|${sex}|${fromAge}`, pop11);
       }
     }
   }
@@ -138,17 +181,22 @@ function runOneSimulation(perturbFactor) {
         newPop[eth] = {};
         for (const sex of SEXES) {
           newPop[eth][sex] = {};
-          // Age with perturbed CCRs
+          // Age with perturbed CCRs — FIX 1: cell-size-dependent σ
           for (let toAge = 10; toAge <= 90; toAge++) {
             const baseCCR = ccrs.get(`${code}|${eth}|${sex}|${toAge-10}`)||1.0;
-            const perturbedCCR = Math.max(0.01, baseCCR + randn() * CCR_SIGMA * perturbFactor);
+            const pop = ccrPops.get(`${code}|${eth}|${sex}|${toAge-10}`) || 1;
+            const sigma = CCR_SIGMA_BASE + CCR_SIGMA_SMALL_POP / Math.sqrt(Math.max(pop, 1));
+            const perturbedCCR = Math.max(0.01, baseCCR + randn() * sigma * perturbFactor);
             newPop[eth][sex][toAge] = Math.round((currentPop[eth][sex][toAge-10]||0) * perturbedCCR);
           }
           newPop[eth][sex][90] = (newPop[eth][sex][90]||0) + Math.round((currentPop[eth][sex][90]||0) * 0.3);
 
-          // Births with perturbed CWR
+          // Births with perturbed CWR — FIX 1: cell-size-dependent σ
           const baseCWR = cwrs.get(`${code}|${eth}`)||0.03;
-          const perturbedCWR = Math.max(0, baseCWR + randn() * CWR_SIGMA * perturbFactor);
+          let cwrWomen = 0;
+          for (let a = 15; a <= 44; a++) cwrWomen += base2021.areas[code][eth]?.F?.[a] || 0;
+          const cwrSigma = CWR_SIGMA_BASE + 0.15 / Math.sqrt(Math.max(cwrWomen, 1));
+          const perturbedCWR = Math.max(0, baseCWR + randn() * cwrSigma * perturbFactor);
           let women = 0;
           for (let a = 15; a <= 44; a++) women += newPop[eth]?.F?.[a] || currentPop[eth]?.F?.[a] || 0;
           const births = women * perturbedCWR;
