@@ -3,7 +3,7 @@ import { disableMotion, stabilizePage } from "./layout-helpers";
 
 const pages = [
   // home page excluded — redesigned with impact-first layout, no longer follows priority-section pattern
-  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
+  { name: "places", path: "/places/", focus: "#place-search", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   // hotels page disabled (renamed to _hotels.astro.disabled) — data pipeline intact
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
