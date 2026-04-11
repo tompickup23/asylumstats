@@ -173,7 +173,7 @@ const pageDescription = `${area.areaName}: ${area.supportedAsylum.toLocaleString
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
   description: pageDescription,
-  socialImageUrl: buildAbsoluteUrl("/og-card.png"),
+  socialImageUrl: buildAbsoluteUrl(`/og/places/${slugifyAreaName(area.areaName)}.png`),
   snapshotDate: localRouteLatest.snapshotDate,
   areaRank,
   contingencyRank,
@@ -299,6 +299,12 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         title={areaTrend.deltaFromPrevious !== null && areaTrend.deltaFromPrevious > 0 ? `${area.areaName}: asylum numbers still rising` : areaTrend.deltaFromPrevious !== null && areaTrend.deltaFromPrevious < 0 ? `${area.areaName}: asylum numbers falling` : `${area.areaName}: asylum numbers holding steady`}
         description={buildSupportedAsylumStockDescription(areaTrend.latestPeriodLabel, areaTrend.hasIllustrativeData)}
         tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
+        annotations={[
+          { label: "Rwanda scheme", pointLabel: "Jun 2022" },
+          { label: "Albania deal", pointLabel: "Dec 2022" },
+          { label: "Bibby Stockholm", pointLabel: "Sept 2023", color: "rgba(239,68,68,0.4)" },
+          { label: "Rwanda scrapped", pointLabel: "Sept 2024", color: "rgba(239,68,68,0.5)" },
+        ]}
       />
       <article class="panel panel-pad">
         <h2>Trend</h2>
@@ -406,7 +412,19 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </div>
   </section>
 
-  <!-- HOTEL EVIDENCE -->
+  <!-- ═══ TABBED SECTIONS ═══ -->
+  <div class="place-tabs" data-tab-group>
+    <div class="tab-bar" role="tablist">
+      <button role="tab" type="button" class="tab-btn" aria-selected="true" aria-controls="tabpanel-hotels" data-tab="hotels">Hotels</button>
+      {ethnicProjection && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-demographics" data-tab="demographics">Demographics</button>}
+      {(socioData?.economicActivity || ethnicProjection?.schoolEthnicity) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-economy" data-tab="economy">Economy</button>}
+      {(crimeProfile || sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
+      <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-benchmarks" data-tab="benchmarks">Benchmarks</button>
+    </div>
+
+    <!-- TAB: Hotels -->
+    <div id="tabpanel-hotels" role="tabpanel" class="tab-panel" data-tab-panel="hotels">
+
   <section id="hotel-evidence" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -491,7 +509,11 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     )}
   </section>
 
-  <!-- DEMOGRAPHICS - ProjectionChart -->
+    </div><!-- end tabpanel-hotels -->
+
+    <!-- TAB: Demographics -->
+    <div id="tabpanel-demographics" role="tabpanel" class="tab-panel" data-tab-panel="demographics" hidden>
+
   {ethnicProjection && ethChartLines.length > 0 && (
     <section id="demographic-profile" class="section section-anchor">
       <div class="section-head">
@@ -583,7 +605,11 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </section>
   )}
 
-  <!-- SOCIOECONOMIC -->
+    </div><!-- end tabpanel-demographics -->
+
+    <!-- TAB: Economy -->
+    <div id="tabpanel-economy" role="tabpanel" class="tab-panel" data-tab-panel="economy" hidden>
+
   {socioData?.economicActivity && (
     <section id="socioeconomic" class="section section-anchor">
       <div class="section-head">
@@ -733,7 +759,11 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </section>
   )}
 
-  <!-- CRIME -->
+    </div><!-- end tabpanel-economy -->
+
+    <!-- TAB: Services -->
+    <div id="tabpanel-services" role="tabpanel" class="tab-panel" data-tab-panel="services" hidden>
+
   {crimeProfile && (
     <section id="crime-profile" class="section section-anchor">
       <div class="section-head">
@@ -942,7 +972,11 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </section>
   )}
 
-  <!-- BENCHMARKS -->
+    </div><!-- end tabpanel-services -->
+
+    <!-- TAB: Benchmarks -->
+    <div id="tabpanel-benchmarks" role="tabpanel" class="tab-panel" data-tab-panel="benchmarks" hidden>
+
   <section id="local-benchmarks" class="section section-anchor">
     <div class="section-head">
       <div>
@@ -1011,4 +1045,25 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       ))}
     </div>
   </section>
+
+    </div><!-- end tabpanel-benchmarks -->
+  </div><!-- end place-tabs -->
+
+  <script>
+    document.querySelectorAll("[data-tab-group]").forEach((group) => {
+      const buttons = group.querySelectorAll<HTMLButtonElement>("[data-tab]");
+      const panels = group.querySelectorAll<HTMLElement>("[data-tab-panel]");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const target = btn.dataset.tab;
+          buttons.forEach((b) => b.setAttribute("aria-selected", "false"));
+          panels.forEach((p) => (p.hidden = true));
+          btn.setAttribute("aria-selected", "true");
+          const panel = group.querySelector(`[data-tab-panel="${target}"]`);
+          if (panel) (panel as HTMLElement).hidden = false;
+        });
+      });
+    });
+  </script>
+
 </BaseLayout>

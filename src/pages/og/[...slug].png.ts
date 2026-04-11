@@ -5,7 +5,8 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getCollection } from "astro:content";
-import { loadRouteDashboard } from "../../lib/route-data";
+import { loadRouteDashboard, loadLocalRouteLatest } from "../../lib/route-data";
+import { getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 
 // Brand colors from brand_system.py
 const COLORS = {
@@ -58,6 +59,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
 
   const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
+  const localRouteLatest = loadLocalRouteLatest();
+
+  // Rank all areas by supported asylum (descending) for rank labels
+  const rankedAreas = [...localRouteLatest.areas].sort((a, b) => b.supportedAsylum - a.supportedAsylum);
+  const rankMap = new Map(rankedAreas.map((a, i) => [a.areaCode, i + 1]));
+
+  // Generate OG images for public place pages
+  const publicAreas = getPublicPlaceAreas();
+  const placePaths = publicAreas.map((area) => ({
+    params: { slug: `places/${slugifyAreaName(area.areaName)}` },
+    props: {
+      title: area.areaName,
+      stat: area.supportedAsylum.toLocaleString(),
+      statLabel: `On asylum support - Rank ${rankMap.get(area.areaCode) ?? "?"} of ${localRouteLatest.areas.length} - ${area.supportedAsylumRate?.toFixed(1) ?? "?"} per 10,000`,
+      verdict: (area.supportedAsylumRate ?? 0) > 30 ? "critical" : (area.supportedAsylumRate ?? 0) > 10 ? "alert" : "info"
+    }
+  }));
 
   return [
     {
@@ -72,13 +90,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
     {
       params: { slug: "routes" },
       props: {
-        title: "How they get here — route analysis",
+        title: "The routes into Britain",
         stat: `${(routeDashboard.nationalCards[0]?.value ?? 0).toLocaleString()}`,
         statLabel: "Small boat arrivals",
         verdict: "alert"
       }
     },
-    ...findingPaths
+    ...findingPaths,
+    ...placePaths
   ];
 };
 

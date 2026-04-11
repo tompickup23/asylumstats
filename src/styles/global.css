@@ -495,6 +495,56 @@ main {
   margin-top: 0.25rem;
 }
 
+.place-tabs {
+  margin-top: 2rem;
+}
+.place-tabs .tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.place-tabs .tab-bar::-webkit-scrollbar { display: none; }
+.place-tabs .tab-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: "Sora", sans-serif;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 180ms, border-color 180ms;
+}
+.place-tabs .tab-btn:hover { color: var(--ink-soft); }
+.place-tabs .tab-btn[aria-selected="true"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.place-tabs .tab-panel {
+  animation: tab-fade 200ms ease;
+}
+.place-tabs .tab-panel[hidden] { display: none; }
+@keyframes tab-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 640px) {
+  .place-tabs .tab-btn {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.82rem;
+  }
+}
+
 .mp-section {
   margin-bottom: 1.5rem;
 }
