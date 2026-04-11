@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageContents from "../components/PageContents.astro";
+import ProjectionChart from "../components/ProjectionChart.astro";
 import { loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getSeriesDelta } from "../lib/route-analytics";
 import { getCollection } from "astro:content";
+import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import rawProjections from "../data/live/ethnic-projections.json";
 
 const routeDashboard = loadRouteDashboard();
 const moneyLedger = loadMoneyLedger();
@@ -47,8 +50,44 @@ const verdictColor: Record<string, string> = {
   info: "var(--accent)"
 };
 
+// Aggregate national demographic projections
+const allAreas = rawProjections.areas as Record<string, any>;
+const projYears = [2021, 2031, 2041, 2051];
+const nationalEthLines = (() => {
+  const groups = ["white_british", "asian", "black", "mixed", "white_other"] as const;
+  const colors: Record<string, string> = { white_british: "#06b6d4", asian: "#f59e0b", black: "#a78bfa", mixed: "#10b981", white_other: "#8b9cb3" };
+  const labels: Record<string, string> = { white_british: "White British", asian: "Asian", black: "Black", mixed: "Mixed", white_other: "White Other" };
+
+  return groups.map(g => ({
+    label: labels[g], color: colors[g],
+    points: projYears.map(y => {
+      const yearKey = String(y);
+      let total = 0, groupTotal = 0;
+      for (const area of Object.values(allAreas)) {
+        if (y === 2021) {
+          total += (area as any).current?.total_population || 0;
+          groupTotal += ((area as any).current?.groups_absolute?.[g]) || ((area as any).current?.total_population || 0) * ((area as any).current?.groups?.[g] || 0) / 100;
+        } else if ((area as any).projections?.[yearKey]) {
+          // Use projection percentages with 2021 population as weight
+          const pop = (area as any).current?.total_population || 0;
+          total += pop;
+          groupTotal += pop * ((area as any).projections[yearKey]?.[g] || 0) / 100;
+        }
+      }
+      return { year: y, value: total > 0 ? Math.round(groupTotal / total * 1000) / 10 : 0 };
+    })
+  }));
+})();
+
+const wbBelow50Count = Object.values(allAreas).filter((a: any) =>
+  a.projections?.["2051"]?.white_british < 50
+).length;
+
+const significantShifts = getSignificantDemographicShifts(2060);
+
 const sections = [
   { id: "national-overview", label: "Overview" },
+  { id: "national-demographics", label: "Demographics" },
   { id: "national-routes", label: "Routes" },
   { id: "national-spending", label: "Spending" },
   { id: "national-findings", label: "Findings" }
@@ -105,6 +144,44 @@ const sections = [
         </article>
       ))}
     </div>
+  </section>
+
+  <!-- DEMOGRAPHICS -->
+  <section id="national-demographics" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Demographic outlook</h2>
+        <p class="lede">
+          National ethnic composition trajectory from Census 2021 base.
+          {wbBelow50Count} areas projected below 50% White British by 2051.
+        </p>
+      </div>
+    </div>
+
+    <ProjectionChart
+      title="National ethnic composition (England & Wales)"
+      lines={nationalEthLines}
+      nowYear={2021}
+      yLabel="% of population"
+    />
+
+    {significantShifts.length > 0 && (
+      <div class="story-grid" style="margin-top: 1rem;">
+        {significantShifts.slice(0, 4).map((shift) => (
+          <article class="story-card">
+            <div class="chip-row">
+              <span class="chip accent">{shift.thresholdYear}</span>
+              <span class="chip">{shift.confidence}</span>
+            </div>
+            <strong>{shift.areaName}</strong>
+            <p class="tiny" style="opacity: 0.6;">
+              WBI {shift.currentWbPct.toFixed(0)}% → below 50% by {shift.thresholdYear}.
+              Declining {shift.annualDeclinePp.toFixed(1)}pp/year.
+            </p>
+          </article>
+        ))}
+      </div>
+    )}
   </section>
 
   <!-- ROUTES -->
