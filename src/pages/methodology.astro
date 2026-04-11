@@ -332,50 +332,50 @@ const methodSections = [
   <section id="method-demographics" class="section section-anchor">
     <div class="section-head">
       <div>
-        <h2>Demographic projections</h2>
+        <h2>Demographic projections (v6.3)</h2>
         <p class="lede">
-          Place pages show ethnic composition projections using a cohort-component model. 318 local authorities, 12 ethnic groups, 9 scenarios, validated against Census 2021.
+          Hamilton-Perry single-year-of-age model with Monte Carlo uncertainty, spatial smoothing, and 13 socioeconomic dimensions. 307 local authorities, 12 ethnic groups, validated against Census 2021.
         </p>
       </div>
     </div>
     <div class="grid-2">
       <article class="signal-card">
-        <span class="tiny">Model type</span>
+        <span class="tiny">Model</span>
         <p class="tiny">
-          Cohort-component projection (5-year age bands, 12 NEWETHPOP ethnic groups, 2 sexes). Base population from Census 2021 (ONS RM032 + TS007A via NOMIS API, IPF disaggregation). 318 local authorities in England and Wales.
+          Hamilton-Perry with single-year-of-age Cohort Change Ratios (CCRs) from Census 2011 → 2021. 585,144 individual CCRs computed from NEWETHPOP 2011 base and IPF-constructed Census 2021 base (RM032 × TS009). Child-Woman Ratios for birth cohorts. Every ratio traces to Census observations — no hardcoded demographic rates.
         </p>
       </article>
       <article class="signal-card">
-        <span class="tiny">Components</span>
+        <span class="tiny">Uncertainty</span>
         <p class="tiny">
-          Fertility: national ethnic TFR from Coleman &amp; Dubuc, ONS Birth Characteristics. 3 scenarios (constant / half-convergence / full convergence). Mortality: ONS 2011-linked ethnic differentials applied to 2022-based life tables. Migration: internal (Census 2021 net rates) + international (3 ONS SNPP variants × ethnic composition from Census 2021).
+          1,000 Monte Carlo simulations (Yu, Sevcikova, Raftery &amp; Curran 2023). Each simulation perturbs CCRs from Normal(observed, σ=0.04) calibrated against the NEWETHPOP validation error distribution (MAE 3.94pp). Reports median + 80%/95% prediction intervals per area. Spatial smoothing: CCRs blended 70/30 with regional averages to stabilise small-population extremes.
         </p>
       </article>
     </div>
     <div class="grid-2" style="margin-top: 0.5rem;">
       <article class="signal-card">
-        <span class="tiny">Scenarios</span>
+        <span class="tiny">Dimensions</span>
         <p class="tiny">
-          9 combinations (3 fertility × 3 migration). Central scenario: half fertility convergence + ONS principal migration (315K net/year). High diversity: constant ethnic fertility + high migration (476K). Low diversity: full convergence + low migration (108K). Each place page shows the central projection with scenario range.
+          Ethnicity (12 groups projected). Religion (8 categories projected). Nativity (UK-born/foreign-born projected). Plus observed Census 2021 cross-tabs: economic activity, housing tenure, qualifications, health — all by ethnic group per LA. English proficiency. Diversity indices. Shift-share decomposition. Migration maturity profiling.
         </p>
       </article>
       <article class="signal-card">
         <span class="tiny">Validation</span>
         <p class="tiny">
-          Validated via backcast: NEWETHPOP's 2011-based predictions compared to Census 2021 actuals for 299 areas. NEWETHPOP MAE: 3.94pp. The model over-predicted White British in 95% of areas (systematic underestimation of diversity growth). Our 90% confidence interval from backcast errors: [-7.5pp, +14.5pp].
+          NEWETHPOP backcast validated against Census 2021 for 299 areas. MAE: 3.94pp. Over-predicted White British in 95% of areas. Model implied TFR (1.80) vs ONS target (1.45) — gap documented, constrained via SNPP 2022-based envelope (309 English LAs, 2022-2047).
         </p>
       </article>
     </div>
     <article class="signal-card" style="margin-top: 0.5rem;">
-      <span class="tiny">Limitations and caveats</span>
+      <span class="tiny">Limitations</span>
       <p class="tiny">
-        LA-level ethnic fertility and mortality data unavailable — national differentials applied uniformly. Census 2021 internal migration captured COVID lockdown period (March 2020-2021). International migration ethnicity estimated from nationality/country-of-birth proxies. Projections do not account for future policy changes, economic shocks, or shifts in self-identification. Mixed ethnicity group assigned from birth ratios, not explicit mixing matrix. All projections carry greater uncertainty at longer horizons. These are demographic projections, not forecasts or predictions.
+        Hamilton-Perry assumes 2011-2021 cohort change patterns persist. Cannot model individual demographic components or policy scenarios. Census 2021 captures COVID-period migration (March 2020-2021). IPF for single-year ethnic populations uses NEWETHPOP 2021 profile as seed. SNPP constraint applies to England only (Wales LAs unconstrained). Projections beyond 2047 extrapolate the SNPP envelope. These are demographic projections, not forecasts.
       </p>
     </article>
     <article class="signal-card" style="margin-top: 0.5rem;">
-      <span class="tiny">Academic references</span>
+      <span class="tiny">References</span>
       <p class="tiny">
-        NEWETHPOP: Wohland, Rees, Norman, Lomax &amp; Clark (2024), University of Leeds, CC BY 4.0. ONS 2022-based Subnational Population Projections. Coleman &amp; Dubuc (2010) ethnic fertility convergence. Goodwin &amp; Sherwood (CHSS, 2025) national trajectory.
+        Hamilton &amp; Perry (1962) original method. Yu, Sevcikova, Raftery &amp; Curran (2023, Demography) probabilistic extension. Hauer (2019, Scientific Data) US county race projections. Wilson et al. (2022) ensemble methods. NEWETHPOP: Wohland, Rees, Norman, Lomax &amp; Clark (2024), CC BY 4.0. ONS 2022-based SNPP. Goodwin &amp; Sherwood (CHSS, 2025).
       </p>
     </article>
   </section>
