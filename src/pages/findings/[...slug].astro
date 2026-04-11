@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 const { finding } = Astro.props;
 const { Content } = await render(finding);
 const findingSlug = finding.id.replace(/\.md$/, "");
-const ogImage = `/og/findings/${findingSlug}.png`;
+const ogImage = `/cards/${findingSlug}_og.png`;
 
 const verdictColor: Record<string, string> = {
   alert: "#f59e0b",
@@ -59,6 +59,12 @@ const verdictLabel: Record<string, string> = {
 
     <div class="finding-detail-body">
       <Content />
+    </div>
+
+    <!-- SHARE CARD -->
+    <div class="finding-share-card">
+      <img src={`/cards/${findingSlug}_square.png`} alt={finding.data.headline} width="540" height="540" loading="lazy" />
+      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding — right-click to save the image.</p>
     </div>
 
     <footer class="finding-detail-footer">
@@ -161,4 +167,15 @@ const verdictLabel: Record<string, string> = {
     text-decoration: none;
   }
   .finding-back:hover { color: var(--ink); }
+  .finding-share-card {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-share-card img {
+    width: 100%;
+    max-width: 540px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
 </style>
