@@ -1,9 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DataFreshness from "../components/DataFreshness.astro";
+import Explainer from "../components/Explainer.astro";
+import ShareButton from "../components/ShareButton.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
-import { slugifyAreaName } from "../lib/site";
+import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import { slugifyAreaName, SITE_URL } from "../lib/site";
+import { getCollection } from "astro:content";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -29,140 +34,252 @@ function fmtGbp(n: number) {
   return `£${fmtInt(n)}`;
 }
 
+// Cost calculations (33.5M income tax payers, HMRC 2024-25; 27.8M households, ONS)
+const annualCostGbp = dailyCostGbp * 365;
+const perTaxpayerGbp = Math.round(annualCostGbp / 33_500_000);
+const costPerResidentPerDay = latestQuarter.hotelAccommodation > 0
+  ? Math.round(dailyCostGbp / latestQuarter.hotelAccommodation)
+  : 186;
+const costPerResidentPerYear = costPerResidentPerDay * 365;
+
+// System flow stats
+const smallBoatArrivals = routeDashboard.nationalCards?.[0]?.value ?? 41_472;
+const smallBoatPeriod = routeDashboard.nationalCards?.[0]?.period ?? "2025";
+const familyReunion = routeDashboard.nationalCards?.[7]?.value ?? 18_869;
+
+// Grant rate calculation
+const flowSeries = routeDashboard.nationalSystemDynamics?.flowSeries;
+const totalDecisions2025 = flowSeries?.initialDecisions
+  ? (flowSeries.initialDecisions as any[]).filter((q: any) => q.periodLabel?.includes("2025")).reduce((sum: number, q: any) => sum + (q.value ?? 0), 0)
+  : 160_077;
+const totalGrants2025 = flowSeries?.initialGrants
+  ? (flowSeries.initialGrants as any[]).filter((q: any) => q.periodLabel?.includes("2025")).reduce((sum: number, q: any) => sum + (q.value ?? 0), 0)
+  : 54_887;
+const grantRatePct = totalDecisions2025 > 0 ? ((totalGrants2025 / totalDecisions2025) * 100).toFixed(1) : "34.3";
+
+// Area distribution
+const areasAbove30 = localRouteLatest.areas.filter((a) => (a.supportedAsylumRate ?? 0) > 30).length;
+const areasZero = localRouteLatest.areas.filter((a) => a.supportedAsylum === 0).length;
+
 const regionalByTotal = [...placeDirectory.regions].sort(
   (a, b) => b.supportedAsylum - a.supportedAsylum
 );
 const topAreas = localRouteLatest.areas
   .filter((a) => a.supportedAsylum >= 200)
   .sort((a, b) => (b.supportedAsylumRate ?? 0) - (a.supportedAsylumRate ?? 0))
-  .slice(0, 8);
+  .slice(0, 10);
+
+// Get latest 3 findings for the strip
+const allFindings = await getCollection("findings");
+const topFindings = allFindings
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+const snapshotDate = latestQuarter.stockPeriodLabel ?? "Q4 2025";
+
+// Demographic modelling data
+const demographicShifts = getSignificantDemographicShifts(2051);
+const areasBelow50 = demographicShifts.length;
+
+// Verdict display labels (not "alert" etc)
+function findingLabel(verdict: string): string {
+  const labels: Record<string, string> = {
+    critical: "INVESTIGATION",
+    alert: "FINDING",
+    info: "ANALYSIS",
+    resolved: "RESOLVED",
+  };
+  return labels[verdict] ?? "FINDING";
+}
+
+function findingColor(verdict: string): string {
+  const colors: Record<string, string> = {
+    critical: "var(--coral)",
+    alert: "var(--accent-3)",
+    info: "var(--accent)",
+    resolved: "var(--accent-2)",
+  };
+  return colors[verdict] ?? "var(--accent)";
+}
 ---
 
 <BaseLayout
-  title="asylumstats — Follow YOUR money"
+  title="asylumstats - Follow YOUR money"
   description={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. ${fmtInt(latestQuarter.awaitingInitialDecision)} people waiting for a decision. Track where YOUR money goes.`}
   image="/og/home.png"
 >
-  <!-- HERO: Impact-first -->
+  <!-- ═══ HERO ═══ -->
   <section class="hero-section">
     <div class="hero-inner">
       <div class="hero-eyebrow">Home Office asylum spending</div>
       <h1 class="hero-headline">
         <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
-        <span class="hero-label">spent PER DAY on asylum accommodation</span>
+        <span class="hero-label">per day. YOUR money. Exposed.</span>
       </h1>
       <p class="hero-subline">
-        That's YOUR money. {fmtGbp(tenYearGbp)} committed over 10 years.
-        {fmtInt(latestQuarter.awaitingInitialDecision)} people still waiting for a decision.
+        The asylum backlog costs every UK taxpayer an estimated £{perTaxpayerGbp} per year.
+        {fmtInt(latestQuarter.awaitingInitialDecision)} people waiting for a decision that never comes.
+        {fmtGbp(tenYearGbp)} committed. Nobody asked you.
       </p>
       {dailyCostSource && (
         <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
-          Source: NAO / Home Office &rarr;
+          Source: National Audit Office &rarr;
         </a>
       )}
-    </div>
-  </section>
 
-  <!-- KEY STATS -->
-  <section class="stats-grid shell" id="headline-stats">
-    <article class="stat-card stat-card--accent">
-      <span class="stat-value">{fmtInt(latestQuarter.supportedAsylum)}</span>
-      <span class="stat-label">On asylum support</span>
-      <span class="stat-context">Stock at {latestQuarter.stockPeriodLabel}</span>
-    </article>
-    <article class="stat-card stat-card--warn">
-      <span class="stat-value">{fmtInt(latestQuarter.awaitingInitialDecision)}</span>
-      <span class="stat-label">Awaiting a decision</span>
-      <span class="stat-context">Initial-decision backlog</span>
-    </article>
-    <article class="stat-card stat-card--coral">
-      <span class="stat-value">{fmtInt(latestQuarter.hotelAccommodation)}</span>
-      <span class="stat-label">In hotel accommodation</span>
-      <span class="stat-context">{latestQuarter.hotelShareOfSupportPct}% of all support</span>
-    </article>
-    <article class="stat-card stat-card--teal">
-      <span class="stat-value">{fmtInt(routeDashboard.nationalCards[0]?.value ?? 0)}</span>
-      <span class="stat-label">Small boat arrivals</span>
-      <span class="stat-context">{routeDashboard.nationalCards[0]?.period ?? "2025"}</span>
-    </article>
-  </section>
-
-  <!-- YOUR AREA LOOKUP -->
-  <section class="lookup-section shell" id="your-area">
-    <div class="lookup-inner">
-      <h2 class="lookup-title">What's happening in YOUR area?</h2>
-      <p class="lookup-desc">Search for any local authority to see asylum seekers, costs, and demographic data.</p>
-      <div class="lookup-field">
+      <!-- Search in hero -->
+      <div class="hero-search">
         <input
           type="search"
           id="area-search"
-          placeholder="Type a council name — e.g. Birmingham, Burnley, Glasgow..."
+          placeholder="Find your area, your MP, your council..."
           autocomplete="off"
           spellcheck="false"
+          aria-label="Search for a local authority"
         />
-        <div class="lookup-results" id="area-results"></div>
+        <div class="lookup-results" id="area-results" hidden></div>
       </div>
     </div>
   </section>
 
-  <!-- DEMOGRAPHIC MODELLING FEATURE -->
-  <section class="model-section shell" id="demographic-model">
-    <div class="model-inner">
-      <span class="chip accent" style="margin-bottom: 0.5rem;">Demographic projections</span>
-      <h2 class="section-title">The data they won't show you</h2>
-      <p class="section-desc">
-        We built a demographic model more detailed than the government's own projections.
-        307 local authorities. Census-verified. Every number sourced.
-        The ONS won't project ethnic composition. We do.
-      </p>
-      <div class="model-stats">
-        <article class="stat-card">
-          <span class="stat-value" style="color: var(--accent);">114</span>
-          <span class="stat-label">Areas where White British will be a minority by 2051</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-value" style="color: var(--accent-3);">3.95pp</span>
-          <span class="stat-label">Average error in the academic model — we found it, nobody else checked</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-value" style="color: var(--accent-2);">38%</span>
-          <span class="stat-label">Of school children are now ethnic minority — DfE data, 2024/25</span>
-        </article>
-      </div>
-      <div class="chip-row" style="margin-top: 1rem;">
-        <a href="/findings/" class="cta-btn cta-btn--primary">See the findings</a>
-        <a href="/national/" class="cta-btn cta-btn--secondary">National demographic outlook</a>
-        <a href="/methodology/" class="cta-btn cta-btn--ghost">Full methodology</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- REGIONAL PRESSURE -->
-  <section class="pressure-section shell" id="regional-pressure">
-    <h2 class="section-title">Where the pressure falls</h2>
-    <p class="section-desc">
-      Asylum seekers are not evenly distributed. Some regions carry far more than their share.
-    </p>
-    <div class="region-grid">
-      {regionalByTotal.slice(0, 6).map((region) => (
-        <a href={region.regionPath} class="region-card">
-          <span class="region-name">{region.regionName}</span>
-          <span class="region-stat">{fmtInt(region.supportedAsylum)}</span>
-          <span class="region-rate">{region.supportedAsylumRate?.toFixed(1) ?? "—"} per 10,000</span>
+  <!-- ═══ TOP FINDINGS ═══ -->
+  <section class="findings-strip shell">
+    <h2 class="strip-title">What we found</h2>
+    <div class="findings-row">
+      {topFindings.map((finding) => (
+        <a href={`/findings/${finding.slug}/`} class="finding-strip-card">
+          <span class="fsc-verdict" style={`color: ${findingColor(finding.data.verdict)}`}>{findingLabel(finding.data.verdict)}</span>
+          <span class="fsc-stat" style={`color: ${findingColor(finding.data.verdict)}`}>{finding.data.stat_value}</span>
+          <span class="fsc-headline">{finding.data.headline}</span>
+          <span class="fsc-cta">Read more &rarr;</span>
         </a>
       ))}
     </div>
-    <a href="/places/" class="cta-link">See all 361 areas &rarr;</a>
+    <a href="/findings/" class="cta-link">All {allFindings.length} findings &rarr;</a>
   </section>
 
-  <!-- TOP AREAS BY RATE -->
+  <!-- ═══ COST STRIP ═══ -->
+  <section class="cost-strip shell">
+    <div class="cost-strip-inner">
+      <div class="cost-item cost-item--hero">
+        <span class="cost-number">£{perTaxpayerGbp}</span>
+        <span class="cost-label">per taxpayer per year</span>
+        <span class="cost-context">Hotels alone. Before legal aid, healthcare, education, translation services.</span>
+      </div>
+      <div class="cost-item">
+        <span class="cost-number">£{fmtInt(costPerResidentPerYear)}</span>
+        <span class="cost-label">per hotel resident per year</span>
+        <span class="cost-context">£{costPerResidentPerDay}/night. More than a junior doctor earns.</span>
+      </div>
+      <div class="cost-item">
+        <span class="cost-number">{fmtGbp(tenYearGbp)}</span>
+        <span class="cost-label">committed over 10 years</span>
+        <span class="cost-context">Contractually locked in. Not discretionary. Already signed.</span>
+      </div>
+    </div>
+    <p class="cost-source">Source: National Audit Office asylum accommodation report. HMRC taxpayer statistics 2024-25.</p>
+  </section>
+
+  <!-- ═══ THE SYSTEM IN NUMBERS ═══ -->
+  <section class="system-section shell" id="headline-stats">
+    <div class="stats-header">
+      <h2 class="strip-title">The system in numbers</h2>
+      <DataFreshness
+        updated="2025-12-31"
+        source="Home Office"
+        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
+      />
+    </div>
+    <div class="system-grid">
+      <article class="sys-card">
+        <span class="sys-value sys-accent">{fmtInt(latestQuarter.supportedAsylum)}</span>
+        <span class="sys-label">On asylum support</span>
+        <span class="sys-context">Fed, housed, and supported by the taxpayer. As at {snapshotDate}.</span>
+      </article>
+      <article class="sys-card">
+        <span class="sys-value sys-warn">{fmtInt(latestQuarter.awaitingInitialDecision)}</span>
+        <span class="sys-label">Awaiting a decision</span>
+        <span class="sys-context">Waiting. Costing. Every single day.</span>
+      </article>
+      <article class="sys-card">
+        <span class="sys-value sys-coral">{fmtInt(smallBoatArrivals)}</span>
+        <span class="sys-label">Illegal boat crossings</span>
+        <span class="sys-context">Up 12.6% year on year. 89% of all illegal entries.</span>
+      </article>
+      <article class="sys-card">
+        <span class="sys-value sys-coral">{grantRatePct}%</span>
+        <span class="sys-label">Grant rate</span>
+        <span class="sys-context">Two thirds refused or withdrawn. Still here. Still costing.</span>
+      </article>
+      <article class="sys-card">
+        <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
+        <span class="sys-label">Family reunion visas</span>
+        <span class="sys-context">Up 234% in four years. Every grant generates dependants.</span>
+      </article>
+      <article class="sys-card">
+        <span class="sys-value sys-accent">{areasZero}</span>
+        <span class="sys-label">Councils taking zero</span>
+        <span class="sys-context">{areasAbove30} councils have rates above 30 per 10,000. {areasZero} take none.</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ DEMOGRAPHIC PROJECTIONS ═══ -->
+  <section class="demo-section shell" id="demographics">
+    <div class="demo-inner">
+      <span class="chip accent" style="margin-bottom: 0.75rem;">Census-verified projections</span>
+      <h2 class="section-title">The demographic transformation nobody will publish</h2>
+      <p class="section-desc" style="max-width: 700px;">
+        The ONS will not project ethnic composition. So we built a model that does.
+        307 local authorities. Census 2011 and 2021 data. Hamilton-Perry methodology.
+        Monte Carlo stochastic confidence intervals. Every number sourced.
+      </p>
+      <div class="demo-stat-grid">
+        <div class="demo-big-stat">
+          <span class="demo-number">{areasBelow50}</span>
+          <span class="demo-label">areas where White British will be under 50% by 2051</span>
+        </div>
+        <div class="demo-bar-visual">
+          {demographicShifts.slice(0, 8).map((area) => (
+            <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="demo-bar-row">
+              <span class="demo-bar-name">{area.areaName}</span>
+              <span class="demo-bar-track">
+                <span class="demo-bar-fill" style={`width: ${area.currentWbPct}%`}></span>
+              </span>
+              <span class="demo-bar-pct">{area.currentWbPct.toFixed(0)}%</span>
+            </a>
+          ))}
+          <span class="demo-bar-caption">White British % (2021 Census). Bar shows current share.</span>
+        </div>
+      </div>
+      <div class="chip-row" style="margin-top: 1.25rem;">
+        <a href="/findings/" class="cta-btn cta-btn--primary">See the findings</a>
+        <a href="/national/" class="cta-btn cta-btn--secondary">National demographic outlook</a>
+        <a href="/methodology/" class="cta-btn cta-btn--ghost">Methodology</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ YOUR AREA ═══ -->
+  <section class="lookup-section shell" id="your-area">
+    <div class="lookup-inner">
+      <h2 class="lookup-title">Look up YOUR area</h2>
+      <p class="lookup-desc">
+        361 local authority profiles. Asylum numbers, demographic projections, hotel sites, crime, schools, economy. All sourced. All free.
+      </p>
+      <a href="/places/" class="cta-btn cta-btn--primary" style="margin-top: 0.5rem;">Browse all areas &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ═══ TOP AREAS BY RATE ═══ -->
   <section class="top-areas-section shell" id="top-areas">
-    <h2 class="section-title">Highest concentration areas</h2>
-    <p class="section-desc">Local authorities with the most asylum seekers per 10,000 population.</p>
+    <h2 class="section-title">Where they are being placed</h2>
+    <p class="section-desc">The councils carrying the heaviest load per head of population. Click any area for the full picture.</p>
     <div class="area-table">
       <div class="area-table-header">
+        <span></span>
         <span>Area</span>
-        <span>Per 10,000</span>
+        <span>Per 10k</span>
         <span>Total</span>
       </div>
       {topAreas.map((area, i) => (
@@ -174,13 +291,31 @@ const topAreas = localRouteLatest.areas
         </a>
       ))}
     </div>
+    <a href="/places/" class="cta-link">See all 361 areas &rarr;</a>
   </section>
 
-  <!-- ROUTE BREAKDOWN -->
-  <section class="routes-section shell" id="routes">
-    <h2 class="section-title">How they get here</h2>
+  <!-- ═══ REGIONAL PRESSURE ═══ -->
+  <section class="pressure-section shell" id="regional-pressure">
+    <h2 class="section-title">Regional breakdown</h2>
     <p class="section-desc">
-      Not all asylum routes are the same. The government treats them differently. So should you.
+      The system is not fair. Some regions carry five times the load of others. Nobody voted for that.
+    </p>
+    <div class="region-grid">
+      {regionalByTotal.slice(0, 6).map((region) => (
+        <a href={region.regionPath} class="region-card">
+          <span class="region-name">{region.regionName}</span>
+          <span class="region-stat">{fmtInt(region.supportedAsylum)}</span>
+          <span class="region-rate">{region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══ ROUTES ═══ -->
+  <section class="routes-section shell" id="routes">
+    <h2 class="section-title">The routes into Britain</h2>
+    <p class="section-desc">
+      Small boats. Visa overstayers. Resettlement schemes. The government counts them separately. So do we.
     </p>
     <div class="route-cards">
       {routeDashboard.routeFamilies.slice(0, 6).map((route) => (
@@ -194,15 +329,23 @@ const topAreas = localRouteLatest.areas
     <a href="/routes/" class="cta-link">Full route analysis &rarr;</a>
   </section>
 
-  <!-- CTA STRIP -->
+  <!-- ═══ CTA STRIP ═══ -->
   <section class="cta-section shell">
     <div class="cta-inner">
-      <h2>This is YOUR money.</h2>
-      <p>Every number on this site links to its official source. Explore the data. Verify the sources. Form your own conclusions.</p>
+      <h2>Every number sourced. Every source linked.</h2>
+      <p>No spin. No hedging. Just data. Click any figure and trace it back to the government's own publications. Then decide for yourself.</p>
       <div class="cta-buttons">
-        <a href="/places/" class="cta-btn cta-btn--primary">Search your area</a>
-        <a href="/routes/" class="cta-btn cta-btn--secondary">Follow the routes</a>
-        <a href="/sources/" class="cta-btn cta-btn--ghost">Check our sources</a>
+        <a href="/places/" class="cta-btn cta-btn--primary">Look up your area</a>
+        <a href="/findings/" class="cta-btn cta-btn--secondary">Read the findings</a>
+        <a href="/sources/" class="cta-btn cta-btn--ghost">Check the sources</a>
+      </div>
+      <div style="margin-top: 1rem;">
+        <ShareButton
+          url={SITE_URL}
+          title="asylumstats - Follow YOUR money"
+          text={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. See the data: ${SITE_URL}`}
+          compact
+        />
       </div>
     </div>
   </section>
@@ -249,10 +392,12 @@ const topAreas = localRouteLatest.areas
         const link = document.createElement("a");
         link.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
         link.className = "lookup-result";
-        link.innerHTML = `
-          <strong>${area.areaName}</strong>
-          <span>${area.regionName} &middot; ${area.supportedAsylum.toLocaleString()} on support</span>
-        `;
+        const strong = document.createElement("strong");
+        strong.textContent = area.areaName;
+        const span = document.createElement("span");
+        span.textContent = `${area.regionName} \u00B7 ${area.supportedAsylum.toLocaleString()} on support`;
+        link.appendChild(strong);
+        link.appendChild(span);
         resultsContainer.appendChild(link);
       }
     });
@@ -267,11 +412,32 @@ const topAreas = localRouteLatest.areas
 </script>
 
 <style>
-  /* HERO */
+  /* ═══ HERO ═══ */
   .hero-section {
     padding: 4rem 1.5rem 3rem;
     text-align: center;
     background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translateX(-50%);
+    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(6, 182, 212, 0.06) 30deg, transparent 60deg);
+    animation: radar-sweep 8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes radar-sweep {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-section::before { animation: none; opacity: 0; }
   }
   .hero-inner {
     max-width: 800px;
@@ -279,7 +445,7 @@ const topAreas = localRouteLatest.areas
   }
   .hero-eyebrow {
     font-family: "Sora", sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -301,7 +467,7 @@ const topAreas = localRouteLatest.areas
   .hero-label {
     display: block;
     font-family: "Sora", sans-serif;
-    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
     font-weight: 700;
     color: var(--ink);
     margin-top: 0.25rem;
@@ -315,8 +481,8 @@ const topAreas = localRouteLatest.areas
   }
   .hero-source {
     display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
     color: var(--accent);
     text-decoration: none;
     opacity: 0.8;
@@ -324,68 +490,14 @@ const topAreas = localRouteLatest.areas
   }
   .hero-source:hover { opacity: 1; }
 
-  /* STATS GRID */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  .stat-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .stat-value {
-    font-family: "Sora", sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .stat-card--accent .stat-value { color: var(--accent); }
-  .stat-card--warn .stat-value { color: #f59e0b; }
-  .stat-card--coral .stat-value { color: var(--accent-3); }
-  .stat-card--teal .stat-value { color: var(--accent-2); }
-  .stat-label {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .stat-context {
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  /* AREA LOOKUP */
-  .lookup-section {
-    margin-top: 3rem;
-    padding: 2.5rem 0;
-  }
-  .lookup-inner {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .lookup-title {
-    font-family: "Sora", sans-serif;
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--ink);
-    margin: 0;
-  }
-  .lookup-desc {
-    color: var(--muted);
-    font-size: 0.95rem;
-    margin: 0.5rem 0 1.5rem;
-  }
-  .lookup-field {
+  /* Search in hero */
+  .hero-search {
+    max-width: 560px;
+    margin: 2rem auto 0;
     position: relative;
+    text-align: left;
   }
-  .lookup-field input {
+  .hero-search input {
     width: 100%;
     padding: 1rem 1.25rem;
     font-size: 1rem;
@@ -395,17 +507,17 @@ const topAreas = localRouteLatest.areas
     border: 2px solid var(--border-strong);
     border-radius: var(--radius-sm);
     outline: none;
-    transition: border-color 180ms;
+    transition: border-color 180ms, box-shadow 180ms;
   }
-  .lookup-field input::placeholder {
+  .hero-search input::placeholder {
     color: var(--muted);
     opacity: 0.7;
   }
-  .lookup-field input:focus {
+  .hero-search input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 4px var(--accent-glow);
   }
-  .lookup-results {
+  .hero-search .lookup-results {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -417,8 +529,8 @@ const topAreas = localRouteLatest.areas
     overflow-y: auto;
     z-index: 50;
   }
-  .lookup-results[hidden] { display: none; }
-  .lookup-results :global(.lookup-result) {
+  .hero-search .lookup-results[hidden] { display: none; }
+  .hero-search :global(.lookup-result) {
     display: flex;
     flex-direction: column;
     padding: 0.75rem 1.25rem;
@@ -427,27 +539,162 @@ const topAreas = localRouteLatest.areas
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
-  .lookup-results :global(.lookup-result:hover) {
+  .hero-search :global(.lookup-result:hover) {
     background: rgba(125, 211, 252, 0.08);
   }
-  .lookup-results :global(.lookup-result strong) {
-    font-size: 0.95rem;
+  .hero-search :global(.lookup-result strong) { font-size: 0.95rem; }
+  .hero-search :global(.lookup-result span) { font-size: 0.82rem; color: var(--muted); }
+
+  /* ═══ FINDINGS STRIP ═══ */
+  .findings-strip {
+    margin-top: 3rem;
   }
-  .lookup-results :global(.lookup-result span) {
-    font-size: 0.78rem;
+  .strip-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+  .findings-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+  .finding-strip-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-decoration: none;
+    transition: border-color 180ms, box-shadow 180ms, transform 180ms;
+  }
+  .finding-strip-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+  .fsc-verdict {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .fsc-stat {
+    font-family: "Sora", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .fsc-headline {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .fsc-cta {
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-top: auto;
+  }
+
+  /* ═══ STATS ═══ */
+  .stats-section {
+    margin-top: 3rem;
+  }
+  .stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .stat-value {
+    font-family: "Sora", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-card--accent .stat-value { color: var(--accent); }
+  .stat-card--warn .stat-value { color: #f59e0b; }
+  .stat-card--coral .stat-value { color: var(--coral); }
+  .stat-card--teal .stat-value { color: var(--accent-2); }
+  .stat-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .stat-context {
+    font-size: 0.82rem;
     color: var(--muted);
   }
 
-  /* REGIONAL PRESSURE */
+  /* ═══ EXPLAINERS ═══ */
+  .explainer-section {
+    margin-top: 3rem;
+  }
+  .explainer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  /* ═══ AREA LOOKUP ═══ */
+  .lookup-section {
+    margin-top: 3rem;
+    padding: 2.5rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .lookup-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .lookup-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+  }
+  .lookup-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0.5rem 0 0;
+  }
+
+  /* ═══ SECTIONS ═══ */
   .pressure-section, .top-areas-section, .routes-section {
     margin-top: 3rem;
   }
   .section-title {
     font-family: "Sora", sans-serif;
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
     font-weight: 800;
     color: var(--ink);
     margin: 0 0 0.25rem;
+    letter-spacing: -0.02em;
   }
   .section-desc {
     color: var(--muted);
@@ -455,6 +702,8 @@ const topAreas = localRouteLatest.areas
     margin: 0 0 1.5rem;
     max-width: 600px;
   }
+
+  /* ═══ REGIONS ═══ */
   .region-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -475,40 +724,31 @@ const topAreas = localRouteLatest.areas
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-glow);
   }
-  .region-name {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--ink);
-  }
+  .region-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); }
   .region-stat {
     font-family: "Sora", sans-serif;
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--accent);
   }
-  .region-rate {
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
+  .region-rate { font-size: 0.82rem; color: var(--muted); }
 
-  /* TOP AREAS TABLE */
-  .area-table {
-    max-width: 640px;
-  }
+  /* ═══ TOP AREAS TABLE ═══ */
+  .area-table { max-width: 700px; }
   .area-table-header {
     display: grid;
-    grid-template-columns: 1fr 100px 100px;
+    grid-template-columns: 32px 1fr 80px 80px;
     padding: 0.5rem 0.75rem;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: var(--muted);
     border-bottom: 1px solid var(--border-strong);
   }
   .area-row {
     display: grid;
-    grid-template-columns: auto 1fr 100px 100px;
+    grid-template-columns: 32px 1fr 80px 80px;
     align-items: center;
     padding: 0.6rem 0.75rem;
     text-decoration: none;
@@ -516,31 +756,18 @@ const topAreas = localRouteLatest.areas
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
-  .area-row:hover {
-    background: rgba(125, 211, 252, 0.06);
-  }
-  .area-rank {
-    width: 24px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--muted);
-  }
-  .area-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
+  .area-row:hover { background: rgba(125, 211, 252, 0.06); }
+  .area-rank { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .area-name { font-weight: 600; font-size: 0.92rem; }
   .area-rate {
     font-family: "Sora", sans-serif;
     font-weight: 700;
     color: var(--accent);
     font-size: 0.95rem;
   }
-  .area-total {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
+  .area-total { font-size: 0.88rem; color: var(--muted); }
 
-  /* ROUTE CARDS */
+  /* ═══ ROUTES ═══ */
   .route-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -555,27 +782,20 @@ const topAreas = localRouteLatest.areas
     flex-direction: column;
     gap: 0.2rem;
   }
-  .route-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-  }
+  .route-label { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
   .route-value {
     font-family: "Sora", sans-serif;
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--ink);
   }
-  .route-period {
-    font-size: 0.72rem;
-    color: var(--muted);
-  }
+  .route-period { font-size: 0.78rem; color: var(--muted); }
 
-  /* CTA */
+  /* ═══ CTAs ═══ */
   .cta-link {
     display: inline-block;
     margin-top: 1.25rem;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 700;
     color: var(--accent);
     text-decoration: none;
@@ -596,9 +816,8 @@ const topAreas = localRouteLatest.areas
   }
   .cta-inner p {
     color: var(--muted);
-    margin: 0.75rem 0 1.5rem;
+    margin: 0.75rem auto 1.5rem;
     max-width: 500px;
-    margin-inline: auto;
   }
   .cta-buttons {
     display: flex;
@@ -606,72 +825,214 @@ const topAreas = localRouteLatest.areas
     justify-content: center;
     flex-wrap: wrap;
   }
-  .cta-btn {
-    padding: 0.7rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: transform 120ms, box-shadow 120ms;
-  }
-  .cta-btn:hover {
-    transform: translateY(-1px);
-  }
-  .cta-btn--primary {
-    background: var(--accent);
-    color: var(--bg);
-  }
-  .cta-btn--secondary {
-    background: rgba(125, 211, 252, 0.12);
-    color: var(--accent);
-    border: 1px solid rgba(125, 211, 252, 0.3);
-  }
-  .cta-btn--ghost {
-    color: var(--muted);
-    border: 1px solid var(--border-strong);
-  }
 
-  /* MOBILE */
-  @media (max-width: 640px) {
-    .hero-section { padding: 2.5rem 1rem 2rem; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .area-table-header, .area-row { grid-template-columns: auto 1fr 70px 70px; }
-    .cta-buttons { flex-direction: column; align-items: center; }
-    .model-stats { grid-template-columns: 1fr; }
+  /* ═══ COST STRIP ═══ */
+  .cost-strip {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%);
   }
-
-  /* DEMOGRAPHIC MODEL FEATURE */
-  .model-section {
-    padding: 2.5rem 0;
-  }
-  .model-inner {
-    max-width: 900px;
-    text-align: center;
-    margin: 0 auto;
-  }
-  .model-stats {
+  .cost-strip-inner {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: 1.5rem;
+    text-align: center;
   }
-  .model-stats .stat-card {
+  .cost-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .cost-item--hero {
+    position: relative;
+  }
+  .cost-item--hero::after {
+    content: "";
+    position: absolute;
+    right: -0.75rem;
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background: var(--border);
+  }
+  .cost-number {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: var(--coral);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .cost-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.25rem;
+  }
+  .cost-context {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .cost-source {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    opacity: 0.5;
+    margin-top: 1rem;
+  }
+
+  /* ═══ SYSTEM GRID ═══ */
+  .system-section {
+    margin-top: 3rem;
+  }
+  .system-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .sys-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
-  .model-stats .stat-value {
+  .sys-value {
     font-family: "Sora", sans-serif;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    display: block;
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
-  .model-stats .stat-label {
+  .sys-accent { color: var(--accent); }
+  .sys-warn { color: #f59e0b; }
+  .sys-coral { color: var(--coral); }
+  .sys-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.15rem;
+  }
+  .sys-context {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ═══ DEMOGRAPHICS ═══ */
+  .demo-section {
+    margin-top: 3rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .demo-inner {
+    max-width: 900px;
+  }
+  .demo-stat-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 1.5rem;
+  }
+  .demo-big-stat {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .demo-number {
+    display: block;
+    font-family: "Sora", sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--coral);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .demo-label {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+  .demo-bar-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .demo-bar-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 42px;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 0.3rem 0;
+    transition: opacity 180ms;
+  }
+  .demo-bar-row:hover { opacity: 0.8; }
+  .demo-bar-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .demo-bar-track {
+    height: 20px;
+    background: rgba(239, 68, 68, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .demo-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.4));
+    border-radius: 4px;
+    min-width: 4px;
+  }
+  .demo-bar-pct {
+    font-family: "Sora", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: right;
+    color: var(--muted);
+  }
+  .demo-bar-caption {
     font-size: 0.78rem;
     color: var(--muted);
-    display: block;
+    opacity: 0.6;
     margin-top: 0.25rem;
+  }
+  .chip-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* ═══ MOBILE ═══ */
+  @media (max-width: 640px) {
+    .hero-section { padding: 2.5rem 1rem 2rem; }
+    .cost-strip-inner { grid-template-columns: 1fr; gap: 1rem; }
+    .cost-item--hero::after { display: none; }
+    .cost-number { font-size: 2rem; }
+    .system-grid { grid-template-columns: 1fr 1fr; }
+    .sys-value { font-size: 1.3rem; }
+    .area-table-header, .area-row { grid-template-columns: 28px 1fr 65px 65px; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .findings-row { grid-template-columns: 1fr; }
+    .fsc-stat { font-size: 1.4rem; }
+    .stats-header { flex-direction: column; align-items: flex-start; }
+    .demo-stat-grid { grid-template-columns: 1fr; }
+    .demo-number { font-size: 3rem; }
+    .demo-bar-row { grid-template-columns: 100px 1fr 36px; }
+    .demo-bar-name { font-size: 0.78rem; }
   }
 </style>

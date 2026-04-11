@@ -4,15 +4,22 @@ interface Point {
   value: number;
 }
 
+interface Annotation {
+  label: string;
+  pointLabel: string;
+  color?: string;
+}
+
 interface Props {
   points: Point[];
   title: string;
   description?: string;
   tone?: "accent" | "teal" | "warm";
   valueSuffix?: string;
+  annotations?: Annotation[];
 }
 
-const { points, title, description, tone = "accent", valueSuffix = "" } = Astro.props;
+const { points, title, description, tone = "accent", valueSuffix = "", annotations = [] } = Astro.props;
 
 const width = 560;
 const height = 230;
@@ -112,5 +119,21 @@ const colors =
         Peak {peak.label}
       </text>
     )}
+    {/* Policy event annotations */}
+    {annotations.map((ann) => {
+      const matchIndex = points.findIndex((p) => p.label === ann.pointLabel);
+      if (matchIndex < 0) return null;
+      const ax = getX(matchIndex);
+      return (
+        <>
+          <line x1={ax} y1={padding.top} x2={ax} y2={padding.top + usableHeight}
+                stroke={ann.color ?? "rgba(245,158,11,0.4)"} stroke-width="1" stroke-dasharray="3 4" />
+          <text x={ax + 3} y={padding.top + 10} class="trend-event-label"
+                fill={ann.color ?? "rgba(245,158,11,0.7)"}>
+            {ann.label}
+          </text>
+        </>
+      );
+    })}
   </svg>
 </figure>

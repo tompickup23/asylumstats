@@ -18,12 +18,16 @@ const categoryLabel: Record<string, string> = {
   routes: "Routes",
   demographics: "Demographics",
   backlog: "Backlog",
-  accountability: "Accountability"
+  accountability: "Accountability",
+  crime: "Crime",
+  "pressure-index": "Pressure",
+  "social-care": "Social care",
+  send: "Schools"
 };
 ---
 
 <BaseLayout
-  title="Findings — asylumstats"
+  title="Findings - asylumstats"
   description="Data-backed findings on UK asylum costs, routes, and the system. Every number sourced. No spin."
 >
   <section class="findings-header shell">
@@ -104,7 +108,7 @@ const categoryLabel: Record<string, string> = {
     align-items: center;
   }
   .finding-category {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -114,7 +118,7 @@ const categoryLabel: Record<string, string> = {
     border-radius: 6px;
   }
   .finding-date {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     color: var(--muted);
   }
 

@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ShareButton from "../../components/ShareButton.astro";
 import { getCollection, render } from "astro:content";
+import { buildAbsoluteUrl } from "../../lib/site";
 
 export async function getStaticPaths() {
   const findings = await getCollection("findings");
@@ -17,6 +20,13 @@ const { finding } = Astro.props;
 const { Content } = await render(finding);
 const findingSlug = finding.id.replace(/\.md$/, "");
 const ogImage = `/cards/${findingSlug}_og.png`;
+const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
+
+// Get related findings (same category)
+const allFindings = await getCollection("findings");
+const relatedFindings = allFindings
+  .filter((f) => f.data.category === finding.data.category && f.id !== finding.id)
+  .slice(0, 3);
 
 const verdictColor: Record<string, string> = {
   alert: "#f59e0b",
@@ -25,18 +35,23 @@ const verdictColor: Record<string, string> = {
   info: "var(--accent)"
 };
 const verdictLabel: Record<string, string> = {
-  alert: "Alert",
-  critical: "Critical",
+  alert: "Finding",
+  critical: "Investigation",
   resolved: "Resolved",
-  info: "Info"
+  info: "Analysis"
 };
 ---
 
 <BaseLayout
-  title={`${finding.data.headline} — asylumstats`}
+  title={`${finding.data.headline} - asylumstats`}
   description={finding.data.summary}
   image={ogImage}
 >
+  <Breadcrumbs items={[
+    { label: "Findings", href: "/findings/" },
+    { label: finding.data.headline }
+  ]} />
+
   <article class="finding-detail shell">
     <div class="finding-detail-meta">
       <span
@@ -46,6 +61,12 @@ const verdictLabel: Record<string, string> = {
         {verdictLabel[finding.data.verdict]}
       </span>
       <span class="finding-detail-date">{finding.data.date}</span>
+      <ShareButton
+        url={pageUrl}
+        title={finding.data.headline}
+        text={`${finding.data.stat_value} - ${finding.data.headline}. Source: ${finding.data.source_label}. ${pageUrl}`}
+        compact
+      />
     </div>
 
     <h1 class="finding-detail-headline">{finding.data.headline}</h1>
@@ -67,22 +88,47 @@ const verdictLabel: Record<string, string> = {
         <video controls preload="metadata" poster={`/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
           <source src="/videos/newethpop_validation_reel.mp4" type="video/mp4" />
         </video>
-        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">12s summary — share on social media.</p>
+        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">12s summary - share on social media.</p>
       </div>
     )}
 
     <!-- SHARE CARD -->
     <div class="finding-share-card">
       <img src={`/cards/${findingSlug}_square.png`} alt={finding.data.headline} width="540" height="540" loading="lazy" />
-      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding — right-click to save the image.</p>
+      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding - right-click to save the image.</p>
+    </div>
+
+    <!-- SHARE -->
+    <div class="finding-share-actions">
+      <h3>Share this finding</h3>
+      <ShareButton
+        url={pageUrl}
+        title={finding.data.headline}
+        text={`${finding.data.stat_value} - ${finding.data.headline}. See the data: ${pageUrl}`}
+      />
     </div>
 
     <footer class="finding-detail-footer">
       <a href={finding.data.source_url} target="_blank" rel="noopener" class="finding-detail-source">
-        {finding.data.source_label} — verify this &rarr;
+        {finding.data.source_label} - verify this yourself &rarr;
       </a>
       <a href="/findings/" class="finding-back">&larr; All findings</a>
     </footer>
+
+    <!-- RELATED -->
+    {relatedFindings.length > 0 && (
+      <div class="finding-related">
+        <h3>Related findings</h3>
+        <div class="finding-related-grid">
+          {relatedFindings.map((related) => (
+            <a href={`/findings/${related.id.replace(/\.md$/, "")}/`} class="finding-related-card">
+              <span class="frc-stat" style={`color: ${verdictColor[related.data.verdict]}`}>{related.data.stat_value}</span>
+              <span class="frc-headline">{related.data.headline}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
   </article>
 </BaseLayout>
 
@@ -187,5 +233,57 @@ const verdictLabel: Record<string, string> = {
     max-width: 540px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
+  }
+  .finding-share-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-share-actions h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+  }
+  .finding-related {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .finding-related h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+  }
+  .finding-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .finding-related-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: border-color 180ms;
+  }
+  .finding-related-card:hover { border-color: var(--accent); }
+  .frc-stat {
+    font-family: "Sora", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .frc-headline {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
   }
 </style>

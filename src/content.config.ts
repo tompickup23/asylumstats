@@ -11,7 +11,13 @@ const findings = defineCollection({
     verdict: z.enum(["alert", "critical", "resolved", "info"]).default("info"),
     source_url: z.string().url(),
     source_label: z.string().default("Source"),
-    summary: z.string()
+    summary: z.string(),
+    // SR integration
+    sr_article_id: z.string().optional(),
+    sr_published: z.boolean().default(false),
+    // Social
+    video_url: z.string().optional(),
+    video_poster: z.string().optional()
   })
 });
 

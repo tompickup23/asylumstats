@@ -12,10 +12,10 @@ summary: "The five councils with the fastest White British population decline sp
 
 Adult social care spending varies significantly across our 25 tracked local authorities, from **£442 per capita** (Ribble Valley) to **£724** (Blackpool).
 
-The five councils experiencing the fastest demographic change — Blackburn, Pendle, Preston, West Northamptonshire, and Burnley — spend an average of **£612 per capita** on adult social care.
+The five councils experiencing the fastest demographic change - Blackburn, Pendle, Preston, West Northamptonshire, and Burnley - spend an average of **£612 per capita** on adult social care.
 
-The five with the slowest change — Wyre, Ribble Valley, Fylde, West Lancashire, and Rossendale — average **£472 per capita**.
+The five with the slowest change - Wyre, Ribble Valley, Fylde, West Lancashire, and Rossendale - average **£472 per capita**.
 
 This gap reflects multiple pressures: older population profiles in post-industrial areas, higher deprivation driving greater need, and the cost of providing culturally appropriate services to diverse communities.
 
-Whether immigration-driven demographic change increases or decreases future ASC demand depends on the age profile of incoming populations. Younger migrant populations may temporarily reduce the 65+ share — but eventually age into the care system themselves.
+Whether immigration-driven demographic change increases or decreases future ASC demand depends on the age profile of incoming populations. Younger migrant populations may temporarily reduce the 65+ share - but eventually age into the care system themselves.

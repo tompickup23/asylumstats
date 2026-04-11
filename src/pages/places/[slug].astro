@@ -1,5 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import PlainEnglish from "../../components/PlainEnglish.astro";
+import DataFreshness from "../../components/DataFreshness.astro";
+import ShareButton from "../../components/ShareButton.astro";
+import MpCard from "../../components/MpCard.astro";
+import EthnicityTimeline from "../../components/EthnicityTimeline.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import ProjectionChart from "../../components/ProjectionChart.astro";
@@ -22,6 +28,7 @@ import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
 import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
+import { getMPsForArea } from "../../lib/mp-data";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -158,7 +165,11 @@ const pressureScore = computePressureScore(
   localRouteLatest.areas.map((a) => a.supportedAsylumRate ?? 0)
 );
 
-const pageDescription = `${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally. Hotels, demographics, crime, SEND, social care.`;
+// MP data
+const areaMPs = getMPsForArea(area.areaName);
+const primaryMP = areaMPs.length > 0 ? areaMPs[0] : null;
+
+const pageDescription = `${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally.${primaryMP ? ` MP: ${primaryMP.mpName} (${primaryMP.party}).` : ""} Hotels, demographics, crime, SEND, social care.`;
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
   description: pageDescription,
@@ -205,22 +216,28 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   structuredData={pageStructuredData}
 >
   <!-- HEADER -->
+  <Breadcrumbs items={[
+    { label: "Places", href: "/places/" },
+    { label: area.regionName, href: `/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/` },
+    { label: area.areaName }
+  ]} />
+
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">{area.regionName}</span>
       <h1>{area.areaName}</h1>
-      <p>
-        {area.supportedAsylum.toLocaleString()} on asylum support. Rank {areaRank} nationally, {regionalRank} in {area.regionName}.
-        Rate: {area.supportedAsylumRate ?? "n/a"} per 10,000 ({ratePercentileLabel} percentile).
-        {namedSiteCount > 0 ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s" : ""}.` : ""}
-        {regionalPrimeProviderCoverage ? ` Regional provider: ${regionalPrimeProviderCoverage.profile.entityName}.` : ""}
-      </p>
-      <div class="chip-row">
-        <span class="chip accent">{localRouteLatest.snapshotDate}</span>
-        <a class="chip" href={`/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/`}>
-          {area.regionName} region
-        </a>
-        {contingencySharePct > 0 && <span class="chip">{contingencySharePct}% contingency</span>}
+      <div class="page-head-meta">
+        <DataFreshness
+          updated={localRouteLatest.snapshotDate ?? "2025-12-31"}
+          source="Home Office"
+          sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
+        />
+        <ShareButton
+          url={buildAbsoluteUrl(Astro.url.pathname)}
+          title={`${area.areaName} - asylumstats`}
+          text={`${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally. See the full data.`}
+          compact
+        />
       </div>
     </section>
 
@@ -248,29 +265,30 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </aside>
   </section>
 
+  <!-- MP -->
+  {primaryMP && (
+    <section class="mp-section">
+      <MpCard
+        name={primaryMP.mpName}
+        party={primaryMP.party}
+        constituency={primaryMP.constituencyName}
+        photoUrl={primaryMP.photoUrl ?? undefined}
+      />
+      {areaMPs.length > 1 && (
+        <p class="mp-note">{areaMPs.length} MPs cover constituencies in or overlapping {area.areaName}.</p>
+      )}
+    </section>
+  )}
+
   <PageContents title="Sections" sections={placeSections} />
 
   <!-- SUMMARY -->
   <section id="place-summary" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Summary</h2>
-      </div>
-    </div>
-    <p class="lede">
-      {area.areaName} has {area.supportedAsylum.toLocaleString()} people on asylum support at quarter end,
-      ranking {areaRank.toLocaleString()} out of {localRouteLatest.areas.length} local authorities nationally.
-      The rate of {area.supportedAsylumRate ?? "n/a"} per 10,000 residents places it around the {ratePercentileLabel} percentile.
-      {area.contingencyAccommodation > 0
-        ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation (${contingencySharePct}% of total).`
-        : " No contingency accommodation recorded."}
-      {namedSiteCount > 0
-        ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s are" : " is"} publicly documented.`
-        : unnamedSiteCount > 0
-          ? ` ${unnamedSiteCount} hotel site${unnamedSiteCount > 1 ? "s" : ""} acknowledged but not publicly named.`
-          : " No hotel evidence attached yet."}
-      These are quarter-end stock numbers, not throughput.
-    </p>
+    <PlainEnglish
+      headline={`${area.supportedAsylum.toLocaleString()} people on asylum support in ${area.areaName}`}
+      body={`That is rank ${areaRank} out of ${localRouteLatest.areas.length} local authorities nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents puts ${area.areaName} in the ${ratePercentileLabel} percentile.${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation (${contingencySharePct}% of total).` : ""}${namedSiteCount > 0 ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s" : ""} publicly documented.` : ""} Quarter-end stock figures, not throughput.`}
+      tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
+    />
   </section>
 
   <!-- TREND -->
@@ -278,7 +296,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     <section id="recent-trend" class="split section section-anchor">
       <TrendChart
         points={areaTrend.points.map((point) => ({ label: point.label, value: point.value }))}
-        title={`Supported asylum in ${area.areaName}`}
+        title={areaTrend.deltaFromPrevious !== null && areaTrend.deltaFromPrevious > 0 ? `${area.areaName}: asylum numbers still rising` : areaTrend.deltaFromPrevious !== null && areaTrend.deltaFromPrevious < 0 ? `${area.areaName}: asylum numbers falling` : `${area.areaName}: asylum numbers holding steady`}
         description={buildSupportedAsylumStockDescription(areaTrend.latestPeriodLabel, areaTrend.hasIllustrativeData)}
         tone={(areaTrend.deltaFromPrevious ?? areaTrend.deltaFromFirst) > 0 ? "warm" : "teal"}
       />
@@ -473,7 +491,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     )}
   </section>
 
-  <!-- DEMOGRAPHICS — ProjectionChart -->
+  <!-- DEMOGRAPHICS - ProjectionChart -->
   {ethnicProjection && ethChartLines.length > 0 && (
     <section id="demographic-profile" class="section section-anchor">
       <div class="section-head">
@@ -488,23 +506,28 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         </div>
       </div>
       <ProjectionChart
-        title={`Ethnic composition — ${area.areaName}`}
+        title={`Ethnic composition - ${area.areaName}`}
         lines={ethChartLines}
         confidenceBand={ethConfidenceBand}
         nowYear={2021}
         yLabel="% of population"
       />
+      {ethnicTimeline && ethnicTimeline.length > 0 && (
+        <div style="margin-top: 1.25rem;">
+          <EthnicityTimeline timeline={ethnicTimeline} areaName={area.areaName} />
+        </div>
+      )}
       <details class="method-note" style="margin-top: 0.5rem;">
         <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Model: Hamilton-Perry single-year CCRs, 1,000 Monte Carlo simulations, SNPP-constrained</summary>
         <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-          Census 2011 → 2021 cohort change ratios. Shaded band = 80% confidence interval from stochastic perturbation (σ=0.04, calibrated from NEWETHPOP validation). Not a forecast.
+          Census 2011 to 2021 cohort change ratios. Shaded band = 80% confidence interval from stochastic perturbation. Not a forecast.
         </p>
       </details>
     </section>
   )}
 
   <!-- RELIGION -->
-  <!-- RELIGION — ProjectionChart -->
+  <!-- RELIGION - ProjectionChart -->
   {religionData && relChartLines.length > 0 && (
     <section id="religion-profile" class="section section-anchor">
       <div class="section-head">
@@ -516,12 +539,12 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`Religion — ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
+      <ProjectionChart title={`Religion - ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
     </section>
   )}
 
   <!-- NATIVITY -->
-  <!-- NATIVITY — ProjectionChart -->
+  <!-- NATIVITY - ProjectionChart -->
   {nativityData && natChartLines.length > 0 && (
     <section id="nativity-profile" class="section section-anchor">
       <div class="section-head">
@@ -534,7 +557,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`UK-born vs foreign-born — ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
+      <ProjectionChart title={`UK-born vs foreign-born - ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
       {migrationProfile && (
         <p class="tiny" style="margin-top: 0.5rem; opacity: 0.5;">
           {migrationProfile.maturityLevel}: {migrationProfile.implication}
@@ -543,7 +566,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     </section>
   )}
 
-  <!-- WHY IT'S CHANGING — ShiftShareChart -->
+  <!-- WHY IT'S CHANGING - ShiftShareChart -->
   {shiftShareData && (
     <section id="change-drivers" class="section section-anchor">
       <ShiftShareChart
