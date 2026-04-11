@@ -61,6 +61,16 @@ const verdictLabel: Record<string, string> = {
       <Content />
     </div>
 
+    <!-- VIDEO (if exists) -->
+    {findingSlug === "newethpop-validation-2021" && (
+      <div class="finding-video">
+        <video controls preload="metadata" poster={`/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
+          <source src="/videos/newethpop_validation_reel.mp4" type="video/mp4" />
+        </video>
+        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">12s summary — share on social media.</p>
+      </div>
+    )}
+
     <!-- SHARE CARD -->
     <div class="finding-share-card">
       <img src={`/cards/${findingSlug}_square.png`} alt={finding.data.headline} width="540" height="540" loading="lazy" />
