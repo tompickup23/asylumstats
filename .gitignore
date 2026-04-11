@@ -19,3 +19,6 @@ data/raw/regional_sources/*.json
 data/raw/regional_sources/*.xlsx
 data/raw/regional_sources/*.html
 data/raw/hotel_entities/*.json
+data/raw/census_ethnicity/
+data/raw/crime/
+data/raw/supplementary/
