@@ -334,28 +334,48 @@ const methodSections = [
       <div>
         <h2>Demographic projections</h2>
         <p class="lede">
-          Place pages include ethnic composition estimates derived from ONS Census data. These are trend extrapolations, not demographic forecasts.
+          Place pages show ethnic composition projections using a cohort-component model. 318 local authorities, 12 ethnic groups, 9 scenarios, validated against Census 2021.
         </p>
       </div>
     </div>
     <div class="grid-2">
       <article class="signal-card">
-        <span class="tiny">Trend model</span>
+        <span class="tiny">Model type</span>
         <p class="tiny">
-          Linear extrapolation of ONS Census 2011 to 2021 decadal percentage-point change rates per ethnic group per local authority. Assumes 2011–2021 rates continue unchanged. Does not model fertility, mortality, internal migration, or policy changes. Produces estimated thresholds (e.g. approximate year White British share falls below 50%) with confidence ratings based on proximity to observed data.
+          Cohort-component projection (5-year age bands, 12 NEWETHPOP ethnic groups, 2 sexes). Base population from Census 2021 (ONS RM032 + TS007A via NOMIS API, IPF disaggregation). 318 local authorities in England and Wales.
         </p>
       </article>
       <article class="signal-card">
-        <span class="tiny">Academic reference</span>
+        <span class="tiny">Components</span>
         <p class="tiny">
-          Trend estimates are validated against the NEWETHPOP cohort-component model (Rees &amp; Norman, University of Leeds, CC BY 4.0) which projects ethnic group populations for all UK local authorities from 2011 to 2061 using age-specific fertility, mortality, and migration rates. Also cross-referenced with Goodwin &amp; Sherwood (Centre for Heterodox Social Sciences, 2025) national trajectory.
+          Fertility: national ethnic TFR from Coleman &amp; Dubuc, ONS Birth Characteristics. 3 scenarios (constant / half-convergence / full convergence). Mortality: ONS 2011-linked ethnic differentials applied to 2022-based life tables. Migration: internal (Census 2021 net rates) + international (3 ONS SNPP variants × ethnic composition from Census 2021).
+        </p>
+      </article>
+    </div>
+    <div class="grid-2" style="margin-top: 0.5rem;">
+      <article class="signal-card">
+        <span class="tiny">Scenarios</span>
+        <p class="tiny">
+          9 combinations (3 fertility × 3 migration). Central scenario: half fertility convergence + ONS principal migration (315K net/year). High diversity: constant ethnic fertility + high migration (476K). Low diversity: full convergence + low migration (108K). Each place page shows the central projection with scenario range.
+        </p>
+      </article>
+      <article class="signal-card">
+        <span class="tiny">Validation</span>
+        <p class="tiny">
+          Validated via backcast: NEWETHPOP's 2011-based predictions compared to Census 2021 actuals for 299 areas. NEWETHPOP MAE: 3.94pp. The model over-predicted White British in 95% of areas (systematic underestimation of diversity growth). Our 90% confidence interval from backcast errors: [-7.5pp, +14.5pp].
         </p>
       </article>
     </div>
     <article class="signal-card" style="margin-top: 0.5rem;">
-      <span class="tiny">Limitations</span>
+      <span class="tiny">Limitations and caveats</span>
       <p class="tiny">
-        Neither model accounts for future policy changes, economic shocks, local planning decisions, or shifts in migration patterns. Mixed-ethnicity classification follows Census self-identification conventions. The trend model is structurally simpler than cohort-component approaches and should be read as directional indication only. All projections carry greater uncertainty at longer time horizons.
+        LA-level ethnic fertility and mortality data unavailable — national differentials applied uniformly. Census 2021 internal migration captured COVID lockdown period (March 2020-2021). International migration ethnicity estimated from nationality/country-of-birth proxies. Projections do not account for future policy changes, economic shocks, or shifts in self-identification. Mixed ethnicity group assigned from birth ratios, not explicit mixing matrix. All projections carry greater uncertainty at longer horizons. These are demographic projections, not forecasts or predictions.
+      </p>
+    </article>
+    <article class="signal-card" style="margin-top: 0.5rem;">
+      <span class="tiny">Academic references</span>
+      <p class="tiny">
+        NEWETHPOP: Wohland, Rees, Norman, Lomax &amp; Clark (2024), University of Leeds, CC BY 4.0. ONS 2022-based Subnational Population Projections. Coleman &amp; Dubuc (2010) ethnic fertility convergence. Goodwin &amp; Sherwood (CHSS, 2025) national trajectory.
       </p>
     </article>
   </section>
