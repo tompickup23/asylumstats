@@ -17,7 +17,7 @@ const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
 const featuredPlaces = placeDirectory.featuredAreas.slice(0, 8);
 const placeRegionMapViews = buildPlaceRegionMapViews(placeDirectory, regionalPressure);
 const placeSections = [
-  { id: "place-map", label: "Map" },
+  { id: "place-search", label: "Search" },
   { id: "featured-places", label: "Top areas" }
 ];
 
@@ -417,26 +417,27 @@ const pageDescription =
 ---
 
 <BaseLayout title="Places | asylumstats" description={pageDescription}>
-  <section id="place-map" class="section section-anchor priority-section region-stage-screen">
-    <div class="home-left">
-      <article class="home-map-panel">
-        <HomeMapStage
-          id="places-britain-map"
-          placeDirectory={placeDirectory}
-          snapshotDate={localRouteLatest.snapshotDate}
-          views={placeRegionMapViews}
+  <!-- SEARCH-FIRST: Find your area -->
+  <section id="place-search" class="section section-anchor priority-section" style="padding: 2.5rem 0;">
+    <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+      <h1 style="font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Find your area</h1>
+      <p class="lede" style="margin-bottom: 1.5rem;">307 local authorities with asylum, demographic, religion, and socioeconomic data.</p>
+      <div class="lookup-field">
+        <input
+          type="search"
+          id="place-search-input"
+          placeholder="Type a council name — e.g. Birmingham, Burnley, Glasgow..."
+          autocomplete="off"
+          spellcheck="false"
+          style="width: 100%; padding: 0.9rem 1.2rem; font-size: 1rem; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--ink);"
         />
-      </article>
+        <div class="lookup-results" id="place-search-results"></div>
+      </div>
+      <div class="chip-row" style="margin-top: 1rem; justify-content: center;">
+        <a href="/regional/" class="source-pill">Browse by region</a>
+        <a href="/national/" class="source-pill">National overview</a>
+      </div>
     </div>
-
-    <aside class="home-right">
-      <HomeSystemDeck
-        entries={placeDeckEntries}
-        initialScopeId="national"
-        targetMapId="places-britain-map"
-        resetLabel="Back to the UK"
-      />
-    </aside>
   </section>
 
   <PageContents title="Start here" sections={placeSections} variant="priority" />
@@ -483,3 +484,39 @@ const pageDescription =
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const searchInput = document.getElementById("place-search-input") as HTMLInputElement | null;
+  const resultsContainer = document.getElementById("place-search-results");
+
+  if (searchInput && resultsContainer) {
+    let areas: Array<{ areaCode: string; areaName: string; regionName: string; supportedAsylum: number }> = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data) => { areas = Array.isArray(data) ? data : data.areas || []; })
+      .catch(() => {});
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      resultsContainer.innerHTML = "";
+      if (query.length < 2) { resultsContainer.hidden = true; return; }
+
+      const matches = areas.filter((a) => a.areaName.toLowerCase().includes(query)).slice(0, 8);
+      if (matches.length === 0) { resultsContainer.hidden = true; return; }
+
+      resultsContainer.hidden = false;
+      for (const area of matches) {
+        const link = document.createElement("a");
+        link.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
+        link.className = "lookup-result";
+        link.innerHTML = `<strong>${area.areaName}</strong><span>${area.regionName} · ${area.supportedAsylum.toLocaleString()} on support</span>`;
+        resultsContainer.appendChild(link);
+      }
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { resultsContainer.hidden = true; searchInput.value = ""; }
+    });
+  }
+</script>
