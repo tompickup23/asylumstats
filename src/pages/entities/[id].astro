@@ -176,7 +176,10 @@ function buildMoneyHref(query: string): string {
 }
 
 function buildPlaceHref(areaCode: string | null): string {
-  return areaCode ? `/places/${areaCode}/` : "/compare/#compare-explorer";
+  if (!areaCode) return "/compare/#compare-explorer";
+  const area = localRouteLatest.areas.find((a: any) => a.areaCode === areaCode);
+  const slug = area ? area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : areaCode;
+  return `/places/${slug}/`;
 }
 
 function formatSourceKind(kind: string): string {

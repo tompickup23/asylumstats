@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { slugifyAreaName } from "../../../lib/site";
 import DataDrawer from "../../../components/DataDrawer.astro";
 import HomeSystemDeck from "../../../components/HomeSystemDeck.astro";
 import LocalEvidenceTimeline from "../../../components/LocalEvidenceTimeline.astro";
@@ -126,7 +127,8 @@ function buildBar(
 }
 
 function buildAreaPath(areaCode: string): string {
-  return `/places/${areaCode}/`;
+  const match = region.areas.find((r: any) => r.area.areaCode === areaCode);
+  return match ? `/places/${slugifyAreaName(match.area.areaName)}/` : `/places/`;
 }
 
 function describeHotelSignalShort(row: PlaceDirectoryRegion["areas"][number]): string {
@@ -428,7 +430,7 @@ for (const row of region.areas) {
             )}
           </div>
           <h3>
-            <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+            <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
           </h3>
           <p class="lede">
             {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
@@ -462,7 +464,7 @@ for (const row of region.areas) {
               <span class="chip teal">{row.area.supportedAsylum.toLocaleString()} supported asylum</span>
             </div>
             <h3>
-              <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+              <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
             </h3>
             <p class="lede">{row.hotelSummary} are already visible on the public record for this authority.</p>
             <p class="tiny">
@@ -545,7 +547,7 @@ for (const row of region.areas) {
               )}
             </div>
             <h3>
-              <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+              <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
             </h3>
             <p class="lede">
               {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}

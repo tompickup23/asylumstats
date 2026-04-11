@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
+import { slugifyAreaName } from "../lib/site";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -133,7 +134,7 @@ const topAreas = localRouteLatest.areas
         <span>Total</span>
       </div>
       {topAreas.map((area, i) => (
-        <a href={`/places/${area.areaCode}/`} class="area-row">
+        <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="area-row">
           <span class="area-rank">{i + 1}</span>
           <span class="area-name">{area.areaName}</span>
           <span class="area-rate">{area.supportedAsylumRate?.toFixed(1)}</span>
@@ -214,7 +215,7 @@ const topAreas = localRouteLatest.areas
       resultsContainer.hidden = false;
       for (const area of matches) {
         const link = document.createElement("a");
-        link.href = `/places/${area.areaCode}/`;
+        link.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
         link.className = "lookup-result";
         link.innerHTML = `
           <strong>${area.areaName}</strong>

@@ -708,7 +708,8 @@ const payload = JSON.stringify({
       return { x: viewX, y: viewY, width: focusWidth, height: focusHeight };
     };
 
-    const buildAreaHref = (areaCode: string) => `/places/${areaCode}/`;
+    const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const buildAreaHref = (areaCode: string, areaName?: string) => `/places/${areaName ? slugify(areaName) : areaCode}/`;
 
     const loadBoundaryPayload = (() => {
       let promise: Promise<BoundaryPayload> | null = null;

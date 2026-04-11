@@ -9,7 +9,7 @@ import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics
 import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
-import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
+import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 import {
   getEthnicProjection, getEthnicCompositionTimeline,
   getReligionData, getNativityData, getStochasticData,
@@ -31,7 +31,7 @@ const hotelLedger = loadHotelEntityLedger();
 
 export function getStaticPaths() {
   return getPublicPlaceAreas().map((area) => ({
-    params: { code: area.areaCode },
+    params: { slug: slugifyAreaName(area.areaName) },
     props: { area }
   }));
 }

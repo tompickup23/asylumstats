@@ -13,7 +13,7 @@ const desktopPages = [
   { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
   { name: "national", path: "/national/", focus: "#national-overview", hasPageContents: true },
   { name: "regional", path: "/regional/", focus: ".region-grid", hasPageContents: false },
-  { name: "birmingham-place", path: "/places/E08000025/", focus: "#place-summary", hasPageContents: true }
+  { name: "birmingham-place", path: "/places/birmingham/", focus: "#place-summary", hasPageContents: true }
 ] as const;
 
 test.describe("desktop layout snapshots", () => {

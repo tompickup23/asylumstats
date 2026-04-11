@@ -31,6 +31,14 @@ function slugifyRegionName(regionName: string): string {
   return regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+export function slugifyAreaName(areaName: string): string {
+  return areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+export function buildPlacePath(area: { areaCode: string; areaName: string }): string {
+  return `/places/${slugifyAreaName(area.areaName)}/`;
+}
+
 export function normalisePageTitle(title: string): string {
   return /asylumstats/i.test(title) ? title : `${title} | ${SITE_NAME}`;
 }
@@ -90,7 +98,7 @@ export function getIndexableSitePaths(): string[] {
   }
 
   for (const area of getPublicPlaceAreas()) {
-    paths.add(`/places/${area.areaCode}/`);
+    paths.add(buildPlacePath(area));
   }
 
   return [...paths].sort((a, b) => a.localeCompare(b));

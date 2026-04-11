@@ -88,7 +88,9 @@ function buildBar(
 }
 
 function buildAreaPath(areaCode: string): string {
-  return `/places/${areaCode}/`;
+  const area = localRouteLatest.areas.find(a => a.areaCode === areaCode);
+  if (!area) return `/places/`;
+  return `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
 }
 
 function describeHotelSignal(row: (typeof placeDirectory.regions)[number]["areas"][number]): string {

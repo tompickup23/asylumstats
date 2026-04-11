@@ -91,7 +91,7 @@ function buildPlaceDescription(
 export function getPublicSearchEntries(): SiteSearchEntry[] {
   const placeDirectory = getPlaceDirectory();
   const placeEntries = getPublicPlaceAreas().map((area) => ({
-    href: `/places/${area.areaCode}/`,
+    href: `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`,
     title: area.areaName,
     kind: "place" as const,
     kicker: `${area.regionName} | ${area.countryName}`,

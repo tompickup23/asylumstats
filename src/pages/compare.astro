@@ -551,7 +551,7 @@ const compareSections = [
             </div>
           </div>
           <p class="tiny">
-            <a class="source-pill" href={`/places/${place.areaCode}/`}>Open place page</a>
+            <a class="source-pill" href={`/places/${place.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`}>Open place page</a>
             {localLeadEntity && (
               <a class="source-pill" href={`/entities/${localLeadEntity.entityId}/`}>
                 Open {localLeadEntity.entityName} profile
@@ -795,7 +795,7 @@ const compareSections = [
                 : "All visible points are official quarter-end values in the current series."}
             </p>
             <p class="tiny">
-              <a class="source-pill" href={`/places/${profile.place.areaCode}/#recent-trend`}>Open place trend</a>
+              <a class="source-pill" href={`/places/${profile.place.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/#recent-trend`}>Open place trend</a>
             </p>
           </article>
         ))}
@@ -995,7 +995,7 @@ const compareSections = [
               : "No contingency accommodation is recorded in the current local snapshot."}
           </p>
           <p class="tiny">
-            <a class="source-pill" href={`/places/${item.place.areaCode}/`}>Open place page</a>
+            <a class="source-pill" href={`/places/${item.place.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`}>Open place page</a>
           </p>
         </article>
       ))}
@@ -1064,7 +1064,7 @@ const compareSections = [
                 {metric.rows.slice(0, 6).map((row) => (
                   <tr>
                     <th scope="row">
-                      <a href={`/places/${row.areaCode}/`}>{row.areaName}</a>
+                      <a href={`/places/${row.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`}>{row.areaName}</a>
                     </th>
                     <td>{row.value.toLocaleString()}</td>
                   </tr>
