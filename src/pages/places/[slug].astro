@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
+import ProjectionChart from "../../components/ProjectionChart.astro";
+import ShiftShareChart from "../../components/ShiftShareChart.astro";
 import TrendChart from "../../components/TrendChart.astro";
 import { buildSupportedAsylumStockDescription } from "../../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../../lib/area-series";
@@ -104,6 +106,45 @@ const diversityIndex = getDiversityIndex(area.areaCode);
 const englishProf = getEnglishProficiency(area.areaCode);
 const migrationProfile = getMigrationProfile(area.areaCode);
 const socioData = getSocioeconomicData(area.areaCode);
+
+// Build ProjectionChart line data
+const ethChartLines = ethnicTimeline ? (() => {
+  const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
+  const colors: Record<string, string> = { white_british: "#06b6d4", white_other: "#8b9cb3", asian: "#f59e0b", black: "#a78bfa", mixed: "#10b981", other: "#6b7280" };
+  const labels: Record<string, string> = { white_british: "White British", white_other: "White Other", asian: "Asian", black: "Black", mixed: "Mixed", other: "Other" };
+  return groups.filter(g => Math.max(...ethnicTimeline.map(t => t.groups[g])) > 3).map(g => ({
+    label: labels[g], color: colors[g],
+    points: ethnicTimeline.map(t => ({ year: Number(t.year), value: t.groups[g] }))
+  }));
+})() : [];
+
+const ethConfidenceBand = stochasticData
+  ? [2031, 2041, 2051].filter(y => stochasticData[y]).map(y => ({
+      year: y, low: stochasticData[y].wbi.p10, high: stochasticData[y].wbi.p90
+    }))
+  : undefined;
+
+const relChartLines = religionData ? (() => {
+  const relGroups = [
+    { key: "Christian", color: "#7dd3fc", label: "Christian" },
+    { key: "No religion", color: "#6b7280", label: "No religion" },
+    { key: "Muslim", color: "#f59e0b", label: "Muslim" },
+    { key: "Hindu", color: "#a78bfa", label: "Hindu" },
+    { key: "Sikh", color: "#10b981", label: "Sikh" }
+  ];
+  const years = [2021, 2031, 2041, 2051].filter(y => religionData[y]);
+  return relGroups
+    .filter(g => years.some(y => (religionData[y]?.[g.key] ?? 0) > 3))
+    .map(g => ({ label: g.label, color: g.color, points: years.map(y => ({ year: y, value: religionData[y]?.[g.key] ?? 0 })) }));
+})() : [];
+
+const natChartLines = nativityData ? (() => {
+  const years = [2021, 2031, 2041, 2051].filter(y => nativityData[y]);
+  return [
+    { label: "UK-born", color: "#06b6d4", points: years.map(y => ({ year: y, value: nativityData[y].ukBornPct })) },
+    { label: "Foreign-born", color: "#f59e0b", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
+  ];
+})() : [];
 const crimeProfile = getCrimeProfile(area.areaCode);
 const crimePercentile = getCrimeRatePercentile(area.areaCode);
 const sendProfile = getSendProfile(area.areaCode);
@@ -432,312 +473,90 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
     )}
   </section>
 
-  <!-- DEMOGRAPHICS -->
-  {ethnicProjection && ethnicTimeline && (
+  <!-- DEMOGRAPHICS — ProjectionChart -->
+  {ethnicProjection && ethChartLines.length > 0 && (
     <section id="demographic-profile" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>Demographics</h2>
+          <h2>Ethnic composition projection</h2>
           <p class="lede">
-            Census-based ethnic composition for {area.areaName} (ONS 2011 & 2021).
-            {significantShift
-              ? ` If 2011-2021 rates continue, White British estimated below 50% by ~${wbThreshold!.year}. This is a trend extrapolation, not a forecast.`
-              : ""}
+            {area.areaName}: WBI {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
+            → {ethnicProjection.projections?.["2051"]?.white_british?.toFixed(1) ?? "?"}% (2051).
+            {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
+            {stochasticData?.[2051] ? ` 80% CI: ${stochasticData[2051].wbi.p10}–${stochasticData[2051].wbi.p90}%.` : ""}
           </p>
         </div>
       </div>
-      <div class="grid-2">
-        <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip accent">Census 2021</span>
-            {significantShift && <span class="chip coral">Significant shift</span>}
-          </div>
-          <h3>Ethnic composition</h3>
-          <div class="stacked-bars">
-            {ethnicTimeline.filter((t) => !t.isProjection || t.year === "2030" || t.year === "2040" || t.year === "2050").map((point) => (
-              <div class="stacked-bar-row">
-                <div class="stacked-bar-label">
-                  <strong>{point.year}</strong>
-                  {point.isProjection && <span class="chip tiny">projected</span>}
-                </div>
-                <div class="stacked-bar" title={`WB: ${point.groups.white_british.toFixed(1)}%, Asian: ${point.groups.asian.toFixed(1)}%, Black: ${point.groups.black.toFixed(1)}%`}>
-                  <div class="bar-seg wb" style={`width: ${point.groups.white_british}%`}></div>
-                  <div class="bar-seg wo" style={`width: ${point.groups.white_other}%`}></div>
-                  <div class="bar-seg asian" style={`width: ${point.groups.asian}%`}></div>
-                  <div class="bar-seg black" style={`width: ${point.groups.black}%`}></div>
-                  <div class="bar-seg mixed" style={`width: ${point.groups.mixed}%`}></div>
-                  <div class="bar-seg other" style={`width: ${point.groups.other}%`}></div>
-                </div>
-                <div class="stacked-bar-pct">{point.groups.white_british.toFixed(1)}% WB</div>
-              </div>
-            ))}
-          </div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="legend-swatch wb"></span> White British</span>
-            <span class="legend-item"><span class="legend-swatch wo"></span> White Other</span>
-            <span class="legend-item"><span class="legend-swatch asian"></span> Asian</span>
-            <span class="legend-item"><span class="legend-swatch black"></span> Black</span>
-            <span class="legend-item"><span class="legend-swatch mixed"></span> Mixed</span>
-            <span class="legend-item"><span class="legend-swatch other"></span> Other</span>
-          </div>
-        </article>
-        <article class="feature-card">
-          <h3>Key metrics</h3>
-          <div class="metric-list">
-            <div class="metric-item">
-              <span class="metric-value">{ethnicProjection.current.groups.white_british.toFixed(1)}%</span>
-              <span class="metric-label">White British ({ethnicProjection.current.year})</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">{ethnicProjection.baseline.groups.white_british.toFixed(1)}%</span>
-              <span class="metric-label">White British ({ethnicProjection.baseline.year})</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value" style={`color: ${Math.abs(ethnicProjection.annualChangePp.white_british) > 0.5 ? "var(--coral)" : "var(--text-secondary)"}`}>
-                {ethnicProjection.annualChangePp.white_british > 0 ? "+" : ""}{ethnicProjection.annualChangePp.white_british.toFixed(2)}pp
-              </span>
-              <span class="metric-label">Annual change (WB)</span>
-            </div>
-            {ethnicProjection.current.groups.asian > 5 && (
-              <div class="metric-item">
-                <span class="metric-value">{ethnicProjection.current.groups.asian.toFixed(1)}%</span>
-                <span class="metric-label">Asian ({ethnicProjection.current.year})</span>
-              </div>
-            )}
-            {wbThreshold && (
-              <div class="metric-item">
-                <span class="metric-value" style={`color: ${significantShift ? "var(--coral)" : "var(--text-secondary)"}`}>
-                  {wbThreshold.year}
-                </span>
-                <span class="metric-label">Projected WB &lt;50% ({wbThreshold.confidence})</span>
-              </div>
-            )}
-          </div>
-          <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source & methodology</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-              ONS Census 2011 & 2021 (TS021). Linear extrapolation of decadal change rates. Not a demographic forecast.
-            </p>
-          </details>
-        </article>
-      </div>
-      {ethnicProjection.thresholds.length > 0 && (
-        <article class="feature-card" style="margin-top: 1rem;">
-          <h3>Projected thresholds</h3>
-          <p class="tiny" style="opacity: 0.6;">If 2011-2021 Census rates continue unchanged. Subject to significant uncertainty.</p>
-          <div class="table-card">
-            <table>
-              <thead><tr><th>Milestone</th><th>Year</th><th>Confidence</th></tr></thead>
-              <tbody>
-                {ethnicProjection.thresholds.map((t) => (
-                  <tr>
-                    <td>{t.label}</td>
-                    <td><strong>{t.year}</strong></td>
-                    <td><span class={`chip tiny ${t.confidence === "medium" ? "coral" : ""}`}>{t.confidence}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-      )}
+      <ProjectionChart
+        title={`Ethnic composition — ${area.areaName}`}
+        lines={ethChartLines}
+        confidenceBand={ethConfidenceBand}
+        nowYear={2021}
+        yLabel="% of population"
+      />
+      <details class="method-note" style="margin-top: 0.5rem;">
+        <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Model: Hamilton-Perry single-year CCRs, 1,000 Monte Carlo simulations, SNPP-constrained</summary>
+        <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+          Census 2011 → 2021 cohort change ratios. Shaded band = 80% confidence interval from stochastic perturbation (σ=0.04, calibrated from NEWETHPOP validation). Not a forecast.
+        </p>
+      </details>
     </section>
   )}
 
-  <!-- CONFIDENCE BANDS (stochastic) -->
-  {stochasticData?.[2051] && (
-    <article class="feature-card" style="margin-top: -0.5rem; margin-bottom: 1rem; border-left: 3px solid var(--accent);">
-      <div class="chip-row">
-        <span class="chip accent">Monte Carlo</span>
-        <span class="chip">1,000 simulations</span>
-      </div>
-      <h3>Projection confidence</h3>
-      <div class="metric-list">
-        <div class="metric-item">
-          <span class="metric-value">{stochasticData[2051].wbi.median}%</span>
-          <span class="metric-label">WBI 2051 (median)</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-value">{stochasticData[2051].wbi.p10}–{stochasticData[2051].wbi.p90}%</span>
-          <span class="metric-label">80% confidence</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-value">{stochasticData[2051].wbi.p2_5}–{stochasticData[2051].wbi.p97_5}%</span>
-          <span class="metric-label">95% confidence</span>
-        </div>
-      </div>
-      <details class="method-note">
-        <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Method</summary>
-        <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">CCRs perturbed from Normal(observed, σ=0.04) calibrated from NEWETHPOP validation (MAE 3.94pp). Yu, Sevcikova, Raftery & Curran (2023, Demography).</p>
-      </details>
-    </article>
-  )}
-
   <!-- RELIGION -->
-  {religionData && (
+  <!-- RELIGION — ProjectionChart -->
+  {religionData && relChartLines.length > 0 && (
     <section id="religion-profile" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>Religion</h2>
+          <h2>Religion projection</h2>
           <p class="lede">
-            Census-based religious composition, projected using Hamilton-Perry change ratios.
+            Muslim {religionData[2021]?.Muslim?.toFixed(1)}% (2021) → {religionData[2051]?.Muslim?.toFixed(1)}% (2051).
+            Christian {religionData[2021]?.Christian?.toFixed(1)}% → {religionData[2051]?.Christian?.toFixed(1)}%.
           </p>
         </div>
       </div>
-      <div class="grid-2">
-        <article class="feature-card">
-          <h3>Religious composition</h3>
-          <div class="stacked-bars">
-            {[2021, 2031, 2041, 2051].filter(y => religionData[y]).map((y) => {
-              const r = religionData[y];
-              const groups = [
-                { key: "Christian", color: "wb" },
-                { key: "No religion", color: "wo" },
-                { key: "Muslim", color: "asian" },
-                { key: "Hindu", color: "mixed" },
-                { key: "Sikh", color: "black" },
-                { key: "Other religion", color: "other" }
-              ];
-              return (
-                <div class="stacked-bar-row">
-                  <div class="stacked-bar-label">
-                    <strong>{y}</strong>
-                    {y > 2021 && <span class="chip tiny">projected</span>}
-                  </div>
-                  <div class="stacked-bar" title={groups.map(g => `${g.key}: ${r[g.key]?.toFixed(1) ?? 0}%`).join(", ")}>
-                    {groups.map(g => (
-                      <div class={`bar-seg ${g.color}`} style={`width: ${r[g.key] ?? 0}%`}></div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="legend-swatch wb"></span> Christian</span>
-            <span class="legend-item"><span class="legend-swatch wo"></span> No religion</span>
-            <span class="legend-item"><span class="legend-swatch asian"></span> Muslim</span>
-            <span class="legend-item"><span class="legend-swatch mixed"></span> Hindu</span>
-            <span class="legend-item"><span class="legend-swatch black"></span> Sikh</span>
-          </div>
-        </article>
-        <article class="feature-card">
-          <h3>Key metrics</h3>
-          <div class="metric-list">
-            {religionData[2021] && (
-              <>
-                <div class="metric-item">
-                  <span class="metric-value">{religionData[2021].Muslim?.toFixed(1)}%</span>
-                  <span class="metric-label">Muslim (2021)</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-value">{religionData[2051]?.Muslim?.toFixed(1)}%</span>
-                  <span class="metric-label">Muslim (2051 projected)</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-value">{religionData[2021].Christian?.toFixed(1)}%</span>
-                  <span class="metric-label">Christian (2021)</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-value">{religionData[2021]["No religion"]?.toFixed(1)}%</span>
-                  <span class="metric-label">No religion (2021)</span>
-                </div>
-              </>
-            )}
-          </div>
-          <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">Census 2011 KS209 → Census 2021 TS030. Hamilton-Perry CCRs. No conversion modelled.</p>
-          </details>
-        </article>
-      </div>
+      <ProjectionChart title={`Religion — ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
     </section>
   )}
 
   <!-- NATIVITY -->
-  {nativityData && (
+  <!-- NATIVITY — ProjectionChart -->
+  {nativityData && natChartLines.length > 0 && (
     <section id="nativity-profile" class="section section-anchor">
       <div class="section-head">
         <div>
           <h2>Nativity</h2>
           <p class="lede">
-            UK-born vs foreign-born population.
-            {nativityData[2021] ? ` Currently ${nativityData[2021].foreignBornPct}% foreign-born.` : ""}
-            {migrationProfile ? ` ${migrationProfile.maturityLevel}.` : ""}
+            {nativityData[2021] ? `${nativityData[2021].foreignBornPct}% foreign-born (2021).` : ""}
+            {diversityIndex ? ` Diversity: ${diversityIndex.diversityLevel} (entropy ${diversityIndex.entropy}).` : ""}
+            {englishProf ? ` ${englishProf.mainLanguageEnglishPct}% main language English.` : ""}
           </p>
         </div>
       </div>
-      <div class="grid-2">
-        <article class="feature-card">
-          <h3>Nativity trajectory</h3>
-          <div class="data-list">
-            {[2021, 2031, 2041, 2051].filter(y => nativityData[y]).map((y) => (
-              <div class="data-row">
-                <span>{y}{y > 2021 ? " (projected)" : ""}</span>
-                <span class="data-row-value">UK-born {nativityData[y].ukBornPct}% | Foreign {nativityData[y].foreignBornPct}%</span>
-              </div>
-            ))}
-          </div>
-        </article>
-        <article class="feature-card">
-          <h3>Context</h3>
-          <div class="metric-list">
-            {diversityIndex && (
-              <>
-                <div class="metric-item">
-                  <span class="metric-value">{diversityIndex.entropy}</span>
-                  <span class="metric-label">Diversity index</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-value">{diversityIndex.diversityLevel}</span>
-                  <span class="metric-label">Classification</span>
-                </div>
-              </>
-            )}
-            {englishProf && (
-              <div class="metric-item">
-                <span class="metric-value">{englishProf.mainLanguageEnglishPct}%</span>
-                <span class="metric-label">Main language English</span>
-              </div>
-            )}
-          </div>
-          {migrationProfile && (
-            <p class="tiny" style="margin-top: 0.5rem; opacity: 0.6;">{migrationProfile.implication}</p>
-          )}
-        </article>
-      </div>
+      <ProjectionChart title={`UK-born vs foreign-born — ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
+      {migrationProfile && (
+        <p class="tiny" style="margin-top: 0.5rem; opacity: 0.5;">
+          {migrationProfile.maturityLevel}: {migrationProfile.implication}
+        </p>
+      )}
     </section>
   )}
 
-  <!-- WHY IT'S CHANGING (Shift-Share) -->
+  <!-- WHY IT'S CHANGING — ShiftShareChart -->
   {shiftShareData && (
     <section id="change-drivers" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Why it's changing</h2>
-          <p class="lede">
-            Shift-share decomposition of 2011–2021 White British decline ({shiftShareData.totalChangePp}pp).
-            Dominant driver: {shiftShareData.dominantDriver}.
-          </p>
-        </div>
-      </div>
-      <div class="story-grid">
-        <article class="story-card">
-          <span class="tiny">National trend</span>
-          <strong style="font-size: 1.4rem;">{shiftShareData.nationalEffectPp}pp</strong>
-          <p class="tiny" style="opacity: 0.6;">Change attributable to the national-level WBI decline affecting all areas equally.</p>
-        </article>
-        <article class="story-card">
-          <span class="tiny">Age structure</span>
-          <strong style="font-size: 1.4rem;">{shiftShareData.structuralEffectPp}pp</strong>
-          <p class="tiny" style="opacity: 0.6;">Change due to having a younger or older ethnic age profile than the national average.</p>
-        </article>
-        <article class="story-card">
-          <span class="tiny">Local migration</span>
-          <strong style="font-size: 1.4rem;">{shiftShareData.localEffectPp}pp</strong>
-          <p class="tiny" style="opacity: 0.6;">Residual change from local factors — migration attraction, housing, employment.</p>
-        </article>
-      </div>
+      <ShiftShareChart
+        total={shiftShareData.totalChangePp}
+        national={shiftShareData.nationalEffectPp}
+        structural={shiftShareData.structuralEffectPp}
+        local={shiftShareData.localEffectPp}
+        areaName={area.areaName}
+      />
+      <p class="tiny" style="opacity: 0.5;">
+        Dominant driver: <strong>{shiftShareData.dominantDriver}</strong>.
+        Shift-share methodology following Franklin (2014).
+      </p>
     </section>
   )}
 
