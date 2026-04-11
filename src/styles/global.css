@@ -4,21 +4,23 @@
 
 :root {
   color-scheme: dark;
-  --bg: #04070d;
-  --bg-soft: #0b1220;
+  /* Brand: Asylum Stats — radar/accountability theme */
+  --bg: #04070d;        /* brand bg: abyss */
+  --bg-soft: #0b1220;   /* brand surface */
   --bg-deep: #07101d;
-  --ink: #f5f7fb;
-  --ink-soft: #dbe7f7;
-  --muted: #91a7c4;
+  --ink: #f5f7fb;        /* brand text_bright */
+  --ink-soft: #dbe7f7;   /* brand text */
+  --muted: #91a7c4;      /* brand text_muted */
   --panel: linear-gradient(180deg, rgba(16, 24, 40, 0.86), rgba(7, 12, 24, 0.94));
   --panel-strong: linear-gradient(180deg, rgba(18, 30, 52, 0.96), rgba(8, 12, 24, 0.98));
   --panel-soft: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.08);
+  --border: #1e293b;     /* brand border */
   --border-strong: rgba(255, 255, 255, 0.18);
-  --accent: #7dd3fc;
-  --accent-2: #4ee4c3;
-  --accent-3: #ff8b61;
-  --accent-glow: rgba(125, 211, 252, 0.28);
+  --accent: #06b6d4;     /* brand accent: cyan (radar) */
+  --accent-2: #10b981;   /* brand success: emerald */
+  --accent-3: #f59e0b;   /* brand warning: amber */
+  --accent-glow: rgba(6, 182, 212, 0.28);
+  --coral: #ef4444;      /* brand critical */
   --shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
   --shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.28);
   --radius: 28px;
@@ -45,9 +47,9 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   background:
-    radial-gradient(circle at top left, rgba(125, 211, 252, 0.16), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(78, 228, 195, 0.18), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(255, 139, 97, 0.12), transparent 28%),
+    radial-gradient(circle at top left, rgba(6, 182, 212, 0.14), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(6, 182, 212, 0.10), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.06), transparent 28%),
     linear-gradient(180deg, #050812 0%, #08101c 45%, #04070d 100%);
 }
 
@@ -167,21 +169,14 @@ textarea {
 }
 
 .brand-mark {
-  width: 2.85rem;
-  height: 2.85rem;
-  border-radius: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.48), transparent 32%),
-    linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 62%, #dcfff8 100%);
-  color: #03131b;
-  font-family: "Sora", sans-serif;
-  font-size: 0.98rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  box-shadow: 0 18px 40px rgba(78, 228, 195, 0.2);
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
 }
 
 .brand-copy {
@@ -1145,8 +1140,8 @@ button.source-pill {
 }
 
 .home-layout .brand-mark {
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 2.4rem;
+  height: 2.4rem;
 }
 
 .home-layout .brand-copy > span {
