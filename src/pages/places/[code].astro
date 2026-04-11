@@ -10,7 +10,12 @@ import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entiti
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas } from "../../lib/site";
-import { getEthnicProjection, getEthnicCompositionTimeline } from "../../lib/ethnic-projections";
+import {
+  getEthnicProjection, getEthnicCompositionTimeline,
+  getReligionData, getNativityData, getStochasticData,
+  getShiftShareData, getDiversityIndex, getEnglishProficiency,
+  getMigrationProfile, getSocioeconomicData
+} from "../../lib/ethnic-projections";
 import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
 import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
@@ -91,6 +96,14 @@ const ethnicProjection = getEthnicProjection(area.areaCode);
 const ethnicTimeline = getEthnicCompositionTimeline(area.areaCode);
 const wbThreshold = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
 const significantShift = wbThreshold && wbThreshold.year <= 2070;
+const religionData = getReligionData(area.areaCode);
+const nativityData = getNativityData(area.areaCode);
+const stochasticData = getStochasticData(area.areaCode);
+const shiftShareData = getShiftShareData(area.areaCode);
+const diversityIndex = getDiversityIndex(area.areaCode);
+const englishProf = getEnglishProficiency(area.areaCode);
+const migrationProfile = getMigrationProfile(area.areaCode);
+const socioData = getSocioeconomicData(area.areaCode);
 const crimeProfile = getCrimeProfile(area.areaCode);
 const crimePercentile = getCrimeRatePercentile(area.areaCode);
 const sendProfile = getSendProfile(area.areaCode);
@@ -122,9 +135,13 @@ const placeSections = [
   { id: "local-numbers", label: "Local numbers" },
   { id: "hotel-evidence", label: "Hotels" },
   ...(ethnicProjection ? [{ id: "demographic-profile", label: "Demographics" }] : []),
+  ...(religionData ? [{ id: "religion-profile", label: "Religion" }] : []),
+  ...(nativityData ? [{ id: "nativity-profile", label: "Nativity" }] : []),
+  ...(shiftShareData ? [{ id: "change-drivers", label: "Why it's changing" }] : []),
   ...(crimeProfile ? [{ id: "crime-profile", label: "Crime" }] : []),
   ...(sendProfile ? [{ id: "send-profile", label: "SEND" }] : []),
   ...(ascProfile ? [{ id: "asc-profile", label: "Social care" }] : []),
+  ...(socioData?.economicActivity ? [{ id: "socioeconomic", label: "Economy & housing" }] : []),
   ...(pressureScore.availableModules >= 3 ? [{ id: "pressure-index", label: "Pressure index" }] : []),
   { id: "local-benchmarks", label: "Benchmarks" },
   { id: "regional-peers", label: "Regional peers" }
@@ -520,6 +537,260 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
               </tbody>
             </table>
           </div>
+        </article>
+      )}
+    </section>
+  )}
+
+  <!-- CONFIDENCE BANDS (stochastic) -->
+  {stochasticData?.[2051] && (
+    <article class="feature-card" style="margin-top: -0.5rem; margin-bottom: 1rem; border-left: 3px solid var(--accent);">
+      <div class="chip-row">
+        <span class="chip accent">Monte Carlo</span>
+        <span class="chip">1,000 simulations</span>
+      </div>
+      <h3>Projection confidence</h3>
+      <div class="metric-list">
+        <div class="metric-item">
+          <span class="metric-value">{stochasticData[2051].wbi.median}%</span>
+          <span class="metric-label">WBI 2051 (median)</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-value">{stochasticData[2051].wbi.p10}–{stochasticData[2051].wbi.p90}%</span>
+          <span class="metric-label">80% confidence</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-value">{stochasticData[2051].wbi.p2_5}–{stochasticData[2051].wbi.p97_5}%</span>
+          <span class="metric-label">95% confidence</span>
+        </div>
+      </div>
+      <details class="method-note">
+        <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Method</summary>
+        <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">CCRs perturbed from Normal(observed, σ=0.04) calibrated from NEWETHPOP validation (MAE 3.94pp). Yu, Sevcikova, Raftery & Curran (2023, Demography).</p>
+      </details>
+    </article>
+  )}
+
+  <!-- RELIGION -->
+  {religionData && (
+    <section id="religion-profile" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Religion</h2>
+          <p class="lede">
+            Census-based religious composition, projected using Hamilton-Perry change ratios.
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="feature-card">
+          <h3>Religious composition</h3>
+          <div class="stacked-bars">
+            {[2021, 2031, 2041, 2051].filter(y => religionData[y]).map((y) => {
+              const r = religionData[y];
+              const groups = [
+                { key: "Christian", color: "wb" },
+                { key: "No religion", color: "wo" },
+                { key: "Muslim", color: "asian" },
+                { key: "Hindu", color: "mixed" },
+                { key: "Sikh", color: "black" },
+                { key: "Other religion", color: "other" }
+              ];
+              return (
+                <div class="stacked-bar-row">
+                  <div class="stacked-bar-label">
+                    <strong>{y}</strong>
+                    {y > 2021 && <span class="chip tiny">projected</span>}
+                  </div>
+                  <div class="stacked-bar" title={groups.map(g => `${g.key}: ${r[g.key]?.toFixed(1) ?? 0}%`).join(", ")}>
+                    {groups.map(g => (
+                      <div class={`bar-seg ${g.color}`} style={`width: ${r[g.key] ?? 0}%`}></div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch wb"></span> Christian</span>
+            <span class="legend-item"><span class="legend-swatch wo"></span> No religion</span>
+            <span class="legend-item"><span class="legend-swatch asian"></span> Muslim</span>
+            <span class="legend-item"><span class="legend-swatch mixed"></span> Hindu</span>
+            <span class="legend-item"><span class="legend-swatch black"></span> Sikh</span>
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>Key metrics</h3>
+          <div class="metric-list">
+            {religionData[2021] && (
+              <>
+                <div class="metric-item">
+                  <span class="metric-value">{religionData[2021].Muslim?.toFixed(1)}%</span>
+                  <span class="metric-label">Muslim (2021)</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-value">{religionData[2051]?.Muslim?.toFixed(1)}%</span>
+                  <span class="metric-label">Muslim (2051 projected)</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-value">{religionData[2021].Christian?.toFixed(1)}%</span>
+                  <span class="metric-label">Christian (2021)</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-value">{religionData[2021]["No religion"]?.toFixed(1)}%</span>
+                  <span class="metric-label">No religion (2021)</span>
+                </div>
+              </>
+            )}
+          </div>
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">Census 2011 KS209 → Census 2021 TS030. Hamilton-Perry CCRs. No conversion modelled.</p>
+          </details>
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- NATIVITY -->
+  {nativityData && (
+    <section id="nativity-profile" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Nativity</h2>
+          <p class="lede">
+            UK-born vs foreign-born population.
+            {nativityData[2021] ? ` Currently ${nativityData[2021].foreignBornPct}% foreign-born.` : ""}
+            {migrationProfile ? ` ${migrationProfile.maturityLevel}.` : ""}
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="feature-card">
+          <h3>Nativity trajectory</h3>
+          <div class="data-list">
+            {[2021, 2031, 2041, 2051].filter(y => nativityData[y]).map((y) => (
+              <div class="data-row">
+                <span>{y}{y > 2021 ? " (projected)" : ""}</span>
+                <span class="data-row-value">UK-born {nativityData[y].ukBornPct}% | Foreign {nativityData[y].foreignBornPct}%</span>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>Context</h3>
+          <div class="metric-list">
+            {diversityIndex && (
+              <>
+                <div class="metric-item">
+                  <span class="metric-value">{diversityIndex.entropy}</span>
+                  <span class="metric-label">Diversity index</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-value">{diversityIndex.diversityLevel}</span>
+                  <span class="metric-label">Classification</span>
+                </div>
+              </>
+            )}
+            {englishProf && (
+              <div class="metric-item">
+                <span class="metric-value">{englishProf.mainLanguageEnglishPct}%</span>
+                <span class="metric-label">Main language English</span>
+              </div>
+            )}
+          </div>
+          {migrationProfile && (
+            <p class="tiny" style="margin-top: 0.5rem; opacity: 0.6;">{migrationProfile.implication}</p>
+          )}
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- WHY IT'S CHANGING (Shift-Share) -->
+  {shiftShareData && (
+    <section id="change-drivers" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Why it's changing</h2>
+          <p class="lede">
+            Shift-share decomposition of 2011–2021 White British decline ({shiftShareData.totalChangePp}pp).
+            Dominant driver: {shiftShareData.dominantDriver}.
+          </p>
+        </div>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <span class="tiny">National trend</span>
+          <strong style="font-size: 1.4rem;">{shiftShareData.nationalEffectPp}pp</strong>
+          <p class="tiny" style="opacity: 0.6;">Change attributable to the national-level WBI decline affecting all areas equally.</p>
+        </article>
+        <article class="story-card">
+          <span class="tiny">Age structure</span>
+          <strong style="font-size: 1.4rem;">{shiftShareData.structuralEffectPp}pp</strong>
+          <p class="tiny" style="opacity: 0.6;">Change due to having a younger or older ethnic age profile than the national average.</p>
+        </article>
+        <article class="story-card">
+          <span class="tiny">Local migration</span>
+          <strong style="font-size: 1.4rem;">{shiftShareData.localEffectPp}pp</strong>
+          <p class="tiny" style="opacity: 0.6;">Residual change from local factors — migration attraction, housing, employment.</p>
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- SOCIOECONOMIC -->
+  {socioData?.economicActivity && (
+    <section id="socioeconomic" class="section section-anchor">
+      <div class="section-head">
+        <div>
+          <h2>Economy & housing by ethnicity</h2>
+          <p class="lede">Census 2021 employment, homeownership, and qualifications by ethnic group.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        {socioData.economicActivity && (
+          <article class="feature-card">
+            <h3>Employment rate</h3>
+            <div class="data-list">
+              {Object.entries(socioData.economicActivity).slice(0, 6).map(([eth, data]) => (
+                <div class="data-row">
+                  <span style="font-size: 0.85rem;">{eth}</span>
+                  <span class="data-row-value">{(data as any).employmentRate}%</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        )}
+        {socioData.housingTenure && (
+          <article class="feature-card">
+            <h3>Homeownership rate</h3>
+            <div class="data-list">
+              {Object.entries(socioData.housingTenure).slice(0, 6).map(([eth, data]) => (
+                <div class="data-row">
+                  <span style="font-size: 0.85rem;">{eth}</span>
+                  <span class="data-row-value">{(data as any).ownershipRate}%</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        )}
+      </div>
+      {socioData.qualifications && (
+        <article class="feature-card" style="margin-top: 1rem;">
+          <h3>Degree+ qualification rate</h3>
+          <div class="data-list">
+            {Object.entries(socioData.qualifications).slice(0, 6).map(([eth, data]) => (
+              <div class="data-row">
+                <span style="font-size: 0.85rem;">{eth}</span>
+                <span class="data-row-value">{(data as any).degreeOrAbovePct}%</span>
+              </div>
+            ))}
+          </div>
+          <details class="method-note">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">Census 2021 RM018 (economic activity), RM134 (tenure), RM049 (qualifications) by ethnic group. Observed, not projected.</p>
+          </details>
         </article>
       )}
     </section>

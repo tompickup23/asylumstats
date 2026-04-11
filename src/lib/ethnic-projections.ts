@@ -22,6 +22,31 @@ export interface EthnicThreshold {
   confidence: "high" | "medium" | "low";
 }
 
+export interface ReligionData {
+  [key: string]: number;
+}
+
+export interface NativityData {
+  ukBornPct: number;
+  foreignBornPct: number;
+}
+
+export interface StochasticBand {
+  wbi: { p2_5: number; p10: number; median: number; p90: number; p97_5: number };
+}
+
+export interface ShiftShareData {
+  totalChangePp: number;
+  nationalEffectPp: number;
+  structuralEffectPp: number;
+  localEffectPp: number;
+  dominantDriver: string;
+}
+
+export interface EthGroupMetric {
+  [ethnicity: string]: Record<string, number>;
+}
+
 export interface AreaEthnicProjection {
   areaName: string;
   baseline: EthnicSnapshot;
@@ -30,6 +55,20 @@ export interface AreaEthnicProjection {
   projections: Record<string, EthnicGroup>;
   thresholds: EthnicThreshold[];
   headlineStat: { value: string; trend: string } | null;
+  // v6 additions
+  religion?: Record<string, ReligionData>;
+  nativity?: Record<string, NativityData>;
+  stochastic?: Record<string, StochasticBand>;
+  confidenceBand2051?: { median: number; ci80: [number, number]; ci95: [number, number] };
+  shiftShare?: ShiftShareData;
+  diversityIndex?: { entropy: number; diversityLevel: string; dissimilarity: number };
+  englishProficiency?: { mainLanguageEnglishPct: number; cannotSpeakEnglishPct: number };
+  migrationProfile?: { foreignBornPct: number; maturityLevel: string; implication: string };
+  economicActivity?: EthGroupMetric;
+  housingTenure?: EthGroupMetric;
+  qualifications?: EthGroupMetric;
+  health?: EthGroupMetric;
+  smoothedProjections?: Record<string, EthnicGroup>;
 }
 
 interface EthnicProjectionsData {
@@ -39,7 +78,7 @@ interface EthnicProjectionsData {
   areas: Record<string, AreaEthnicProjection>;
 }
 
-const data = rawProjections as EthnicProjectionsData;
+const data = rawProjections as unknown as EthnicProjectionsData;
 
 export function getEthnicProjection(areaCode: string): AreaEthnicProjection | null {
   return data.areas[areaCode] ?? null;
@@ -51,6 +90,45 @@ export function getEthnicProjectionSource(): string {
 
 export function getEthnicProjectionMethodology(): string {
   return data.methodology;
+}
+
+export function getReligionData(areaCode: string) {
+  return data.areas[areaCode]?.religion ?? null;
+}
+
+export function getNativityData(areaCode: string) {
+  return data.areas[areaCode]?.nativity ?? null;
+}
+
+export function getStochasticData(areaCode: string) {
+  return data.areas[areaCode]?.stochastic ?? null;
+}
+
+export function getShiftShareData(areaCode: string) {
+  return data.areas[areaCode]?.shiftShare ?? null;
+}
+
+export function getDiversityIndex(areaCode: string) {
+  return data.areas[areaCode]?.diversityIndex ?? null;
+}
+
+export function getEnglishProficiency(areaCode: string) {
+  return data.areas[areaCode]?.englishProficiency ?? null;
+}
+
+export function getMigrationProfile(areaCode: string) {
+  return data.areas[areaCode]?.migrationProfile ?? null;
+}
+
+export function getSocioeconomicData(areaCode: string) {
+  const area = data.areas[areaCode];
+  if (!area) return null;
+  return {
+    economicActivity: area.economicActivity ?? null,
+    housingTenure: area.housingTenure ?? null,
+    qualifications: area.qualifications ?? null,
+    health: area.health ?? null
+  };
 }
 
 /**
