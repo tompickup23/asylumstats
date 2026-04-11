@@ -5,7 +5,7 @@ const shouldAssertScreenshots = !process.env.CI;
 
 const desktopPages = [
   { name: "home", path: "/", focus: "#headline-stats", hasPageContents: false },
-  { name: "places", path: "/places/", focus: "#place-map", hasPageContents: true, hasRegionMapExplorer: true, hasRegionMapSummary: false },
+  { name: "places", path: "/places/", focus: "#place-search", hasPageContents: true },
   { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
@@ -74,6 +74,7 @@ test("home page renders hero and stats grid", async ({ page }) => {
   await expect(page.locator(".hero-section")).toBeVisible();
   await expect(page.locator(".hero-headline")).toBeVisible();
   await expect(page.locator("#headline-stats")).toBeVisible();
-  await expect(page.locator(".stat-card")).toHaveCount(7);
+  await expect(page.locator(".sys-card")).toHaveCount(6);
+  await expect(page.locator(".cost-item")).toHaveCount(3);
   await expect(page.locator("#your-area")).toBeVisible();
 });
