@@ -105,6 +105,38 @@ const topAreas = localRouteLatest.areas
     </div>
   </section>
 
+  <!-- DEMOGRAPHIC MODELLING FEATURE -->
+  <section class="model-section shell" id="demographic-model">
+    <div class="model-inner">
+      <span class="chip accent" style="margin-bottom: 0.5rem;">Population modelling</span>
+      <h2 class="section-title">How your area is changing</h2>
+      <p class="section-desc">
+        Hamilton-Perry cohort-component model with 1,000 Monte Carlo simulations.
+        307 local authorities. 12 ethnic groups. Religion, nativity, and socioeconomic data.
+        Every projection includes confidence intervals.
+      </p>
+      <div class="model-stats">
+        <article class="stat-card">
+          <span class="stat-value" style="color: var(--accent);">114</span>
+          <span class="stat-label">Areas projected &lt;50% White British by 2051</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value" style="color: var(--accent-3);">14</span>
+          <span class="stat-label">Published findings — sourced &amp; caveated</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value" style="color: var(--accent-2);">8.1M</span>
+          <span class="stat-label">School pupils with ethnic composition data</span>
+        </article>
+      </div>
+      <div class="chip-row" style="margin-top: 1rem;">
+        <a href="/findings/" class="cta-btn cta-btn--primary">Explore the findings</a>
+        <a href="/national/" class="cta-btn cta-btn--secondary">National demographic outlook</a>
+        <a href="/methodology/" class="cta-btn cta-btn--ghost">Full methodology</a>
+      </div>
+    </div>
+  </section>
+
   <!-- REGIONAL PRESSURE -->
   <section class="pressure-section shell" id="regional-pressure">
     <h2 class="section-title">Where the pressure falls</h2>
@@ -166,7 +198,7 @@ const topAreas = localRouteLatest.areas
   <section class="cta-section shell">
     <div class="cta-inner">
       <h2>This is YOUR money.</h2>
-      <p>Every number on this site links to its official source. Share it. Challenge it. Hold them to account.</p>
+      <p>Every number on this site links to its official source. Explore the data. Verify the sources. Form your own conclusions.</p>
       <div class="cta-buttons">
         <a href="/places/" class="cta-btn cta-btn--primary">Search your area</a>
         <a href="/routes/" class="cta-btn cta-btn--secondary">Follow the routes</a>
@@ -605,5 +637,41 @@ const topAreas = localRouteLatest.areas
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .area-table-header, .area-row { grid-template-columns: auto 1fr 70px 70px; }
     .cta-buttons { flex-direction: column; align-items: center; }
+    .model-stats { grid-template-columns: 1fr; }
+  }
+
+  /* DEMOGRAPHIC MODEL FEATURE */
+  .model-section {
+    padding: 2.5rem 0;
+  }
+  .model-inner {
+    max-width: 900px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .model-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .model-stats .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .model-stats .stat-value {
+    font-family: "Sora", sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    display: block;
+  }
+  .model-stats .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: block;
+    margin-top: 0.25rem;
   }
 </style>

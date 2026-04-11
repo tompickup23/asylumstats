@@ -139,17 +139,16 @@ The money layer is intentionally broad at this stage. It combines:
 
 This is deliberate. It gives the public a visible accountability chain now, while local procurement and subcontractor ingestion is still missing.
 
-## Editorial angle
+## Scope: Transparency focus
 
-The strongest version of asylumstats is not anti-migrant and not neutral-bureaucratic either. It should be an accountability product aimed at:
+asylumstats focuses on public spending transparency and demographic data accountability:
 
-- Home Office secrecy
-- expensive hotel dependence
-- uneven geographic concentration
-- slow decision-making that keeps people in temporary accommodation longer
-- opaque contractor performance and public spending
+- Public spending on asylum accommodation (Home Office published figures)
+- Geographic distribution of asylum support (ONS local authority data)
+- Demographic projections using Census-observed data (Hamilton-Perry methodology)
+- Contractor and provider transparency (published procurement data)
 
-That is where the “scandalous” energy should go: toward waste, opacity, and system failure, not toward asylum seekers themselves.
+The site is data-driven and sources all claims to official government publications. It does not make policy recommendations or political endorsements.
 
 ## Strongest hooks confirmed from current public sources
 

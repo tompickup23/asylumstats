@@ -134,9 +134,18 @@ const structuredData = [
     </main>
     {!hideFooter && (
       <footer class="shell footer">
-        Every number on this site links to its source. No spin. No hedging. Just data. &middot;
-        <a href="/sources/">Sources</a> &middot;
-        <a href="/methodology/">Methodology</a>
+        <div class="footer-main">
+          Every number on this site links to its source. No spin. No hedging. Just data. &middot;
+          <a href="/sources/">Sources</a> &middot;
+          <a href="/methodology/">Methodology</a> &middot;
+          <a href="/findings/">Findings</a>
+        </div>
+        <div class="footer-legal">
+          asylumstats.co.uk is an independent personal research project by Tom Pickup. It uses publicly available government data (ONS, Home Office, DfE, NHS Digital).
+          Not affiliated with or endorsed by any political party, council, or candidate. No cookies. No tracking. No personal data collected.
+          &copy; {new Date().getFullYear()} Tom Pickup. All projections are demographic estimates, not predictions.
+          <a href="/methodology/">Full methodology &amp; limitations</a>.
+        </div>
       </footer>
     )}
   </body>
