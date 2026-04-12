@@ -119,17 +119,18 @@ const colors =
         Peak {peak.label}
       </text>
     )}
-    {/* Policy event annotations */}
-    {annotations.map((ann) => {
+    {/* Policy event annotations - staggered vertically to avoid overlap */}
+    {annotations.map((ann, annIdx) => {
       const matchIndex = points.findIndex((p) => p.label === ann.pointLabel);
       if (matchIndex < 0) return null;
       const ax = getX(matchIndex);
+      const staggerY = padding.top + 10 + (annIdx % 4) * 14;
       return (
         <>
-          <line x1={ax} y1={padding.top} x2={ax} y2={padding.top + usableHeight}
-                stroke={ann.color ?? "rgba(245,158,11,0.4)"} stroke-width="1" stroke-dasharray="3 4" />
-          <text x={ax + 3} y={padding.top + 10} class="trend-event-label"
-                fill={ann.color ?? "rgba(245,158,11,0.7)"}>
+          <line x1={ax} y1={staggerY - 2} x2={ax} y2={padding.top + usableHeight}
+                stroke={ann.color ?? "rgba(245,158,11,0.25)"} stroke-width="1" stroke-dasharray="2 4" />
+          <text x={ax + 3} y={staggerY} class="trend-event-label"
+                fill={ann.color ?? "rgba(245,158,11,0.6)"}>
             {ann.label}
           </text>
         </>

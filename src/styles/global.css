@@ -3092,9 +3092,10 @@ button.region-map-shortlist-link {
 }
 
 .trend-event-label {
-  font-size: 9px;
-  font-weight: 600;
+  font-size: 8px;
+  font-weight: 700;
   font-family: "Sora", sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .region-map-label {
