@@ -6,7 +6,8 @@ import ShareButton from "../components/ShareButton.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
-import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import { getSignificantDemographicShifts, getEthnicProjection } from "../lib/ethnic-projections";
+import rawProjections from "../data/live/ethnic-projections.json";
 import { slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
 
@@ -34,9 +35,12 @@ function fmtGbp(n: number) {
   return `£${fmtInt(n)}`;
 }
 
-// Cost calculations (33.5M income tax payers, HMRC 2024-25; 27.8M households, ONS)
+// Cost calculations
+// HMRC projected individual income taxpayers 2024-25: 34.1M (Table 2.1, Nov 2024 forecast)
+// Source: https://www.gov.uk/government/statistics/income-tax-liabilities-statistics
+const UK_TAXPAYERS = 34_100_000;
 const annualCostGbp = dailyCostGbp * 365;
-const perTaxpayerGbp = Math.round(annualCostGbp / 33_500_000);
+const perTaxpayerGbp = Math.round(annualCostGbp / UK_TAXPAYERS);
 const costPerResidentPerDay = latestQuarter.hotelAccommodation > 0
   ? Math.round(dailyCostGbp / latestQuarter.hotelAccommodation)
   : 186;
@@ -84,6 +88,18 @@ const demographicShifts2061 = getSignificantDemographicShifts(2061);
 const areasBelow50by2061 = demographicShifts2061.length;
 const areasBelow30by2051 = demographicShifts.filter(a => a.currentWbPct < 30 || (a.currentWbPct - a.annualDeclinePp * 30) < 30).length;
 
+// Dynamic demographic counts (not hardcoded)
+const projData = rawProjections as any;
+const allAreaCodes = Object.keys(projData.areas);
+const muslimMajority2051 = allAreaCodes.filter(code => {
+  const mp = projData.areas[code]?.muslimPct2051;
+  return mp && mp > 50;
+}).length;
+const foreignBornMajority2051 = allAreaCodes.filter(code => {
+  const fb = projData.areas[code]?.nativity?.["2051"]?.foreignBornPct;
+  return fb && fb > 50;
+}).length;
+
 // Verdict display labels (not "alert" etc)
 function findingLabel(verdict: string): string {
   const labels: Record<string, string> = {
@@ -126,7 +142,7 @@ function findingColor(verdict: string): string {
       </p>
       {dailyCostSource && (
         <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
-          Source: National Audit Office &rarr;
+          Source: Home Office asylum accommodation factsheet &rarr;
         </a>
       )}
 
@@ -168,19 +184,20 @@ function findingColor(verdict: string): string {
         <span class="cost-number">£{perTaxpayerGbp}</span>
         <span class="cost-label">per taxpayer per year</span>
         <span class="cost-context">Hotels alone. Before legal aid, healthcare, education, translation services.</span>
+        <span class="cost-calc">£{fmtGbp(dailyCostGbp)}/day x 365 = {fmtGbp(annualCostGbp)}/yr / {fmtInt(UK_TAXPAYERS / 1_000_000)}M taxpayers</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">£{fmtInt(costPerResidentPerYear)}</span>
         <span class="cost-label">per hotel resident per year</span>
-        <span class="cost-context">£{costPerResidentPerDay}/night. More than a junior doctor earns.</span>
+        <span class="cost-context">£{costPerResidentPerDay}/night. {fmtInt(latestQuarter.hotelAccommodation)} people in asylum hotels at {snapshotDate}.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">{fmtGbp(tenYearGbp)}</span>
-        <span class="cost-label">committed over 10 years</span>
-        <span class="cost-context">Contractually locked in. Not discretionary. Already signed.</span>
+        <span class="cost-label">forecast over 10 years</span>
+        <span class="cost-context">NAO forecast. The 10-year asylum accommodation contract rose from £4.5B to £15.3B.</span>
       </div>
     </div>
-    <p class="cost-source">Source: National Audit Office asylum accommodation report (2024/25 average daily cost). HMRC taxpayer statistics 2024-25. Per-resident cost derived from daily average / Q4 2025 hotel count.</p>
+    <p class="cost-source">Daily cost: Home Office factsheet (2024/25 average). Taxpayers: HMRC projected 2024-25. Per-resident: daily average / Q4 2025 hotel count (time periods differ). 10-year: NAO Investigation into Asylum Accommodation, Nov 2024.</p>
   </section>
 
   <!-- ═══ THE SYSTEM IN NUMBERS ═══ -->
@@ -212,7 +229,7 @@ function findingColor(verdict: string): string {
       <article class="sys-card">
         <span class="sys-value sys-coral">{grantRatePct}%</span>
         <span class="sys-label">Initial grant rate</span>
-        <span class="sys-context">At first decision. After appeals, roughly 53% eventually get to stay.</span>
+        <span class="sys-context">At first decision only. Many refused claims are later overturned on appeal. Appeals data lagging (last: 2023 Q1).</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
@@ -241,32 +258,33 @@ function findingColor(verdict: string): string {
       <!-- National trajectory -->
       <div class="demo-national">
         <div class="demo-trajectory">
-          <span class="demo-traj-label">National White British share</span>
+          <span class="demo-traj-label">White British share (population-weighted, 301 local authorities in model)</span>
           <div class="demo-traj-bar">
             <div class="demo-traj-segment" style="width: 100%;">
-              <span class="demo-traj-year">2011</span>
-              <span class="demo-traj-pct">80%</span>
+              <span class="demo-traj-year">2011 Census</span>
+              <span class="demo-traj-pct">80.5%</span>
             </div>
           </div>
           <div class="demo-traj-bar">
             <div class="demo-traj-segment demo-traj-current" style="width: 73.3%;">
-              <span class="demo-traj-year">2021</span>
+              <span class="demo-traj-year">2021 Census</span>
               <span class="demo-traj-pct">73.3%</span>
             </div>
           </div>
           <div class="demo-traj-bar">
             <div class="demo-traj-segment demo-traj-proj" style="width: 48.7%;">
-              <span class="demo-traj-year">2051</span>
+              <span class="demo-traj-year">2051 projected</span>
               <span class="demo-traj-pct">48.7%</span>
             </div>
           </div>
           <div class="demo-traj-bar">
             <div class="demo-traj-segment demo-traj-proj demo-traj-illustrative" style="width: 40.2%;">
-              <span class="demo-traj-year">2061</span>
+              <span class="demo-traj-year">2061 illustrative</span>
               <span class="demo-traj-pct">40.2%</span>
             </div>
           </div>
         </div>
+        <span class="demo-traj-note">Census figures observed. 2051/2061 projected by Hamilton-Perry CCR model. 2061 is illustrative only. <a href="/methodology/">Full methodology</a></span>
       </div>
 
       <!-- Key stats grid -->
@@ -280,11 +298,11 @@ function findingColor(verdict: string): string {
           <span class="demo-key-label">areas White British under 50% by 2061</span>
         </div>
         <div class="demo-key-stat">
-          <span class="demo-key-number" style="color: var(--accent-3);">6</span>
+          <span class="demo-key-number" style="color: var(--accent-3);">{muslimMajority2051}</span>
           <span class="demo-key-label">areas projected Muslim majority by 2051</span>
         </div>
         <div class="demo-key-stat">
-          <span class="demo-key-number" style="color: var(--accent);">110</span>
+          <span class="demo-key-number" style="color: var(--accent);">{foreignBornMajority2051}</span>
           <span class="demo-key-label">areas projected foreign-born majority by 2051</span>
         </div>
       </div>
@@ -1028,12 +1046,21 @@ function findingColor(verdict: string): string {
     color: var(--muted);
     line-height: 1.4;
   }
+  .cost-calc {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    opacity: 0.5;
+    margin-top: 0.25rem;
+    font-family: "Sora", sans-serif;
+  }
   .cost-source {
     text-align: center;
     font-size: 0.78rem;
     color: var(--muted);
     opacity: 0.5;
     margin-top: 1rem;
+    line-height: 1.5;
   }
 
   /* ═══ SYSTEM GRID ═══ */
@@ -1237,6 +1264,15 @@ function findingColor(verdict: string): string {
     font-weight: 800;
     color: rgba(0, 0, 0, 0.8);
   }
+  .demo-traj-note {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+  .demo-traj-note a { color: var(--accent); }
 
   /* Key stats grid */
   .demo-key-stats {
