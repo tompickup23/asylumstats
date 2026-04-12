@@ -882,6 +882,16 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
+@media (max-width: 640px) {
+  .stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  .stat-tile strong {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+  }
+}
+
 .feature-grid {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
@@ -4208,8 +4218,24 @@ button.region-map-shortlist-link {
 
 .table-card {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background:
     linear-gradient(180deg, rgba(9, 15, 28, 0.94), rgba(6, 10, 20, 0.98));
+}
+
+.table-card table {
+  min-width: 500px;
+}
+
+@media (max-width: 640px) {
+  .table-card th,
+  .table-card td {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.82rem;
+  }
+  .table-card th {
+    font-size: 0.72rem;
+  }
 }
 
 table {
@@ -5282,7 +5308,7 @@ tr:last-child td {
 }
 
 .metric-item .metric-label {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   color: var(--muted);
   margin-top: 0.15rem;
 }

@@ -185,7 +185,6 @@ const placeSections = [
   { id: "place-summary", label: "Summary" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "local-numbers", label: "Local numbers" },
-  { id: "tabpanel-hotels", label: "Hotels" },
   ...(ethnicProjection ? [{ id: "tabpanel-demographics", label: "Demographics" }] : []),
   ...(socioData?.economicActivity ? [{ id: "tabpanel-economy", label: "Economy" }] : []),
   ...((crimeProfile || sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
@@ -276,8 +275,8 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <!-- SUMMARY -->
   <section id="place-summary" class="section section-anchor">
     <PlainEnglish
-      headline={`${area.supportedAsylum.toLocaleString()} people on asylum support in ${area.areaName}`}
-      body={`That is rank ${areaRank} out of ${localRouteLatest.areas.length} local authorities nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 residents puts ${area.areaName} in the ${ratePercentileLabel} percentile.${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} are in contingency accommodation (${contingencySharePct}% of total).` : ""}${namedSiteCount > 0 ? ` ${namedSiteCount} named hotel site${namedSiteCount > 1 ? "s" : ""} publicly documented.` : ""} Quarter-end stock figures, not throughput.`}
+      headline={`${area.supportedAsylum.toLocaleString()} people housed on asylum support in ${area.areaName}`}
+      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""} At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(area.supportedAsylum * 150 * 365 / 1_000_000)}M per year for this area alone.`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
     />
   </section>
@@ -406,104 +405,16 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <!-- ═══ TABBED SECTIONS ═══ -->
   <div class="place-tabs" data-tab-group>
     <div class="tab-bar" role="tablist">
-      <button role="tab" type="button" class="tab-btn" aria-selected="true" aria-controls="tabpanel-hotels" data-tab="hotels">Hotels</button>
-      {ethnicProjection && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-demographics" data-tab="demographics">Demographics</button>}
-      {(socioData?.economicActivity || ethnicProjection?.schoolEthnicity) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-economy" data-tab="economy">Economy</button>}
+      {ethnicProjection && <button role="tab" type="button" class="tab-btn" aria-selected="true" aria-controls="tabpanel-demographics" data-tab="demographics">Demographics</button>}
+      {(socioData?.economicActivity || ethnicProjection?.schoolEthnicity) && <button role="tab" type="button" class="tab-btn" aria-selected={!ethnicProjection ? "true" : "false"} aria-controls="tabpanel-economy" data-tab="economy">Economy</button>}
       {(crimeProfile || sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
       <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-benchmarks" data-tab="benchmarks">Benchmarks</button>
     </div>
 
-    <!-- TAB: Hotels -->
-    <div id="tabpanel-hotels" role="tabpanel" class="tab-panel" data-tab-panel="hotels">
+    <!-- HOTELS REMOVED - insufficient place-specific data -->
 
-  <section id="hotel-evidence" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Hotel evidence</h2>
-        <p class="lede">
-          {namedSiteCount > 0
-            ? `${namedSiteCount} named site${namedSiteCount > 1 ? "s" : ""} publicly documented.`
-            : unnamedSiteCount > 0
-              ? `${unnamedSiteCount} site${unnamedSiteCount > 1 ? "s" : ""} acknowledged but not publicly named.`
-              : "No public hotel evidence attached to this area yet."}
-        </p>
-      </div>
-    </div>
-    {hotelSites.length > 0 || hotelArea ? (
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Site</th>
-              <th scope="col">Status</th>
-              <th scope="col">Evidence</th>
-              <th scope="col">Last public date</th>
-              <th scope="col">Entity coverage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hotelSites.map((site) => (
-              (() => {
-                const entityProfiles = getSiteEntityProfiles(site);
-                return (
-                  <tr>
-                    <th scope="row">
-                      <strong>{site.siteName}</strong>
-                      <div class="tiny"><a class="source-pill" href={site.sourceUrl}>Evidence</a></div>
-                    </th>
-                    <td>{site.status}</td>
-                    <td>{site.evidenceClass}</td>
-                    <td>{site.lastPublicDate}</td>
-                    <td>
-                      <span class="chip tiny">{site.entityCoverage}</span>
-                      {site.ownerName && <div class="tiny">Owner: {site.ownerName}</div>}
-                      {site.operatorName && <div class="tiny">Operator: {site.operatorName}</div>}
-                      {site.primeProvider && (
-                        <div class="tiny">
-                          Provider: {site.primeProvider.provider}
-                          {getEntityProfileByReference(site.primeProvider.provider, null) && (
-                            <> <a href={`/entities/${getEntityProfileByReference(site.primeProvider.provider, null)!.entityId}/`}>profile</a></>
-                          )}
-                        </div>
-                      )}
-                      {site.entityLinks.map((link) => {
-                        const profile = getEntityProfileByReference(link.entityName, link.companyNumber);
-                        return (
-                          <div class="tiny">
-                            {link.entityName} ({link.linkRole})
-                            {profile && <> <a href={`/entities/${profile.entityId}/`}>profile</a></>}
-                          </div>
-                        );
-                      })}
-                    </td>
-                  </tr>
-                );
-              })()
-            ))}
-            {hotelArea && hotelArea.unnamedSiteCount > 0 && (
-              <tr>
-                <th scope="row">
-                  <strong>Unnamed sites</strong>
-                  <div class="tiny"><a class="source-pill" href={hotelArea.sourceUrl}>Source</a></div>
-                </th>
-                <td>acknowledged</td>
-                <td>area sighting</td>
-                <td>{hotelArea.lastPublicDate}</td>
-                <td><span class="tiny">{hotelArea.unnamedSiteCount} site{hotelArea.unnamedSiteCount > 1 ? "s" : ""} without names</span></td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    ) : (
-      <p class="lede" style="opacity: 0.6;">No public hotel evidence logged for this area yet.</p>
-    )}
-  </section>
-
-    </div><!-- end tabpanel-hotels -->
-
-    <!-- TAB: Demographics -->
-    <div id="tabpanel-demographics" role="tabpanel" class="tab-panel" data-tab-panel="demographics" hidden>
+    <!-- TAB: Demographics (default/first) -->
+    <div id="tabpanel-demographics" role="tabpanel" class="tab-panel" data-tab-panel="demographics">
 
   {ethnicProjection && ethChartLines.length > 0 && (
     <section id="demographic-profile" class="section section-anchor">
@@ -1041,17 +952,34 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   </div><!-- end place-tabs -->
 
   <script>
+    // Tab switching
     document.querySelectorAll("[data-tab-group]").forEach((group) => {
       const buttons = group.querySelectorAll<HTMLButtonElement>("[data-tab]");
       const panels = group.querySelectorAll<HTMLElement>("[data-tab-panel]");
+
+      function activateTab(tabId: string) {
+        buttons.forEach((b) => b.setAttribute("aria-selected", "false"));
+        panels.forEach((p) => (p.hidden = true));
+        const btn = group.querySelector(`[data-tab="${tabId}"]`);
+        if (btn) btn.setAttribute("aria-selected", "true");
+        const panel = group.querySelector(`[data-tab-panel="${tabId}"]`);
+        if (panel) (panel as HTMLElement).hidden = false;
+      }
+
       buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const target = btn.dataset.tab;
-          buttons.forEach((b) => b.setAttribute("aria-selected", "false"));
-          panels.forEach((p) => (p.hidden = true));
-          btn.setAttribute("aria-selected", "true");
-          const panel = group.querySelector(`[data-tab-panel="${target}"]`);
-          if (panel) (panel as HTMLElement).hidden = false;
+        btn.addEventListener("click", () => activateTab(btn.dataset.tab!));
+      });
+
+      // Section nav links that target tab panels should activate the tab
+      document.querySelectorAll('.page-contents-links a[href^="#tabpanel-"]').forEach((link) => {
+        link.addEventListener("click", (e) => {
+          const href = (link as HTMLAnchorElement).getAttribute("href");
+          if (!href) return;
+          const tabId = href.replace("#tabpanel-", "");
+          activateTab(tabId);
+          // Scroll to the tab group
+          (group as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
+          e.preventDefault();
         });
       });
     });
