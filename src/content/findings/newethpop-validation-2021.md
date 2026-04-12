@@ -8,6 +8,7 @@ verdict: alert
 source_url: "https://reshare.ukdataservice.ac.uk/852508/"
 source_label: "NEWETHPOP (University of Leeds)"
 summary: "The NEWETHPOP cohort-component model, the UK's most cited academic ethnic projection, over-predicted White British population share in 282 out of 296 local authorities. Average error: 3.95 percentage points. The UK diversified faster than the gold-standard model predicted."
+video_url: "/videos/newethpop_validation_reel.mp4"
 ---
 
 **The UK diversified faster than the best academic model predicted.**

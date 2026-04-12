@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { buildAbsoluteUrl, getIndexableSitePaths } from "../lib/site";
+import { getCollection } from "astro:content";
 
 export const prerender = true;
 
@@ -12,8 +13,17 @@ function escapeXml(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
-export const GET: APIRoute = () => {
-  const urlEntries = getIndexableSitePaths()
+export const GET: APIRoute = async () => {
+  const paths = getIndexableSitePaths();
+
+  // Add findings
+  const findings = await getCollection("findings");
+  for (const finding of findings) {
+    paths.push(`/findings/${finding.id.replace(/\.md$/, "")}/`);
+  }
+  if (!paths.includes("/findings/")) paths.push("/findings/");
+
+  const urlEntries = paths
     .map((path) => `  <url>\n    <loc>${escapeXml(buildAbsoluteUrl(path))}</loc>\n  </url>`)
     .join("\n");
 

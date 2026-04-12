@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 const { finding } = Astro.props;
 const { Content } = await render(finding);
 const findingSlug = finding.id.replace(/\.md$/, "");
-const ogImage = `/cards/${findingSlug}_og.png`;
+const ogImage = `/og/findings/${findingSlug}.png`;
 const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
 
 // Get related findings (same category)
@@ -46,6 +46,17 @@ const verdictLabel: Record<string, string> = {
   title={`${finding.data.headline} - asylumstats`}
   description={finding.data.summary}
   image={ogImage}
+  structuredData={[{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": finding.data.headline,
+    "description": finding.data.summary,
+    "url": pageUrl,
+    "image": `https://asylumstats.co.uk${ogImage}`,
+    "datePublished": finding.data.date,
+    "author": { "@type": "Person", "name": "Tom Pickup" },
+    "publisher": { "@type": "Organization", "name": "asylumstats", "url": "https://asylumstats.co.uk" }
+  }]}
 >
   <Breadcrumbs items={[
     { label: "Findings", href: "/findings/" },
@@ -83,12 +94,12 @@ const verdictLabel: Record<string, string> = {
     </div>
 
     <!-- VIDEO (if exists) -->
-    {findingSlug === "newethpop-validation-2021" && (
+    {finding.data.video_url && (
       <div class="finding-video">
-        <video controls preload="metadata" poster={`/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
-          <source src="/videos/newethpop_validation_reel.mp4" type="video/mp4" />
+        <video controls preload="metadata" poster={finding.data.video_poster ?? `/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
+          <source src={finding.data.video_url} type="video/mp4" />
         </video>
-        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">12s summary - share on social media.</p>
+        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Short video summary - share on social media.</p>
       </div>
     )}
 
