@@ -42,14 +42,34 @@ export function getMPsForArea(areaName: string): MpRecord[] {
     .replace(/\bthe\b/gi, "")
     .trim();
 
-  // Split compound names (e.g. "Blackburn with Darwen" -> ["blackburn", "darwen"])
+  // Split compound names
   const areaParts = normalised.split(/[\s,]+/).filter(p => p.length > 3);
+  // Words that are common in constituency names but weak signals alone
+  const WEAK_WORDS = new Set(["city", "north", "south", "east", "west", "upon", "under", "over", "great", "little", "upper", "lower"]);
 
-  return data.members.filter(mp => {
-    const constNorm = mp.constituencyName.toLowerCase();
-    // Check if any significant word from the area name appears in the constituency
-    return areaParts.some(part => constNorm.includes(part));
-  });
+  // Score each MP: strong words (not in WEAK_WORDS) count double
+  const scored = data.members
+    .map(mp => {
+      const constNorm = mp.constituencyName.toLowerCase();
+      let score = 0;
+      for (const part of areaParts) {
+        if (constNorm.includes(part)) {
+          score += WEAK_WORDS.has(part) ? 1 : 3;
+        }
+      }
+      return { mp, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  const maxScore = scored[0]?.score ?? 0;
+  if (maxScore === 0) return [];
+
+  // Only return MPs within 80% of the best score
+  const threshold = Math.floor(maxScore * 0.8);
+  return scored
+    .filter(({ score }) => score >= threshold)
+    .map(({ mp }) => mp);
 }
 
 /**
