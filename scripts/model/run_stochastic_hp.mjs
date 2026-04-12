@@ -36,13 +36,14 @@ const SEXES = ["M", "F"];
 const N_SIMULATIONS = 1000;
 const PROJ_YEARS = [2031, 2041, 2051, 2061];
 
-// FIX 1: Cell-size-dependent σ (replaces flat 0.04)
-// Base σ calibrated from NEWETHPOP validation: MAE 3.94pp → base σ = 0.04
+// FIX 1: Cell-size-dependent σ + horizon scaling
+// Base σ recalibrated from OWN backcast MAE: 5.42pp → base σ = 0.055
+// (Previous: 0.04 calibrated from NEWETHPOP's 3.94pp - understated own uncertainty)
 // Additional uncertainty for small populations: 0.25 / sqrt(pop)
-// pop=10000 → σ=0.04, pop=100 → σ=0.065, pop=10 → σ=0.12, pop=1 → σ=0.29
-const CCR_SIGMA_BASE = 0.04;
+// Horizon scaling: σ_t = σ_base * sqrt(t/10) (uncertainty compounds over time)
+const CCR_SIGMA_BASE = 0.055;
 const CCR_SIGMA_SMALL_POP = 0.25; // additional σ per 1/sqrt(pop)
-const CWR_SIGMA_BASE = 0.03;
+const CWR_SIGMA_BASE = 0.04;
 
 // James-Stein shrinkage constant: CCR_shrunk = w * CCR_local + (1-w) * CCR_national
 // where w = pop / (pop + k). k=50 means pop=50 gets 50% shrinkage toward national.
@@ -176,16 +177,18 @@ function runOneSimulation(perturbFactor) {
     }
 
     for (const year of PROJ_YEARS) {
+      const yearsFromBase = year - 2021;
+      const horizonScale = Math.sqrt(yearsFromBase / 10); // 2031=1.0, 2041=1.41, 2051=1.73, 2061=2.0
       const newPop = {};
       for (const eth of ETHNIC_GROUPS) {
         newPop[eth] = {};
         for (const sex of SEXES) {
           newPop[eth][sex] = {};
-          // Age with perturbed CCRs — FIX 1: cell-size-dependent σ
+          // Age with perturbed CCRs — cell-size-dependent σ + horizon scaling
           for (let toAge = 10; toAge <= 90; toAge++) {
             const baseCCR = ccrs.get(`${code}|${eth}|${sex}|${toAge-10}`)||1.0;
             const pop = ccrPops.get(`${code}|${eth}|${sex}|${toAge-10}`) || 1;
-            const sigma = CCR_SIGMA_BASE + CCR_SIGMA_SMALL_POP / Math.sqrt(Math.max(pop, 1));
+            const sigma = (CCR_SIGMA_BASE + CCR_SIGMA_SMALL_POP / Math.sqrt(Math.max(pop, 1))) * horizonScale;
             const perturbedCCR = Math.max(0.01, baseCCR + randn() * sigma * perturbFactor);
             newPop[eth][sex][toAge] = Math.round((currentPop[eth][sex][toAge-10]||0) * perturbedCCR);
           }
@@ -319,8 +322,10 @@ for (const code of areaCodes) {
   const area = existing.areas[code];
 
   area.stochastic = {};
-  for (const year of [2031, 2041, 2051]) {
-    area.stochastic[String(year)] = stochasticResults[code][year];
+  for (const year of [2031, 2041, 2051, 2061]) {
+    if (stochasticResults[code][year]) {
+      area.stochastic[String(year)] = stochasticResults[code][year];
+    }
   }
 
   // Update confidence band in headline

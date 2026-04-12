@@ -220,9 +220,22 @@ for (const code of areaCodes) {
       }
     }
 
-    // SNPP constraint
-    const snppYear = String(Math.min(year, 2047));
-    const snppTarget = snppTotals.get(code)?.[snppYear];
+    // SNPP constraint (extrapolate linearly beyond 2047)
+    let snppTarget;
+    if (year <= 2047) {
+      snppTarget = snppTotals.get(code)?.[String(year)];
+    } else {
+      // Linear extrapolation from 2043-2047 trend
+      const s43 = snppTotals.get(code)?.["2043"];
+      const s47 = snppTotals.get(code)?.["2047"];
+      if (s43 && s47 && s43 > 0) {
+        const annualGrowth = (s47 - s43) / 4;
+        snppTarget = s47 + annualGrowth * (year - 2047);
+        if (snppTarget < 0) snppTarget = s47; // floor at 2047 if declining to zero
+      } else {
+        snppTarget = snppTotals.get(code)?.["2047"];
+      }
+    }
     if (snppTarget && snppTarget > 0) {
       let modelTotal = 0;
       for (const eth of ETHNIC_GROUPS) for (const sex of SEXES) for (const age of AGES) {
@@ -312,7 +325,7 @@ for (const code of areaCodes) {
   const d = projections[code];
 
   area.projections = {};
-  for (const y of [2031, 2041, 2051]) {
+  for (const y of [2031, 2041, 2051, 2061]) {
     if (d[y]) area.projections[String(y)] = toSimple(d[y].eth, d[y].total);
   }
 
@@ -334,7 +347,7 @@ for (const code of areaCodes) {
   }
 }
 
-existing.methodology = "Hamilton-Perry single-year-of-age model. CCRs from Census 2011 (NEWETHPOP) → Census 2021 (IPF-constructed from RM032 × TS009). 91 age groups × 12 ethnic groups × 2 sexes × 307 LAs. SNPP 2022-based envelope constraint. Every ratio derived from Census observations.";
+existing.methodology = "Hamilton-Perry single-year-of-age model. CCRs from Census 2011 (NEWETHPOP DC2101) to Census 2021 (IPF-constructed from RM032 x TS009). 91 age groups x 12 ethnic groups x 2 sexes x 316 LAs. SNPP 2022-based envelope constraint (linear extrapolation beyond 2047). James-Stein shrinkage (k=50). Brexit WHO adjustment. Monte Carlo uncertainty from run_stochastic_hp.mjs. 2061 projections are illustrative only - confidence intervals widen significantly beyond 2051.";
 existing.modelVersion = "5.0-single-year-hp";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
 

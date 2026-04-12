@@ -1,5 +1,6 @@
 import { getPlaceDirectory } from "./place-directory";
 import { getPublicPlaceAreas } from "./site";
+import { getEthnicProjection } from "./ethnic-projections";
 
 export interface SiteSearchEntry {
   href: string;
@@ -8,6 +9,14 @@ export interface SiteSearchEntry {
   kicker: string;
   description: string;
   priority: number;
+  // Area-specific fields for preview cards
+  areaCode?: string;
+  areaName?: string;
+  regionName?: string;
+  supportedAsylum?: number;
+  supportedAsylumRate?: number | null;
+  wbiNow?: number | null;
+  wbi2051?: number | null;
   searchText: string;
 }
 
@@ -90,7 +99,9 @@ function buildPlaceDescription(
 
 export function getPublicSearchEntries(): SiteSearchEntry[] {
   const placeDirectory = getPlaceDirectory();
-  const placeEntries = getPublicPlaceAreas().map((area) => ({
+  const placeEntries = getPublicPlaceAreas().map((area) => {
+    const ep = getEthnicProjection(area.areaCode);
+    return {
     href: `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`,
     title: area.areaName,
     kind: "place" as const,
@@ -101,6 +112,13 @@ export function getPublicSearchEntries(): SiteSearchEntry[] {
       area.contingencyAccommodation
     ),
     priority: Math.min(99, Math.max(20, Math.round(area.supportedAsylum / 40))),
+    areaCode: area.areaCode,
+    areaName: area.areaName,
+    regionName: area.regionName,
+    supportedAsylum: area.supportedAsylum,
+    supportedAsylumRate: area.supportedAsylumRate,
+    wbiNow: ep?.current?.groups?.white_british ?? null,
+    wbi2051: ep?.projections?.["2051"]?.white_british ?? null,
     searchText: [
       area.areaName,
       area.areaCode,
@@ -115,7 +133,8 @@ export function getPublicSearchEntries(): SiteSearchEntry[] {
     ]
       .join(" ")
       .toLowerCase()
-  }));
+  };
+  });
   const regionEntries = placeDirectory.regions.map((region) => ({
     href: region.regionPath,
     title: region.regionName,

@@ -94,6 +94,15 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
           stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3 4" />
     <text x={x(nowYear)} y={pad.top - 3} text-anchor="middle" class="proj-now-label">Census 2021</text>
 
+    <!-- 2051 boundary (if 2061 data exists) -->
+    {maxYear > 2051 && (
+      <>
+        <line x1={x(2051)} y1={pad.top} x2={x(2051)} y2={pad.top + uh}
+              stroke="rgba(245,158,11,0.2)" stroke-width="1" stroke-dasharray="2 4" />
+        <text x={x(2051)} y={pad.top + uh + 20} text-anchor="middle" class="proj-now-label" fill="rgba(245,158,11,0.5)">Illustrative</text>
+      </>
+    )}
+
     <!-- Lines -->
     {lines.map(line => (
       <>

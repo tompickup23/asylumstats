@@ -80,6 +80,9 @@ const snapshotDate = latestQuarter.stockPeriodLabel ?? "Q4 2025";
 // Demographic modelling data
 const demographicShifts = getSignificantDemographicShifts(2051);
 const areasBelow50 = demographicShifts.length;
+const demographicShifts2061 = getSignificantDemographicShifts(2061);
+const areasBelow50by2061 = demographicShifts2061.length;
+const areasBelow30by2051 = demographicShifts.filter(a => a.currentWbPct < 30 || (a.currentWbPct - a.annualDeclinePp * 30) < 30).length;
 
 // Verdict display labels (not "alert" etc)
 function findingLabel(verdict: string): string {
@@ -177,7 +180,7 @@ function findingColor(verdict: string): string {
         <span class="cost-context">Contractually locked in. Not discretionary. Already signed.</span>
       </div>
     </div>
-    <p class="cost-source">Source: National Audit Office asylum accommodation report. HMRC taxpayer statistics 2024-25.</p>
+    <p class="cost-source">Source: National Audit Office asylum accommodation report (2024/25 average daily cost). HMRC taxpayer statistics 2024-25. Per-resident cost derived from daily average / Q4 2025 hotel count.</p>
   </section>
 
   <!-- ═══ THE SYSTEM IN NUMBERS ═══ -->
@@ -204,17 +207,17 @@ function findingColor(verdict: string): string {
       <article class="sys-card">
         <span class="sys-value sys-coral">{fmtInt(smallBoatArrivals)}</span>
         <span class="sys-label">Illegal boat crossings</span>
-        <span class="sys-context">Up 12.6% year on year. 89% of all illegal entries.</span>
+        <span class="sys-context">Up 12.6% year on year. 89% of detected illegal entry routes.</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-coral">{grantRatePct}%</span>
-        <span class="sys-label">Grant rate</span>
-        <span class="sys-context">Two thirds refused or withdrawn. Still here. Still costing.</span>
+        <span class="sys-label">Initial grant rate</span>
+        <span class="sys-context">At first decision. After appeals, roughly 53% eventually get to stay.</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
         <span class="sys-label">Family reunion visas</span>
-        <span class="sys-context">Up 234% in four years. Every grant generates dependants.</span>
+        <span class="sys-context">Up 153% since 2019 (pre-COVID). Every grant generates dependants.</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-accent">{areasZero}</span>
@@ -227,20 +230,70 @@ function findingColor(verdict: string): string {
   <!-- ═══ DEMOGRAPHIC PROJECTIONS ═══ -->
   <section class="demo-section shell" id="demographics">
     <div class="demo-inner">
-      <span class="chip accent" style="margin-bottom: 0.75rem;">Census-verified projections</span>
+      <span class="chip accent" style="margin-bottom: 0.75rem;">Hamilton-Perry model, Census-verified</span>
       <h2 class="section-title">The demographic transformation nobody will publish</h2>
       <p class="section-desc" style="max-width: 700px;">
-        The ONS will not project ethnic composition. So we built a model that does.
-        307 local authorities. Census 2011 and 2021 data. Hamilton-Perry methodology.
-        Monte Carlo stochastic confidence intervals. Every number sourced.
+        The ONS will not project ethnic composition at local authority level. So we built a model that does.
+        316 local authorities. Census 2011 and 2021 observed data. Hamilton-Perry CCR methodology.
+        1,000 Monte Carlo simulations. Every ratio traced to Census observations.
       </p>
-      <div class="demo-stat-grid">
-        <div class="demo-big-stat">
-          <span class="demo-number">{areasBelow50}</span>
-          <span class="demo-label">areas where White British will be under 50% by 2051</span>
+
+      <!-- National trajectory -->
+      <div class="demo-national">
+        <div class="demo-trajectory">
+          <span class="demo-traj-label">National White British share</span>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment" style="width: 100%;">
+              <span class="demo-traj-year">2011</span>
+              <span class="demo-traj-pct">80%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-current" style="width: 73.3%;">
+              <span class="demo-traj-year">2021</span>
+              <span class="demo-traj-pct">73.3%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-proj" style="width: 48.7%;">
+              <span class="demo-traj-year">2051</span>
+              <span class="demo-traj-pct">48.7%</span>
+            </div>
+          </div>
+          <div class="demo-traj-bar">
+            <div class="demo-traj-segment demo-traj-proj demo-traj-illustrative" style="width: 40.2%;">
+              <span class="demo-traj-year">2061</span>
+              <span class="demo-traj-pct">40.2%</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Key stats grid -->
+      <div class="demo-key-stats">
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--coral);">{areasBelow50}</span>
+          <span class="demo-key-label">areas White British under 50% by 2051</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent-3);">{areasBelow50by2061}</span>
+          <span class="demo-key-label">areas White British under 50% by 2061</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent-3);">6</span>
+          <span class="demo-key-label">areas projected Muslim majority by 2051</span>
+        </div>
+        <div class="demo-key-stat">
+          <span class="demo-key-number" style="color: var(--accent);">110</span>
+          <span class="demo-key-label">areas projected foreign-born majority by 2051</span>
+        </div>
+      </div>
+
+      <!-- Top areas bar chart -->
+      <div class="demo-bar-section">
+        <h3 class="demo-bar-title">Fastest transformation: White British % (2021 Census)</h3>
         <div class="demo-bar-visual">
-          {demographicShifts.slice(0, 8).map((area) => (
+          {demographicShifts.slice(0, 10).map((area) => (
             <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="demo-bar-row">
               <span class="demo-bar-name">{area.areaName}</span>
               <span class="demo-bar-track">
@@ -249,10 +302,10 @@ function findingColor(verdict: string): string {
               <span class="demo-bar-pct">{area.currentWbPct.toFixed(0)}%</span>
             </a>
           ))}
-          <span class="demo-bar-caption">White British % (2021 Census). Bar shows current share.</span>
         </div>
       </div>
-      <div class="chip-row" style="margin-top: 1.25rem;">
+
+      <div class="chip-row" style="margin-top: 1.5rem;">
         <a href="/findings/" class="cta-btn cta-btn--primary">See the findings</a>
         <a href="/national/" class="cta-btn cta-btn--secondary">National demographic outlook</a>
         <a href="/methodology/" class="cta-btn cta-btn--ghost">Methodology</a>
@@ -260,14 +313,46 @@ function findingColor(verdict: string): string {
     </div>
   </section>
 
-  <!-- ═══ YOUR AREA ═══ -->
-  <section class="lookup-section shell" id="your-area">
-    <div class="lookup-inner">
-      <h2 class="lookup-title">Look up YOUR area</h2>
-      <p class="lookup-desc">
-        361 local authority profiles. Asylum numbers, demographic projections, hotel sites, crime, schools, economy. All sourced. All free.
+  <!-- ═══ YOUR AREA IN 2051 ═══ -->
+  <section class="future-section shell" id="your-area">
+    <div class="future-inner">
+      <span class="chip accent" style="margin-bottom: 0.5rem;">Explore the data</span>
+      <h2 class="section-title">What does YOUR area look like in 2051?</h2>
+      <p class="section-desc" style="max-width: 600px;">
+        361 local authority profiles. Asylum numbers, demographic projections to 2061, hotel sites, crime, schools, your MP, your council. All sourced. All free.
       </p>
-      <a href="/places/" class="cta-btn cta-btn--primary" style="margin-top: 0.5rem;">Browse all areas &rarr;</a>
+      <div class="future-search">
+        <input
+          type="search"
+          id="future-search"
+          placeholder="Type your council name..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search for your area"
+        />
+        <div class="future-results" id="future-results" hidden></div>
+      </div>
+      <div class="future-preview" id="future-preview" hidden>
+        <div class="future-card">
+          <h3 id="future-area-name"></h3>
+          <div class="future-stats">
+            <div class="future-stat">
+              <span class="future-stat-label">Asylum seekers on support</span>
+              <span class="future-stat-value" id="future-asylum"></span>
+            </div>
+            <div class="future-stat">
+              <span class="future-stat-label">White British 2021</span>
+              <span class="future-stat-value" id="future-wb-now"></span>
+            </div>
+            <div class="future-stat">
+              <span class="future-stat-label">White British 2051</span>
+              <span class="future-stat-value" id="future-wb-2051"></span>
+            </div>
+          </div>
+          <a class="cta-btn cta-btn--primary" id="future-link" href="/places/">See the full profile &rarr;</a>
+        </div>
+      </div>
+      <a href="/places/" class="cta-link" style="margin-top: 1rem;">Browse all 361 areas &rarr;</a>
     </div>
   </section>
 
@@ -408,6 +493,73 @@ function findingColor(verdict: string): string {
         searchInput.value = "";
       }
     });
+  }
+
+  // Future area search + preview
+  const futureInput = document.getElementById("future-search") as HTMLInputElement | null;
+  const futureResults = document.getElementById("future-results");
+  const futurePreview = document.getElementById("future-preview");
+
+  if (futureInput && futureResults && futurePreview) {
+    let futureAreas: any[] = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data) => {
+        futureAreas = Array.isArray(data) ? data : data.areas ?? [];
+      })
+      .catch(() => {});
+
+    futureInput.addEventListener("input", () => {
+      const query = futureInput.value.trim().toLowerCase();
+      futureResults.textContent = "";
+      futurePreview.hidden = true;
+
+      if (query.length < 2) {
+        futureResults.hidden = true;
+        return;
+      }
+
+      const matches = futureAreas
+        .filter((a: any) => a.areaName.toLowerCase().includes(query))
+        .slice(0, 6);
+
+      if (matches.length === 0) {
+        futureResults.hidden = true;
+        return;
+      }
+
+      futureResults.hidden = false;
+      for (const area of matches) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "future-result-btn";
+        btn.textContent = `${area.areaName} (${area.regionName})`;
+        btn.addEventListener("click", () => {
+          futureInput.value = area.areaName;
+          futureResults.hidden = true;
+          showFuturePreview(area);
+        });
+        futureResults.appendChild(btn);
+      }
+    });
+
+    function showFuturePreview(area: any): void {
+      if (!futurePreview) return;
+      const nameEl = document.getElementById("future-area-name");
+      const asylumEl = document.getElementById("future-asylum");
+      const wbNowEl = document.getElementById("future-wb-now");
+      const wb2051El = document.getElementById("future-wb-2051");
+      const linkEl = document.getElementById("future-link") as HTMLAnchorElement;
+
+      if (nameEl) nameEl.textContent = area.areaName;
+      if (asylumEl) asylumEl.textContent = (area.supportedAsylum ?? 0).toLocaleString();
+      if (wbNowEl) wbNowEl.textContent = area.wbiNow ? `${area.wbiNow}%` : "n/a";
+      if (wb2051El) wb2051El.textContent = area.wbi2051 ? `${area.wbi2051}%` : "n/a";
+      if (linkEl) linkEl.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
+
+      futurePreview.hidden = false;
+    }
   }
 </script>
 
@@ -924,6 +1076,104 @@ function findingColor(verdict: string): string {
     line-height: 1.4;
   }
 
+  /* ═══ FUTURE AREA ═══ */
+  .future-section {
+    margin-top: 3rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .future-inner { max-width: 640px; margin: 0 auto; }
+  .future-search {
+    position: relative;
+    max-width: 480px;
+    margin: 1.25rem auto 0;
+    text-align: left;
+  }
+  .future-search input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 180ms;
+  }
+  .future-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .future-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    z-index: 50;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .future-results[hidden] { display: none; }
+  .future-result-btn {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-size: 0.92rem;
+    color: var(--ink);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 120ms;
+  }
+  .future-result-btn:hover { background: rgba(125, 211, 252, 0.08); }
+  .future-preview { margin-top: 1.25rem; }
+  .future-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    text-align: left;
+  }
+  .future-card h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .future-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .future-stat-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+  .future-stat-value {
+    font-family: "Sora", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .future-stats { grid-template-columns: 1fr; gap: 0.5rem; }
+    .future-stat-value { font-size: 1.15rem; }
+  }
+
   /* ═══ DEMOGRAPHICS ═══ */
   .demo-section {
     margin-top: 3rem;
@@ -933,35 +1183,101 @@ function findingColor(verdict: string): string {
   .demo-inner {
     max-width: 900px;
   }
-  .demo-stat-grid {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 2rem;
-    align-items: start;
+
+  /* National trajectory bars */
+  .demo-national {
     margin-top: 1.5rem;
-  }
-  .demo-big-stat {
-    text-align: center;
     padding: 1.5rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     background: var(--panel);
   }
-  .demo-number {
+  .demo-traj-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .demo-traj-bar {
+    margin-bottom: 0.5rem;
+  }
+  .demo-traj-segment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 36px;
+    padding: 0 0.75rem;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    transition: width 600ms ease;
+  }
+  .demo-traj-current {
+    background: linear-gradient(90deg, var(--accent-3), rgba(245, 158, 11, 0.3));
+  }
+  .demo-traj-proj {
+    background: linear-gradient(90deg, var(--coral), rgba(239, 68, 68, 0.2));
+  }
+  .demo-traj-illustrative {
+    opacity: 0.6;
+    border: 1px dashed rgba(239, 68, 68, 0.4);
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+  }
+  .demo-traj-year {
+    font-family: "Sora", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .demo-traj-pct {
+    font-family: "Sora", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Key stats grid */
+  .demo-key-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .demo-key-stat {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .demo-key-number {
     display: block;
     font-family: "Sora", sans-serif;
-    font-size: 4rem;
+    font-size: 2rem;
     font-weight: 800;
-    color: var(--coral);
     line-height: 1;
     letter-spacing: -0.03em;
   }
-  .demo-label {
+  .demo-key-label {
     display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+    line-height: 1.3;
+  }
+
+  /* Bar chart */
+  .demo-bar-section {
+    margin-top: 1.5rem;
+  }
+  .demo-bar-title {
+    font-family: "Sora", sans-serif;
     font-size: 0.88rem;
+    font-weight: 700;
     color: var(--ink-soft);
-    margin-top: 0.5rem;
-    line-height: 1.4;
+    margin: 0 0 0.75rem;
   }
   .demo-bar-visual {
     display: flex;
@@ -1030,9 +1346,11 @@ function findingColor(verdict: string): string {
     .findings-row { grid-template-columns: 1fr; }
     .fsc-stat { font-size: 1.4rem; }
     .stats-header { flex-direction: column; align-items: flex-start; }
-    .demo-stat-grid { grid-template-columns: 1fr; }
-    .demo-number { font-size: 3rem; }
+    .demo-key-stats { grid-template-columns: repeat(2, 1fr); }
+    .demo-key-number { font-size: 1.5rem; }
     .demo-bar-row { grid-template-columns: 100px 1fr 36px; }
     .demo-bar-name { font-size: 0.78rem; }
+    .demo-traj-segment { height: 30px; }
+    .demo-traj-pct { font-size: 0.82rem; }
   }
 </style>
