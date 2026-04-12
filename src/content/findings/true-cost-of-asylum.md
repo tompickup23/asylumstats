@@ -8,6 +8,8 @@ verdict: critical
 source_url: "https://www.nao.org.uk/reports/an-analysis-of-the-asylum-system/"
 source_label: "NAO, Home Office, MoJ, HMCTS, DfE, NHS Digital"
 summary: "The total annual cost of the UK asylum system is at least £5.8 billion - over £170 per income taxpayer per year. The hotel bill (£2.1 billion) is only 36% of the true figure. This is the minimum defensible total from published government sources. The actual figure is likely higher."
+video_url: "/videos/true_cost_reel.mp4"
+video_poster: "/cards/true-cost-of-asylum_og.png"
 ---
 
 **£5.77 million per day on asylum hotels.** That is the number the Home Office publishes. It is real. It is sourced. And it is only 36% of the actual bill.
