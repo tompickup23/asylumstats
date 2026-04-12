@@ -250,6 +250,12 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             <span class="tiny">Contingency</span>
             <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
           </article>
+          {wbThreshold && (
+            <article class="stat-tile" style="border-left: 2px solid var(--coral);">
+              <span class="tiny">WB minority by</span>
+              <strong style="color: var(--coral);">~{wbThreshold.year}</strong>
+            </article>
+          )}
         </div>
       </article>
     </aside>
@@ -276,7 +282,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <section id="place-summary" class="section section-anchor">
     <PlainEnglish
       headline={`${area.supportedAsylum.toLocaleString()} people housed on asylum support in ${area.areaName}`}
-      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""} At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(area.supportedAsylum * 150 * 365 / 1_000_000)}M per year for this area alone.`}
+      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""} At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(area.supportedAsylum * 150 * 365 / 1_000_000)}M per year for this area alone.`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
     />
   </section>
