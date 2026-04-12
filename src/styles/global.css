@@ -4295,6 +4295,7 @@ tr:last-child td {
 }
 
 .metric-track {
+  display: block;
   flex: 1;
   height: 0.82rem;
   overflow: hidden;
@@ -4304,6 +4305,7 @@ tr:last-child td {
 }
 
 .metric-fill {
+  display: block;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 72%, #f5fffe 140%);

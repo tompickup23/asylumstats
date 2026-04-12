@@ -1,20 +1,12 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import DataFreshness from "../../../components/DataFreshness.astro";
+import PlainEnglish from "../../../components/PlainEnglish.astro";
 import { slugifyAreaName } from "../../../lib/site";
-import DataDrawer from "../../../components/DataDrawer.astro";
-import HomeSystemDeck from "../../../components/HomeSystemDeck.astro";
-import LocalEvidenceTimeline from "../../../components/LocalEvidenceTimeline.astro";
-import PageContents from "../../../components/PageContents.astro";
-import PageGuide from "../../../components/PageGuide.astro";
-import RegionAuthorityStage from "../../../components/RegionAuthorityStage.astro";
-import {
-  getRegionLocalEvidenceAreaSummaries,
-  getRegionLocalEvidenceLayers,
-  getRegionLocalEvidenceTimeline
-} from "../../../lib/local-evidence";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
-import { buildPlaceSubregions } from "../../../lib/place-subregions";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
+import rawProjections from "../../../data/live/ethnic-projections.json";
 
 const localRouteLatest = loadLocalRouteLatest();
 
@@ -26,537 +18,207 @@ export function getStaticPaths() {
 }
 
 const { region } = Astro.props as { region: PlaceDirectoryRegion };
-const featuredAreas = region.areas.slice(0, 8);
-const hotelLinkedAreas = region.areas.filter((row) => row.hotelSignal !== "none");
-const regionLocalEvidenceLayer = getRegionLocalEvidenceLayers().find((layer) => layer.regionName === region.regionName) ?? null;
-const regionLocalEvidenceAreas = getRegionLocalEvidenceAreaSummaries(region.regionName, 6);
-const regionLocalEvidenceTimeline = getRegionLocalEvidenceTimeline(region.regionName, 8);
-const regionSections = [
-  { id: "region-findings", label: "Map" },
-  { id: "region-guide", label: "How to use" },
-  { id: "region-places", label: "Place leaders" },
-  ...(hotelLinkedAreas.length > 0 ? [{ id: "region-hotels", label: "Hotel visibility" }] : []),
-  ...(regionLocalEvidenceLayer ? [{ id: "region-local-evidence", label: "Local sites" }] : []),
-  { id: "region-data", label: "Full list" }
-];
-const regionGuideItems = [
-  {
-    eyebrow: "Start here",
-    title: "Use the authority map before opening any full page",
-    body: "The first screen now does the narrowing work directly. Pick one authority on the map, then decide whether it is worth opening in full.",
-    href: "#region-findings",
-    cta: "Use the map"
-  },
-  {
-    eyebrow: "Then go local",
-    title: "Use the deck to compare the first authorities properly",
-    body: "The right-hand deck keeps support, rate, contingency, and hotel visibility together while you move between authorities.",
-    href: "#region-findings",
-    cta: "Use the deck"
-  },
-  {
-    eyebrow: "Only if needed",
-    title: "Use the timeline and full ledger after the main decision",
-    body: "Named local evidence and the full regional ledger still exist, but they now sit behind the authority stage instead of preceding it.",
-    href: regionLocalEvidenceTimeline.length > 0 ? "#region-local-evidence" : "#region-data",
-    cta: regionLocalEvidenceTimeline.length > 0 ? "Open the timeline" : "Open the full list"
-  }
-];
-const pageDescription = `${region.regionName} asylum pressure by place, with regional totals, local authority leaders, and hotel visibility carried through the place layer.`;
 
-type RegionDeckEntry = {
-  scopeId: string;
-  parentScopeId?: string;
-  parentLabel?: string;
-  eyebrow: string;
-  title: string;
-  note: string;
-  scopeHref?: string;
-  scopeActionLabel?: string;
-  linksLabel: string;
-  stats: Array<{
-    label: string;
-    value: string;
-    context: string;
-  }>;
-  links: Array<{
-    label: string;
-    href: string;
-    meta: string;
-    scopeId?: string;
-    actionLabel?: string;
-  }>;
-  visualIntro: string;
-  visualGroups: Array<{
-    title: string;
-    bars: Array<{
-      label: string;
-      value: string;
-      meta: string;
-      widthPct: number;
-      tone: "accent" | "teal" | "warm" | "slate";
-    }>;
-  }>;
-};
+// Sort areas by asylum support (descending)
+const areasSorted = [...region.areas].sort((a, b) => b.area.supportedAsylum - a.area.supportedAsylum);
+const maxAreaAsylum = areasSorted[0]?.area.supportedAsylum ?? 1;
+const totalRegional = region.supportedAsylum;
 
-function formatInteger(value: number): string {
-  return value.toLocaleString();
-}
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("en-GB", {
-    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
-    maximumFractionDigits: Number.isInteger(value) ? 0 : 2
-  }).format(value);
-}
-
-function buildBar(
-  label: string,
-  value: number,
-  scale: number,
-  tone: "accent" | "teal" | "warm" | "slate",
-  meta: string
-) {
-  return {
-    label,
-    value: Number.isInteger(value) ? formatInteger(value) : formatNumber(value),
-    meta,
-    widthPct: scale > 0 ? (value / scale) * 100 : 0,
-    tone
-  };
-}
-
-function buildAreaPath(areaCode: string): string {
-  const match = region.areas.find((r: any) => r.area.areaCode === areaCode);
-  return match ? `/places/${slugifyAreaName(match.area.areaName)}/` : `/places/`;
-}
-
-function describeHotelSignalShort(row: PlaceDirectoryRegion["areas"][number]): string {
-  if (row.hotelSignal === "named") {
-    return "Named site visible";
-  }
-
-  if (row.hotelSignal === "unnamed") {
-    return "Unnamed hotel evidence";
-  }
-
-  return "No named site visible";
-}
-
-function buildAreaNote(row: PlaceDirectoryRegion["areas"][number]) {
-  const area = row.area;
-
-  if (row.hotelSignal === "named") {
-    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. ${row.namedCurrentSiteCount} named hotel site${row.namedCurrentSiteCount === 1 ? "" : "s"} visible.`;
-  }
-
-  if (row.hotelSignal === "unnamed") {
-    return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. Hotel use is visible but unnamed.`;
-  }
-
-  return `${formatInteger(area.supportedAsylum)} on support. ${formatInteger(area.contingencyAccommodation)} in contingency. No named hotel site is public yet.`;
-}
-
-const regionStageId = `region-authority-stage-${region.regionSlug}`;
-const accommodationAverage = Math.round(region.supportedAsylum / Math.max(region.publicPlaceCount, 1));
-const subregions = buildPlaceSubregions(region);
-const rankedSubregions = [...subregions].sort(
-  (left, right) =>
-    right.supportedAsylum - left.supportedAsylum ||
-    (right.supportedAsylumRate ?? 0) - (left.supportedAsylumRate ?? 0) ||
-    left.label.localeCompare(right.label)
-);
-const subregionByAreaCode = new Map(
-  subregions.flatMap((subregion) => subregion.areaCodes.map((areaCode) => [areaCode, subregion] as const))
-);
-const regionDeckEntries: Record<string, RegionDeckEntry> = {
-  [region.regionName]: {
-    scopeId: region.regionName,
-    eyebrow: `${region.countryName} region`,
-    title: region.regionName,
-    note:
-      subregions.length > 0
-        ? `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Start with one cluster before picking an authority.`
-        : `${formatInteger(region.supportedAsylum)} on support across ${formatInteger(region.publicPlaceCount)} authorities. Pick one on the map.`,
-    linksLabel: subregions.length > 0 ? "Open one subregion first" : "Open one local authority",
-    stats: [
-      {
-        label: "Supported asylum",
-        value: formatInteger(region.supportedAsylum),
-        context: `${formatInteger(region.publicPlaceCount)} public place pages`
-      },
-      {
-        label: "Regional rate",
-        value: region.supportedAsylumRate === null ? "n/a" : formatNumber(region.supportedAsylumRate),
-        context: "Supported asylum per 10,000 residents"
-      },
-      {
-        label: "Contingency",
-        value: formatInteger(region.contingencyAccommodation),
-        context: "People in contingency accommodation"
-      }
-    ],
-    links:
-      subregions.length > 0
-        ? rankedSubregions.map((subregion) => ({
-            label: subregion.label,
-            href: region.regionPath,
-            meta: `${formatInteger(subregion.supportedAsylum)} on support · ${formatInteger(subregion.publicPlaceCount)} authorities`,
-            scopeId: subregion.scopeId,
-            actionLabel: "Preview subregion"
-          }))
-        : region.areas.map((row) => ({
-            label: row.area.areaName,
-            href: buildAreaPath(row.area.areaCode),
-            meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
-            scopeId: row.area.areaCode,
-            actionLabel: "Preview place"
-          })),
-    visualIntro:
-      subregions.length > 0
-        ? "Use the cluster layer first. It makes long regional maps legible before you narrow into one authority."
-        : "The regional map tells you where to open next.",
-    visualGroups: [
-      {
-        title: subregions.length > 0 ? `Largest subregional totals in ${region.regionName}` : `Largest local totals in ${region.regionName}`,
-        bars:
-          subregions.length > 0
-            ? rankedSubregions.slice(0, 4).map((subregion) =>
-                buildBar(
-                  subregion.label,
-                  subregion.supportedAsylum,
-                  rankedSubregions[0]?.supportedAsylum ?? 1,
-                  "accent",
-                  `${formatInteger(subregion.publicPlaceCount)} authorities · ${subregion.hotelSignalLabel}`
-                )
-              )
-            : region.areas.slice(0, 3).map((row) =>
-                buildBar(
-                  row.area.areaName,
-                  row.area.supportedAsylum,
-                  region.leadArea?.area.supportedAsylum ?? 1,
-                  "accent",
-                  row.hotelSummary
-                )
-              )
-      }
-    ]
-  }
-};
-
-for (const subregion of rankedSubregions) {
-  const subregionRows = region.areas
-    .filter((row) => subregion.areaCodes.includes(row.area.areaCode))
-    .sort(
-      (left, right) =>
-        right.area.supportedAsylum - left.area.supportedAsylum ||
-        (right.area.supportedAsylumRate ?? 0) - (left.area.supportedAsylumRate ?? 0) ||
-        left.area.areaName.localeCompare(right.area.areaName)
-    );
-  const comparisonScale = Math.max(
-    subregion.leadArea?.area.supportedAsylum ?? 0,
-    Math.round(subregion.supportedAsylum / Math.max(subregion.publicPlaceCount, 1)),
-    1
-  );
-
-  regionDeckEntries[subregion.scopeId] = {
-    scopeId: subregion.scopeId,
-    parentScopeId: region.regionName,
-    parentLabel: region.regionName,
-    eyebrow: `${region.regionName} cluster`,
-    title: subregion.label,
-    note: `${formatInteger(subregion.supportedAsylum)} on support across ${formatInteger(subregion.publicPlaceCount)} authorities. Narrow again to one authority.`,
-    linksLabel: "Open one local authority",
-    stats: [
-      {
-        label: "Supported asylum",
-        value: formatInteger(subregion.supportedAsylum),
-        context: `${formatInteger(subregion.publicPlaceCount)} authorities in this cluster`
-      },
-      {
-        label: "Cluster rate",
-        value: subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate),
-        context: "Supported asylum per 10,000 residents"
-      },
-      {
-        label: "Contingency",
-        value: formatInteger(subregion.contingencyAccommodation),
-        context: "People in contingency accommodation"
-      }
-    ],
-    links: subregionRows.map((row) => ({
-      label: row.area.areaName,
-      href: buildAreaPath(row.area.areaCode),
-      meta: `${formatInteger(row.area.supportedAsylum)} on support · ${describeHotelSignalShort(row)}`,
-      scopeId: row.area.areaCode,
-      actionLabel: "Preview place"
-    })),
-    visualIntro: "This cluster view shortens the geography so the next authority choice is legible.",
-    visualGroups: [
-      {
-        title: `Largest local totals in ${subregion.label}`,
-        bars: subregionRows.slice(0, 4).map((row) =>
-          buildBar(
-            row.area.areaName,
-            row.area.supportedAsylum,
-            comparisonScale,
-            "accent",
-            row.hotelSummary
-          )
-        )
-      }
-    ]
-  };
-}
-
+// Compute regional WBI
+const allAreas = (rawProjections as any).areas as Record<string, any>;
+let wbiSum2021 = 0, wbiSum2051 = 0, wbiCount = 0;
 for (const row of region.areas) {
-  const area = row.area;
-  const regionalLead = region.leadArea?.area ?? area;
-  const comparisonScale = Math.max(regionalLead.supportedAsylum, accommodationAverage, area.supportedAsylum, 1);
-  const parentSubregion = subregionByAreaCode.get(area.areaCode);
-
-  regionDeckEntries[area.areaCode] = {
-    scopeId: area.areaCode,
-    parentScopeId: parentSubregion?.scopeId ?? region.regionName,
-    parentLabel: parentSubregion?.label ?? region.regionName,
-    eyebrow: `${region.regionName} local page`,
-    title: area.areaName,
-    note: buildAreaNote(row),
-    scopeHref: buildAreaPath(area.areaCode),
-    scopeActionLabel: "Open place page",
-    linksLabel: "Also open",
-    stats: [
-      {
-        label: "Supported asylum",
-        value: formatInteger(area.supportedAsylum),
-        context: area.snapshotDate
-      },
-      {
-        label: "Local rate",
-        value: area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate),
-        context: "Per 10,000"
-      },
-      {
-        label: "Contingency",
-        value: formatInteger(area.contingencyAccommodation),
-        context: "In contingency"
-      }
-    ],
-    links: [
-      {
-        label: `Open ${region.regionName}`,
-        href: region.regionPath,
-        meta: "Regional page"
-      }
-    ],
-    visualIntro: parentSubregion
-      ? `This is the last narrowing step after ${parentSubregion.label}.`
-      : "This is the last narrowing step on the region page.",
-    visualGroups: [
-      {
-        title: parentSubregion ? `Within ${parentSubregion.label}` : `Within ${region.regionName}`,
-        bars: [
-          buildBar(area.areaName, area.supportedAsylum, comparisonScale, "accent", "This local authority"),
-          buildBar(
-            regionalLead.areaName,
-            regionalLead.supportedAsylum,
-            comparisonScale,
-            "slate",
-            "Regional lead by supported asylum"
-          ),
-          buildBar(
-            "Regional average",
-            accommodationAverage,
-            comparisonScale,
-            "teal",
-            `${formatInteger(region.publicPlaceCount)} place pages in view`
-          )
-        ]
-      }
-    ]
-  };
+  const proj = allAreas[row.area.areaCode];
+  if (!proj?.current?.groups?.white_british) continue;
+  wbiSum2021 += proj.current.groups.white_british;
+  wbiSum2051 += proj.projections?.["2051"]?.white_british ?? proj.current.groups.white_british;
+  wbiCount++;
 }
+const regionWbi2021 = wbiCount > 0 ? wbiSum2021 / wbiCount : null;
+const regionWbi2051 = wbiCount > 0 ? wbiSum2051 / wbiCount : null;
+
+const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()} asylum seekers on support across ${region.areas.length} local authorities. Rate: ${region.supportedAsylumRate?.toFixed(1)} per 10,000.`;
 ---
 
-<BaseLayout title={`${region.regionName} region | asylumstats`} description={pageDescription}>
-  <section id="region-findings" class="section section-anchor priority-section home-screen region-stage-screen">
-    <div class="home-left">
-      <article class="home-map-panel">
-        <RegionAuthorityStage id={regionStageId} region={region} snapshotDate={localRouteLatest.snapshotDate} />
-      </article>
-    </div>
+<BaseLayout
+  title={`${region.regionName} | asylumstats`}
+  description={pageDescription}
+>
+  <Breadcrumbs items={[
+    { label: "Places", href: "/places/" },
+    { label: "Regional", href: "/regional/" },
+    { label: region.regionName }
+  ]} />
 
-    <aside class="home-right">
-      <HomeSystemDeck
-        entries={regionDeckEntries}
-        initialScopeId={region.regionName}
-        targetMapId={regionStageId}
-        rootScopeKind="region"
-        resetLabel={`Back to ${region.regionName}`}
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">{region.countryName}</span>
+      <h1>{region.regionName}</h1>
+      <DataFreshness
+        updated={localRouteLatest.snapshotDate ?? "2025-12-31"}
+        source="Home Office"
+        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
       />
+    </section>
+    <aside class="page-rail">
+      <article class="panel panel-pad">
+        <div class="stat-strip">
+          <article class="stat-tile">
+            <span class="tiny">On support</span>
+            <strong>{totalRegional.toLocaleString()}</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Rate /10k</span>
+            <strong>{region.supportedAsylumRate?.toFixed(1) ?? "-"}</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="tiny">Areas</span>
+            <strong>{region.areas.length}</strong>
+          </article>
+          {regionWbi2021 !== null && (
+            <article class="stat-tile">
+              <span class="tiny">WBI 2051</span>
+              <strong>{regionWbi2051?.toFixed(0)}%</strong>
+            </article>
+          )}
+        </div>
+      </article>
     </aside>
   </section>
 
-  <PageContents title="Start here" sections={regionSections} variant="priority" />
-
-  <PageGuide
-    id="region-guide"
-    title={`Use ${region.regionName} in three moves`}
-    intro="The region page now keeps the authority map and the local readout on one screen, so you can narrow before opening any full place page."
-    items={regionGuideItems}
+  <PlainEnglish
+    headline={`${totalRegional.toLocaleString()} people on asylum support in ${region.regionName}`}
+    body={`${region.areas.length} local authorities in this region. Rate of ${region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000 residents.${regionWbi2021 !== null ? ` Average White British share: ${regionWbi2021.toFixed(0)}% (2021) projected to ${regionWbi2051?.toFixed(0)}% by 2051.` : ""} At roughly £150/person/day, asylum support in this region alone costs an estimated £${Math.round(totalRegional * 150 * 365 / 1_000_000)}M per year.`}
+    tone={totalRegional > 10000 ? "alert" : totalRegional > 3000 ? "info" : "success"}
   />
 
-  <section id="region-places" class="section section-anchor">
-    <div class="section-head">
-      <div>
-        <h2>Place leaders inside {region.regionName}</h2>
-        <p class="lede">
-          These are the first place pages to open in this region. They keep the local count, rate, contingency use,
-          and hotel visibility on a single surface.
-        </p>
-      </div>
-      <span class="chip accent">{featuredAreas.length.toLocaleString()} featured authorities</span>
-    </div>
-    <div class="place-grid">
-      {featuredAreas.map((row) => (
-        <article class="place-card">
-          <div class="chip-row">
-            <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
-            <span class="chip">{row.area.contingencyAccommodation.toLocaleString()} contingency</span>
-            {row.hotelSignal !== "none" && (
-              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
-                {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+  <!-- AREA RANKING -->
+  <section class="section shell">
+    <h2 class="reg-section-title">Local authorities ranked by asylum seekers on support</h2>
+    <div class="reg-area-list">
+      {areasSorted.map((row, i) => {
+        const a = row.area;
+        const pct = (a.supportedAsylum / maxAreaAsylum) * 100;
+        const proj = allAreas[a.areaCode];
+        const wbiNow = proj?.current?.groups?.white_british;
+        const wbi51 = proj?.projections?.["2051"]?.white_british;
+        return (
+          <a href={`/places/${slugifyAreaName(a.areaName)}/`} class="reg-area-row">
+            <span class="reg-area-rank">{i + 1}</span>
+            <div class="reg-area-info">
+              <span class="reg-area-name">{a.areaName}</span>
+              <span class="reg-area-bar-track">
+                <span class="reg-area-bar-fill" style={`width: ${pct}%`}></span>
               </span>
+            </div>
+            <span class="reg-area-count">{a.supportedAsylum.toLocaleString()}</span>
+            <span class="reg-area-rate">{a.supportedAsylumRate?.toFixed(1) ?? "-"}</span>
+            {wbiNow !== undefined && (
+              <span class="reg-area-wbi">{wbiNow.toFixed(0)}% → {wbi51?.toFixed(0) ?? "?"}%</span>
             )}
-          </div>
-          <h3>
-            <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
-          </h3>
-          <p class="lede">
-            {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
-            {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
-          </p>
-          <p class="tiny">Hotels: {row.hotelSummary}.</p>
-        </article>
-      ))}
+          </a>
+        );
+      })}
     </div>
+    <p class="reg-area-caption">
+      Click any area for the full profile. Rate = per 10,000 residents. WBI = White British Index (2021 → 2051 projected).
+    </p>
   </section>
-
-  {hotelLinkedAreas.length > 0 && (
-    <section id="region-hotels" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Where hotel evidence is already visible</h2>
-          <p class="lede">
-            Hotel evidence stays inside the place layer. Use these authorities when you need a regional route into named
-            current sites or unnamed acknowledged hotel use.
-          </p>
-        </div>
-        <a class="chip accent" href="/hotels/">Open the hotel notebook only if needed</a>
-      </div>
-      <div class="feature-grid">
-        {hotelLinkedAreas.slice(0, 8).map((row) => (
-          <article class="feature-card">
-            <div class="chip-row">
-              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
-                {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
-              </span>
-              <span class="chip teal">{row.area.supportedAsylum.toLocaleString()} supported asylum</span>
-            </div>
-            <h3>
-              <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
-            </h3>
-            <p class="lede">{row.hotelSummary} are already visible on the public record for this authority.</p>
-            <p class="tiny">
-              Contingency accommodation {row.area.contingencyAccommodation.toLocaleString()} | rate{" "}
-              {row.area.supportedAsylumRate ?? "n/a"} per 10,000.
-            </p>
-          </article>
-        ))}
-      </div>
-    </section>
-  )}
-
-  {regionLocalEvidenceLayer && (
-    <section id="region-local-evidence" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Named local evidence over time in {region.regionName}</h2>
-          <p class="lede">
-            This is the lower-level local layer the site can publish honestly here: a dated timeline of named public
-            hotel evidence. It is not a complete town map and it does not imply site-level coverage outside these
-            evidence-backed rows.
-          </p>
-        </div>
-        <span class="chip accent">
-          {regionLocalEvidenceLayer.currentNamedSiteCount.toLocaleString()} named current site
-          {regionLocalEvidenceLayer.currentNamedSiteCount === 1 ? "" : "s"}
-        </span>
-      </div>
-      {regionLocalEvidenceAreas.length > 0 && (
-        <div class="feature-grid">
-          {regionLocalEvidenceAreas.map((area) => (
-            <article class="feature-card">
-              <div class="chip-row">
-                <span class="chip accent">{area.areaName}</span>
-                <span class:list={["chip", area.partiallyResolvedSiteCount > 0 ? "teal" : "warm"]}>{area.chainLabel}</span>
-              </div>
-              <h3>{area.currentNamedSiteCount.toLocaleString()} named current site{area.currentNamedSiteCount === 1 ? "" : "s"}</h3>
-              <p class="lede">
-                Latest public naming on {area.latestPublicDateLabel}. {area.supportedAsylum !== null ? `${area.supportedAsylum.toLocaleString()} people are on supported asylum there at quarter end.` : "The site evidence is public even where the local route row is not carrying a numeric anchor here."}
-              </p>
-              <p class="tiny">{area.siteNames.slice(0, 2).join(" | ")}</p>
-              {area.placeHref && (
-                <p class="tiny">
-                  <a class="source-pill" href={area.placeHref}>Open {area.areaName}</a>
-                </p>
-              )}
-            </article>
-          ))}
-        </div>
-      )}
-      <LocalEvidenceTimeline items={regionLocalEvidenceTimeline} />
-    </section>
-  )}
-
-  <DataDrawer
-    id="region-data"
-    label="Deep data"
-    title={`Open the full ${region.regionName} place list`}
-    summary="Use the full regional ledger when you need every published authority in this slice, not just the first pages worth opening."
-  >
-    <section class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>All published place pages in {region.regionName}</h2>
-          <p class="lede">
-            The full regional place list stays here so the main reading surface can stay selective and legible.
-          </p>
-        </div>
-      </div>
-      <div class="place-grid">
-        {region.areas.map((row) => (
-          <article class="place-card">
-            <div class="chip-row">
-              <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
-              <span class="chip">{row.area.contingencyAccommodation.toLocaleString()} contingency</span>
-              {row.hotelSignal !== "none" && (
-                <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
-                  {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
-                </span>
-              )}
-            </div>
-            <h3>
-              <a href={`/places/${slugifyAreaName(row.area.areaName)}/`}>{row.area.areaName}</a>
-            </h3>
-            <p class="lede">
-              {row.area.supportedAsylum.toLocaleString()} people on supported asylum at quarter end, rate{" "}
-              {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents.
-            </p>
-            <p class="tiny">Hotels: {row.hotelSummary}.</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  </DataDrawer>
 </BaseLayout>
+
+<style>
+  .reg-section-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .reg-area-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .reg-area-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 70px 55px 90px;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms;
+  }
+  .reg-area-row:hover {
+    background: rgba(6, 182, 212, 0.04);
+  }
+  .reg-area-rank {
+    font-family: "Sora", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+  }
+  .reg-area-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .reg-area-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .reg-area-bar-track {
+    display: block;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .reg-area-bar-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    border-radius: 4px;
+    min-width: 2px;
+  }
+  .reg-area-count {
+    font-family: "Sora", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-align: right;
+  }
+  .reg-area-rate {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: right;
+  }
+  .reg-area-wbi {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .reg-area-caption {
+    font-size: 0.78rem;
+    color: var(--muted);
+    opacity: 0.5;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .reg-area-row {
+      grid-template-columns: 24px 1fr 55px 45px;
+      gap: 0.3rem;
+    }
+    .reg-area-wbi { display: none; }
+    .reg-area-name { font-size: 0.82rem; }
+    .reg-area-count { font-size: 0.82rem; }
+  }
+</style>
