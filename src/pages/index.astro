@@ -181,10 +181,10 @@ function findingColor(verdict: string): string {
   <section class="cost-strip shell">
     <div class="cost-strip-inner">
       <div class="cost-item cost-item--hero">
-        <span class="cost-number">£{perTaxpayerGbp}</span>
-        <span class="cost-label">per taxpayer per year</span>
-        <span class="cost-context">Hotels alone. Before legal aid, healthcare, education, translation services.</span>
-        <span class="cost-calc">£{fmtGbp(dailyCostGbp)}/day x 365 = {fmtGbp(annualCostGbp)}/yr / {fmtInt(UK_TAXPAYERS / 1_000_000)}M taxpayers</span>
+        <span class="cost-number">£170</span>
+        <span class="cost-label">total cost per taxpayer per year</span>
+        <span class="cost-context">Hotels, accommodation, processing, legal aid, NHS, education, enforcement, tribunals, local authority costs. <a href="/findings/true-cost-of-asylum/" style="color: var(--accent);">Full breakdown.</a></span>
+        <span class="cost-calc">£5.8B total / 34.1M taxpayers. Hotels alone = £{perTaxpayerGbp}/taxpayer.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">£{fmtInt(costPerResidentPerYear)}</span>
