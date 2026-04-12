@@ -60,22 +60,38 @@ const REL_GROUPS = ["No religion", "Christian", "Buddhist", "Hindu", "Jewish", "
 const rel2021 = parseDataset(REL_2021, 0, 2);
 const rel2011 = parseDataset(REL_2011, 0, 2);
 
-// Compute religion CCRs
+// Compute religion CCRs with James-Stein shrinkage
 const relCCRs = new Map();
 const relAreas2021 = new Set([...rel2021.keys()].map(k => k.split("|")[0]));
 const relAreas2011 = new Set([...rel2011.keys()].map(k => k.split("|")[0]));
 const relCommonAreas = [...relAreas2021].filter(c => relAreas2011.has(c));
 
+// Compute national-average CCRs for shrinkage target
+const nationalRelCCRs = new Map();
+for (const group of REL_GROUPS) {
+  let natPop11 = 0, natPop21 = 0;
+  for (const code of relCommonAreas) {
+    natPop11 += rel2011.get(`${code}|${group}`) || 0;
+    natPop21 += rel2021.get(`${code}|${group}`) || 0;
+  }
+  nationalRelCCRs.set(group, natPop11 > 0 ? natPop21 / natPop11 : 1.0);
+}
+
+const SHRINKAGE_K = 50; // Same as ethnic model
 for (const code of relCommonAreas) {
   for (const group of REL_GROUPS) {
     const pop11 = rel2011.get(`${code}|${group}`) || 0;
     const pop21 = rel2021.get(`${code}|${group}`) || 0;
-    let ccr = pop11 > 10 ? pop21 / pop11 : 1.0;
-    ccr = Math.max(0.1, Math.min(5.0, ccr)); // Cap extremes
-    relCCRs.set(`${code}|${group}`, ccr);
+    let localCCR = pop11 > 10 ? pop21 / pop11 : 1.0;
+    localCCR = Math.max(0.1, Math.min(3.0, localCCR)); // Tighter cap than ethnicity
+    // James-Stein shrinkage: small populations pulled toward national average
+    const w = pop11 / (pop11 + SHRINKAGE_K);
+    const nationalCCR = nationalRelCCRs.get(group) || 1.0;
+    const shrunkCCR = w * localCCR + (1 - w) * nationalCCR;
+    relCCRs.set(`${code}|${group}`, shrunkCCR);
   }
 }
-console.log(`  ${relCommonAreas.length} areas, ${relCCRs.size} CCRs`);
+console.log(`  ${relCommonAreas.length} areas, ${relCCRs.size} CCRs (with shrinkage, k=${SHRINKAGE_K})`);
 
 // Project religion forward
 const relProjections = {};

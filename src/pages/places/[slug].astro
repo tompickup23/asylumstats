@@ -185,20 +185,11 @@ const placeSections = [
   { id: "place-summary", label: "Summary" },
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "local-numbers", label: "Local numbers" },
-  { id: "hotel-evidence", label: "Hotels" },
-  ...(ethnicProjection ? [{ id: "demographic-profile", label: "Demographics" }] : []),
-  ...(religionData ? [{ id: "religion-profile", label: "Religion" }] : []),
-  ...(nativityData ? [{ id: "nativity-profile", label: "Nativity" }] : []),
-  ...(shiftShareData ? [{ id: "change-drivers", label: "Why it's changing" }] : []),
-  ...(crimeProfile ? [{ id: "crime-profile", label: "Crime" }] : []),
-  ...(sendProfile ? [{ id: "send-profile", label: "SEND" }] : []),
-  ...(ascProfile ? [{ id: "asc-profile", label: "Social care" }] : []),
-  ...(socioData?.economicActivity ? [{ id: "socioeconomic", label: "Economy & housing" }] : []),
-  ...(ethnicProjection?.schoolEthnicity ? [{ id: "school-ethnicity", label: "Schools" }] : []),
-  ...(ethnicProjection?.impactProjections ? [{ id: "impact-projections", label: "Service impact" }] : []),
-  ...(pressureScore.availableModules >= 3 ? [{ id: "pressure-index", label: "Pressure index" }] : []),
-  { id: "local-benchmarks", label: "Benchmarks" },
-  { id: "regional-peers", label: "Regional peers" }
+  { id: "tabpanel-hotels", label: "Hotels" },
+  ...(ethnicProjection ? [{ id: "tabpanel-demographics", label: "Demographics" }] : []),
+  ...(socioData?.economicActivity ? [{ id: "tabpanel-economy", label: "Economy" }] : []),
+  ...((crimeProfile || sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
+  { id: "tabpanel-benchmarks", label: "Benchmarks" }
 ];
 
 function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
