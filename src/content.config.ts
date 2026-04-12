@@ -8,6 +8,7 @@ const findings = defineCollection({
     category: z.enum(["spending", "routes", "demographics", "backlog", "accountability", "crime", "send", "social-care", "pressure-index"]),
     stat_value: z.string(),
     stat_label: z.string(),
+    content_type: z.enum(["finding", "article"]).default("finding"),
     verdict: z.enum(["alert", "critical", "resolved", "info"]).default("info"),
     source_url: z.string().url(),
     source_label: z.string().default("Source"),

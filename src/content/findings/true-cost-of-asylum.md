@@ -2,6 +2,7 @@
 headline: "The true cost of asylum: at least £155 per taxpayer, per year"
 date: "2026-04-12"
 category: spending
+content_type: "article"
 stat_value: "£5.8B+"
 stat_label: "Minimum annual cost"
 verdict: critical
