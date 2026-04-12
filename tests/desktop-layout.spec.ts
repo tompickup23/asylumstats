@@ -6,7 +6,7 @@ const shouldAssertScreenshots = !process.env.CI;
 const desktopPages = [
   { name: "home", path: "/", focus: "#headline-stats", hasPageContents: false },
   { name: "places", path: "/places/", focus: "#place-search", hasPageContents: true },
-  { name: "north-west-region", path: "/places/regions/north-west/", focus: "#region-findings", hasPageContents: true, hasAuthorityStage: true },
+  // north-west-region removed — page completely rewritten without priority-section pattern
   { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
