@@ -47,7 +47,16 @@ function curlJson(url) {
     maxBuffer: 1024 * 1024 * 64
   });
 
-  return JSON.parse(output);
+  if (output.trimStart().startsWith("<!DOCTYPE") || output.trimStart().startsWith("<html")) {
+    console.warn(`WARN: ${url} returned HTML instead of JSON (possible 403/captcha). Skipping.`);
+    return null;
+  }
+  try {
+    return JSON.parse(output);
+  } catch (e) {
+    console.warn(`WARN: ${url} returned invalid JSON: ${e.message}. Skipping.`);
+    return null;
+  }
 }
 
 function downloadFile(url, destination) {
@@ -100,11 +109,15 @@ mkdirSync(manifestDir, { recursive: true });
 const nwrsmpMedia = curlJson(mediaUrl);
 const nwrsmpPage = curlJson(pageUrl);
 
-writeFileSync(path.join(rawDir, "nwrsmp-media.json"), `${JSON.stringify(nwrsmpMedia, null, 2)}\n`);
-writeFileSync(path.join(rawDir, "nwrsmp-data-page.json"), `${JSON.stringify(nwrsmpPage, null, 2)}\n`);
+if (nwrsmpMedia) {
+  writeFileSync(path.join(rawDir, "nwrsmp-media.json"), `${JSON.stringify(nwrsmpMedia, null, 2)}\n`);
+}
+if (nwrsmpPage) {
+  writeFileSync(path.join(rawDir, "nwrsmp-data-page.json"), `${JSON.stringify(nwrsmpPage, null, 2)}\n`);
+}
 
 const workbookDocuments = dedupeBy(
-  nwrsmpMedia
+  (nwrsmpMedia || [])
     .filter(
       (item) =>
         item?.mime_type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" &&
