@@ -121,7 +121,7 @@ const structuredData = [
     <meta name="twitter:image:alt" content={`${pageTitle} - asylumstats.co.uk`} />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.postcodes.io; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" />
     <!-- Fonts self-hosted via Fontsource (imported in global.css) -->
     {structuredData.map((item) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
@@ -147,6 +147,9 @@ const structuredData = [
           <a href="/terms/">Terms</a> &middot;
           <a href="/accessibility/">Accessibility</a>
         </div>
+        <div class="footer-cross-site">
+          Population projections for 320 local authorities at <a href="https://ukdemographics.co.uk" rel="noopener">ukdemographics.co.uk</a>
+        </div>
         <div class="footer-legal">
           asylumstats.co.uk is an independent personal research project by Tom Pickup. It uses publicly available government data (ONS, Home Office, DfE, NHS Digital).
           Not affiliated with or endorsed by any political party, council, or candidate. No cookies. No tracking. No personal data collected.
@@ -154,7 +157,7 @@ const structuredData = [
           <a href="/methodology/">Full methodology &amp; limitations</a>.
         </div>
         <div class="footer-imprint">
-          Published by Tom Pickup, Burnley, Lancashire. Independent research - no party affiliation.
+          Promoted by Victoria Taylor on behalf of Tom Pickup, both at Reform UK, Millbank Tower, 21-24 Millbank, London, SW1P 4QP.
         </div>
       </footer>
     )}
