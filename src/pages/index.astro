@@ -123,7 +123,7 @@ function findingColor(verdict: string): string {
 ---
 
 <BaseLayout
-  title="asylumstats - Follow YOUR money"
+  title="asylumstats — UK asylum data, hotel costs, ethnic projections by local authority"
   description={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. ${fmtInt(latestQuarter.awaitingInitialDecision)} people waiting for a decision. Track where YOUR money goes.`}
   image="/og/home.png"
 >
@@ -151,7 +151,7 @@ function findingColor(verdict: string): string {
         <input
           type="search"
           id="area-search"
-          placeholder="Find your area, your MP, your council..."
+          placeholder="Enter your postcode or area name..."
           autocomplete="off"
           spellcheck="false"
           aria-label="Search for a local authority"
@@ -229,7 +229,7 @@ function findingColor(verdict: string): string {
       <article class="sys-card">
         <span class="sys-value sys-coral">{grantRatePct}%</span>
         <span class="sys-label">Initial grant rate</span>
-        <span class="sys-context">At first decision only. Many refused claims are later overturned on appeal. Appeals data lagging (last: 2023 Q1).</span>
+        <span class="sys-context">At first decision only. After appeals, true grant rate is on average 14pp higher (Asy_D04, Dec 2025).</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
@@ -445,7 +445,7 @@ function findingColor(verdict: string): string {
       <div style="margin-top: 1rem;">
         <ShareButton
           url={SITE_URL}
-          title="asylumstats - Follow YOUR money"
+          title="asylumstats — UK asylum data, hotel costs, ethnic projections by local authority"
           text={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. See the data: ${SITE_URL}`}
           compact
         />
@@ -472,8 +472,36 @@ function findingColor(verdict: string): string {
       })
       .catch(() => {});
 
+    // UK postcode regex (full or partial)
+    const postcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+    const partialPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d/i;
+    let postcodeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function slugify(name: string) {
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function showPostcodeResult(areaName: string, laCode: string, postcode: string) {
+      resultsContainer!.innerHTML = "";
+      resultsContainer!.hidden = false;
+      const matchedArea = areas.find((a) => a.areaCode === laCode);
+      const link = document.createElement("a");
+      link.href = `/places/${slugify(areaName)}/`;
+      link.className = "lookup-result";
+      const strong = document.createElement("strong");
+      strong.textContent = `${postcode.toUpperCase()} → ${areaName}`;
+      const span = document.createElement("span");
+      span.textContent = matchedArea
+        ? `${matchedArea.regionName} · ${matchedArea.supportedAsylum?.toLocaleString() || "?"} on support`
+        : "View demographic projections";
+      link.appendChild(strong);
+      link.appendChild(span);
+      resultsContainer!.appendChild(link);
+    }
+
     searchInput.addEventListener("input", () => {
-      const query = searchInput.value.trim().toLowerCase();
+      const query = searchInput.value.trim();
+      const queryLower = query.toLowerCase();
       resultsContainer.innerHTML = "";
 
       if (query.length < 2) {
@@ -481,8 +509,37 @@ function findingColor(verdict: string): string {
         return;
       }
 
+      // Check if input looks like a postcode
+      if (postcodeRegex.test(query) || (partialPostcodeRegex.test(query) && query.length >= 5)) {
+        resultsContainer.hidden = false;
+        resultsContainer.innerHTML = '<div class="lookup-result" style="opacity:0.5">Looking up postcode...</div>';
+
+        if (postcodeTimeout) clearTimeout(postcodeTimeout);
+        postcodeTimeout = setTimeout(() => {
+          const clean = query.replace(/\s+/g, "").toUpperCase();
+          fetch(`https://api.postcodes.io/postcodes/${clean}`)
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.status === 200 && data.result) {
+                const adminDistrict = data.result.admin_district;
+                const laCode = data.result.codes?.admin_district;
+                if (adminDistrict) {
+                  showPostcodeResult(adminDistrict, laCode, query);
+                }
+              } else {
+                resultsContainer.innerHTML = '<div class="lookup-result" style="opacity:0.5">Postcode not found — try an area name</div>';
+              }
+            })
+            .catch(() => {
+              resultsContainer.innerHTML = '<div class="lookup-result" style="opacity:0.5">Could not look up postcode</div>';
+            });
+        }, 300);
+        return;
+      }
+
+      // Standard area name search
       const matches = areas
-        .filter((a) => a.areaName.toLowerCase().includes(query))
+        .filter((a) => a.areaName.toLowerCase().includes(queryLower))
         .slice(0, 8);
 
       if (matches.length === 0) {
@@ -493,7 +550,7 @@ function findingColor(verdict: string): string {
       resultsContainer.hidden = false;
       for (const area of matches) {
         const link = document.createElement("a");
-        link.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
+        link.href = `/places/${slugify(area.areaName)}/`;
         link.className = "lookup-result";
         const strong = document.createElement("strong");
         strong.textContent = area.areaName;

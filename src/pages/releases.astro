@@ -6,7 +6,7 @@ import { buildAbsoluteUrl, buildReleaseCollectionStructuredData } from "../lib/s
 const latestRelease = releases[0];
 const pageDescription =
   "Release diary for asylumstats covering national data updates, local authority snapshots, and hotel evidence changes.";
-const pageStructuredData = buildReleaseCollectionStructuredData(releases, {
+const pageStructuredData = buildReleaseCollectionStructuredData(releases as any, {
   canonicalUrl: buildAbsoluteUrl("/releases/"),
   description: pageDescription,
   socialImageUrl: buildAbsoluteUrl("/og-card.png")

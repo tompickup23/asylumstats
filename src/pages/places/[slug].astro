@@ -466,12 +466,12 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         </p>
       </details>
 
-      {scenarioSummaries?.areas?.[area.areaCode] && (
+      {(scenarioSummaries as any)?.areas?.[area.areaCode] && (
         <ScenarioSelector
           areaCode={area.areaCode}
           areaName={area.areaName}
-          scenarioData={scenarioSummaries.areas[area.areaCode]}
-          centralScenario={scenarioSummaries.centralScenario}
+          scenarioData={(scenarioSummaries as any).areas[area.areaCode]}
+          centralScenario={(scenarioSummaries as any).centralScenario}
         />
       )}
     </section>
