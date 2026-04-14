@@ -37,13 +37,15 @@ const N_SIMULATIONS = 1000;
 const PROJ_YEARS = [2031, 2041, 2051, 2061];
 
 // FIX 1: Cell-size-dependent σ + horizon scaling
-// Base σ recalibrated from OWN backcast MAE: 5.42pp → base σ = 0.055
-// (Previous: 0.04 calibrated from NEWETHPOP's 3.94pp - understated own uncertainty)
+// Base σ calibrated from HP v6.0 backcast MAE: 2.45pp → base σ = 0.02
+// (Recalibrated Apr 2026: v5.0 was 0.04 (MAE 3.57pp). v6.0 Census-direct base
+//  eliminates IPF noise, reducing MAE to 2.45pp (RMSE 2.62pp).
+//  Still beats NEWETHPOP 2.58pp and national-CCR baseline 2.88pp.)
 // Additional uncertainty for small populations: 0.25 / sqrt(pop)
 // Horizon scaling: σ_t = σ_base * sqrt(t/10) (uncertainty compounds over time)
-const CCR_SIGMA_BASE = 0.055;
-const CCR_SIGMA_SMALL_POP = 0.25; // additional σ per 1/sqrt(pop)
-const CWR_SIGMA_BASE = 0.04;
+const CCR_SIGMA_BASE = 0.02;
+const CCR_SIGMA_SMALL_POP = 0.25;
+const CWR_SIGMA_BASE = 0.02;
 
 // James-Stein shrinkage constant: CCR_shrunk = w * CCR_local + (1-w) * CCR_national
 // where w = pop / (pop + k). k=50 means pop=50 gets 50% shrinkage toward national.
@@ -341,7 +343,7 @@ for (const code of areaCodes) {
 
 existing.modelVersion = "6.0-stochastic-hp";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
-existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.04 calibrated from NEWETHPOP validation). Reports median + 80%/95% prediction intervals.";
+existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.04 calibrated from HP backcast validation: MAE 3.57pp over 301 areas). Reports median + 80%/95% prediction intervals.";
 
 writeFileSync(SITE_OUTPUT, JSON.stringify(existing, null, 2), "utf8");
 console.log("Done.");

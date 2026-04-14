@@ -1,3329 +1,5501 @@
 {
-  "generatedAt": "2026-04-11T23:40:22.040Z",
-  "methodology": "Backcast validation: ran cohort-component model from Census 2011 base to predict 2021, then compared to Census 2021 actuals. Also compared NEWETHPOP's own 2021 prediction.",
+  "generatedAt": "2026-04-14T09:25:55.781Z",
+  "methodology": "Hamilton-Perry backcast: projected from Census 2011 base (NEWETHPOP, split from 12 to 20 groups using 2021 proportions) to 2021 using the same single-year CCR/CWR methodology as the forward model v6.0 (run_hp_single_year.mjs). 20 ethnic groups. No SNPP constraint (starts 2022). No DfE calibration (would be circular). Compared against Census 2021 actuals (direct observations from custom dataset). National-CCR baseline uses population-weighted average CCRs. NEWETHPOP comparison uses their own 2021 projection from their 2011 cohort-component model. NOTE: backcast is partially circular — CCRs derived from the same 2011→2021 endpoints being validated. The national-CCR baseline (which removes local information) is the better measure of genuine predictive ability.",
+  "models": {
+    "hp_local": "Hamilton-Perry with per-area CCRs (same as forward projection model)",
+    "hp_national": "Hamilton-Perry with national-average CCRs only (baseline)",
+    "newethpop": "NEWETHPOP cohort-component model (University of Leeds, Rees/Wohland et al.)"
+  },
   "summary": {
-    "areasCompared": 299,
-    "ourModel": {
-      "mae": 5.42,
-      "rmse": 7,
-      "overPredictWBCount": 145,
-      "underPredictWBCount": 154
+    "areasCompared": 269,
+    "hp_local": {
+      "mae": 2.45,
+      "rmse": 2.62,
+      "overPredictWBCount": 268,
+      "underPredictWBCount": 1,
+      "count": 269
+    },
+    "hp_national": {
+      "mae": 2.88,
+      "rmse": 3.67,
+      "overPredictWBCount": 256,
+      "underPredictWBCount": 13,
+      "count": 269
     },
     "newethpop": {
-      "mae": 3.94,
-      "rmse": 5.19
+      "mae": 2.58,
+      "rmse": 3.18,
+      "overPredictWBCount": 244,
+      "underPredictWBCount": 25,
+      "count": 269
     },
-    "comparison": {
-      "ourModelBetterInAreas": 119,
-      "newethpopBetterInAreas": 180,
-      "maeImprovement": -1.48,
-      "verdict": "NEWETHPOP (MAE 3.94pp) outperforms our model (MAE 5.42pp) by 1.48pp"
+    "localBetterCount": 120,
+    "nationalBetterCount": 149
+  },
+  "perGroupMetrics": {
+    "white_british": {
+      "hp_local": {
+        "mae": 2.45,
+        "rmse": 2.62
+      },
+      "hp_national": {
+        "mae": 2.88,
+        "rmse": 3.67
+      }
+    },
+    "white_other": {
+      "hp_local": {
+        "mae": 1.29,
+        "rmse": 1.46
+      },
+      "hp_national": {
+        "mae": 1.46,
+        "rmse": 1.78
+      }
+    },
+    "asian": {
+      "hp_local": {
+        "mae": 0.39,
+        "rmse": 0.48
+      },
+      "hp_national": {
+        "mae": 0.74,
+        "rmse": 1.3
+      }
+    },
+    "black": {
+      "hp_local": {
+        "mae": 0.31,
+        "rmse": 0.4
+      },
+      "hp_national": {
+        "mae": 0.51,
+        "rmse": 0.85
+      }
+    },
+    "mixed": {
+      "hp_local": {
+        "mae": 0.28,
+        "rmse": 0.33
+      },
+      "hp_national": {
+        "mae": 0.35,
+        "rmse": 0.44
+      }
+    },
+    "other": {
+      "hp_local": {
+        "mae": 0.44,
+        "rmse": 0.52
+      },
+      "hp_national": {
+        "mae": 0.39,
+        "rmse": 0.62
+      }
     }
   },
   "areas": {
     "E08000025": {
       "areaName": "Birmingham",
       "actualWB": 42.9,
-      "ourPredictedWB": 58.13,
-      "ourError": 15.23,
-      "newethpopPredictedWB": 50.8,
-      "newethpopError": 7.9,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 44.65,
+        "error": 1.75
+      },
+      "hp_national": {
+        "predictedWB": 47.19,
+        "error": 4.29
+      },
+      "newethpop": {
+        "predictedWB": 46.09,
+        "error": 3.19
+      },
+      "bestModel": "hp_local"
     },
     "E08000012": {
       "areaName": "Liverpool",
       "actualWB": 77.31,
-      "ourPredictedWB": 85.87,
-      "ourError": 8.56,
-      "newethpopPredictedWB": 82.99,
-      "newethpopError": 5.68,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 79.95,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 81.67,
+        "error": 4.36
+      },
+      "newethpop": {
+        "predictedWB": 80.36,
+        "error": 3.05
+      },
+      "bestModel": "hp_local"
     },
     "E09000017": {
       "areaName": "Hillingdon",
       "actualWB": 37.06,
-      "ourPredictedWB": 54.69,
-      "ourError": 17.63,
-      "newethpopPredictedWB": 44.1,
-      "newethpopError": 7.04,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 39.15,
+        "error": 2.09
+      },
+      "hp_national": {
+        "predictedWB": 45.96,
+        "error": 8.9
+      },
+      "newethpop": {
+        "predictedWB": 40.26,
+        "error": 3.2
+      },
+      "bestModel": "hp_local"
     },
     "E08000003": {
       "areaName": "Manchester",
       "actualWB": 48.66,
-      "ourPredictedWB": 64.27,
-      "ourError": 15.61,
-      "newethpopPredictedWB": 56.4,
-      "newethpopError": 7.74,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 50.84,
+        "error": 2.18
+      },
+      "hp_national": {
+        "predictedWB": 54.18,
+        "error": 5.52
+      },
+      "newethpop": {
+        "predictedWB": 51.12,
+        "error": 2.46
+      },
+      "bestModel": "hp_local"
     },
     "E08000035": {
       "areaName": "Leeds",
       "actualWB": 73.37,
-      "ourPredictedWB": 82.88,
-      "ourError": 9.51,
-      "newethpopPredictedWB": 80.88,
-      "newethpopError": 7.51,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 75.11,
+        "error": 1.74
+      },
+      "hp_national": {
+        "predictedWB": 76.74,
+        "error": 3.37
+      },
+      "newethpop": {
+        "predictedWB": 78.03,
+        "error": 4.66
+      },
+      "bestModel": "hp_local"
     },
     "E09000018": {
       "areaName": "Hounslow",
-      "actualWB": 28.43,
-      "ourPredictedWB": 39.08,
-      "ourError": 10.65,
-      "newethpopPredictedWB": 34.01,
-      "newethpopError": 5.58,
-      "ourBetter": false
+      "actualWB": 28.44,
+      "hp_local": {
+        "predictedWB": 29.79,
+        "error": 1.35
+      },
+      "hp_national": {
+        "predictedWB": 32.64,
+        "error": 4.2
+      },
+      "newethpop": {
+        "predictedWB": 31.88,
+        "error": 3.44
+      },
+      "bestModel": "hp_local"
     },
     "E08000026": {
       "areaName": "Coventry",
       "actualWB": 55.28,
-      "ourPredictedWB": 69.25,
-      "ourError": 13.97,
-      "newethpopPredictedWB": 62.4,
-      "newethpopError": 7.12,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 58.41,
+        "error": 3.13
+      },
+      "hp_national": {
+        "predictedWB": 60.95,
+        "error": 5.67
+      },
+      "newethpop": {
+        "predictedWB": 58.14,
+        "error": 2.86
+      },
+      "bestModel": "hp_local"
     },
     "E06000018": {
       "areaName": "Nottingham",
-      "actualWB": 57.34,
-      "ourPredictedWB": 67.76,
-      "ourError": 10.42,
-      "newethpopPredictedWB": 61.5,
-      "newethpopError": 4.16,
-      "ourBetter": false
+      "actualWB": 57.35,
+      "hp_local": {
+        "predictedWB": 59.63,
+        "error": 2.28
+      },
+      "hp_national": {
+        "predictedWB": 59.46,
+        "error": 2.11
+      },
+      "newethpop": {
+        "predictedWB": 56.46,
+        "error": -0.89
+      },
+      "bestModel": "hp_national"
     },
     "E08000028": {
       "areaName": "Sandwell",
-      "actualWB": 52.05,
-      "ourPredictedWB": 66.98,
-      "ourError": 14.93,
-      "newethpopPredictedWB": 61.33,
-      "newethpopError": 9.28,
-      "ourBetter": false
+      "actualWB": 52.06,
+      "hp_local": {
+        "predictedWB": 53.79,
+        "error": 1.73
+      },
+      "hp_national": {
+        "predictedWB": 58.9,
+        "error": 6.84
+      },
+      "newethpop": {
+        "predictedWB": 57.31,
+        "error": 5.25
+      },
+      "bestModel": "hp_local"
     },
     "E06000016": {
       "areaName": "Leicester",
       "actualWB": 33.21,
-      "ourPredictedWB": 45.71,
-      "ourError": 12.5,
-      "newethpopPredictedWB": 39.67,
-      "newethpopError": 6.46,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 34.52,
+        "error": 1.31
+      },
+      "hp_national": {
+        "predictedWB": 38.62,
+        "error": 5.41
+      },
+      "newethpop": {
+        "predictedWB": 36.69,
+        "error": 3.48
+      },
+      "bestModel": "hp_local"
     },
     "E09000008": {
       "areaName": "Croydon",
-      "actualWB": 37.44,
-      "ourPredictedWB": 57.26,
-      "ourError": 19.82,
-      "newethpopPredictedWB": 49.28,
-      "newethpopError": 11.84,
-      "ourBetter": false
-    },
-    "W06000015": {
-      "areaName": "Cardiff",
-      "actualWB": 73.56,
-      "ourPredictedWB": 79.65,
-      "ourError": 6.09,
-      "newethpopPredictedWB": 77.47,
-      "newethpopError": 3.91,
-      "ourBetter": false
+      "actualWB": 37.43,
+      "hp_local": {
+        "predictedWB": 38.88,
+        "error": 1.45
+      },
+      "hp_national": {
+        "predictedWB": 41.78,
+        "error": 4.35
+      },
+      "newethpop": {
+        "predictedWB": 38.16,
+        "error": 0.73
+      },
+      "bestModel": "hp_local"
     },
     "E09000003": {
       "areaName": "Barnet",
       "actualWB": 36.16,
-      "ourPredictedWB": 48.12,
-      "ourError": 11.96,
-      "newethpopPredictedWB": 43.35,
-      "newethpopError": 7.19,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 37.99,
+        "error": 1.83
+      },
+      "hp_national": {
+        "predictedWB": 39.08,
+        "error": 2.92
+      },
+      "newethpop": {
+        "predictedWB": 39.57,
+        "error": 3.41
+      },
+      "bestModel": "hp_local"
     },
     "E08000032": {
       "areaName": "Bradford",
-      "actualWB": 56.72,
-      "ourPredictedWB": 62.71,
-      "ourError": 5.99,
-      "newethpopPredictedWB": 56.97,
-      "newethpopError": 0.25,
-      "ourBetter": false
+      "actualWB": 56.71,
+      "hp_local": {
+        "predictedWB": 57.88,
+        "error": 1.17
+      },
+      "hp_national": {
+        "predictedWB": 55.91,
+        "error": -0.8
+      },
+      "newethpop": {
+        "predictedWB": 55.78,
+        "error": -0.93
+      },
+      "bestModel": "hp_national"
     },
     "E08000031": {
       "areaName": "Wolverhampton",
-      "actualWB": 54.72,
-      "ourPredictedWB": 65.86,
-      "ourError": 11.14,
-      "newethpopPredictedWB": 62.5,
-      "newethpopError": 7.78,
-      "ourBetter": false
+      "actualWB": 54.7,
+      "hp_local": {
+        "predictedWB": 56.02,
+        "error": 1.32
+      },
+      "hp_national": {
+        "predictedWB": 57.7,
+        "error": 3
+      },
+      "newethpop": {
+        "predictedWB": 58.12,
+        "error": 3.42
+      },
+      "bestModel": "hp_local"
     },
     "E06000021": {
       "areaName": "Stoke-on-Trent",
       "actualWB": 78.53,
-      "ourPredictedWB": 84.13,
-      "ourError": 5.6,
-      "newethpopPredictedWB": 84.57,
-      "newethpopError": 6.04,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 80.65,
+        "error": 2.12
+      },
+      "hp_national": {
+        "predictedWB": 82.46,
+        "error": 3.93
+      },
+      "newethpop": {
+        "predictedWB": 83.24,
+        "error": 4.71
+      },
+      "bestModel": "hp_local"
     },
     "E09000009": {
       "areaName": "Ealing",
       "actualWB": 24.32,
-      "ourPredictedWB": 34.48,
-      "ourError": 10.16,
-      "newethpopPredictedWB": 31.08,
-      "newethpopError": 6.76,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 25.63,
+        "error": 1.31
+      },
+      "hp_national": {
+        "predictedWB": 26.8,
+        "error": 2.48
+      },
+      "newethpop": {
+        "predictedWB": 28.04,
+        "error": 3.72
+      },
+      "bestModel": "hp_local"
     },
     "E06000015": {
       "areaName": "Derby",
-      "actualWB": 66.22,
-      "ourPredictedWB": 74.54,
-      "ourError": 8.32,
-      "newethpopPredictedWB": 73.49,
-      "newethpopError": 7.27,
-      "ourBetter": false
+      "actualWB": 66.23,
+      "hp_local": {
+        "predictedWB": 68.26,
+        "error": 2.03
+      },
+      "hp_national": {
+        "predictedWB": 69.66,
+        "error": 3.43
+      },
+      "newethpop": {
+        "predictedWB": 71.17,
+        "error": 4.94
+      },
+      "bestModel": "hp_local"
     },
     "E08000010": {
       "areaName": "Wigan",
-      "actualWB": 91.85,
-      "ourPredictedWB": 93.57,
-      "ourError": 1.72,
-      "newethpopPredictedWB": 94.64,
-      "newethpopError": 2.79,
-      "ourBetter": true
+      "actualWB": 91.86,
+      "hp_local": {
+        "predictedWB": 93.73,
+        "error": 1.87
+      },
+      "hp_national": {
+        "predictedWB": 94.5,
+        "error": 2.64
+      },
+      "newethpop": {
+        "predictedWB": 94,
+        "error": 2.14
+      },
+      "bestModel": "hp_local"
     },
     "E09000025": {
       "areaName": "Newham",
       "actualWB": 14.76,
-      "ourPredictedWB": 19.74,
-      "ourError": 4.98,
-      "newethpopPredictedWB": 14.05,
-      "newethpopError": -0.71,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 15.18,
+        "error": 0.42
+      },
+      "hp_national": {
+        "predictedWB": 13.07,
+        "error": -1.69
+      },
+      "newethpop": {
+        "predictedWB": 11.59,
+        "error": -3.17
+      },
+      "bestModel": "hp_local"
     },
     "E08000021": {
       "areaName": "Newcastle upon Tyne",
       "actualWB": 74.49,
-      "ourPredictedWB": 80.28,
-      "ourError": 5.79,
-      "newethpopPredictedWB": 76.9,
-      "newethpopError": 2.41,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 76.93,
+        "error": 2.44
+      },
+      "hp_national": {
+        "predictedWB": 77.21,
+        "error": 2.72
+      },
+      "newethpop": {
+        "predictedWB": 75.26,
+        "error": 0.77
+      },
+      "bestModel": "hp_local"
     },
     "E06000023": {
       "areaName": "Bristol, City of",
-      "actualWB": 71.64,
-      "ourPredictedWB": 80.79,
-      "ourError": 9.15,
-      "newethpopPredictedWB": 77.7,
-      "newethpopError": 6.06,
-      "ourBetter": false
+      "actualWB": 71.63,
+      "hp_local": {
+        "predictedWB": 73.68,
+        "error": 2.05
+      },
+      "hp_national": {
+        "predictedWB": 73.22,
+        "error": 1.59
+      },
+      "newethpop": {
+        "predictedWB": 72.64,
+        "error": 1.01
+      },
+      "bestModel": "hp_national"
     },
     "E08000001": {
       "areaName": "Bolton",
       "actualWB": 68.75,
-      "ourPredictedWB": 77.76,
-      "ourError": 9.01,
-      "newethpopPredictedWB": 76.62,
-      "newethpopError": 7.87,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 70.85,
+        "error": 2.1
+      },
+      "hp_national": {
+        "predictedWB": 74.34,
+        "error": 5.59
+      },
+      "newethpop": {
+        "predictedWB": 74.79,
+        "error": 6.04
+      },
+      "bestModel": "hp_local"
     },
     "E09000005": {
       "areaName": "Brent",
-      "actualWB": 15.19,
-      "ourPredictedWB": 24.53,
-      "ourError": 9.34,
-      "newethpopPredictedWB": 23.21,
-      "newethpopError": 8.02,
-      "ourBetter": false
+      "actualWB": 15.18,
+      "hp_local": {
+        "predictedWB": 16.09,
+        "error": 0.91
+      },
+      "hp_national": {
+        "predictedWB": 17.06,
+        "error": 1.88
+      },
+      "newethpop": {
+        "predictedWB": 19.19,
+        "error": 4.01
+      },
+      "bestModel": "hp_local"
     },
     "E08000007": {
       "areaName": "Stockport",
       "actualWB": 83.4,
-      "ourPredictedWB": 87.55,
-      "ourError": 4.15,
-      "newethpopPredictedWB": 88.35,
-      "newethpopError": 4.95,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 86.04,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 87.13,
+        "error": 3.73
+      },
+      "newethpop": {
+        "predictedWB": 87.65,
+        "error": 4.25
+      },
+      "bestModel": "hp_local"
     },
     "E06000004": {
       "areaName": "Stockton-on-Tees",
-      "actualWB": 90.3,
-      "ourPredictedWB": 89.71,
-      "ourError": -0.59,
-      "newethpopPredictedWB": 91.94,
-      "newethpopError": 1.64,
-      "ourBetter": true
+      "actualWB": 90.32,
+      "hp_local": {
+        "predictedWB": 91.88,
+        "error": 1.56
+      },
+      "hp_national": {
+        "predictedWB": 91.61,
+        "error": 1.29
+      },
+      "newethpop": {
+        "predictedWB": 91.12,
+        "error": 0.8
+      },
+      "bestModel": "hp_national"
     },
     "E08000024": {
       "areaName": "Sunderland",
-      "actualWB": 92.88,
-      "ourPredictedWB": 92.12,
-      "ourError": -0.76,
-      "newethpopPredictedWB": 94.13,
-      "newethpopError": 1.25,
-      "ourBetter": true
+      "actualWB": 92.89,
+      "hp_local": {
+        "predictedWB": 93.96,
+        "error": 1.07
+      },
+      "hp_national": {
+        "predictedWB": 93.22,
+        "error": 0.33
+      },
+      "newethpop": {
+        "predictedWB": 93.53,
+        "error": 0.64
+      },
+      "bestModel": "hp_national"
     },
     "E08000004": {
       "areaName": "Oldham",
-      "actualWB": 65.23,
-      "ourPredictedWB": 72.92,
-      "ourError": 7.69,
-      "newethpopPredictedWB": 70.39,
-      "newethpopError": 5.16,
-      "ourBetter": false
+      "actualWB": 65.24,
+      "hp_local": {
+        "predictedWB": 67.89,
+        "error": 2.65
+      },
+      "hp_national": {
+        "predictedWB": 69.54,
+        "error": 4.3
+      },
+      "newethpop": {
+        "predictedWB": 69.52,
+        "error": 4.28
+      },
+      "bestModel": "hp_local"
     },
     "E08000015": {
       "areaName": "Wirral",
       "actualWB": 92.43,
-      "ourPredictedWB": 93.09,
-      "ourError": 0.66,
-      "newethpopPredictedWB": 94.31,
-      "newethpopError": 1.88,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 94.31,
+        "error": 1.88
+      },
+      "hp_national": {
+        "predictedWB": 94.32,
+        "error": 1.89
+      },
+      "newethpop": {
+        "predictedWB": 94.1,
+        "error": 1.67
+      },
+      "bestModel": "hp_local"
     },
     "E06000010": {
       "areaName": "Kingston upon Hull, City of",
-      "actualWB": 83.88,
-      "ourPredictedWB": 87.13,
-      "ourError": 3.25,
-      "newethpopPredictedWB": 86.99,
-      "newethpopError": 3.11,
-      "ourBetter": false
+      "actualWB": 83.89,
+      "hp_local": {
+        "predictedWB": 85.67,
+        "error": 1.78
+      },
+      "hp_national": {
+        "predictedWB": 86.05,
+        "error": 2.16
+      },
+      "newethpop": {
+        "predictedWB": 85.64,
+        "error": 1.75
+      },
+      "bestModel": "hp_local"
     },
     "E06000008": {
       "areaName": "Blackburn with Darwen",
-      "actualWB": 56.87,
-      "ourPredictedWB": 62.36,
-      "ourError": 5.49,
-      "newethpopPredictedWB": 59.66,
-      "newethpopError": 2.79,
-      "ourBetter": false
+      "actualWB": 56.88,
+      "hp_local": {
+        "predictedWB": 58.54,
+        "error": 1.66
+      },
+      "hp_national": {
+        "predictedWB": 59.41,
+        "error": 2.53
+      },
+      "newethpop": {
+        "predictedWB": 59.26,
+        "error": 2.38
+      },
+      "bestModel": "hp_local"
     },
     "E06000044": {
       "areaName": "Portsmouth",
-      "actualWB": 77.72,
-      "ourPredictedWB": 81.43,
-      "ourError": 3.71,
-      "newethpopPredictedWB": 79.46,
-      "newethpopError": 1.74,
-      "ourBetter": false
+      "actualWB": 77.71,
+      "hp_local": {
+        "predictedWB": 80.33,
+        "error": 2.62
+      },
+      "hp_national": {
+        "predictedWB": 79.34,
+        "error": 1.63
+      },
+      "newethpop": {
+        "predictedWB": 77.38,
+        "error": -0.33
+      },
+      "bestModel": "hp_national"
     },
     "E06000038": {
       "areaName": "Reading",
-      "actualWB": 53.48,
-      "ourPredictedWB": 65.89,
-      "ourError": 12.41,
-      "newethpopPredictedWB": 63.67,
-      "newethpopError": 10.19,
-      "ourBetter": false
+      "actualWB": 53.47,
+      "hp_local": {
+        "predictedWB": 56.4,
+        "error": 2.93
+      },
+      "hp_national": {
+        "predictedWB": 59.81,
+        "error": 6.34
+      },
+      "newethpop": {
+        "predictedWB": 58.82,
+        "error": 5.35
+      },
+      "bestModel": "hp_local"
     },
     "E08000034": {
       "areaName": "Kirklees",
-      "actualWB": 70.54,
-      "ourPredictedWB": 75.91,
-      "ourError": 5.37,
-      "newethpopPredictedWB": 72.54,
-      "newethpopError": 2,
-      "ourBetter": false
+      "actualWB": 70.53,
+      "hp_local": {
+        "predictedWB": 71.88,
+        "error": 1.35
+      },
+      "hp_national": {
+        "predictedWB": 71.04,
+        "error": 0.51
+      },
+      "newethpop": {
+        "predictedWB": 71.18,
+        "error": 0.65
+      },
+      "bestModel": "hp_national"
     },
     "E08000005": {
       "areaName": "Rochdale",
-      "actualWB": 70.01,
-      "ourPredictedWB": 76.35,
-      "ourError": 6.34,
-      "newethpopPredictedWB": 75.11,
-      "newethpopError": 5.1,
-      "ourBetter": false
+      "actualWB": 70.03,
+      "hp_local": {
+        "predictedWB": 72.4,
+        "error": 2.37
+      },
+      "hp_national": {
+        "predictedWB": 73.89,
+        "error": 3.86
+      },
+      "newethpop": {
+        "predictedWB": 73.85,
+        "error": 3.82
+      },
+      "bestModel": "hp_local"
     },
     "E08000027": {
       "areaName": "Dudley",
       "actualWB": 82.4,
-      "ourPredictedWB": 87.17,
-      "ourError": 4.77,
-      "newethpopPredictedWB": 87.34,
-      "newethpopError": 4.94,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 83.93,
+        "error": 1.53
+      },
+      "hp_national": {
+        "predictedWB": 85.23,
+        "error": 2.83
+      },
+      "newethpop": {
+        "predictedWB": 85.9,
+        "error": 3.5
+      },
+      "bestModel": "hp_local"
     },
     "E08000036": {
       "areaName": "Wakefield",
       "actualWB": 88.19,
-      "ourPredictedWB": 90.85,
-      "ourError": 2.66,
-      "newethpopPredictedWB": 91.56,
-      "newethpopError": 3.37,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 89.68,
+        "error": 1.49
+      },
+      "hp_national": {
+        "predictedWB": 90.41,
+        "error": 2.22
+      },
+      "newethpop": {
+        "predictedWB": 90.73,
+        "error": 2.54
+      },
+      "bestModel": "hp_local"
     },
     "E06000032": {
       "areaName": "Luton",
-      "actualWB": 31.76,
-      "ourPredictedWB": 48.49,
-      "ourError": 16.73,
-      "newethpopPredictedWB": 39.57,
-      "newethpopError": 7.81,
-      "ourBetter": false
+      "actualWB": 31.75,
+      "hp_local": {
+        "predictedWB": 34.14,
+        "error": 2.39
+      },
+      "hp_national": {
+        "predictedWB": 39.43,
+        "error": 7.68
+      },
+      "newethpop": {
+        "predictedWB": 35.18,
+        "error": 3.43
+      },
+      "bestModel": "hp_local"
     },
     "E06000020": {
       "areaName": "Telford and Wrekin",
-      "actualWB": 82.97,
-      "ourPredictedWB": 85.7,
-      "ourError": 2.73,
-      "newethpopPredictedWB": 88.45,
-      "newethpopError": 5.48,
-      "ourBetter": true
+      "actualWB": 82.95,
+      "hp_local": {
+        "predictedWB": 85.41,
+        "error": 2.46
+      },
+      "hp_national": {
+        "predictedWB": 86.82,
+        "error": 3.87
+      },
+      "newethpop": {
+        "predictedWB": 87.54,
+        "error": 4.59
+      },
+      "bestModel": "hp_local"
     },
     "E08000006": {
       "areaName": "Salford",
-      "actualWB": 73.95,
-      "ourPredictedWB": 83.85,
-      "ourError": 9.9,
-      "newethpopPredictedWB": 82.64,
-      "newethpopError": 8.69,
-      "ourBetter": false
-    },
-    "W06000011": {
-      "areaName": "Swansea",
-      "actualWB": 87.51,
-      "ourPredictedWB": 88.73,
-      "ourError": 1.22,
-      "newethpopPredictedWB": 89.85,
-      "newethpopError": 2.34,
-      "ourBetter": true
+      "actualWB": 73.96,
+      "hp_local": {
+        "predictedWB": 77,
+        "error": 3.04
+      },
+      "hp_national": {
+        "predictedWB": 80.45,
+        "error": 6.49
+      },
+      "newethpop": {
+        "predictedWB": 79.4,
+        "error": 5.44
+      },
+      "bestModel": "hp_local"
     },
     "E06000002": {
       "areaName": "Middlesbrough",
-      "actualWB": 79.5,
-      "ourPredictedWB": 81.47,
-      "ourError": 1.97,
-      "newethpopPredictedWB": 82.54,
-      "newethpopError": 3.04,
-      "ourBetter": true
+      "actualWB": 79.52,
+      "hp_local": {
+        "predictedWB": 82.08,
+        "error": 2.56
+      },
+      "hp_national": {
+        "predictedWB": 81.92,
+        "error": 2.4
+      },
+      "newethpop": {
+        "predictedWB": 81.16,
+        "error": 1.64
+      },
+      "bestModel": "hp_national"
     },
     "E07000067": {
       "areaName": "Braintree",
       "actualWB": 90.35,
-      "ourPredictedWB": 88.71,
-      "ourError": -1.64,
-      "newethpopPredictedWB": 92.05,
-      "newethpopError": 1.7,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 92.5,
+        "error": 2.15
+      },
+      "hp_national": {
+        "predictedWB": 91.83,
+        "error": 1.48
+      },
+      "newethpop": {
+        "predictedWB": 91.4,
+        "error": 1.05
+      },
+      "bestModel": "hp_national"
     },
     "E08000030": {
       "areaName": "Walsall",
       "actualWB": 67.41,
-      "ourPredictedWB": 75.53,
-      "ourError": 8.12,
-      "newethpopPredictedWB": 72.06,
-      "newethpopError": 4.65,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 69.05,
+        "error": 1.64
+      },
+      "hp_national": {
+        "predictedWB": 71.3,
+        "error": 3.89
+      },
+      "newethpop": {
+        "predictedWB": 70.09,
+        "error": 2.68
+      },
+      "bestModel": "hp_local"
     },
     "E08000013": {
       "areaName": "St Helens",
-      "actualWB": 93.61,
-      "ourPredictedWB": 92.39,
-      "ourError": -1.22,
-      "newethpopPredictedWB": 96.68,
-      "newethpopError": 3.07,
-      "ourBetter": true
+      "actualWB": 93.62,
+      "hp_local": {
+        "predictedWB": 95.93,
+        "error": 2.31
+      },
+      "hp_national": {
+        "predictedWB": 96.11,
+        "error": 2.49
+      },
+      "newethpop": {
+        "predictedWB": 96.48,
+        "error": 2.86
+      },
+      "bestModel": "hp_local"
     },
     "E06000050": {
       "areaName": "Cheshire West and Chester",
       "actualWB": 91.17,
-      "ourPredictedWB": 92.79,
-      "ourError": 1.62,
-      "newethpopPredictedWB": 94.41,
-      "newethpopError": 3.24,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 93.29,
+        "error": 2.12
+      },
+      "hp_national": {
+        "predictedWB": 93.66,
+        "error": 2.49
+      },
+      "newethpop": {
+        "predictedWB": 94.04,
+        "error": 2.87
+      },
+      "bestModel": "hp_local"
     },
     "E08000017": {
       "areaName": "Doncaster",
       "actualWB": 86.62,
-      "ourPredictedWB": 89.86,
-      "ourError": 3.24,
-      "newethpopPredictedWB": 90.1,
-      "newethpopError": 3.48,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 88.54,
+        "error": 1.92
+      },
+      "hp_national": {
+        "predictedWB": 89.56,
+        "error": 2.94
+      },
+      "newethpop": {
+        "predictedWB": 89.49,
+        "error": 2.87
+      },
+      "bestModel": "hp_local"
     },
     "E08000023": {
       "areaName": "South Tyneside",
       "actualWB": 93,
-      "ourPredictedWB": 89.8,
-      "ourError": -3.2,
-      "newethpopPredictedWB": 94.02,
-      "newethpopError": 1.02,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 94.47,
+        "error": 1.47
+      },
+      "hp_national": {
+        "predictedWB": 93.24,
+        "error": 0.24
+      },
+      "newethpop": {
+        "predictedWB": 93.65,
+        "error": 0.65
+      },
+      "bestModel": "hp_national"
     },
     "E08000033": {
       "areaName": "Calderdale",
-      "actualWB": 82.75,
-      "ourPredictedWB": 83.56,
-      "ourError": 0.81,
-      "newethpopPredictedWB": 84.85,
-      "newethpopError": 2.1,
-      "ourBetter": true
+      "actualWB": 82.77,
+      "hp_local": {
+        "predictedWB": 84.67,
+        "error": 1.9
+      },
+      "hp_national": {
+        "predictedWB": 83.51,
+        "error": 0.74
+      },
+      "newethpop": {
+        "predictedWB": 84.34,
+        "error": 1.57
+      },
+      "bestModel": "hp_national"
     },
     "E06000006": {
       "areaName": "Halton",
-      "actualWB": 93.64,
-      "ourPredictedWB": 90.56,
-      "ourError": -3.08,
-      "newethpopPredictedWB": 94.67,
-      "newethpopError": 1.03,
-      "ourBetter": false
+      "actualWB": 93.63,
+      "hp_local": {
+        "predictedWB": 96.02,
+        "error": 2.39
+      },
+      "hp_national": {
+        "predictedWB": 95.97,
+        "error": 2.34
+      },
+      "newethpop": {
+        "predictedWB": 94.4,
+        "error": 0.77
+      },
+      "bestModel": "hp_national"
     },
     "E09000012": {
       "areaName": "Hackney",
       "actualWB": 33.93,
-      "ourPredictedWB": 45.37,
-      "ourError": 11.44,
-      "newethpopPredictedWB": 46.8,
-      "newethpopError": 12.87,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 35.3,
+        "error": 1.37
+      },
+      "hp_national": {
+        "predictedWB": 32.07,
+        "error": -1.86
+      },
+      "newethpop": {
+        "predictedWB": 37.31,
+        "error": 3.38
+      },
+      "bestModel": "hp_local"
     },
     "E06000009": {
       "areaName": "Blackpool",
       "actualWB": 90.36,
-      "ourPredictedWB": 88.78,
-      "ourError": -1.58,
-      "newethpopPredictedWB": 94.15,
-      "newethpopError": 3.79,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 92.76,
+        "error": 2.4
+      },
+      "hp_national": {
+        "predictedWB": 92.49,
+        "error": 2.13
+      },
+      "newethpop": {
+        "predictedWB": 93.53,
+        "error": 3.17
+      },
+      "bestModel": "hp_national"
     },
     "E06000047": {
       "areaName": "County Durham",
-      "actualWB": 94.75,
-      "ourPredictedWB": 95.1,
-      "ourError": 0.35,
-      "newethpopPredictedWB": 95.05,
-      "newethpopError": 0.3,
-      "ourBetter": false
+      "actualWB": 94.74,
+      "hp_local": {
+        "predictedWB": 96.03,
+        "error": 1.29
+      },
+      "hp_national": {
+        "predictedWB": 95.58,
+        "error": 0.84
+      },
+      "newethpop": {
+        "predictedWB": 94.83,
+        "error": 0.09
+      },
+      "bestModel": "hp_national"
     },
     "E07000220": {
       "areaName": "Rugby",
       "actualWB": 74.92,
-      "ourPredictedWB": 79.01,
-      "ourError": 4.09,
-      "newethpopPredictedWB": 81.93,
-      "newethpopError": 7.01,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 78.74,
+        "error": 3.82
+      },
+      "hp_national": {
+        "predictedWB": 80.67,
+        "error": 5.75
+      },
+      "newethpop": {
+        "predictedWB": 79.94,
+        "error": 5.02
+      },
+      "bestModel": "hp_local"
     },
     "E06000030": {
       "areaName": "Swindon",
-      "actualWB": 74.22,
-      "ourPredictedWB": 82.22,
-      "ourError": 8,
-      "newethpopPredictedWB": 82.4,
-      "newethpopError": 8.18,
-      "ourBetter": true
+      "actualWB": 74.21,
+      "hp_local": {
+        "predictedWB": 76.85,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 81.6,
+        "error": 7.39
+      },
+      "newethpop": {
+        "predictedWB": 80.99,
+        "error": 6.78
+      },
+      "bestModel": "hp_local"
     },
     "E09000028": {
       "areaName": "Southwark",
-      "actualWB": 35.51,
-      "ourPredictedWB": 52.77,
-      "ourError": 17.26,
-      "newethpopPredictedWB": 49.41,
-      "newethpopError": 13.9,
-      "ourBetter": false
+      "actualWB": 35.52,
+      "hp_local": {
+        "predictedWB": 37.3,
+        "error": 1.78
+      },
+      "hp_national": {
+        "predictedWB": 35.24,
+        "error": -0.28
+      },
+      "newethpop": {
+        "predictedWB": 37.73,
+        "error": 2.21
+      },
+      "bestModel": "hp_national"
     },
     "E06000026": {
       "areaName": "Plymouth",
-      "actualWB": 89.46,
-      "ourPredictedWB": 90.31,
-      "ourError": 0.85,
-      "newethpopPredictedWB": 91.03,
-      "newethpopError": 1.57,
-      "ourBetter": true
+      "actualWB": 89.47,
+      "hp_local": {
+        "predictedWB": 91.21,
+        "error": 1.74
+      },
+      "hp_national": {
+        "predictedWB": 90.73,
+        "error": 1.26
+      },
+      "newethpop": {
+        "predictedWB": 90.25,
+        "error": 0.78
+      },
+      "bestModel": "hp_national"
     },
     "E09000026": {
       "areaName": "Redbridge",
-      "actualWB": 23.16,
-      "ourPredictedWB": 36.2,
-      "ourError": 13.04,
-      "newethpopPredictedWB": 26.6,
-      "newethpopError": 3.44,
-      "ourBetter": false
+      "actualWB": 23.15,
+      "hp_local": {
+        "predictedWB": 24.45,
+        "error": 1.3
+      },
+      "hp_national": {
+        "predictedWB": 27.94,
+        "error": 4.79
+      },
+      "newethpop": {
+        "predictedWB": 24.38,
+        "error": 1.23
+      },
+      "bestModel": "hp_local"
     },
     "E06000031": {
       "areaName": "Peterborough",
-      "actualWB": 59.51,
-      "ourPredictedWB": 68.41,
-      "ourError": 8.9,
-      "newethpopPredictedWB": 66.63,
-      "newethpopError": 7.12,
-      "ourBetter": false
+      "actualWB": 59.52,
+      "hp_local": {
+        "predictedWB": 62.02,
+        "error": 2.5
+      },
+      "hp_national": {
+        "predictedWB": 64.1,
+        "error": 4.58
+      },
+      "newethpop": {
+        "predictedWB": 64.88,
+        "error": 5.36
+      },
+      "bestModel": "hp_local"
     },
     "E08000008": {
       "areaName": "Tameside",
       "actualWB": 82.36,
-      "ourPredictedWB": 85.76,
-      "ourError": 3.4,
-      "newethpopPredictedWB": 87.11,
-      "newethpopError": 4.75,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 84.73,
+        "error": 2.37
+      },
+      "hp_national": {
+        "predictedWB": 85.92,
+        "error": 3.56
+      },
+      "newethpop": {
+        "predictedWB": 86.24,
+        "error": 3.88
+      },
+      "bestModel": "hp_local"
     },
     "E09000030": {
       "areaName": "Tower Hamlets",
       "actualWB": 22.94,
-      "ourPredictedWB": 32.07,
-      "ourError": 9.13,
-      "newethpopPredictedWB": 29.61,
-      "newethpopError": 6.67,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 25.15,
+        "error": 2.21
+      },
+      "hp_national": {
+        "predictedWB": 26.66,
+        "error": 3.72
+      },
+      "newethpop": {
+        "predictedWB": 27.79,
+        "error": 4.85
+      },
+      "bestModel": "hp_local"
     },
     "E06000049": {
       "areaName": "Cheshire East",
       "actualWB": 89.61,
-      "ourPredictedWB": 91.88,
-      "ourError": 2.27,
-      "newethpopPredictedWB": 93.25,
-      "newethpopError": 3.64,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 91.58,
+        "error": 1.97
+      },
+      "hp_national": {
+        "predictedWB": 91.94,
+        "error": 2.33
+      },
+      "newethpop": {
+        "predictedWB": 92.75,
+        "error": 3.14
+      },
+      "bestModel": "hp_local"
     },
     "E07000096": {
       "areaName": "Dacorum",
       "actualWB": 78.74,
-      "ourPredictedWB": 83.24,
-      "ourError": 4.5,
-      "newethpopPredictedWB": 84.47,
-      "newethpopError": 5.73,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 82.41,
+        "error": 3.67
+      },
+      "hp_national": {
+        "predictedWB": 83.63,
+        "error": 4.89
+      },
+      "newethpop": {
+        "predictedWB": 81.94,
+        "error": 3.2
+      },
+      "bestModel": "hp_local"
     },
     "E07000117": {
       "areaName": "Burnley",
-      "actualWB": 77.92,
-      "ourPredictedWB": 77.64,
-      "ourError": -0.28,
-      "newethpopPredictedWB": 81.58,
-      "newethpopError": 3.66,
-      "ourBetter": true
+      "actualWB": 77.9,
+      "hp_local": {
+        "predictedWB": 80.96,
+        "error": 3.06
+      },
+      "hp_national": {
+        "predictedWB": 81.63,
+        "error": 3.73
+      },
+      "newethpop": {
+        "predictedWB": 81.15,
+        "error": 3.25
+      },
+      "bestModel": "hp_local"
     },
     "E06000007": {
       "areaName": "Warrington",
-      "actualWB": 88.13,
-      "ourPredictedWB": 89.53,
-      "ourError": 1.4,
-      "newethpopPredictedWB": 91.98,
-      "newethpopError": 3.85,
-      "ourBetter": true
+      "actualWB": 88.15,
+      "hp_local": {
+        "predictedWB": 90.65,
+        "error": 2.5
+      },
+      "hp_national": {
+        "predictedWB": 91.45,
+        "error": 3.3
+      },
+      "newethpop": {
+        "predictedWB": 91.55,
+        "error": 3.4
+      },
+      "bestModel": "hp_local"
     },
     "E07000228": {
       "areaName": "Mid Sussex",
-      "actualWB": 85.85,
-      "ourPredictedWB": 85.69,
-      "ourError": -0.16,
-      "newethpopPredictedWB": 88.66,
-      "newethpopError": 2.81,
-      "ourBetter": true
+      "actualWB": 85.86,
+      "hp_local": {
+        "predictedWB": 88.79,
+        "error": 2.93
+      },
+      "hp_national": {
+        "predictedWB": 88.27,
+        "error": 2.41
+      },
+      "newethpop": {
+        "predictedWB": 88.03,
+        "error": 2.17
+      },
+      "bestModel": "hp_national"
     },
     "E07000122": {
       "areaName": "Pendle",
       "actualWB": 66.13,
-      "ourPredictedWB": 69.89,
-      "ourError": 3.76,
-      "newethpopPredictedWB": 73.78,
-      "newethpopError": 7.65,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 68.48,
+        "error": 2.35
+      },
+      "hp_national": {
+        "predictedWB": 70.96,
+        "error": 4.83
+      },
+      "newethpop": {
+        "predictedWB": 73.62,
+        "error": 7.49
+      },
+      "bestModel": "hp_local"
     },
     "E08000018": {
       "areaName": "Rotherham",
-      "actualWB": 88.26,
-      "ourPredictedWB": 89.35,
-      "ourError": 1.09,
-      "newethpopPredictedWB": 90.76,
-      "newethpopError": 2.5,
-      "ourBetter": true
+      "actualWB": 88.25,
+      "hp_local": {
+        "predictedWB": 89.53,
+        "error": 1.28
+      },
+      "hp_national": {
+        "predictedWB": 89.07,
+        "error": 0.82
+      },
+      "newethpop": {
+        "predictedWB": 89.95,
+        "error": 1.7
+      },
+      "bestModel": "hp_national"
     },
     "E08000022": {
       "areaName": "North Tyneside",
-      "actualWB": 92.5,
-      "ourPredictedWB": 91.35,
-      "ourError": -1.15,
-      "newethpopPredictedWB": 93.91,
-      "newethpopError": 1.41,
-      "ourBetter": true
+      "actualWB": 92.49,
+      "hp_local": {
+        "predictedWB": 94.13,
+        "error": 1.64
+      },
+      "hp_national": {
+        "predictedWB": 93.77,
+        "error": 1.28
+      },
+      "newethpop": {
+        "predictedWB": 93.38,
+        "error": 0.89
+      },
+      "bestModel": "hp_national"
     },
     "E07000222": {
       "areaName": "Warwick",
-      "actualWB": 75.88,
-      "ourPredictedWB": 79.36,
-      "ourError": 3.48,
-      "newethpopPredictedWB": 80.29,
-      "newethpopError": 4.41,
-      "ourBetter": true
+      "actualWB": 75.89,
+      "hp_local": {
+        "predictedWB": 79.32,
+        "error": 3.43
+      },
+      "hp_national": {
+        "predictedWB": 79.73,
+        "error": 3.84
+      },
+      "newethpop": {
+        "predictedWB": 79.58,
+        "error": 3.69
+      },
+      "bestModel": "hp_local"
     },
     "E08000014": {
       "areaName": "Sefton",
-      "actualWB": 91.8,
-      "ourPredictedWB": 92.61,
-      "ourError": 0.81,
-      "newethpopPredictedWB": 95.01,
-      "newethpopError": 3.21,
-      "ourBetter": true
+      "actualWB": 91.81,
+      "hp_local": {
+        "predictedWB": 94.03,
+        "error": 2.22
+      },
+      "hp_national": {
+        "predictedWB": 93.96,
+        "error": 2.15
+      },
+      "newethpop": {
+        "predictedWB": 94.72,
+        "error": 2.91
+      },
+      "bestModel": "hp_national"
     },
     "E07000123": {
       "areaName": "Preston",
-      "actualWB": 66.1,
-      "ourPredictedWB": 71.72,
-      "ourError": 5.62,
-      "newethpopPredictedWB": 71.75,
-      "newethpopError": 5.65,
-      "ourBetter": true
+      "actualWB": 66.09,
+      "hp_local": {
+        "predictedWB": 69.24,
+        "error": 3.15
+      },
+      "hp_national": {
+        "predictedWB": 70.68,
+        "error": 4.59
+      },
+      "newethpop": {
+        "predictedWB": 70.82,
+        "error": 4.73
+      },
+      "bestModel": "hp_local"
     },
     "E09000022": {
       "areaName": "Lambeth",
-      "actualWB": 37.59,
-      "ourPredictedWB": 51.61,
-      "ourError": 14.02,
-      "newethpopPredictedWB": 50.8,
-      "newethpopError": 13.21,
-      "ourBetter": false
+      "actualWB": 37.58,
+      "hp_local": {
+        "predictedWB": 37.08,
+        "error": -0.5
+      },
+      "hp_national": {
+        "predictedWB": 36.01,
+        "error": -1.57
+      },
+      "newethpop": {
+        "predictedWB": 38.98,
+        "error": 1.4
+      },
+      "bestModel": "hp_local"
     },
     "E07000120": {
       "areaName": "Hyndburn",
-      "actualWB": 79.61,
-      "ourPredictedWB": 76.85,
-      "ourError": -2.76,
-      "newethpopPredictedWB": 82.16,
-      "newethpopError": 2.55,
-      "ourBetter": false
+      "actualWB": 79.62,
+      "hp_local": {
+        "predictedWB": 81.56,
+        "error": 1.94
+      },
+      "hp_national": {
+        "predictedWB": 81.42,
+        "error": 1.8
+      },
+      "newethpop": {
+        "predictedWB": 81.95,
+        "error": 2.33
+      },
+      "bestModel": "hp_national"
     },
     "E07000127": {
       "areaName": "West Lancashire",
       "actualWB": 92.82,
-      "ourPredictedWB": 88.84,
-      "ourError": -3.98,
-      "newethpopPredictedWB": 94.32,
-      "newethpopError": 1.5,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 94.85,
+        "error": 2.03
+      },
+      "hp_national": {
+        "predictedWB": 94.38,
+        "error": 1.56
+      },
+      "newethpop": {
+        "predictedWB": 94,
+        "error": 1.18
+      },
+      "bestModel": "hp_national"
     },
     "E08000009": {
       "areaName": "Trafford",
-      "actualWB": 72.13,
-      "ourPredictedWB": 80.81,
-      "ourError": 8.68,
-      "newethpopPredictedWB": 78.39,
-      "newethpopError": 6.26,
-      "ourBetter": false
+      "actualWB": 72.12,
+      "hp_local": {
+        "predictedWB": 74.94,
+        "error": 2.82
+      },
+      "hp_national": {
+        "predictedWB": 77.55,
+        "error": 5.43
+      },
+      "newethpop": {
+        "predictedWB": 75.91,
+        "error": 3.79
+      },
+      "bestModel": "hp_local"
     },
     "E06000001": {
       "areaName": "Hartlepool",
       "actualWB": 95.04,
-      "ourPredictedWB": 88.37,
-      "ourError": -6.67,
-      "newethpopPredictedWB": 95.46,
-      "newethpopError": 0.42,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 96.33,
+        "error": 1.29
+      },
+      "hp_national": {
+        "predictedWB": 95.75,
+        "error": 0.71
+      },
+      "newethpop": {
+        "predictedWB": 95.11,
+        "error": 0.07
+      },
+      "bestModel": "hp_national"
     },
     "E08000002": {
       "areaName": "Bury",
       "actualWB": 78.17,
-      "ourPredictedWB": 82.63,
-      "ourError": 4.46,
-      "newethpopPredictedWB": 83.67,
-      "newethpopError": 5.5,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 80.81,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 82.22,
+        "error": 4.05
+      },
+      "newethpop": {
+        "predictedWB": 82.83,
+        "error": 4.66
+      },
+      "bestModel": "hp_local"
     },
     "E07000226": {
       "areaName": "Crawley",
-      "actualWB": 61.76,
-      "ourPredictedWB": 68.21,
-      "ourError": 6.45,
-      "newethpopPredictedWB": 70.7,
-      "newethpopError": 8.94,
-      "ourBetter": true
+      "actualWB": 61.77,
+      "hp_local": {
+        "predictedWB": 64.73,
+        "error": 2.96
+      },
+      "hp_national": {
+        "predictedWB": 66.69,
+        "error": 4.92
+      },
+      "newethpop": {
+        "predictedWB": 67.82,
+        "error": 6.05
+      },
+      "bestModel": "hp_local"
     },
     "E09000010": {
       "areaName": "Enfield",
-      "actualWB": 31.26,
-      "ourPredictedWB": 47.41,
-      "ourError": 16.15,
-      "newethpopPredictedWB": 42.44,
-      "newethpopError": 11.18,
-      "ourBetter": false
+      "actualWB": 31.25,
+      "hp_local": {
+        "predictedWB": 32.82,
+        "error": 1.57
+      },
+      "hp_national": {
+        "predictedWB": 33.54,
+        "error": 2.29
+      },
+      "newethpop": {
+        "predictedWB": 34.67,
+        "error": 3.42
+      },
+      "bestModel": "hp_local"
     },
     "E07000081": {
       "areaName": "Gloucester",
-      "actualWB": 78.03,
-      "ourPredictedWB": 80.98,
-      "ourError": 2.95,
-      "newethpopPredictedWB": 84.42,
-      "newethpopError": 6.39,
-      "ourBetter": true
+      "actualWB": 78.02,
+      "hp_local": {
+        "predictedWB": 80.62,
+        "error": 2.6
+      },
+      "hp_national": {
+        "predictedWB": 81.25,
+        "error": 3.23
+      },
+      "newethpop": {
+        "predictedWB": 81.78,
+        "error": 3.76
+      },
+      "bestModel": "hp_local"
     },
     "E06000042": {
       "areaName": "Milton Keynes",
-      "actualWB": 62.21,
-      "ourPredictedWB": 76.16,
-      "ourError": 13.95,
-      "newethpopPredictedWB": 73.66,
-      "newethpopError": 11.45,
-      "ourBetter": false
+      "actualWB": 62.22,
+      "hp_local": {
+        "predictedWB": 64.88,
+        "error": 2.66
+      },
+      "hp_national": {
+        "predictedWB": 69.02,
+        "error": 6.8
+      },
+      "newethpop": {
+        "predictedWB": 67.1,
+        "error": 4.88
+      },
+      "bestModel": "hp_local"
     },
     "E06000039": {
       "areaName": "Slough",
-      "actualWB": 24.04,
-      "ourPredictedWB": 35.06,
-      "ourError": 11.02,
-      "newethpopPredictedWB": 28.38,
-      "newethpopError": 4.34,
-      "ourBetter": false
+      "actualWB": 24.03,
+      "hp_local": {
+        "predictedWB": 25.33,
+        "error": 1.3
+      },
+      "hp_national": {
+        "predictedWB": 28.84,
+        "error": 4.81
+      },
+      "newethpop": {
+        "predictedWB": 25.88,
+        "error": 1.85
+      },
+      "bestModel": "hp_local"
     },
     "E07000126": {
       "areaName": "South Ribble",
       "actualWB": 92.84,
-      "ourPredictedWB": 88.66,
-      "ourError": -4.18,
-      "newethpopPredictedWB": 94.31,
-      "newethpopError": 1.47,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 94.87,
+        "error": 2.03
+      },
+      "hp_national": {
+        "predictedWB": 94.48,
+        "error": 1.64
+      },
+      "newethpop": {
+        "predictedWB": 93.89,
+        "error": 1.05
+      },
+      "bestModel": "hp_national"
     },
     "E06000040": {
       "areaName": "Windsor and Maidenhead",
-      "actualWB": 69.05,
-      "ourPredictedWB": 74.07,
-      "ourError": 5.02,
-      "newethpopPredictedWB": 72.93,
-      "newethpopError": 3.88,
-      "ourBetter": false
+      "actualWB": 69.06,
+      "hp_local": {
+        "predictedWB": 72.04,
+        "error": 2.98
+      },
+      "hp_national": {
+        "predictedWB": 72.93,
+        "error": 3.87
+      },
+      "newethpop": {
+        "predictedWB": 71.77,
+        "error": 2.71
+      },
+      "bestModel": "hp_local"
     },
     "E07000070": {
       "areaName": "Chelmsford",
       "actualWB": 83.05,
-      "ourPredictedWB": 87.15,
-      "ourError": 4.1,
-      "newethpopPredictedWB": 89.67,
-      "newethpopError": 6.62,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 86.17,
+        "error": 3.12
+      },
+      "hp_national": {
+        "predictedWB": 88.32,
+        "error": 5.27
+      },
+      "newethpop": {
+        "predictedWB": 87.97,
+        "error": 4.92
+      },
+      "bestModel": "hp_local"
     },
     "E09000013": {
       "areaName": "Hammersmith and Fulham",
-      "actualWB": 38.28,
-      "ourPredictedWB": 49.69,
-      "ourError": 11.41,
-      "newethpopPredictedWB": 46.58,
-      "newethpopError": 8.3,
-      "ourBetter": false
+      "actualWB": 38.27,
+      "hp_local": {
+        "predictedWB": 41.02,
+        "error": 2.75
+      },
+      "hp_national": {
+        "predictedWB": 41.03,
+        "error": 2.76
+      },
+      "newethpop": {
+        "predictedWB": 41.71,
+        "error": 3.44
+      },
+      "bestModel": "hp_local"
     },
     "E07000128": {
       "areaName": "Wyre",
-      "actualWB": 95.73,
-      "ourPredictedWB": 89.85,
-      "ourError": -5.88,
-      "newethpopPredictedWB": 96.62,
-      "newethpopError": 0.89,
-      "ourBetter": false
+      "actualWB": 95.71,
+      "hp_local": {
+        "predictedWB": 97.11,
+        "error": 1.4
+      },
+      "hp_national": {
+        "predictedWB": 95.91,
+        "error": 0.2
+      },
+      "newethpop": {
+        "predictedWB": 96.41,
+        "error": 0.7
+      },
+      "bestModel": "hp_national"
     },
     "E07000095": {
       "areaName": "Broxbourne",
-      "actualWB": 68.57,
-      "ourPredictedWB": 77.26,
-      "ourError": 8.69,
-      "newethpopPredictedWB": 79.69,
-      "newethpopError": 11.12,
-      "ourBetter": true
+      "actualWB": 68.56,
+      "hp_local": {
+        "predictedWB": 73.7,
+        "error": 5.14
+      },
+      "hp_national": {
+        "predictedWB": 77.08,
+        "error": 8.52
+      },
+      "newethpop": {
+        "predictedWB": 74.8,
+        "error": 6.24
+      },
+      "bestModel": "hp_local"
     },
     "E09000015": {
       "areaName": "Harrow",
       "actualWB": 20.51,
-      "ourPredictedWB": 33.79,
-      "ourError": 13.28,
-      "newethpopPredictedWB": 27.1,
-      "newethpopError": 6.59,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 22.01,
+        "error": 1.5
+      },
+      "hp_national": {
+        "predictedWB": 26.59,
+        "error": 6.08
+      },
+      "newethpop": {
+        "predictedWB": 24.85,
+        "error": 4.34
+      },
+      "bestModel": "hp_local"
     },
     "E07000148": {
       "areaName": "Norwich",
-      "actualWB": 77.56,
-      "ourPredictedWB": 80.32,
-      "ourError": 2.76,
-      "newethpopPredictedWB": 80.31,
-      "newethpopError": 2.75,
-      "ourBetter": false
-    },
-    "W06000022": {
-      "areaName": "Newport",
-      "actualWB": 80.36,
-      "ourPredictedWB": 83.12,
-      "ourError": 2.76,
-      "newethpopPredictedWB": 85.68,
-      "newethpopError": 5.32,
-      "ourBetter": true
+      "actualWB": 77.55,
+      "hp_local": {
+        "predictedWB": 81.34,
+        "error": 3.79
+      },
+      "hp_national": {
+        "predictedWB": 80.37,
+        "error": 2.82
+      },
+      "newethpop": {
+        "predictedWB": 78.41,
+        "error": 0.86
+      },
+      "bestModel": "hp_national"
     },
     "E06000045": {
       "areaName": "Southampton",
-      "actualWB": 68.09,
-      "ourPredictedWB": 75.78,
-      "ourError": 7.69,
-      "newethpopPredictedWB": 73.27,
-      "newethpopError": 5.18,
-      "ourBetter": false
+      "actualWB": 68.08,
+      "hp_local": {
+        "predictedWB": 70.75,
+        "error": 2.67
+      },
+      "hp_national": {
+        "predictedWB": 72.12,
+        "error": 4.04
+      },
+      "newethpop": {
+        "predictedWB": 71.12,
+        "error": 3.04
+      },
+      "bestModel": "hp_local"
     },
     "E07000211": {
       "areaName": "Reigate and Banstead",
-      "actualWB": 76.87,
-      "ourPredictedWB": 81.31,
-      "ourError": 4.44,
-      "newethpopPredictedWB": 83.03,
-      "newethpopError": 6.16,
-      "ourBetter": true
+      "actualWB": 76.86,
+      "hp_local": {
+        "predictedWB": 80.37,
+        "error": 3.51
+      },
+      "hp_national": {
+        "predictedWB": 82.15,
+        "error": 5.29
+      },
+      "newethpop": {
+        "predictedWB": 81.32,
+        "error": 4.46
+      },
+      "bestModel": "hp_local"
     },
     "E07000066": {
       "areaName": "Basildon",
-      "actualWB": 82.13,
-      "ourPredictedWB": 88.15,
-      "ourError": 6.02,
-      "newethpopPredictedWB": 91.12,
-      "newethpopError": 8.99,
-      "ourBetter": true
+      "actualWB": 82.14,
+      "hp_local": {
+        "predictedWB": 85.56,
+        "error": 3.42
+      },
+      "hp_national": {
+        "predictedWB": 87.86,
+        "error": 5.72
+      },
+      "newethpop": {
+        "predictedWB": 88.01,
+        "error": 5.87
+      },
+      "bestModel": "hp_local"
     },
     "E08000011": {
       "areaName": "Knowsley",
-      "actualWB": 92.35,
-      "ourPredictedWB": 91.14,
-      "ourError": -1.21,
-      "newethpopPredictedWB": 96.01,
-      "newethpopError": 3.66,
-      "ourBetter": true
+      "actualWB": 92.36,
+      "hp_local": {
+        "predictedWB": 95.39,
+        "error": 3.03
+      },
+      "hp_national": {
+        "predictedWB": 95.54,
+        "error": 3.18
+      },
+      "newethpop": {
+        "predictedWB": 95.67,
+        "error": 3.31
+      },
+      "bestModel": "hp_local"
     },
     "E07000071": {
       "areaName": "Colchester",
       "actualWB": 80.68,
-      "ourPredictedWB": 84.24,
-      "ourError": 3.56,
-      "newethpopPredictedWB": 85.31,
-      "newethpopError": 4.63,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 83.88,
+        "error": 3.2
+      },
+      "hp_national": {
+        "predictedWB": 83.14,
+        "error": 2.46
+      },
+      "newethpop": {
+        "predictedWB": 83.66,
+        "error": 2.98
+      },
+      "bestModel": "hp_national"
     },
     "E09000024": {
       "areaName": "Merton",
       "actualWB": 41.21,
-      "ourPredictedWB": 51.69,
-      "ourError": 10.48,
-      "newethpopPredictedWB": 47.62,
-      "newethpopError": 6.41,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 43.1,
+        "error": 1.89
+      },
+      "hp_national": {
+        "predictedWB": 43.65,
+        "error": 2.44
+      },
+      "newethpop": {
+        "predictedWB": 43.04,
+        "error": 1.83
+      },
+      "bestModel": "hp_local"
     },
     "E09000002": {
       "areaName": "Barking and Dagenham",
-      "actualWB": 30.86,
-      "ourPredictedWB": 57.61,
-      "ourError": 26.75,
-      "newethpopPredictedWB": 46.56,
-      "newethpopError": 15.7,
-      "ourBetter": false
+      "actualWB": 30.85,
+      "hp_local": {
+        "predictedWB": 32.91,
+        "error": 2.06
+      },
+      "hp_national": {
+        "predictedWB": 41.48,
+        "error": 10.63
+      },
+      "newethpop": {
+        "predictedWB": 35.81,
+        "error": 4.96
+      },
+      "bestModel": "hp_local"
     },
     "E07000219": {
       "areaName": "Nuneaton and Bedworth",
-      "actualWB": 81.82,
-      "ourPredictedWB": 83.67,
-      "ourError": 1.85,
-      "newethpopPredictedWB": 86.84,
-      "newethpopError": 5.02,
-      "ourBetter": true
+      "actualWB": 81.85,
+      "hp_local": {
+        "predictedWB": 85.19,
+        "error": 3.34
+      },
+      "hp_national": {
+        "predictedWB": 86.31,
+        "error": 4.46
+      },
+      "newethpop": {
+        "predictedWB": 85.56,
+        "error": 3.71
+      },
+      "bestModel": "hp_local"
     },
     "E08000029": {
       "areaName": "Solihull",
-      "actualWB": 77.88,
-      "ourPredictedWB": 84.64,
-      "ourError": 6.76,
-      "newethpopPredictedWB": 84.53,
-      "newethpopError": 6.65,
-      "ourBetter": false
+      "actualWB": 77.86,
+      "hp_local": {
+        "predictedWB": 81.04,
+        "error": 3.18
+      },
+      "hp_national": {
+        "predictedWB": 83.6,
+        "error": 5.74
+      },
+      "newethpop": {
+        "predictedWB": 83.16,
+        "error": 5.3
+      },
+      "bestModel": "hp_local"
     },
     "E06000012": {
       "areaName": "North East Lincolnshire",
-      "actualWB": 92.61,
-      "ourPredictedWB": 90.5,
-      "ourError": -2.11,
-      "newethpopPredictedWB": 93.8,
-      "newethpopError": 1.19,
-      "ourBetter": false
+      "actualWB": 92.59,
+      "hp_local": {
+        "predictedWB": 94,
+        "error": 1.41
+      },
+      "hp_national": {
+        "predictedWB": 93.97,
+        "error": 1.38
+      },
+      "newethpop": {
+        "predictedWB": 93.44,
+        "error": 0.85
+      },
+      "bestModel": "hp_national"
     },
     "E07000178": {
       "areaName": "Oxford",
       "actualWB": 53.49,
-      "ourPredictedWB": 62.61,
-      "ourError": 9.12,
-      "newethpopPredictedWB": 59.62,
-      "newethpopError": 6.13,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 56.43,
+        "error": 2.94
+      },
+      "hp_national": {
+        "predictedWB": 57.18,
+        "error": 3.69
+      },
+      "newethpop": {
+        "predictedWB": 57.12,
+        "error": 3.63
+      },
+      "bestModel": "hp_local"
     },
     "E06000014": {
       "areaName": "York",
       "actualWB": 87.25,
-      "ourPredictedWB": 86.74,
-      "ourError": -0.51,
-      "newethpopPredictedWB": 86.07,
-      "newethpopError": -1.18,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 89.85,
+        "error": 2.6
+      },
+      "hp_national": {
+        "predictedWB": 87.32,
+        "error": 0.07
+      },
+      "newethpop": {
+        "predictedWB": 85.34,
+        "error": -1.91
+      },
+      "bestModel": "hp_national"
     },
     "E06000003": {
       "areaName": "Redcar and Cleveland",
       "actualWB": 96.53,
-      "ourPredictedWB": 91.9,
-      "ourError": -4.63,
-      "newethpopPredictedWB": 97.49,
-      "newethpopError": 0.96,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 97.67,
+        "error": 1.14
+      },
+      "hp_national": {
+        "predictedWB": 97.17,
+        "error": 0.64
+      },
+      "newethpop": {
+        "predictedWB": 97.29,
+        "error": 0.76
+      },
+      "bestModel": "hp_national"
     },
     "E09000020": {
       "areaName": "Kensington and Chelsea",
-      "actualWB": 32.7,
-      "ourPredictedWB": 39.67,
-      "ourError": 6.97,
-      "newethpopPredictedWB": 36.52,
-      "newethpopError": 3.82,
-      "ourBetter": false
+      "actualWB": 32.69,
+      "hp_local": {
+        "predictedWB": 34.67,
+        "error": 1.98
+      },
+      "hp_national": {
+        "predictedWB": 33.09,
+        "error": 0.4
+      },
+      "newethpop": {
+        "predictedWB": 34.7,
+        "error": 2.01
+      },
+      "bestModel": "hp_national"
     },
     "E09000023": {
       "areaName": "Lewisham",
-      "actualWB": 37.17,
-      "ourPredictedWB": 54.9,
-      "ourError": 17.73,
-      "newethpopPredictedWB": 50.45,
-      "newethpopError": 13.28,
-      "ourBetter": false
+      "actualWB": 37.18,
+      "hp_local": {
+        "predictedWB": 38.4,
+        "error": 1.22
+      },
+      "hp_national": {
+        "predictedWB": 36.67,
+        "error": -0.51
+      },
+      "newethpop": {
+        "predictedWB": 37.01,
+        "error": -0.17
+      },
+      "bestModel": "hp_national"
     },
     "E06000035": {
       "areaName": "Medway",
       "actualWB": 78.26,
-      "ourPredictedWB": 84.81,
-      "ourError": 6.55,
-      "newethpopPredictedWB": 84.2,
-      "newethpopError": 5.94,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 80.21,
+        "error": 1.95
+      },
+      "hp_national": {
+        "predictedWB": 81.93,
+        "error": 3.67
+      },
+      "newethpop": {
+        "predictedWB": 80.87,
+        "error": 2.61
+      },
+      "bestModel": "hp_local"
     },
     "E06000033": {
       "areaName": "Southend-on-Sea",
-      "actualWB": 81.6,
-      "ourPredictedWB": 84.62,
-      "ourError": 3.02,
-      "newethpopPredictedWB": 86.39,
-      "newethpopError": 4.79,
-      "ourBetter": true
+      "actualWB": 81.61,
+      "hp_local": {
+        "predictedWB": 83.94,
+        "error": 2.33
+      },
+      "hp_national": {
+        "predictedWB": 83.78,
+        "error": 2.17
+      },
+      "newethpop": {
+        "predictedWB": 84.36,
+        "error": 2.75
+      },
+      "bestModel": "hp_national"
     },
     "E07000121": {
       "areaName": "Lancaster",
-      "actualWB": 87.84,
-      "ourPredictedWB": 86.58,
-      "ourError": -1.26,
-      "newethpopPredictedWB": 88.48,
-      "newethpopError": 0.64,
-      "ourBetter": false
+      "actualWB": 87.85,
+      "hp_local": {
+        "predictedWB": 91.51,
+        "error": 3.66
+      },
+      "hp_national": {
+        "predictedWB": 88.49,
+        "error": 0.64
+      },
+      "newethpop": {
+        "predictedWB": 87.77,
+        "error": -0.08
+      },
+      "bestModel": "hp_national"
     },
     "E07000125": {
       "areaName": "Rossendale",
-      "actualWB": 90.41,
-      "ourPredictedWB": 81.93,
-      "ourError": -8.48,
-      "newethpopPredictedWB": 91.5,
-      "newethpopError": 1.09,
-      "ourBetter": false
+      "actualWB": 90.45,
+      "hp_local": {
+        "predictedWB": 92.04,
+        "error": 1.59
+      },
+      "hp_national": {
+        "predictedWB": 90.29,
+        "error": -0.16
+      },
+      "newethpop": {
+        "predictedWB": 91.08,
+        "error": 0.63
+      },
+      "bestModel": "hp_national"
     },
     "E07000130": {
       "areaName": "Charnwood",
-      "actualWB": 77.92,
-      "ourPredictedWB": 80.28,
-      "ourError": 2.36,
-      "newethpopPredictedWB": 79.93,
-      "newethpopError": 2.01,
-      "ourBetter": false
+      "actualWB": 77.9,
+      "hp_local": {
+        "predictedWB": 80.64,
+        "error": 2.74
+      },
+      "hp_national": {
+        "predictedWB": 80.4,
+        "error": 2.5
+      },
+      "newethpop": {
+        "predictedWB": 78.98,
+        "error": 1.08
+      },
+      "bestModel": "hp_national"
     },
     "E09000007": {
       "areaName": "Camden",
-      "actualWB": 35.38,
-      "ourPredictedWB": 46.93,
-      "ourError": 11.55,
-      "newethpopPredictedWB": 41.23,
-      "newethpopError": 5.85,
-      "ourBetter": false
+      "actualWB": 35.39,
+      "hp_local": {
+        "predictedWB": 37.88,
+        "error": 2.49
+      },
+      "hp_national": {
+        "predictedWB": 39.14,
+        "error": 3.75
+      },
+      "newethpop": {
+        "predictedWB": 38.52,
+        "error": 3.13
+      },
+      "bestModel": "hp_local"
     },
     "E07000118": {
       "areaName": "Chorley",
-      "actualWB": 92.96,
-      "ourPredictedWB": 88.46,
-      "ourError": -4.5,
-      "newethpopPredictedWB": 94.64,
-      "newethpopError": 1.68,
-      "ourBetter": false
+      "actualWB": 92.94,
+      "hp_local": {
+        "predictedWB": 94.86,
+        "error": 1.92
+      },
+      "hp_national": {
+        "predictedWB": 94.2,
+        "error": 1.26
+      },
+      "newethpop": {
+        "predictedWB": 94.22,
+        "error": 1.28
+      },
+      "bestModel": "hp_national"
     },
     "E07000106": {
       "areaName": "Canterbury",
-      "actualWB": 82.51,
-      "ourPredictedWB": 83.87,
-      "ourError": 1.36,
-      "newethpopPredictedWB": 84.31,
-      "newethpopError": 1.8,
-      "ourBetter": true
+      "actualWB": 82.49,
+      "hp_local": {
+        "predictedWB": 87.23,
+        "error": 4.74
+      },
+      "hp_national": {
+        "predictedWB": 82.69,
+        "error": 0.2
+      },
+      "newethpop": {
+        "predictedWB": 82.76,
+        "error": 0.27
+      },
+      "bestModel": "hp_national"
     },
     "E06000005": {
       "areaName": "Darlington",
-      "actualWB": 90.28,
-      "ourPredictedWB": 86.93,
-      "ourError": -3.35,
-      "newethpopPredictedWB": 92.39,
-      "newethpopError": 2.11,
-      "ourBetter": false
+      "actualWB": 90.3,
+      "hp_local": {
+        "predictedWB": 92.57,
+        "error": 2.27
+      },
+      "hp_national": {
+        "predictedWB": 92.14,
+        "error": 1.84
+      },
+      "newethpop": {
+        "predictedWB": 91.94,
+        "error": 1.64
+      },
+      "bestModel": "hp_national"
     },
     "E07000040": {
       "areaName": "East Devon",
-      "actualWB": 94.16,
-      "ourPredictedWB": 90.54,
-      "ourError": -3.62,
-      "newethpopPredictedWB": 95.11,
-      "newethpopError": 0.95,
-      "ourBetter": false
+      "actualWB": 94.15,
+      "hp_local": {
+        "predictedWB": 95.85,
+        "error": 1.7
+      },
+      "hp_national": {
+        "predictedWB": 95.24,
+        "error": 1.09
+      },
+      "newethpop": {
+        "predictedWB": 94.88,
+        "error": 0.73
+      },
+      "bestModel": "hp_national"
     },
     "E06000055": {
       "areaName": "Bedford",
-      "actualWB": 64.13,
-      "ourPredictedWB": 69.93,
-      "ourError": 5.8,
-      "newethpopPredictedWB": 71.39,
-      "newethpopError": 7.26,
-      "ourBetter": true
+      "actualWB": 64.1,
+      "hp_local": {
+        "predictedWB": 66.38,
+        "error": 2.28
+      },
+      "hp_national": {
+        "predictedWB": 65.72,
+        "error": 1.62
+      },
+      "newethpop": {
+        "predictedWB": 67.77,
+        "error": 3.67
+      },
+      "bestModel": "hp_national"
     },
     "E06000041": {
       "areaName": "Wokingham",
-      "actualWB": 72.72,
-      "ourPredictedWB": 80.2,
-      "ourError": 7.48,
-      "newethpopPredictedWB": 79.48,
-      "newethpopError": 6.76,
-      "ourBetter": false
+      "actualWB": 72.73,
+      "hp_local": {
+        "predictedWB": 75.73,
+        "error": 3
+      },
+      "hp_national": {
+        "predictedWB": 80,
+        "error": 7.27
+      },
+      "newethpop": {
+        "predictedWB": 78.04,
+        "error": 5.31
+      },
+      "bestModel": "hp_local"
     },
     "E07000141": {
       "areaName": "South Kesteven",
-      "actualWB": 90.47,
-      "ourPredictedWB": 88.2,
-      "ourError": -2.27,
-      "newethpopPredictedWB": 92.8,
-      "newethpopError": 2.33,
-      "ourBetter": true
+      "actualWB": 90.49,
+      "hp_local": {
+        "predictedWB": 92.42,
+        "error": 1.93
+      },
+      "hp_national": {
+        "predictedWB": 91.72,
+        "error": 1.23
+      },
+      "newethpop": {
+        "predictedWB": 92.35,
+        "error": 1.86
+      },
+      "bestModel": "hp_national"
     },
     "E07000199": {
       "areaName": "Tamworth",
-      "actualWB": 90.86,
-      "ourPredictedWB": 86,
-      "ourError": -4.86,
-      "newethpopPredictedWB": 94.69,
-      "newethpopError": 3.83,
-      "ourBetter": false
+      "actualWB": 90.84,
+      "hp_local": {
+        "predictedWB": 94.07,
+        "error": 3.23
+      },
+      "hp_national": {
+        "predictedWB": 94.29,
+        "error": 3.45
+      },
+      "newethpop": {
+        "predictedWB": 94.19,
+        "error": 3.35
+      },
+      "bestModel": "hp_local"
     },
     "E06000054": {
       "areaName": "Wiltshire",
       "actualWB": 90.06,
-      "ourPredictedWB": 92.4,
-      "ourError": 2.34,
-      "newethpopPredictedWB": 92.79,
-      "newethpopError": 2.73,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 91.47,
+        "error": 1.41
+      },
+      "hp_national": {
+        "predictedWB": 91.74,
+        "error": 1.68
+      },
+      "newethpop": {
+        "predictedWB": 92.09,
+        "error": 2.03
+      },
+      "bestModel": "hp_local"
     },
     "E06000056": {
       "areaName": "Central Bedfordshire",
-      "actualWB": 83.52,
-      "ourPredictedWB": 88.6,
-      "ourError": 5.08,
-      "newethpopPredictedWB": 88.2,
-      "newethpopError": 4.68,
-      "ourBetter": false
+      "actualWB": 83.54,
+      "hp_local": {
+        "predictedWB": 86.71,
+        "error": 3.17
+      },
+      "hp_national": {
+        "predictedWB": 88.4,
+        "error": 4.86
+      },
+      "newethpop": {
+        "predictedWB": 86.39,
+        "error": 2.85
+      },
+      "bestModel": "hp_local"
     },
     "E07000076": {
       "areaName": "Tendring",
-      "actualWB": 93.47,
-      "ourPredictedWB": 90.36,
-      "ourError": -3.11,
-      "newethpopPredictedWB": 96.24,
-      "newethpopError": 2.77,
-      "ourBetter": false
+      "actualWB": 93.45,
+      "hp_local": {
+        "predictedWB": 95.51,
+        "error": 2.06
+      },
+      "hp_national": {
+        "predictedWB": 94.59,
+        "error": 1.14
+      },
+      "newethpop": {
+        "predictedWB": 95.77,
+        "error": 2.32
+      },
+      "bestModel": "hp_national"
     },
     "E07000171": {
       "areaName": "Bassetlaw",
-      "actualWB": 91.97,
-      "ourPredictedWB": 88.06,
-      "ourError": -3.91,
-      "newethpopPredictedWB": 93.56,
-      "newethpopError": 1.59,
-      "ourBetter": false
+      "actualWB": 92.01,
+      "hp_local": {
+        "predictedWB": 93.43,
+        "error": 1.42
+      },
+      "hp_national": {
+        "predictedWB": 92.83,
+        "error": 0.82
+      },
+      "newethpop": {
+        "predictedWB": 92.9,
+        "error": 0.89
+      },
+      "bestModel": "hp_national"
     },
     "E09000031": {
       "areaName": "Waltham Forest",
       "actualWB": 34.04,
-      "ourPredictedWB": 41.58,
-      "ourError": 7.54,
-      "newethpopPredictedWB": 36.91,
-      "newethpopError": 2.87,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 34.87,
+        "error": 0.83
+      },
+      "hp_national": {
+        "predictedWB": 29.83,
+        "error": -4.21
+      },
+      "newethpop": {
+        "predictedWB": 30.81,
+        "error": -3.23
+      },
+      "bestModel": "hp_local"
     },
     "E09000014": {
       "areaName": "Haringey",
-      "actualWB": 31.9,
-      "ourPredictedWB": 41.91,
-      "ourError": 10.01,
-      "newethpopPredictedWB": 41.42,
-      "newethpopError": 9.52,
-      "ourBetter": false
+      "actualWB": 31.89,
+      "hp_local": {
+        "predictedWB": 33.2,
+        "error": 1.31
+      },
+      "hp_national": {
+        "predictedWB": 30.59,
+        "error": -1.3
+      },
+      "newethpop": {
+        "predictedWB": 34.57,
+        "error": 2.68
+      },
+      "bestModel": "hp_national"
     },
     "E07000225": {
       "areaName": "Chichester",
-      "actualWB": 90.13,
-      "ourPredictedWB": 87.02,
-      "ourError": -3.11,
-      "newethpopPredictedWB": 92.03,
-      "newethpopError": 1.9,
-      "ourBetter": false
+      "actualWB": 90.14,
+      "hp_local": {
+        "predictedWB": 92.34,
+        "error": 2.2
+      },
+      "hp_national": {
+        "predictedWB": 91.3,
+        "error": 1.16
+      },
+      "newethpop": {
+        "predictedWB": 91.46,
+        "error": 1.32
+      },
+      "bestModel": "hp_national"
     },
     "E09000016": {
       "areaName": "Havering",
-      "actualWB": 66.49,
-      "ourPredictedWB": 84.7,
-      "ourError": 18.21,
-      "newethpopPredictedWB": 81.99,
-      "newethpopError": 15.5,
-      "ourBetter": false
+      "actualWB": 66.5,
+      "hp_local": {
+        "predictedWB": 70.31,
+        "error": 3.81
+      },
+      "hp_national": {
+        "predictedWB": 79.53,
+        "error": 13.03
+      },
+      "newethpop": {
+        "predictedWB": 76.44,
+        "error": 9.94
+      },
+      "bestModel": "hp_local"
     },
     "E09000006": {
       "areaName": "Bromley",
-      "actualWB": 66.51,
-      "ourPredictedWB": 80.36,
-      "ourError": 13.85,
-      "newethpopPredictedWB": 78.1,
-      "newethpopError": 11.59,
-      "ourBetter": false
+      "actualWB": 66.52,
+      "hp_local": {
+        "predictedWB": 69.11,
+        "error": 2.59
+      },
+      "hp_national": {
+        "predictedWB": 73.25,
+        "error": 6.73
+      },
+      "newethpop": {
+        "predictedWB": 71.45,
+        "error": 4.93
+      },
+      "bestModel": "hp_local"
     },
     "E06000034": {
       "areaName": "Thurrock",
-      "actualWB": 66.16,
-      "ourPredictedWB": 82.78,
-      "ourError": 16.62,
-      "newethpopPredictedWB": 83.36,
-      "newethpopError": 17.2,
-      "ourBetter": true
+      "actualWB": 66.15,
+      "hp_local": {
+        "predictedWB": 70.24,
+        "error": 4.09
+      },
+      "hp_national": {
+        "predictedWB": 76.36,
+        "error": 10.21
+      },
+      "newethpop": {
+        "predictedWB": 74.76,
+        "error": 8.61
+      },
+      "bestModel": "hp_local"
     },
     "E07000172": {
       "areaName": "Broxtowe",
-      "actualWB": 84.48,
-      "ourPredictedWB": 83.38,
-      "ourError": -1.1,
-      "newethpopPredictedWB": 86.47,
-      "newethpopError": 1.99,
-      "ourBetter": true
+      "actualWB": 84.47,
+      "hp_local": {
+        "predictedWB": 87.38,
+        "error": 2.91
+      },
+      "hp_national": {
+        "predictedWB": 86.49,
+        "error": 2.02
+      },
+      "newethpop": {
+        "predictedWB": 85.31,
+        "error": 0.84
+      },
+      "bestModel": "hp_national"
     },
     "E07000072": {
       "areaName": "Epping Forest",
       "actualWB": 75.56,
-      "ourPredictedWB": 81.43,
-      "ourError": 5.87,
-      "newethpopPredictedWB": 82.79,
-      "newethpopError": 7.23,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 79.55,
+        "error": 3.99
+      },
+      "hp_national": {
+        "predictedWB": 82.11,
+        "error": 6.55
+      },
+      "newethpop": {
+        "predictedWB": 80.9,
+        "error": 5.34
+      },
+      "bestModel": "hp_local"
     },
     "E07000174": {
       "areaName": "Mansfield",
       "actualWB": 87.32,
-      "ourPredictedWB": 86.21,
-      "ourError": -1.11,
-      "newethpopPredictedWB": 91.3,
-      "newethpopError": 3.98,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 90.61,
+        "error": 3.29
+      },
+      "hp_national": {
+        "predictedWB": 91.13,
+        "error": 3.81
+      },
+      "newethpop": {
+        "predictedWB": 90.64,
+        "error": 3.32
+      },
+      "bestModel": "hp_local"
     },
     "E07000105": {
       "areaName": "Ashford",
-      "actualWB": 82.62,
-      "ourPredictedWB": 84.49,
-      "ourError": 1.87,
-      "newethpopPredictedWB": 87.59,
-      "newethpopError": 4.97,
-      "ourBetter": true
+      "actualWB": 82.63,
+      "hp_local": {
+        "predictedWB": 86.14,
+        "error": 3.51
+      },
+      "hp_national": {
+        "predictedWB": 87.4,
+        "error": 4.77
+      },
+      "newethpop": {
+        "predictedWB": 86.4,
+        "error": 3.77
+      },
+      "bestModel": "hp_local"
     },
     "E07000078": {
       "areaName": "Cheltenham",
-      "actualWB": 83.25,
-      "ourPredictedWB": 82.59,
-      "ourError": -0.66,
-      "newethpopPredictedWB": 86.67,
-      "newethpopError": 3.42,
-      "ourBetter": true
+      "actualWB": 83.26,
+      "hp_local": {
+        "predictedWB": 86.22,
+        "error": 2.96
+      },
+      "hp_national": {
+        "predictedWB": 85.19,
+        "error": 1.93
+      },
+      "newethpop": {
+        "predictedWB": 85.72,
+        "error": 2.46
+      },
+      "bestModel": "hp_national"
     },
     "E07000195": {
       "areaName": "Newcastle-under-Lyme",
-      "actualWB": 89.98,
-      "ourPredictedWB": 87.48,
-      "ourError": -2.5,
-      "newethpopPredictedWB": 91.11,
-      "newethpopError": 1.13,
-      "ourBetter": false
+      "actualWB": 90,
+      "hp_local": {
+        "predictedWB": 92.78,
+        "error": 2.78
+      },
+      "hp_national": {
+        "predictedWB": 91.07,
+        "error": 1.07
+      },
+      "newethpop": {
+        "predictedWB": 89.9,
+        "error": -0.1
+      },
+      "bestModel": "hp_national"
     },
     "E07000099": {
       "areaName": "North Hertfordshire",
       "actualWB": 81.3,
-      "ourPredictedWB": 81.07,
-      "ourError": -0.23,
-      "newethpopPredictedWB": 83.37,
-      "newethpopError": 2.07,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 83.91,
+        "error": 2.61
+      },
+      "hp_national": {
+        "predictedWB": 82.19,
+        "error": 0.89
+      },
+      "newethpop": {
+        "predictedWB": 81.65,
+        "error": 0.35
+      },
+      "bestModel": "hp_national"
     },
     "E07000092": {
       "areaName": "Rushmoor",
       "actualWB": 71.09,
-      "ourPredictedWB": 74.66,
-      "ourError": 3.57,
-      "newethpopPredictedWB": 78.3,
-      "newethpopError": 7.21,
-      "ourBetter": true
-    },
-    "W06000016": {
-      "areaName": "Rhondda Cynon Taf",
-      "actualWB": 95.15,
-      "ourPredictedWB": 93.3,
-      "ourError": -1.85,
-      "newethpopPredictedWB": 96.3,
-      "newethpopError": 1.15,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 74.6,
+        "error": 3.51
+      },
+      "hp_national": {
+        "predictedWB": 77.34,
+        "error": 6.25
+      },
+      "newethpop": {
+        "predictedWB": 76.36,
+        "error": 5.27
+      },
+      "bestModel": "hp_local"
     },
     "E07000221": {
       "areaName": "Stratford-on-Avon",
-      "actualWB": 90.06,
-      "ourPredictedWB": 87.8,
-      "ourError": -2.26,
-      "newethpopPredictedWB": 93.45,
-      "newethpopError": 3.39,
-      "ourBetter": true
+      "actualWB": 90.08,
+      "hp_local": {
+        "predictedWB": 92.72,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 92.21,
+        "error": 2.13
+      },
+      "newethpop": {
+        "predictedWB": 93.23,
+        "error": 3.15
+      },
+      "bestModel": "hp_national"
     },
     "E07000170": {
       "areaName": "Ashfield",
-      "actualWB": 91.82,
-      "ourPredictedWB": 89.81,
-      "ourError": -2.01,
-      "newethpopPredictedWB": 95.52,
-      "newethpopError": 3.7,
-      "ourBetter": true
+      "actualWB": 91.81,
+      "hp_local": {
+        "predictedWB": 94.73,
+        "error": 2.92
+      },
+      "hp_national": {
+        "predictedWB": 95.03,
+        "error": 3.22
+      },
+      "newethpop": {
+        "predictedWB": 94.96,
+        "error": 3.15
+      },
+      "bestModel": "hp_local"
     },
     "E07000237": {
       "areaName": "Worcester",
-      "actualWB": 82.67,
-      "ourPredictedWB": 82.14,
-      "ourError": -0.53,
-      "newethpopPredictedWB": 87.92,
-      "newethpopError": 5.25,
-      "ourBetter": true
+      "actualWB": 82.65,
+      "hp_local": {
+        "predictedWB": 86.25,
+        "error": 3.6
+      },
+      "hp_national": {
+        "predictedWB": 86.35,
+        "error": 3.7
+      },
+      "newethpop": {
+        "predictedWB": 87.36,
+        "error": 4.71
+      },
+      "bestModel": "hp_local"
     },
     "E07000177": {
       "areaName": "Cherwell",
-      "actualWB": 77.89,
-      "ourPredictedWB": 82.29,
-      "ourError": 4.4,
-      "newethpopPredictedWB": 84.83,
-      "newethpopError": 6.94,
-      "ourBetter": true
+      "actualWB": 77.88,
+      "hp_local": {
+        "predictedWB": 81.64,
+        "error": 3.76
+      },
+      "hp_national": {
+        "predictedWB": 83.05,
+        "error": 5.17
+      },
+      "newethpop": {
+        "predictedWB": 83.4,
+        "error": 5.52
+      },
+      "bestModel": "hp_local"
     },
     "E07000036": {
       "areaName": "Erewash",
-      "actualWB": 92.46,
-      "ourPredictedWB": 88.87,
-      "ourError": -3.59,
-      "newethpopPredictedWB": 94.78,
-      "newethpopError": 2.32,
-      "ourBetter": false
+      "actualWB": 92.45,
+      "hp_local": {
+        "predictedWB": 94.28,
+        "error": 1.83
+      },
+      "hp_national": {
+        "predictedWB": 94.2,
+        "error": 1.75
+      },
+      "newethpop": {
+        "predictedWB": 94.2,
+        "error": 1.75
+      },
+      "bestModel": "hp_national"
     },
     "E09000011": {
       "areaName": "Greenwich",
       "actualWB": 41.4,
-      "ourPredictedWB": 62.13,
-      "ourError": 20.73,
-      "newethpopPredictedWB": 57.38,
-      "newethpopError": 15.98,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 43.31,
+        "error": 1.91
+      },
+      "hp_national": {
+        "predictedWB": 46.13,
+        "error": 4.73
+      },
+      "newethpop": {
+        "predictedWB": 45.18,
+        "error": 3.78
+      },
+      "bestModel": "hp_local"
     },
     "E06000025": {
       "areaName": "South Gloucestershire",
       "actualWB": 85.79,
-      "ourPredictedWB": 89.67,
-      "ourError": 3.88,
-      "newethpopPredictedWB": 90.63,
-      "newethpopError": 4.84,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 88.18,
+        "error": 2.39
+      },
+      "hp_national": {
+        "predictedWB": 89.93,
+        "error": 4.14
+      },
+      "newethpop": {
+        "predictedWB": 89.63,
+        "error": 3.84
+      },
+      "bestModel": "hp_local"
     },
     "E07000193": {
       "areaName": "East Staffordshire",
-      "actualWB": 78.23,
-      "ourPredictedWB": 80.32,
-      "ourError": 2.09,
-      "newethpopPredictedWB": 85.2,
-      "newethpopError": 6.97,
-      "ourBetter": true
+      "actualWB": 78.24,
+      "hp_local": {
+        "predictedWB": 80.95,
+        "error": 2.71
+      },
+      "hp_national": {
+        "predictedWB": 81.93,
+        "error": 3.69
+      },
+      "newethpop": {
+        "predictedWB": 84.36,
+        "error": 6.12
+      },
+      "bestModel": "hp_local"
     },
     "E07000109": {
       "areaName": "Gravesham",
-      "actualWB": 68.31,
-      "ourPredictedWB": 72.67,
-      "ourError": 4.36,
-      "newethpopPredictedWB": 74.62,
-      "newethpopError": 6.31,
-      "ourBetter": true
+      "actualWB": 68.32,
+      "hp_local": {
+        "predictedWB": 70.96,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 70.94,
+        "error": 2.62
+      },
+      "newethpop": {
+        "predictedWB": 71.46,
+        "error": 3.14
+      },
+      "bestModel": "hp_national"
     },
     "E07000033": {
       "areaName": "Bolsover",
-      "actualWB": 93.25,
-      "ourPredictedWB": 86.7,
-      "ourError": -6.55,
-      "newethpopPredictedWB": 95.42,
-      "newethpopError": 2.17,
-      "ourBetter": false
-    },
-    "W06000006": {
-      "areaName": "Wrexham",
-      "actualWB": 90.69,
-      "ourPredictedWB": 87.61,
-      "ourError": -3.08,
-      "newethpopPredictedWB": 91.54,
-      "newethpopError": 0.85,
-      "ourBetter": false
+      "actualWB": 93.27,
+      "hp_local": {
+        "predictedWB": 95.44,
+        "error": 2.17
+      },
+      "hp_national": {
+        "predictedWB": 95.45,
+        "error": 2.18
+      },
+      "newethpop": {
+        "predictedWB": 94.48,
+        "error": 1.21
+      },
+      "bestModel": "hp_local"
     },
     "E07000181": {
       "areaName": "West Oxfordshire",
       "actualWB": 88.98,
-      "ourPredictedWB": 86.04,
-      "ourError": -2.94,
-      "newethpopPredictedWB": 91.74,
-      "newethpopError": 2.76,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 91.47,
+        "error": 2.49
+      },
+      "hp_national": {
+        "predictedWB": 90.93,
+        "error": 1.95
+      },
+      "newethpop": {
+        "predictedWB": 91.22,
+        "error": 2.24
+      },
+      "bestModel": "hp_national"
     },
     "E07000114": {
       "areaName": "Thanet",
-      "actualWB": 87.35,
-      "ourPredictedWB": 85.58,
-      "ourError": -1.77,
-      "newethpopPredictedWB": 89.47,
-      "newethpopError": 2.12,
-      "ourBetter": true
+      "actualWB": 87.34,
+      "hp_local": {
+        "predictedWB": 89.95,
+        "error": 2.61
+      },
+      "hp_national": {
+        "predictedWB": 87.56,
+        "error": 0.22
+      },
+      "newethpop": {
+        "predictedWB": 88.65,
+        "error": 1.31
+      },
+      "bestModel": "hp_national"
     },
     "E07000136": {
       "areaName": "Boston",
       "actualWB": 74.52,
-      "ourPredictedWB": 73.4,
-      "ourError": -1.12,
-      "newethpopPredictedWB": 79.68,
-      "newethpopError": 5.16,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 77.27,
+        "error": 2.75
+      },
+      "hp_national": {
+        "predictedWB": 76.6,
+        "error": 2.08
+      },
+      "newethpop": {
+        "predictedWB": 78.97,
+        "error": 4.45
+      },
+      "bestModel": "hp_national"
     },
     "E07000075": {
       "areaName": "Rochford",
-      "actualWB": 93.79,
-      "ourPredictedWB": 87.24,
-      "ourError": -6.55,
-      "newethpopPredictedWB": 94.97,
-      "newethpopError": 1.18,
-      "ourBetter": false
+      "actualWB": 93.76,
+      "hp_local": {
+        "predictedWB": 95.86,
+        "error": 2.1
+      },
+      "hp_national": {
+        "predictedWB": 94.99,
+        "error": 1.23
+      },
+      "newethpop": {
+        "predictedWB": 93.58,
+        "error": -0.18
+      },
+      "bestModel": "hp_national"
     },
     "E07000202": {
       "areaName": "Ipswich",
-      "actualWB": 74.62,
-      "ourPredictedWB": 78.99,
-      "ourError": 4.37,
-      "newethpopPredictedWB": 82.32,
-      "newethpopError": 7.7,
-      "ourBetter": true
+      "actualWB": 74.59,
+      "hp_local": {
+        "predictedWB": 77.28,
+        "error": 2.69
+      },
+      "hp_national": {
+        "predictedWB": 78.27,
+        "error": 3.68
+      },
+      "newethpop": {
+        "predictedWB": 80.15,
+        "error": 5.56
+      },
+      "bestModel": "hp_local"
     },
     "E07000238": {
       "areaName": "Wychavon",
       "actualWB": 90.61,
-      "ourPredictedWB": 87.87,
-      "ourError": -2.74,
-      "newethpopPredictedWB": 93.48,
-      "newethpopError": 2.87,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 92.93,
+        "error": 2.32
+      },
+      "hp_national": {
+        "predictedWB": 92.71,
+        "error": 2.1
+      },
+      "newethpop": {
+        "predictedWB": 93.24,
+        "error": 2.63
+      },
+      "bestModel": "hp_national"
     },
     "E07000137": {
       "areaName": "East Lindsey",
       "actualWB": 95.6,
-      "ourPredictedWB": 91.02,
-      "ourError": -4.58,
-      "newethpopPredictedWB": 97.15,
-      "newethpopError": 1.55,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 96.57,
+        "error": 0.97
+      },
+      "hp_national": {
+        "predictedWB": 95.56,
+        "error": -0.04
+      },
+      "newethpop": {
+        "predictedWB": 96.89,
+        "error": 1.29
+      },
+      "bestModel": "hp_national"
     },
     "E09000004": {
       "areaName": "Bexley",
       "actualWB": 64.45,
-      "ourPredictedWB": 81.41,
-      "ourError": 16.96,
-      "newethpopPredictedWB": 79.44,
-      "newethpopError": 14.99,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 66.88,
+        "error": 2.43
+      },
+      "hp_national": {
+        "predictedWB": 72.35,
+        "error": 7.9
+      },
+      "newethpop": {
+        "predictedWB": 70.33,
+        "error": 5.88
+      },
+      "bestModel": "hp_local"
     },
     "E06000043": {
       "areaName": "Brighton and Hove",
-      "actualWB": 73.92,
-      "ourPredictedWB": 79.18,
-      "ourError": 5.26,
-      "newethpopPredictedWB": 76.47,
-      "newethpopError": 2.55,
-      "ourBetter": false
+      "actualWB": 73.93,
+      "hp_local": {
+        "predictedWB": 76.73,
+        "error": 2.8
+      },
+      "hp_national": {
+        "predictedWB": 75.82,
+        "error": 1.89
+      },
+      "newethpop": {
+        "predictedWB": 75.18,
+        "error": 1.25
+      },
+      "bestModel": "hp_national"
     },
     "E07000134": {
       "areaName": "North West Leicestershire",
-      "actualWB": 92.1,
-      "ourPredictedWB": 87.51,
-      "ourError": -4.59,
-      "newethpopPredictedWB": 94.25,
-      "newethpopError": 2.15,
-      "ourBetter": false
-    },
-    "W06000018": {
-      "areaName": "Caerphilly",
-      "actualWB": 96.25,
-      "ourPredictedWB": 92.84,
-      "ourError": -3.41,
-      "newethpopPredictedWB": 95.76,
-      "newethpopError": -0.49,
-      "ourBetter": false
+      "actualWB": 92.08,
+      "hp_local": {
+        "predictedWB": 94.65,
+        "error": 2.57
+      },
+      "hp_national": {
+        "predictedWB": 94.28,
+        "error": 2.2
+      },
+      "newethpop": {
+        "predictedWB": 93.83,
+        "error": 1.75
+      },
+      "bestModel": "hp_national"
     },
     "E07000180": {
       "areaName": "Vale of White Horse",
       "actualWB": 83.16,
-      "ourPredictedWB": 84.63,
-      "ourError": 1.47,
-      "newethpopPredictedWB": 88.31,
-      "newethpopError": 5.15,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 87.12,
+        "error": 3.96
+      },
+      "hp_national": {
+        "predictedWB": 87.12,
+        "error": 3.96
+      },
+      "newethpop": {
+        "predictedWB": 87.21,
+        "error": 4.05
+      },
+      "bestModel": "hp_local"
     },
     "E07000227": {
       "areaName": "Horsham",
-      "actualWB": 88.13,
-      "ourPredictedWB": 87.07,
-      "ourError": -1.06,
-      "newethpopPredictedWB": 91.24,
-      "newethpopError": 3.11,
-      "ourBetter": true
+      "actualWB": 88.15,
+      "hp_local": {
+        "predictedWB": 91.24,
+        "error": 3.09
+      },
+      "hp_national": {
+        "predictedWB": 90.48,
+        "error": 2.33
+      },
+      "newethpop": {
+        "predictedWB": 90.48,
+        "error": 2.33
+      },
+      "bestModel": "hp_national"
     },
     "E07000213": {
       "areaName": "Spelthorne",
       "actualWB": 69.21,
-      "ourPredictedWB": 75.75,
-      "ourError": 6.54,
-      "newethpopPredictedWB": 77.29,
-      "newethpopError": 8.08,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 73.64,
+        "error": 4.43
+      },
+      "hp_national": {
+        "predictedWB": 77.52,
+        "error": 8.31
+      },
+      "newethpop": {
+        "predictedWB": 75.86,
+        "error": 6.65
+      },
+      "bestModel": "hp_local"
     },
     "E07000214": {
       "areaName": "Surrey Heath",
-      "actualWB": 77.91,
-      "ourPredictedWB": 77.97,
-      "ourError": 0.06,
-      "newethpopPredictedWB": 82.61,
-      "newethpopError": 4.7,
-      "ourBetter": true
+      "actualWB": 77.89,
+      "hp_local": {
+        "predictedWB": 81.35,
+        "error": 3.46
+      },
+      "hp_national": {
+        "predictedWB": 81.93,
+        "error": 4.04
+      },
+      "newethpop": {
+        "predictedWB": 81.31,
+        "error": 3.42
+      },
+      "bestModel": "hp_local"
     },
     "E07000032": {
       "areaName": "Amber Valley",
-      "actualWB": 95.03,
-      "ourPredictedWB": 90.3,
-      "ourError": -4.73,
-      "newethpopPredictedWB": 95.65,
-      "newethpopError": 0.62,
-      "ourBetter": false
+      "actualWB": 95.04,
+      "hp_local": {
+        "predictedWB": 96.21,
+        "error": 1.17
+      },
+      "hp_national": {
+        "predictedWB": 95.63,
+        "error": 0.59
+      },
+      "newethpop": {
+        "predictedWB": 95.33,
+        "error": 0.29
+      },
+      "bestModel": "hp_national"
     },
     "E06000024": {
       "areaName": "North Somerset",
-      "actualWB": 90.4,
-      "ourPredictedWB": 90.58,
-      "ourError": 0.18,
-      "newethpopPredictedWB": 93.76,
-      "newethpopError": 3.36,
-      "ourBetter": true
+      "actualWB": 90.39,
+      "hp_local": {
+        "predictedWB": 92.48,
+        "error": 2.09
+      },
+      "hp_national": {
+        "predictedWB": 92.5,
+        "error": 2.11
+      },
+      "newethpop": {
+        "predictedWB": 93.36,
+        "error": 2.97
+      },
+      "bestModel": "hp_local"
     },
     "E07000196": {
       "areaName": "South Staffordshire",
-      "actualWB": 92.18,
-      "ourPredictedWB": 88.2,
-      "ourError": -3.98,
-      "newethpopPredictedWB": 93.71,
-      "newethpopError": 1.53,
-      "ourBetter": false
+      "actualWB": 92.15,
+      "hp_local": {
+        "predictedWB": 94.16,
+        "error": 2.01
+      },
+      "hp_national": {
+        "predictedWB": 93.51,
+        "error": 1.36
+      },
+      "newethpop": {
+        "predictedWB": 93,
+        "error": 0.85
+      },
+      "bestModel": "hp_national"
     },
     "E06000013": {
       "areaName": "North Lincolnshire",
-      "actualWB": 88.73,
-      "ourPredictedWB": 87.77,
-      "ourError": -0.96,
-      "newethpopPredictedWB": 90.46,
-      "newethpopError": 1.73,
-      "ourBetter": true
+      "actualWB": 88.71,
+      "hp_local": {
+        "predictedWB": 90.46,
+        "error": 1.75
+      },
+      "hp_national": {
+        "predictedWB": 89.78,
+        "error": 1.07
+      },
+      "newethpop": {
+        "predictedWB": 90.01,
+        "error": 1.3
+      },
+      "bestModel": "hp_national"
     },
     "E07000034": {
       "areaName": "Chesterfield",
-      "actualWB": 93.07,
-      "ourPredictedWB": 88.11,
-      "ourError": -4.96,
-      "newethpopPredictedWB": 94.5,
-      "newethpopError": 1.43,
-      "ourBetter": false
+      "actualWB": 93.05,
+      "hp_local": {
+        "predictedWB": 94.65,
+        "error": 1.6
+      },
+      "hp_national": {
+        "predictedWB": 93.62,
+        "error": 0.57
+      },
+      "newethpop": {
+        "predictedWB": 93.59,
+        "error": 0.54
+      },
+      "bestModel": "hp_national"
     },
     "E07000140": {
       "areaName": "South Holland",
-      "actualWB": 84.36,
-      "ourPredictedWB": 81.83,
-      "ourError": -2.53,
-      "newethpopPredictedWB": 87.92,
-      "newethpopError": 3.56,
-      "ourBetter": true
-    },
-    "W06000004": {
-      "areaName": "Denbighshire",
-      "actualWB": 94.42,
-      "ourPredictedWB": 87.8,
-      "ourError": -6.62,
-      "newethpopPredictedWB": 96.08,
-      "newethpopError": 1.66,
-      "ourBetter": false
+      "actualWB": 84.37,
+      "hp_local": {
+        "predictedWB": 86.58,
+        "error": 2.21
+      },
+      "hp_national": {
+        "predictedWB": 86.03,
+        "error": 1.66
+      },
+      "newethpop": {
+        "predictedWB": 87.52,
+        "error": 3.15
+      },
+      "bestModel": "hp_national"
     },
     "E07000119": {
       "areaName": "Fylde",
       "actualWB": 93.14,
-      "ourPredictedWB": 85.69,
-      "ourError": -7.45,
-      "newethpopPredictedWB": 94.08,
-      "newethpopError": 0.94,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 95.19,
+        "error": 2.05
+      },
+      "hp_national": {
+        "predictedWB": 93.99,
+        "error": 0.85
+      },
+      "newethpop": {
+        "predictedWB": 93.76,
+        "error": 0.62
+      },
+      "bestModel": "hp_national"
     },
     "E07000175": {
       "areaName": "Newark and Sherwood",
-      "actualWB": 91.04,
-      "ourPredictedWB": 88.24,
-      "ourError": -2.8,
-      "newethpopPredictedWB": 93.22,
-      "newethpopError": 2.18,
-      "ourBetter": false
+      "actualWB": 91.07,
+      "hp_local": {
+        "predictedWB": 93.23,
+        "error": 2.16
+      },
+      "hp_national": {
+        "predictedWB": 93.09,
+        "error": 2.02
+      },
+      "newethpop": {
+        "predictedWB": 92.61,
+        "error": 1.54
+      },
+      "bestModel": "hp_national"
     },
     "E09000021": {
       "areaName": "Kingston upon Thames",
-      "actualWB": 53.72,
-      "ourPredictedWB": 60.92,
-      "ourError": 7.2,
-      "newethpopPredictedWB": 54.41,
-      "newethpopError": 0.69,
-      "ourBetter": false
+      "actualWB": 53.73,
+      "hp_local": {
+        "predictedWB": 55.84,
+        "error": 2.11
+      },
+      "hp_national": {
+        "predictedWB": 56.93,
+        "error": 3.2
+      },
+      "newethpop": {
+        "predictedWB": 53,
+        "error": -0.73
+      },
+      "bestModel": "hp_local"
     },
     "E09000032": {
       "areaName": "Wandsworth",
-      "actualWB": 47.95,
-      "ourPredictedWB": 58.3,
-      "ourError": 10.35,
-      "newethpopPredictedWB": 55.6,
-      "newethpopError": 7.65,
-      "ourBetter": false
+      "actualWB": 47.96,
+      "hp_local": {
+        "predictedWB": 49.9,
+        "error": 1.94
+      },
+      "hp_national": {
+        "predictedWB": 49.97,
+        "error": 2.01
+      },
+      "newethpop": {
+        "predictedWB": 50.32,
+        "error": 2.36
+      },
+      "bestModel": "hp_local"
     },
     "E07000094": {
       "areaName": "Winchester",
-      "actualWB": 88.12,
-      "ourPredictedWB": 85.94,
-      "ourError": -2.18,
-      "newethpopPredictedWB": 90.4,
-      "newethpopError": 2.28,
-      "ourBetter": true
+      "actualWB": 88.13,
+      "hp_local": {
+        "predictedWB": 90.68,
+        "error": 2.55
+      },
+      "hp_national": {
+        "predictedWB": 89.74,
+        "error": 1.61
+      },
+      "newethpop": {
+        "predictedWB": 89.71,
+        "error": 1.58
+      },
+      "bestModel": "hp_national"
     },
     "E07000108": {
       "areaName": "Dover",
       "actualWB": 90.29,
-      "ourPredictedWB": 86.64,
-      "ourError": -3.65,
-      "newethpopPredictedWB": 90.44,
-      "newethpopError": 0.15,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 92.57,
+        "error": 2.28
+      },
+      "hp_national": {
+        "predictedWB": 91.2,
+        "error": 0.91
+      },
+      "newethpop": {
+        "predictedWB": 89.86,
+        "error": -0.43
+      },
+      "bestModel": "hp_national"
     },
     "E07000073": {
       "areaName": "Harlow",
-      "actualWB": 72.85,
-      "ourPredictedWB": 78.76,
-      "ourError": 5.91,
-      "newethpopPredictedWB": 82.66,
-      "newethpopError": 9.81,
-      "ourBetter": true
+      "actualWB": 72.86,
+      "hp_local": {
+        "predictedWB": 78.03,
+        "error": 5.17
+      },
+      "hp_national": {
+        "predictedWB": 80.55,
+        "error": 7.69
+      },
+      "newethpop": {
+        "predictedWB": 78.76,
+        "error": 5.9
+      },
+      "bestModel": "hp_local"
     },
     "E07000132": {
       "areaName": "Hinckley and Bosworth",
-      "actualWB": 90.83,
-      "ourPredictedWB": 87.69,
-      "ourError": -3.14,
-      "newethpopPredictedWB": 92.95,
-      "newethpopError": 2.12,
-      "ourBetter": false
-    },
-    "W06000012": {
-      "areaName": "Neath Port Talbot",
-      "actualWB": 94.95,
-      "ourPredictedWB": 91.52,
-      "ourError": -3.43,
-      "newethpopPredictedWB": 96.73,
-      "newethpopError": 1.78,
-      "ourBetter": false
+      "actualWB": 90.82,
+      "hp_local": {
+        "predictedWB": 93.46,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 93.42,
+        "error": 2.6
+      },
+      "newethpop": {
+        "predictedWB": 92.52,
+        "error": 1.7
+      },
+      "bestModel": "hp_national"
     },
     "E07000173": {
       "areaName": "Gedling",
-      "actualWB": 85.59,
-      "ourPredictedWB": 85.24,
-      "ourError": -0.35,
-      "newethpopPredictedWB": 89.93,
-      "newethpopError": 4.34,
-      "ourBetter": true
+      "actualWB": 85.54,
+      "hp_local": {
+        "predictedWB": 88.52,
+        "error": 2.98
+      },
+      "hp_national": {
+        "predictedWB": 88.44,
+        "error": 2.9
+      },
+      "newethpop": {
+        "predictedWB": 88.5,
+        "error": 2.96
+      },
+      "bestModel": "hp_national"
     },
     "E07000113": {
       "areaName": "Swale",
-      "actualWB": 88.6,
-      "ourPredictedWB": 88.69,
-      "ourError": 0.09,
-      "newethpopPredictedWB": 92.72,
-      "newethpopError": 4.12,
-      "ourBetter": true
-    },
-    "W06000005": {
-      "areaName": "Flintshire",
-      "actualWB": 93.16,
-      "ourPredictedWB": 90.87,
-      "ourError": -2.29,
-      "newethpopPredictedWB": 94.53,
-      "newethpopError": 1.37,
-      "ourBetter": false
+      "actualWB": 88.62,
+      "hp_local": {
+        "predictedWB": 91.49,
+        "error": 2.87
+      },
+      "hp_national": {
+        "predictedWB": 91.82,
+        "error": 3.2
+      },
+      "newethpop": {
+        "predictedWB": 91.52,
+        "error": 2.9
+      },
+      "bestModel": "hp_local"
     },
     "E07000077": {
       "areaName": "Uttlesford",
       "actualWB": 88.94,
-      "ourPredictedWB": 83.92,
-      "ourError": -5.02,
-      "newethpopPredictedWB": 90.68,
-      "newethpopError": 1.74,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 92.11,
+        "error": 3.17
+      },
+      "hp_national": {
+        "predictedWB": 90.54,
+        "error": 1.6
+      },
+      "newethpop": {
+        "predictedWB": 89.55,
+        "error": 0.61
+      },
+      "bestModel": "hp_national"
     },
     "E07000062": {
       "areaName": "Hastings",
-      "actualWB": 85.08,
-      "ourPredictedWB": 82.51,
-      "ourError": -2.57,
-      "newethpopPredictedWB": 89.62,
-      "newethpopError": 4.54,
-      "ourBetter": true
-    },
-    "W06000010": {
-      "areaName": "Carmarthenshire",
-      "actualWB": 94.03,
-      "ourPredictedWB": 91.52,
-      "ourError": -2.51,
-      "newethpopPredictedWB": 95.36,
-      "newethpopError": 1.33,
-      "ourBetter": false
+      "actualWB": 85.06,
+      "hp_local": {
+        "predictedWB": 87.86,
+        "error": 2.8
+      },
+      "hp_national": {
+        "predictedWB": 87.03,
+        "error": 1.97
+      },
+      "newethpop": {
+        "predictedWB": 88.43,
+        "error": 3.37
+      },
+      "bestModel": "hp_national"
     },
     "E06000027": {
       "areaName": "Torbay",
-      "actualWB": 92.14,
-      "ourPredictedWB": 89.12,
-      "ourError": -3.02,
-      "newethpopPredictedWB": 94.02,
-      "newethpopError": 1.88,
-      "ourBetter": false
+      "actualWB": 92.11,
+      "hp_local": {
+        "predictedWB": 93.98,
+        "error": 1.87
+      },
+      "hp_national": {
+        "predictedWB": 93.42,
+        "error": 1.31
+      },
+      "newethpop": {
+        "predictedWB": 93.74,
+        "error": 1.63
+      },
+      "bestModel": "hp_national"
     },
     "E07000038": {
       "areaName": "North East Derbyshire",
-      "actualWB": 95.74,
-      "ourPredictedWB": 89.34,
-      "ourError": -6.4,
-      "newethpopPredictedWB": 95.68,
-      "newethpopError": -0.06,
-      "ourBetter": false
+      "actualWB": 95.75,
+      "hp_local": {
+        "predictedWB": 96.87,
+        "error": 1.12
+      },
+      "hp_national": {
+        "predictedWB": 96.02,
+        "error": 0.27
+      },
+      "newethpop": {
+        "predictedWB": 94.99,
+        "error": -0.76
+      },
+      "bestModel": "hp_national"
     },
     "E06000011": {
       "areaName": "East Riding of Yorkshire",
       "actualWB": 94.63,
-      "ourPredictedWB": 93.85,
-      "ourError": -0.78,
-      "newethpopPredictedWB": 95.48,
-      "newethpopError": 0.85,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 95.67,
+        "error": 1.04
+      },
+      "hp_national": {
+        "predictedWB": 95.01,
+        "error": 0.38
+      },
+      "newethpop": {
+        "predictedWB": 95.22,
+        "error": 0.59
+      },
+      "bestModel": "hp_national"
     },
     "E07000218": {
       "areaName": "North Warwickshire",
-      "actualWB": 93.18,
-      "ourPredictedWB": 84.81,
-      "ourError": -8.37,
-      "newethpopPredictedWB": 95.63,
-      "newethpopError": 2.45,
-      "ourBetter": false
-    },
-    "W06000002": {
-      "areaName": "Gwynedd",
-      "actualWB": 93.32,
-      "ourPredictedWB": 88.37,
-      "ourError": -4.95,
-      "newethpopPredictedWB": 91.62,
-      "newethpopError": -1.7,
-      "ourBetter": false
+      "actualWB": 93.17,
+      "hp_local": {
+        "predictedWB": 96.15,
+        "error": 2.98
+      },
+      "hp_national": {
+        "predictedWB": 95.71,
+        "error": 2.54
+      },
+      "newethpop": {
+        "predictedWB": 95.17,
+        "error": 2
+      },
+      "bestModel": "hp_national"
     },
     "E09000019": {
       "areaName": "Islington",
       "actualWB": 39.75,
-      "ourPredictedWB": 54.2,
-      "ourError": 14.45,
-      "newethpopPredictedWB": 51.38,
-      "newethpopError": 11.63,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 42.92,
+        "error": 3.17
+      },
+      "hp_national": {
+        "predictedWB": 44.42,
+        "error": 4.67
+      },
+      "newethpop": {
+        "predictedWB": 45.7,
+        "error": 5.95
+      },
+      "bestModel": "hp_local"
     },
     "E07000098": {
       "areaName": "Hertsmere",
-      "actualWB": 63.09,
-      "ourPredictedWB": 73.16,
-      "ourError": 10.07,
-      "newethpopPredictedWB": 73.47,
-      "newethpopError": 10.38,
-      "ourBetter": true
+      "actualWB": 63.1,
+      "hp_local": {
+        "predictedWB": 67.46,
+        "error": 4.36
+      },
+      "hp_national": {
+        "predictedWB": 71.52,
+        "error": 8.42
+      },
+      "newethpop": {
+        "predictedWB": 69.84,
+        "error": 6.74
+      },
+      "bestModel": "hp_local"
     },
     "E07000239": {
       "areaName": "Wyre Forest",
-      "actualWB": 92.47,
-      "ourPredictedWB": 87.59,
-      "ourError": -4.88,
-      "newethpopPredictedWB": 94.45,
-      "newethpopError": 1.98,
-      "ourBetter": false
-    },
-    "W06000019": {
-      "areaName": "Blaenau Gwent",
-      "actualWB": 95.65,
-      "ourPredictedWB": 86.64,
-      "ourError": -9.01,
-      "newethpopPredictedWB": 95.91,
-      "newethpopError": 0.26,
-      "ourBetter": false
+      "actualWB": 92.46,
+      "hp_local": {
+        "predictedWB": 94.59,
+        "error": 2.13
+      },
+      "hp_national": {
+        "predictedWB": 94.02,
+        "error": 1.56
+      },
+      "newethpop": {
+        "predictedWB": 94.22,
+        "error": 1.76
+      },
+      "bestModel": "hp_national"
     },
     "E07000110": {
       "areaName": "Maidstone",
-      "actualWB": 81.98,
-      "ourPredictedWB": 85.38,
-      "ourError": 3.4,
-      "newethpopPredictedWB": 87.06,
-      "newethpopError": 5.08,
-      "ourBetter": true
-    },
-    "W06000013": {
-      "areaName": "Bridgend",
-      "actualWB": 94.68,
-      "ourPredictedWB": 90.59,
-      "ourError": -4.09,
-      "newethpopPredictedWB": 94.93,
-      "newethpopError": 0.25,
-      "ourBetter": false
+      "actualWB": 81.99,
+      "hp_local": {
+        "predictedWB": 85.43,
+        "error": 3.44
+      },
+      "hp_national": {
+        "predictedWB": 86.94,
+        "error": 4.95
+      },
+      "newethpop": {
+        "predictedWB": 85.91,
+        "error": 3.92
+      },
+      "bestModel": "hp_local"
     },
     "E07000142": {
       "areaName": "West Lindsey",
-      "actualWB": 94.55,
-      "ourPredictedWB": 88.29,
-      "ourError": -6.26,
-      "newethpopPredictedWB": 96.11,
-      "newethpopError": 1.56,
-      "ourBetter": false
+      "actualWB": 94.54,
+      "hp_local": {
+        "predictedWB": 96.31,
+        "error": 1.77
+      },
+      "hp_national": {
+        "predictedWB": 95.84,
+        "error": 1.3
+      },
+      "newethpop": {
+        "predictedWB": 95.83,
+        "error": 1.29
+      },
+      "bestModel": "hp_national"
     },
     "E07000045": {
       "areaName": "Teignbridge",
       "actualWB": 94.91,
-      "ourPredictedWB": 90.08,
-      "ourError": -4.83,
-      "newethpopPredictedWB": 95.18,
-      "newethpopError": 0.27,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 96.22,
+        "error": 1.31
+      },
+      "hp_national": {
+        "predictedWB": 95.4,
+        "error": 0.49
+      },
+      "newethpop": {
+        "predictedWB": 94.98,
+        "error": 0.07
+      },
+      "bestModel": "hp_national"
     },
     "E07000061": {
       "areaName": "Eastbourne",
-      "actualWB": 82.09,
-      "ourPredictedWB": 81,
-      "ourError": -1.09,
-      "newethpopPredictedWB": 86.31,
-      "newethpopError": 4.22,
-      "ourBetter": true
+      "actualWB": 82.08,
+      "hp_local": {
+        "predictedWB": 85.42,
+        "error": 3.34
+      },
+      "hp_national": {
+        "predictedWB": 83.83,
+        "error": 1.75
+      },
+      "newethpop": {
+        "predictedWB": 85.62,
+        "error": 3.54
+      },
+      "bestModel": "hp_national"
     },
     "E07000176": {
       "areaName": "Rushcliffe",
-      "actualWB": 86.06,
-      "ourPredictedWB": 84.26,
-      "ourError": -1.8,
-      "newethpopPredictedWB": 89.79,
-      "newethpopError": 3.73,
-      "ourBetter": true
+      "actualWB": 86.08,
+      "hp_local": {
+        "predictedWB": 88.73,
+        "error": 2.65
+      },
+      "hp_national": {
+        "predictedWB": 87.98,
+        "error": 1.9
+      },
+      "newethpop": {
+        "predictedWB": 89.08,
+        "error": 3
+      },
+      "bestModel": "hp_national"
     },
     "E06000037": {
       "areaName": "West Berkshire",
       "actualWB": 85.63,
-      "ourPredictedWB": 86.5,
-      "ourError": 0.87,
-      "newethpopPredictedWB": 89.83,
-      "newethpopError": 4.2,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 88.38,
+        "error": 2.75
+      },
+      "hp_national": {
+        "predictedWB": 88.3,
+        "error": 2.67
+      },
+      "newethpop": {
+        "predictedWB": 88.92,
+        "error": 3.29
+      },
+      "bestModel": "hp_national"
     },
     "E07000135": {
       "areaName": "Oadby and Wigston",
-      "actualWB": 59.76,
-      "ourPredictedWB": 61.27,
-      "ourError": 1.51,
-      "newethpopPredictedWB": 62.95,
-      "newethpopError": 3.19,
-      "ourBetter": true
+      "actualWB": 59.72,
+      "hp_local": {
+        "predictedWB": 63.31,
+        "error": 3.59
+      },
+      "hp_national": {
+        "predictedWB": 63.01,
+        "error": 3.29
+      },
+      "newethpop": {
+        "predictedWB": 61.45,
+        "error": 1.73
+      },
+      "bestModel": "hp_national"
     },
     "E07000129": {
       "areaName": "Blaby",
-      "actualWB": 82.34,
-      "ourPredictedWB": 81.72,
-      "ourError": -0.62,
-      "newethpopPredictedWB": 86.7,
-      "newethpopError": 4.36,
-      "ourBetter": true
-    },
-    "W06000024": {
-      "areaName": "Merthyr Tydfil",
-      "actualWB": 93.33,
-      "ourPredictedWB": 82.44,
-      "ourError": -10.89,
-      "newethpopPredictedWB": 93.14,
-      "newethpopError": -0.19,
-      "ourBetter": false
+      "actualWB": 82.29,
+      "hp_local": {
+        "predictedWB": 85.31,
+        "error": 3.02
+      },
+      "hp_national": {
+        "predictedWB": 85.88,
+        "error": 3.59
+      },
+      "newethpop": {
+        "predictedWB": 85.67,
+        "error": 3.38
+      },
+      "bestModel": "hp_local"
     },
     "E09000033": {
       "areaName": "Westminster",
       "actualWB": 27.99,
-      "ourPredictedWB": 35.95,
-      "ourError": 7.96,
-      "newethpopPredictedWB": 30.38,
-      "newethpopError": 2.39,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 30.63,
+        "error": 2.64
+      },
+      "hp_national": {
+        "predictedWB": 29.35,
+        "error": 1.36
+      },
+      "newethpop": {
+        "predictedWB": 28.77,
+        "error": 0.78
+      },
+      "bestModel": "hp_national"
     },
     "E07000192": {
       "areaName": "Cannock Chase",
-      "actualWB": 94.52,
-      "ourPredictedWB": 88.89,
-      "ourError": -5.63,
-      "newethpopPredictedWB": 95.33,
-      "newethpopError": 0.81,
-      "ourBetter": false
+      "actualWB": 94.54,
+      "hp_local": {
+        "predictedWB": 96.22,
+        "error": 1.68
+      },
+      "hp_national": {
+        "predictedWB": 95.8,
+        "error": 1.26
+      },
+      "newethpop": {
+        "predictedWB": 94.93,
+        "error": 0.39
+      },
+      "bestModel": "hp_national"
     },
     "E07000112": {
       "areaName": "Shepway",
-      "actualWB": 88,
-      "ourPredictedWB": 84.4,
-      "ourError": -3.6,
-      "newethpopPredictedWB": 88.22,
-      "newethpopError": 0.22,
-      "ourBetter": false
-    },
-    "E07000124": {
-      "areaName": "Ribble Valley",
-      "actualWB": 94.07,
-      "ourPredictedWB": 83.55,
-      "ourError": -10.52,
-      "newethpopPredictedWB": 95.62,
-      "newethpopError": 1.55,
-      "ourBetter": false
+      "actualWB": 88.01,
+      "hp_local": {
+        "predictedWB": 90.21,
+        "error": 2.2
+      },
+      "hp_national": {
+        "predictedWB": 88.55,
+        "error": 0.54
+      },
+      "newethpop": {
+        "predictedWB": 87.49,
+        "error": -0.52
+      },
+      "bestModel": "hp_national"
     },
     "E07000197": {
       "areaName": "Stafford",
-      "actualWB": 90.01,
-      "ourPredictedWB": 87.61,
-      "ourError": -2.4,
-      "newethpopPredictedWB": 91.34,
-      "newethpopError": 1.33,
-      "ourBetter": false
+      "actualWB": 90.02,
+      "hp_local": {
+        "predictedWB": 91.85,
+        "error": 1.83
+      },
+      "hp_national": {
+        "predictedWB": 90.91,
+        "error": 0.89
+      },
+      "newethpop": {
+        "predictedWB": 90.02,
+        "error": 0
+      },
+      "bestModel": "hp_national"
     },
     "E07000087": {
       "areaName": "Fareham",
-      "actualWB": 92.75,
-      "ourPredictedWB": 88.17,
-      "ourError": -4.58,
-      "newethpopPredictedWB": 93.26,
-      "newethpopError": 0.51,
-      "ourBetter": false
-    },
-    "E07000198": {
-      "areaName": "Staffordshire Moorlands",
-      "actualWB": 96.58,
-      "ourPredictedWB": 89.61,
-      "ourError": -6.97,
-      "newethpopPredictedWB": 96.34,
-      "newethpopError": -0.24,
-      "ourBetter": false
+      "actualWB": 92.76,
+      "hp_local": {
+        "predictedWB": 94.58,
+        "error": 1.82
+      },
+      "hp_national": {
+        "predictedWB": 93.44,
+        "error": 0.68
+      },
+      "newethpop": {
+        "predictedWB": 92.77,
+        "error": 0.01
+      },
+      "bestModel": "hp_national"
     },
     "E09000029": {
       "areaName": "Sutton",
-      "actualWB": 57.25,
-      "ourPredictedWB": 71.2,
-      "ourError": 13.95,
-      "newethpopPredictedWB": 66.45,
-      "newethpopError": 9.2,
-      "ourBetter": false
-    },
-    "W06000001": {
-      "areaName": "Isle of Anglesey",
-      "actualWB": 96.31,
-      "ourPredictedWB": 86.39,
-      "ourError": -9.92,
-      "newethpopPredictedWB": 96.19,
-      "newethpopError": -0.12,
-      "ourBetter": false
+      "actualWB": 57.26,
+      "hp_local": {
+        "predictedWB": 60,
+        "error": 2.74
+      },
+      "hp_national": {
+        "predictedWB": 66.53,
+        "error": 9.27
+      },
+      "newethpop": {
+        "predictedWB": 62.86,
+        "error": 5.6
+      },
+      "bestModel": "hp_local"
     },
     "E06000051": {
       "areaName": "Shropshire",
-      "actualWB": 93.3,
-      "ourPredictedWB": 93.07,
-      "ourError": -0.23,
-      "newethpopPredictedWB": 93.86,
-      "newethpopError": 0.56,
-      "ourBetter": true
+      "actualWB": 93.31,
+      "hp_local": {
+        "predictedWB": 94.93,
+        "error": 1.62
+      },
+      "hp_national": {
+        "predictedWB": 94.03,
+        "error": 0.72
+      },
+      "newethpop": {
+        "predictedWB": 93.62,
+        "error": 0.31
+      },
+      "bestModel": "hp_national"
     },
     "E07000069": {
       "areaName": "Castle Point",
-      "actualWB": 92.65,
-      "ourPredictedWB": 87.65,
-      "ourError": -5,
-      "newethpopPredictedWB": 95.85,
-      "newethpopError": 3.2,
-      "ourBetter": false
+      "actualWB": 92.68,
+      "hp_local": {
+        "predictedWB": 95.48,
+        "error": 2.8
+      },
+      "hp_national": {
+        "predictedWB": 94.63,
+        "error": 1.95
+      },
+      "newethpop": {
+        "predictedWB": 94.77,
+        "error": 2.09
+      },
+      "bestModel": "hp_national"
     },
     "E07000207": {
       "areaName": "Elmbridge",
       "actualWB": 74.14,
-      "ourPredictedWB": 75.63,
-      "ourError": 1.49,
-      "newethpopPredictedWB": 76.23,
-      "newethpopError": 2.09,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 77.5,
+        "error": 3.36
+      },
+      "hp_national": {
+        "predictedWB": 75.6,
+        "error": 1.46
+      },
+      "newethpop": {
+        "predictedWB": 75.59,
+        "error": 1.45
+      },
+      "bestModel": "hp_national"
     },
     "E07000143": {
       "areaName": "Breckland",
       "actualWB": 88.72,
-      "ourPredictedWB": 85.7,
-      "ourError": -3.02,
-      "newethpopPredictedWB": 88.91,
-      "newethpopError": 0.19,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 90.3,
+        "error": 1.58
+      },
+      "hp_national": {
+        "predictedWB": 87.94,
+        "error": -0.78
+      },
+      "newethpop": {
+        "predictedWB": 88.25,
+        "error": -0.47
+      },
+      "bestModel": "hp_national"
     },
     "E07000068": {
       "areaName": "Brentwood",
       "actualWB": 82.67,
-      "ourPredictedWB": 81.35,
-      "ourError": -1.32,
-      "newethpopPredictedWB": 88.33,
-      "newethpopError": 5.66,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 87.32,
+        "error": 4.65
+      },
+      "hp_national": {
+        "predictedWB": 87.31,
+        "error": 4.64
+      },
+      "newethpop": {
+        "predictedWB": 86.95,
+        "error": 4.28
+      },
+      "bestModel": "hp_national"
     },
     "E07000203": {
       "areaName": "Mid Suffolk",
       "actualWB": 94.04,
-      "ourPredictedWB": 88.37,
-      "ourError": -5.67,
-      "newethpopPredictedWB": 94.81,
-      "newethpopError": 0.77,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 95.76,
+        "error": 1.72
+      },
+      "hp_national": {
+        "predictedWB": 94.97,
+        "error": 0.93
+      },
+      "newethpop": {
+        "predictedWB": 94.06,
+        "error": 0.02
+      },
+      "bestModel": "hp_national"
     },
     "E07000179": {
       "areaName": "South Oxfordshire",
-      "actualWB": 85.78,
-      "ourPredictedWB": 86.02,
-      "ourError": 0.24,
-      "newethpopPredictedWB": 88.26,
-      "newethpopError": 2.48,
-      "ourBetter": true
+      "actualWB": 85.8,
+      "hp_local": {
+        "predictedWB": 89.15,
+        "error": 3.35
+      },
+      "hp_national": {
+        "predictedWB": 88.89,
+        "error": 3.09
+      },
+      "newethpop": {
+        "predictedWB": 87.43,
+        "error": 1.63
+      },
+      "bestModel": "hp_national"
     },
     "E07000088": {
       "areaName": "Gosport",
-      "actualWB": 92.45,
-      "ourPredictedWB": 85.96,
-      "ourError": -6.49,
-      "newethpopPredictedWB": 93.56,
-      "newethpopError": 1.11,
-      "ourBetter": false
+      "actualWB": 92.43,
+      "hp_local": {
+        "predictedWB": 94.04,
+        "error": 1.61
+      },
+      "hp_national": {
+        "predictedWB": 93.01,
+        "error": 0.58
+      },
+      "newethpop": {
+        "predictedWB": 92.41,
+        "error": -0.02
+      },
+      "bestModel": "hp_national"
     },
     "E07000084": {
       "areaName": "Basingstoke and Deane",
-      "actualWB": 81.86,
-      "ourPredictedWB": 84.82,
-      "ourError": 2.96,
-      "newethpopPredictedWB": 86.76,
-      "newethpopError": 4.9,
-      "ourBetter": true
-    },
-    "W06000003": {
-      "areaName": "Conwy",
-      "actualWB": 94.06,
-      "ourPredictedWB": 89.19,
-      "ourError": -4.87,
-      "newethpopPredictedWB": 95.24,
-      "newethpopError": 1.18,
-      "ourBetter": false
+      "actualWB": 81.84,
+      "hp_local": {
+        "predictedWB": 84.86,
+        "error": 3.02
+      },
+      "hp_national": {
+        "predictedWB": 85.91,
+        "error": 4.07
+      },
+      "newethpop": {
+        "predictedWB": 85.63,
+        "error": 3.79
+      },
+      "bestModel": "hp_local"
     },
     "E07000041": {
       "areaName": "Exeter",
-      "actualWB": 82.7,
-      "ourPredictedWB": 82.32,
-      "ourError": -0.38,
-      "newethpopPredictedWB": 82.13,
-      "newethpopError": -0.57,
-      "ourBetter": true
+      "actualWB": 82.67,
+      "hp_local": {
+        "predictedWB": 87.39,
+        "error": 4.72
+      },
+      "hp_national": {
+        "predictedWB": 84.91,
+        "error": 2.24
+      },
+      "newethpop": {
+        "predictedWB": 81.51,
+        "error": -1.16
+      },
+      "bestModel": "hp_national"
     },
     "E06000019": {
       "areaName": "Herefordshire, County of",
-      "actualWB": 91.12,
-      "ourPredictedWB": 89.58,
-      "ourError": -1.54,
-      "newethpopPredictedWB": 91.55,
-      "newethpopError": 0.43,
-      "ourBetter": false
+      "actualWB": 91.11,
+      "hp_local": {
+        "predictedWB": 92.73,
+        "error": 1.62
+      },
+      "hp_national": {
+        "predictedWB": 91.7,
+        "error": 0.59
+      },
+      "newethpop": {
+        "predictedWB": 91.34,
+        "error": 0.23
+      },
+      "bestModel": "hp_national"
     },
     "E07000215": {
       "areaName": "Tandridge",
-      "actualWB": 83.46,
-      "ourPredictedWB": 82.19,
-      "ourError": -1.27,
-      "newethpopPredictedWB": 87.91,
-      "newethpopError": 4.45,
-      "ourBetter": true
+      "actualWB": 83.5,
+      "hp_local": {
+        "predictedWB": 88.11,
+        "error": 4.61
+      },
+      "hp_national": {
+        "predictedWB": 87.42,
+        "error": 3.92
+      },
+      "newethpop": {
+        "predictedWB": 86.49,
+        "error": 2.99
+      },
+      "bestModel": "hp_national"
     },
     "E06000052": {
       "areaName": "Cornwall",
       "actualWB": 93.61,
-      "ourPredictedWB": 92.95,
-      "ourError": -0.66,
-      "newethpopPredictedWB": 95.38,
-      "newethpopError": 1.77,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 95.99,
+        "error": 2.38
+      },
+      "hp_national": {
+        "predictedWB": 94.65,
+        "error": 1.04
+      },
+      "newethpop": {
+        "predictedWB": 95.17,
+        "error": 1.56
+      },
+      "bestModel": "hp_national"
     },
     "E07000090": {
       "areaName": "Havant",
-      "actualWB": 93.17,
-      "ourPredictedWB": 89.18,
-      "ourError": -3.99,
-      "newethpopPredictedWB": 93.69,
-      "newethpopError": 0.52,
-      "ourBetter": false
+      "actualWB": 93.2,
+      "hp_local": {
+        "predictedWB": 94.93,
+        "error": 1.73
+      },
+      "hp_national": {
+        "predictedWB": 94.25,
+        "error": 1.05
+      },
+      "newethpop": {
+        "predictedWB": 93.09,
+        "error": -0.11
+      },
+      "bestModel": "hp_national"
     },
     "E07000011": {
       "areaName": "Huntingdonshire",
       "actualWB": 85.21,
-      "ourPredictedWB": 85.87,
-      "ourError": 0.66,
-      "newethpopPredictedWB": 87.56,
-      "newethpopError": 2.35,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 87.43,
+        "error": 2.22
+      },
+      "hp_national": {
+        "predictedWB": 86.81,
+        "error": 1.6
+      },
+      "newethpop": {
+        "predictedWB": 86.34,
+        "error": 1.13
+      },
+      "bestModel": "hp_national"
     },
     "E07000039": {
       "areaName": "South Derbyshire",
-      "actualWB": 90.14,
-      "ourPredictedWB": 86.48,
-      "ourError": -3.66,
-      "newethpopPredictedWB": 93.59,
-      "newethpopError": 3.45,
-      "ourBetter": false
-    },
-    "W06000014": {
-      "areaName": "Vale of Glamorgan",
-      "actualWB": 91.99,
-      "ourPredictedWB": 88.65,
-      "ourError": -3.34,
-      "newethpopPredictedWB": 94.15,
-      "newethpopError": 2.16,
-      "ourBetter": false
+      "actualWB": 90.17,
+      "hp_local": {
+        "predictedWB": 92.84,
+        "error": 2.67
+      },
+      "hp_national": {
+        "predictedWB": 92.59,
+        "error": 2.42
+      },
+      "newethpop": {
+        "predictedWB": 92.79,
+        "error": 2.62
+      },
+      "bestModel": "hp_national"
     },
     "E07000107": {
       "areaName": "Dartford",
-      "actualWB": 67.28,
-      "ourPredictedWB": 78.53,
-      "ourError": 11.25,
-      "newethpopPredictedWB": 80.6,
-      "newethpopError": 13.32,
-      "ourBetter": true
+      "actualWB": 67.26,
+      "hp_local": {
+        "predictedWB": 72.55,
+        "error": 5.29
+      },
+      "hp_national": {
+        "predictedWB": 78.82,
+        "error": 11.56
+      },
+      "newethpop": {
+        "predictedWB": 76.79,
+        "error": 9.53
+      },
+      "bestModel": "hp_local"
     },
     "E07000044": {
       "areaName": "South Hams",
-      "actualWB": 94.19,
-      "ourPredictedWB": 87,
-      "ourError": -7.19,
-      "newethpopPredictedWB": 94.96,
-      "newethpopError": 0.77,
-      "ourBetter": false
+      "actualWB": 94.21,
+      "hp_local": {
+        "predictedWB": 95.66,
+        "error": 1.45
+      },
+      "hp_national": {
+        "predictedWB": 94.79,
+        "error": 0.58
+      },
+      "newethpop": {
+        "predictedWB": 94.64,
+        "error": 0.43
+      },
+      "bestModel": "hp_national"
     },
     "E07000229": {
       "areaName": "Worthing",
-      "actualWB": 85.04,
-      "ourPredictedWB": 83.28,
-      "ourError": -1.76,
-      "newethpopPredictedWB": 87.12,
-      "newethpopError": 2.08,
-      "ourBetter": true
+      "actualWB": 85,
+      "hp_local": {
+        "predictedWB": 87.95,
+        "error": 2.95
+      },
+      "hp_national": {
+        "predictedWB": 87.07,
+        "error": 2.07
+      },
+      "newethpop": {
+        "predictedWB": 86.15,
+        "error": 1.15
+      },
+      "bestModel": "hp_national"
     },
     "E09000027": {
       "areaName": "Richmond upon Thames",
       "actualWB": 63.04,
-      "ourPredictedWB": 69.92,
-      "ourError": 6.88,
-      "newethpopPredictedWB": 68.22,
-      "newethpopError": 5.18,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 66.23,
+        "error": 3.19
+      },
+      "hp_national": {
+        "predictedWB": 67.24,
+        "error": 4.2
+      },
+      "newethpop": {
+        "predictedWB": 67.33,
+        "error": 4.29
+      },
+      "bestModel": "hp_local"
     },
     "E07000103": {
       "areaName": "Watford",
-      "actualWB": 45.79,
-      "ourPredictedWB": 60.27,
-      "ourError": 14.48,
-      "newethpopPredictedWB": 57.24,
-      "newethpopError": 11.45,
-      "ourBetter": false
-    },
-    "E07000133": {
-      "areaName": "Melton",
-      "actualWB": 92.87,
-      "ourPredictedWB": 81.28,
-      "ourError": -11.59,
-      "newethpopPredictedWB": 94.12,
-      "newethpopError": 1.25,
-      "ourBetter": false
+      "actualWB": 45.78,
+      "hp_local": {
+        "predictedWB": 50.1,
+        "error": 4.32
+      },
+      "hp_national": {
+        "predictedWB": 56.94,
+        "error": 11.16
+      },
+      "newethpop": {
+        "predictedWB": 53.44,
+        "error": 7.66
+      },
+      "bestModel": "hp_local"
     },
     "E07000149": {
       "areaName": "South Norfolk",
-      "actualWB": 91.79,
-      "ourPredictedWB": 89.27,
-      "ourError": -2.52,
-      "newethpopPredictedWB": 92.52,
-      "newethpopError": 0.73,
-      "ourBetter": false
+      "actualWB": 91.8,
+      "hp_local": {
+        "predictedWB": 94.36,
+        "error": 2.56
+      },
+      "hp_national": {
+        "predictedWB": 93.87,
+        "error": 2.07
+      },
+      "newethpop": {
+        "predictedWB": 91.94,
+        "error": 0.14
+      },
+      "bestModel": "hp_national"
     },
     "E07000008": {
       "areaName": "Cambridge",
-      "actualWB": 52.99,
-      "ourPredictedWB": 62.07,
-      "ourError": 9.08,
-      "newethpopPredictedWB": 58.2,
-      "newethpopError": 5.21,
-      "ourBetter": false
-    },
-    "W06000020": {
-      "areaName": "Torfaen",
-      "actualWB": 95.23,
-      "ourPredictedWB": 88.77,
-      "ourError": -6.46,
-      "newethpopPredictedWB": 96.93,
-      "newethpopError": 1.7,
-      "ourBetter": false
+      "actualWB": 52.98,
+      "hp_local": {
+        "predictedWB": 58.68,
+        "error": 5.7
+      },
+      "hp_national": {
+        "predictedWB": 59.4,
+        "error": 6.42
+      },
+      "newethpop": {
+        "predictedWB": 57.12,
+        "error": 4.14
+      },
+      "bestModel": "hp_local"
     },
     "E07000145": {
       "areaName": "Great Yarmouth",
       "actualWB": 88.89,
-      "ourPredictedWB": 85.38,
-      "ourError": -3.51,
-      "newethpopPredictedWB": 91.64,
-      "newethpopError": 2.75,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 91.29,
+        "error": 2.4
+      },
+      "hp_national": {
+        "predictedWB": 89.87,
+        "error": 0.98
+      },
+      "newethpop": {
+        "predictedWB": 91.11,
+        "error": 2.22
+      },
+      "bestModel": "hp_national"
     },
     "E07000093": {
       "areaName": "Test Valley",
-      "actualWB": 88.03,
-      "ourPredictedWB": 86.44,
-      "ourError": -1.59,
-      "newethpopPredictedWB": 90.81,
-      "newethpopError": 2.78,
-      "ourBetter": true
+      "actualWB": 88.01,
+      "hp_local": {
+        "predictedWB": 90.92,
+        "error": 2.91
+      },
+      "hp_national": {
+        "predictedWB": 90.47,
+        "error": 2.46
+      },
+      "newethpop": {
+        "predictedWB": 90.12,
+        "error": 2.11
+      },
+      "bestModel": "hp_national"
     },
     "E06000022": {
       "areaName": "Bath and North East Somerset",
-      "actualWB": 85.56,
-      "ourPredictedWB": 86.37,
-      "ourError": 0.81,
-      "newethpopPredictedWB": 87.48,
-      "newethpopError": 1.92,
-      "ourBetter": true
+      "actualWB": 85.57,
+      "hp_local": {
+        "predictedWB": 88.93,
+        "error": 3.36
+      },
+      "hp_national": {
+        "predictedWB": 87.18,
+        "error": 1.61
+      },
+      "newethpop": {
+        "predictedWB": 86.78,
+        "error": 1.21
+      },
+      "bestModel": "hp_national"
     },
     "E06000036": {
       "areaName": "Bracknell Forest",
-      "actualWB": 77.81,
-      "ourPredictedWB": 80.2,
-      "ourError": 2.39,
-      "newethpopPredictedWB": 83.03,
-      "newethpopError": 5.22,
-      "ourBetter": true
-    },
-    "W06000023": {
-      "areaName": "Powys",
-      "actualWB": 94.88,
-      "ourPredictedWB": 90.35,
-      "ourError": -4.53,
-      "newethpopPredictedWB": 95.12,
-      "newethpopError": 0.24,
-      "ourBetter": false
+      "actualWB": 77.79,
+      "hp_local": {
+        "predictedWB": 80.86,
+        "error": 3.07
+      },
+      "hp_national": {
+        "predictedWB": 81.75,
+        "error": 3.96
+      },
+      "newethpop": {
+        "predictedWB": 81.07,
+        "error": 3.28
+      },
+      "bestModel": "hp_local"
     },
     "E07000144": {
       "areaName": "Broadland",
       "actualWB": 93.58,
-      "ourPredictedWB": 89.89,
-      "ourError": -3.69,
-      "newethpopPredictedWB": 95.12,
-      "newethpopError": 1.54,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 95.37,
+        "error": 1.79
+      },
+      "hp_national": {
+        "predictedWB": 94.91,
+        "error": 1.33
+      },
+      "newethpop": {
+        "predictedWB": 94.81,
+        "error": 1.23
+      },
+      "bestModel": "hp_national"
     },
     "E07000146": {
       "areaName": "King's Lynn and West Norfolk",
       "actualWB": 88.75,
-      "ourPredictedWB": 87.25,
-      "ourError": -1.5,
-      "newethpopPredictedWB": 89.84,
-      "newethpopError": 1.09,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 90.78,
+        "error": 2.03
+      },
+      "hp_national": {
+        "predictedWB": 89.22,
+        "error": 0.47
+      },
+      "newethpop": {
+        "predictedWB": 89.3,
+        "error": 0.55
+      },
+      "bestModel": "hp_national"
     },
     "E07000139": {
       "areaName": "North Kesteven",
-      "actualWB": 94.27,
-      "ourPredictedWB": 89.11,
-      "ourError": -5.16,
-      "newethpopPredictedWB": 96.01,
-      "newethpopError": 1.74,
-      "ourBetter": false
+      "actualWB": 94.28,
+      "hp_local": {
+        "predictedWB": 95.74,
+        "error": 1.46
+      },
+      "hp_national": {
+        "predictedWB": 94.91,
+        "error": 0.63
+      },
+      "newethpop": {
+        "predictedWB": 95.74,
+        "error": 1.46
+      },
+      "bestModel": "hp_national"
     },
     "E07000085": {
       "areaName": "East Hampshire",
-      "actualWB": 90.51,
-      "ourPredictedWB": 87.11,
-      "ourError": -3.4,
-      "newethpopPredictedWB": 91.97,
-      "newethpopError": 1.46,
-      "ourBetter": false
+      "actualWB": 90.53,
+      "hp_local": {
+        "predictedWB": 92.41,
+        "error": 1.88
+      },
+      "hp_national": {
+        "predictedWB": 91.48,
+        "error": 0.95
+      },
+      "newethpop": {
+        "predictedWB": 91.56,
+        "error": 1.03
+      },
+      "bestModel": "hp_national"
     },
     "E07000208": {
       "areaName": "Epsom and Ewell",
-      "actualWB": 69.36,
-      "ourPredictedWB": 71.73,
-      "ourError": 2.37,
-      "newethpopPredictedWB": 74.22,
-      "newethpopError": 4.86,
-      "ourBetter": true
+      "actualWB": 69.35,
+      "hp_local": {
+        "predictedWB": 73.73,
+        "error": 4.38
+      },
+      "hp_national": {
+        "predictedWB": 74.61,
+        "error": 5.26
+      },
+      "newethpop": {
+        "predictedWB": 72.64,
+        "error": 3.29
+      },
+      "bestModel": "hp_local"
     },
     "E07000037": {
       "areaName": "High Peak",
-      "actualWB": 94.77,
-      "ourPredictedWB": 87.95,
-      "ourError": -6.82,
-      "newethpopPredictedWB": 95.6,
-      "newethpopError": 0.83,
-      "ourBetter": false
+      "actualWB": 94.75,
+      "hp_local": {
+        "predictedWB": 95.86,
+        "error": 1.11
+      },
+      "hp_national": {
+        "predictedWB": 95.17,
+        "error": 0.42
+      },
+      "newethpop": {
+        "predictedWB": 95.21,
+        "error": 0.46
+      },
+      "bestModel": "hp_national"
     },
     "E07000082": {
       "areaName": "Stroud",
-      "actualWB": 92.4,
-      "ourPredictedWB": 88.41,
-      "ourError": -3.99,
-      "newethpopPredictedWB": 93.17,
-      "newethpopError": 0.77,
-      "ourBetter": false
+      "actualWB": 92.43,
+      "hp_local": {
+        "predictedWB": 94.3,
+        "error": 1.87
+      },
+      "hp_national": {
+        "predictedWB": 93.81,
+        "error": 1.38
+      },
+      "newethpop": {
+        "predictedWB": 92.75,
+        "error": 0.32
+      },
+      "bestModel": "hp_national"
     },
     "E07000200": {
       "areaName": "Babergh",
-      "actualWB": 93.58,
-      "ourPredictedWB": 87.19,
-      "ourError": -6.39,
-      "newethpopPredictedWB": 94.49,
-      "newethpopError": 0.91,
-      "ourBetter": false
+      "actualWB": 93.59,
+      "hp_local": {
+        "predictedWB": 95.21,
+        "error": 1.62
+      },
+      "hp_national": {
+        "predictedWB": 94.29,
+        "error": 0.7
+      },
+      "newethpop": {
+        "predictedWB": 93.95,
+        "error": 0.36
+      },
+      "bestModel": "hp_national"
     },
     "E07000234": {
       "areaName": "Bromsgrove",
-      "actualWB": 90.41,
-      "ourPredictedWB": 86.58,
-      "ourError": -3.83,
-      "newethpopPredictedWB": 93.26,
-      "newethpopError": 2.85,
-      "ourBetter": false
+      "actualWB": 90.44,
+      "hp_local": {
+        "predictedWB": 93.47,
+        "error": 3.03
+      },
+      "hp_national": {
+        "predictedWB": 92.28,
+        "error": 1.84
+      },
+      "newethpop": {
+        "predictedWB": 92.46,
+        "error": 2.02
+      },
+      "bestModel": "hp_national"
     },
     "E07000080": {
       "areaName": "Forest of Dean",
       "actualWB": 94.71,
-      "ourPredictedWB": 87.72,
-      "ourError": -6.99,
-      "newethpopPredictedWB": 96.46,
-      "newethpopError": 1.75,
-      "ourBetter": false
-    },
-    "W06000009": {
-      "areaName": "Pembrokeshire",
-      "actualWB": 94.7,
-      "ourPredictedWB": 90.06,
-      "ourError": -4.64,
-      "newethpopPredictedWB": 95.3,
-      "newethpopError": 0.6,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 96.35,
+        "error": 1.64
+      },
+      "hp_national": {
+        "predictedWB": 95.93,
+        "error": 1.22
+      },
+      "newethpop": {
+        "predictedWB": 96.03,
+        "error": 1.32
+      },
+      "bestModel": "hp_national"
     },
     "E07000236": {
       "areaName": "Redditch",
-      "actualWB": 82.43,
-      "ourPredictedWB": 79.88,
-      "ourError": -2.55,
-      "newethpopPredictedWB": 85.75,
-      "newethpopError": 3.32,
-      "ourBetter": true
+      "actualWB": 82.42,
+      "hp_local": {
+        "predictedWB": 84.71,
+        "error": 2.29
+      },
+      "hp_national": {
+        "predictedWB": 84.4,
+        "error": 1.98
+      },
+      "newethpop": {
+        "predictedWB": 84.83,
+        "error": 2.41
+      },
+      "bestModel": "hp_national"
     },
     "E07000115": {
       "areaName": "Tonbridge and Malling",
-      "actualWB": 88.34,
-      "ourPredictedWB": 86.8,
-      "ourError": -1.54,
-      "newethpopPredictedWB": 91.06,
-      "newethpopError": 2.72,
-      "ourBetter": true
-    },
-    "E07000046": {
-      "areaName": "Torridge",
-      "actualWB": 96.09,
-      "ourPredictedWB": 85.65,
-      "ourError": -10.44,
-      "newethpopPredictedWB": 96.26,
-      "newethpopError": 0.17,
-      "ourBetter": false
+      "actualWB": 88.36,
+      "hp_local": {
+        "predictedWB": 91.23,
+        "error": 2.87
+      },
+      "hp_national": {
+        "predictedWB": 90.81,
+        "error": 2.45
+      },
+      "newethpop": {
+        "predictedWB": 90.69,
+        "error": 2.33
+      },
+      "bestModel": "hp_national"
     },
     "E07000216": {
       "areaName": "Waverley",
       "actualWB": 86.82,
-      "ourPredictedWB": 85.12,
-      "ourError": -1.7,
-      "newethpopPredictedWB": 89.59,
-      "newethpopError": 2.77,
-      "ourBetter": true
+      "hp_local": {
+        "predictedWB": 89.81,
+        "error": 2.99
+      },
+      "hp_national": {
+        "predictedWB": 87.99,
+        "error": 1.17
+      },
+      "newethpop": {
+        "predictedWB": 89.08,
+        "error": 2.26
+      },
+      "bestModel": "hp_national"
     },
     "E07000086": {
       "areaName": "Eastleigh",
-      "actualWB": 88.13,
-      "ourPredictedWB": 86.17,
-      "ourError": -1.96,
-      "newethpopPredictedWB": 89.91,
-      "newethpopError": 1.78,
-      "ourBetter": false
+      "actualWB": 88.14,
+      "hp_local": {
+        "predictedWB": 90.3,
+        "error": 2.16
+      },
+      "hp_national": {
+        "predictedWB": 89.55,
+        "error": 1.41
+      },
+      "newethpop": {
+        "predictedWB": 89.38,
+        "error": 1.24
+      },
+      "bestModel": "hp_national"
     },
     "E07000063": {
       "areaName": "Lewes",
-      "actualWB": 88.91,
-      "ourPredictedWB": 85.53,
-      "ourError": -3.38,
-      "newethpopPredictedWB": 90.93,
-      "newethpopError": 2.02,
-      "ourBetter": false
-    },
-    "E06000017": {
-      "areaName": "Rutland",
-      "actualWB": 91.04,
-      "ourPredictedWB": 77.32,
-      "ourError": -13.72,
-      "newethpopPredictedWB": 94.29,
-      "newethpopError": 3.25,
-      "ourBetter": false
+      "actualWB": 88.94,
+      "hp_local": {
+        "predictedWB": 91.66,
+        "error": 2.72
+      },
+      "hp_national": {
+        "predictedWB": 90.98,
+        "error": 2.04
+      },
+      "newethpop": {
+        "predictedWB": 90.38,
+        "error": 1.44
+      },
+      "bestModel": "hp_national"
     },
     "E07000111": {
       "areaName": "Sevenoaks",
-      "actualWB": 85.56,
-      "ourPredictedWB": 85.62,
-      "ourError": 0.06,
-      "newethpopPredictedWB": 89.78,
-      "newethpopError": 4.22,
-      "ourBetter": true
+      "actualWB": 85.54,
+      "hp_local": {
+        "predictedWB": 89.17,
+        "error": 3.63
+      },
+      "hp_national": {
+        "predictedWB": 89.08,
+        "error": 3.54
+      },
+      "newethpop": {
+        "predictedWB": 88.99,
+        "error": 3.45
+      },
+      "bestModel": "hp_national"
     },
     "E07000102": {
       "areaName": "Three Rivers",
-      "actualWB": 67.94,
-      "ourPredictedWB": 74.58,
-      "ourError": 6.64,
-      "newethpopPredictedWB": 76.58,
-      "newethpopError": 8.64,
-      "ourBetter": true
+      "actualWB": 67.98,
+      "hp_local": {
+        "predictedWB": 72.47,
+        "error": 4.49
+      },
+      "hp_national": {
+        "predictedWB": 76.78,
+        "error": 8.8
+      },
+      "newethpop": {
+        "predictedWB": 74.81,
+        "error": 6.83
+      },
+      "bestModel": "hp_local"
     },
     "E07000009": {
       "areaName": "East Cambridgeshire",
-      "actualWB": 86.48,
-      "ourPredictedWB": 81.84,
-      "ourError": -4.64,
-      "newethpopPredictedWB": 86.51,
-      "newethpopError": 0.03,
-      "ourBetter": false
+      "actualWB": 86.49,
+      "hp_local": {
+        "predictedWB": 88.73,
+        "error": 2.24
+      },
+      "hp_national": {
+        "predictedWB": 86.83,
+        "error": 0.34
+      },
+      "newethpop": {
+        "predictedWB": 85.66,
+        "error": -0.83
+      },
+      "bestModel": "hp_national"
     },
     "E07000194": {
       "areaName": "Lichfield",
-      "actualWB": 92.03,
-      "ourPredictedWB": 87.69,
-      "ourError": -4.34,
-      "newethpopPredictedWB": 94.43,
-      "newethpopError": 2.4,
-      "ourBetter": false
+      "actualWB": 92.05,
+      "hp_local": {
+        "predictedWB": 94.28,
+        "error": 2.23
+      },
+      "hp_national": {
+        "predictedWB": 93.56,
+        "error": 1.51
+      },
+      "newethpop": {
+        "predictedWB": 93.89,
+        "error": 1.84
+      },
+      "bestModel": "hp_national"
     },
     "E07000138": {
       "areaName": "Lincoln",
-      "actualWB": 82.74,
-      "ourPredictedWB": 82.38,
-      "ourError": -0.36,
-      "newethpopPredictedWB": 88.16,
-      "newethpopError": 5.42,
-      "ourBetter": true
+      "actualWB": 82.72,
+      "hp_local": {
+        "predictedWB": 87.05,
+        "error": 4.33
+      },
+      "hp_national": {
+        "predictedWB": 86.64,
+        "error": 3.92
+      },
+      "newethpop": {
+        "predictedWB": 86.95,
+        "error": 4.23
+      },
+      "bestModel": "hp_national"
     },
     "E07000224": {
       "areaName": "Arun",
-      "actualWB": 88.65,
-      "ourPredictedWB": 86.84,
-      "ourError": -1.81,
-      "newethpopPredictedWB": 90.52,
-      "newethpopError": 1.87,
-      "ourBetter": true
+      "actualWB": 88.64,
+      "hp_local": {
+        "predictedWB": 90.66,
+        "error": 2.02
+      },
+      "hp_national": {
+        "predictedWB": 88.9,
+        "error": 0.26
+      },
+      "newethpop": {
+        "predictedWB": 89.95,
+        "error": 1.31
+      },
+      "bestModel": "hp_national"
     },
     "E07000010": {
       "areaName": "Fenland",
-      "actualWB": 85.91,
-      "ourPredictedWB": 83.33,
-      "ourError": -2.58,
-      "newethpopPredictedWB": 89.43,
-      "newethpopError": 3.52,
-      "ourBetter": true
+      "actualWB": 85.92,
+      "hp_local": {
+        "predictedWB": 88.22,
+        "error": 2.3
+      },
+      "hp_national": {
+        "predictedWB": 87.34,
+        "error": 1.42
+      },
+      "newethpop": {
+        "predictedWB": 88.59,
+        "error": 2.67
+      },
+      "bestModel": "hp_national"
     },
     "E07000209": {
       "areaName": "Guildford",
       "actualWB": 77.33,
-      "ourPredictedWB": 79.32,
-      "ourError": 1.99,
-      "newethpopPredictedWB": 77.16,
-      "newethpopError": -0.17,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 80.9,
+        "error": 3.57
+      },
+      "hp_national": {
+        "predictedWB": 78.92,
+        "error": 1.59
+      },
+      "newethpop": {
+        "predictedWB": 75.74,
+        "error": -1.59
+      },
+      "bestModel": "hp_national"
     },
     "E07000074": {
       "areaName": "Maldon",
-      "actualWB": 94.04,
-      "ourPredictedWB": 84.61,
-      "ourError": -9.43,
-      "newethpopPredictedWB": 95.57,
-      "newethpopError": 1.53,
-      "ourBetter": false
+      "actualWB": 94.03,
+      "hp_local": {
+        "predictedWB": 96.18,
+        "error": 2.15
+      },
+      "hp_national": {
+        "predictedWB": 95.54,
+        "error": 1.51
+      },
+      "newethpop": {
+        "predictedWB": 95.09,
+        "error": 1.06
+      },
+      "bestModel": "hp_national"
     },
     "E07000091": {
       "areaName": "New Forest",
-      "actualWB": 93.21,
-      "ourPredictedWB": 90.99,
-      "ourError": -2.22,
-      "newethpopPredictedWB": 94.35,
-      "newethpopError": 1.14,
-      "ourBetter": false
+      "actualWB": 93.23,
+      "hp_local": {
+        "predictedWB": 94.45,
+        "error": 1.22
+      },
+      "hp_national": {
+        "predictedWB": 93.75,
+        "error": 0.52
+      },
+      "newethpop": {
+        "predictedWB": 93.92,
+        "error": 0.69
+      },
+      "bestModel": "hp_national"
     },
     "E07000043": {
       "areaName": "North Devon",
       "actualWB": 94.25,
-      "ourPredictedWB": 87.9,
-      "ourError": -6.35,
-      "newethpopPredictedWB": 94.06,
-      "newethpopError": -0.19,
-      "ourBetter": false
+      "hp_local": {
+        "predictedWB": 95.64,
+        "error": 1.39
+      },
+      "hp_national": {
+        "predictedWB": 94.77,
+        "error": 0.52
+      },
+      "newethpop": {
+        "predictedWB": 93.64,
+        "error": -0.61
+      },
+      "bestModel": "hp_national"
     },
     "E07000223": {
       "areaName": "Adur",
-      "actualWB": 88.92,
-      "ourPredictedWB": 82.06,
-      "ourError": -6.86,
-      "newethpopPredictedWB": 92.34,
-      "newethpopError": 3.42,
-      "ourBetter": false
+      "actualWB": 88.93,
+      "hp_local": {
+        "predictedWB": 92.2,
+        "error": 3.27
+      },
+      "hp_national": {
+        "predictedWB": 91.09,
+        "error": 2.16
+      },
+      "newethpop": {
+        "predictedWB": 91.54,
+        "error": 2.61
+      },
+      "bestModel": "hp_national"
     },
     "E07000131": {
       "areaName": "Harborough",
-      "actualWB": 87.56,
-      "ourPredictedWB": 84.64,
-      "ourError": -2.92,
-      "newethpopPredictedWB": 91.65,
-      "newethpopError": 4.09,
-      "ourBetter": true
+      "actualWB": 87.55,
+      "hp_local": {
+        "predictedWB": 90.63,
+        "error": 3.08
+      },
+      "hp_national": {
+        "predictedWB": 91.08,
+        "error": 3.53
+      },
+      "newethpop": {
+        "predictedWB": 91.02,
+        "error": 3.47
+      },
+      "bestModel": "hp_local"
     },
     "E07000210": {
       "areaName": "Mole Valley",
-      "actualWB": 85.81,
-      "ourPredictedWB": 82.39,
-      "ourError": -3.42,
-      "newethpopPredictedWB": 87.62,
-      "newethpopError": 1.81,
-      "ourBetter": false
+      "actualWB": 85.78,
+      "hp_local": {
+        "predictedWB": 88.91,
+        "error": 3.13
+      },
+      "hp_national": {
+        "predictedWB": 87.71,
+        "error": 1.93
+      },
+      "newethpop": {
+        "predictedWB": 86.92,
+        "error": 1.14
+      },
+      "bestModel": "hp_national"
     },
     "E07000064": {
       "areaName": "Rother",
-      "actualWB": 91.67,
-      "ourPredictedWB": 86.45,
-      "ourError": -5.22,
-      "newethpopPredictedWB": 93.65,
-      "newethpopError": 1.98,
-      "ourBetter": false
+      "actualWB": 91.71,
+      "hp_local": {
+        "predictedWB": 93.92,
+        "error": 2.21
+      },
+      "hp_national": {
+        "predictedWB": 92.6,
+        "error": 0.89
+      },
+      "newethpop": {
+        "predictedWB": 93.17,
+        "error": 1.46
+      },
+      "bestModel": "hp_national"
     },
     "E07000012": {
       "areaName": "South Cambridgeshire",
-      "actualWB": 79.56,
-      "ourPredictedWB": 83.19,
-      "ourError": 3.63,
-      "newethpopPredictedWB": 83.22,
-      "newethpopError": 3.66,
-      "ourBetter": true
+      "actualWB": 79.55,
+      "hp_local": {
+        "predictedWB": 82.9,
+        "error": 3.35
+      },
+      "hp_national": {
+        "predictedWB": 84.28,
+        "error": 4.73
+      },
+      "newethpop": {
+        "predictedWB": 82.29,
+        "error": 2.74
+      },
+      "bestModel": "hp_local"
     },
     "E07000065": {
       "areaName": "Wealden",
-      "actualWB": 91.77,
-      "ourPredictedWB": 89.18,
-      "ourError": -2.59,
-      "newethpopPredictedWB": 92.73,
-      "newethpopError": 0.96,
-      "ourBetter": false
-    },
-    "E07000047": {
-      "areaName": "West Devon",
-      "actualWB": 94.92,
-      "ourPredictedWB": 83.13,
-      "ourError": -11.79,
-      "newethpopPredictedWB": 95.54,
-      "newethpopError": 0.62,
-      "ourBetter": false
+      "actualWB": 91.74,
+      "hp_local": {
+        "predictedWB": 93.7,
+        "error": 1.96
+      },
+      "hp_national": {
+        "predictedWB": 92.44,
+        "error": 0.7
+      },
+      "newethpop": {
+        "predictedWB": 92.38,
+        "error": 0.64
+      },
+      "bestModel": "hp_national"
     },
     "E07000217": {
       "areaName": "Woking",
-      "actualWB": 67.26,
-      "ourPredictedWB": 69.53,
-      "ourError": 2.27,
-      "newethpopPredictedWB": 70.04,
-      "newethpopError": 2.78,
-      "ourBetter": true
-    },
-    "W06000008": {
-      "areaName": "Ceredigion",
-      "actualWB": 91.89,
-      "ourPredictedWB": 83.88,
-      "ourError": -8.01,
-      "newethpopPredictedWB": 92.47,
-      "newethpopError": 0.58,
-      "ourBetter": false
-    },
-    "E09000001": {
-      "areaName": "City of London",
-      "actualWB": 42.51,
-      "ourPredictedWB": 35.95,
-      "ourError": -6.56,
-      "newethpopPredictedWB": 30.38,
-      "newethpopError": -12.13,
-      "ourBetter": true
+      "actualWB": 67.24,
+      "hp_local": {
+        "predictedWB": 70.14,
+        "error": 2.9
+      },
+      "hp_national": {
+        "predictedWB": 69.67,
+        "error": 2.43
+      },
+      "newethpop": {
+        "predictedWB": 68.8,
+        "error": 1.56
+      },
+      "bestModel": "hp_national"
     },
     "E07000079": {
       "areaName": "Cotswold",
-      "actualWB": 91.98,
-      "ourPredictedWB": 85.92,
-      "ourError": -6.06,
-      "newethpopPredictedWB": 93.32,
-      "newethpopError": 1.34,
-      "ourBetter": false
-    },
-    "E07000035": {
-      "areaName": "Derbyshire Dales",
-      "actualWB": 95.51,
-      "ourPredictedWB": 86.49,
-      "ourError": -9.02,
-      "newethpopPredictedWB": 96.12,
-      "newethpopError": 0.61,
-      "ourBetter": false
+      "actualWB": 91.97,
+      "hp_local": {
+        "predictedWB": 94.14,
+        "error": 2.17
+      },
+      "hp_national": {
+        "predictedWB": 93.13,
+        "error": 1.16
+      },
+      "newethpop": {
+        "predictedWB": 93,
+        "error": 1.03
+      },
+      "bestModel": "hp_national"
     },
     "E07000089": {
       "areaName": "Hart",
-      "actualWB": 86.93,
-      "ourPredictedWB": 83.48,
-      "ourError": -3.45,
-      "newethpopPredictedWB": 88.39,
-      "newethpopError": 1.46,
-      "ourBetter": false
+      "actualWB": 86.96,
+      "hp_local": {
+        "predictedWB": 89.64,
+        "error": 2.68
+      },
+      "hp_national": {
+        "predictedWB": 89.03,
+        "error": 2.07
+      },
+      "newethpop": {
+        "predictedWB": 87.67,
+        "error": 0.71
+      },
+      "bestModel": "hp_national"
     },
     "E06000046": {
       "areaName": "Isle of Wight",
-      "actualWB": 93.76,
-      "ourPredictedWB": 89.54,
-      "ourError": -4.22,
-      "newethpopPredictedWB": 93.63,
-      "newethpopError": -0.13,
-      "ourBetter": false
-    },
-    "E06000053": {
-      "areaName": "Isles of Scilly",
-      "actualWB": 93.72,
-      "ourPredictedWB": 92.95,
-      "ourError": -0.77,
-      "newethpopPredictedWB": 95.38,
-      "newethpopError": 1.66,
-      "ourBetter": true
+      "actualWB": 93.75,
+      "hp_local": {
+        "predictedWB": 95.06,
+        "error": 1.31
+      },
+      "hp_national": {
+        "predictedWB": 93.66,
+        "error": -0.09
+      },
+      "newethpop": {
+        "predictedWB": 93.27,
+        "error": -0.48
+      },
+      "bestModel": "hp_national"
     },
     "E07000235": {
       "areaName": "Malvern Hills",
-      "actualWB": 93.34,
-      "ourPredictedWB": 85.6,
-      "ourError": -7.74,
-      "newethpopPredictedWB": 95.18,
-      "newethpopError": 1.84,
-      "ourBetter": false
-    },
-    "E07000042": {
-      "areaName": "Mid Devon",
-      "actualWB": 93.78,
-      "ourPredictedWB": 86.41,
-      "ourError": -7.37,
-      "newethpopPredictedWB": 95.03,
-      "newethpopError": 1.25,
-      "ourBetter": false
-    },
-    "W06000021": {
-      "areaName": "Monmouthshire",
-      "actualWB": 94.2,
-      "ourPredictedWB": 87.94,
-      "ourError": -6.26,
-      "newethpopPredictedWB": 94.75,
-      "newethpopError": 0.55,
-      "ourBetter": false
+      "actualWB": 93.35,
+      "hp_local": {
+        "predictedWB": 95.39,
+        "error": 2.04
+      },
+      "hp_national": {
+        "predictedWB": 92.94,
+        "error": -0.41
+      },
+      "newethpop": {
+        "predictedWB": 94.74,
+        "error": 1.39
+      },
+      "bestModel": "hp_national"
     },
     "E07000147": {
       "areaName": "North Norfolk",
-      "actualWB": 95.56,
-      "ourPredictedWB": 89.11,
-      "ourError": -6.45,
-      "newethpopPredictedWB": 95.31,
-      "newethpopError": -0.25,
-      "ourBetter": false
+      "actualWB": 95.57,
+      "hp_local": {
+        "predictedWB": 96.63,
+        "error": 1.06
+      },
+      "hp_national": {
+        "predictedWB": 95.58,
+        "error": 0.01
+      },
+      "newethpop": {
+        "predictedWB": 95,
+        "error": -0.57
+      },
+      "bestModel": "hp_national"
     },
     "E07000212": {
       "areaName": "Runnymede",
-      "actualWB": 72.62,
-      "ourPredictedWB": 73.1,
-      "ourError": 0.48,
-      "newethpopPredictedWB": 75.65,
-      "newethpopError": 3.03,
-      "ourBetter": true
+      "actualWB": 72.61,
+      "hp_local": {
+        "predictedWB": 77.27,
+        "error": 4.66
+      },
+      "hp_national": {
+        "predictedWB": 74.79,
+        "error": 2.18
+      },
+      "newethpop": {
+        "predictedWB": 74.32,
+        "error": 1.71
+      },
+      "bestModel": "hp_national"
     },
     "E07000083": {
       "areaName": "Tewkesbury",
-      "actualWB": 90.34,
-      "ourPredictedWB": 85.65,
-      "ourError": -4.69,
-      "newethpopPredictedWB": 92.84,
-      "newethpopError": 2.5,
-      "ourBetter": false
+      "actualWB": 90.36,
+      "hp_local": {
+        "predictedWB": 93.64,
+        "error": 3.28
+      },
+      "hp_national": {
+        "predictedWB": 92.98,
+        "error": 2.62
+      },
+      "newethpop": {
+        "predictedWB": 91.96,
+        "error": 1.6
+      },
+      "bestModel": "hp_national"
     },
     "E07000116": {
       "areaName": "Tunbridge Wells",
-      "actualWB": 84.16,
-      "ourPredictedWB": 83.96,
-      "ourError": -0.2,
-      "newethpopPredictedWB": 88.47,
-      "newethpopError": 4.31,
-      "ourBetter": true
+      "actualWB": 84.2,
+      "hp_local": {
+        "predictedWB": 87.19,
+        "error": 2.99
+      },
+      "hp_national": {
+        "predictedWB": 87.37,
+        "error": 3.17
+      },
+      "newethpop": {
+        "predictedWB": 87.78,
+        "error": 3.58
+      },
+      "bestModel": "hp_local"
+    },
+    "E08000016": {
+      "areaName": "Barnsley",
+      "actualWB": 92.6,
+      "hp_local": {
+        "predictedWB": 94.43,
+        "error": 1.83
+      },
+      "hp_national": {
+        "predictedWB": 94.88,
+        "error": 2.28
+      },
+      "newethpop": {
+        "predictedWB": 94.74,
+        "error": 2.14
+      },
+      "bestModel": "hp_local"
+    },
+    "E08000019": {
+      "areaName": "Sheffield",
+      "actualWB": 74.51,
+      "hp_local": {
+        "predictedWB": 76.31,
+        "error": 1.8
+      },
+      "hp_national": {
+        "predictedWB": 75.12,
+        "error": 0.61
+      },
+      "newethpop": {
+        "predictedWB": 73.8,
+        "error": -0.71
+      },
+      "bestModel": "hp_national"
     }
   },
   "errorDistribution": {
-    "ourModel": [
-      15.23,
-      8.56,
-      17.63,
-      15.61,
-      9.51,
-      10.65,
-      13.97,
-      10.42,
-      14.93,
-      12.5,
-      19.82,
-      6.09,
-      11.96,
-      5.99,
-      11.14,
-      5.6,
-      10.16,
-      8.32,
-      1.72,
-      4.98,
-      5.79,
-      9.15,
-      9.01,
-      9.34,
-      4.15,
-      -0.59,
-      -0.76,
-      7.69,
-      0.66,
-      3.25,
-      5.49,
-      3.71,
-      12.41,
-      5.37,
-      6.34,
-      4.77,
-      2.66,
-      16.73,
-      2.73,
-      9.9,
-      1.22,
-      1.97,
-      -1.64,
-      8.12,
-      -1.22,
-      1.62,
-      3.24,
-      -3.2,
-      0.81,
-      -3.08,
-      11.44,
-      -1.58,
-      0.35,
-      4.09,
-      8,
-      17.26,
-      0.85,
-      13.04,
-      8.9,
-      3.4,
-      9.13,
-      2.27,
-      4.5,
-      -0.28,
-      1.4,
-      -0.16,
-      3.76,
-      1.09,
-      -1.15,
-      3.48,
-      0.81,
-      5.62,
-      14.02,
-      -2.76,
-      -3.98,
-      8.68,
-      -6.67,
-      4.46,
-      6.45,
-      16.15,
-      2.95,
-      13.95,
-      11.02,
-      -4.18,
-      5.02,
-      4.1,
-      11.41,
-      -5.88,
-      8.69,
-      13.28,
-      2.76,
-      2.76,
-      7.69,
-      4.44,
-      6.02,
-      -1.21,
-      3.56,
-      10.48,
-      26.75,
-      1.85,
-      6.76,
-      -2.11,
-      9.12,
-      -0.51,
-      -4.63,
-      6.97,
-      17.73,
-      6.55,
-      3.02,
-      -1.26,
-      -8.48,
-      2.36,
-      11.55,
-      -4.5,
-      1.36,
-      -3.35,
-      -3.62,
-      5.8,
-      7.48,
-      -2.27,
-      -4.86,
-      2.34,
-      5.08,
-      -3.11,
-      -3.91,
-      7.54,
-      10.01,
-      -3.11,
-      18.21,
-      13.85,
-      16.62,
-      -1.1,
-      5.87,
-      -1.11,
-      1.87,
-      -0.66,
-      -2.5,
-      -0.23,
-      3.57,
-      -1.85,
-      -2.26,
-      -2.01,
-      -0.53,
-      4.4,
-      -3.59,
-      20.73,
-      3.88,
+    "hp_local": [
+      1.75,
+      2.64,
       2.09,
-      4.36,
-      -6.55,
-      -3.08,
-      -2.94,
-      -1.77,
-      -1.12,
-      -6.55,
-      4.37,
-      -2.74,
-      -4.58,
-      16.96,
-      5.26,
-      -4.59,
-      -3.41,
-      1.47,
-      -1.06,
-      6.54,
-      0.06,
-      -4.73,
-      0.18,
-      -3.98,
-      -0.96,
-      -4.96,
-      -2.53,
-      -6.62,
-      -7.45,
-      -2.8,
-      7.2,
-      10.35,
-      -2.18,
-      -3.65,
-      5.91,
-      -3.14,
-      -3.43,
-      -0.35,
-      0.09,
-      -2.29,
-      -5.02,
-      -2.57,
-      -2.51,
-      -3.02,
-      -6.4,
-      -0.78,
-      -8.37,
-      -4.95,
-      14.45,
-      10.07,
-      -4.88,
-      -9.01,
-      3.4,
-      -4.09,
-      -6.26,
-      -4.83,
-      -1.09,
-      -1.8,
-      0.87,
-      1.51,
-      -0.62,
-      -10.89,
-      7.96,
-      -5.63,
-      -3.6,
-      -10.52,
-      -2.4,
-      -4.58,
-      -6.97,
-      13.95,
-      -9.92,
-      -0.23,
-      -5,
-      1.49,
-      -3.02,
-      -1.32,
-      -5.67,
-      0.24,
-      -6.49,
-      2.96,
-      -4.87,
-      -0.38,
-      -1.54,
-      -1.27,
-      -0.66,
-      -3.99,
-      0.66,
-      -3.66,
-      -3.34,
-      11.25,
-      -7.19,
-      -1.76,
-      6.88,
-      14.48,
-      -11.59,
-      -2.52,
-      9.08,
-      -6.46,
-      -3.51,
-      -1.59,
-      0.81,
-      2.39,
-      -4.53,
-      -3.69,
-      -1.5,
-      -5.16,
-      -3.4,
+      2.18,
+      1.74,
+      1.35,
+      3.13,
+      2.28,
+      1.73,
+      1.31,
+      1.45,
+      1.83,
+      1.17,
+      1.32,
+      2.12,
+      1.31,
+      2.03,
+      1.87,
+      0.42,
+      2.44,
+      2.05,
+      2.1,
+      0.91,
+      2.64,
+      1.56,
+      1.07,
+      2.65,
+      1.88,
+      1.78,
+      1.66,
+      2.62,
+      2.93,
+      1.35,
       2.37,
-      -6.82,
-      -3.99,
-      -6.39,
-      -3.83,
-      -6.99,
-      -4.64,
-      -2.55,
-      -1.54,
-      -10.44,
-      -1.7,
-      -1.96,
-      -3.38,
-      -13.72,
-      0.06,
-      6.64,
-      -4.64,
-      -4.34,
-      -0.36,
-      -1.81,
-      -2.58,
-      1.99,
-      -9.43,
-      -2.22,
-      -6.35,
-      -6.86,
-      -2.92,
-      -3.42,
-      -5.22,
-      3.63,
-      -2.59,
-      -11.79,
+      1.53,
+      1.49,
+      2.39,
+      2.46,
+      3.04,
+      2.56,
+      2.15,
+      1.64,
+      2.31,
+      2.12,
+      1.92,
+      1.47,
+      1.9,
+      2.39,
+      1.37,
+      2.4,
+      1.29,
+      3.82,
+      2.64,
+      1.78,
+      1.74,
+      1.3,
+      2.5,
+      2.37,
+      2.21,
+      1.97,
+      3.67,
+      3.06,
+      2.5,
+      2.93,
+      2.35,
+      1.28,
+      1.64,
+      3.43,
+      2.22,
+      3.15,
+      -0.5,
+      1.94,
+      2.03,
+      2.82,
+      1.29,
+      2.64,
+      2.96,
+      1.57,
+      2.6,
+      2.66,
+      1.3,
+      2.03,
+      2.98,
+      3.12,
+      2.75,
+      1.4,
+      5.14,
+      1.5,
+      3.79,
+      2.67,
+      3.51,
+      3.42,
+      3.03,
+      3.2,
+      1.89,
+      2.06,
+      3.34,
+      3.18,
+      1.41,
+      2.94,
+      2.6,
+      1.14,
+      1.98,
+      1.22,
+      1.95,
+      2.33,
+      3.66,
+      1.59,
+      2.74,
+      2.49,
+      1.92,
+      4.74,
       2.27,
-      -8.01,
-      -6.56,
-      -6.06,
-      -9.02,
-      -3.45,
-      -4.22,
-      -0.77,
-      -7.74,
-      -7.37,
-      -6.26,
-      -6.45,
-      0.48,
-      -4.69,
-      -0.2
+      1.7,
+      2.28,
+      3,
+      1.93,
+      3.23,
+      1.41,
+      3.17,
+      2.06,
+      1.42,
+      0.83,
+      1.31,
+      2.2,
+      3.81,
+      2.59,
+      4.09,
+      2.91,
+      3.99,
+      3.29,
+      3.51,
+      2.96,
+      2.78,
+      2.61,
+      3.51,
+      2.64,
+      2.92,
+      3.6,
+      3.76,
+      1.83,
+      1.91,
+      2.39,
+      2.71,
+      2.64,
+      2.17,
+      2.49,
+      2.61,
+      2.75,
+      2.1,
+      2.69,
+      2.32,
+      0.97,
+      2.43,
+      2.8,
+      2.57,
+      3.96,
+      3.09,
+      4.43,
+      3.46,
+      1.17,
+      2.09,
+      2.01,
+      1.75,
+      1.6,
+      2.21,
+      2.05,
+      2.16,
+      2.11,
+      1.94,
+      2.55,
+      2.28,
+      5.17,
+      2.64,
+      2.98,
+      2.87,
+      3.17,
+      2.8,
+      1.87,
+      1.12,
+      1.04,
+      2.98,
+      3.17,
+      4.36,
+      2.13,
+      3.44,
+      1.77,
+      1.31,
+      3.34,
+      2.65,
+      2.75,
+      3.59,
+      3.02,
+      2.64,
+      1.68,
+      2.2,
+      1.83,
+      1.82,
+      2.74,
+      1.62,
+      2.8,
+      3.36,
+      1.58,
+      4.65,
+      1.72,
+      3.35,
+      1.61,
+      3.02,
+      4.72,
+      1.62,
+      4.61,
+      2.38,
+      1.73,
+      2.22,
+      2.67,
+      5.29,
+      1.45,
+      2.95,
+      3.19,
+      4.32,
+      2.56,
+      5.7,
+      2.4,
+      2.91,
+      3.36,
+      3.07,
+      1.79,
+      2.03,
+      1.46,
+      1.88,
+      4.38,
+      1.11,
+      1.87,
+      1.62,
+      3.03,
+      1.64,
+      2.29,
+      2.87,
+      2.99,
+      2.16,
+      2.72,
+      3.63,
+      4.49,
+      2.24,
+      2.23,
+      4.33,
+      2.02,
+      2.3,
+      3.57,
+      2.15,
+      1.22,
+      1.39,
+      3.27,
+      3.08,
+      3.13,
+      2.21,
+      3.35,
+      1.96,
+      2.9,
+      2.17,
+      2.68,
+      1.31,
+      2.04,
+      1.06,
+      4.66,
+      3.28,
+      2.99,
+      1.83,
+      1.8
+    ],
+    "hp_national": [
+      4.29,
+      4.36,
+      8.9,
+      5.52,
+      3.37,
+      4.2,
+      5.67,
+      2.11,
+      6.84,
+      5.41,
+      4.35,
+      2.92,
+      -0.8,
+      3,
+      3.93,
+      2.48,
+      3.43,
+      2.64,
+      -1.69,
+      2.72,
+      1.59,
+      5.59,
+      1.88,
+      3.73,
+      1.29,
+      0.33,
+      4.3,
+      1.89,
+      2.16,
+      2.53,
+      1.63,
+      6.34,
+      0.51,
+      3.86,
+      2.83,
+      2.22,
+      7.68,
+      3.87,
+      6.49,
+      2.4,
+      1.48,
+      3.89,
+      2.49,
+      2.49,
+      2.94,
+      0.24,
+      0.74,
+      2.34,
+      -1.86,
+      2.13,
+      0.84,
+      5.75,
+      7.39,
+      -0.28,
+      1.26,
+      4.79,
+      4.58,
+      3.56,
+      3.72,
+      2.33,
+      4.89,
+      3.73,
+      3.3,
+      2.41,
+      4.83,
+      0.82,
+      1.28,
+      3.84,
+      2.15,
+      4.59,
+      -1.57,
+      1.8,
+      1.56,
+      5.43,
+      0.71,
+      4.05,
+      4.92,
+      2.29,
+      3.23,
+      6.8,
+      4.81,
+      1.64,
+      3.87,
+      5.27,
+      2.76,
+      0.2,
+      8.52,
+      6.08,
+      2.82,
+      4.04,
+      5.29,
+      5.72,
+      3.18,
+      2.46,
+      2.44,
+      10.63,
+      4.46,
+      5.74,
+      1.38,
+      3.69,
+      0.07,
+      0.64,
+      0.4,
+      -0.51,
+      3.67,
+      2.17,
+      0.64,
+      -0.16,
+      2.5,
+      3.75,
+      1.26,
+      0.2,
+      1.84,
+      1.09,
+      1.62,
+      7.27,
+      1.23,
+      3.45,
+      1.68,
+      4.86,
+      1.14,
+      0.82,
+      -4.21,
+      -1.3,
+      1.16,
+      13.03,
+      6.73,
+      10.21,
+      2.02,
+      6.55,
+      3.81,
+      4.77,
+      1.93,
+      1.07,
+      0.89,
+      6.25,
+      2.13,
+      3.22,
+      3.7,
+      5.17,
+      1.75,
+      4.73,
+      4.14,
+      3.69,
+      2.62,
+      2.18,
+      1.95,
+      0.22,
+      2.08,
+      1.23,
+      3.68,
+      2.1,
+      -0.04,
+      7.9,
+      1.89,
+      2.2,
+      3.96,
+      2.33,
+      8.31,
+      4.04,
+      0.59,
+      2.11,
+      1.36,
+      1.07,
+      0.57,
+      1.66,
+      0.85,
+      2.02,
+      3.2,
+      2.01,
+      1.61,
+      0.91,
+      7.69,
+      2.6,
+      2.9,
+      3.2,
+      1.6,
+      1.97,
+      1.31,
+      0.27,
+      0.38,
+      2.54,
+      4.67,
+      8.42,
+      1.56,
+      4.95,
+      1.3,
+      0.49,
+      1.75,
+      1.9,
+      2.67,
+      3.29,
+      3.59,
+      1.36,
+      1.26,
+      0.54,
+      0.89,
+      0.68,
+      9.27,
+      0.72,
+      1.95,
+      1.46,
+      -0.78,
+      4.64,
+      0.93,
+      3.09,
+      0.58,
+      4.07,
+      2.24,
+      0.59,
+      3.92,
+      1.04,
+      1.05,
+      1.6,
+      2.42,
+      11.56,
+      0.58,
+      2.07,
+      4.2,
+      11.16,
+      2.07,
+      6.42,
+      0.98,
+      2.46,
+      1.61,
+      3.96,
+      1.33,
+      0.47,
+      0.63,
+      0.95,
+      5.26,
+      0.42,
+      1.38,
+      0.7,
+      1.84,
+      1.22,
+      1.98,
+      2.45,
+      1.17,
+      1.41,
+      2.04,
+      3.54,
+      8.8,
+      0.34,
+      1.51,
+      3.92,
+      0.26,
+      1.42,
+      1.59,
+      1.51,
+      0.52,
+      0.52,
+      2.16,
+      3.53,
+      1.93,
+      0.89,
+      4.73,
+      0.7,
+      2.43,
+      1.16,
+      2.07,
+      -0.09,
+      -0.41,
+      0.01,
+      2.18,
+      2.62,
+      3.17,
+      2.28,
+      0.61
     ],
     "newethpop": [
-      7.9,
-      5.68,
-      7.04,
-      7.74,
-      7.51,
-      5.58,
-      7.12,
-      4.16,
-      9.28,
-      6.46,
-      11.84,
-      3.91,
-      7.19,
-      0.25,
-      7.78,
-      6.04,
-      6.76,
-      7.27,
-      2.79,
-      -0.71,
-      2.41,
-      6.06,
-      7.87,
-      8.02,
-      4.95,
-      1.64,
-      1.25,
-      5.16,
-      1.88,
-      3.11,
-      2.79,
-      1.74,
-      10.19,
-      2,
-      5.1,
-      4.94,
-      3.37,
-      7.81,
-      5.48,
-      8.69,
-      2.34,
-      3.04,
-      1.7,
-      4.65,
-      3.07,
-      3.24,
-      3.48,
-      1.02,
-      2.1,
-      1.03,
-      12.87,
-      3.79,
-      0.3,
-      7.01,
-      8.18,
-      13.9,
-      1.57,
-      3.44,
-      7.12,
-      4.75,
-      6.67,
-      3.64,
-      5.73,
-      3.66,
-      3.85,
-      2.81,
-      7.65,
-      2.5,
-      1.41,
-      4.41,
-      3.21,
-      5.65,
-      13.21,
-      2.55,
-      1.5,
-      6.26,
-      0.42,
-      5.5,
-      8.94,
-      11.18,
-      6.39,
-      11.45,
-      4.34,
-      1.47,
-      3.88,
-      6.62,
-      8.3,
-      0.89,
-      11.12,
-      6.59,
-      2.75,
-      5.32,
-      5.18,
-      6.16,
-      8.99,
-      3.66,
-      4.63,
-      6.41,
-      15.7,
-      5.02,
-      6.65,
-      1.19,
-      6.13,
-      -1.18,
-      0.96,
-      3.82,
-      13.28,
-      5.94,
-      4.79,
-      0.64,
-      1.09,
-      2.01,
-      5.85,
-      1.68,
-      1.8,
-      2.11,
-      0.95,
-      7.26,
-      6.76,
-      2.33,
-      3.83,
-      2.73,
-      4.68,
-      2.77,
-      1.59,
-      2.87,
-      9.52,
-      1.9,
-      15.5,
-      11.59,
-      17.2,
-      1.99,
-      7.23,
-      3.98,
-      4.97,
-      3.42,
-      1.13,
-      2.07,
-      7.21,
-      1.15,
-      3.39,
-      3.7,
-      5.25,
-      6.94,
-      2.32,
-      15.98,
-      4.84,
-      6.97,
-      6.31,
-      2.17,
-      0.85,
-      2.76,
-      2.12,
-      5.16,
-      1.18,
-      7.7,
-      2.87,
-      1.55,
-      14.99,
-      2.55,
-      2.15,
-      -0.49,
-      5.15,
-      3.11,
-      8.08,
-      4.7,
-      0.62,
-      3.36,
-      1.53,
-      1.73,
-      1.43,
-      3.56,
-      1.66,
-      0.94,
-      2.18,
-      0.69,
-      7.65,
-      2.28,
-      0.15,
-      9.81,
-      2.12,
-      1.78,
-      4.34,
-      4.12,
-      1.37,
-      1.74,
-      4.54,
-      1.33,
-      1.88,
-      -0.06,
-      0.85,
-      2.45,
-      -1.7,
-      11.63,
-      10.38,
-      1.98,
-      0.26,
-      5.08,
-      0.25,
-      1.56,
-      0.27,
-      4.22,
-      3.73,
-      4.2,
       3.19,
-      4.36,
-      -0.19,
-      2.39,
-      0.81,
-      0.22,
-      1.55,
-      1.33,
-      0.51,
-      -0.24,
-      9.2,
-      -0.12,
-      0.56,
+      3.05,
       3.2,
-      2.09,
-      0.19,
-      5.66,
-      0.77,
-      2.48,
-      1.11,
-      4.9,
-      1.18,
-      -0.57,
-      0.43,
-      4.45,
-      1.77,
-      0.52,
-      2.35,
-      3.45,
-      2.16,
-      13.32,
-      0.77,
-      2.08,
-      5.18,
-      11.45,
-      1.25,
+      2.46,
+      4.66,
+      3.44,
+      2.86,
+      -0.89,
+      5.25,
+      3.48,
       0.73,
-      5.21,
-      1.7,
-      2.75,
-      2.78,
-      1.92,
-      5.22,
-      0.24,
-      1.54,
-      1.09,
-      1.74,
-      1.46,
-      4.86,
-      0.83,
-      0.77,
-      0.91,
-      2.85,
-      1.75,
-      0.6,
-      3.32,
-      2.72,
-      0.17,
-      2.77,
-      1.78,
-      2.02,
-      3.25,
-      4.22,
-      8.64,
-      0.03,
-      2.4,
-      5.42,
-      1.87,
-      3.52,
-      -0.17,
-      1.53,
-      1.14,
-      -0.19,
+      3.41,
+      -0.93,
       3.42,
-      4.09,
-      1.81,
-      1.98,
-      3.66,
-      0.96,
-      0.62,
-      2.78,
-      0.58,
-      -12.13,
-      1.34,
-      0.61,
-      1.46,
-      -0.13,
-      1.66,
-      1.84,
+      4.71,
+      3.72,
+      4.94,
+      2.14,
+      -3.17,
+      0.77,
+      1.01,
+      6.04,
+      4.01,
+      4.25,
+      0.8,
+      0.64,
+      4.28,
+      1.67,
+      1.75,
+      2.38,
+      -0.33,
+      5.35,
+      0.65,
+      3.82,
+      3.5,
+      2.54,
+      3.43,
+      4.59,
+      5.44,
+      1.64,
+      1.05,
+      2.68,
+      2.86,
+      2.87,
+      2.87,
+      0.65,
+      1.57,
+      0.77,
+      3.38,
+      3.17,
+      0.09,
+      5.02,
+      6.78,
+      2.21,
+      0.78,
+      1.23,
+      5.36,
+      3.88,
+      4.85,
+      3.14,
+      3.2,
+      3.25,
+      3.4,
+      2.17,
+      7.49,
+      1.7,
+      0.89,
+      3.69,
+      2.91,
+      4.73,
+      1.4,
+      2.33,
+      1.18,
+      3.79,
+      0.07,
+      4.66,
+      6.05,
+      3.42,
+      3.76,
+      4.88,
+      1.85,
+      1.05,
+      2.71,
+      4.92,
+      3.44,
+      0.7,
+      6.24,
+      4.34,
+      0.86,
+      3.04,
+      4.46,
+      5.87,
+      3.31,
+      2.98,
+      1.83,
+      4.96,
+      3.71,
+      5.3,
+      0.85,
+      3.63,
+      -1.91,
+      0.76,
+      2.01,
+      -0.17,
+      2.61,
+      2.75,
+      -0.08,
+      0.63,
+      1.08,
+      3.13,
+      1.28,
+      0.27,
+      1.64,
+      0.73,
+      3.67,
+      5.31,
+      1.86,
+      3.35,
+      2.03,
+      2.85,
+      2.32,
+      0.89,
+      -3.23,
+      2.68,
+      1.32,
+      9.94,
+      4.93,
+      8.61,
+      0.84,
+      5.34,
+      3.32,
+      3.77,
+      2.46,
+      -0.1,
+      0.35,
+      5.27,
+      3.15,
+      3.15,
+      4.71,
+      5.52,
+      1.75,
+      3.78,
+      3.84,
+      6.12,
+      3.14,
+      1.21,
+      2.24,
+      1.31,
+      4.45,
+      -0.18,
+      5.56,
+      2.63,
+      1.29,
+      5.88,
       1.25,
+      1.75,
+      4.05,
+      2.33,
+      6.65,
+      3.42,
+      0.29,
+      2.97,
+      0.85,
+      1.3,
+      0.54,
+      3.15,
+      0.62,
+      1.54,
+      -0.73,
+      2.36,
+      1.58,
+      -0.43,
+      5.9,
+      1.7,
+      2.96,
+      2.9,
+      0.61,
+      3.37,
+      1.63,
+      -0.76,
+      0.59,
+      2,
+      5.95,
+      6.74,
+      1.76,
+      3.92,
+      1.29,
+      0.07,
+      3.54,
+      3,
+      3.29,
+      1.73,
+      3.38,
+      0.78,
+      0.39,
+      -0.52,
+      0,
+      0.01,
+      5.6,
+      0.31,
+      2.09,
+      1.45,
+      -0.47,
+      4.28,
+      0.02,
+      1.63,
+      -0.02,
+      3.79,
+      -1.16,
+      0.23,
+      2.99,
+      1.56,
+      -0.11,
+      1.13,
+      2.62,
+      9.53,
+      0.43,
+      1.15,
+      4.29,
+      7.66,
+      0.14,
+      4.14,
+      2.22,
+      2.11,
+      1.21,
+      3.28,
+      1.23,
       0.55,
-      -0.25,
-      3.03,
-      2.5,
-      4.31
+      1.46,
+      1.03,
+      3.29,
+      0.46,
+      0.32,
+      0.36,
+      2.02,
+      1.32,
+      2.41,
+      2.33,
+      2.26,
+      1.24,
+      1.44,
+      3.45,
+      6.83,
+      -0.83,
+      1.84,
+      4.23,
+      1.31,
+      2.67,
+      -1.59,
+      1.06,
+      0.69,
+      -0.61,
+      2.61,
+      3.47,
+      1.14,
+      1.46,
+      2.74,
+      0.64,
+      1.56,
+      1.03,
+      0.71,
+      -0.48,
+      1.39,
+      -0.57,
+      1.71,
+      1.6,
+      3.58,
+      2.14,
+      -0.71
     ]
   },
   "confidenceIntervals": {
-    "description": "Empirical error distribution from 2011→2021 backcast. Apply to forward projections as ±uncertainty.",
-    "p5": -7.45,
-    "p25": -3.51,
-    "median": -0.28,
-    "p75": 5.79,
-    "p95": 14.48,
-    "interpretation": "For a forward projection of WB%, the 90% confidence interval is approximately [projection -7.45pp, projection +14.48pp]"
+    "description": "Empirical WBI error distribution from HP 2011→2021 backcast. Apply to forward projections as ±uncertainty.",
+    "p2_5": 1.06,
+    "p5": 1.22,
+    "p25": 1.8,
+    "median": 2.35,
+    "p75": 2.98,
+    "p95": 4.33,
+    "p97_5": 4.66
+  },
+  "sigmaRecommendation": {
+    "value": 0.02,
+    "description": "CCR_SIGMA_BASE should be 0.02 (MAE 2.45pp / 100). Previous: 0.055 (from CC model MAE 5.42pp)."
   }
 }
