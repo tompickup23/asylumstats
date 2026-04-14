@@ -4336,6 +4336,27 @@ tr:last-child td {
 }
 .footer-cross-site a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .footer-cross-site a:hover { text-decoration: underline; }
+
+/* UKD cross-link banner on place pages */
+.ukd-cross-link {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0.03) 100%);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: var(--radius-sm);
+}
+.ukd-cross-inner { display: flex; flex-direction: column; gap: 0.5rem; }
+.ukd-cross-label { font-family: "Sora", sans-serif; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #818cf8; }
+.ukd-cross-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+.ukd-cross-btn {
+  display: inline-block; margin-top: 0.25rem; padding: 0.5rem 1rem;
+  font-size: 0.85rem; font-weight: 700; color: #f5f7fb;
+  background: #4f46e5; border-radius: 8px; text-decoration: none;
+  transition: background 180ms;
+  width: fit-content;
+}
+.ukd-cross-btn:hover { background: #4338ca; }
+
 .footer-legal {
   font-size: 0.78rem;
   opacity: 0.5;

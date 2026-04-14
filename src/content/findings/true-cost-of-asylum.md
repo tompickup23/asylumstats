@@ -360,5 +360,3 @@ All source documents are listed below and linked where available online. We welc
 - Salvation Army Modern Slavery Victim Care Contract
 
 Over £7 billion. At least £207 per taxpayer. Every year. Those are the minimum defensible numbers. The actual cost is higher.
-
-*Population projections for 320 local authorities are published at [ukdemographics.co.uk](https://ukdemographics.co.uk).*

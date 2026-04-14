@@ -9,6 +9,8 @@ import EthnicityTimeline from "../../components/EthnicityTimeline.astro";
 import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import ProjectionChart from "../../components/ProjectionChart.astro";
+import ScenarioSelector from "../../components/ScenarioSelector.astro";
+import CostCalculator from "../../components/CostCalculator.astro";
 import ShiftShareChart from "../../components/ShiftShareChart.astro";
 import TrendChart from "../../components/TrendChart.astro";
 import { buildSupportedAsylumStockDescription } from "../../lib/asylum-support-logic";
@@ -30,6 +32,9 @@ import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
 import { getMPsForArea } from "../../lib/mp-data";
 import schoolValidationData from "../../data/live/school-validation.json";
+import scenarioSummaries from "../../data/live/scenario-summaries.json";
+import migrationEthnicity from "../../data/live/migration-ethnicity.json";
+import schoolFertilityProxy from "../../data/live/school-fertility-proxy.json";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -203,7 +208,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
 ---
 
 <BaseLayout
-  title={`${area.areaName} | asylumstats`}
+  title={`Asylum seekers in ${area.areaName} — ${area.supportedAsylum.toLocaleString()} on support | asylumstats`}
   description={pageDescription}
   structuredData={pageStructuredData}
 >
@@ -286,6 +291,11 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       headline={`${area.supportedAsylum.toLocaleString()} people housed on asylum support in ${area.areaName}`}
       body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""} At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(area.supportedAsylum * 150 * 365 / 1_000_000)}M per year for this area alone.`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
+    />
+    <CostCalculator
+      areaName={area.areaName}
+      supportedAsylum={area.supportedAsylum}
+      hotelSites={namedSiteCount + unnamedSiteCount}
     />
   </section>
 
@@ -455,6 +465,15 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           Census 2011 to 2021 cohort change ratios. Shaded band = 80% confidence interval from stochastic perturbation. Not a forecast.
         </p>
       </details>
+
+      {scenarioSummaries?.areas?.[area.areaCode] && (
+        <ScenarioSelector
+          areaCode={area.areaCode}
+          areaName={area.areaName}
+          scenarioData={scenarioSummaries.areas[area.areaCode]}
+          centralScenario={scenarioSummaries.centralScenario}
+        />
+      )}
     </section>
   )}
 
@@ -495,6 +514,27 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           {migrationProfile.maturityLevel}: {migrationProfile.implication}
         </p>
       )}
+      {(migrationEthnicity as any)?.areas?.[area.areaCode] && (() => {
+        const mig = (migrationEthnicity as any).areas[area.areaCode];
+        const groups = mig.groups || {};
+        return (
+          <details class="method-note" style="margin-top: 0.5rem;">
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">
+              Census 2021 mobility: {mig.internalMigrantsPct}% moved within UK, {mig.internationalMigrantsPct}% arrived from abroad
+            </summary>
+            <div class="data-list" style="margin-top: 0.4rem;">
+              {Object.entries(groups).sort(([,a]: any, [,b]: any) => (b.internalPct + b.internationalPct) - (a.internalPct + a.internationalPct)).map(([group, d]: any) => (
+                <div class="data-row">
+                  <span style="font-size: 0.78rem; text-transform: capitalize;">{group.replace("_", " ")}</span>
+                  <span style="font-size: 0.78rem; opacity: 0.7;">
+                    {d.internalPct}% internal, {d.internationalPct}% international
+                  </span>
+                </div>
+              ))}
+            </div>
+          </details>
+        );
+      })()}
     </section>
   )}
 
@@ -514,6 +554,19 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       </p>
     </section>
   )}
+
+  <!-- UKD cross-link banner -->
+  <div class="ukd-cross-link">
+    <div class="ukd-cross-inner">
+      <span class="ukd-cross-label">Full demographic profile</span>
+      <span class="ukd-cross-desc">
+        School pressure, housing demand, service demand scoring, economic profile, language projections, and more on UK Demographics.
+      </span>
+      <a href={`https://ukdemographics.co.uk/places/${slugifyAreaName(area.areaName)}/`} class="ukd-cross-btn" rel="noopener">
+        View {area.areaName} on UK Demographics &rarr;
+      </a>
+    </div>
+  </div>
 
     </div><!-- end tabpanel-demographics -->
 
@@ -638,6 +691,19 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
               <p class="tiny" style="margin-top: 0.4rem; opacity: 0.7;">{schoolValidation.pipelineGap.signal}</p>
             </div>
           )}
+          {(schoolFertilityProxy as any)?.areas?.[area.areaCode] && (() => {
+            const sfp = (schoolFertilityProxy as any).areas[area.areaCode];
+            return sfp.annualWbiChangePp !== 0 ? (
+              <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: rgba(6,182,212,0.04); border-radius: 6px; border: 1px solid rgba(6,182,212,0.1);">
+                <p class="tiny" style="margin: 0;">
+                  <strong>Fertility proxy (10-year school trend):</strong> WBI share in primary schools changing at {sfp.annualWbiChangePp > 0 ? "+" : ""}{sfp.annualWbiChangePp}pp/year.
+                  {sfp.annualWbiChangePp < -1 ? " Rapid diversification in young cohorts — the demographic wave is accelerating." :
+                   sfp.annualWbiChangePp < 0 ? " Gradual diversification in school-age population." :
+                   " WBI share stable or increasing in schools."}
+                </p>
+              </div>
+            ) : null;
+          })()}
           <details class="method-note">
             <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; validation</summary>
             <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
