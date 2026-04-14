@@ -135,11 +135,14 @@ try {
   console.log("  WARNING: base_single_year_2021.json not found. Using total pop comparison only.");
 }
 
-// Map 12-group model codes to our 6-group output categories
+// Map 20-group model codes to our 6-group output categories
 const MODEL_TO_6 = {
-  WBI: "white_british", WIR: "white_other", WHO: "white_other",
-  MIX: "mixed", IND: "asian", PAK: "asian", BAN: "asian",
-  CHI: "asian", OAS: "asian", BCA: "black", BAF: "black", OTH: "other"
+  WBI: "white_british", WIR: "white_other", WGT: "white_other", WRO: "white_other", WHO: "white_other",
+  MWA: "mixed", MWF: "mixed", MWC: "mixed", MOM: "mixed",
+  MIX: "mixed",  // backwards compat with 12-group
+  IND: "asian", PAK: "asian", BAN: "asian", CHI: "asian", OAS: "asian",
+  BAF: "black", BCA: "black", OBL: "black",
+  ARB: "other", OOT: "other", OTH: "other"
 };
 
 // Extract Census 2021 ethnic composition for school-age children (ages 4-15)

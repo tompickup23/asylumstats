@@ -1,252 +1,252 @@
 /**
- * Build single-year-of-age ethnic population base using IPF.
+ * Build single-year-of-age ethnic population base from Census 2021 custom dataset.
  *
- * Problem: Census 2021 NOMIS only provides ethnic × 6 broad age bands (RM032).
- * We need ethnic × single year (0-90+) for proper cohort-component modelling.
+ * REPLACES IPF. The ONS "Create a custom dataset" provides Census 2021
+ * single-year × 20 ethnic groups × sex × 311 LAs as direct observations.
+ * No estimation required — every cell is an observed Census count.
  *
- * Solution: Iterative Proportional Fitting (IPF)
- *   Seed: NEWETHPOP 2021 single-year ethnic profile (model-generated but structurally realistic)
- *   Margin 1: Census 2021 RM032 ethnic × broad age × sex × LA (observed)
- *   Margin 2: Census 2021 TS009 total pop × single year × sex × LA (observed)
+ * 20 ethnic groups (ONS codes 1-19):
+ *   BAN, CHI, IND, PAK, OAS (Asian subcategories)
+ *   BAF, BCA, OBL (Black subcategories)
+ *   MWA, MWF, MWC, MOM (Mixed subcategories)
+ *   WBI, WIR, WGT, WRO, WHO (White subcategories)
+ *   ARB, OOT (Other subcategories)
  *
- * Result: Census-consistent single-year ethnic populations.
- * Every marginal total matches observed Census data.
+ * 20 areas are suppressed for disclosure control — identified and listed.
  *
  * Output: data/model/base_single_year_2021.json
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 
-const RM032_PATH = path.resolve("data/raw/census_base/rm032_ethnic_age_sex.csv");
-const TS009_PATH = path.resolve("data/raw/census_base/ts009_single_year_age_sex.csv");
-const NEWETHPOP_2021 = path.resolve("data/raw/newethpop/extracted/2DataArchive/OutputData/Population/Population2021_LEEDS2.csv");
+const CENSUS_CSV = path.resolve("data/raw/census_single_year/census2021_ethnic_age_sex_la_singleyear.csv");
 const OUTPUT_DIR = path.resolve("data/model");
 const OUTPUT_PATH = path.join(OUTPUT_DIR, "base_single_year_2021.json");
 mkdirSync(OUTPUT_DIR, { recursive: true });
 
-const ETHNIC_GROUPS = ["WBI", "WIR", "WHO", "MIX", "IND", "PAK", "BAN", "CHI", "OAS", "BCA", "BAF", "OTH"];
+// 20-group ethnic codes (our internal codes)
+const ETHNIC_GROUPS_20 = [
+  "WBI", "WIR", "WGT", "WRO", "WHO",  // White: British, Irish, Gypsy/Traveller, Roma, Other
+  "MWA", "MWF", "MWC", "MOM",          // Mixed: White+Asian, White+Black African, White+Black Caribbean, Other Mixed
+  "IND", "PAK", "BAN", "CHI", "OAS",   // Asian: Indian, Pakistani, Bangladeshi, Chinese, Other Asian
+  "BAF", "BCA", "OBL",                  // Black: African, Caribbean, Other Black
+  "ARB", "OOT"                          // Other: Arab, Any Other
+];
+
+// Also define the 12-group backwards-compatible mapping
+const MAP_20_TO_12 = {
+  WBI: "WBI", WIR: "WIR", WGT: "WHO", WRO: "WHO", WHO: "WHO",
+  MWA: "MIX", MWF: "MIX", MWC: "MIX", MOM: "MIX",
+  IND: "IND", PAK: "PAK", BAN: "BAN", CHI: "CHI", OAS: "OAS",
+  BAF: "BAF", BCA: "BCA", OBL: "OTH",
+  ARB: "OTH", OOT: "OTH"
+};
+const ETHNIC_GROUPS_12 = ["WBI", "WIR", "WHO", "MIX", "IND", "PAK", "BAN", "CHI", "OAS", "BCA", "BAF", "OTH"];
+
+// Map ONS Census CSV ethnic codes (integers) to our 20-group codes
+const ONS_CODE_MAP = {
+  1: "BAN",   // Bangladeshi
+  2: "CHI",   // Chinese
+  3: "IND",   // Indian
+  4: "PAK",   // Pakistani
+  5: "OAS",   // Other Asian
+  6: "BAF",   // African
+  7: "BCA",   // Caribbean
+  8: "OBL",   // Other Black
+  9: "MWA",   // White and Asian
+  10: "MWF",  // White and Black African
+  11: "MWC",  // White and Black Caribbean
+  12: "MOM",  // Other Mixed
+  13: "WBI",  // English, Welsh, Scottish, Northern Irish or British
+  14: "WIR",  // Irish
+  15: "WGT",  // Gypsy or Irish Traveller
+  16: "WRO",  // Roma
+  17: "WHO",  // Other White
+  18: "ARB",  // Arab
+  19: "OOT"   // Any other ethnic group
+};
+
 const SEXES = ["M", "F"];
-const AGES = []; for (let a = 0; a <= 90; a++) AGES.push(a); // 0 to 90 (90 = 90+)
+const AGES = []; for (let a = 0; a <= 90; a++) AGES.push(a);
 
-const ETH_MAP_2021 = {
-  "White: English, Welsh, Scottish, Northern Irish or British": "WBI",
-  "White: Irish": "WIR", "White: Gypsy or Irish Traveller": "WHO",
-  "White: Roma": "WHO", "White: Other White": "WHO",
-  "Mixed or Multiple ethnic groups: White and Black Caribbean": "MIX",
-  "Mixed or Multiple ethnic groups: White and Black African": "MIX",
-  "Mixed or Multiple ethnic groups: White and Asian": "MIX",
-  "Mixed or Multiple ethnic groups: Other Mixed or Multiple ethnic groups": "MIX",
-  "Asian, Asian British or Asian Welsh: Indian": "IND",
-  "Asian, Asian British or Asian Welsh: Pakistani": "PAK",
-  "Asian, Asian British or Asian Welsh: Bangladeshi": "BAN",
-  "Asian, Asian British or Asian Welsh: Chinese": "CHI",
-  "Asian, Asian British or Asian Welsh: Other Asian": "OAS",
-  "Black, Black British, Black Welsh, Caribbean or African: Caribbean": "BCA",
-  "Black, Black British, Black Welsh, Caribbean or African: African": "BAF",
-  "Black, Black British, Black Welsh, Caribbean or African: Other Black": "OTH",
-  "Other ethnic group: Arab": "OTH", "Other ethnic group: Any other ethnic group": "OTH"
-};
-const PARENT_ETH = new Set(["Total: All usual residents", "White", "Mixed or Multiple ethnic groups",
-  "Asian, Asian British or Asian Welsh", "Black, Black British, Black Welsh, Caribbean or African", "Other ethnic group"]);
+console.log("Parsing Census 2021 custom dataset (single-year × 20 ethnic × sex × LA)...");
+console.log(`  Source: ${CENSUS_CSV}`);
 
-// Map RM032 broad bands to single-year ranges
-const BROAD_TO_SINGLES = {
-  "Aged 24 years and under": Array.from({length: 25}, (_, i) => i),
-  "Aged 25 to 34 years": Array.from({length: 10}, (_, i) => i + 25),
-  "Aged 35 to 49 years": Array.from({length: 15}, (_, i) => i + 35),
-  "Aged 50 to 64 years": Array.from({length: 15}, (_, i) => i + 50),
-  "Aged 65 years and over": Array.from({length: 26}, (_, i) => i + 65) // 65-90+
-};
-
+// Use Python-style CSV parsing for robustness with quoted fields
 function parseCsvLine(line) {
   const f = []; let c = ""; let q = false;
-  for (const ch of line) { if (ch === '"') q = !q; else if (ch === "," && !q) { f.push(c.trim()); c = ""; } else c += ch; }
+  for (const ch of line) {
+    if (ch === '"') q = !q;
+    else if (ch === "," && !q) { f.push(c.trim()); c = ""; }
+    else c += ch;
+  }
   f.push(c.trim()); return f;
 }
 
-// ============================================================
-// Parse RM032: ethnic × broad age × sex × LA (MARGIN 1)
-// ============================================================
-console.log("Parsing RM032 (ethnic × broad age × sex)...");
-const rm032 = new Map(); // "code|eth|sex|broadAge" → pop
-const rm032Lines = readFileSync(RM032_PATH, "utf8").split("\n").filter(l => l.trim());
-for (let i = 1; i < rm032Lines.length; i++) {
-  const cols = parseCsvLine(rm032Lines[i]);
-  const code = cols[0], ethName = cols[2], ageName = cols[3], sexName = cols[4], pop = parseFloat(cols[5]);
-  if (!code || isNaN(pop) || ageName === "Total") continue;
-  if (PARENT_ETH.has(ethName)) continue;
-  const eth = ETH_MAP_2021[ethName]; if (!eth) continue;
-  const sex = sexName === "Female" ? "F" : "M";
-  const key = `${code}|${eth}|${sex}|${ageName}`;
-  rm032.set(key, (rm032.get(key) || 0) + pop);
-}
-const rm032Areas = new Set([...rm032.keys()].map(k => k.split("|")[0]));
-console.log(`  ${rm032Areas.size} areas`);
+const fileContent = readFileSync(CENSUS_CSV, "utf8");
+const lines = fileContent.split("\n").filter(l => l.trim());
+console.log(`  ${lines.length - 1} data rows`);
 
-// ============================================================
-// Parse TS009: total × single year × sex × LA (MARGIN 2)
-// ============================================================
-console.log("Parsing TS009 (single year × sex)...");
-const ts009 = new Map(); // "code|sex|age" → pop
+// Columns: LA Code, LA Name, Age Code, Age Name, Eth Code, Eth Name, Sex Code, Sex Name, Observation
+const result = {};     // code → { eth → { sex → { age → pop, total → sum } } }
+const suppressedAreas = new Set();
+let rowCount = 0;
 
-function parseAgeName(name) {
-  if (name === "Aged under 1 year") return 0;
-  if (name === "Aged 90 years and over") return 90;
-  const m = name.match(/Aged (\d+)/);
-  return m ? parseInt(m[1]) : null;
-}
+for (let i = 1; i < lines.length; i++) {
+  const cols = parseCsvLine(lines[i]);
+  const laCode = cols[0];
+  const ageCode = parseInt(cols[2]);
+  const ethCode = parseInt(cols[4]);
+  const sexCode = parseInt(cols[6]);
+  const observation = parseInt(cols[8]) || 0;
 
-const ts009Lines = readFileSync(TS009_PATH, "utf8").split("\n").filter(l => l.trim());
-for (let i = 1; i < ts009Lines.length; i++) {
-  const cols = parseCsvLine(ts009Lines[i]);
-  const code = cols[0], ageName = cols[1], sexName = cols[2], pop = parseFloat(cols[3]);
-  if (!code || isNaN(pop)) continue;
-  const age = parseAgeName(ageName); if (age === null) continue;
-  const sex = sexName === "Female" ? "F" : "M";
-  ts009.set(`${code}|${sex}|${age}`, pop);
-}
-console.log(`  ${ts009.size} cells`);
+  if (!laCode?.startsWith("E")) continue;
 
-// ============================================================
-// Parse NEWETHPOP 2021: single year ethnic profile (SEED)
-// ============================================================
-console.log("Parsing NEWETHPOP 2021 seed profile...");
-const seed = new Map(); // "code|eth|sex|age" → pop
-const newethLines = readFileSync(NEWETHPOP_2021, "utf8").split("\n").filter(l => l.trim());
+  // Map ethnic code
+  const eth = ONS_CODE_MAP[ethCode];
+  if (!eth) continue; // Skip "Does not apply" (code -8)
 
-for (let i = 1; i < newethLines.length; i++) {
-  const cols = parseCsvLine(newethLines[i]);
-  const rawCode = cols[2], eth = cols[3];
-  if (!rawCode || !ETHNIC_GROUPS.includes(eth)) continue;
+  // Map sex
+  const sex = sexCode === 1 ? "F" : sexCode === 2 ? "M" : null;
+  if (!sex) continue;
 
-  const codes = rawCode.split("+");
-  // Columns 4-104 = M0..M100+, 105-205 = F0..F100+
-  for (const code of codes) {
-    for (let age = 0; age <= 90; age++) {
-      const maleVal = parseFloat(cols[4 + age]) || 0;
-      const femaleVal = parseFloat(cols[105 + age]) || 0;
-      // For age 90, sum 90-100+
-      if (age === 90) {
-        let mSum = 0, fSum = 0;
-        for (let a = 90; a <= 100; a++) {
-          mSum += parseFloat(cols[4 + a]) || 0;
-          fSum += parseFloat(cols[105 + a]) || 0;
-        }
-        seed.set(`${code}|${eth}|M|90`, (seed.get(`${code}|${eth}|M|90`) || 0) + mSum / codes.length);
-        seed.set(`${code}|${eth}|F|90`, (seed.get(`${code}|${eth}|F|90`) || 0) + fSum / codes.length);
-      } else {
-        seed.set(`${code}|${eth}|M|${age}`, (seed.get(`${code}|${eth}|M|${age}`) || 0) + maleVal / codes.length);
-        seed.set(`${code}|${eth}|F|${age}`, (seed.get(`${code}|${eth}|F|${age}`) || 0) + femaleVal / codes.length);
-      }
-    }
-  }
-}
-console.log(`  ${seed.size} cells`);
-
-// ============================================================
-// IPF: Fit seed to Census 2021 margins
-// ============================================================
-console.log("\nRunning IPF...");
-const commonAreas = [...rm032Areas].filter(c => ts009.has(`${c}|M|0`));
-console.log(`  ${commonAreas.length} areas with both margins`);
-
-const result = {}; // code → { eth → { sex → { age → pop } } }
-let ipfCount = 0;
-
-for (const code of commonAreas) {
-  result[code] = {};
-
-  for (const sex of SEXES) {
-    // Initialize from seed (NEWETHPOP profile)
-    const matrix = {}; // eth → age → pop
-    for (const eth of ETHNIC_GROUPS) {
-      matrix[eth] = {};
-      for (const age of AGES) {
-        matrix[eth][age] = Math.max(0.01, seed.get(`${code}|${eth}|${sex}|${age}`) || 0.01);
-      }
-    }
-
-    // IPF iterations: alternate between fitting ethnic margins and age margins
-    for (let iter = 0; iter < 20; iter++) {
-      // Fit ethnic × broad age margins (from RM032)
-      for (const [broadAge, singleAges] of Object.entries(BROAD_TO_SINGLES)) {
-        for (const eth of ETHNIC_GROUPS) {
-          const target = rm032.get(`${code}|${eth}|${sex}|${broadAge}`) || 0;
-          let current = 0;
-          for (const age of singleAges) {
-            if (age <= 90) current += matrix[eth][age] || 0;
-          }
-          if (current > 0 && target > 0) {
-            const factor = target / current;
-            for (const age of singleAges) {
-              if (age <= 90) matrix[eth][age] = (matrix[eth][age] || 0) * factor;
-            }
-          }
-        }
-      }
-
-      // Fit total × single year margins (from TS009)
-      for (const age of AGES) {
-        const target = ts009.get(`${code}|${sex}|${age}`) || 0;
-        let current = 0;
-        for (const eth of ETHNIC_GROUPS) current += matrix[eth][age] || 0;
-        if (current > 0 && target > 0) {
-          const factor = target / current;
-          for (const eth of ETHNIC_GROUPS) matrix[eth][age] = (matrix[eth][age] || 0) * factor;
-        }
-      }
-    }
-
-    // Store result
-    for (const eth of ETHNIC_GROUPS) {
-      if (!result[code][eth]) result[code][eth] = {};
-      result[code][eth][sex] = {};
-      let total = 0;
-      for (const age of AGES) {
-        result[code][eth][sex][age] = Math.round(matrix[eth][age] || 0);
-        total += result[code][eth][sex][age];
-      }
-      result[code][eth][sex].total = total;
-    }
+  // Map age: 0-89 = individual years, 90-100 = sum into 90+
+  let age;
+  if (ageCode >= 0 && ageCode <= 89) {
+    age = ageCode;
+  } else if (ageCode >= 90 && ageCode <= 100) {
+    age = 90; // Sum into 90+ bucket
+  } else {
+    continue;
   }
 
-  ipfCount++;
+  // Initialize area/eth/sex structures
+  if (!result[laCode]) result[laCode] = {};
+  if (!result[laCode][eth]) result[laCode][eth] = {};
+  if (!result[laCode][eth][sex]) {
+    result[laCode][eth][sex] = {};
+    for (const a of AGES) result[laCode][eth][sex][a] = 0;
+    result[laCode][eth][sex].total = 0;
+  }
+
+  result[laCode][eth][sex][age] += observation;
+  result[laCode][eth][sex].total += observation;
+  rowCount++;
 }
 
-console.log(`IPF complete for ${ipfCount} areas`);
-
-// Verify
+// Compute totals and verify
+const areaCodes = Object.keys(result).sort();
 let totalPop = 0, totalWBI = 0;
-for (const code of commonAreas) {
-  for (const eth of ETHNIC_GROUPS) {
+const areaPopulations = {};
+
+for (const code of areaCodes) {
+  let areaPop = 0;
+  for (const eth of ETHNIC_GROUPS_20) {
     for (const sex of SEXES) {
-      totalPop += result[code][eth][sex].total;
-      if (eth === "WBI") totalWBI += result[code][eth][sex].total;
+      const pop = result[code]?.[eth]?.[sex]?.total || 0;
+      areaPop += pop;
+      totalPop += pop;
+      if (eth === "WBI") totalWBI += pop;
+    }
+  }
+  areaPopulations[code] = areaPop;
+
+  // Check for suppressed areas (very low populations across all groups)
+  // ONS suppresses 20 areas for disclosure control
+  if (areaPop < 1000) {
+    suppressedAreas.add(code);
+  }
+}
+
+console.log(`\nParsed ${areaCodes.length} areas from Census custom dataset`);
+console.log(`Total population: ${totalPop.toLocaleString()}`);
+console.log(`WBI: ${totalWBI.toLocaleString()} (${(totalWBI / totalPop * 100).toFixed(1)}%)`);
+console.log(`Suppressed areas (pop < 1000): ${suppressedAreas.size}`);
+
+// Also generate a 12-group version for backwards compatibility
+const result12 = {};
+for (const code of areaCodes) {
+  if (suppressedAreas.has(code)) continue;
+  result12[code] = {};
+  for (const eth20 of ETHNIC_GROUPS_20) {
+    const eth12 = MAP_20_TO_12[eth20];
+    if (!result12[code][eth12]) {
+      result12[code][eth12] = {};
+      for (const sex of SEXES) {
+        result12[code][eth12][sex] = {};
+        for (const a of AGES) result12[code][eth12][sex][a] = 0;
+        result12[code][eth12][sex].total = 0;
+      }
+    }
+    for (const sex of SEXES) {
+      for (const a of AGES) {
+        result12[code][eth12][sex][a] += result[code]?.[eth20]?.[sex]?.[a] || 0;
+      }
+      result12[code][eth12][sex].total += result[code]?.[eth20]?.[sex]?.total || 0;
     }
   }
 }
-console.log(`Total population: ${totalPop.toLocaleString()}`);
-console.log(`WBI: ${totalWBI.toLocaleString()} (${(totalWBI/totalPop*100).toFixed(1)}%)`);
 
-// Spot check Blackburn age pyramid
-const bb = result["E06000008"];
-if (bb) {
-  console.log("\nBlackburn age pyramid (WBI vs PAK, males, selected ages):");
-  for (const age of [0, 5, 15, 25, 35, 50, 65, 80]) {
-    console.log(`  Age ${age}: WBI=${bb.WBI.M[age]} PAK=${bb.PAK.M[age]}`);
-  }
-}
-
-// Write output
-const output = {
+// Write 20-group output
+const output20 = {
   baseYear: 2021,
-  source: "IPF: NEWETHPOP seed × Census 2021 RM032 ethnic margins × Census 2021 TS009 age margins",
-  methodology: "Iterative Proportional Fitting (20 iterations). Seed from NEWETHPOP Leeds2 2021 projected population. Row margins: RM032 ethnic × broad age × sex (observed). Column margins: TS009 total × single year × sex (observed). All margins match Census 2021.",
-  ethnicGroups: ETHNIC_GROUPS,
+  source: "Census 2021 custom dataset: single-year-of-age × 20 ethnic groups × sex × 311 LAs. Direct observations — no IPF or estimation.",
+  methodology: "ONS 'Create a custom dataset' tool. Every cell is a directly observed Census 2021 count. Ages 90-100 summed into 90+ bucket. No iterative fitting, no seed profiles, no estimation. 20 ethnic groups as defined by ONS Census 2021 classification.",
+  ethnicGroups: ETHNIC_GROUPS_20,
+  ethnicGroups12: ETHNIC_GROUPS_12,
+  map20to12: MAP_20_TO_12,
   ages: AGES,
-  areaCount: ipfCount,
-  areas: result
+  areaCount: areaCodes.length - suppressedAreas.size,
+  suppressedAreas: [...suppressedAreas],
+  areas: {}
 };
 
-writeFileSync(OUTPUT_PATH, JSON.stringify(output), "utf8"); // Compact — this file is large
-console.log(`\nWritten ${OUTPUT_PATH} (${(JSON.stringify(output).length / 1e6).toFixed(1)} MB)`);
+// Only include non-suppressed areas
+for (const code of areaCodes) {
+  if (suppressedAreas.has(code)) continue;
+  output20.areas[code] = result[code];
+}
+
+writeFileSync(OUTPUT_PATH, JSON.stringify(output20), "utf8");
+console.log(`\nWritten 20-group base: ${OUTPUT_PATH} (${(JSON.stringify(output20).length / 1e6).toFixed(1)} MB)`);
+
+// Write 12-group backwards-compatible version
+const output12Path = path.join(OUTPUT_DIR, "base_single_year_2021_12group.json");
+const output12 = {
+  baseYear: 2021,
+  source: "Census 2021 custom dataset, aggregated from 20 to 12 groups for backwards compatibility.",
+  methodology: "Direct Census observations aggregated: WGT+WRO→WHO, MWA+MWF+MWC+MOM→MIX, OBL+ARB+OOT→OTH.",
+  ethnicGroups: ETHNIC_GROUPS_12,
+  ages: AGES,
+  areaCount: Object.keys(result12).length,
+  areas: result12
+};
+
+writeFileSync(output12Path, JSON.stringify(output12), "utf8");
+console.log(`Written 12-group base: ${output12Path} (${(JSON.stringify(output12).length / 1e6).toFixed(1)} MB)`);
+
+// Spot checks
+const bb = output20.areas["E06000008"];
+if (bb) {
+  console.log("\nBlackburn age pyramid (selected groups, males, selected ages):");
+  for (const age of [0, 5, 15, 25, 35, 50, 65, 80]) {
+    const wbi = bb.WBI?.M?.[age] || 0;
+    const pak = bb.PAK?.M?.[age] || 0;
+    const arb = bb.ARB?.M?.[age] || 0;
+    const wro = bb.WRO?.M?.[age] || 0;
+    console.log(`  Age ${age}: WBI=${wbi} PAK=${pak} ARB=${arb} Roma=${wro}`);
+  }
+}
+
+// New group totals
+console.log("\nNew group national totals:");
+const natTotals = {};
+for (const code of areaCodes) {
+  if (suppressedAreas.has(code)) continue;
+  for (const eth of ETHNIC_GROUPS_20) {
+    natTotals[eth] = (natTotals[eth] || 0) + (result[code]?.[eth]?.M?.total || 0) + (result[code]?.[eth]?.F?.total || 0);
+  }
+}
+for (const eth of ETHNIC_GROUPS_20) {
+  console.log(`  ${eth}: ${(natTotals[eth] || 0).toLocaleString()} (${((natTotals[eth] || 0) / totalPop * 100).toFixed(2)}%)`);
+}
