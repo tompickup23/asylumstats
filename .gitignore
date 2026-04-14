@@ -25,3 +25,8 @@ data/raw/supplementary/
 data/raw/newethpop/
 data/model/
 data/raw/census_base/
+data/raw/census_single_year/
+data/raw/dfe_schools/
+data/raw/ons_births/
+data/raw/census_ethnicity_detail/
+data/raw/snpp/
