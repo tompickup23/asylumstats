@@ -29,6 +29,7 @@ import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
 import { getMPsForArea } from "../../lib/mp-data";
+import schoolValidationData from "../../data/live/school-validation.json";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -84,6 +85,7 @@ const pathwayBreakdown = [
 const maxPathwayValue = Math.max(...pathwayBreakdown.map((item) => item.value), 1);
 
 const areaTrend = getAreaTrendSummary(area.areaCode);
+const schoolValidation = (schoolValidationData as any).areas?.find((a: any) => a.areaCode === area.areaCode);
 
 const regionalPrimeProviderCoverage = getAreaRegionalPrimeProviderCoverage(
   area, getEntityProfiles(), localRouteLatest.areas, hotelLedger.areas
@@ -620,9 +622,30 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
               </div>
             </div>
           )}
+          {schoolValidation?.pipelineGap && (
+            <div style="margin-top: 1rem; padding: 0.75rem; background: var(--surface-alt, #f5f5f5); border-radius: 0.5rem;">
+              <p class="tiny" style="font-weight: 600; margin-bottom: 0.3rem;">Demographic pipeline</p>
+              <div class="metric-list">
+                <div class="metric-item">
+                  <span class="metric-value">{schoolValidation.pipelineGap.primaryWBIPct}%</span>
+                  <span class="metric-label">Primary WBI</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-value">{schoolValidation.pipelineGap.secondaryWBIPct}%</span>
+                  <span class="metric-label">Secondary WBI</span>
+                </div>
+              </div>
+              <p class="tiny" style="margin-top: 0.4rem; opacity: 0.7;">{schoolValidation.pipelineGap.signal}</p>
+            </div>
+          )}
           <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">DfE School Census 2024/25. State-funded schools. Upper-tier LA level.</p>
+            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source &amp; validation</summary>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
+              DfE School Census 2024/25. State-funded schools. Upper-tier LA level.
+              {schoolValidation?.comparison?.white_british?.censusChildPct != null
+                ? ` Validated against Census 2021 ages 4-15: Census WBI ${schoolValidation.comparison.white_british.censusChildPct}% vs school ${schoolValidation.comparison.white_british.schoolPct}% (${schoolValidation.comparison.white_british.gapPp > 0 ? '+' : ''}${schoolValidation.comparison.white_british.gapPp}pp gap).`
+                : ""}
+            </p>
           </details>
         </article>
       </div>

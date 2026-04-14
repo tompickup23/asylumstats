@@ -348,7 +348,7 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Uncertainty</span>
         <p class="tiny">
-          1,000 Monte Carlo simulations (Yu, Sevcikova, Raftery &amp; Curran 2023). Each simulation perturbs CCRs from Normal(observed, sigma) where sigma = 0.055 (calibrated from own backcast MAE 5.42pp). Sigma scales with projection horizon: sigma_t = sigma_base x sqrt(years/10), so 2061 intervals are approximately 2x wider than 2031 intervals. James-Stein shrinkage (k=50) pulls small-population CCRs toward the national average. Reports median + 80%/95% prediction intervals per area. Spatial smoothing: projections blended 70/30 with regional averages.
+          1,000 Monte Carlo simulations (Yu, Sevcikova, Raftery &amp; Curran 2023). Each simulation perturbs CCRs from Normal(observed, sigma) where sigma = 0.04 (calibrated from Hamilton-Perry backcast MAE 3.57pp across 301 areas). Sigma scales with projection horizon: sigma_t = sigma_base x sqrt(years/10), so 2061 intervals are approximately 2x wider than 2031 intervals. James-Stein shrinkage (k=50) pulls small-population CCRs toward the national average. Reports median + 80%/95% prediction intervals per area. Spatial smoothing: projections blended 70/30 with regional averages.
         </p>
       </article>
     </div>
@@ -362,10 +362,16 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Validation</span>
         <p class="tiny">
-          Our model backcast-validated against Census 2021 for 299 areas. Our MAE: 5.42pp. NEWETHPOP MAE: 3.94pp (both over-predicted White British in the majority of areas). Sigma calibrated from own backcast error, not NEWETHPOP's. Model implied TFR (1.80) vs ONS target (1.45) - gap documented, partially constrained via SNPP 2022-based envelope (309 English LAs, 2022-2047).
+          Hamilton-Perry backcast validated against Census 2021 across 301 areas using the same CCR/CWR methodology as the forward projections. Our MAE: 3.57pp (RMSE 4.26pp). Compared against two baselines: NEWETHPOP cohort-component model (MAE 3.94pp) and national-average CCRs only (MAE 4.04pp). Our local-CCR model outperforms both, though local CCRs are better in only 46% of individual areas — most demographic change is driven by national-level trends. Sigma calibrated from own HP backcast error. SNPP 2022-based envelope constraint (301 English LAs, 2022-2047).
         </p>
       </article>
     </div>
+    <article class="signal-card" style="margin-top: 0.5rem;">
+      <span class="tiny">School census validation</span>
+      <p class="tiny">
+        Independent validation against DfE School Census 2024/25 (8.1 million pupils across 126 LAs). Compares Census 2021 ethnic composition of ages 4-15 against observed school enrollment 3 years later. Age-specific MAE: 2.73pp (RMSE 3.92pp). By group: White British 6.61pp, Asian 2.04pp, Black 2.84pp, Mixed 0.77pp. The 3-year gap means some divergence is expected from births, migration, and demographic change since the Census. 49 LAs have minority-WBI school populations. Pipeline analysis (primary vs secondary) identifies areas where diversification is accelerating.
+      </p>
+    </article>
     <article class="signal-card" style="margin-top: 0.5rem;">
       <span class="tiny">Limitations</span>
       <p class="tiny">

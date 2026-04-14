@@ -8,6 +8,8 @@ import { getSeriesDelta } from "../lib/route-analytics";
 import { getCollection } from "astro:content";
 import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
 import rawProjections from "../data/live/ethnic-projections.json";
+import grantRateData from "../data/live/grant-rates-nationality.json";
+import schoolValidationData from "../data/live/school-validation.json";
 
 const routeDashboard = loadRouteDashboard();
 const moneyLedger = loadMoneyLedger();
@@ -85,10 +87,17 @@ const wbBelow50Count = Object.values(allAreas).filter((a: any) =>
 
 const significantShifts = getSignificantDemographicShifts(2060);
 
+const grantRates = grantRateData as any;
+const topGrantRates = (grantRates.leagueTable || []).slice(0, 8);
+const bottomGrantRates = [...(grantRates.leagueTable || [])].sort((a: any, b: any) => a.grantRatePct - b.grantRatePct).slice(0, 8);
+const topClaimants = (grantRates.volumeRanking || []).slice(0, 8);
+const schoolStats = (schoolValidationData as any).validationStats;
+
 const sections = [
   { id: "national-overview", label: "Overview" },
   { id: "national-demographics", label: "Demographics" },
   { id: "national-routes", label: "Routes" },
+  { id: "national-grant-rates", label: "Grant rates" },
   { id: "national-spending", label: "Spending" },
   { id: "national-findings", label: "Findings" }
 ];
@@ -249,6 +258,78 @@ const sections = [
         );
       })}
     </div>
+  </section>
+
+  <!-- GRANT RATES BY NATIONALITY -->
+  <section id="national-grant-rates" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Grant rates by nationality</h2>
+        <p class="lede">
+          {grantRates.summary?.nationalitiesInLeagueTable} nationalities assessed (2020-2025).
+          {grantRates.summary?.genuineRefugeeNationalities} with 75%+ grant rate,
+          {grantRates.summary?.likelyEconomicMigrationNationalities} with under 25%.
+          Initial decisions only — appeal outcomes raise true rates.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <article class="feature-card">
+        <h3>Highest grant rates</h3>
+        <p class="tiny" style="opacity: 0.6;">Nationalities most likely granted protection</p>
+        <div class="data-list">
+          {topGrantRates.map((row: any) => (
+            <div class="data-row">
+              <span style="font-size: 0.85rem;">{row.nationality}</span>
+              <span class="data-row-value" style="color: var(--accent-success, #10B981);">{row.grantRatePct}%</span>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="feature-card">
+        <h3>Lowest grant rates</h3>
+        <p class="tiny" style="opacity: 0.6;">Nationalities most likely refused — likely economic migration</p>
+        <div class="data-list">
+          {bottomGrantRates.map((row: any) => (
+            <div class="data-row">
+              <span style="font-size: 0.85rem;">{row.nationality}</span>
+              <span class="data-row-value" style="color: var(--coral, #EF4444);">{row.grantRatePct}%</span>
+            </div>
+          ))}
+        </div>
+      </article>
+    </div>
+
+    <article class="feature-card" style="margin-top: 1rem;">
+      <h3>Top claimant nationalities (all time)</h3>
+      <div class="stacked-bars">
+        {topClaimants.map((row: any) => {
+          const maxVol = topClaimants[0]?.totalDecisions || 1;
+          return (
+            <div class="stacked-bar-row">
+              <div class="stacked-bar-label" style="min-width: 8rem;">
+                <span style="font-size: 0.78rem;">{row.nationality}</span>
+              </div>
+              <div class="stacked-bar" style="background: var(--panel-soft);">
+                <div class="bar-seg asian" style={`width: ${(row.totalDecisions / maxVol) * 100}%`}></div>
+              </div>
+              <div class="stacked-bar-pct" style="min-width: 5rem; text-align: right;">
+                {row.totalDecisions.toLocaleString()} <span class="tiny" style="opacity:0.5">({row.grantRatePct}%)</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <details class="method-note" style="margin-top: 0.5rem;">
+        <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Methodology</summary>
+        <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">{grantRates.methodology}</p>
+        {(grantRates.caveats || []).map((c: string) => (
+          <p class="tiny" style="margin-top: 0.2rem; opacity: 0.5;">{c}</p>
+        ))}
+      </details>
+    </article>
   </section>
 
   <!-- SPENDING -->
