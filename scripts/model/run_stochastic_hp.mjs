@@ -66,26 +66,62 @@ function randn() {
 }
 
 // ============================================================
-// Parse 2011 base + compute deterministic CCRs (same as run_hp_single_year.mjs)
+// Parse 2011 base (12 groups) and split to 20 (same as run_hp_single_year.mjs)
 // ============================================================
-console.log("Parsing data...");
-const pop2011 = new Map();
+console.log("Parsing NEWETHPOP 2011 (12 groups) and splitting to 20...");
+const NEWETHPOP_TO_CHILDREN = {
+  WBI: ["WBI"], WIR: ["WIR"],
+  WHO: ["WGT", "WRO", "WHO"],
+  MIX: ["MWA", "MWF", "MWC", "MOM"],
+  IND: ["IND"], PAK: ["PAK"], BAN: ["BAN"], CHI: ["CHI"], OAS: ["OAS"],
+  BLA: ["BAF"], BLC: ["BCA"], OBL: ["OBL"],
+  OTH: ["ARB", "OOT"]
+};
+const pop2011_12 = new Map();
 const lines2011 = readFileSync(NEWETHPOP_2011, "utf8").split("\n").filter(l => l.trim());
 for (let i = 1; i < lines2011.length; i++) {
   const cols = parseCsvLine(lines2011[i]);
-  const rawCode = cols[2], eth = cols[3];
-  if (!rawCode || !ETHNIC_GROUPS.includes(eth)) continue;
+  const rawCode = cols[2];
+  if (!rawCode) continue;
+  const eth = cols[3];
   for (const code of rawCode.split("+")) {
     for (let age = 0; age <= 90; age++) {
       let mVal = age < 90 ? (parseFloat(cols[4 + age]) || 0) : 0;
       let fVal = age < 90 ? (parseFloat(cols[105 + age]) || 0) : 0;
       if (age === 90) { for (let a = 90; a <= 100; a++) { mVal += parseFloat(cols[4+a])||0; fVal += parseFloat(cols[105+a])||0; } }
       const n = rawCode.split("+").length;
-      pop2011.set(`${code}|${eth}|M|${age}`, (pop2011.get(`${code}|${eth}|M|${age}`)||0) + mVal/n);
-      pop2011.set(`${code}|${eth}|F|${age}`, (pop2011.get(`${code}|${eth}|F|${age}`)||0) + fVal/n);
+      pop2011_12.set(`${code}|${eth}|M|${age}`, (pop2011_12.get(`${code}|${eth}|M|${age}`)||0) + mVal/n);
+      pop2011_12.set(`${code}|${eth}|F|${age}`, (pop2011_12.get(`${code}|${eth}|F|${age}`)||0) + fVal/n);
     }
   }
 }
+
+// Split 12→20 using 2021 sub-group proportions
+const pop2011 = new Map();
+for (const code of Object.keys(base2021.areas)) {
+  for (const sex of SEXES) {
+    for (let age = 0; age <= 90; age++) {
+      for (const [parentEth, children] of Object.entries(NEWETHPOP_TO_CHILDREN)) {
+        const parentPop = pop2011_12.get(`${code}|${parentEth}|${sex}|${age}`) || 0;
+        if (children.length === 1) {
+          pop2011.set(`${code}|${children[0]}|${sex}|${age}`, parentPop);
+          continue;
+        }
+        let parentTotal2021 = 0;
+        for (const child of children) parentTotal2021 += base2021.areas[code]?.[child]?.[sex]?.[age] || 0;
+        if (parentTotal2021 <= 0) {
+          for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop / children.length);
+        } else {
+          for (const child of children) {
+            const share = (base2021.areas[code]?.[child]?.[sex]?.[age] || 0) / parentTotal2021;
+            pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop * share);
+          }
+        }
+      }
+    }
+  }
+}
+console.log(`  Split complete`);
 
 // Compute deterministic CCRs and CWRs
 const areaCodes = Object.keys(base2021.areas).filter(c => pop2011.has(`${c}|WBI|M|0`));

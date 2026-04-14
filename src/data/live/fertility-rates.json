@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-04-14T09:35:54.503Z",
+  "source": "ONS Births Linked 2024 + Census 2021 custom dataset",
+  "methodology": "Census-derived CWRs computed as Children(0-4) / Women(15-44) per ethnic group per LA. The HP model uses these directly — no hardcoded TFRs. ONS Linked Births 2024 provides independent validation of ethnic fertility differentials. Approximate TFR from CWR: TFR ≈ CWR × 6 (5-year-cohort children / 30-year childbearing window).",
+  "censusCWR": {
+    "WBI": 0.2842,
+    "WIR": 0.1026,
+    "WGT": 0.426,
+    "WRO": 0.2211,
+    "WHO": 0.1532,
+    "MWA": 0.7702,
+    "MWF": 0.7643,
+    "MWC": 0.5356,
+    "MOM": 0.5767,
+    "IND": 0.2512,
+    "PAK": 0.3587,
+    "BAN": 0.3277,
+    "CHI": 0.1189,
+    "OAS": 0.2295,
+    "BAF": 0.2612,
+    "BCA": 0.1722,
+    "OBL": 0.6663,
+    "ARB": 0.336,
+    "OOT": 0.241
+  },
+  "note": "The v6.0 HP model does NOT use hardcoded TFRs. It computes CWRs directly from Census 2021 per LA per ethnic group. The older scripts (build_components.mjs, run_projection.mjs) used hardcoded TFRs from Coleman & Dubuc (2010) and Rees et al. (2012). ONS 2024 births data is available for future model improvements: age-specific fertility rates by ethnicity × IMD deprivation decile × region.",
+  "onsBirths2024": {
+    "Bangladeshi": 12787,
+    "Indian": 31848,
+    "Pakistani": 32971,
+    "Any other Asian background": 21616,
+    "Black African": 31372,
+    "Black Caribbean": 4799,
+    "Any other Black background": 4478,
+    "Any other ethnic group": 14960,
+    "White British": 304244,
+    "Any other White background": 59275,
+    "Not stated": 9266
+  },
+  "totalBirths2024": 527616
+}

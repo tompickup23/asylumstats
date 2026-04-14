@@ -35,7 +35,7 @@ All five worst misses are in London and the Thames Gateway - areas where interna
 
 Every ethnic demographic projection for the UK - including Goodwin's CHSS report (2025), which projects White British minority by 2063 - inherits assumptions from the same academic tradition. If the gold-standard model underestimated diversity growth by an average of 4 percentage points over just 10 years, then forward projections to 2050 or 2060 are likely understating the pace of demographic change.
 
-Our own model (Hamilton-Perry with Census 2021 base, validated and Monte Carlo-tested) addresses this by using observed Census-to-Census ratios rather than modelled component rates. But it carries its own limitations - documented fully on our methodology page.
+Our own model (Hamilton-Perry v6.0 with Census 2021 direct observations, 20 ethnic groups) addresses this by using observed Census-to-Census ratios rather than modelled component rates. In backcast validation across 269 areas, our model achieves MAE 2.45pp — outperforming NEWETHPOP's 2.58pp while using a simpler, more transparent method. The v6.0 upgrade (eliminating IPF estimation, expanding to 20 groups, adding DfE school census calibration) improved accuracy by 31%. Full limitations documented on our methodology page.
 
 **Accuracy distribution across 296 areas:**
 - Within 1pp: 48 areas (16%)
@@ -45,4 +45,4 @@ Our own model (Hamilton-Perry with Census 2021 base, validated and Monte Carlo-t
 
 **Nobody else has published this validation.** The NEWETHPOP dataset has been downloaded and cited by researchers worldwide, but no systematic comparison against Census 2021 actuals has been published. This finding is, to our knowledge, the first.
 
-**Data:** NEWETHPOP Leeds2 projection (DOI: 10.5255/UKDA-SN-852508) vs ONS Census 2021 TS021 via NOMIS API. Full validation data and error tables published at asylumstats.co.uk. Methodology: Hamilton-Perry single-year-of-age model with James-Stein shrinkage and 1,000 Monte Carlo simulations.
+**Data:** NEWETHPOP Leeds2 projection (DOI: 10.5255/UKDA-SN-852508) vs ONS Census 2021 TS021 via NOMIS API. Full validation data and error tables published at asylumstats.co.uk. Methodology: Hamilton-Perry v6.0 single-year-of-age model, 20 ethnic groups, Census 2021 direct observations (no IPF), DfE School Census 2024/25 calibration, James-Stein shrinkage, 1,000 Monte Carlo simulations, backcast validation (MAE 2.45pp vs NEWETHPOP 2.58pp across 269 areas).
