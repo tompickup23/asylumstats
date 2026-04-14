@@ -13,7 +13,7 @@ video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/cards/true-cost-of-asylum_og.png"
 ---
 
-**£5.77 million per day on asylum hotels.** That is the number the Home Office publishes. It is real. It is sourced. And it is only 26% of the actual bill.
+**£5.77 million per day on asylum hotels.** That is the number the Home Office publishes. It is real. It is sourced. And it is less than a third of the actual bill.
 
 The total annual cost of the UK asylum system is **at least £8 billion**. Over £230 for every income taxpayer. Every year. That is the minimum defensible figure from published government data. The actual cost is almost certainly higher.
 
@@ -257,7 +257,7 @@ Seven new cost categories (shown in **bold**) account for an additional £1.8-2.
 
 **At minimum, the asylum system costs over £207 per taxpayer per year.** The central estimate is £236. The true figure is likely higher because several cost categories (healthcare, education, criminal justice) rely on estimates rather than published asylum-specific data.
 
-The hotel bill alone (£62/taxpayer) is only 26% of even the conservative total.
+The hotel bill alone (£62/taxpayer) is only 26% of the central total, and 30% of the conservative total.
 
 ## What this does NOT include
 
