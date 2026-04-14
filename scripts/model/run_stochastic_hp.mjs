@@ -15,8 +15,8 @@
  *   - P10/P90 = 80% prediction interval
  *   - P2.5/P97.5 = 95% prediction interval
  *
- * σ calibrated from NEWETHPOP validation: MAE 3.94pp over 10 years
- * → per-cohort CCR σ ≈ 0.04 (since errors accumulate across ~90 cohorts)
+ * σ calibrated from HP v6.0 backcast: MAE 2.45pp over 10 years
+ * → per-cohort CCR σ = 0.02 (Census-direct base eliminates IPF noise)
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -379,7 +379,7 @@ for (const code of areaCodes) {
 
 existing.modelVersion = "6.0-stochastic-hp";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
-existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.04 calibrated from HP backcast validation: MAE 3.57pp over 301 areas). Reports median + 80%/95% prediction intervals.";
+existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.02 calibrated from HP v6.0 backcast validation: MAE 2.45pp over 269 areas). Reports median + 80%/95% prediction intervals.";
 
 writeFileSync(SITE_OUTPUT, JSON.stringify(existing, null, 2), "utf8");
 console.log("Done.");

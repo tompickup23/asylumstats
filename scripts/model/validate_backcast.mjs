@@ -536,7 +536,7 @@ const hpMAE = validation.summary.hp_local.mae;
 const sigmaRecommendation = r(hpMAE / 100); // Convert pp to proportion
 validation.sigmaRecommendation = {
   value: sigmaRecommendation,
-  description: `CCR_SIGMA_BASE should be ${sigmaRecommendation} (MAE ${hpMAE}pp / 100). Previous: 0.055 (from CC model MAE 5.42pp).`
+  description: `CCR_SIGMA_BASE should be ${sigmaRecommendation} (MAE ${hpMAE}pp / 100). v6.0 current: 0.02 (from HP backcast MAE 2.45pp).`
 };
 
 // ============================================================
@@ -561,7 +561,7 @@ console.log(`\n90% CI: [${validation.confidenceIntervals.p5}pp, +${validation.co
 console.log(`95% CI: [${validation.confidenceIntervals.p2_5}pp, +${validation.confidenceIntervals.p97_5}pp]`);
 console.log(`Median error: ${validation.confidenceIntervals.median}pp`);
 
-console.log(`\nSigma recommendation: CCR_SIGMA_BASE = ${sigmaRecommendation} (was 0.055)`);
+console.log(`\nSigma recommendation: CCR_SIGMA_BASE = ${sigmaRecommendation} (v6.0 current: 0.02)`);
 
 // Top improvements / worst areas
 const areaList = Object.entries(validation.areas)

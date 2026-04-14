@@ -539,7 +539,7 @@ for (const code of areaCodes) {
   }
 }
 
-existing.methodology = "Hamilton-Perry single-year-of-age model with 20 ethnic groups. Census 2021 base from ONS custom dataset (direct observations, no IPF). 2011 base from NEWETHPOP Population2011_LEEDS2.csv, split from 12 to 20 groups using 2021 sub-group proportions. 91 age groups x 20 ethnic groups x 2 sexes. SNPP 2022-based envelope constraint (linear extrapolation beyond 2047). Brexit WHO adjustment (-15% growth ages 20-44). DfE School Census 2024/25 calibration (20% damped CCR adjustment for ages 0-5). Backcast validated: MAE 3.57pp across 301 areas. Monte Carlo uncertainty from run_stochastic_hp.mjs (sigma=0.04).";
+existing.methodology = "Hamilton-Perry single-year-of-age model with 20 ethnic groups. Census 2021 base from ONS custom dataset (direct observations, no IPF). 2011 base from NEWETHPOP Population2011_LEEDS2.csv, split from 12 to 20 groups using 2021 sub-group proportions. 91 age groups x 20 ethnic groups x 2 sexes. SNPP 2022-based envelope constraint (linear extrapolation beyond 2047). Brexit WHO adjustment (-15% growth ages 20-44). DfE School Census 2024/25 calibration (20% damped CCR adjustment for ages 0-5). Backcast validated: MAE 2.45pp across 269 areas (beats NEWETHPOP 2.58pp). Monte Carlo uncertainty from run_stochastic_hp.mjs (sigma=0.02).";
 existing.modelVersion = "6.0-20group-census-direct";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
 
