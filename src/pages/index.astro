@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import DataFreshness from "../components/DataFreshness.astro";
 import Explainer from "../components/Explainer.astro";
 import ShareButton from "../components/ShareButton.astro";
+import SisterSiteTeaser from "../components/SisterSiteTeaser.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
@@ -431,6 +432,9 @@ function findingColor(verdict: string): string {
     </div>
     <a href="/routes/" class="cta-link">Full route analysis &rarr;</a>
   </section>
+
+  <!-- ═══ SISTER SITE (UK Demographics) ═══ -->
+  <SisterSiteTeaser />
 
   <!-- ═══ CTA STRIP ═══ -->
   <section class="cta-section shell">

@@ -47,6 +47,17 @@ function isActive(href: string): boolean {
   </a>
 
   <div class="site-tools">
+    <a
+      class="sister-pill"
+      href="https://ukdemographics.co.uk"
+      target="_blank"
+      rel="noopener"
+      title="Sister site — population projections"
+    >
+      <span class="sister-pill-dot" aria-hidden="true"></span>
+      <span class="sister-pill-label">ukdemographics.co.uk</span>
+      <span class="sister-pill-arrow" aria-hidden="true">&#8599;</span>
+    </a>
     <button
       class="search-launch"
       type="button"
@@ -263,8 +274,43 @@ function isActive(href: string): boolean {
   }
   .mobile-menu-btn:hover { background: var(--panel-soft); }
 
+  /* Sister-site pill */
+  .sister-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #818cf8;
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 180ms, border-color 180ms, transform 180ms;
+    white-space: nowrap;
+  }
+  .sister-pill:hover {
+    background: rgba(129, 140, 248, 0.18);
+    border-color: rgba(129, 140, 248, 0.5);
+    transform: translateY(-1px);
+  }
+  .sister-pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #818cf8;
+    box-shadow: 0 0 8px rgba(129, 140, 248, 0.7);
+  }
+  .sister-pill-arrow { font-size: 0.82rem; opacity: 0.7; }
+
   @media (max-width: 900px) {
     .desktop-nav { display: none; }
     .mobile-menu-btn { display: flex; }
+    .sister-pill-label { display: none; }
+    .sister-pill { padding: 0.35rem 0.55rem; }
+  }
+  @media (max-width: 520px) {
+    .sister-pill { display: none; }
   }
 </style>
