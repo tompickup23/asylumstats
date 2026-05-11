@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-28T17:32:15.601Z",
+  "generatedAt": "2026-05-11T13:05:52.862Z",
   "summary": {
     "totalRecords": 11,
     "primeContractRows": 3,
@@ -367,7 +367,7 @@
       "routeFamilies": [
         "asylum_support"
       ],
-      "siteCount": 2,
+      "siteCount": 5,
       "publicContractCount": 1,
       "publicContractValueGbp": null,
       "riskLevel": "low",
@@ -377,7 +377,32 @@
       ],
       "siteIds": [
         "bell-hotel-epping",
-        "phoenix-hotel-north-weald"
+        "phoenix-hotel-north-weald",
+        "holiday-inn-flore-west-northamptonshire",
+        "ibis-rugby-east-crick",
+        "mk-hotel-deanshanger"
+      ],
+      "notes": "Current regional responsibility in the public contract structure. The starter ledger uses this to map visible current hotel sites to a prime provider."
+    },
+    {
+      "supplierId": "supplier_mears",
+      "entityName": "Mears",
+      "entityRole": "prime_provider",
+      "companyNumber": null,
+      "routeFamilies": [
+        "asylum_support"
+      ],
+      "siteCount": 2,
+      "publicContractCount": 1,
+      "publicContractValueGbp": null,
+      "riskLevel": "low",
+      "integritySignalCount": 0,
+      "sourceUrls": [
+        "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      ],
+      "siteIds": [
+        "cedar-court-wakefield",
+        "allerton-court-hotel-northallerton"
       ],
       "notes": "Current regional responsibility in the public contract structure. The starter ledger uses this to map visible current hotel sites to a prime provider."
     },
@@ -441,27 +466,6 @@
       ],
       "siteIds": [
         "stanwell-hotel-spelthorne"
-      ],
-      "notes": "Current regional responsibility in the public contract structure. The starter ledger uses this to map visible current hotel sites to a prime provider."
-    },
-    {
-      "supplierId": "supplier_mears",
-      "entityName": "Mears",
-      "entityRole": "prime_provider",
-      "companyNumber": null,
-      "routeFamilies": [
-        "asylum_support"
-      ],
-      "siteCount": 1,
-      "publicContractCount": 1,
-      "publicContractValueGbp": null,
-      "riskLevel": "low",
-      "integritySignalCount": 0,
-      "sourceUrls": [
-        "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
-      ],
-      "siteIds": [
-        "cedar-court-wakefield"
       ],
       "notes": "Current regional responsibility in the public contract structure. The starter ledger uses this to map visible current hotel sites to a prime provider."
     },
@@ -615,7 +619,7 @@
     {
       "id": "current-hotel-resolution-gap",
       "title": "Current named hotels still outpace documented operator and owner chains",
-      "detail": "4 current named hotel sites are visible in the live ledger but still sit in partial or unresolved entity coverage.",
+      "detail": "8 current named hotel sites are visible in the live ledger but still sit in partial or unresolved entity coverage.",
       "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
       "severity": "warning"
     },
