@@ -5,6 +5,12 @@ on:
     - cron: "0 8 * * 1"
   workflow_dispatch:
 
+# The job commits and pushes refreshed data back to main, so the workflow
+# token needs contents: write. Without this it defaults to read-only and
+# the final `git push` fails with 403.
+permissions:
+  contents: write
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
