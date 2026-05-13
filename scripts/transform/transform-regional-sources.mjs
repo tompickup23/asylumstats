@@ -743,7 +743,7 @@ const migrationObservatoryGuideLinks = dedupeBy(
     pickLink(
       migrationObservatoryGuideLinksRaw,
       (label, url) =>
-        label.includes("Local Area Migration Indicators suite") &&
+        label.toLowerCase().includes("local area migration indicators") &&
         url.includes("localareamigrationindicatorsunitedkingdom")
     ) &&
       buildAssetRow({
@@ -756,7 +756,7 @@ const migrationObservatoryGuideLinks = dedupeBy(
           pickLink(
             migrationObservatoryGuideLinksRaw,
             (label, url) =>
-              label.includes("Local Area Migration Indicators suite") &&
+              label.toLowerCase().includes("local area migration indicators") &&
               url.includes("localareamigrationindicatorsunitedkingdom")
           )?.url ?? migrationObservatoryLocalGuideUrl,
         assetType: "official_source_link",
@@ -789,8 +789,8 @@ const migrationObservatoryGuideLinks = dedupeBy(
     pickLink(
       migrationObservatoryGuideLinksRaw,
       (label, url) =>
-        label.includes("Download the source data in this chart from the Home Office") &&
-        url.includes("asylum-and-resettlement-datasets#local-authority-data")
+        label.includes("Home Office") &&
+        url.includes("immigration-system-statistics-regional-and-local-authority-data")
     ) &&
       buildAssetRow({
         organisation: "Migration Observatory",
@@ -802,58 +802,35 @@ const migrationObservatoryGuideLinks = dedupeBy(
           pickLink(
             migrationObservatoryGuideLinksRaw,
             (label, url) =>
-              label.includes("Download the source data in this chart from the Home Office") &&
-              url.includes("asylum-and-resettlement-datasets#local-authority-data")
+              label.includes("Home Office") &&
+              url.includes("immigration-system-statistics-regional-and-local-authority-data")
           )?.url ?? migrationObservatoryLocalGuideUrl,
         assetType: "official_source_link",
         routeFocus: ["asylum", "refugees"],
-        notes: "Local-authority asylum and resettlement source table linked out from the guide."
+        notes: "Home Office regional and local-authority immigration data (Reg_01 + Reg_02) linked out from the guide."
       }),
     pickLink(
       migrationObservatoryGuideLinksRaw,
       (label, url) =>
-        label.includes("Download the source data in this chart from the Department for Education") &&
-        url.includes("children-looked-after")
+        label.includes("Home Office") &&
+        url.includes("immigration-system-statistics-data-tables#asylum")
     ) &&
       buildAssetRow({
         organisation: "Migration Observatory",
         regionName: "United Kingdom",
         pageTitle: extractTitle(migrationObservatoryLocalGuideHtml) ?? "Local data guide",
         pageUrl: migrationObservatoryLocalGuideUrl,
-        assetTitle: "Department for Education UASC source table",
+        assetTitle: "Home Office asylum support dataset (Asy_D11)",
         assetUrl:
           pickLink(
             migrationObservatoryGuideLinksRaw,
             (label, url) =>
-              label.includes("Download the source data in this chart from the Department for Education") &&
-              url.includes("children-looked-after")
+              label.includes("Home Office") &&
+              url.includes("immigration-system-statistics-data-tables#asylum")
           )?.url ?? migrationObservatoryLocalGuideUrl,
         assetType: "official_source_link",
-        routeFocus: ["asylum", "children"],
-        notes: "UASC local-authority source table linked from the guide."
-      }),
-    pickLink(
-      migrationObservatoryGuideLinksRaw,
-      (label, url) =>
-        label.includes("Download the source data in this chart from ONS") &&
-        url.includes("localareamigrationindicatorsunitedkingdom")
-    ) &&
-      buildAssetRow({
-        organisation: "Migration Observatory",
-        regionName: "United Kingdom",
-        pageTitle: extractTitle(migrationObservatoryLocalGuideHtml) ?? "Local data guide",
-        pageUrl: migrationObservatoryLocalGuideUrl,
-        assetTitle: "ONS local-area migration indicators source data",
-        assetUrl:
-          pickLink(
-            migrationObservatoryGuideLinksRaw,
-            (label, url) =>
-              label.includes("Download the source data in this chart from ONS") &&
-              url.includes("localareamigrationindicatorsunitedkingdom")
-          )?.url ?? migrationObservatoryLocalGuideUrl,
-        assetType: "official_source_link",
-        routeFocus: ["migration"],
-        notes: "Direct ONS source-data link surfaced from the guide."
+        routeFocus: ["asylum"],
+        notes: "Home Office immigration-system-statistics asylum tables (Asy_D11) linked from the guide."
       })
   ].filter(Boolean),
   (row) => row.assetUrl

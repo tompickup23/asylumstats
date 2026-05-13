@@ -1,73 +1,73 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-05-11T13:05:49.299Z",
+  "generatedAt": "2026-05-13T14:06:47.280Z",
   "inputs": [
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/manual/regional-source-watch.csv",
+      "path": "/Users/tompickup/asylumstats/data/manual/regional-source-watch.csv",
       "fileSha256": "014ed9f3ff937ed5ada9c62d6a5ac482706ddc98a510bd8f086f69d4efc7634d"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-media.json",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-media.json",
       "fileSha256": "168b2241cb81258cb23204d38b516ccb45048a334fff8dba0f03d0482f1a931e"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-data-page.json",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-data-page.json",
       "fileSha256": "a6474d82a3845486bf727d1548764b2e7569c24a93989cb30af029ed02be4d7e"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/src/data/live/local-route-latest.json",
+      "path": "/Users/tompickup/asylumstats/src/data/live/local-route-latest.json",
       "fileSha256": "7f7b5b902b3e8e5d934ba29461f366fcda161a25fd1bd0ae28946259dbb6b6f0"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
-      "fileSha256": "482c79a34b002126b02dfa9f0265a3cd7c27ae1ea76d5553ff9dd47afdb572e7"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
+      "fileSha256": "7da051a9a50905f5dd39383c2d5848b9a24f84f62fa09644272ea3c87154e887"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-refugee-dashboard.html",
-      "fileSha256": "aa6e2c9682200ec5f024af1f09a592463fc6be160073f0edbebc6291c4973daf"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-yorkshire-refugee-dashboard.html",
+      "fileSha256": "e641e81a6df40de351669d8c58362d2d6c85bae8cb37169b19b619b18dde8e90"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-ukraine-dashboard.html",
-      "fileSha256": "6d2db4a98aa6835939a88ec502eab6770643077b80d0724d230ce5acb42bbc94"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-yorkshire-ukraine-dashboard.html",
+      "fileSha256": "11c4eab39b357fda2d82a727a982c1cb6a7a836f4065a7bafc2de58d95a91c71"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-euss-dashboard.html",
-      "fileSha256": "1352d204957621a037dfab8e645e91674bfe283304623abc4314ed6eb9eb64cf"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-yorkshire-euss-dashboard.html",
+      "fileSha256": "592f703ff552a9abb3beb2a0a3abd116da0481a896360365d7904d51b445f65c"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nemp-data-page.html",
-      "fileSha256": "414fa38800d4f5b5bd4699ba6b199fe370121eda2a30e208ef0434f8fc20b2d0"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nemp-data-page.html",
+      "fileSha256": "636aea36d2abdfb914240192b0117c1cc390893da4608ec4f9ca62124026d144"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/wsmp-dataobservatory.html",
-      "fileSha256": "d0877fdc5acb601a118a1ca4a673e73ccc81544da4f9e7f7a73d21d9660379a0"
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/wsmp-dataobservatory.html",
+      "fileSha256": "42a327c742f8dc6e9ab77b91c83092dcf295f9b95326e1481badb7294fbce61a"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-observatory-local-data-guide.html",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-observatory-local-data-guide.html",
       "fileSha256": "8d42c7bcd6b1eaa986eea783e8e3035ae184a8ee8ddc240aa42774ce2309ba4c"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2026-02-27.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2026-02-27.xlsx",
       "fileSha256": "ed9d0e479d3a48ca0ae4c673f5dcde6160f478b48718200851cce1b07d1a0817"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-12-05.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-12-05.xlsx",
       "fileSha256": "d9ef53a0d6d9ad61957123b34dc6254d08f04b5dccd7b8c07acbed215176ab38"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-08-22.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-08-22.xlsx",
       "fileSha256": "bd909af55bdbb1ed5212e7e65c1855aa3db9db885534d3f7121d65aa38f5e24a"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-05-23.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-05-23.xlsx",
       "fileSha256": "fa467794aaa51f6d4f44047b6f821c47bedde1aa046f54c1b34472b925aa3874"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-01-31.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2025-01-31.xlsx",
       "fileSha256": "15d97d02f9237c74daa30c4b5a5fe1aac3d9079b3acd4550807611576a8f1bc6"
     },
     {
-      "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2024-11-01.xlsx",
+      "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-workbook-2024-11-01.xlsx",
       "fileSha256": "6b279315d95ba96887959a839fadefb2c821e6e427381c9dd540834cc1c4fc25"
     }
   ],
@@ -79,6 +79,6 @@
     "nwrsmpSupportedSeriesPointCount": 11718,
     "nwrsmpSupportedSeriesLatestPeriod": "2025-12-31",
     "regionalPartnerAssetCount": 14,
-    "migrationObservatoryGuideLinkCount": 1
+    "migrationObservatoryGuideLinkCount": 4
   }
 }

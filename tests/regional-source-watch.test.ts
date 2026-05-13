@@ -130,7 +130,7 @@ describe("regional-source-watch.json", () => {
       watch.migrationObservatoryGuideLinks.some(
         (row) =>
           row.assetTitle === "Home Office local-authority asylum and resettlement data" &&
-          row.assetUrl.includes("asylum-and-resettlement-datasets#local-authority-data")
+          row.assetUrl.includes("immigration-system-statistics-regional-and-local-authority-data")
       )
     ).toBe(true);
   });
