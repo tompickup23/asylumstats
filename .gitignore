@@ -30,3 +30,12 @@ data/raw/dfe_schools/
 data/raw/ons_births/
 data/raw/census_ethnicity_detail/
 data/raw/snpp/
+
+# Environment and credential files
+*.env
+.env
+.env.*
+!.env.example
+!.env.sample
+**/.env
+**/.env.*
