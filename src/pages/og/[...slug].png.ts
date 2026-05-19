@@ -17,7 +17,9 @@ const COLORS = {
   muted: "#91a7c4",
   alert: "#f59e0b",
   critical: "#ef4444",
-  resolved: "#10b981"
+  resolved: "#10b981",
+  ukd: "#818cf8",
+  uke: "#38bdf8"
 };
 
 const verdictColor: Record<string, string> = {
@@ -247,37 +249,174 @@ export const GET: APIRoute = async ({ props }) => {
               ]
             }
           },
-          // Bottom: Accent bar
+          // Bottom: Accent bar + sister-sites strip
           {
             type: "div",
             props: {
               style: {
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: "column",
+                gap: "14px",
                 borderTop: `2px solid ${COLORS.accent}`,
                 paddingTop: "16px"
               },
               children: [
+                // Row 1: brand + tagline
                 {
-                  type: "span",
+                  type: "div",
                   props: {
                     style: {
-                      fontSize: "14px",
-                      color: COLORS.accent,
-                      fontWeight: 600
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
                     },
-                    children: "asylumstats.co.uk"
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            fontSize: "14px",
+                            color: COLORS.accent,
+                            fontWeight: 600
+                          },
+                          children: "asylumstats.co.uk"
+                        }
+                      },
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            fontSize: "12px",
+                            color: COLORS.muted
+                          },
+                          children: "Every number sourced."
+                        }
+                      }
+                    ]
                   }
                 },
+                // Row 2: sister-sites promo strip
                 {
-                  type: "span",
+                  type: "div",
                   props: {
                     style: {
-                      fontSize: "12px",
-                      color: COLORS.muted
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px"
                     },
-                    children: "Every number sourced."
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            fontSize: "10px",
+                            color: COLORS.muted,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.12em",
+                            fontWeight: 700
+                          },
+                          children: "Sister sites"
+                        }
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            padding: "5px 12px",
+                            background: "rgba(129, 140, 248, 0.12)",
+                            border: `1px solid ${COLORS.ukd}40`,
+                            borderRadius: "999px"
+                          },
+                          children: [
+                            {
+                              type: "div",
+                              props: {
+                                style: {
+                                  width: "6px",
+                                  height: "6px",
+                                  borderRadius: "999px",
+                                  background: COLORS.ukd
+                                },
+                                children: ""
+                              }
+                            },
+                            {
+                              type: "span",
+                              props: {
+                                style: {
+                                  fontSize: "12px",
+                                  color: COLORS.ukd,
+                                  fontWeight: 700
+                                },
+                                children: "ukdemographics.co.uk"
+                              }
+                            },
+                            {
+                              type: "span",
+                              props: {
+                                style: {
+                                  fontSize: "11px",
+                                  color: COLORS.muted
+                                },
+                                children: "· Population projections"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            padding: "5px 12px",
+                            background: "rgba(56, 189, 248, 0.12)",
+                            border: `1px solid ${COLORS.uke}40`,
+                            borderRadius: "999px"
+                          },
+                          children: [
+                            {
+                              type: "div",
+                              props: {
+                                style: {
+                                  width: "6px",
+                                  height: "6px",
+                                  borderRadius: "999px",
+                                  background: COLORS.uke
+                                },
+                                children: ""
+                              }
+                            },
+                            {
+                              type: "span",
+                              props: {
+                                style: {
+                                  fontSize: "12px",
+                                  color: COLORS.uke,
+                                  fontWeight: 700
+                                },
+                                children: "ukelections.co.uk"
+                              }
+                            },
+                            {
+                              type: "span",
+                              props: {
+                                style: {
+                                  fontSize: "11px",
+                                  color: COLORS.muted
+                                },
+                                children: "· Elections & seats"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
                   }
                 }
               ]

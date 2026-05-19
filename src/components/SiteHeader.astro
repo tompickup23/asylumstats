@@ -48,7 +48,7 @@ function isActive(href: string): boolean {
 
   <div class="site-tools">
     <a
-      class="sister-pill"
+      class="sister-pill sister-pill--ukd"
       href="https://ukdemographics.co.uk"
       target="_blank"
       rel="noopener"
@@ -56,6 +56,17 @@ function isActive(href: string): boolean {
     >
       <span class="sister-pill-dot" aria-hidden="true"></span>
       <span class="sister-pill-label">ukdemographics.co.uk</span>
+      <span class="sister-pill-arrow" aria-hidden="true">&#8599;</span>
+    </a>
+    <a
+      class="sister-pill sister-pill--uke"
+      href="https://ukelections.co.uk"
+      target="_blank"
+      rel="noopener"
+      title="Sister site — UK elections forecasts"
+    >
+      <span class="sister-pill-dot" aria-hidden="true"></span>
+      <span class="sister-pill-label">ukelections.co.uk</span>
       <span class="sister-pill-arrow" aria-hidden="true">&#8599;</span>
     </a>
     <button
@@ -274,7 +285,7 @@ function isActive(href: string): boolean {
   }
   .mobile-menu-btn:hover { background: var(--panel-soft); }
 
-  /* Sister-site pill */
+  /* Sister-site pills (UKD = indigo, UKE = sky blue) */
   .sister-pill {
     display: inline-flex;
     align-items: center;
@@ -282,28 +293,44 @@ function isActive(href: string): boolean {
     padding: 0.35rem 0.7rem;
     font-size: 0.78rem;
     font-weight: 600;
-    color: #818cf8;
-    background: rgba(129, 140, 248, 0.1);
-    border: 1px solid rgba(129, 140, 248, 0.3);
     border-radius: 999px;
     text-decoration: none;
     transition: background 180ms, border-color 180ms, transform 180ms;
     white-space: nowrap;
   }
-  .sister-pill:hover {
+  .sister-pill--ukd {
+    color: #818cf8;
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+  .sister-pill--ukd:hover {
     background: rgba(129, 140, 248, 0.18);
     border-color: rgba(129, 140, 248, 0.5);
+    transform: translateY(-1px);
+  }
+  .sister-pill--uke {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+  .sister-pill--uke:hover {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.5);
     transform: translateY(-1px);
   }
   .sister-pill-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #818cf8;
-    box-shadow: 0 0 8px rgba(129, 140, 248, 0.7);
   }
+  .sister-pill--ukd .sister-pill-dot { background: #818cf8; box-shadow: 0 0 8px rgba(129, 140, 248, 0.7); }
+  .sister-pill--uke .sister-pill-dot { background: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.7); }
   .sister-pill-arrow { font-size: 0.82rem; opacity: 0.7; }
 
+  @media (max-width: 1100px) {
+    .sister-pill--uke .sister-pill-label { display: none; }
+    .sister-pill--uke { padding: 0.35rem 0.55rem; }
+  }
   @media (max-width: 900px) {
     .desktop-nav { display: none; }
     .mobile-menu-btn { display: flex; }
@@ -311,6 +338,9 @@ function isActive(href: string): boolean {
     .sister-pill { padding: 0.35rem 0.55rem; }
   }
   @media (max-width: 520px) {
+    .sister-pill--uke { display: none; }
+  }
+  @media (max-width: 460px) {
     .sister-pill { display: none; }
   }
 </style>
