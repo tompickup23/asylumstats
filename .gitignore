@@ -30,6 +30,13 @@ data/raw/dfe_schools/
 data/raw/ons_births/
 data/raw/census_ethnicity_detail/
 data/raw/snpp/
+data/raw/census_2011_ethnicity_age/
+data/raw/census_2011_migration/
+data/raw/census_migration/
+
+# Video / audio binaries (footage + narration for explainer reels)
+assets/footage/
+assets/output/
 
 # Environment and credential files
 *.env

@@ -136,11 +136,33 @@ const INTL_ETH = {
 const INTL_AGE = [0.05,0.03,0.02,0.08,0.20,0.22,0.16,0.10,0.06,0.03,0.02,0.01,0.01,0.005,0.003,0.001,0.001,0.000];
 const MIGRATION_VOLUMES = { principal: 315000, high_migration: 476500, low_migration: 108500 };
 
-// Internal migration: simplified net rates
-const INT_MIG = {
+// Internal migration: per-LA ethnic net rates from NEWETHPOP 2011 + Census 2021 blend
+// Built by build_net_migration_rates.mjs — combines out-migration patterns with mobility indicators
+let netMigRates = null;
+const INT_MIG_FALLBACK = {
   WBI:-0.002, WIR:-0.001, WHO:0.005, MIX:0.001, IND:0.000, PAK:0.002,
   BAN:0.003, CHI:0.002, OAS:0.005, BCA:-0.001, BAF:0.008, OTH:0.010
 };
+try {
+  netMigRates = JSON.parse(readFileSync(path.resolve("data/model/net_migration_rates.json"), "utf8"));
+  console.log(`Loaded per-LA net migration rates (${netMigRates.areaCount} areas)`);
+} catch (e) {
+  console.log("Warning: net_migration_rates.json not found, using flat national rates");
+}
+
+function getIntMigRate(areaCode, eth) {
+  // Try per-LA rate from net migration model
+  if (netMigRates?.areas?.[areaCode]) {
+    const area = netMigRates.areas[areaCode];
+    // Direct 20-group match
+    if (area[eth] !== undefined) return area[eth];
+    // Map 12-group CC codes to 20-group
+    const map12to20 = { BAF: "BAF", BCA: "BCA", MIX: "MWA" };
+    if (map12to20[eth] && area[map12to20[eth]] !== undefined) return area[map12to20[eth]];
+  }
+  // Fallback to flat national rate
+  return INT_MIG_FALLBACK[eth] ?? 0;
+}
 
 // Mixing: proportion of births in each ethnic group that produce "Mixed" children
 // Source: Census 2021 showed Mixed population grew 45% vs 2011.
@@ -214,8 +236,8 @@ function projectArea(areaCode, areaPop, fertScenario, migScenario) {
         if (sex === "M") mixedBirthsM += mixedBirths * sexRatio;
         else mixedBirthsF += mixedBirths * sexRatio;
 
-        // 3. Internal migration
-        const intRate = INT_MIG[eth] ?? 0;
+        // 3. Internal migration (per-LA scaled rates from Census 2021)
+        const intRate = getIntMigRate(areaCode, eth);
         for (const band of AGE_BANDS) {
           newPop[eth][sex][band] = Math.max(0, Math.round(
             (newPop[eth][sex][band] || 0) * (1 + intRate * STEP)
@@ -375,35 +397,29 @@ function toSimple(pct) {
   };
 }
 
+// IMPORTANT: Do NOT overwrite HP projections, thresholds, or headlineStat.
+// CC v2 adds scenario range data and modelSpread ONLY.
+// The HP model (run_hp_single_year.mjs) is the primary displayed model.
 for (const code of areaCodes) {
   const d = central[code]; if (!d || !existing.areas[code]) continue;
   const area = existing.areas[code];
 
-  area.projections = {};
-  for (const y of [2026,2031,2036,2041,2046,2051]) if (d[y]) area.projections[String(y)] = toSimple(d[y].pct);
+  // Add CC v2 scenario range (without overwriting HP projections)
+  const wb51_cc = d[2051]?.pct?.WBI ?? 0;
+  const hd = allProjections["constant__high_migration"]?.[code]?.[2051]?.pct?.WBI ?? wb51_cc;
+  const ld = allProjections["full_convergence__low_migration"]?.[code]?.[2051]?.pct?.WBI ?? wb51_cc;
+  area.scenarioRange2051 = { central: Math.round(wb51_cc*10)/10, highDiversity: Math.round(hd*10)/10, lowDiversity: Math.round(ld*10)/10 };
 
-  area.thresholds = [];
-  const wbt = PROJ_YEARS.map(y => ({ year:y, wb: d[y]?.pct?.WBI ?? 100 }));
-  for (let i=0; i<wbt.length-1; i++) {
-    if (wbt[i].wb >= 50 && wbt[i+1].wb < 50) {
-      const cross = Math.round(wbt[i].year + (50-wbt[i].wb)/(wbt[i+1].wb-wbt[i].wb)*(wbt[i+1].year-wbt[i].year));
-      area.thresholds.push({ label:"White British <50%", year:cross, confidence: cross<=2036?"high":cross<=2051?"medium":"low" });
-      break;
-    }
-  }
-
-  const wb21 = d[2021]?.pct?.WBI??0, wb51 = d[2051]?.pct?.WBI??wb21;
-  const decline = Math.round((wb21-wb51)*10)/10;
-  if (decline > 2) area.headlineStat = { value:`-${decline.toFixed(1)}pp`, trend:`WBI ${wb21.toFixed(1)}% → ${wb51.toFixed(1)}% by 2051 (v2, SNPP-constrained, bias-corrected)` };
-
-  const hd = allProjections["constant__high_migration"]?.[code]?.[2051]?.pct?.WBI ?? wb51;
-  const ld = allProjections["full_convergence__low_migration"]?.[code]?.[2051]?.pct?.WBI ?? wb51;
-  area.scenarioRange2051 = { central: Math.round(wb51*10)/10, highDiversity: Math.round(hd*10)/10, lowDiversity: Math.round(ld*10)/10 };
+  // Add CC v2 projection as model comparison (for ensemble/methodology, not primary display)
+  const wb51_hp = area.projections?.["2051"]?.white_british ?? 0;
+  area.modelSpread2051 = {
+    hamiltonPerry: Math.round(wb51_hp * 10) / 10,
+    cohortComponent: Math.round(wb51_cc * 10) / 10,
+    spreadPp: Math.round(Math.abs(wb51_hp - wb51_cc) * 10) / 10
+  };
 }
 
-existing.methodology = "Cohort-component v2: Census 2021 base, ONS SNPP constraint, population-weighted migration, bias-corrected (NEWETHPOP validation). 9 scenarios. All rates from published ONS sources.";
-existing.modelVersion = "2.1-snpp-bias-corrected";
-existing.lastUpdated = new Date().toISOString().slice(0,10);
+// Do NOT overwrite methodology or modelVersion — HP model owns these
 
 writeFileSync(SITE_OUTPUT_PATH, JSON.stringify(existing, null, 2), "utf8");
 console.log("Written ethnic-projections.json");

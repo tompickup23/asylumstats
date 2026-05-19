@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T08:44:36.961Z",
+  "generatedAt": "2026-04-14T11:04:11.373Z",
   "source": "Home Office Immigration Statistics: Asylum initial decisions (Asy_D02), Dec 2025 release",
   "methodology": "Grant rate = (grants of protection + grants of other leave) / (grants + refusals) × 100. Excludes withdrawn cases and administrative outcomes from denominator (substantive decisions only). Recent period = 2020-2025. Minimum 50 substantive decisions for league table inclusion. 'Refugee' and 'Stateless person' status entries excluded as they are not nationalities.",
   "caveats": [
@@ -23,7 +23,9 @@
     "genuineRefugeeNationalities": 11,
     "likelyEconomicMigrationNationalities": 41,
     "topClaimantAllTime": "Iran",
-    "topClaimantRecentVolume": "Iran"
+    "topClaimantRecentVolume": "Iran",
+    "avgAppealUpliftPp": 14.1,
+    "nationalitiesWithAppealData": 103
   },
   "leagueTable": [
     {
@@ -35,7 +37,13 @@
       "substantiveDecisions": 5126,
       "totalDecisions": 5350,
       "withdrawn": 75,
-      "administrativeOutcomes": 149
+      "administrativeOutcomes": 149,
+      "trueGrantRatePct": 97.9,
+      "appealUpliftPp": 10.5,
+      "latestGrants": 2286,
+      "latestRefusals": 50,
+      "latestSubstantive": 2336,
+      "pctResolved": 99.6
     },
     {
       "nationality": "Syria",
@@ -46,7 +54,13 @@
       "substantiveDecisions": 14189,
       "totalDecisions": 15962,
       "withdrawn": 895,
-      "administrativeOutcomes": 878
+      "administrativeOutcomes": 878,
+      "trueGrantRatePct": 97.1,
+      "appealUpliftPp": 3.9,
+      "latestGrants": 14613,
+      "latestRefusals": 436,
+      "latestSubstantive": 15049,
+      "pctResolved": 94.9
     },
     {
       "nationality": "Sudan",
@@ -57,7 +71,13 @@
       "substantiveDecisions": 19529,
       "totalDecisions": 20503,
       "withdrawn": 402,
-      "administrativeOutcomes": 572
+      "administrativeOutcomes": 572,
+      "trueGrantRatePct": 97.6,
+      "appealUpliftPp": 13.6,
+      "latestGrants": 17730,
+      "latestRefusals": 430,
+      "latestSubstantive": 18160,
+      "pctResolved": 99.2
     },
     {
       "nationality": "Eritrea",
@@ -68,7 +88,13 @@
       "substantiveDecisions": 26673,
       "totalDecisions": 27814,
       "withdrawn": 410,
-      "administrativeOutcomes": 731
+      "administrativeOutcomes": 731,
+      "trueGrantRatePct": 96.2,
+      "appealUpliftPp": 12,
+      "latestGrants": 21620,
+      "latestRefusals": 857,
+      "latestSubstantive": 22477,
+      "pctResolved": 99.6
     },
     {
       "nationality": "South Sudan",
@@ -79,7 +105,13 @@
       "substantiveDecisions": 1022,
       "totalDecisions": 1090,
       "withdrawn": 34,
-      "administrativeOutcomes": 34
+      "administrativeOutcomes": 34,
+      "trueGrantRatePct": 93.7,
+      "appealUpliftPp": 6,
+      "latestGrants": 580,
+      "latestRefusals": 39,
+      "latestSubstantive": 619,
+      "pctResolved": 95.1
     },
     {
       "nationality": "Myanmar (Burma)",
@@ -90,7 +122,13 @@
       "substantiveDecisions": 1394,
       "totalDecisions": 1435,
       "withdrawn": 28,
-      "administrativeOutcomes": 13
+      "administrativeOutcomes": 13,
+      "trueGrantRatePct": 77.8,
+      "appealUpliftPp": 15.8,
+      "latestGrants": 407,
+      "latestRefusals": 116,
+      "latestSubstantive": 523,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Libya",
@@ -101,7 +139,13 @@
       "substantiveDecisions": 3943,
       "totalDecisions": 4406,
       "withdrawn": 270,
-      "administrativeOutcomes": 193
+      "administrativeOutcomes": 193,
+      "trueGrantRatePct": 93.4,
+      "appealUpliftPp": 13.4,
+      "latestGrants": 2505,
+      "latestRefusals": 177,
+      "latestSubstantive": 2682,
+      "pctResolved": 99
     },
     {
       "nationality": "Palestine",
@@ -112,7 +156,13 @@
       "substantiveDecisions": 1355,
       "totalDecisions": 1510,
       "withdrawn": 107,
-      "administrativeOutcomes": 48
+      "administrativeOutcomes": 48,
+      "trueGrantRatePct": 79.6,
+      "appealUpliftPp": 22.7,
+      "latestGrants": 591,
+      "latestRefusals": 151,
+      "latestSubstantive": 742,
+      "pctResolved": 98.8
     },
     {
       "nationality": "Saudi Arabia",
@@ -123,7 +173,13 @@
       "substantiveDecisions": 762,
       "totalDecisions": 1046,
       "withdrawn": 240,
-      "administrativeOutcomes": 44
+      "administrativeOutcomes": 44,
+      "trueGrantRatePct": 89.1,
+      "appealUpliftPp": 6.4,
+      "latestGrants": 547,
+      "latestRefusals": 67,
+      "latestSubstantive": 614,
+      "pctResolved": 99.3
     },
     {
       "nationality": "El Salvador",
@@ -134,7 +190,13 @@
       "substantiveDecisions": 3815,
       "totalDecisions": 4414,
       "withdrawn": 419,
-      "administrativeOutcomes": 180
+      "administrativeOutcomes": 180,
+      "trueGrantRatePct": 90.6,
+      "appealUpliftPp": 17.4,
+      "latestGrants": 2032,
+      "latestRefusals": 212,
+      "latestSubstantive": 2244,
+      "pctResolved": 100
     },
     {
       "nationality": "Uganda",
@@ -145,7 +207,13 @@
       "substantiveDecisions": 1523,
       "totalDecisions": 1624,
       "withdrawn": 64,
-      "administrativeOutcomes": 37
+      "administrativeOutcomes": 37,
+      "trueGrantRatePct": 81.5,
+      "appealUpliftPp": 12.8,
+      "latestGrants": 1155,
+      "latestRefusals": 263,
+      "latestSubstantive": 1418,
+      "pctResolved": 99.5
     },
     {
       "nationality": "Iran",
@@ -156,7 +224,13 @@
       "substantiveDecisions": 42588,
       "totalDecisions": 46192,
       "withdrawn": 1301,
-      "administrativeOutcomes": 2303
+      "administrativeOutcomes": 2303,
+      "trueGrantRatePct": 85.4,
+      "appealUpliftPp": 18.7,
+      "latestGrants": 34961,
+      "latestRefusals": 5975,
+      "latestSubstantive": 40936,
+      "pctResolved": 99.6
     },
     {
       "nationality": "Guyana",
@@ -178,7 +252,13 @@
       "substantiveDecisions": 4848,
       "totalDecisions": 5137,
       "withdrawn": 109,
-      "administrativeOutcomes": 180
+      "administrativeOutcomes": 180,
+      "trueGrantRatePct": 79.8,
+      "appealUpliftPp": 20.6,
+      "latestGrants": 3504,
+      "latestRefusals": 886,
+      "latestSubstantive": 4390,
+      "pctResolved": 99.5
     },
     {
       "nationality": "Afghanistan",
@@ -189,7 +269,13 @@
       "substantiveDecisions": 33263,
       "totalDecisions": 37462,
       "withdrawn": 2441,
-      "administrativeOutcomes": 1758
+      "administrativeOutcomes": 1758,
+      "trueGrantRatePct": 78.8,
+      "appealUpliftPp": 11.8,
+      "latestGrants": 20174,
+      "latestRefusals": 5429,
+      "latestSubstantive": 25603,
+      "pctResolved": 98.6
     },
     {
       "nationality": "Oman",
@@ -200,7 +286,13 @@
       "substantiveDecisions": 94,
       "totalDecisions": 135,
       "withdrawn": 30,
-      "administrativeOutcomes": 11
+      "administrativeOutcomes": 11,
+      "trueGrantRatePct": 70.7,
+      "appealUpliftPp": 10.4,
+      "latestGrants": 41,
+      "latestRefusals": 17,
+      "latestSubstantive": 58,
+      "pctResolved": 100
     },
     {
       "nationality": "Russia",
@@ -211,7 +303,13 @@
       "substantiveDecisions": 1722,
       "totalDecisions": 2022,
       "withdrawn": 218,
-      "administrativeOutcomes": 82
+      "administrativeOutcomes": 82,
+      "trueGrantRatePct": 78.9,
+      "appealUpliftPp": 21,
+      "latestGrants": 1049,
+      "latestRefusals": 280,
+      "latestSubstantive": 1329,
+      "pctResolved": 99.1
     },
     {
       "nationality": "Cameroon",
@@ -222,7 +320,13 @@
       "substantiveDecisions": 2133,
       "totalDecisions": 2254,
       "withdrawn": 78,
-      "administrativeOutcomes": 43
+      "administrativeOutcomes": 43,
+      "trueGrantRatePct": 74.2,
+      "appealUpliftPp": 20.1,
+      "latestGrants": 1145,
+      "latestRefusals": 399,
+      "latestSubstantive": 1544,
+      "pctResolved": 99.7
     },
     {
       "nationality": "Turkmenistan",
@@ -233,7 +337,13 @@
       "substantiveDecisions": 88,
       "totalDecisions": 112,
       "withdrawn": 19,
-      "administrativeOutcomes": 5
+      "administrativeOutcomes": 5,
+      "trueGrantRatePct": 73.3,
+      "appealUpliftPp": 14,
+      "latestGrants": 44,
+      "latestRefusals": 16,
+      "latestSubstantive": 60,
+      "pctResolved": 100
     },
     {
       "nationality": "Belarus",
@@ -244,7 +354,13 @@
       "substantiveDecisions": 176,
       "totalDecisions": 215,
       "withdrawn": 27,
-      "administrativeOutcomes": 12
+      "administrativeOutcomes": 12,
+      "trueGrantRatePct": 73.4,
+      "appealUpliftPp": 16.7,
+      "latestGrants": 105,
+      "latestRefusals": 38,
+      "latestSubstantive": 143,
+      "pctResolved": 99.4
     },
     {
       "nationality": "Kuwait",
@@ -255,7 +371,13 @@
       "substantiveDecisions": 2286,
       "totalDecisions": 2773,
       "withdrawn": 323,
-      "administrativeOutcomes": 164
+      "administrativeOutcomes": 164,
+      "trueGrantRatePct": 80.9,
+      "appealUpliftPp": 11.7,
+      "latestGrants": 634,
+      "latestRefusals": 150,
+      "latestSubstantive": 784,
+      "pctResolved": 98.6
     },
     {
       "nationality": "Mali",
@@ -266,7 +388,13 @@
       "substantiveDecisions": 120,
       "totalDecisions": 132,
       "withdrawn": 7,
-      "administrativeOutcomes": 5
+      "administrativeOutcomes": 5,
+      "trueGrantRatePct": 61.9,
+      "appealUpliftPp": 13.4,
+      "latestGrants": 83,
+      "latestRefusals": 51,
+      "latestSubstantive": 134,
+      "pctResolved": 98.7
     },
     {
       "nationality": "Malawi",
@@ -277,7 +405,13 @@
       "substantiveDecisions": 142,
       "totalDecisions": 179,
       "withdrawn": 20,
-      "administrativeOutcomes": 17
+      "administrativeOutcomes": 17,
+      "trueGrantRatePct": 42.3,
+      "appealUpliftPp": 13,
+      "latestGrants": 115,
+      "latestRefusals": 157,
+      "latestSubstantive": 272,
+      "pctResolved": 99
     },
     {
       "nationality": "Venezuela",
@@ -288,7 +422,13 @@
       "substantiveDecisions": 111,
       "totalDecisions": 137,
       "withdrawn": 16,
-      "administrativeOutcomes": 10
+      "administrativeOutcomes": 10,
+      "trueGrantRatePct": 67.8,
+      "appealUpliftPp": 23.2,
+      "latestGrants": 82,
+      "latestRefusals": 39,
+      "latestSubstantive": 121,
+      "pctResolved": 97.4
     },
     {
       "nationality": "Sierra Leone",
@@ -299,7 +439,13 @@
       "substantiveDecisions": 914,
       "totalDecisions": 998,
       "withdrawn": 44,
-      "administrativeOutcomes": 40
+      "administrativeOutcomes": 40,
+      "trueGrantRatePct": 59.8,
+      "appealUpliftPp": 14.6,
+      "latestGrants": 405,
+      "latestRefusals": 272,
+      "latestSubstantive": 677,
+      "pctResolved": 98.7
     },
     {
       "nationality": "Lebanon",
@@ -310,7 +456,13 @@
       "substantiveDecisions": 546,
       "totalDecisions": 646,
       "withdrawn": 63,
-      "administrativeOutcomes": 37
+      "administrativeOutcomes": 37,
+      "trueGrantRatePct": 59.6,
+      "appealUpliftPp": 21.1,
+      "latestGrants": 223,
+      "latestRefusals": 151,
+      "latestSubstantive": 374,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Burundi",
@@ -321,7 +473,13 @@
       "substantiveDecisions": 71,
       "totalDecisions": 79,
       "withdrawn": 3,
-      "administrativeOutcomes": 5
+      "administrativeOutcomes": 5,
+      "trueGrantRatePct": 68,
+      "appealUpliftPp": 23.3,
+      "latestGrants": 70,
+      "latestRefusals": 33,
+      "latestSubstantive": 103,
+      "pctResolved": 99.1
     },
     {
       "nationality": "Zambia",
@@ -332,7 +490,13 @@
       "substantiveDecisions": 98,
       "totalDecisions": 117,
       "withdrawn": 11,
-      "administrativeOutcomes": 8
+      "administrativeOutcomes": 8,
+      "trueGrantRatePct": 51.2,
+      "appealUpliftPp": 14,
+      "latestGrants": 62,
+      "latestRefusals": 59,
+      "latestSubstantive": 121,
+      "pctResolved": 97.9
     },
     {
       "nationality": "Nicaragua",
@@ -343,7 +507,13 @@
       "substantiveDecisions": 622,
       "totalDecisions": 744,
       "withdrawn": 71,
-      "administrativeOutcomes": 51
+      "administrativeOutcomes": 51,
+      "trueGrantRatePct": 67.5,
+      "appealUpliftPp": 14.5,
+      "latestGrants": 193,
+      "latestRefusals": 93,
+      "latestSubstantive": 286,
+      "pctResolved": 99.7
     },
     {
       "nationality": "Somalia",
@@ -354,7 +524,13 @@
       "substantiveDecisions": 5611,
       "totalDecisions": 6202,
       "withdrawn": 324,
-      "administrativeOutcomes": 267
+      "administrativeOutcomes": 267,
+      "trueGrantRatePct": 73.6,
+      "appealUpliftPp": 16.9,
+      "latestGrants": 2301,
+      "latestRefusals": 824,
+      "latestSubstantive": 3125,
+      "pctResolved": 98.8
     },
     {
       "nationality": "Cuba",
@@ -376,7 +552,13 @@
       "substantiveDecisions": 657,
       "totalDecisions": 730,
       "withdrawn": 31,
-      "administrativeOutcomes": 42
+      "administrativeOutcomes": 42,
+      "trueGrantRatePct": 65.7,
+      "appealUpliftPp": 19.5,
+      "latestGrants": 404,
+      "latestRefusals": 211,
+      "latestSubstantive": 615,
+      "pctResolved": 98.1
     },
     {
       "nationality": "Gambia, The",
@@ -387,7 +569,13 @@
       "substantiveDecisions": 604,
       "totalDecisions": 718,
       "withdrawn": 61,
-      "administrativeOutcomes": 53
+      "administrativeOutcomes": 53,
+      "trueGrantRatePct": 45.4,
+      "appealUpliftPp": 15.6,
+      "latestGrants": 362,
+      "latestRefusals": 436,
+      "latestSubstantive": 798,
+      "pctResolved": 97.8
     },
     {
       "nationality": "Guinea",
@@ -398,7 +586,13 @@
       "substantiveDecisions": 366,
       "totalDecisions": 442,
       "withdrawn": 47,
-      "administrativeOutcomes": 29
+      "administrativeOutcomes": 29,
+      "trueGrantRatePct": 56.5,
+      "appealUpliftPp": 15.5,
+      "latestGrants": 216,
+      "latestRefusals": 166,
+      "latestSubstantive": 382,
+      "pctResolved": 96.4
     },
     {
       "nationality": "Azerbaijan",
@@ -409,7 +603,13 @@
       "substantiveDecisions": 328,
       "totalDecisions": 394,
       "withdrawn": 36,
-      "administrativeOutcomes": 30
+      "administrativeOutcomes": 30,
+      "trueGrantRatePct": 64.2,
+      "appealUpliftPp": 21.5,
+      "latestGrants": 145,
+      "latestRefusals": 81,
+      "latestSubstantive": 226,
+      "pctResolved": 99
     },
     {
       "nationality": "Tanzania",
@@ -420,7 +620,13 @@
       "substantiveDecisions": 485,
       "totalDecisions": 529,
       "withdrawn": 26,
-      "administrativeOutcomes": 18
+      "administrativeOutcomes": 18,
+      "trueGrantRatePct": 52.6,
+      "appealUpliftPp": 14.9,
+      "latestGrants": 159,
+      "latestRefusals": 143,
+      "latestSubstantive": 302,
+      "pctResolved": 98.2
     },
     {
       "nationality": "Congo (Democratic Republic)",
@@ -431,7 +637,13 @@
       "substantiveDecisions": 715,
       "totalDecisions": 842,
       "withdrawn": 61,
-      "administrativeOutcomes": 66
+      "administrativeOutcomes": 66,
+      "trueGrantRatePct": 60.3,
+      "appealUpliftPp": 26.9,
+      "latestGrants": 666,
+      "latestRefusals": 439,
+      "latestSubstantive": 1105,
+      "pctResolved": 99.1
     },
     {
       "nationality": "Pakistan",
@@ -442,7 +654,13 @@
       "substantiveDecisions": 27330,
       "totalDecisions": 31488,
       "withdrawn": 3135,
-      "administrativeOutcomes": 1023
+      "administrativeOutcomes": 1023,
+      "trueGrantRatePct": 49.7,
+      "appealUpliftPp": 13.8,
+      "latestGrants": 7887,
+      "latestRefusals": 7981,
+      "latestSubstantive": 15868,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Kenya",
@@ -453,7 +671,13 @@
       "substantiveDecisions": 1157,
       "totalDecisions": 1297,
       "withdrawn": 92,
-      "administrativeOutcomes": 48
+      "administrativeOutcomes": 48,
+      "trueGrantRatePct": 59.7,
+      "appealUpliftPp": 18.7,
+      "latestGrants": 537,
+      "latestRefusals": 362,
+      "latestSubstantive": 899,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Vietnam",
@@ -464,7 +688,13 @@
       "substantiveDecisions": 8264,
       "totalDecisions": 14563,
       "withdrawn": 5719,
-      "administrativeOutcomes": 580
+      "administrativeOutcomes": 580,
+      "trueGrantRatePct": 65,
+      "appealUpliftPp": 15.9,
+      "latestGrants": 4357,
+      "latestRefusals": 2349,
+      "latestSubstantive": 6706,
+      "pctResolved": 98.2
     },
     {
       "nationality": "Turkey",
@@ -475,7 +705,13 @@
       "substantiveDecisions": 10903,
       "totalDecisions": 12539,
       "withdrawn": 1084,
-      "administrativeOutcomes": 552
+      "administrativeOutcomes": 552,
+      "trueGrantRatePct": 53.7,
+      "appealUpliftPp": 12.5,
+      "latestGrants": 4080,
+      "latestRefusals": 3523,
+      "latestSubstantive": 7603,
+      "pctResolved": 98.2
     },
     {
       "nationality": "Iraq",
@@ -486,7 +722,13 @@
       "substantiveDecisions": 24970,
       "totalDecisions": 28741,
       "withdrawn": 2014,
-      "administrativeOutcomes": 1757
+      "administrativeOutcomes": 1757,
+      "trueGrantRatePct": 56.3,
+      "appealUpliftPp": 25.5,
+      "latestGrants": 13610,
+      "latestRefusals": 10545,
+      "latestSubstantive": 24155,
+      "pctResolved": 99.2
     },
     {
       "nationality": "Zimbabwe",
@@ -497,7 +739,13 @@
       "substantiveDecisions": 841,
       "totalDecisions": 1067,
       "withdrawn": 100,
-      "administrativeOutcomes": 126
+      "administrativeOutcomes": 126,
+      "trueGrantRatePct": 48.8,
+      "appealUpliftPp": 24.7,
+      "latestGrants": 634,
+      "latestRefusals": 666,
+      "latestSubstantive": 1300,
+      "pctResolved": 98.6
     },
     {
       "nationality": "Nigeria",
@@ -508,7 +756,13 @@
       "substantiveDecisions": 9287,
       "totalDecisions": 10769,
       "withdrawn": 954,
-      "administrativeOutcomes": 528
+      "administrativeOutcomes": 528,
+      "trueGrantRatePct": 44.1,
+      "appealUpliftPp": 13.6,
+      "latestGrants": 2894,
+      "latestRefusals": 3675,
+      "latestSubstantive": 6569,
+      "pctResolved": 99
     },
     {
       "nationality": "Honduras",
@@ -519,7 +773,13 @@
       "substantiveDecisions": 2403,
       "totalDecisions": 3286,
       "withdrawn": 669,
-      "administrativeOutcomes": 214
+      "administrativeOutcomes": 214,
+      "trueGrantRatePct": 56.2,
+      "appealUpliftPp": 16.6,
+      "latestGrants": 664,
+      "latestRefusals": 518,
+      "latestSubstantive": 1182,
+      "pctResolved": 99.2
     },
     {
       "nationality": "Ivory Coast",
@@ -530,7 +790,13 @@
       "substantiveDecisions": 238,
       "totalDecisions": 286,
       "withdrawn": 27,
-      "administrativeOutcomes": 21
+      "administrativeOutcomes": 21,
+      "trueGrantRatePct": 47.6,
+      "appealUpliftPp": 17.8,
+      "latestGrants": 151,
+      "latestRefusals": 166,
+      "latestSubstantive": 317,
+      "pctResolved": 98.9
     },
     {
       "nationality": "Tajikistan",
@@ -541,7 +807,13 @@
       "substantiveDecisions": 1131,
       "totalDecisions": 1375,
       "withdrawn": 212,
-      "administrativeOutcomes": 32
+      "administrativeOutcomes": 32,
+      "trueGrantRatePct": 40.7,
+      "appealUpliftPp": 5.8,
+      "latestGrants": 259,
+      "latestRefusals": 378,
+      "latestSubstantive": 637,
+      "pctResolved": 97.1
     },
     {
       "nationality": "Ukraine",
@@ -552,7 +824,13 @@
       "substantiveDecisions": 2913,
       "totalDecisions": 3607,
       "withdrawn": 596,
-      "administrativeOutcomes": 98
+      "administrativeOutcomes": 98,
+      "trueGrantRatePct": 57.2,
+      "appealUpliftPp": 14,
+      "latestGrants": 581,
+      "latestRefusals": 434,
+      "latestSubstantive": 1015,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Bahrain",
@@ -563,7 +841,13 @@
       "substantiveDecisions": 208,
       "totalDecisions": 305,
       "withdrawn": 77,
-      "administrativeOutcomes": 20
+      "administrativeOutcomes": 20,
+      "trueGrantRatePct": 72.1,
+      "appealUpliftPp": 22.1,
+      "latestGrants": 44,
+      "latestRefusals": 17,
+      "latestSubstantive": 61,
+      "pctResolved": 100
     },
     {
       "nationality": "Hong Kong",
@@ -574,7 +858,13 @@
       "substantiveDecisions": 171,
       "totalDecisions": 285,
       "withdrawn": 102,
-      "administrativeOutcomes": 12
+      "administrativeOutcomes": 12,
+      "trueGrantRatePct": 52.1,
+      "appealUpliftPp": 15.9,
+      "latestGrants": 74,
+      "latestRefusals": 68,
+      "latestSubstantive": 142,
+      "pctResolved": 98.8
     },
     {
       "nationality": "Sri Lanka",
@@ -585,7 +875,13 @@
       "substantiveDecisions": 7771,
       "totalDecisions": 8942,
       "withdrawn": 771,
-      "administrativeOutcomes": 400
+      "administrativeOutcomes": 400,
+      "trueGrantRatePct": 59.4,
+      "appealUpliftPp": 32.4,
+      "latestGrants": 3296,
+      "latestRefusals": 2255,
+      "latestSubstantive": 5551,
+      "pctResolved": 98.5
     },
     {
       "nationality": "Morocco",
@@ -596,7 +892,13 @@
       "substantiveDecisions": 1089,
       "totalDecisions": 1525,
       "withdrawn": 345,
-      "administrativeOutcomes": 91
+      "administrativeOutcomes": 91,
+      "trueGrantRatePct": 42.2,
+      "appealUpliftPp": 14.5,
+      "latestGrants": 344,
+      "latestRefusals": 471,
+      "latestSubstantive": 815,
+      "pctResolved": 97.6
     },
     {
       "nationality": "Jamaica",
@@ -607,7 +909,13 @@
       "substantiveDecisions": 287,
       "totalDecisions": 412,
       "withdrawn": 83,
-      "administrativeOutcomes": 42
+      "administrativeOutcomes": 42,
+      "trueGrantRatePct": 25,
+      "appealUpliftPp": 9,
+      "latestGrants": 210,
+      "latestRefusals": 629,
+      "latestSubstantive": 839,
+      "pctResolved": 95.5
     },
     {
       "nationality": "Other and unknown",
@@ -618,7 +926,13 @@
       "substantiveDecisions": 330,
       "totalDecisions": 765,
       "withdrawn": 107,
-      "administrativeOutcomes": 328
+      "administrativeOutcomes": 328,
+      "trueGrantRatePct": 90.3,
+      "appealUpliftPp": 33.7,
+      "latestGrants": 886,
+      "latestRefusals": 95,
+      "latestSubstantive": 981,
+      "pctResolved": 31.1
     },
     {
       "nationality": "Senegal",
@@ -629,7 +943,13 @@
       "substantiveDecisions": 221,
       "totalDecisions": 267,
       "withdrawn": 25,
-      "administrativeOutcomes": 21
+      "administrativeOutcomes": 21,
+      "trueGrantRatePct": 48.1,
+      "appealUpliftPp": 14.9,
+      "latestGrants": 91,
+      "latestRefusals": 98,
+      "latestSubstantive": 189,
+      "pctResolved": 97.4
     },
     {
       "nationality": "Togo",
@@ -640,7 +960,13 @@
       "substantiveDecisions": 63,
       "totalDecisions": 69,
       "withdrawn": 5,
-      "administrativeOutcomes": 1
+      "administrativeOutcomes": 1,
+      "trueGrantRatePct": 45.8,
+      "appealUpliftPp": 23.6,
+      "latestGrants": 33,
+      "latestRefusals": 39,
+      "latestSubstantive": 72,
+      "pctResolved": 98.7
     },
     {
       "nationality": "Angola",
@@ -651,7 +977,13 @@
       "substantiveDecisions": 339,
       "totalDecisions": 383,
       "withdrawn": 23,
-      "administrativeOutcomes": 21
+      "administrativeOutcomes": 21,
+      "trueGrantRatePct": 46.3,
+      "appealUpliftPp": 17.9,
+      "latestGrants": 137,
+      "latestRefusals": 159,
+      "latestSubstantive": 296,
+      "pctResolved": 99.1
     },
     {
       "nationality": "Indonesia",
@@ -662,7 +994,13 @@
       "substantiveDecisions": 535,
       "totalDecisions": 684,
       "withdrawn": 140,
-      "administrativeOutcomes": 9
+      "administrativeOutcomes": 9,
+      "trueGrantRatePct": 34.4,
+      "appealUpliftPp": 6.3,
+      "latestGrants": 119,
+      "latestRefusals": 227,
+      "latestSubstantive": 346,
+      "pctResolved": 98.7
     },
     {
       "nationality": "St Vincent and the Grenadines",
@@ -673,7 +1011,13 @@
       "substantiveDecisions": 274,
       "totalDecisions": 312,
       "withdrawn": 26,
-      "administrativeOutcomes": 12
+      "administrativeOutcomes": 12,
+      "trueGrantRatePct": 51.4,
+      "appealUpliftPp": 12.1,
+      "latestGrants": 75,
+      "latestRefusals": 71,
+      "latestSubstantive": 146,
+      "pctResolved": 97.2
     },
     {
       "nationality": "Egypt",
@@ -684,7 +1028,13 @@
       "substantiveDecisions": 3823,
       "totalDecisions": 5368,
       "withdrawn": 1232,
-      "administrativeOutcomes": 313
+      "administrativeOutcomes": 313,
+      "trueGrantRatePct": 36.7,
+      "appealUpliftPp": 17.1,
+      "latestGrants": 1205,
+      "latestRefusals": 2074,
+      "latestSubstantive": 3279,
+      "pctResolved": 98.5
     },
     {
       "nationality": "Liberia",
@@ -695,7 +1045,13 @@
       "substantiveDecisions": 75,
       "totalDecisions": 84,
       "withdrawn": 6,
-      "administrativeOutcomes": 3
+      "administrativeOutcomes": 3,
+      "trueGrantRatePct": 38,
+      "appealUpliftPp": 12,
+      "latestGrants": 19,
+      "latestRefusals": 31,
+      "latestSubstantive": 50,
+      "pctResolved": 98.2
     },
     {
       "nationality": "Rwanda",
@@ -706,7 +1062,13 @@
       "substantiveDecisions": 147,
       "totalDecisions": 155,
       "withdrawn": 7,
-      "administrativeOutcomes": 1
+      "administrativeOutcomes": 1,
+      "trueGrantRatePct": 56.2,
+      "appealUpliftPp": 32.1,
+      "latestGrants": 82,
+      "latestRefusals": 64,
+      "latestSubstantive": 146,
+      "pctResolved": 98.1
     },
     {
       "nationality": "Grenada",
@@ -717,7 +1079,13 @@
       "substantiveDecisions": 225,
       "totalDecisions": 270,
       "withdrawn": 32,
-      "administrativeOutcomes": 13
+      "administrativeOutcomes": 13,
+      "trueGrantRatePct": 45.5,
+      "appealUpliftPp": 13.4,
+      "latestGrants": 60,
+      "latestRefusals": 72,
+      "latestSubstantive": 132,
+      "pctResolved": 98.8
     },
     {
       "nationality": "Congo",
@@ -728,7 +1096,13 @@
       "substantiveDecisions": 129,
       "totalDecisions": 143,
       "withdrawn": 7,
-      "administrativeOutcomes": 7
+      "administrativeOutcomes": 7,
+      "trueGrantRatePct": 37.1,
+      "appealUpliftPp": 15.2,
+      "latestGrants": 52,
+      "latestRefusals": 88,
+      "latestSubstantive": 140,
+      "pctResolved": 99.3
     },
     {
       "nationality": "United States",
@@ -739,7 +1113,13 @@
       "substantiveDecisions": 308,
       "totalDecisions": 514,
       "withdrawn": 161,
-      "administrativeOutcomes": 45
+      "administrativeOutcomes": 45,
+      "trueGrantRatePct": 14,
+      "appealUpliftPp": 5.5,
+      "latestGrants": 16,
+      "latestRefusals": 98,
+      "latestSubstantive": 114,
+      "pctResolved": 99.3
     },
     {
       "nationality": "Benin",
@@ -750,7 +1130,13 @@
       "substantiveDecisions": 80,
       "totalDecisions": 98,
       "withdrawn": 13,
-      "administrativeOutcomes": 5
+      "administrativeOutcomes": 5,
+      "trueGrantRatePct": 35.2,
+      "appealUpliftPp": 14.8,
+      "latestGrants": 19,
+      "latestRefusals": 35,
+      "latestSubstantive": 54,
+      "pctResolved": 98.6
     },
     {
       "nationality": "Ghana",
@@ -761,7 +1147,13 @@
       "substantiveDecisions": 1355,
       "totalDecisions": 1789,
       "withdrawn": 362,
-      "administrativeOutcomes": 72
+      "administrativeOutcomes": 72,
+      "trueGrantRatePct": 28.1,
+      "appealUpliftPp": 10.1,
+      "latestGrants": 378,
+      "latestRefusals": 968,
+      "latestSubstantive": 1346,
+      "pctResolved": 99.1
     },
     {
       "nationality": "Mexico",
@@ -772,7 +1164,13 @@
       "substantiveDecisions": 220,
       "totalDecisions": 339,
       "withdrawn": 95,
-      "administrativeOutcomes": 24
+      "administrativeOutcomes": 24,
+      "trueGrantRatePct": 37.5,
+      "appealUpliftPp": 12.9,
+      "latestGrants": 45,
+      "latestRefusals": 75,
+      "latestSubstantive": 120,
+      "pctResolved": 98.6
     },
     {
       "nationality": "Malaysia",
@@ -783,7 +1181,13 @@
       "substantiveDecisions": 1235,
       "totalDecisions": 1532,
       "withdrawn": 257,
-      "administrativeOutcomes": 40
+      "administrativeOutcomes": 40,
+      "trueGrantRatePct": 43.8,
+      "appealUpliftPp": 17.7,
+      "latestGrants": 510,
+      "latestRefusals": 655,
+      "latestSubstantive": 1165,
+      "pctResolved": 99
     },
     {
       "nationality": "Jordan",
@@ -794,7 +1198,13 @@
       "substantiveDecisions": 1588,
       "totalDecisions": 1925,
       "withdrawn": 260,
-      "administrativeOutcomes": 77
+      "administrativeOutcomes": 77,
+      "trueGrantRatePct": 46.7,
+      "appealUpliftPp": 15.3,
+      "latestGrants": 114,
+      "latestRefusals": 130,
+      "latestSubstantive": 244,
+      "pctResolved": 99
     },
     {
       "nationality": "Dominica",
@@ -805,7 +1215,13 @@
       "substantiveDecisions": 78,
       "totalDecisions": 134,
       "withdrawn": 46,
-      "administrativeOutcomes": 10
+      "administrativeOutcomes": 10,
+      "trueGrantRatePct": 45.1,
+      "appealUpliftPp": 10.4,
+      "latestGrants": 32,
+      "latestRefusals": 39,
+      "latestSubstantive": 71,
+      "pctResolved": 100
     },
     {
       "nationality": "Guatemala",
@@ -816,7 +1232,13 @@
       "substantiveDecisions": 184,
       "totalDecisions": 235,
       "withdrawn": 28,
-      "administrativeOutcomes": 23
+      "administrativeOutcomes": 23,
+      "trueGrantRatePct": 39,
+      "appealUpliftPp": 5.7,
+      "latestGrants": 30,
+      "latestRefusals": 47,
+      "latestSubstantive": 77,
+      "pctResolved": 98.1
     },
     {
       "nationality": "Tunisia",
@@ -827,7 +1249,13 @@
       "substantiveDecisions": 517,
       "totalDecisions": 728,
       "withdrawn": 179,
-      "administrativeOutcomes": 32
+      "administrativeOutcomes": 32,
+      "trueGrantRatePct": 32,
+      "appealUpliftPp": 10.1,
+      "latestGrants": 128,
+      "latestRefusals": 272,
+      "latestSubstantive": 400,
+      "pctResolved": 98.5
     },
     {
       "nationality": "Trinidad and Tobago",
@@ -838,7 +1266,13 @@
       "substantiveDecisions": 925,
       "totalDecisions": 1078,
       "withdrawn": 100,
-      "administrativeOutcomes": 53
+      "administrativeOutcomes": 53,
+      "trueGrantRatePct": 42.7,
+      "appealUpliftPp": 13.9,
+      "latestGrants": 183,
+      "latestRefusals": 246,
+      "latestSubstantive": 429,
+      "pctResolved": 97.2
     },
     {
       "nationality": "Kazakhstan",
@@ -849,7 +1283,13 @@
       "substantiveDecisions": 892,
       "totalDecisions": 1243,
       "withdrawn": 296,
-      "administrativeOutcomes": 55
+      "administrativeOutcomes": 55,
+      "trueGrantRatePct": 31.8,
+      "appealUpliftPp": 5.7,
+      "latestGrants": 135,
+      "latestRefusals": 289,
+      "latestSubstantive": 424,
+      "pctResolved": 97.3
     },
     {
       "nationality": "Kosovo",
@@ -860,7 +1300,13 @@
       "substantiveDecisions": 149,
       "totalDecisions": 238,
       "withdrawn": 77,
-      "administrativeOutcomes": 12
+      "administrativeOutcomes": 12,
+      "trueGrantRatePct": 29.7,
+      "appealUpliftPp": 10.3,
+      "latestGrants": 44,
+      "latestRefusals": 104,
+      "latestSubstantive": 148,
+      "pctResolved": 98.3
     },
     {
       "nationality": "Bangladesh",
@@ -871,7 +1317,13 @@
       "substantiveDecisions": 18506,
       "totalDecisions": 22843,
       "withdrawn": 3801,
-      "administrativeOutcomes": 536
+      "administrativeOutcomes": 536,
+      "trueGrantRatePct": 28.4,
+      "appealUpliftPp": 11.6,
+      "latestGrants": 3646,
+      "latestRefusals": 9184,
+      "latestSubstantive": 12830,
+      "pctResolved": 99
     },
     {
       "nationality": "St Lucia",
@@ -882,7 +1334,13 @@
       "substantiveDecisions": 303,
       "totalDecisions": 349,
       "withdrawn": 40,
-      "administrativeOutcomes": 6
+      "administrativeOutcomes": 6,
+      "trueGrantRatePct": 35.1,
+      "appealUpliftPp": 6.1,
+      "latestGrants": 59,
+      "latestRefusals": 109,
+      "latestSubstantive": 168,
+      "pctResolved": 97.6
     },
     {
       "nationality": "Algeria",
@@ -893,7 +1351,13 @@
       "substantiveDecisions": 1496,
       "totalDecisions": 2382,
       "withdrawn": 728,
-      "administrativeOutcomes": 158
+      "administrativeOutcomes": 158,
+      "trueGrantRatePct": 29.5,
+      "appealUpliftPp": 14.8,
+      "latestGrants": 343,
+      "latestRefusals": 821,
+      "latestSubstantive": 1164,
+      "pctResolved": 97.5
     },
     {
       "nationality": "Albania",
@@ -904,7 +1368,13 @@
       "substantiveDecisions": 16385,
       "totalDecisions": 38771,
       "withdrawn": 18526,
-      "administrativeOutcomes": 3860
+      "administrativeOutcomes": 3860,
+      "trueGrantRatePct": 31,
+      "appealUpliftPp": 15.9,
+      "latestGrants": 4511,
+      "latestRefusals": 10023,
+      "latestSubstantive": 14534,
+      "pctResolved": 99.3
     },
     {
       "nationality": "South Africa",
@@ -915,7 +1385,13 @@
       "substantiveDecisions": 372,
       "totalDecisions": 468,
       "withdrawn": 59,
-      "administrativeOutcomes": 37
+      "administrativeOutcomes": 37,
+      "trueGrantRatePct": 26.5,
+      "appealUpliftPp": 11.5,
+      "latestGrants": 93,
+      "latestRefusals": 258,
+      "latestSubstantive": 351,
+      "pctResolved": 98.2
     },
     {
       "nationality": "China",
@@ -926,7 +1402,13 @@
       "substantiveDecisions": 4810,
       "totalDecisions": 8163,
       "withdrawn": 2840,
-      "administrativeOutcomes": 513
+      "administrativeOutcomes": 513,
+      "trueGrantRatePct": 22.6,
+      "appealUpliftPp": 10.2,
+      "latestGrants": 949,
+      "latestRefusals": 3243,
+      "latestSubstantive": 4192,
+      "pctResolved": 99.4
     },
     {
       "nationality": "Ecuador",
@@ -937,7 +1419,13 @@
       "substantiveDecisions": 228,
       "totalDecisions": 258,
       "withdrawn": 26,
-      "administrativeOutcomes": 4
+      "administrativeOutcomes": 4,
+      "trueGrantRatePct": 32.3,
+      "appealUpliftPp": 12,
+      "latestGrants": 20,
+      "latestRefusals": 42,
+      "latestSubstantive": 62,
+      "pctResolved": 97.4
     },
     {
       "nationality": "Mongolia",
@@ -948,7 +1436,13 @@
       "substantiveDecisions": 150,
       "totalDecisions": 182,
       "withdrawn": 16,
-      "administrativeOutcomes": 16
+      "administrativeOutcomes": 16,
+      "trueGrantRatePct": 29.1,
+      "appealUpliftPp": 11.4,
+      "latestGrants": 23,
+      "latestRefusals": 56,
+      "latestSubstantive": 79,
+      "pctResolved": 97.2
     },
     {
       "nationality": "Mauritius",
@@ -959,7 +1453,13 @@
       "substantiveDecisions": 370,
       "totalDecisions": 472,
       "withdrawn": 82,
-      "administrativeOutcomes": 20
+      "administrativeOutcomes": 20,
+      "trueGrantRatePct": 22.7,
+      "appealUpliftPp": 10.3,
+      "latestGrants": 70,
+      "latestRefusals": 238,
+      "latestSubstantive": 308,
+      "pctResolved": 97.5
     },
     {
       "nationality": "Kyrgyzstan",
@@ -970,7 +1470,13 @@
       "substantiveDecisions": 548,
       "totalDecisions": 762,
       "withdrawn": 186,
-      "administrativeOutcomes": 28
+      "administrativeOutcomes": 28,
+      "trueGrantRatePct": 29.9,
+      "appealUpliftPp": 6.4,
+      "latestGrants": 82,
+      "latestRefusals": 192,
+      "latestSubstantive": 274,
+      "pctResolved": 97.3
     },
     {
       "nationality": "Uzbekistan",
@@ -981,7 +1487,13 @@
       "substantiveDecisions": 1315,
       "totalDecisions": 1952,
       "withdrawn": 572,
-      "administrativeOutcomes": 65
+      "administrativeOutcomes": 65,
+      "trueGrantRatePct": 17.5,
+      "appealUpliftPp": 4.1,
+      "latestGrants": 136,
+      "latestRefusals": 639,
+      "latestSubstantive": 775,
+      "pctResolved": 97
     },
     {
       "nationality": "Namibia",
@@ -992,7 +1504,13 @@
       "substantiveDecisions": 2302,
       "totalDecisions": 2658,
       "withdrawn": 171,
-      "administrativeOutcomes": 185
+      "administrativeOutcomes": 185,
+      "trueGrantRatePct": 31.8,
+      "appealUpliftPp": 17.5,
+      "latestGrants": 659,
+      "latestRefusals": 1412,
+      "latestSubstantive": 2071,
+      "pctResolved": 98.8
     },
     {
       "nationality": "Israel",
@@ -1025,7 +1543,13 @@
       "substantiveDecisions": 215,
       "totalDecisions": 285,
       "withdrawn": 61,
-      "administrativeOutcomes": 9
+      "administrativeOutcomes": 9,
+      "trueGrantRatePct": 21.8,
+      "appealUpliftPp": 12.2,
+      "latestGrants": 27,
+      "latestRefusals": 97,
+      "latestSubstantive": 124,
+      "pctResolved": 96.2
     },
     {
       "nationality": "Botswana",
@@ -1036,7 +1560,13 @@
       "substantiveDecisions": 1026,
       "totalDecisions": 1219,
       "withdrawn": 139,
-      "administrativeOutcomes": 54
+      "administrativeOutcomes": 54,
+      "trueGrantRatePct": 20.6,
+      "appealUpliftPp": 8.7,
+      "latestGrants": 129,
+      "latestRefusals": 498,
+      "latestSubstantive": 627,
+      "pctResolved": 94.7
     },
     {
       "nationality": "Colombia",
@@ -1047,7 +1577,13 @@
       "substantiveDecisions": 2608,
       "totalDecisions": 3234,
       "withdrawn": 492,
-      "administrativeOutcomes": 134
+      "administrativeOutcomes": 134,
+      "trueGrantRatePct": 15.6,
+      "appealUpliftPp": 4.3,
+      "latestGrants": 98,
+      "latestRefusals": 530,
+      "latestSubstantive": 628,
+      "pctResolved": 95.4
     },
     {
       "nationality": "Argentina",
@@ -1069,7 +1605,13 @@
       "substantiveDecisions": 1502,
       "totalDecisions": 1874,
       "withdrawn": 331,
-      "administrativeOutcomes": 41
+      "administrativeOutcomes": 41,
+      "trueGrantRatePct": 16.1,
+      "appealUpliftPp": 9.8,
+      "latestGrants": 223,
+      "latestRefusals": 1163,
+      "latestSubstantive": 1386,
+      "pctResolved": 99.5
     },
     {
       "nationality": "Peru",
@@ -1102,7 +1644,13 @@
       "substantiveDecisions": 1903,
       "totalDecisions": 4923,
       "withdrawn": 2471,
-      "administrativeOutcomes": 549
+      "administrativeOutcomes": 549,
+      "trueGrantRatePct": 15.9,
+      "appealUpliftPp": 8.7,
+      "latestGrants": 163,
+      "latestRefusals": 863,
+      "latestSubstantive": 1026,
+      "pctResolved": 98.3
     },
     {
       "nationality": "Thailand",
@@ -1113,7 +1661,13 @@
       "substantiveDecisions": 582,
       "totalDecisions": 735,
       "withdrawn": 138,
-      "administrativeOutcomes": 15
+      "administrativeOutcomes": 15,
+      "trueGrantRatePct": 16.8,
+      "appealUpliftPp": 10.1,
+      "latestGrants": 79,
+      "latestRefusals": 390,
+      "latestSubstantive": 469,
+      "pctResolved": 97.4
     },
     {
       "nationality": "Romania",
@@ -1124,7 +1678,13 @@
       "substantiveDecisions": 169,
       "totalDecisions": 274,
       "withdrawn": 46,
-      "administrativeOutcomes": 59
+      "administrativeOutcomes": 59,
+      "trueGrantRatePct": 0.8,
+      "appealUpliftPp": 0,
+      "latestGrants": 1,
+      "latestRefusals": 129,
+      "latestSubstantive": 130,
+      "pctResolved": 99.5
     },
     {
       "nationality": "India",
@@ -1135,7 +1695,13 @@
       "substantiveDecisions": 9365,
       "totalDecisions": 20311,
       "withdrawn": 9836,
-      "administrativeOutcomes": 1110
+      "administrativeOutcomes": 1110,
+      "trueGrantRatePct": 7.4,
+      "appealUpliftPp": 4.2,
+      "latestGrants": 513,
+      "latestRefusals": 6444,
+      "latestSubstantive": 6957,
+      "pctResolved": 99.2
     },
     {
       "nationality": "Nepal",
@@ -1146,7 +1712,13 @@
       "substantiveDecisions": 2210,
       "totalDecisions": 3333,
       "withdrawn": 1044,
-      "administrativeOutcomes": 79
+      "administrativeOutcomes": 79,
+      "trueGrantRatePct": 5.8,
+      "appealUpliftPp": 3,
+      "latestGrants": 104,
+      "latestRefusals": 1679,
+      "latestSubstantive": 1783,
+      "pctResolved": 99
     },
     {
       "nationality": "Brazil",
@@ -1157,7 +1729,13 @@
       "substantiveDecisions": 3578,
       "totalDecisions": 6796,
       "withdrawn": 2814,
-      "administrativeOutcomes": 404
+      "administrativeOutcomes": 404,
+      "trueGrantRatePct": 5.8,
+      "appealUpliftPp": 2.7,
+      "latestGrants": 77,
+      "latestRefusals": 1262,
+      "latestSubstantive": 1339,
+      "pctResolved": 98.9
     },
     {
       "nationality": "East Timor",
@@ -1179,7 +1757,13 @@
       "substantiveDecisions": 264,
       "totalDecisions": 372,
       "withdrawn": 61,
-      "administrativeOutcomes": 47
+      "administrativeOutcomes": 47,
+      "trueGrantRatePct": 0,
+      "appealUpliftPp": 0,
+      "latestGrants": 0,
+      "latestRefusals": 258,
+      "latestSubstantive": 258,
+      "pctResolved": 97.8
     },
     {
       "nationality": "Hungary",
@@ -1190,7 +1774,13 @@
       "substantiveDecisions": 79,
       "totalDecisions": 131,
       "withdrawn": 36,
-      "administrativeOutcomes": 16
+      "administrativeOutcomes": 16,
+      "trueGrantRatePct": 0,
+      "appealUpliftPp": 0,
+      "latestGrants": 0,
+      "latestRefusals": 55,
+      "latestSubstantive": 55,
+      "pctResolved": 96.8
     },
     {
       "nationality": "Lithuania",
@@ -1201,7 +1791,13 @@
       "substantiveDecisions": 57,
       "totalDecisions": 90,
       "withdrawn": 16,
-      "administrativeOutcomes": 17
+      "administrativeOutcomes": 17,
+      "trueGrantRatePct": 1.1,
+      "appealUpliftPp": 1.1,
+      "latestGrants": 1,
+      "latestRefusals": 94,
+      "latestSubstantive": 95,
+      "pctResolved": 100
     }
   ],
   "volumeRanking": [
@@ -2694,6 +3290,1147 @@
       "grants": 51958,
       "refusals": 80068,
       "grantRatePct": 39.4
+    }
+  },
+  "outcomeAnalysis": {
+    "source": "Home Office Immigration Statistics: Outcome analysis (Asy_D04), Dec 2025 release",
+    "claimYears": "2015-2023",
+    "methodology": "True grant rate = (latest grants of protection + other leave) / (latest grants + latest refusals) × 100. 'Latest' outcome includes appeal results and all subsequent decisions. Claim years 2015-2023 used so most cases have settled outcomes.",
+    "nationalitiesWithTrueRate": 103,
+    "trueGrantRates": {
+      "Algeria": {
+        "claims": 2119,
+        "initialGrantRatePct": 14.7,
+        "trueGrantRatePct": 29.5,
+        "appealUpliftPp": 14.8,
+        "latestGrants": 343,
+        "latestRefusals": 821,
+        "latestSubstantive": 1164,
+        "latestNotYetKnown": 52,
+        "pctResolved": 97.5
+      },
+      "Egypt": {
+        "claims": 4918,
+        "initialGrantRatePct": 19.6,
+        "trueGrantRatePct": 36.7,
+        "appealUpliftPp": 17.1,
+        "latestGrants": 1205,
+        "latestRefusals": 2074,
+        "latestSubstantive": 3279,
+        "latestNotYetKnown": 72,
+        "pctResolved": 98.5
+      },
+      "Libya": {
+        "claims": 3046,
+        "initialGrantRatePct": 80,
+        "trueGrantRatePct": 93.4,
+        "appealUpliftPp": 13.4,
+        "latestGrants": 2505,
+        "latestRefusals": 177,
+        "latestSubstantive": 2682,
+        "latestNotYetKnown": 30,
+        "pctResolved": 99
+      },
+      "Morocco": {
+        "claims": 1243,
+        "initialGrantRatePct": 27.7,
+        "trueGrantRatePct": 42.2,
+        "appealUpliftPp": 14.5,
+        "latestGrants": 344,
+        "latestRefusals": 471,
+        "latestSubstantive": 815,
+        "latestNotYetKnown": 30,
+        "pctResolved": 97.6
+      },
+      "Sudan": {
+        "claims": 18956,
+        "initialGrantRatePct": 84,
+        "trueGrantRatePct": 97.6,
+        "appealUpliftPp": 13.6,
+        "latestGrants": 17730,
+        "latestRefusals": 430,
+        "latestSubstantive": 18160,
+        "latestNotYetKnown": 146,
+        "pctResolved": 99.2
+      },
+      "Tunisia": {
+        "claims": 606,
+        "initialGrantRatePct": 21.9,
+        "trueGrantRatePct": 32,
+        "appealUpliftPp": 10.1,
+        "latestGrants": 128,
+        "latestRefusals": 272,
+        "latestSubstantive": 400,
+        "latestNotYetKnown": 9,
+        "pctResolved": 98.5
+      },
+      "Angola": {
+        "claims": 335,
+        "initialGrantRatePct": 28.4,
+        "trueGrantRatePct": 46.3,
+        "appealUpliftPp": 17.9,
+        "latestGrants": 137,
+        "latestRefusals": 159,
+        "latestSubstantive": 296,
+        "latestNotYetKnown": 3,
+        "pctResolved": 99.1
+      },
+      "Benin": {
+        "claims": 72,
+        "initialGrantRatePct": 20.4,
+        "trueGrantRatePct": 35.2,
+        "appealUpliftPp": 14.8,
+        "latestGrants": 19,
+        "latestRefusals": 35,
+        "latestSubstantive": 54,
+        "latestNotYetKnown": 1,
+        "pctResolved": 98.6
+      },
+      "Botswana": {
+        "claims": 806,
+        "initialGrantRatePct": 11.9,
+        "trueGrantRatePct": 20.6,
+        "appealUpliftPp": 8.7,
+        "latestGrants": 129,
+        "latestRefusals": 498,
+        "latestSubstantive": 627,
+        "latestNotYetKnown": 43,
+        "pctResolved": 94.7
+      },
+      "Burkina Faso": {
+        "claims": 59,
+        "initialGrantRatePct": 44.2,
+        "trueGrantRatePct": 50.9,
+        "appealUpliftPp": 6.7,
+        "latestGrants": 27,
+        "latestRefusals": 26,
+        "latestSubstantive": 53,
+        "latestNotYetKnown": 2,
+        "pctResolved": 96.6
+      },
+      "Burundi": {
+        "claims": 110,
+        "initialGrantRatePct": 44.7,
+        "trueGrantRatePct": 68,
+        "appealUpliftPp": 23.3,
+        "latestGrants": 70,
+        "latestRefusals": 33,
+        "latestSubstantive": 103,
+        "latestNotYetKnown": 1,
+        "pctResolved": 99.1
+      },
+      "Cameroon": {
+        "claims": 1651,
+        "initialGrantRatePct": 54.1,
+        "trueGrantRatePct": 74.2,
+        "appealUpliftPp": 20.1,
+        "latestGrants": 1145,
+        "latestRefusals": 399,
+        "latestSubstantive": 1544,
+        "latestNotYetKnown": 5,
+        "pctResolved": 99.7
+      },
+      "Chad": {
+        "claims": 692,
+        "initialGrantRatePct": 46.2,
+        "trueGrantRatePct": 65.7,
+        "appealUpliftPp": 19.5,
+        "latestGrants": 404,
+        "latestRefusals": 211,
+        "latestSubstantive": 615,
+        "latestNotYetKnown": 13,
+        "pctResolved": 98.1
+      },
+      "Congo": {
+        "claims": 146,
+        "initialGrantRatePct": 21.9,
+        "trueGrantRatePct": 37.1,
+        "appealUpliftPp": 15.2,
+        "latestGrants": 52,
+        "latestRefusals": 88,
+        "latestSubstantive": 140,
+        "latestNotYetKnown": 1,
+        "pctResolved": 99.3
+      },
+      "Congo (Democratic Republic)": {
+        "claims": 1200,
+        "initialGrantRatePct": 33.4,
+        "trueGrantRatePct": 60.3,
+        "appealUpliftPp": 26.9,
+        "latestGrants": 666,
+        "latestRefusals": 439,
+        "latestSubstantive": 1105,
+        "latestNotYetKnown": 11,
+        "pctResolved": 99.1
+      },
+      "Eritrea": {
+        "claims": 23363,
+        "initialGrantRatePct": 84.2,
+        "trueGrantRatePct": 96.2,
+        "appealUpliftPp": 12,
+        "latestGrants": 21620,
+        "latestRefusals": 857,
+        "latestSubstantive": 22477,
+        "latestNotYetKnown": 84,
+        "pctResolved": 99.6
+      },
+      "Ethiopia": {
+        "claims": 4619,
+        "initialGrantRatePct": 59.2,
+        "trueGrantRatePct": 79.8,
+        "appealUpliftPp": 20.6,
+        "latestGrants": 3504,
+        "latestRefusals": 886,
+        "latestSubstantive": 4390,
+        "latestNotYetKnown": 23,
+        "pctResolved": 99.5
+      },
+      "Gambia, The": {
+        "claims": 922,
+        "initialGrantRatePct": 29.8,
+        "trueGrantRatePct": 45.4,
+        "appealUpliftPp": 15.6,
+        "latestGrants": 362,
+        "latestRefusals": 436,
+        "latestSubstantive": 798,
+        "latestNotYetKnown": 20,
+        "pctResolved": 97.8
+      },
+      "Ghana": {
+        "claims": 1837,
+        "initialGrantRatePct": 18,
+        "trueGrantRatePct": 28.1,
+        "appealUpliftPp": 10.1,
+        "latestGrants": 378,
+        "latestRefusals": 968,
+        "latestSubstantive": 1346,
+        "latestNotYetKnown": 17,
+        "pctResolved": 99.1
+      },
+      "Guinea": {
+        "claims": 442,
+        "initialGrantRatePct": 41,
+        "trueGrantRatePct": 56.5,
+        "appealUpliftPp": 15.5,
+        "latestGrants": 216,
+        "latestRefusals": 166,
+        "latestSubstantive": 382,
+        "latestNotYetKnown": 16,
+        "pctResolved": 96.4
+      },
+      "Ivory Coast": {
+        "claims": 357,
+        "initialGrantRatePct": 29.8,
+        "trueGrantRatePct": 47.6,
+        "appealUpliftPp": 17.8,
+        "latestGrants": 151,
+        "latestRefusals": 166,
+        "latestSubstantive": 317,
+        "latestNotYetKnown": 4,
+        "pctResolved": 98.9
+      },
+      "Kenya": {
+        "claims": 998,
+        "initialGrantRatePct": 41,
+        "trueGrantRatePct": 59.7,
+        "appealUpliftPp": 18.7,
+        "latestGrants": 537,
+        "latestRefusals": 362,
+        "latestSubstantive": 899,
+        "latestNotYetKnown": 7,
+        "pctResolved": 99.3
+      },
+      "Liberia": {
+        "claims": 56,
+        "initialGrantRatePct": 26,
+        "trueGrantRatePct": 38,
+        "appealUpliftPp": 12,
+        "latestGrants": 19,
+        "latestRefusals": 31,
+        "latestSubstantive": 50,
+        "latestNotYetKnown": 1,
+        "pctResolved": 98.2
+      },
+      "Malawi": {
+        "claims": 301,
+        "initialGrantRatePct": 29.3,
+        "trueGrantRatePct": 42.3,
+        "appealUpliftPp": 13,
+        "latestGrants": 115,
+        "latestRefusals": 157,
+        "latestSubstantive": 272,
+        "latestNotYetKnown": 3,
+        "pctResolved": 99
+      },
+      "Mali": {
+        "claims": 149,
+        "initialGrantRatePct": 48.5,
+        "trueGrantRatePct": 61.9,
+        "appealUpliftPp": 13.4,
+        "latestGrants": 83,
+        "latestRefusals": 51,
+        "latestSubstantive": 134,
+        "latestNotYetKnown": 2,
+        "pctResolved": 98.7
+      },
+      "Mauritius": {
+        "claims": 400,
+        "initialGrantRatePct": 12.4,
+        "trueGrantRatePct": 22.7,
+        "appealUpliftPp": 10.3,
+        "latestGrants": 70,
+        "latestRefusals": 238,
+        "latestSubstantive": 308,
+        "latestNotYetKnown": 10,
+        "pctResolved": 97.5
+      },
+      "Namibia": {
+        "claims": 2488,
+        "initialGrantRatePct": 14.3,
+        "trueGrantRatePct": 31.8,
+        "appealUpliftPp": 17.5,
+        "latestGrants": 659,
+        "latestRefusals": 1412,
+        "latestSubstantive": 2071,
+        "latestNotYetKnown": 31,
+        "pctResolved": 98.8
+      },
+      "Nigeria": {
+        "claims": 7727,
+        "initialGrantRatePct": 30.5,
+        "trueGrantRatePct": 44.1,
+        "appealUpliftPp": 13.6,
+        "latestGrants": 2894,
+        "latestRefusals": 3675,
+        "latestSubstantive": 6569,
+        "latestNotYetKnown": 76,
+        "pctResolved": 99
+      },
+      "Rwanda": {
+        "claims": 155,
+        "initialGrantRatePct": 24.1,
+        "trueGrantRatePct": 56.2,
+        "appealUpliftPp": 32.1,
+        "latestGrants": 82,
+        "latestRefusals": 64,
+        "latestSubstantive": 146,
+        "latestNotYetKnown": 3,
+        "pctResolved": 98.1
+      },
+      "Senegal": {
+        "claims": 229,
+        "initialGrantRatePct": 33.2,
+        "trueGrantRatePct": 48.1,
+        "appealUpliftPp": 14.9,
+        "latestGrants": 91,
+        "latestRefusals": 98,
+        "latestSubstantive": 189,
+        "latestNotYetKnown": 6,
+        "pctResolved": 97.4
+      },
+      "Sierra Leone": {
+        "claims": 748,
+        "initialGrantRatePct": 45.2,
+        "trueGrantRatePct": 59.8,
+        "appealUpliftPp": 14.6,
+        "latestGrants": 405,
+        "latestRefusals": 272,
+        "latestSubstantive": 677,
+        "latestNotYetKnown": 10,
+        "pctResolved": 98.7
+      },
+      "Somalia": {
+        "claims": 3526,
+        "initialGrantRatePct": 56.7,
+        "trueGrantRatePct": 73.6,
+        "appealUpliftPp": 16.9,
+        "latestGrants": 2301,
+        "latestRefusals": 824,
+        "latestSubstantive": 3125,
+        "latestNotYetKnown": 42,
+        "pctResolved": 98.8
+      },
+      "South Africa": {
+        "claims": 440,
+        "initialGrantRatePct": 15,
+        "trueGrantRatePct": 26.5,
+        "appealUpliftPp": 11.5,
+        "latestGrants": 93,
+        "latestRefusals": 258,
+        "latestSubstantive": 351,
+        "latestNotYetKnown": 8,
+        "pctResolved": 98.2
+      },
+      "South Sudan": {
+        "claims": 688,
+        "initialGrantRatePct": 87.7,
+        "trueGrantRatePct": 93.7,
+        "appealUpliftPp": 6,
+        "latestGrants": 580,
+        "latestRefusals": 39,
+        "latestSubstantive": 619,
+        "latestNotYetKnown": 34,
+        "pctResolved": 95.1
+      },
+      "Tanzania": {
+        "claims": 336,
+        "initialGrantRatePct": 37.7,
+        "trueGrantRatePct": 52.6,
+        "appealUpliftPp": 14.9,
+        "latestGrants": 159,
+        "latestRefusals": 143,
+        "latestSubstantive": 302,
+        "latestNotYetKnown": 6,
+        "pctResolved": 98.2
+      },
+      "Togo": {
+        "claims": 78,
+        "initialGrantRatePct": 22.2,
+        "trueGrantRatePct": 45.8,
+        "appealUpliftPp": 23.6,
+        "latestGrants": 33,
+        "latestRefusals": 39,
+        "latestSubstantive": 72,
+        "latestNotYetKnown": 1,
+        "pctResolved": 98.7
+      },
+      "Uganda": {
+        "claims": 1506,
+        "initialGrantRatePct": 68.7,
+        "trueGrantRatePct": 81.5,
+        "appealUpliftPp": 12.8,
+        "latestGrants": 1155,
+        "latestRefusals": 263,
+        "latestSubstantive": 1418,
+        "latestNotYetKnown": 7,
+        "pctResolved": 99.5
+      },
+      "Zambia": {
+        "claims": 144,
+        "initialGrantRatePct": 37.2,
+        "trueGrantRatePct": 51.2,
+        "appealUpliftPp": 14,
+        "latestGrants": 62,
+        "latestRefusals": 59,
+        "latestSubstantive": 121,
+        "latestNotYetKnown": 3,
+        "pctResolved": 97.9
+      },
+      "Zimbabwe": {
+        "claims": 1457,
+        "initialGrantRatePct": 24.1,
+        "trueGrantRatePct": 48.8,
+        "appealUpliftPp": 24.7,
+        "latestGrants": 634,
+        "latestRefusals": 666,
+        "latestSubstantive": 1300,
+        "latestNotYetKnown": 20,
+        "pctResolved": 98.6
+      },
+      "Bolivia": {
+        "claims": 186,
+        "initialGrantRatePct": 9.6,
+        "trueGrantRatePct": 21.8,
+        "appealUpliftPp": 12.2,
+        "latestGrants": 27,
+        "latestRefusals": 97,
+        "latestSubstantive": 124,
+        "latestNotYetKnown": 7,
+        "pctResolved": 96.2
+      },
+      "Brazil": {
+        "claims": 2615,
+        "initialGrantRatePct": 3.1,
+        "trueGrantRatePct": 5.8,
+        "appealUpliftPp": 2.7,
+        "latestGrants": 77,
+        "latestRefusals": 1262,
+        "latestSubstantive": 1339,
+        "latestNotYetKnown": 30,
+        "pctResolved": 98.9
+      },
+      "Colombia": {
+        "claims": 873,
+        "initialGrantRatePct": 11.3,
+        "trueGrantRatePct": 15.6,
+        "appealUpliftPp": 4.3,
+        "latestGrants": 98,
+        "latestRefusals": 530,
+        "latestSubstantive": 628,
+        "latestNotYetKnown": 40,
+        "pctResolved": 95.4
+      },
+      "Dominica": {
+        "claims": 103,
+        "initialGrantRatePct": 34.7,
+        "trueGrantRatePct": 45.1,
+        "appealUpliftPp": 10.4,
+        "latestGrants": 32,
+        "latestRefusals": 39,
+        "latestSubstantive": 71,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Ecuador": {
+        "claims": 77,
+        "initialGrantRatePct": 20.3,
+        "trueGrantRatePct": 32.3,
+        "appealUpliftPp": 12,
+        "latestGrants": 20,
+        "latestRefusals": 42,
+        "latestSubstantive": 62,
+        "latestNotYetKnown": 2,
+        "pctResolved": 97.4
+      },
+      "El Salvador": {
+        "claims": 2661,
+        "initialGrantRatePct": 73.2,
+        "trueGrantRatePct": 90.6,
+        "appealUpliftPp": 17.4,
+        "latestGrants": 2032,
+        "latestRefusals": 212,
+        "latestSubstantive": 2244,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Grenada": {
+        "claims": 166,
+        "initialGrantRatePct": 32.1,
+        "trueGrantRatePct": 45.5,
+        "appealUpliftPp": 13.4,
+        "latestGrants": 60,
+        "latestRefusals": 72,
+        "latestSubstantive": 132,
+        "latestNotYetKnown": 2,
+        "pctResolved": 98.8
+      },
+      "Guatemala": {
+        "claims": 104,
+        "initialGrantRatePct": 33.3,
+        "trueGrantRatePct": 39,
+        "appealUpliftPp": 5.7,
+        "latestGrants": 30,
+        "latestRefusals": 47,
+        "latestSubstantive": 77,
+        "latestNotYetKnown": 2,
+        "pctResolved": 98.1
+      },
+      "Honduras": {
+        "claims": 1932,
+        "initialGrantRatePct": 39.6,
+        "trueGrantRatePct": 56.2,
+        "appealUpliftPp": 16.6,
+        "latestGrants": 664,
+        "latestRefusals": 518,
+        "latestSubstantive": 1182,
+        "latestNotYetKnown": 15,
+        "pctResolved": 99.2
+      },
+      "Jamaica": {
+        "claims": 1087,
+        "initialGrantRatePct": 16,
+        "trueGrantRatePct": 25,
+        "appealUpliftPp": 9,
+        "latestGrants": 210,
+        "latestRefusals": 629,
+        "latestSubstantive": 839,
+        "latestNotYetKnown": 49,
+        "pctResolved": 95.5
+      },
+      "Mexico": {
+        "claims": 211,
+        "initialGrantRatePct": 24.6,
+        "trueGrantRatePct": 37.5,
+        "appealUpliftPp": 12.9,
+        "latestGrants": 45,
+        "latestRefusals": 75,
+        "latestSubstantive": 120,
+        "latestNotYetKnown": 3,
+        "pctResolved": 98.6
+      },
+      "St Lucia": {
+        "claims": 207,
+        "initialGrantRatePct": 29,
+        "trueGrantRatePct": 35.1,
+        "appealUpliftPp": 6.1,
+        "latestGrants": 59,
+        "latestRefusals": 109,
+        "latestSubstantive": 168,
+        "latestNotYetKnown": 5,
+        "pctResolved": 97.6
+      },
+      "St Vincent and the Grenadines": {
+        "claims": 179,
+        "initialGrantRatePct": 39.3,
+        "trueGrantRatePct": 51.4,
+        "appealUpliftPp": 12.1,
+        "latestGrants": 75,
+        "latestRefusals": 71,
+        "latestSubstantive": 146,
+        "latestNotYetKnown": 5,
+        "pctResolved": 97.2
+      },
+      "Trinidad and Tobago": {
+        "claims": 532,
+        "initialGrantRatePct": 28.8,
+        "trueGrantRatePct": 42.7,
+        "appealUpliftPp": 13.9,
+        "latestGrants": 183,
+        "latestRefusals": 246,
+        "latestSubstantive": 429,
+        "latestNotYetKnown": 15,
+        "pctResolved": 97.2
+      },
+      "Venezuela": {
+        "claims": 151,
+        "initialGrantRatePct": 44.6,
+        "trueGrantRatePct": 67.8,
+        "appealUpliftPp": 23.2,
+        "latestGrants": 82,
+        "latestRefusals": 39,
+        "latestSubstantive": 121,
+        "latestNotYetKnown": 4,
+        "pctResolved": 97.4
+      },
+      "United States": {
+        "claims": 306,
+        "initialGrantRatePct": 8.5,
+        "trueGrantRatePct": 14,
+        "appealUpliftPp": 5.5,
+        "latestGrants": 16,
+        "latestRefusals": 98,
+        "latestSubstantive": 114,
+        "latestNotYetKnown": 2,
+        "pctResolved": 99.3
+      },
+      "Afghanistan": {
+        "claims": 29682,
+        "initialGrantRatePct": 67,
+        "trueGrantRatePct": 78.8,
+        "appealUpliftPp": 11.8,
+        "latestGrants": 20174,
+        "latestRefusals": 5429,
+        "latestSubstantive": 25603,
+        "latestNotYetKnown": 407,
+        "pctResolved": 98.6
+      },
+      "Kazakhstan": {
+        "claims": 637,
+        "initialGrantRatePct": 26.1,
+        "trueGrantRatePct": 31.8,
+        "appealUpliftPp": 5.7,
+        "latestGrants": 135,
+        "latestRefusals": 289,
+        "latestSubstantive": 424,
+        "latestNotYetKnown": 17,
+        "pctResolved": 97.3
+      },
+      "Kyrgyzstan": {
+        "claims": 411,
+        "initialGrantRatePct": 23.5,
+        "trueGrantRatePct": 29.9,
+        "appealUpliftPp": 6.4,
+        "latestGrants": 82,
+        "latestRefusals": 192,
+        "latestSubstantive": 274,
+        "latestNotYetKnown": 11,
+        "pctResolved": 97.3
+      },
+      "Tajikistan": {
+        "claims": 838,
+        "initialGrantRatePct": 34.9,
+        "trueGrantRatePct": 40.7,
+        "appealUpliftPp": 5.8,
+        "latestGrants": 259,
+        "latestRefusals": 378,
+        "latestSubstantive": 637,
+        "latestNotYetKnown": 24,
+        "pctResolved": 97.1
+      },
+      "Turkmenistan": {
+        "claims": 72,
+        "initialGrantRatePct": 59.3,
+        "trueGrantRatePct": 73.3,
+        "appealUpliftPp": 14,
+        "latestGrants": 44,
+        "latestRefusals": 16,
+        "latestSubstantive": 60,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Uzbekistan": {
+        "claims": 1283,
+        "initialGrantRatePct": 13.4,
+        "trueGrantRatePct": 17.5,
+        "appealUpliftPp": 4.1,
+        "latestGrants": 136,
+        "latestRefusals": 639,
+        "latestSubstantive": 775,
+        "latestNotYetKnown": 39,
+        "pctResolved": 97
+      },
+      "China": {
+        "claims": 7771,
+        "initialGrantRatePct": 12.4,
+        "trueGrantRatePct": 22.6,
+        "appealUpliftPp": 10.2,
+        "latestGrants": 949,
+        "latestRefusals": 3243,
+        "latestSubstantive": 4192,
+        "latestNotYetKnown": 45,
+        "pctResolved": 99.4
+      },
+      "Hong Kong": {
+        "claims": 248,
+        "initialGrantRatePct": 36.2,
+        "trueGrantRatePct": 52.1,
+        "appealUpliftPp": 15.9,
+        "latestGrants": 74,
+        "latestRefusals": 68,
+        "latestSubstantive": 142,
+        "latestNotYetKnown": 3,
+        "pctResolved": 98.8
+      },
+      "Mongolia": {
+        "claims": 106,
+        "initialGrantRatePct": 17.7,
+        "trueGrantRatePct": 29.1,
+        "appealUpliftPp": 11.4,
+        "latestGrants": 23,
+        "latestRefusals": 56,
+        "latestSubstantive": 79,
+        "latestNotYetKnown": 3,
+        "pctResolved": 97.2
+      },
+      "Bangladesh": {
+        "claims": 16442,
+        "initialGrantRatePct": 16.8,
+        "trueGrantRatePct": 28.4,
+        "appealUpliftPp": 11.6,
+        "latestGrants": 3646,
+        "latestRefusals": 9184,
+        "latestSubstantive": 12830,
+        "latestNotYetKnown": 168,
+        "pctResolved": 99
+      },
+      "India": {
+        "claims": 15704,
+        "initialGrantRatePct": 3.2,
+        "trueGrantRatePct": 7.4,
+        "appealUpliftPp": 4.2,
+        "latestGrants": 513,
+        "latestRefusals": 6444,
+        "latestSubstantive": 6957,
+        "latestNotYetKnown": 121,
+        "pctResolved": 99.2
+      },
+      "Nepal": {
+        "claims": 2725,
+        "initialGrantRatePct": 2.8,
+        "trueGrantRatePct": 5.8,
+        "appealUpliftPp": 3,
+        "latestGrants": 104,
+        "latestRefusals": 1679,
+        "latestSubstantive": 1783,
+        "latestNotYetKnown": 26,
+        "pctResolved": 99
+      },
+      "Pakistan": {
+        "claims": 19842,
+        "initialGrantRatePct": 35.9,
+        "trueGrantRatePct": 49.7,
+        "appealUpliftPp": 13.8,
+        "latestGrants": 7887,
+        "latestRefusals": 7981,
+        "latestSubstantive": 15868,
+        "latestNotYetKnown": 131,
+        "pctResolved": 99.3
+      },
+      "Sri Lanka": {
+        "claims": 6422,
+        "initialGrantRatePct": 27,
+        "trueGrantRatePct": 59.4,
+        "appealUpliftPp": 32.4,
+        "latestGrants": 3296,
+        "latestRefusals": 2255,
+        "latestSubstantive": 5551,
+        "latestNotYetKnown": 97,
+        "pctResolved": 98.5
+      },
+      "Indonesia": {
+        "claims": 460,
+        "initialGrantRatePct": 28.1,
+        "trueGrantRatePct": 34.4,
+        "appealUpliftPp": 6.3,
+        "latestGrants": 119,
+        "latestRefusals": 227,
+        "latestSubstantive": 346,
+        "latestNotYetKnown": 6,
+        "pctResolved": 98.7
+      },
+      "Malaysia": {
+        "claims": 1475,
+        "initialGrantRatePct": 26.1,
+        "trueGrantRatePct": 43.8,
+        "appealUpliftPp": 17.7,
+        "latestGrants": 510,
+        "latestRefusals": 655,
+        "latestSubstantive": 1165,
+        "latestNotYetKnown": 15,
+        "pctResolved": 99
+      },
+      "Myanmar (Burma)": {
+        "claims": 561,
+        "initialGrantRatePct": 62,
+        "trueGrantRatePct": 77.8,
+        "appealUpliftPp": 15.8,
+        "latestGrants": 407,
+        "latestRefusals": 116,
+        "latestSubstantive": 523,
+        "latestNotYetKnown": 4,
+        "pctResolved": 99.3
+      },
+      "Philippines": {
+        "claims": 1744,
+        "initialGrantRatePct": 6.3,
+        "trueGrantRatePct": 16.1,
+        "appealUpliftPp": 9.8,
+        "latestGrants": 223,
+        "latestRefusals": 1163,
+        "latestSubstantive": 1386,
+        "latestNotYetKnown": 9,
+        "pctResolved": 99.5
+      },
+      "Thailand": {
+        "claims": 613,
+        "initialGrantRatePct": 6.7,
+        "trueGrantRatePct": 16.8,
+        "appealUpliftPp": 10.1,
+        "latestGrants": 79,
+        "latestRefusals": 390,
+        "latestSubstantive": 469,
+        "latestNotYetKnown": 16,
+        "pctResolved": 97.4
+      },
+      "Vietnam": {
+        "claims": 11018,
+        "initialGrantRatePct": 49.1,
+        "trueGrantRatePct": 65,
+        "appealUpliftPp": 15.9,
+        "latestGrants": 4357,
+        "latestRefusals": 2349,
+        "latestSubstantive": 6706,
+        "latestNotYetKnown": 194,
+        "pctResolved": 98.2
+      },
+      "Romania": {
+        "claims": 188,
+        "initialGrantRatePct": 0.8,
+        "trueGrantRatePct": 0.8,
+        "appealUpliftPp": 0,
+        "latestGrants": 1,
+        "latestRefusals": 129,
+        "latestSubstantive": 130,
+        "latestNotYetKnown": 1,
+        "pctResolved": 99.5
+      },
+      "Hungary": {
+        "claims": 94,
+        "initialGrantRatePct": 0,
+        "trueGrantRatePct": 0,
+        "appealUpliftPp": 0,
+        "latestGrants": 0,
+        "latestRefusals": 55,
+        "latestSubstantive": 55,
+        "latestNotYetKnown": 3,
+        "pctResolved": 96.8
+      },
+      "Latvia": {
+        "claims": 78,
+        "initialGrantRatePct": 0,
+        "trueGrantRatePct": 0,
+        "appealUpliftPp": 0,
+        "latestGrants": 0,
+        "latestRefusals": 58,
+        "latestSubstantive": 58,
+        "latestNotYetKnown": 2,
+        "pctResolved": 97.4
+      },
+      "Lithuania": {
+        "claims": 131,
+        "initialGrantRatePct": 0,
+        "trueGrantRatePct": 1.1,
+        "appealUpliftPp": 1.1,
+        "latestGrants": 1,
+        "latestRefusals": 94,
+        "latestSubstantive": 95,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Poland": {
+        "claims": 368,
+        "initialGrantRatePct": 0,
+        "trueGrantRatePct": 0,
+        "appealUpliftPp": 0,
+        "latestGrants": 0,
+        "latestRefusals": 258,
+        "latestSubstantive": 258,
+        "latestNotYetKnown": 8,
+        "pctResolved": 97.8
+      },
+      "Albania": {
+        "claims": 35729,
+        "initialGrantRatePct": 15.1,
+        "trueGrantRatePct": 31,
+        "appealUpliftPp": 15.9,
+        "latestGrants": 4511,
+        "latestRefusals": 10023,
+        "latestSubstantive": 14534,
+        "latestNotYetKnown": 240,
+        "pctResolved": 99.3
+      },
+      "Armenia": {
+        "claims": 91,
+        "initialGrantRatePct": 30.6,
+        "trueGrantRatePct": 50.7,
+        "appealUpliftPp": 20.1,
+        "latestGrants": 38,
+        "latestRefusals": 37,
+        "latestSubstantive": 75,
+        "latestNotYetKnown": 1,
+        "pctResolved": 98.9
+      },
+      "Azerbaijan": {
+        "claims": 286,
+        "initialGrantRatePct": 42.7,
+        "trueGrantRatePct": 64.2,
+        "appealUpliftPp": 21.5,
+        "latestGrants": 145,
+        "latestRefusals": 81,
+        "latestSubstantive": 226,
+        "latestNotYetKnown": 3,
+        "pctResolved": 99
+      },
+      "Belarus": {
+        "claims": 177,
+        "initialGrantRatePct": 56.7,
+        "trueGrantRatePct": 73.4,
+        "appealUpliftPp": 16.7,
+        "latestGrants": 105,
+        "latestRefusals": 38,
+        "latestSubstantive": 143,
+        "latestNotYetKnown": 1,
+        "pctResolved": 99.4
+      },
+      "Georgia": {
+        "claims": 3226,
+        "initialGrantRatePct": 7.2,
+        "trueGrantRatePct": 15.9,
+        "appealUpliftPp": 8.7,
+        "latestGrants": 163,
+        "latestRefusals": 863,
+        "latestSubstantive": 1026,
+        "latestNotYetKnown": 54,
+        "pctResolved": 98.3
+      },
+      "Kosovo": {
+        "claims": 229,
+        "initialGrantRatePct": 19.4,
+        "trueGrantRatePct": 29.7,
+        "appealUpliftPp": 10.3,
+        "latestGrants": 44,
+        "latestRefusals": 104,
+        "latestSubstantive": 148,
+        "latestNotYetKnown": 4,
+        "pctResolved": 98.3
+      },
+      "Russia": {
+        "claims": 1574,
+        "initialGrantRatePct": 57.9,
+        "trueGrantRatePct": 78.9,
+        "appealUpliftPp": 21,
+        "latestGrants": 1049,
+        "latestRefusals": 280,
+        "latestSubstantive": 1329,
+        "latestNotYetKnown": 14,
+        "pctResolved": 99.1
+      },
+      "Turkey": {
+        "claims": 8707,
+        "initialGrantRatePct": 41.2,
+        "trueGrantRatePct": 53.7,
+        "appealUpliftPp": 12.5,
+        "latestGrants": 4080,
+        "latestRefusals": 3523,
+        "latestSubstantive": 7603,
+        "latestNotYetKnown": 158,
+        "pctResolved": 98.2
+      },
+      "Ukraine": {
+        "claims": 1617,
+        "initialGrantRatePct": 43.2,
+        "trueGrantRatePct": 57.2,
+        "appealUpliftPp": 14,
+        "latestGrants": 581,
+        "latestRefusals": 434,
+        "latestSubstantive": 1015,
+        "latestNotYetKnown": 11,
+        "pctResolved": 99.3
+      },
+      "Bahrain": {
+        "claims": 84,
+        "initialGrantRatePct": 50,
+        "trueGrantRatePct": 72.1,
+        "appealUpliftPp": 22.1,
+        "latestGrants": 44,
+        "latestRefusals": 17,
+        "latestSubstantive": 61,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Iran": {
+        "claims": 43984,
+        "initialGrantRatePct": 66.7,
+        "trueGrantRatePct": 85.4,
+        "appealUpliftPp": 18.7,
+        "latestGrants": 34961,
+        "latestRefusals": 5975,
+        "latestSubstantive": 40936,
+        "latestNotYetKnown": 162,
+        "pctResolved": 99.6
+      },
+      "Iraq": {
+        "claims": 27317,
+        "initialGrantRatePct": 30.8,
+        "trueGrantRatePct": 56.3,
+        "appealUpliftPp": 25.5,
+        "latestGrants": 13610,
+        "latestRefusals": 10545,
+        "latestSubstantive": 24155,
+        "latestNotYetKnown": 227,
+        "pctResolved": 99.2
+      },
+      "Jordan": {
+        "claims": 303,
+        "initialGrantRatePct": 31.4,
+        "trueGrantRatePct": 46.7,
+        "appealUpliftPp": 15.3,
+        "latestGrants": 114,
+        "latestRefusals": 130,
+        "latestSubstantive": 244,
+        "latestNotYetKnown": 3,
+        "pctResolved": 99
+      },
+      "Kuwait": {
+        "claims": 1037,
+        "initialGrantRatePct": 69.2,
+        "trueGrantRatePct": 80.9,
+        "appealUpliftPp": 11.7,
+        "latestGrants": 634,
+        "latestRefusals": 150,
+        "latestSubstantive": 784,
+        "latestNotYetKnown": 14,
+        "pctResolved": 98.6
+      },
+      "Lebanon": {
+        "claims": 438,
+        "initialGrantRatePct": 38.5,
+        "trueGrantRatePct": 59.6,
+        "appealUpliftPp": 21.1,
+        "latestGrants": 223,
+        "latestRefusals": 151,
+        "latestSubstantive": 374,
+        "latestNotYetKnown": 3,
+        "pctResolved": 99.3
+      },
+      "Oman": {
+        "claims": 86,
+        "initialGrantRatePct": 60.3,
+        "trueGrantRatePct": 70.7,
+        "appealUpliftPp": 10.4,
+        "latestGrants": 41,
+        "latestRefusals": 17,
+        "latestSubstantive": 58,
+        "latestNotYetKnown": 0,
+        "pctResolved": 100
+      },
+      "Palestine": {
+        "claims": 894,
+        "initialGrantRatePct": 56.9,
+        "trueGrantRatePct": 79.6,
+        "appealUpliftPp": 22.7,
+        "latestGrants": 591,
+        "latestRefusals": 151,
+        "latestSubstantive": 742,
+        "latestNotYetKnown": 11,
+        "pctResolved": 98.8
+      },
+      "Saudi Arabia": {
+        "claims": 842,
+        "initialGrantRatePct": 82.7,
+        "trueGrantRatePct": 89.1,
+        "appealUpliftPp": 6.4,
+        "latestGrants": 547,
+        "latestRefusals": 67,
+        "latestSubstantive": 614,
+        "latestNotYetKnown": 6,
+        "pctResolved": 99.3
+      },
+      "Syria": {
+        "claims": 17193,
+        "initialGrantRatePct": 93.2,
+        "trueGrantRatePct": 97.1,
+        "appealUpliftPp": 3.9,
+        "latestGrants": 14613,
+        "latestRefusals": 436,
+        "latestSubstantive": 15049,
+        "latestNotYetKnown": 883,
+        "pctResolved": 94.9
+      },
+      "Yemen": {
+        "claims": 2495,
+        "initialGrantRatePct": 87.4,
+        "trueGrantRatePct": 97.9,
+        "appealUpliftPp": 10.5,
+        "latestGrants": 2286,
+        "latestRefusals": 50,
+        "latestSubstantive": 2336,
+        "latestNotYetKnown": 9,
+        "pctResolved": 99.6
+      },
+      "Stateless": {
+        "claims": 1099,
+        "initialGrantRatePct": 61.6,
+        "trueGrantRatePct": 81.4,
+        "appealUpliftPp": 19.8,
+        "latestGrants": 703,
+        "latestRefusals": 161,
+        "latestSubstantive": 864,
+        "latestNotYetKnown": 16,
+        "pctResolved": 98.5
+      },
+      "Other and unknown": {
+        "claims": 3546,
+        "initialGrantRatePct": 56.6,
+        "trueGrantRatePct": 90.3,
+        "appealUpliftPp": 33.7,
+        "latestGrants": 886,
+        "latestRefusals": 95,
+        "latestSubstantive": 981,
+        "latestNotYetKnown": 2444,
+        "pctResolved": 31.1
+      },
+      "Nicaragua": {
+        "claims": 372,
+        "initialGrantRatePct": 53,
+        "trueGrantRatePct": 67.5,
+        "appealUpliftPp": 14.5,
+        "latestGrants": 193,
+        "latestRefusals": 93,
+        "latestSubstantive": 286,
+        "latestNotYetKnown": 1,
+        "pctResolved": 99.7
+      }
     }
   }
 }

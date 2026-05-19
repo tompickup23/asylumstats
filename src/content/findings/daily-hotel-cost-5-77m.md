@@ -7,10 +7,10 @@ stat_label: "Daily Hotel Cost"
 verdict: alert
 source_url: "https://www.nao.org.uk/reports/asylum-accommodation-and-support/"
 source_label: "NAO Report"
-summary: "The National Audit Office confirmed the Home Office is spending an average of £5.77 million per day on asylum hotel accommodation. That's £2.1 billion per year on hotels alone - while 64,426 people wait for a decision on their claim."
+summary: "The National Audit Office confirmed the Home Office was spending an average of £5.77 million per day on asylum hotel accommodation (2024/25 average). That's £2.1 billion per year on hotels alone - while 64,426 people wait for a decision on their claim."
 ---
 
-The National Audit Office confirmed the Home Office is spending an average of **£5.77 million per day** on asylum hotel accommodation.
+The National Audit Office confirmed the Home Office was spending an average of **£5.77 million per day** on asylum hotel accommodation (2024/25 financial year average).
 
 **£2.1 billion per year.** On hotels.
 

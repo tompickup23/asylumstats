@@ -22,16 +22,19 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const SITE_OUTPUT = path.resolve("src/data/live/ethnic-projections.json");
+const CC_PROJECTIONS = path.resolve("data/model/projections.json");
 const existing = JSON.parse(readFileSync(SITE_OUTPUT, "utf8"));
 
-// The HP model has already written its projections to ethnic-projections.json.
-// We need the CC v2 and linear projections too.
-// Since we've run all three models in previous steps, let me compute
-// the linear and CC outputs inline and average.
-
-// Load Census 2011 and 2021 ethnic data for linear extrapolation
-const census2021 = existing; // Already has Census 2021 current data
-const census2011Data = {}; // Will compute from existing baseline data
+// Load CC v2 projections (9 scenarios — use central: half_convergence__principal)
+let ccData = null;
+try {
+  const ccRaw = JSON.parse(readFileSync(CC_PROJECTIONS, "utf8"));
+  const centralScenario = ccRaw.centralScenario || "half_convergence__principal";
+  ccData = ccRaw.projections?.[centralScenario] || null;
+  console.log(`Loaded CC v2 central scenario: ${centralScenario} (${ccData ? Object.keys(ccData).length : 0} areas)`);
+} catch (e) {
+  console.log("Warning: Could not load CC v2 projections, using proxy method");
+}
 
 console.log("Building ensemble from 3 models...");
 
@@ -66,16 +69,33 @@ for (const [code, area] of Object.entries(existing.areas)) {
     }
   }
 
-  // MODEL 3: Cohort-component v2 (midpoint between HP and linear as proxy)
-  // Since CC v2 was systematically between HP and linear, approximate as weighted average
-  // This avoids re-running the full CC model. Weight: HP 40%, Linear 60% (CC was closer to linear)
+  // MODEL 3: Cohort-component v2 (from projections.json central scenario)
   const cc = {};
-  for (const y of PROJ_YEARS) {
-    cc[y] = {};
-    for (const g of GROUPS) {
-      const hpVal = hp[y]?.[g] ?? (area.current?.groups?.[g] || 0);
-      const linVal = linear[y]?.[g] ?? (area.current?.groups?.[g] || 0);
-      cc[y][g] = Math.round((hpVal * 0.4 + linVal * 0.6) * 100) / 100;
+  const ccArea = ccData?.[code];
+  if (ccArea) {
+    for (const y of PROJ_YEARS) {
+      const ccYear = ccArea[y];
+      if (ccYear?.pct) {
+        cc[y] = {};
+        // CC v2 uses 12-group codes (WBI, WIR, WHO, MIX, IND, PAK, BAN, CHI, OAS, BCA, BAF, OTH)
+        // Map to 6-group for ensemble
+        cc[y].white_british = ccYear.pct.WBI || 0;
+        cc[y].white_other = (ccYear.pct.WIR || 0) + (ccYear.pct.WHO || 0);
+        cc[y].asian = (ccYear.pct.IND || 0) + (ccYear.pct.PAK || 0) + (ccYear.pct.BAN || 0) + (ccYear.pct.CHI || 0) + (ccYear.pct.OAS || 0);
+        cc[y].black = (ccYear.pct.BAF || 0) + (ccYear.pct.BCA || 0);
+        cc[y].mixed = ccYear.pct.MIX || 0;
+        cc[y].other = ccYear.pct.OTH || 0;
+      }
+    }
+  } else {
+    // Fallback: proxy as weighted average of HP and linear
+    for (const y of PROJ_YEARS) {
+      cc[y] = {};
+      for (const g of GROUPS) {
+        const hpVal = hp[y]?.[g] ?? (area.current?.groups?.[g] || 0);
+        const linVal = linear[y]?.[g] ?? (area.current?.groups?.[g] || 0);
+        cc[y][g] = Math.round((hpVal * 0.4 + linVal * 0.6) * 100) / 100;
+      }
     }
   }
 
@@ -145,10 +165,10 @@ for (const [code, area] of Object.entries(existing.areas)) {
 }
 
 // Update metadata
-existing.methodology = "3-model ensemble: (1) Hamilton-Perry CCR from Census 2011→2021, (2) Cohort-component with ethnic TFR/mortality/migration, (3) Linear extrapolation. Simple average following Wilson et al. (2022). SNPP 2022-based envelope constraint. Model spread provides empirical uncertainty.";
-existing.modelVersion = "4.0-ensemble";
+existing.methodology = "3-model ensemble: (1) Hamilton-Perry single-year CCR with 20 ethnic groups (Census-direct 2021 base, DfE calibration), (2) Cohort-component v2 with ethnic fertility/mortality/migration (9 scenarios, central selected), (3) Linear extrapolation (Census 2011→2021 trend). Simple average following Wilson et al. (2022). SNPP 2022-based envelope constraint. Model spread provides empirical uncertainty.";
+existing.modelVersion = "6.1-ensemble";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
-existing.source = "Census 2011 DC2101EW + Census 2021 RM032/TS021 (NOMIS) + ONS SNPP Z1";
+existing.source = "Census 2011 KS201/DC2101 + Census 2021 custom dataset (direct) + ONS SNPP 2022-based Z1";
 
 writeFileSync(SITE_OUTPUT, JSON.stringify(existing, null, 2), "utf8");
 
