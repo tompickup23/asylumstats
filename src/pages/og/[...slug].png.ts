@@ -1,25 +1,42 @@
+/**
+ * /og/[...slug].png — dynamic per-page Open Graph card endpoint.
+ *
+ * Each path enumerated in getStaticPaths emits a 1200×630 PNG rendered
+ * by Satori (text + flex layout → SVG) and @resvg/resvg-js (SVG → PNG).
+ *
+ * Gated behind BUILD_OG=1. When unset, getStaticPaths returns [] —
+ * iteration builds skip the OG pass. CI sets BUILD_OG=1 explicitly.
+ *
+ * Standard layout (shared with ukdemographics.co.uk + ukelections.co.uk):
+ *   Brand row (40×40 logo tile + name + tagline)
+ *   Hero block (site-specific — AS uses stat + uppercase label + title)
+ *   Single-line footer (site URL · brand sourced-tagline)
+ */
 import type { APIRoute, GetStaticPaths } from "astro";
 import satori from "satori";
-import sharp from "sharp";
+import { Resvg } from "@resvg/resvg-js";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getCollection } from "astro:content";
 import { loadRouteDashboard, loadLocalRouteLatest } from "../../lib/route-data";
 import { getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 
-// Brand colors from brand_system.py
+const BUILD_OG = process.env.BUILD_OG === "1";
+
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+
+// Brand colors — asylumstats (cyan) on the shared dark surface.
 const COLORS = {
   bg: "#04070d",
   surface: "#0b1220",
-  accent: "#06b6d4",
+  accent: "#06b6d4",       // brand cyan
   accentLight: "#7dd3fc",
   text: "#f5f7fb",
   muted: "#91a7c4",
   alert: "#f59e0b",
   critical: "#ef4444",
-  resolved: "#10b981",
-  ukd: "#818cf8",
-  uke: "#38bdf8"
+  resolved: "#10b981"
 };
 
 const verdictColor: Record<string, string> = {
@@ -29,12 +46,10 @@ const verdictColor: Record<string, string> = {
   info: COLORS.accent
 };
 
-// Load TTF fonts (Satori requires TTF/OTF, not woff2)
 let manropeBold: ArrayBuffer | null = null;
 let soraBold: ArrayBuffer | null = null;
 
 function loadFont(name: string): ArrayBuffer {
-  // Resolve fonts from process.cwd() (project root) — works in both dev and build
   const fontFile = name === "Manrope" ? "Manrope-Bold.ttf" : "Sora-ExtraBold.ttf";
   const fontPath = join(process.cwd(), "src", "assets", "fonts", fontFile);
   return readFileSync(fontPath).buffer as ArrayBuffer;
@@ -46,6 +61,8 @@ function ensureFonts() {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  if (!BUILD_OG) return [];
+
   const findings = await getCollection("findings");
   const routeDashboard = loadRouteDashboard();
 
@@ -119,8 +136,8 @@ export const GET: APIRoute = async ({ props }) => {
       type: "div",
       props: {
         style: {
-          width: "1200px",
-          height: "630px",
+          width: `${OG_WIDTH}px`,
+          height: `${OG_HEIGHT}px`,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -129,7 +146,7 @@ export const GET: APIRoute = async ({ props }) => {
           fontFamily: "Manrope"
         },
         children: [
-          // Top: Logo area
+          // Brand row — shared standard across UKD / UKE / AS.
           {
             type: "div",
             props: {
@@ -153,7 +170,7 @@ export const GET: APIRoute = async ({ props }) => {
                       color: COLORS.bg,
                       fontFamily: "Sora",
                       fontWeight: 800,
-                      fontSize: "18px"
+                      fontSize: "16px"
                     },
                     children: "AS"
                   }
@@ -195,7 +212,7 @@ export const GET: APIRoute = async ({ props }) => {
               ]
             }
           },
-          // Middle: Content
+          // Hero block — stat (Sora 96, brand colour) + label + title.
           {
             type: "div",
             props: {
@@ -212,10 +229,11 @@ export const GET: APIRoute = async ({ props }) => {
                   props: {
                     style: {
                       fontFamily: "Sora",
-                      fontSize: "56px",
+                      fontSize: "96px",
                       fontWeight: 800,
                       color: statColor,
-                      lineHeight: 1
+                      lineHeight: 1,
+                      letterSpacing: "-0.03em"
                     },
                     children: stat
                   }
@@ -237,10 +255,10 @@ export const GET: APIRoute = async ({ props }) => {
                   props: {
                     style: {
                       fontFamily: "Sora",
-                      fontSize: "32px",
-                      fontWeight: 700,
+                      fontSize: "36px",
+                      fontWeight: 800,
                       color: COLORS.text,
-                      lineHeight: 1.2,
+                      lineHeight: 1.15,
                       maxWidth: "900px"
                     },
                     children: title
@@ -249,174 +267,37 @@ export const GET: APIRoute = async ({ props }) => {
               ]
             }
           },
-          // Bottom: Accent bar + sister-sites strip
+          // Single-line footer — URL (brand colour) + tagline (muted).
           {
             type: "div",
             props: {
               style: {
                 display: "flex",
-                flexDirection: "column",
-                gap: "14px",
+                justifyContent: "space-between",
+                alignItems: "center",
                 borderTop: `2px solid ${COLORS.accent}`,
                 paddingTop: "16px"
               },
               children: [
-                // Row 1: brand + tagline
                 {
-                  type: "div",
+                  type: "span",
                   props: {
                     style: {
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
+                      fontSize: "14px",
+                      color: COLORS.accent,
+                      fontWeight: 600
                     },
-                    children: [
-                      {
-                        type: "span",
-                        props: {
-                          style: {
-                            fontSize: "14px",
-                            color: COLORS.accent,
-                            fontWeight: 600
-                          },
-                          children: "asylumstats.co.uk"
-                        }
-                      },
-                      {
-                        type: "span",
-                        props: {
-                          style: {
-                            fontSize: "12px",
-                            color: COLORS.muted
-                          },
-                          children: "Every number sourced."
-                        }
-                      }
-                    ]
+                    children: "asylumstats.co.uk"
                   }
                 },
-                // Row 2: sister-sites promo strip
                 {
-                  type: "div",
+                  type: "span",
                   props: {
                     style: {
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px"
+                      fontSize: "12px",
+                      color: COLORS.muted
                     },
-                    children: [
-                      {
-                        type: "span",
-                        props: {
-                          style: {
-                            fontSize: "10px",
-                            color: COLORS.muted,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.12em",
-                            fontWeight: 700
-                          },
-                          children: "Sister sites"
-                        }
-                      },
-                      {
-                        type: "div",
-                        props: {
-                          style: {
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            padding: "5px 12px",
-                            background: "rgba(129, 140, 248, 0.12)",
-                            border: `1px solid ${COLORS.ukd}40`,
-                            borderRadius: "999px"
-                          },
-                          children: [
-                            {
-                              type: "div",
-                              props: {
-                                style: {
-                                  width: "6px",
-                                  height: "6px",
-                                  borderRadius: "999px",
-                                  background: COLORS.ukd
-                                },
-                                children: ""
-                              }
-                            },
-                            {
-                              type: "span",
-                              props: {
-                                style: {
-                                  fontSize: "12px",
-                                  color: COLORS.ukd,
-                                  fontWeight: 700
-                                },
-                                children: "ukdemographics.co.uk"
-                              }
-                            },
-                            {
-                              type: "span",
-                              props: {
-                                style: {
-                                  fontSize: "11px",
-                                  color: COLORS.muted
-                                },
-                                children: "· Population projections"
-                              }
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        type: "div",
-                        props: {
-                          style: {
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            padding: "5px 12px",
-                            background: "rgba(56, 189, 248, 0.12)",
-                            border: `1px solid ${COLORS.uke}40`,
-                            borderRadius: "999px"
-                          },
-                          children: [
-                            {
-                              type: "div",
-                              props: {
-                                style: {
-                                  width: "6px",
-                                  height: "6px",
-                                  borderRadius: "999px",
-                                  background: COLORS.uke
-                                },
-                                children: ""
-                              }
-                            },
-                            {
-                              type: "span",
-                              props: {
-                                style: {
-                                  fontSize: "12px",
-                                  color: COLORS.uke,
-                                  fontWeight: 700
-                                },
-                                children: "ukelections.co.uk"
-                              }
-                            },
-                            {
-                              type: "span",
-                              props: {
-                                style: {
-                                  fontSize: "11px",
-                                  color: COLORS.muted
-                                },
-                                children: "· Elections & seats"
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
+                    children: "Every number sourced."
                   }
                 }
               ]
@@ -426,8 +307,8 @@ export const GET: APIRoute = async ({ props }) => {
       }
     },
     {
-      width: 1200,
-      height: 630,
+      width: OG_WIDTH,
+      height: OG_HEIGHT,
       fonts: [
         { name: "Manrope", data: manropeBold!, weight: 700, style: "normal" },
         { name: "Sora", data: soraBold!, weight: 800, style: "normal" }
@@ -435,9 +316,10 @@ export const GET: APIRoute = async ({ props }) => {
     }
   );
 
-  const png = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer();
+  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: OG_WIDTH } });
+  const png = Buffer.from(resvg.render().asPng());
 
-  return new Response(png as unknown as BodyInit, {
+  return new Response(new Uint8Array(png), {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control": "public, max-age=86400"
