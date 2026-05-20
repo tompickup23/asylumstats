@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import BacklogClock from "../components/BacklogClock.astro";
 import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
@@ -239,6 +240,8 @@ const spendingSections = [
         collapsing unlike records into one fake total.
       </p>
     </section>
+
+    <BacklogClock dailyCostMillions={5.77} label="asylum hotel bill" />
 
     <aside class="page-rail">
       <article class="panel panel-pad">

@@ -25,6 +25,7 @@ import {
   getPercentileRank,
   getRegionPressureSummaries
 } from "../lib/route-analytics";
+import { getEthnicProjection } from "../lib/ethnic-projections";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
@@ -537,6 +538,27 @@ const compareSections = [
               <span>All three pathways total</span>
               <span class="data-row-value">{place.allThreePathwaysTotal.toLocaleString()}</span>
             </div>
+            {(() => {
+              const ep = getEthnicProjection(place.areaCode);
+              if (!ep) return null;
+              const wbiNow = ep.current?.groups?.white_british;
+              const wbi2051 = ep.projections?.["2051"]?.white_british;
+              if (wbiNow == null) return null;
+              return (
+                <>
+                  <div class="data-row">
+                    <span>WBI now (Census 2021)</span>
+                    <span class="data-row-value">{wbiNow.toFixed(1)}%</span>
+                  </div>
+                  {wbi2051 != null && (
+                    <div class="data-row">
+                      <span>WBI projected 2051</span>
+                      <span class="data-row-value" style={wbi2051 < 50 ? "color: var(--coral, #EF4444);" : ""}>{wbi2051.toFixed(1)}%</span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
             <div class="data-row">
               <span>Named current actor profiles</span>
               <span class="data-row-value">{localEntityProfiles.length.toLocaleString()}</span>

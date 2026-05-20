@@ -20,4 +20,6 @@ The fastest growth is in areas that also carry high asylum dispersal loads:
 
 Rising EHCP numbers reflect multiple factors: improved identification practices, changing diagnostic thresholds, increased parental awareness, and genuine prevalence changes. Language barriers in areas with higher non-English-speaking populations may also affect identification timing.
 
+**Methodological limitation:** This is a descriptive comparison across n=25 areas without formal statistical controls. EHCP demand growth correlates with deprivation, population growth, and LA assessment practices independently of demographic change or asylum dispersal. A proper analysis would need to partial out IMD rank and prior EHCP baseline rates. The sample size (25 LAs) is too small for reliable multivariate analysis.
+
 The question for local authorities is whether SEND funding models keep pace with demand in areas under simultaneous demographic, asylum, and deprivation pressures.

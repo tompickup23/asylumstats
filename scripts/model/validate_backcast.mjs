@@ -4,8 +4,9 @@
  * Validates the ACTUAL projection model (not a simplified CC substitute).
  * Replicates the exact HP methodology from run_hp_single_year.mjs:
  *
- * 1. Parse NEWETHPOP 2011 single-year base (same source as forward model)
- * 2. Parse IPF-constructed 2021 base (same source as forward model)
+ * 1. Parse Census 2011 DC2101EW (18 groups, 21 age bands → interpolated single-year)
+ *    Fallback: NEWETHPOP 2011 (12 groups, split to 20 using 2021 proportions)
+ * 2. Parse Census 2021 base (direct observations, 20 groups)
  * 3. Compute CCRs and CWRs identically to the forward model
  * 4. Project from 2011 → 2021 using one 10-year HP step
  * 5. Compare to Census 2021 actuals (from ethnic-projections.json)
@@ -14,13 +15,14 @@
  *
  * Output: src/data/live/model-validation.json
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
 // ============================================================
 // FILE PATHS — same inputs as run_hp_single_year.mjs
 // ============================================================
 const BASE_2021_PATH = path.resolve("data/model/base_single_year_2021.json");
+const DC2101EW_PATH = path.resolve("data/raw/census_2011_ethnicity_age/dc2101ew_ethnicity_sex_age_la.csv");
 const NEWETHPOP_2011 = path.resolve("data/raw/newethpop/extracted/2DataArchive/OutputData/Population/Population2011_LEEDS2.csv");
 const NEWETHPOP_2021 = path.resolve("data/raw/newethpop/extracted/2DataArchive/OutputData/Population/Population2021_LEEDS2.csv");
 const CENSUS_PATH = path.resolve("src/data/live/ethnic-projections.json");
@@ -53,43 +55,113 @@ function parseCsvLine(line) {
 function r(n) { return Math.round(n * 100) / 100; }
 
 // ============================================================
-// 1. Parse NEWETHPOP 2011 base (12 groups) and split to 20
-//    (identical methodology to run_hp_single_year.mjs)
+// 1. Parse 2011 base — identical to run_hp_single_year.mjs
+//    PRIMARY: Census 2011 DC2101EW (18 groups, 21 age bands → interpolated single-year)
+//    FALLBACK: NEWETHPOP Population2011_LEEDS2.csv (12 groups, split to 20)
 // ============================================================
+
+// DC2101EW ethnic code → our 20-group code
+const DC_ETH_MAP = {
+  "2": "WBI", "3": "WIR", "4": "WGT", "5": "WHO",
+  "7": "MWC", "8": "MWF", "9": "MWA", "10": "MOM",
+  "12": "IND", "13": "PAK", "14": "BAN", "15": "CHI", "16": "OAS",
+  "18": "BAF", "19": "BCA", "20": "OBL",
+  "22": "ARB", "23": "OOT"
+};
+const DC_AGE_BANDS = {
+  "1": [0, 4], "2": [5, 7], "3": [8, 9], "4": [10, 14], "5": [15, 15],
+  "6": [16, 17], "7": [18, 19], "8": [20, 24], "9": [25, 29], "10": [30, 34],
+  "11": [35, 39], "12": [40, 44], "13": [45, 49], "14": [50, 54], "15": [55, 59],
+  "16": [60, 64], "17": [65, 69], "18": [70, 74], "19": [75, 79], "20": [80, 84],
+  "21": [85, 90]
+};
+
+function distribute5YearBand(total, startAge) {
+  if (startAge === 0) {
+    const weights = [0.22, 0.21, 0.20, 0.19, 0.18];
+    return weights.map(w => total * w);
+  }
+  const weights = [0.19, 0.20, 0.22, 0.20, 0.19];
+  return weights.map(w => total * w);
+}
+
+const dc2101ewLoaded = new Map();
+if (existsSync(DC2101EW_PATH)) {
+  console.log("Loading Census 2011 DC2101EW (18 groups, 21 age bands)...");
+  const dcLines = readFileSync(DC2101EW_PATH, "utf8").split("\n").filter(l => l.trim());
+  for (let i = 1; i < dcLines.length; i++) {
+    const cols = parseCsvLine(dcLines[i]);
+    if (cols.length < 9) continue;
+    const laCode = cols[0], ethCode = cols[2], sexCode = cols[4], ageCode = cols[6];
+    const count = parseInt(cols[8]) || 0;
+    if (!laCode?.startsWith("E")) continue;
+    const eth20 = DC_ETH_MAP[ethCode];
+    if (!eth20) continue;
+    const sex = sexCode === "1" ? "M" : "F";
+    const band = DC_AGE_BANDS[ageCode];
+    if (!band) continue;
+    const bandWidth = band[1] - band[0] + 1;
+    if (bandWidth === 5) {
+      const distributed = distribute5YearBand(count, band[0]);
+      for (let i = 0; i < bandWidth && (band[0] + i) <= 90; i++) {
+        const key = `${laCode}|${eth20}|${sex}|${band[0] + i}`;
+        dc2101ewLoaded.set(key, (dc2101ewLoaded.get(key) || 0) + distributed[i]);
+      }
+    } else {
+      const perYear = count / bandWidth;
+      for (let age = band[0]; age <= band[1] && age <= 90; age++) {
+        const key = `${laCode}|${eth20}|${sex}|${age}`;
+        dc2101ewLoaded.set(key, (dc2101ewLoaded.get(key) || 0) + perYear);
+      }
+    }
+  }
+  const dcAreas = new Set([...dc2101ewLoaded.keys()].map(k => k.split("|")[0]));
+  console.log(`  ${dcAreas.size} areas loaded from DC2101EW`);
+
+  // Split Roma from Gypsy/Traveller using 2021 proportions
+  for (const code of dcAreas) {
+    for (const sex of SEXES) {
+      for (let age = 0; age <= 90; age++) {
+        const wgtKey = `${code}|WGT|${sex}|${age}`;
+        const wgtPop = dc2101ewLoaded.get(wgtKey) || 0;
+        if (wgtPop <= 0) continue;
+        const wgt2021 = base2021.areas[code]?.WGT?.[sex]?.[age] || 0;
+        const wro2021 = base2021.areas[code]?.WRO?.[sex]?.[age] || 0;
+        const total2021 = wgt2021 + wro2021;
+        if (total2021 > 0 && wro2021 > 0) {
+          const wroShare = wro2021 / total2021;
+          dc2101ewLoaded.set(wgtKey, wgtPop * (1 - wroShare));
+          dc2101ewLoaded.set(`${code}|WRO|${sex}|${age}`, wgtPop * wroShare);
+        }
+      }
+    }
+  }
+}
+
+// Also parse NEWETHPOP 2011 as fallback
 console.log("Parsing NEWETHPOP 2011 base (12 groups)...");
 const NEWETHPOP_GROUPS = ["WBI", "WIR", "WHO", "MIX", "IND", "PAK", "BAN", "CHI", "OAS", "BLA", "BLC", "OBL", "OTH"];
 const pop2011_12 = new Map();
-
 const lines2011 = readFileSync(NEWETHPOP_2011, "utf8").split("\n").filter(l => l.trim());
 for (let i = 1; i < lines2011.length; i++) {
   const cols = parseCsvLine(lines2011[i]);
   const rawCode = cols[2], eth = cols[3];
   if (!rawCode) continue;
   const codes = rawCode.split("+");
-
   for (const code of codes) {
     for (let age = 0; age <= 90; age++) {
       let mVal, fVal;
-      if (age < 90) {
-        mVal = parseFloat(cols[4 + age]) || 0;
-        fVal = parseFloat(cols[105 + age]) || 0;
-      } else {
-        mVal = 0; fVal = 0;
-        for (let a = 90; a <= 100; a++) {
-          mVal += parseFloat(cols[4 + a]) || 0;
-          fVal += parseFloat(cols[105 + a]) || 0;
-        }
-      }
+      if (age < 90) { mVal = parseFloat(cols[4 + age]) || 0; fVal = parseFloat(cols[105 + age]) || 0; }
+      else { mVal = 0; fVal = 0; for (let a = 90; a <= 100; a++) { mVal += parseFloat(cols[4 + a]) || 0; fVal += parseFloat(cols[105 + a]) || 0; } }
       pop2011_12.set(`${code}|${eth}|M|${age}`, (pop2011_12.get(`${code}|${eth}|M|${age}`) || 0) + mVal / codes.length);
       pop2011_12.set(`${code}|${eth}|F|${age}`, (pop2011_12.get(`${code}|${eth}|F|${age}`) || 0) + fVal / codes.length);
     }
   }
 }
 const areas2011 = new Set([...pop2011_12.keys()].map(k => k.split("|")[0]));
-console.log(`  ${areas2011.size} areas from 2011 (12-group)`);
+console.log(`  ${areas2011.size} areas from NEWETHPOP (12-group)`);
 
-// Split 2011 from 12 to 20 groups using 2021 proportions
-console.log("Splitting 2011 data to 20 groups...");
+// Build unified pop2011: DC2101EW preferred, NEWETHPOP fallback
 const NEWETHPOP_TO_CHILDREN = {
   WBI: ["WBI"], WIR: ["WIR"],
   WHO: ["WGT", "WRO", "WHO"],
@@ -99,36 +171,37 @@ const NEWETHPOP_TO_CHILDREN = {
   OTH: ["ARB", "OOT"]
 };
 
+console.log("Building unified 2011 base...");
 const pop2011 = new Map();
+let dcUsed = 0, fallbackUsed = 0;
 for (const code of Object.keys(base2021.areas)) {
-  if (!areas2011.has(code)) continue;
-  for (const sex of SEXES) {
-    for (let age = 0; age <= 90; age++) {
-      for (const [parentEth, children] of Object.entries(NEWETHPOP_TO_CHILDREN)) {
-        const parentPop = pop2011_12.get(`${code}|${parentEth}|${sex}|${age}`) || 0;
-        if (parentPop <= 0) {
-          for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, 0);
-          continue;
-        }
-        if (children.length === 1) {
-          pop2011.set(`${code}|${children[0]}|${sex}|${age}`, parentPop);
-          continue;
-        }
-        let parentTotal2021 = 0;
-        for (const child of children) parentTotal2021 += base2021.areas[code]?.[child]?.[sex]?.[age] || 0;
-        if (parentTotal2021 <= 0) {
-          for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop / children.length);
-        } else {
-          for (const child of children) {
-            const share = (base2021.areas[code]?.[child]?.[sex]?.[age] || 0) / parentTotal2021;
-            pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop * share);
-          }
+  const hasDC = dc2101ewLoaded.size > 0 && dc2101ewLoaded.has(`${code}|WBI|M|0`);
+  if (hasDC) {
+    for (const eth of ETHNIC_GROUPS) {
+      for (const sex of SEXES) {
+        for (let age = 0; age <= 90; age++) {
+          pop2011.set(`${code}|${eth}|${sex}|${age}`, dc2101ewLoaded.get(`${code}|${eth}|${sex}|${age}`) || 0);
         }
       }
     }
+    dcUsed++;
+  } else if (areas2011.has(code)) {
+    for (const sex of SEXES) {
+      for (let age = 0; age <= 90; age++) {
+        for (const [parentEth, children] of Object.entries(NEWETHPOP_TO_CHILDREN)) {
+          const parentPop = pop2011_12.get(`${code}|${parentEth}|${sex}|${age}`) || 0;
+          if (parentPop <= 0) { for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, 0); continue; }
+          if (children.length === 1) { pop2011.set(`${code}|${children[0]}|${sex}|${age}`, parentPop); continue; }
+          let pt = 0; for (const child of children) pt += base2021.areas[code]?.[child]?.[sex]?.[age] || 0;
+          if (pt <= 0) { for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop / children.length); }
+          else { for (const child of children) pop2011.set(`${code}|${child}|${sex}|${age}`, parentPop * ((base2021.areas[code]?.[child]?.[sex]?.[age] || 0) / pt)); }
+        }
+      }
+    }
+    fallbackUsed++;
   }
 }
-console.log(`  Split complete`);
+console.log(`  DC2101EW: ${dcUsed} areas | NEWETHPOP fallback: ${fallbackUsed} areas`);
 
 // ============================================================
 // 2. Parse NEWETHPOP 2021 prediction (for comparison)
@@ -375,7 +448,7 @@ console.log("\nComparing to Census 2021 actuals...");
 
 const validation = {
   generatedAt: new Date().toISOString(),
-  methodology: "Hamilton-Perry backcast: projected from Census 2011 base (NEWETHPOP, split from 12 to 20 groups using 2021 proportions) to 2021 using the same single-year CCR/CWR methodology as the forward model v6.0 (run_hp_single_year.mjs). 20 ethnic groups. No SNPP constraint (starts 2022). No DfE calibration (would be circular). Compared against Census 2021 actuals (direct observations from custom dataset). National-CCR baseline uses population-weighted average CCRs. NEWETHPOP comparison uses their own 2021 projection from their 2011 cohort-component model. NOTE: backcast is partially circular — CCRs derived from the same 2011→2021 endpoints being validated. The national-CCR baseline (which removes local information) is the better measure of genuine predictive ability.",
+  methodology: "Hamilton-Perry backcast: projected from Census 2011 base (NEWETHPOP, split from 12 to 20 groups using 2021 proportions) to 2021 using the same single-year CCR/CWR methodology as the forward model v7.0 (run_hp_single_year.mjs). 20 ethnic groups. No SNPP constraint (starts 2022). No DfE calibration (would be circular). Compared against Census 2021 actuals (direct observations from custom dataset). National-CCR baseline uses population-weighted average CCRs. NEWETHPOP comparison uses their own 2021 projection from their 2011 cohort-component model. NOTE: backcast is partially circular — CCRs derived from the same 2011→2021 endpoints being validated. The national-CCR baseline (which removes local information) is the better measure of genuine predictive ability.",
   models: {
     hp_local: "Hamilton-Perry with per-area CCRs (same as forward projection model)",
     hp_national: "Hamilton-Perry with national-average CCRs only (baseline)",
@@ -536,7 +609,7 @@ const hpMAE = validation.summary.hp_local.mae;
 const sigmaRecommendation = r(hpMAE / 100); // Convert pp to proportion
 validation.sigmaRecommendation = {
   value: sigmaRecommendation,
-  description: `CCR_SIGMA_BASE should be ${sigmaRecommendation} (MAE ${hpMAE}pp / 100). v6.0 current: 0.02 (from HP backcast MAE 2.45pp).`
+  description: `CCR_SIGMA_BASE should be ${sigmaRecommendation} (MAE ${hpMAE}pp / 100). v7.0 current: 0.02 (from HP backcast MAE 1.71pp).`
 };
 
 // ============================================================

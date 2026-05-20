@@ -91,6 +91,13 @@ const grantRates = grantRateData as any;
 const topGrantRates = (grantRates.leagueTable || []).slice(0, 8);
 const bottomGrantRates = [...(grantRates.leagueTable || [])].sort((a: any, b: any) => a.grantRatePct - b.grantRatePct).slice(0, 8);
 const topClaimants = (grantRates.volumeRanking || []).slice(0, 8);
+const hasAppealData = grantRates.summary?.nationalitiesWithAppealData > 0;
+const biggestUplifts = hasAppealData
+  ? (grantRates.leagueTable || [])
+      .filter((r: any) => r.appealUpliftPp > 10 && r.substantiveDecisions >= 200)
+      .sort((a: any, b: any) => b.appealUpliftPp - a.appealUpliftPp)
+      .slice(0, 8)
+  : [];
 const schoolStats = (schoolValidationData as any).validationStats;
 
 const sections = [
@@ -104,7 +111,7 @@ const sections = [
 ---
 
 <BaseLayout
-  title="National Overview - asylumstats"
+  title="UK asylum statistics — national overview, grant rates, ethnic projections | asylumstats"
   description={`UK asylum system: ${latestQuarter.supportedAsylum.toLocaleString()} on support, ${latestQuarter.awaitingInitialDecision.toLocaleString()} awaiting decision, ${fmtGbp(dailyCostGbp)}/day on hotels.`}
 >
   <section class="page-top">
@@ -274,10 +281,16 @@ const sections = [
       </div>
     </div>
 
-    <div class="grid-2">
+    {/* Grant rate toggle: initial vs after appeals */}
+    <div class="grant-rate-toggle" style="margin-bottom: 0.75rem;">
+      <button class="tab-btn grant-tab active" data-grant-view="initial" aria-pressed="true">Initial decisions</button>
+      <button class="tab-btn grant-tab" data-grant-view="true" aria-pressed="false">After appeals</button>
+    </div>
+
+    <div class="grid-2" id="grant-initial-view">
       <article class="feature-card">
         <h3>Highest grant rates</h3>
-        <p class="tiny" style="opacity: 0.6;">Nationalities most likely granted protection</p>
+        <p class="tiny" style="opacity: 0.6;">Nationalities most likely granted protection (initial decision)</p>
         <div class="data-list">
           {topGrantRates.map((row: any) => (
             <div class="data-row">
@@ -287,10 +300,9 @@ const sections = [
           ))}
         </div>
       </article>
-
       <article class="feature-card">
         <h3>Lowest grant rates</h3>
-        <p class="tiny" style="opacity: 0.6;">Nationalities most likely refused — likely economic migration</p>
+        <p class="tiny" style="opacity: 0.6;">Nationalities most likely refused (initial decision)</p>
         <div class="data-list">
           {bottomGrantRates.map((row: any) => (
             <div class="data-row">
@@ -301,6 +313,60 @@ const sections = [
         </div>
       </article>
     </div>
+
+    <div class="grid-2" id="grant-true-view" style="display: none;">
+      <article class="feature-card">
+        <h3>Highest true grant rates</h3>
+        <p class="tiny" style="opacity: 0.6;">After appeals — the real protection rate</p>
+        <div class="data-list">
+          {(grantRates.leagueTable || [])
+            .filter((r: any) => r.trueGrantRatePct != null)
+            .sort((a: any, b: any) => b.trueGrantRatePct - a.trueGrantRatePct)
+            .slice(0, 8)
+            .map((row: any) => (
+              <div class="data-row">
+                <span style="font-size: 0.85rem;">{row.nationality}</span>
+                <span class="data-row-meta">
+                  <span style="color: var(--muted); font-size: 0.72rem; text-decoration: line-through;">{row.grantRatePct}%</span>
+                  <span style="color: var(--accent-success, #10B981); font-weight: 600; margin-left: 0.3rem;">{row.trueGrantRatePct}%</span>
+                </span>
+              </div>
+            ))}
+        </div>
+      </article>
+      <article class="feature-card">
+        <h3>Biggest appeal uplifts</h3>
+        <p class="tiny" style="opacity: 0.6;">Where appeals change the story most</p>
+        <div class="data-list">
+          {biggestUplifts.map((row: any) => (
+            <div class="data-row">
+              <span style="font-size: 0.85rem;">{row.nationality}</span>
+              <span class="data-row-meta">
+                <span style="color: var(--muted); font-size: 0.78rem;">{row.grantRatePct}%</span>
+                <span style="color: var(--muted); font-size: 0.78rem;"> → </span>
+                <span style="color: var(--accent-success, #10B981); font-weight: 600;">{row.trueGrantRatePct}%</span>
+                <span style="color: #f59e0b; font-size: 0.72rem; margin-left: 0.3rem;">+{row.appealUpliftPp}pp</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </article>
+    </div>
+
+    <script>
+      document.querySelectorAll('.grant-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.grant-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+          const view = btn.getAttribute('data-grant-view');
+          document.getElementById('grant-initial-view')!.style.display = view === 'initial' ? '' : 'none';
+          document.getElementById('grant-true-view')!.style.display = view === 'true' ? '' : 'none';
+        });
+      });
+    </script>
+
+    {/* Appeal uplift data now shown in the toggle above */}
 
     <article class="feature-card" style="margin-top: 1rem;">
       <h3>Top claimant nationalities (all time)</h3>

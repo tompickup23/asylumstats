@@ -213,6 +213,143 @@ const output = {
   annualOverall
 };
 
+// ── ASY_D04: Outcome Analysis — Initial + Appeal (True Grant Rate) ──
+const OUTCOME_SOURCE = path.resolve("data/raw/uk_routes/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx");
+console.log("\n\n=== OUTCOME ANALYSIS (Asy_D04): True Grant Rates ===");
+console.log(`Reading ${OUTCOME_SOURCE}...`);
+
+try {
+  const wbOutcome = xlsx.readFile(OUTCOME_SOURCE, { raw: false });
+  const wsOutcome = wbOutcome.Sheets["Data_Asy_D04"];
+  const outcomeRows = xlsx.utils.sheet_to_json(wsOutcome, { header: 1, raw: false, defval: "" });
+  console.log(`  ${outcomeRows.length} rows`);
+
+  // Row 0 is title, row 1 is headers
+  // Columns: Year of Claim, Region, Nationality, Claims,
+  //   Initial Decisions, Initial: Grants of Protection, Initial: Grants of Other Leave,
+  //   Initial: Refusals, Initial: Withdrawals, Initial: Administrative Outcomes, Initial: Not yet known,
+  //   Enforced Returns, Voluntary Returns, ...,
+  //   Latest: Grants of Protection, Latest: Grants of Other Leave,
+  //   Latest: Refusals, Latest: Withdrawals, Latest: Administrative Outcomes, Latest: Not yet known
+
+  // Aggregate by nationality (recent claim years 2020-2024 for stable latest outcomes)
+  const outcomeByNat = {};
+  for (let i = 2; i < outcomeRows.length; i++) {
+    const row = outcomeRows[i];
+    const year = parseInt(row[0]);
+    const nationality = String(row[2] || "").trim();
+    if (!year || !nationality) continue;
+    if (nationality === "Total" || nationality.startsWith("Total ") || nationality === "Other" || nationality === "Refugee" || nationality === "Stateless person") continue;
+    if (nationality.includes("(excluding")) continue;
+
+    // Use claims from 2015-2023 (older claims have more settled outcomes)
+    if (year < 2015 || year > 2023) continue;
+
+    const claims = safeInt(row[3]);
+    const initialDecisions = safeInt(row[4]);
+    const initialGrantsProt = safeInt(row[5]);
+    const initialGrantsOther = safeInt(row[6]);
+    const initialRefusals = safeInt(row[7]);
+    const initialWithdrawn = safeInt(row[8]);
+    const latestGrantsProt = safeInt(row[16]);
+    const latestGrantsOther = safeInt(row[17]);
+    const latestRefusals = safeInt(row[18]);
+    const latestWithdrawn = safeInt(row[19]);
+    const latestAdmin = safeInt(row[20]);
+    const latestNotYetKnown = safeInt(row[21]);
+
+    if (!outcomeByNat[nationality]) {
+      outcomeByNat[nationality] = {
+        claims: 0, initialDecisions: 0,
+        initialGrants: 0, initialRefusals: 0, initialWithdrawn: 0,
+        latestGrants: 0, latestRefusals: 0, latestWithdrawn: 0,
+        latestNotYetKnown: 0
+      };
+    }
+    const d = outcomeByNat[nationality];
+    d.claims += claims;
+    d.initialDecisions += initialDecisions;
+    d.initialGrants += initialGrantsProt + initialGrantsOther;
+    d.initialRefusals += initialRefusals;
+    d.initialWithdrawn += initialWithdrawn;
+    d.latestGrants += latestGrantsProt + latestGrantsOther;
+    d.latestRefusals += latestRefusals;
+    d.latestWithdrawn += latestWithdrawn;
+    d.latestNotYetKnown += latestNotYetKnown;
+  }
+
+  // Compute true grant rates and merge into league table
+  const trueGrantRates = {};
+  for (const [nat, d] of Object.entries(outcomeByNat)) {
+    const initialSub = d.initialGrants + d.initialRefusals;
+    const latestSub = d.latestGrants + d.latestRefusals;
+    if (latestSub < 50) continue;
+
+    const initialRate = initialSub > 0 ? Math.round(d.initialGrants / initialSub * 1000) / 10 : null;
+    const latestRate = Math.round(d.latestGrants / latestSub * 1000) / 10;
+    const appealUplift = (initialRate !== null) ? Math.round((latestRate - initialRate) * 10) / 10 : null;
+
+    trueGrantRates[nat] = {
+      claims: d.claims,
+      initialGrantRatePct: initialRate,
+      trueGrantRatePct: latestRate,
+      appealUpliftPp: appealUplift,
+      latestGrants: d.latestGrants,
+      latestRefusals: d.latestRefusals,
+      latestSubstantive: latestSub,
+      latestNotYetKnown: d.latestNotYetKnown,
+      pctResolved: Math.round((1 - d.latestNotYetKnown / Math.max(d.claims, 1)) * 1000) / 10
+    };
+  }
+
+  // Merge true grant rates into league table entries
+  for (const entry of output.leagueTable) {
+    const tgr = trueGrantRates[entry.nationality];
+    if (tgr) {
+      entry.trueGrantRatePct = tgr.trueGrantRatePct;
+      entry.appealUpliftPp = tgr.appealUpliftPp;
+      entry.latestGrants = tgr.latestGrants;
+      entry.latestRefusals = tgr.latestRefusals;
+      entry.latestSubstantive = tgr.latestSubstantive;
+      entry.pctResolved = tgr.pctResolved;
+    }
+  }
+
+  // Add outcome analysis metadata to output
+  output.outcomeAnalysis = {
+    source: "Home Office Immigration Statistics: Outcome analysis (Asy_D04), Dec 2025 release",
+    claimYears: "2015-2023",
+    methodology: "True grant rate = (latest grants of protection + other leave) / (latest grants + latest refusals) × 100. 'Latest' outcome includes appeal results and all subsequent decisions. Claim years 2015-2023 used so most cases have settled outcomes.",
+    nationalitiesWithTrueRate: Object.keys(trueGrantRates).length,
+    trueGrantRates
+  };
+
+  // Print biggest appeal uplifts
+  const bigUplift = Object.entries(trueGrantRates)
+    .filter(([, d]) => d.appealUpliftPp !== null && d.latestSubstantive >= 200)
+    .sort(([, a], [, b]) => b.appealUpliftPp - a.appealUpliftPp);
+
+  console.log(`\nTrue grant rates computed for ${Object.keys(trueGrantRates).length} nationalities`);
+  console.log(`\nBiggest appeal uplifts (≥200 decisions):`);
+  for (const [nat, d] of bigUplift.slice(0, 15)) {
+    console.log(`  ${nat}: ${d.initialGrantRatePct}% → ${d.trueGrantRatePct}% (+${d.appealUpliftPp}pp)`);
+  }
+
+  // Summary stats
+  const withUplift = bigUplift.filter(([, d]) => d.appealUpliftPp > 0);
+  const avgUplift = withUplift.length > 0
+    ? Math.round(withUplift.reduce((s, [, d]) => s + d.appealUpliftPp, 0) / withUplift.length * 10) / 10
+    : 0;
+  console.log(`\n${withUplift.length} nationalities see appeal uplift (avg +${avgUplift}pp)`);
+
+  output.summary.avgAppealUpliftPp = avgUplift;
+  output.summary.nationalitiesWithAppealData = Object.keys(trueGrantRates).length;
+
+} catch (err) {
+  console.log(`  Warning: Could not read outcome analysis file: ${err.message}`);
+  console.log("  Continuing without true grant rates.");
+}
+
 writeFileSync(OUTPUT, JSON.stringify(output, null, 2), "utf8");
 
 // Print summary

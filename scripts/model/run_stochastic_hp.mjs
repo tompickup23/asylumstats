@@ -15,8 +15,8 @@
  *   - P10/P90 = 80% prediction interval
  *   - P2.5/P97.5 = 95% prediction interval
  *
- * σ calibrated from HP v6.0 backcast: MAE 2.45pp over 10 years
- * → per-cohort CCR σ = 0.02 (Census-direct base eliminates IPF noise)
+ * σ calibrated from HP v7.0 backcast: MAE 1.71pp over 10 years
+ * → per-cohort CCR σ = 0.02 (Census 2011 DC2101EW + Census 2021 direct base)
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -37,10 +37,10 @@ const N_SIMULATIONS = 1000;
 const PROJ_YEARS = [2031, 2041, 2051, 2061];
 
 // FIX 1: Cell-size-dependent σ + horizon scaling
-// Base σ calibrated from HP v6.0 backcast MAE: 2.45pp → base σ = 0.02
-// (Recalibrated Apr 2026: v5.0 was 0.04 (MAE 3.57pp). v6.0 Census-direct base
-//  eliminates IPF noise, reducing MAE to 2.45pp (RMSE 2.62pp).
-//  Still beats NEWETHPOP 2.58pp and national-CCR baseline 2.88pp.)
+// Base σ calibrated from HP v7.0 backcast MAE: 1.71pp → base σ = 0.02
+// History: v5.0 σ=0.04 (MAE 3.57pp). v6.0 σ=0.02 (MAE 2.45pp, Census-direct).
+// v7.0 σ=0.02 (MAE 1.71pp, Census 2011 DC2101EW + Beers interpolation).
+// Beats NEWETHPOP 2.58pp by 33% and national-CCR baseline 2.32pp.
 // Additional uncertainty for small populations: 0.25 / sqrt(pop)
 // Horizon scaling: σ_t = σ_base * sqrt(t/10) (uncertainty compounds over time)
 const CCR_SIGMA_BASE = 0.02;
@@ -379,7 +379,7 @@ for (const code of areaCodes) {
 
 existing.modelVersion = "6.0-stochastic-hp";
 existing.lastUpdated = new Date().toISOString().slice(0, 10);
-existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.02 calibrated from HP v6.0 backcast validation: MAE 2.45pp over 269 areas). Reports median + 80%/95% prediction intervals.";
+existing.methodology += " Monte Carlo stochastic projection (1000 simulations, CCR σ=0.02 calibrated from HP v7.0 backcast validation: MAE 1.71pp over 269 areas). Reports median + 80%/95% prediction intervals.";
 
 writeFileSync(SITE_OUTPUT, JSON.stringify(existing, null, 2), "utf8");
 console.log("Done.");
