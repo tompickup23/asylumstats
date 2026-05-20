@@ -22,9 +22,10 @@ interface Props {
   nowYear?: number;
   yLabel?: string;
   height?: number;
+  caption?: string;
 }
 
-const { title, lines, confidenceBand, nowYear = 2021, yLabel = "%", height: chartHeight = 220 } = Astro.props;
+const { title, lines, confidenceBand, nowYear = 2021, yLabel = "%", height: chartHeight = 220, caption } = Astro.props;
 
 const width = 560;
 const height = chartHeight;
@@ -141,6 +142,7 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
     ))}
     {confidenceBand && <span class="proj-legend-item"><span class="proj-legend-swatch" style="background: rgba(6, 182, 212, 0.3)"></span> 80% CI</span>}
   </div>
+  {caption && <p class="proj-caption">{caption}</p>}
 </figure>
 
 <style>
@@ -153,4 +155,5 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
   .proj-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
   .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--muted); }
   .proj-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .proj-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.4; }
 </style>

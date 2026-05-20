@@ -13,13 +13,13 @@ video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/cards/true-cost-of-asylum_og.png"
 ---
 
+> **Updated 14 April 2026.** Second edition. Adds seven cost categories not in the original: post-decision welfare, family reunion dependants, criminal justice, integration, translation, and modern slavery support. The total rises from £5.8 billion to over £8 billion.
+
 **£5.77 million per day on asylum hotels.** That is the number the Home Office publishes. It is real. It is sourced. And it is less than a third of the actual bill.
 
 The total annual cost of the UK asylum system is **at least £8 billion**. Over £230 for every income taxpayer. Every year. That is the minimum defensible figure from published government data. The actual cost is almost certainly higher.
 
 No official body has published the complete total. The Home Office publishes hotel costs. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did.
-
-**Updated 14 April 2026:** This second edition adds seven cost categories not included in the original calculation: post-decision welfare, family reunion dependants, criminal justice, integration, translation, and modern slavery support. The total rises from £5.8 billion to over £8 billion.
 
 ## The full breakdown
 

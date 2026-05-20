@@ -453,6 +453,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         confidenceBand={ethConfidenceBand}
         nowYear={2021}
         yLabel="% of population"
+        caption="Each line shows one ethnic group's share of the local population. The shaded band is the 80% confidence range. Values after 2051 are illustrative only."
       />
       {ethnicTimeline && ethnicTimeline.length > 0 && (
         <div style="margin-top: 1.25rem;">
@@ -490,7 +491,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`Religion: ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
+      <ProjectionChart title={`Religion: ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" caption="Religious affiliation projected from Census 2021 self-identification. Trends reflect demographic change in the existing population, not religious conversion." />
     </section>
   )}
 
@@ -508,7 +509,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`UK-born vs foreign-born: ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
+      <ProjectionChart title={`UK-born vs foreign-born: ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} caption="Share of the local population born outside the UK. Movement reflects both new arrivals and the UK-born children of existing residents reaching adulthood." />
       {migrationProfile && (
         <p class="tiny" style="margin-top: 0.5rem; opacity: 0.5;">
           {migrationProfile.maturityLevel}: {migrationProfile.implication}
