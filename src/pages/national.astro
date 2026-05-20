@@ -111,7 +111,7 @@ const sections = [
 ---
 
 <BaseLayout
-  title="UK asylum statistics — national overview, grant rates, ethnic projections | asylumstats"
+  title="UK asylum statistics: national overview, grant rates, ethnic projections | asylumstats"
   description={`UK asylum system: ${latestQuarter.supportedAsylum.toLocaleString()} on support, ${latestQuarter.awaitingInitialDecision.toLocaleString()} awaiting decision, ${fmtGbp(dailyCostGbp)}/day on hotels.`}
 >
   <section class="page-top">
@@ -276,7 +276,7 @@ const sections = [
           {grantRates.summary?.nationalitiesInLeagueTable} nationalities assessed (2020-2025).
           {grantRates.summary?.genuineRefugeeNationalities} with 75%+ grant rate,
           {grantRates.summary?.likelyEconomicMigrationNationalities} with under 25%.
-          Initial decisions only — appeal outcomes raise true rates.
+          Initial decisions only. The real protection rate is higher after appeals are counted.
         </p>
       </div>
     </div>
@@ -317,7 +317,7 @@ const sections = [
     <div class="grid-2" id="grant-true-view" style="display: none;">
       <article class="feature-card">
         <h3>Highest true grant rates</h3>
-        <p class="tiny" style="opacity: 0.6;">After appeals — the real protection rate</p>
+        <p class="tiny" style="opacity: 0.6;">After appeals: the real protection rate.</p>
         <div class="data-list">
           {(grantRates.leagueTable || [])
             .filter((r: any) => r.trueGrantRatePct != null)

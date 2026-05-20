@@ -208,7 +208,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
 ---
 
 <BaseLayout
-  title={`Asylum seekers in ${area.areaName} — ${area.supportedAsylum.toLocaleString()} on support | asylumstats`}
+  title={`Asylum seekers in ${area.areaName}: ${area.supportedAsylum.toLocaleString()} on support | asylumstats`}
   description={pageDescription}
   structuredData={pageStructuredData}
 >
@@ -321,7 +321,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             <span class="metric-value">
               {areaTrend.deltaFromPrevious !== null
                 ? `${areaTrend.deltaFromPrevious >= 0 ? "+" : ""}${areaTrend.deltaFromPrevious.toLocaleString()}`
-                : "—"}
+                : "n/a"}
             </span>
             <span class="metric-label">Latest quarter change</span>
           </div>
@@ -697,7 +697,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
               <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: rgba(6,182,212,0.04); border-radius: 6px; border: 1px solid rgba(6,182,212,0.1);">
                 <p class="tiny" style="margin: 0;">
                   <strong>Fertility proxy (10-year school trend):</strong> WBI share in primary schools changing at {sfp.annualWbiChangePp > 0 ? "+" : ""}{sfp.annualWbiChangePp}pp/year.
-                  {sfp.annualWbiChangePp < -1 ? " Rapid diversification in young cohorts — the demographic wave is accelerating." :
+                  {sfp.annualWbiChangePp < -1 ? " Rapid diversification in young cohorts. The demographic wave is accelerating." :
                    sfp.annualWbiChangePp < 0 ? " Gradual diversification in school-age population." :
                    " WBI share stable or increasing in schools."}
                 </p>
