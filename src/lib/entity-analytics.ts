@@ -48,8 +48,8 @@ export interface EntityTimelineEvent {
   kind: "site_public" | "site_latest" | "money_row";
   title: string;
   detail: string;
-  href: string;
-  cta: string;
+  href?: string;
+  cta?: string;
 }
 
 export interface EntityTimelineSummary {
@@ -116,15 +116,6 @@ function compareAreas(left: EntityProfileArea, right: EntityProfileArea): number
 function parseDate(value: string | null | undefined): string | null {
   const normalized = String(value ?? "").trim();
   return normalized || null;
-}
-
-function buildHotelHref(siteName: string, status: string): string {
-  const search = new URLSearchParams({
-    hotel_q: siteName,
-    hotel_status: status
-  });
-
-  return `/hotels/?${search.toString()}#hotel-filters`;
 }
 
 function buildMoneyHref(query: string): string {
@@ -340,9 +331,7 @@ export function getEntityTimeline(profile: EntityProfile, limit = 8): EntityTime
         date: firstPublicDate,
         kind: "site_public",
         title: `${site.siteName} enters the public record`,
-        detail: `${site.areaName} appears in the visible site chain for ${profile.entityName}.`,
-        href: buildHotelHref(site.siteName, site.status),
-        cta: "Open hotel trail"
+        detail: `${site.areaName} appears in the visible site chain for ${profile.entityName}.`
       });
     }
 
@@ -352,9 +341,7 @@ export function getEntityTimeline(profile: EntityProfile, limit = 8): EntityTime
         date: lastPublicDate,
         kind: "site_latest",
         title: `${site.siteName} is last publicly visible in the historical ledger`,
-        detail: `${site.areaName} remains part of the historical site chain rather than the current named estate.`,
-        href: buildHotelHref(site.siteName, site.status),
-        cta: "Open historical hotel trail"
+        detail: `${site.areaName} remains part of the historical site chain rather than the current named estate.`
       });
     }
   }

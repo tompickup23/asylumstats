@@ -21,7 +21,7 @@ describe("investigation trails", () => {
 
     expect(trails).toHaveLength(3);
     expect(new Set(trails.map((trail) => trail.areaCode ?? trail.areaName)).size).toBe(3);
-    expect(trails.every((trail) => trail.steps.length === 3)).toBe(true);
+    expect(trails.every((trail) => trail.steps.length === 2)).toBe(true);
     expect(trails.some((trail) => trail.moneyMatchType === "direct")).toBe(true);
   });
 

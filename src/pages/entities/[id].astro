@@ -161,15 +161,6 @@ function formatDate(value: string | null | undefined): string {
   }).format(new Date(value));
 }
 
-function buildHotelHref(siteName: string, status: string): string {
-  const search = new URLSearchParams({
-    hotel_q: siteName,
-    hotel_status: status
-  });
-
-  return `/hotels/?${search.toString()}#hotel-filters`;
-}
-
 function buildMoneyHref(query: string): string {
   const search = new URLSearchParams({ money_q: query });
   return `/spending/?${search.toString()}#money-explorer`;
@@ -329,9 +320,11 @@ function formatSourceKind(kind: string): string {
             </div>
             <h3>{event.title}</h3>
             <p class="lede">{event.detail}</p>
-            <p class="tiny">
-              <a class="source-pill" href={event.href}>{event.cta}</a>
-            </p>
+            {event.href && event.cta && (
+              <p class="tiny">
+                <a class="source-pill" href={event.href}>{event.cta}</a>
+              </p>
+            )}
           </article>
         ))}
       </div>
@@ -561,7 +554,6 @@ function formatSourceKind(kind: string): string {
               </div>
             </div>
             <p class="tiny">
-              <a class="source-pill" href={buildHotelHref(site.siteName, site.status)}>Open hotel view</a>
               <a class="source-pill" href={buildPlaceHref(site.areaCode)}>Open place profile</a>
             </p>
           </article>
