@@ -5,7 +5,7 @@ import { getEntityProfiles, type EntityProfile } from "./entities";
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
 export const DEFAULT_DESCRIPTION =
-  "Follow YOUR money. UK asylum costs, routes, and demographic impact — every figure sourced, every claim checked.";
+  "Follow YOUR money. UK asylum costs, routes, and demographic impact. Every figure sourced, every claim checked.";
 export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-card.png";
 
 export type StructuredDataNode = Record<string, unknown>;
