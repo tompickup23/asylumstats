@@ -40,6 +40,51 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     searchText: "places regions map local authorities supported asylum contingency hotel visibility place directory"
   },
   {
+    href: "/national/",
+    title: "National",
+    kind: "page",
+    kicker: "UK-wide totals",
+    description: "UK-level totals across supported asylum, contingency accommodation, routes, demographics, and the public money surface.",
+    priority: 118,
+    searchText: "national uk-wide totals supported asylum contingency routes demographics money headline figures national overview united kingdom england"
+  },
+  {
+    href: "/regional/",
+    title: "Regional",
+    kind: "page",
+    kicker: "Regions and nations",
+    description: "Nine English regions plus Scotland, Wales, and Northern Ireland with comparable pressure, money, and demographic readings.",
+    priority: 113,
+    searchText: "regional regions english regions scotland wales northern ireland nations regional pressure comparable readings nine regions"
+  },
+  {
+    href: "/councils/",
+    title: "Councils",
+    kind: "page",
+    kicker: "By council",
+    description: "Local authority view of supported asylum and contingency accommodation, with named-hotel evidence layered on each council page.",
+    priority: 114,
+    searchText: "councils local authorities council accommodation supported asylum contingency named hotels council pages by-council view"
+  },
+  {
+    href: "/spending/",
+    title: "Spending",
+    kind: "page",
+    kicker: "Money trail",
+    description: "£8.1B True Cost breakdown of UK asylum spend by department, supplier, and route, with every figure tied to a public money row.",
+    priority: 117,
+    searchText: "spending true cost money asylum costs eight billion 8.1bn departments suppliers contracts routes money trail expenditure budget"
+  },
+  {
+    href: "/entities/",
+    title: "Entities",
+    kind: "page",
+    kicker: "Suppliers and contractors",
+    description: "Profiles of the suppliers, contractors, and corporate vehicles attached to the public asylum money trail and the named hotel estate.",
+    priority: 115,
+    searchText: "entities suppliers contractors providers corporate vehicles serco mears clearsprings prime providers contractors profiles ownership"
+  },
+  {
     href: "/compare/",
     title: "Compare",
     kind: "page",
@@ -56,6 +101,15 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     description: "Official route families, stock-flow logic, trend charts, and national system context.",
     priority: 116,
     searchText: "routes national route families small boats asylum trend charts backlog support appeals returns"
+  },
+  {
+    href: "/findings/",
+    title: "Findings",
+    kind: "page",
+    kicker: "Published investigations",
+    description: "Every published investigation: data-backed findings with full source citations across spending, routes, demographics, backlog, accountability, crime, SEND, and social care.",
+    priority: 115,
+    searchText: "findings investigations research analysis published findings data-backed evidence citations spending routes demographics backlog accountability crime send social care pressure"
   },
   {
     href: "/releases/",
@@ -85,6 +139,15 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     description: "Editorial and data rules for route specificity, local relevance, and publishability.",
     priority: 109,
     searchText: "methodology scope rules route specificity local relevance publishability"
+  },
+  {
+    href: "/glossary/",
+    title: "Glossary",
+    kind: "page",
+    kicker: "Terms and definitions",
+    description: "Definitions for every term, acronym, route family, and statutory framework used across the site.",
+    priority: 105,
+    searchText: "glossary terms definitions acronyms route families statutory frameworks asylum support contingency definitions"
   }
 ];
 

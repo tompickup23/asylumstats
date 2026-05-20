@@ -20,11 +20,18 @@ export interface ReleaseEntry {
 const INDEXABLE_STATIC_PATHS = [
   "/",
   "/places/",
+  "/national/",
+  "/regional/",
+  "/councils/",
+  "/spending/",
+  "/entities/",
   "/compare/",
   "/routes/",
+  "/findings/",
   "/releases/",
   "/sources/",
-  "/methodology/"
+  "/methodology/",
+  "/glossary/"
 ] as const;
 
 function slugifyRegionName(regionName: string): string {

@@ -32,13 +32,14 @@ describe("site metadata helpers", () => {
     expect(paths).toContain("/places/");
     expect(paths.some((path) => path.startsWith("/places/regions/"))).toBe(true);
     expect(paths).toContain("/routes/");
-    expect(paths).not.toContain("/entities/");
+    expect(paths).toContain("/entities/");
+    expect(paths).toContain("/spending/");
+    expect(paths).toContain("/councils/");
     expect(paths).not.toContain("/hotels/");
-    expect(paths).not.toContain("/spending/");
-    expect(paths.some((path) => path.startsWith("/entities/"))).toBe(false);
+    // Hub pages are indexable; individual noindex'd profile pages must not slip in
+    expect(paths.some((path) => /^\/entities\/[^/]+/.test(path))).toBe(false);
+    expect(paths.some((path) => /^\/councils\/[^/]+/.test(path))).toBe(false);
     expect(paths.some((path) => path.startsWith("/places/"))).toBe(true);
-    expect(paths).not.toContain("/councils/");
-    expect(paths.some((path) => path.startsWith("/councils/"))).toBe(false);
   });
 
   it("defaults social images to the generated PNG card", () => {
