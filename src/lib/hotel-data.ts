@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface HotelFact {
   label: string;
@@ -149,8 +150,7 @@ export interface HotelEntityLedger {
 }
 
 function readProjectJson<T>(projectRelativePath: string): T {
-  const fileUrl = new URL(`../../${projectRelativePath}`, import.meta.url);
-  return JSON.parse(readFileSync(fileUrl, "utf8")) as T;
+  return JSON.parse(readFileSync(join(process.cwd(), projectRelativePath), "utf8")) as T;
 }
 
 export function loadHotelEntityLedger(): HotelEntityLedger {

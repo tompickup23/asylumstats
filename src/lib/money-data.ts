@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface MoneyRecordLinkedSite {
   siteId: string;
@@ -100,8 +101,7 @@ export interface MoneyLedger {
 }
 
 function readProjectJson<T>(projectRelativePath: string): T {
-  const fileUrl = new URL(`../../${projectRelativePath}`, import.meta.url);
-  return JSON.parse(readFileSync(fileUrl, "utf8")) as T;
+  return JSON.parse(readFileSync(join(process.cwd(), projectRelativePath), "utf8")) as T;
 }
 
 export function loadMoneyLedger(): MoneyLedger {
