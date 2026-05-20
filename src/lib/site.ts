@@ -22,6 +22,7 @@ const INDEXABLE_STATIC_PATHS = [
   "/places/",
   "/compare/",
   "/routes/",
+  "/hotels/",
   "/releases/",
   "/sources/",
   "/methodology/"

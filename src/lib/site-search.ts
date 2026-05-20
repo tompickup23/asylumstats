@@ -58,6 +58,15 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     searchText: "routes national route families small boats asylum trend charts backlog support appeals returns"
   },
   {
+    href: "/hotels/",
+    title: "Hotels",
+    kind: "page",
+    kicker: "Named sites & visibility gaps",
+    description: "Hotel ledger: named current and historical sites, parliamentary references, prime-provider breakdown, and the visibility gap where local authorities acknowledge unnamed accommodation.",
+    priority: 114,
+    searchText: "hotels asylum accommodation named sites visibility gap parliamentary references prime providers serco mears clearsprings unnamed sites contingency archive snapshot ledger"
+  },
+  {
     href: "/releases/",
     title: "Releases",
     kind: "page",
