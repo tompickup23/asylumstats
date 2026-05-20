@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface CouncilCatalogEntry {
   bodyId: string;
@@ -146,8 +147,7 @@ export interface CouncilSnapshot {
 }
 
 function readProjectJson<T>(projectRelativePath: string): T {
-  const fileUrl = new URL(`../../${projectRelativePath}`, import.meta.url);
-  return JSON.parse(readFileSync(fileUrl, "utf8")) as T;
+  return JSON.parse(readFileSync(join(process.cwd(), projectRelativePath), "utf8")) as T;
 }
 
 function buildSourceFamilies(files: RawManifestFile[]): SourceFamily[] {

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface RouteCard {
   id: string;
@@ -198,8 +199,7 @@ export interface LocalRouteLatest {
 }
 
 function readProjectJson<T>(projectRelativePath: string): T {
-  const fileUrl = new URL(`../../${projectRelativePath}`, import.meta.url);
-  return JSON.parse(readFileSync(fileUrl, "utf8")) as T;
+  return JSON.parse(readFileSync(join(process.cwd(), projectRelativePath), "utf8")) as T;
 }
 
 export function loadRouteDashboard(): RouteDashboard {
