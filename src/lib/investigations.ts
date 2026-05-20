@@ -162,19 +162,6 @@ function buildSiteTrail(site: HotelSiteSummary, area: LocalRouteAreaSummary | un
     ],
     steps: [
       {
-        label: "Hotel evidence",
-        body: "Filter the hotel ledger straight to this site and its current chain status.",
-        href: buildFilterHref(
-          "/hotels/",
-          {
-            hotel_q: site.siteName,
-            hotel_status: site.status
-          },
-          "hotel-filters"
-        ),
-        cta: "Open hotel trail"
-      },
-      {
         label: "Money trail",
         body:
           match.matchType === "direct" && leadRecord
@@ -224,19 +211,6 @@ function buildAreaVisibilityTrail(area: LocalRouteAreaSummary, hotelArea: HotelA
     tone: "accent",
     chips: [area.areaName, "unnamed-only", "source-backed"],
     steps: [
-      {
-        label: "Hotel visibility",
-        body: "Filter the hotel ledger to the unnamed-only view for this area.",
-        href: buildFilterHref(
-          "/hotels/",
-          {
-            hotel_q: area.areaName,
-            hotel_visibility: "unnamed-only"
-          },
-          "hotel-filters"
-        ),
-        cta: "Open visibility gap"
-      },
       {
         label: "Place pressure",
         body: `${area.supportedAsylum.toLocaleString()} people were on asylum support here at quarter end. The pressure line and the visibility gap belong in the same frame.`,
