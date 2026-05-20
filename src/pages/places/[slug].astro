@@ -231,7 +231,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         />
         <ShareButton
           url={buildAbsoluteUrl(Astro.url.pathname)}
-          title={`${area.areaName} - asylumstats`}
+          title={`${area.areaName} | asylumstats`}
           text={`${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally. See the full data.`}
           compact
         />
@@ -448,7 +448,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         </div>
       </div>
       <ProjectionChart
-        title={`Ethnic composition - ${area.areaName}`}
+        title={`Ethnic composition: ${area.areaName}`}
         lines={ethChartLines}
         confidenceBand={ethConfidenceBand}
         nowYear={2021}
@@ -490,7 +490,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`Religion - ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
+      <ProjectionChart title={`Religion: ${area.areaName}`} lines={relChartLines} nowYear={2021} yLabel="%" />
     </section>
   )}
 
@@ -508,7 +508,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           </p>
         </div>
       </div>
-      <ProjectionChart title={`UK-born vs foreign-born - ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
+      <ProjectionChart title={`UK-born vs foreign-born: ${area.areaName}`} lines={natChartLines} nowYear={2021} yLabel="%" height={180} />
       {migrationProfile && (
         <p class="tiny" style="margin-top: 0.5rem; opacity: 0.5;">
           {migrationProfile.maturityLevel}: {migrationProfile.implication}
