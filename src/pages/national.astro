@@ -111,14 +111,14 @@ const sections = [
 ---
 
 <BaseLayout
-  title="UK asylum statistics — national overview, grant rates, ethnic projections | asylumstats"
+  title="UK asylum statistics: national overview, grant rates, ethnic projections | asylumstats"
   description={`UK asylum system: ${latestQuarter.supportedAsylum.toLocaleString()} on support, ${latestQuarter.awaitingInitialDecision.toLocaleString()} awaiting decision, ${fmtGbp(dailyCostGbp)}/day on hotels.`}
 >
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">National</span>
       <h1>The national asylum picture</h1>
-      <p>Routes, spending, and findings - all in one place.</p>
+      <p>Routes, spending, and findings. All in one place.</p>
     </section>
   </section>
 
@@ -276,7 +276,7 @@ const sections = [
           {grantRates.summary?.nationalitiesInLeagueTable} nationalities assessed (2020-2025).
           {grantRates.summary?.genuineRefugeeNationalities} with 75%+ grant rate,
           {grantRates.summary?.likelyEconomicMigrationNationalities} with under 25%.
-          Initial decisions only — appeal outcomes raise true rates.
+          Initial decisions only. The real protection rate is higher after appeals are counted.
         </p>
       </div>
     </div>
@@ -317,7 +317,7 @@ const sections = [
     <div class="grid-2" id="grant-true-view" style="display: none;">
       <article class="feature-card">
         <h3>Highest true grant rates</h3>
-        <p class="tiny" style="opacity: 0.6;">After appeals — the real protection rate</p>
+        <p class="tiny" style="opacity: 0.6;">After appeals: the real protection rate.</p>
         <div class="data-list">
           {(grantRates.leagueTable || [])
             .filter((r: any) => r.trueGrantRatePct != null)
@@ -403,7 +403,7 @@ const sections = [
     <div class="section-head">
       <div>
         <h2>Spending</h2>
-        <p class="lede">Where the money goes - contracts, suppliers, and the hotel bill.</p>
+        <p class="lede">Where the money goes: contracts, suppliers, and the hotel bill.</p>
       </div>
       <a class="source-pill" href="/spending/">Full spending detail &rarr;</a>
     </div>

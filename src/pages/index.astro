@@ -124,7 +124,7 @@ function findingColor(verdict: string): string {
 ---
 
 <BaseLayout
-  title="asylumstats — UK asylum data, hotel costs, ethnic projections by local authority"
+  title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
   description={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. ${fmtInt(latestQuarter.awaitingInitialDecision)} people waiting for a decision. Track where YOUR money goes.`}
   image="/og/home.png"
 >
@@ -449,7 +449,7 @@ function findingColor(verdict: string): string {
       <div style="margin-top: 1rem;">
         <ShareButton
           url={SITE_URL}
-          title="asylumstats — UK asylum data, hotel costs, ethnic projections by local authority"
+          title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
           text={`The Home Office spends ${fmtGbp(dailyCostGbp)} PER DAY on asylum accommodation. See the data: ${SITE_URL}`}
           compact
         />
@@ -531,7 +531,7 @@ function findingColor(verdict: string): string {
                   showPostcodeResult(adminDistrict, laCode, query);
                 }
               } else {
-                resultsContainer.innerHTML = '<div class="lookup-result" style="opacity:0.5">Postcode not found — try an area name</div>';
+                resultsContainer.innerHTML = '<div class="lookup-result" style="opacity:0.5">Postcode not found. Try an area name.</div>';
               }
             })
             .catch(() => {
