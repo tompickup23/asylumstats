@@ -15,8 +15,8 @@ describe("site search index", () => {
     expect(pageEntries.map((entry) => entry.href)).toContain("/");
     expect(pageEntries.map((entry) => entry.href)).toContain("/places/");
     expect(pageEntries.map((entry) => entry.href)).toContain("/compare/");
+    expect(pageEntries.map((entry) => entry.href)).toContain("/hotels/");
     expect(pageEntries.map((entry) => entry.href)).not.toContain("/entities/");
-    expect(pageEntries.map((entry) => entry.href)).not.toContain("/hotels/");
     expect(regionEntries).toHaveLength(placeDirectory.regions.length);
     expect(regionEntries.some((entry) => entry.href === "/places/regions/north-west/")).toBe(true);
     expect(regionEntries.some((entry) => entry.searchText.includes("regional pressure"))).toBe(true);

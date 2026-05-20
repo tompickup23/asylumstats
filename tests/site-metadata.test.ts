@@ -32,8 +32,8 @@ describe("site metadata helpers", () => {
     expect(paths).toContain("/places/");
     expect(paths.some((path) => path.startsWith("/places/regions/"))).toBe(true);
     expect(paths).toContain("/routes/");
+    expect(paths).toContain("/hotels/");
     expect(paths).not.toContain("/entities/");
-    expect(paths).not.toContain("/hotels/");
     expect(paths).not.toContain("/spending/");
     expect(paths.some((path) => path.startsWith("/entities/"))).toBe(false);
     expect(paths.some((path) => path.startsWith("/places/"))).toBe(true);
