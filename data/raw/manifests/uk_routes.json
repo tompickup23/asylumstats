@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-11T13:03:58.004Z",
+  "generatedAt": "2026-05-25T11:48:30.370Z",
   "datasetId": "uk_routes",
   "fetchedFileCount": 10,
   "files": [
@@ -14,64 +14,64 @@
       "sourceId": "local_resettlement_routes",
       "fileName": "resettlement-local-authority-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
-      "sizeBytes": 219262,
-      "fileSha256": "6242e4e29cd0b637ef8394de292618239a4442e55a0f348f18ef3212ef6e6ac0"
+      "sizeBytes": 221431,
+      "fileSha256": "5fe7e8a84127d5da7b8e4e0e5faf818a2f508d8836e72b276676cfc31aa870b8"
     },
     {
       "sourceId": "illegal_entry_routes",
       "fileName": "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
-      "sizeBytes": 2427668,
-      "fileSha256": "f59e2865d4e7be3449ffdefb23e98710beb40b76509066a38623b2e6c34bda29"
+      "sizeBytes": 2577648,
+      "fileSha256": "21974cb8040d5c5bb256375dc528a0f59256bb87a653f5b7caca922ef5f1ba19"
     },
     {
       "sourceId": "asylum_claims",
       "fileName": "asylum-claims-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx",
-      "sizeBytes": 11316776,
-      "fileSha256": "19c5522167bf78a215c1459482d6497ead3cacee1ccd6505e2d2e698c8476637"
+      "sizeBytes": 12116999,
+      "fileSha256": "fdc3e2e7783bb26c074074456bda72e2f0c489a5563c487ab0c1c3c30da57a71"
     },
     {
       "sourceId": "asylum_awaiting_decision",
       "fileName": "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
-      "sizeBytes": 3934947,
-      "fileSha256": "9b95d47625995825c23aec6616a493923f85d2ba8c3b82a215d0f1952768bf73"
+      "sizeBytes": 3991336,
+      "fileSha256": "d888bf2c5527e0b20ddf164412af02ec9094257298ff1c1c97a38191a2f19647"
     },
     {
       "sourceId": "asylum_outcome_analysis",
       "fileName": "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
-      "sizeBytes": 349243,
-      "fileSha256": "4c442ad882ef9d6fdab44eb7ff236a099c3ab7d474452378154dbbc5def2b997"
+      "sizeBytes": 357589,
+      "fileSha256": "f78f54d9de6316e431318623cbd986ff0aa1a08b44aeabfcaa3bf1ba55cfc13a"
     },
     {
       "sourceId": "asylum_appeals",
       "fileName": "asylum-appeals-lodged-datasets-mar-2023.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx",
-      "sizeBytes": 864910,
-      "fileSha256": "fa89aa8ecce418a815df20659eb9b57870a569ea6dd3b0bfc52eabee73cd56db"
+      "sizeBytes": 829072,
+      "fileSha256": "80df524b58ffe66d58b8465953ad51248441f2ff5ff9f2e07ec12e005827f803"
     },
     {
       "sourceId": "asylum_support",
       "fileName": "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
-      "sizeBytes": 3795022,
-      "fileSha256": "939832dbc9416dd732407e117486ddbbe2b3065f7622cc9862cf1008b9d1093f"
+      "sizeBytes": 3930149,
+      "fileSha256": "c772fc98be7b4bec5a0eac7a9cd2942f5cd55257a361160d46ee59a52f0458c2"
     },
     {
       "sourceId": "returns",
       "fileName": "returns-datasets-dec-2025.xlsx",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx",
-      "sizeBytes": 14951946,
-      "fileSha256": "ecc481a4f7c833e504db378fa85681ce109aa01c64c5a05c0c0322717aaa378b"
+      "sizeBytes": 15942682,
+      "fileSha256": "b2675b02c0ce8f5ab84721d74ad246d6e85de0507c5196c7c609de8daced2110"
     },
     {
       "sourceId": "safe_legal_routes_summary",
       "fileName": "safe-legal-routes-summary-tables-dec-2025.ods",
       "sourceUrl": "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
-      "sizeBytes": 53753,
-      "fileSha256": "2ebcbfc291c68231d30d53a4c220a901117925d743c28f3bef346f27f38138e8"
+      "sizeBytes": 57592,
+      "fileSha256": "0e6c55923b09bf1dfb3d0014ad24ef6898e1539a3b3c8d8f0a055e157694f91e"
     }
   ]
 }

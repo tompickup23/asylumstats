@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-11T13:05:02.326Z",
+  "generatedAt": "2026-05-25T11:49:37.320Z",
   "snapshotDate": "2025-12-31",
   "defaultCompareCodes": [
     "S12000049",
@@ -133,7 +133,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -320,13 +320,13 @@
       "afghanProgrammeRate": 7.4,
       "supportedAsylumRate": 48.48,
       "contingencyAccommodationRate": 7.4,
-      "resettlementCumulativeTotal": 214,
+      "resettlementCumulativeTotal": 223,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 214,
+      "ukResettlementFamilyCumulative": 223,
       "communitySponsorshipCumulative": 5,
       "resettlementLatestYearTotal": 32,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 9
     },
     {
       "areaCode": "E08000028",
@@ -512,13 +512,13 @@
       "afghanProgrammeRate": 8.55,
       "supportedAsylumRate": 24.27,
       "contingencyAccommodationRate": 4.52,
-      "resettlementCumulativeTotal": 827,
+      "resettlementCumulativeTotal": 833,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 827,
+      "ukResettlementFamilyCumulative": 833,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 2,
-      "latestResettlementQuarterLabel": "2025 Q1",
-      "latestResettlementQuarterValue": 2
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 6
     },
     {
       "areaCode": "E08000031",
@@ -613,7 +613,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -640,13 +640,13 @@
       "afghanProgrammeRate": 6.55,
       "supportedAsylumRate": 32.36,
       "contingencyAccommodationRate": 12.15,
-      "resettlementCumulativeTotal": 72,
+      "resettlementCumulativeTotal": 74,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 72,
+      "ukResettlementFamilyCumulative": 74,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2024 Q4",
-      "latestResettlementQuarterValue": 15
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 2
     },
     {
       "areaCode": "E06000015",
@@ -709,7 +709,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -800,13 +800,13 @@
       "afghanProgrammeRate": 9.85,
       "supportedAsylumRate": 22.41,
       "contingencyAccommodationRate": 14.6,
-      "resettlementCumulativeTotal": 486,
+      "resettlementCumulativeTotal": 494,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 486,
+      "ukResettlementFamilyCumulative": 494,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 33,
-      "latestResettlementQuarterLabel": "2025 Q2",
-      "latestResettlementQuarterValue": 2
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 8
     },
     {
       "areaCode": "E08000001",
@@ -837,7 +837,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -933,7 +933,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -965,7 +965,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -992,13 +992,13 @@
       "afghanProgrammeRate": 5.44,
       "supportedAsylumRate": 35.08,
       "contingencyAccommodationRate": 18.29,
-      "resettlementCumulativeTotal": 124,
+      "resettlementCumulativeTotal": 131,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 124,
+      "ukResettlementFamilyCumulative": 131,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 2,
-      "latestResettlementQuarterLabel": "2025 Q1",
-      "latestResettlementQuarterValue": 2
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 7
     },
     {
       "areaCode": "E08000004",
@@ -1029,7 +1029,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -1125,7 +1125,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -1253,7 +1253,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -1312,13 +1312,13 @@
       "afghanProgrammeRate": 3.81,
       "supportedAsylumRate": 19.39,
       "contingencyAccommodationRate": 5.74,
-      "resettlementCumulativeTotal": 204,
+      "resettlementCumulativeTotal": 208,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 204,
-      "communitySponsorshipCumulative": 4,
+      "ukResettlementFamilyCumulative": 208,
+      "communitySponsorshipCumulative": 8,
       "resettlementLatestYearTotal": 8,
-      "latestResettlementQuarterLabel": "2025 Q1",
-      "latestResettlementQuarterValue": 8
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 4
     },
     {
       "areaCode": "E06000032",
@@ -1733,7 +1733,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -1829,7 +1829,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -1989,7 +1989,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -2277,7 +2277,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -2592,13 +2592,13 @@
       "afghanProgrammeRate": 6.91,
       "supportedAsylumRate": 28.08,
       "contingencyAccommodationRate": 23.44,
-      "resettlementCumulativeTotal": 37,
+      "resettlementCumulativeTotal": 39,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 37,
+      "ukResettlementFamilyCumulative": 39,
       "communitySponsorshipCumulative": 5,
       "resettlementLatestYearTotal": 4,
-      "latestResettlementQuarterLabel": "2025 Q2",
-      "latestResettlementQuarterValue": 4
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 2
     },
     {
       "areaCode": "E08000014",
@@ -2656,12 +2656,12 @@
       "afghanProgrammeRate": 11.48,
       "supportedAsylumRate": 26.34,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 55,
+      "resettlementCumulativeTotal": 59,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 55,
+      "ukResettlementFamilyCumulative": 59,
       "communitySponsorshipCumulative": 7,
       "resettlementLatestYearTotal": 8,
-      "latestResettlementQuarterLabel": "2025 Q3",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 4
     },
     {
@@ -2752,13 +2752,13 @@
       "afghanProgrammeRate": 10.25,
       "supportedAsylumRate": 33.53,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 75,
+      "resettlementCumulativeTotal": 80,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 75,
+      "ukResettlementFamilyCumulative": 80,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 17,
-      "latestResettlementQuarterLabel": "2025 Q3",
-      "latestResettlementQuarterValue": 8
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 5
     },
     {
       "areaCode": "E08000009",
@@ -2816,12 +2816,12 @@
       "afghanProgrammeRate": 18.54,
       "supportedAsylumRate": 41.25,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 213,
+      "resettlementCumulativeTotal": 218,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 213,
+      "ukResettlementFamilyCumulative": 218,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 5,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 5
     },
     {
@@ -3040,13 +3040,13 @@
       "afghanProgrammeRate": 0.94,
       "supportedAsylumRate": 14.22,
       "contingencyAccommodationRate": 12.34,
-      "resettlementCumulativeTotal": 300,
+      "resettlementCumulativeTotal": 313,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 300,
+      "ukResettlementFamilyCumulative": 313,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 46,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 13
     },
     {
       "areaCode": "E07000126",
@@ -3200,13 +3200,13 @@
       "afghanProgrammeRate": 9.38,
       "supportedAsylumRate": 19.29,
       "contingencyAccommodationRate": 16.96,
-      "resettlementCumulativeTotal": 43,
+      "resettlementCumulativeTotal": 45,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 43,
+      "ukResettlementFamilyCumulative": 45,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2024 Q3",
-      "latestResettlementQuarterValue": 4
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 2
     },
     {
       "areaCode": "E07000128",
@@ -3269,7 +3269,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -3328,13 +3328,13 @@
       "afghanProgrammeRate": 8.56,
       "supportedAsylumRate": 23.85,
       "contingencyAccommodationRate": 11.01,
-      "resettlementCumulativeTotal": 297,
+      "resettlementCumulativeTotal": 318,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 297,
+      "ukResettlementFamilyCumulative": 318,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 25,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 4
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 21
     },
     {
       "areaCode": "W06000022",
@@ -3648,12 +3648,12 @@
       "afghanProgrammeRate": 4.03,
       "supportedAsylumRate": 21.26,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 23,
+      "resettlementCumulativeTotal": 27,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 23,
+      "ukResettlementFamilyCumulative": 27,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 4,
-      "latestResettlementQuarterLabel": "2025 Q3",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 4
     },
     {
@@ -3717,7 +3717,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -3776,13 +3776,13 @@
       "afghanProgrammeRate": 7.77,
       "supportedAsylumRate": 16.68,
       "contingencyAccommodationRate": 13.79,
-      "resettlementCumulativeTotal": 190,
+      "resettlementCumulativeTotal": 195,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 190,
+      "ukResettlementFamilyCumulative": 195,
       "communitySponsorshipCumulative": 15,
       "resettlementLatestYearTotal": 9,
-      "latestResettlementQuarterLabel": "2025 Q1",
-      "latestResettlementQuarterValue": 9
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 5
     },
     {
       "areaCode": "E06000014",
@@ -3840,13 +3840,13 @@
       "afghanProgrammeRate": 6.11,
       "supportedAsylumRate": 18.67,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 383,
+      "resettlementCumulativeTotal": 393,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 383,
+      "ukResettlementFamilyCumulative": 393,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2024 Q4",
-      "latestResettlementQuarterValue": 8
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 10
     },
     {
       "areaCode": "E09000020",
@@ -3973,7 +3973,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -4032,13 +4032,13 @@
       "afghanProgrammeRate": 2,
       "supportedAsylumRate": 16.9,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 93,
+      "resettlementCumulativeTotal": 95,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 93,
+      "ukResettlementFamilyCumulative": 95,
       "communitySponsorshipCumulative": 3,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2024 Q3",
-      "latestResettlementQuarterValue": 6
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 2
     },
     {
       "areaCode": "E07000125",
@@ -4160,13 +4160,13 @@
       "afghanProgrammeRate": 10.72,
       "supportedAsylumRate": 4.37,
       "contingencyAccommodationRate": 3.24,
-      "resettlementCumulativeTotal": 694,
+      "resettlementCumulativeTotal": 702,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 694,
+      "ukResettlementFamilyCumulative": 702,
       "communitySponsorshipCumulative": 20,
       "resettlementLatestYearTotal": 25,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 9
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 8
     },
     {
       "areaCode": "E09000007",
@@ -4512,13 +4512,13 @@
       "afghanProgrammeRate": 9.62,
       "supportedAsylumRate": 6.43,
       "contingencyAccommodationRate": 4.78,
-      "resettlementCumulativeTotal": 97,
+      "resettlementCumulativeTotal": 101,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 97,
+      "ukResettlementFamilyCumulative": 101,
       "communitySponsorshipCumulative": 6,
       "resettlementLatestYearTotal": 3,
-      "latestResettlementQuarterLabel": "2025 Q3",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 4
     },
     {
       "areaCode": "N09000001",
@@ -4576,13 +4576,13 @@
       "afghanProgrammeRate": 2.91,
       "supportedAsylumRate": 13.02,
       "contingencyAccommodationRate": 12.76,
-      "resettlementCumulativeTotal": 5,
+      "resettlementCumulativeTotal": 9,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 5,
+      "ukResettlementFamilyCumulative": 9,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2023 Q4",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 4
     },
     {
       "areaCode": "N09000004",
@@ -4901,7 +4901,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -5253,7 +5253,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -5312,13 +5312,13 @@
       "afghanProgrammeRate": 4.99,
       "supportedAsylumRate": 10.12,
       "contingencyAccommodationRate": 10.12,
-      "resettlementCumulativeTotal": 61,
+      "resettlementCumulativeTotal": 66,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 61,
+      "ukResettlementFamilyCumulative": 66,
       "communitySponsorshipCumulative": 4,
       "resettlementLatestYearTotal": 3,
-      "latestResettlementQuarterLabel": "2025 Q3",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 5
     },
     {
       "areaCode": "E07000170",
@@ -5765,7 +5765,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -5797,7 +5797,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -5856,13 +5856,13 @@
       "afghanProgrammeRate": 4.33,
       "supportedAsylumRate": 5.97,
       "contingencyAccommodationRate": 3.81,
-      "resettlementCumulativeTotal": 186,
+      "resettlementCumulativeTotal": 189,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 186,
+      "ukResettlementFamilyCumulative": 189,
       "communitySponsorshipCumulative": 4,
       "resettlementLatestYearTotal": 2,
-      "latestResettlementQuarterLabel": "2025 Q1",
-      "latestResettlementQuarterValue": 2
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 3
     },
     {
       "areaCode": "E07000238",
@@ -5957,7 +5957,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -6048,13 +6048,13 @@
       "afghanProgrammeRate": 0.31,
       "supportedAsylumRate": 6.12,
       "contingencyAccommodationRate": 5.75,
-      "resettlementCumulativeTotal": 86,
+      "resettlementCumulativeTotal": 96,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 86,
+      "ukResettlementFamilyCumulative": 96,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 3,
-      "latestResettlementQuarterLabel": "2025 Q2",
-      "latestResettlementQuarterValue": 3
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 10
     },
     {
       "areaCode": "E07000134",
@@ -6245,7 +6245,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -6373,7 +6373,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -6528,13 +6528,13 @@
       "afghanProgrammeRate": 5.8,
       "supportedAsylumRate": 7.43,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 106,
+      "resettlementCumulativeTotal": 109,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 106,
+      "ukResettlementFamilyCumulative": 109,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 13,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 13
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 3
     },
     {
       "areaCode": "E07000119",
@@ -7008,13 +7008,13 @@
       "afghanProgrammeRate": 6.47,
       "supportedAsylumRate": 6.47,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 105,
+      "resettlementCumulativeTotal": 108,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 105,
+      "ukResettlementFamilyCumulative": 108,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 2,
-      "latestResettlementQuarterLabel": "2025 Q3",
-      "latestResettlementQuarterValue": 2
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 3
     },
     {
       "areaCode": "W06000010",
@@ -7328,13 +7328,13 @@
       "afghanProgrammeRate": 24.08,
       "supportedAsylumRate": 2.11,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 158,
+      "resettlementCumulativeTotal": 167,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 158,
+      "ukResettlementFamilyCumulative": 167,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 62,
-      "latestResettlementQuarterLabel": "2025 Q4",
-      "latestResettlementQuarterValue": 1
+      "latestResettlementQuarterLabel": "2026 Q1",
+      "latestResettlementQuarterValue": 9
     },
     {
       "areaCode": "E07000098",
@@ -7525,7 +7525,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -7589,7 +7589,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -7973,7 +7973,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -8064,12 +8064,12 @@
       "afghanProgrammeRate": 1.52,
       "supportedAsylumRate": 4.71,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 21,
+      "resettlementCumulativeTotal": 28,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 21,
+      "ukResettlementFamilyCumulative": 28,
       "communitySponsorshipCumulative": 5,
       "resettlementLatestYearTotal": 7,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 7
     },
     {
@@ -8293,7 +8293,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -8357,7 +8357,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -8453,7 +8453,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -8549,7 +8549,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -8837,7 +8837,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -9189,7 +9189,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -9285,7 +9285,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -9541,7 +9541,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -9733,7 +9733,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -10245,7 +10245,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -10720,12 +10720,12 @@
       "afghanProgrammeRate": 4.89,
       "supportedAsylumRate": 0.1,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 66,
+      "resettlementCumulativeTotal": 71,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 66,
+      "ukResettlementFamilyCumulative": 71,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2023 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 5
     },
     {
@@ -11077,7 +11077,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -11173,7 +11173,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -11397,7 +11397,7 @@
       "ukResettlementFamilyCumulative": 0,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2025 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 0
     },
     {
@@ -11552,12 +11552,12 @@
       "afghanProgrammeRate": 4.01,
       "supportedAsylumRate": 0,
       "contingencyAccommodationRate": 0,
-      "resettlementCumulativeTotal": 55,
+      "resettlementCumulativeTotal": 58,
       "afghanResettlementCumulative": 0,
-      "ukResettlementFamilyCumulative": 55,
+      "ukResettlementFamilyCumulative": 58,
       "communitySponsorshipCumulative": 0,
       "resettlementLatestYearTotal": 0,
-      "latestResettlementQuarterLabel": "2024 Q4",
+      "latestResettlementQuarterLabel": "2026 Q1",
       "latestResettlementQuarterValue": 3
     }
   ],
@@ -11900,7 +11900,7 @@
           "areaCode": "E08000032",
           "areaName": "Bradford",
           "regionName": "Yorkshire and The Humber",
-          "value": 827
+          "value": 833
         },
         {
           "areaCode": "E08000026",
@@ -11912,7 +11912,7 @@
           "areaCode": "S12000036",
           "areaName": "City of Edinburgh",
           "regionName": "Scotland",
-          "value": 694
+          "value": 702
         },
         {
           "areaCode": "E08000025",
@@ -11930,7 +11930,7 @@
           "areaCode": "E06000023",
           "areaName": "Bristol, City of",
           "regionName": "South West",
-          "value": 486
+          "value": 494
         },
         {
           "areaCode": "N09000003",
@@ -11945,16 +11945,16 @@
           "value": 406
         },
         {
+          "areaCode": "E06000003",
+          "areaName": "Redcar and Cleveland",
+          "regionName": "North East",
+          "value": 393
+        },
+        {
           "areaCode": "E08000021",
           "areaName": "Newcastle upon Tyne",
           "regionName": "North East",
           "value": 385
-        },
-        {
-          "areaCode": "E06000003",
-          "areaName": "Redcar and Cleveland",
-          "regionName": "North East",
-          "value": 383
         }
       ]
     }
