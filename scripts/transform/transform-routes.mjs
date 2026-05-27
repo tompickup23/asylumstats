@@ -9,80 +9,80 @@ const martsDir = path.resolve("data/marts/uk_routes");
 const liveDir = path.resolve("src/data/live");
 
 const sourceFiles = {
-  localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-dec-2025.ods"),
-  localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-dec-2025.xlsx"),
-  illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx"),
-  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-dec-2025.ods"),
-  asylumClaims: path.join(rawDir, "asylum-claims-datasets-dec-2025.xlsx"),
-  asylumAwaitingDecision: path.join(rawDir, "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx"),
-  asylumOutcomeAnalysis: path.join(rawDir, "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"),
+  localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-mar-2026.ods"),
+  localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-mar-2026.xlsx"),
+  illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx"),
+  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-mar-2026.ods"),
+  asylumClaims: path.join(rawDir, "asylum-claims-datasets-mar-2026.xlsx"),
+  asylumAwaitingDecision: path.join(rawDir, "asylum-claims-awaiting-decision-datasets-mar-2026.xlsx"),
+  asylumOutcomeAnalysis: path.join(rawDir, "outcome-analysis-asylum-claims-datasets-mar-2026.xlsx"),
   asylumAppeals: path.join(rawDir, "asylum-appeals-lodged-datasets-mar-2023.xlsx"),
-  asylumSupport: path.join(rawDir, "asylum-seekers-receipt-support-datasets-dec-2025.xlsx"),
-  returns: path.join(rawDir, "returns-datasets-dec-2025.xlsx")
+  asylumSupport: path.join(rawDir, "asylum-seekers-receipt-support-datasets-mar-2026.xlsx"),
+  returns: path.join(rawDir, "returns-datasets-mar-2026.xlsx")
 };
 
 const sourceMeta = {
   localImmigration: {
-    source_id: "local_immigration_groups_dec_2025",
+    source_id: "local_immigration_groups_mar_2026",
     source_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+      "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
     methodology_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
-    release_date: "2026-02-26"
+    release_date: "2026-05-21"
   },
   localResettlement: {
-    source_id: "local_resettlement_routes_dec_2025",
+    source_id: "local_resettlement_routes_mar_2026",
     source_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05e4ef22977ebc82cb3fb6/resettlement-local-authority-datasets-mar-2026.xlsx",
     methodology_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
-    release_date: "2026-02-26"
+    release_date: "2026-05-21"
   },
   illegalEntry: {
-    source_id: "illegal_entry_routes_dec_2025",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    source_id: "illegal_entry_routes_mar_2026",
+    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
-    release_date: "2026-02-26"
+      "https://assets.publishing.service.gov.uk/media/6a05e3b7ee62840dba48a2c7/illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx",
+    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
+    release_date: "2026-05-21"
   },
   safeLegal: {
-    source_id: "safe_legal_routes_summary_dec_2025",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
+    source_id: "safe_legal_routes_summary_mar_2026",
+    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics",
-    release_date: "2026-02-26"
+      "https://assets.publishing.service.gov.uk/media/6a05e568ee62840dba48a2ca/safe-legal-routes-summary-tables-mar-2026.ods",
+    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
+    release_date: "2026-05-21"
   },
   asylumClaims: {
-    source_id: "asylum_claims_dec_2025",
+    source_id: "asylum_claims_mar_2026",
     source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-claim-asylum-in-the-uk",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05df9d97000cb6073e4e25/asylum-claims-datasets-mar-2026.xlsx",
     methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-claim-asylum-in-the-uk",
-    release_date: "2026-02-26"
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
+    release_date: "2026-05-21"
   },
   asylumAwaitingDecision: {
-    source_id: "asylum_awaiting_decision_dec_2025",
+    source_id: "asylum_awaiting_decision_mar_2026",
     source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05df3d5f39105e0848a2be/asylum-claims-awaiting-decision-datasets-mar-2026.xlsx",
     methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-02-26"
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
+    release_date: "2026-05-21"
   },
   asylumOutcomeAnalysis: {
-    source_id: "asylum_outcome_analysis_dec_2025",
+    source_id: "asylum_outcome_analysis_mar_2026",
     source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-granted-asylum-in-the-uk",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05e4abc0cc74b4523e4e49/outcome-analysis-asylum-claims-datasets-mar-2026.xlsx",
     methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-granted-asylum-in-the-uk",
-    release_date: "2026-02-26"
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
+    release_date: "2026-05-21"
   },
   asylumAppeals: {
     source_id: "asylum_appeals_mar_2023",
@@ -95,24 +95,24 @@ const sourceMeta = {
     release_date: "2023-05-25"
   },
   asylumSupport: {
-    source_id: "asylum_support_dec_2025",
+    source_id: "asylum_support_mar_2026",
     source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05dfcb5f39105e0848a2c2/asylum-seekers-receipt-support-datasets-mar-2026.xlsx",
     methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-02-26"
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
+    release_date: "2026-05-21"
   },
   returns: {
-    source_id: "returns_dec_2025",
+    source_id: "returns_mar_2026",
     source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-returned-from-the-uk",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
     attachment_url:
-      "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx",
+      "https://assets.publishing.service.gov.uk/media/6a05e53022977ebc82cb3fb7/returns-datasets-mar-2026.xlsx",
     methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-are-returned-from-the-uk",
-    release_date: "2026-02-26"
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
+    release_date: "2026-05-21"
   }
 };
 
