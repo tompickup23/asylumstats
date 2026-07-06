@@ -43,3 +43,7 @@ npm run preview      # Preview production build
 - **ukdemographics** — Population demographics (JavaScript)
 - **burnleycouncil** — Council transparency + Situation Room
 - **tompickup.one** — Situation Room (burnleycouncil/situation-room)
+
+## Cross-repo lessons (5 Jul 2026)
+
+Hard-won gotchas for this site live in the clawd repo: `/Users/tompickup/clawd/docs/lessons/sister-sites.md` (deploy flows, CSP/Pagefind/Astro 6 gotchas, OG-card standard, em-dash sweep method) and `/Users/tompickup/clawd/docs/lessons/editorial-method.md` (fact-check protocol, factual anchors). Read the relevant one before major work, and append new lessons there, not here.
