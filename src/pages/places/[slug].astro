@@ -443,7 +443,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             {area.areaName}: WBI {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
             → {ethnicProjection.projections?.["2051"]?.white_british?.toFixed(1) ?? "?"}% (2051).
             {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
-            {stochasticData?.[2051] ? ` 80% CI: ${stochasticData[2051].wbi.p10}–${stochasticData[2051].wbi.p90}%.` : ""}
+            {stochasticData?.[2051] ? ` 80% CI: ${stochasticData[2051].wbi.p10}, ${stochasticData[2051].wbi.p90}%.` : ""}
           </p>
         </div>
       </div>
