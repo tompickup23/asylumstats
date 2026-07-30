@@ -26,9 +26,14 @@ describe("route-data loader", () => {
     expect(dashboard.nationalSystemDynamics.stockSeries.awaitingInitialDecision.length).toBeGreaterThan(0);
     expect(dashboard.nationalSystemDynamics.outcomeCohorts.length).toBeGreaterThan(0);
     expect(dashboard.nationalSystemDynamics.latestQuarter).toHaveProperty("decisionMinusClaims");
-    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.series.lodged?.length).toBeGreaterThan(0);
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.series.receipts?.length).toBeGreaterThan(0);
     expect(dashboard.nationalSystemDynamics.postDecisionPath.returns.series.total?.length).toBeGreaterThan(0);
-    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.dataCompleteThroughLabel).toMatch(/^\d{4} Q[1-4]$/);
+    // The tribunal series is on MOJ financial-year quarters ("Q4 2025/26"), not the calendar
+    // quarters ("2026 Q1") used by the Home Office series on the same dashboard.
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.appeals.dataCompleteThroughLabel).toMatch(
+      /^Q[1-4] \d{4}\/\d{2}$/
+    );
+    expect(dashboard.nationalSystemDynamics.postDecisionPath.returns.latestQuarterLabel).toMatch(/^\d{4} Q[1-4]$/);
   });
 
   it("loads local route areas", () => {
@@ -62,7 +67,7 @@ describe("route-data loader", () => {
     expect(supportedAsylumMetric?.description.toLowerCase()).toContain("not identical");
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("flat local"))).toBe(true);
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("support is not a synonym"))).toBe(true);
-    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("appeals dataset"))).toBe(true);
+    expect(dashboard.limitations.some((item) => item.toLowerCase().includes("tribunal statistics"))).toBe(true);
     expect(dashboard.limitations.some((item) => item.toLowerCase().includes("broader than asylum"))).toBe(true);
   });
 });

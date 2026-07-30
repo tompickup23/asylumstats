@@ -79,6 +79,13 @@ const latestReturnsBreakdown = postDecisionPath.returns.latestBreakdown;
 const maxLatestDecisionBreakdownValue = Math.max(...latestQuarterDecisionBreakdown.map((row) => row.value), 1);
 const maxLatestSupportBreakdownValue = Math.max(...latestSupportBreakdown.map((row) => row.value), 1);
 const maxLatestAppealBreakdownValue = Math.max(...latestAppealDeterminationBreakdown.map((row) => row.value), 1);
+const formatReleaseDate = (value: string): string =>
+  new Date(`${value}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC"
+  });
 const maxLatestReturnsBreakdownValue = Math.max(...latestReturnsBreakdown.map((row) => row.value), 1);
 const leadPressureMetric =
   routeDashboard.topAreasByMetric.find((metric) => metric.metricId === "supportedAsylum") ??
@@ -97,8 +104,8 @@ const routeFindingCards = [
     body: `In ${latestQuarter.quarterLabel ?? "the latest quarter"}, ${latestQuarter.initialDecisions.toLocaleString()} initial decisions ${latestQuarter.decisionMinusClaims >= 0 ? "ran ahead of" : "trailed"} ${latestQuarter.claims.toLocaleString()} claims by ${Math.abs(latestQuarter.decisionMinusClaims).toLocaleString()}.`
   },
   {
-    title: "Post-decision exits are still split across lagged systems",
-    body: `Appeals data is only complete through ${postDecisionPath.appeals.dataCompleteThroughLabel ?? "an older quarter"}, while returns run to ${postDecisionPath.returns.latestQuarterLabel ?? "the latest quarter"} but cover all returns, not just asylum-specific exits.`
+    title: "The tribunal backlog is growing faster than the tribunal can clear it",
+    body: `In ${postDecisionPath.appeals.latestQuarterLabel ?? "the latest tribunal quarter"}, the immigration and asylum tribunal took in ${(postDecisionPath.appeals.series.receipts?.at(-1)?.value ?? 0).toLocaleString()} appeals and cleared ${(postDecisionPath.appeals.series.disposals?.at(-1)?.value ?? 0).toLocaleString()}, leaving ${(postDecisionPath.appeals.series.openCaseload?.at(-1)?.value ?? 0).toLocaleString()} cases open. Mean time to clear reached ${postDecisionPath.appeals.meanWeeksToClear ?? "n/a"} weeks.`
   }
 ];
 const routeCaseFiles = getRouteInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
@@ -475,34 +482,35 @@ function formatCardValue(value: number, suffix?: string): string {
       <div>
         <h2>Post-decision path</h2>
         <p class="lede">
-          After an initial refusal or other case progression, some claims move through appeals and some people later
-          leave the UK. The public data here has to stay split again: appeals are asylum-specific but lag badly, while
-          current returns are broader than asylum-only exits.
+          After an initial refusal, some claims move on to the tribunal and some people later leave the UK. The public
+          data stays split, and the two halves are not measured the same way: the tribunal figures are published by the
+          Ministry of Justice on financial-year quarters and cover every immigration and asylum appeal, while current
+          returns are Home Office calendar quarters and are broader than asylum-only exits.
         </p>
       </div>
       <div class="chip-row">
-        <span class="chip accent">Appeals complete to {postDecisionPath.appeals.dataCompleteThroughLabel ?? "n/a"}</span>
+        <span class="chip accent">Tribunal data to {postDecisionPath.appeals.dataCompleteThroughLabel ?? "n/a"}</span>
         <span class="chip">{postDecisionPath.returns.latestQuarterLabel ?? "Latest quarter"} all-returns series</span>
       </div>
     </div>
     <div class="viz-grid">
       <TrendChart
-        points={(postDecisionPath.appeals.series.lodged ?? []).map((point) => ({
+        points={(postDecisionPath.appeals.series.receipts ?? []).map((point) => ({
           label: point.periodLabel,
           value: point.value
         }))}
-        title="Asylum appeals lodged"
-        description={postDecisionPath.appeals.dataLagNote}
+        title="Tribunal appeals received"
+        description={postDecisionPath.appeals.scopeNote}
         tone="warm"
       {...chartSource("asylum_appeals_mar_2023")}
         />
       <TrendChart
-        points={(postDecisionPath.appeals.series.determined ?? []).map((point) => ({
+        points={(postDecisionPath.appeals.series.openCaseload ?? []).map((point) => ({
           label: point.periodLabel,
           value: point.value
         }))}
-        title="Asylum appeals determined"
-        description="Quarterly tribunal-stage output within the asylum-specific appeals dataset."
+        title="Tribunal open caseload"
+        description="Cases still open at the end of each financial-year quarter. Receipts have outrun disposals for several years, so the backlog compounds."
         tone="teal"
       {...chartSource("asylum_appeals_mar_2023")}
         />
@@ -519,11 +527,13 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
     <div class="split section" style="margin-top: 1rem;">
       <div class="panel panel-pad">
-        <h3>Latest appeals mix</h3>
+        <h3>Latest tribunal mix</h3>
         <p class="lede">
-          In {postDecisionPath.appeals.latestQuarterLabel ?? "the latest appeals quarter"}, asylum appeals data shows
-          the tribunal-stage mix below. This is still an older operational view than the main December 2025 asylum
-          release.
+          In {postDecisionPath.appeals.latestQuarterLabel ?? "the latest tribunal quarter"}, the First-tier Tribunal
+          took in far more appeals than it cleared. Disposals include appeals withdrawn, struck out or found invalid,
+          so only the smaller group determined at a hearing or on paper carries an allowed rate, which stood at{" "}
+          {postDecisionPath.appeals.allowedRatePct ?? "n/a"}% against{" "}
+          {postDecisionPath.appeals.allowedRatePctPrevious ?? "n/a"}% a year earlier.
         </p>
         {latestAppealDeterminationBreakdown.map((row) => (
           <div class="metric-bar">
@@ -557,6 +567,49 @@ function formatCardValue(value: number, suffix?: string): string {
           </div>
         ))}
       </div>
+    </div>
+    <div class="panel panel-pad" style="margin-top: 1rem;">
+      <h3>Tribunal caseload by case type</h3>
+      <p class="lede">
+        {postDecisionPath.appeals.latestQuarterLabel ?? "The latest tribunal quarter"}, split by the case types the
+        Ministry of Justice publishes. Asylum and protection appeals dominate the open caseload and take{" "}
+        {postDecisionPath.appeals.caseTypes.find((row) => row.id === "asylum_protection")?.meanWeeksToClear ?? "n/a"}{" "}
+        weeks on average to clear.
+      </p>
+      <div class="table-card">
+        <table>
+          <caption>
+            First-tier Tribunal Immigration and Asylum Chamber, {postDecisionPath.appeals.latestQuarterLabel ?? "latest quarter"}.
+            Allowed rate is measured on appeals determined at a hearing or on paper, not on all disposals.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Case type</th>
+              <th scope="col">Received</th>
+              <th scope="col">Disposed</th>
+              <th scope="col">Open</th>
+              <th scope="col">Allowed</th>
+              <th scope="col">Mean weeks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {postDecisionPath.appeals.caseTypes.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                <td>{row.receipts?.toLocaleString() ?? "n/a"}</td>
+                <td>{row.disposals?.toLocaleString() ?? "n/a"}</td>
+                <td>{row.openCaseload?.toLocaleString() ?? "n/a"}</td>
+                <td>{row.allowedRatePct === null ? "n/a" : `${row.allowedRatePct}%`}</td>
+                <td>{row.meanWeeksToClear ?? "n/a"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top: 0.75rem;">
+        {postDecisionPath.appeals.sourceLabel}, published {formatReleaseDate(postDecisionPath.appeals.sourceReleaseDate)}.
+        {" "}{postDecisionPath.appeals.provisionalNote} Next edition {formatReleaseDate(postDecisionPath.appeals.nextEditionDate)}.
+      </p>
     </div>
     <div class="story-grid" style="margin-top: 1rem;">
       {postDecisionPath.readingNotes.map((note) => (

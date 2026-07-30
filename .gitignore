@@ -11,6 +11,10 @@ data/raw/lancashire_cc/spending-*.json
 data/raw/lancashire_cc/spending-index.json
 data/raw/uk_routes/*.xlsx
 data/raw/uk_routes/*.ods
+data/raw/moj_tribunals/*.ods
+data/raw/moj_tribunals/*.zip
+data/raw/moj_tribunals/csvs/
+data/canonical/moj_tribunals/
 data/canonical/lancashire_cc/spending/
 data/canonical/uk_routes/
 data/raw/lancashire_cc/budgets_govuk.json

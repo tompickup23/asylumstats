@@ -21,6 +21,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Tribunals must run before routes: the route dashboard's appeals block is built from
+      # src/data/live/tribunal-appeals.json, so routes needs the refreshed file already on disk.
+      - name: Fetch and transform MOJ tribunals
+        run: npm run ingest:tribunals
       - name: Fetch and transform routes
         run: npm run ingest:routes
       - name: Fetch and transform regional sources
@@ -39,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
-          git commit -m "data: refresh route + hotel + money data $(date -u +%Y-%m-%d)"
+          git commit -m "data: refresh tribunal + route + hotel + money data $(date -u +%Y-%m-%d)"
           git push

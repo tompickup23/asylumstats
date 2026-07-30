@@ -4326,570 +4326,1711 @@
     ],
     "postDecisionPath": {
       "appeals": {
-        "latestQuarterLabel": "2023 Q1",
-        "dataCompleteThroughLabel": "2023 Q1",
-        "dataLagNote": "The latest machine-readable asylum appeals series currently ends at 2023 Q1, so it is materially behind the current claims, decisions, backlog, and support releases.",
+        "latestQuarterLabel": "Q4 2025/26",
+        "dataCompleteThroughLabel": "Q4 2025/26",
+        "periodBasis": "financial_year_quarter",
+        "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
+        "scopeLabel": "First-tier Tribunal, Immigration and Asylum Chamber, all case types",
+        "scopeNote": "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.",
+        "provisionalNote": "Q4 2025/26 figures are provisional and subject to revision. Q1 to Q3 2025/26 were revised in this edition as part of the annual reconciliation exercise, and 2024/25 is now final.",
+        "sourceLabel": "Tribunal Statistics Quarterly: January to March 2026",
+        "sourceReleaseDate": "2026-06-11",
+        "nextEditionDate": "2026-09-10",
+        "meanWeeksToClear": 61,
+        "meanWeeksToClearChange": 11,
+        "allowedRatePct": 39,
+        "allowedRatePctPrevious": 42.5,
         "series": {
-          "lodged": [
+          "receipts": [
             {
-              "periodLabel": "2010 Q1",
+              "periodLabel": "Q1 2007/08",
+              "periodEnd": "2007-06-30",
+              "value": 40377,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2007/08",
+              "periodEnd": "2007-09-30",
+              "value": 54111,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2007/08",
+              "periodEnd": "2007-12-31",
+              "value": 44448,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2007/08",
+              "periodEnd": "2008-03-31",
+              "value": 45747,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2008/09",
+              "periodEnd": "2008-06-30",
+              "value": 49385,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2008/09",
+              "periodEnd": "2008-09-30",
+              "value": 56339,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2008/09",
+              "periodEnd": "2008-12-31",
+              "value": 49413,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2008/09",
+              "periodEnd": "2009-03-31",
+              "value": 50754,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2009/10",
+              "periodEnd": "2009-06-30",
+              "value": 43750,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2009/10",
+              "periodEnd": "2009-09-30",
+              "value": 45384,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2009/10",
+              "periodEnd": "2009-12-31",
+              "value": 43385,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2009/10",
               "periodEnd": "2010-03-31",
-              "value": 3749
+              "value": 40130,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q2",
+              "periodLabel": "Q1 2010/11",
               "periodEnd": "2010-06-30",
-              "value": 3706
+              "value": 36584,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q3",
+              "periodLabel": "Q2 2010/11",
               "periodEnd": "2010-09-30",
-              "value": 3263
+              "value": 39491,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q4",
+              "periodLabel": "Q3 2010/11",
               "periodEnd": "2010-12-31",
-              "value": 3210
+              "value": 35369,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q1",
+              "periodLabel": "Q4 2010/11",
               "periodEnd": "2011-03-31",
-              "value": 2880
+              "value": 34660,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q2",
+              "periodLabel": "Q1 2011/12",
               "periodEnd": "2011-06-30",
-              "value": 2639
+              "value": 28360,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q3",
+              "periodLabel": "Q2 2011/12",
               "periodEnd": "2011-09-30",
-              "value": 2317
+              "value": 35480,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q4",
+              "periodLabel": "Q3 2011/12",
               "periodEnd": "2011-12-31",
-              "value": 2150
+              "value": 30667,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q1",
+              "periodLabel": "Q4 2011/12",
               "periodEnd": "2012-03-31",
-              "value": 2278
+              "value": 27864,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q2",
+              "periodLabel": "Q1 2012/13",
               "periodEnd": "2012-06-30",
-              "value": 1988
+              "value": 26563,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q3",
+              "periodLabel": "Q2 2012/13",
               "periodEnd": "2012-09-30",
-              "value": 1924
+              "value": 25748,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q4",
+              "periodLabel": "Q3 2012/13",
               "periodEnd": "2012-12-31",
-              "value": 2007
+              "value": 27768,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q1",
+              "periodLabel": "Q4 2012/13",
               "periodEnd": "2013-03-31",
-              "value": 2332
+              "value": 23844,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q2",
+              "periodLabel": "Q1 2013/14",
               "periodEnd": "2013-06-30",
-              "value": 2491
+              "value": 31554,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q3",
+              "periodLabel": "Q2 2013/14",
               "periodEnd": "2013-09-30",
-              "value": 2208
+              "value": 27387,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q4",
+              "periodLabel": "Q3 2013/14",
               "periodEnd": "2013-12-31",
-              "value": 1488
+              "value": 24621,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q1",
+              "periodLabel": "Q4 2013/14",
               "periodEnd": "2014-03-31",
-              "value": 1361
+              "value": 21434,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q2",
+              "periodLabel": "Q1 2014/15",
               "periodEnd": "2014-06-30",
-              "value": 1580
+              "value": 19703,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q3",
+              "periodLabel": "Q2 2014/15",
               "periodEnd": "2014-09-30",
-              "value": 2177
+              "value": 21938,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q4",
+              "periodLabel": "Q3 2014/15",
               "periodEnd": "2014-12-31",
-              "value": 3123
+              "value": 25735,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q1",
+              "periodLabel": "Q4 2014/15",
               "periodEnd": "2015-03-31",
-              "value": 4278
+              "value": 24251,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q2",
+              "periodLabel": "Q1 2015/16",
               "periodEnd": "2015-06-30",
-              "value": 3576
+              "value": 21738,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q3",
+              "periodLabel": "Q2 2015/16",
               "periodEnd": "2015-09-30",
-              "value": 3108
+              "value": 19427,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q4",
+              "periodLabel": "Q3 2015/16",
               "periodEnd": "2015-12-31",
-              "value": 3280
+              "value": 18373,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q1",
+              "periodLabel": "Q4 2015/16",
               "periodEnd": "2016-03-31",
-              "value": 3015
+              "value": 17382,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q2",
+              "periodLabel": "Q1 2016/17",
               "periodEnd": "2016-06-30",
-              "value": 3144
+              "value": 16045,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q3",
+              "periodLabel": "Q2 2016/17",
               "periodEnd": "2016-09-30",
-              "value": 3141
+              "value": 14472,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q4",
+              "periodLabel": "Q3 2016/17",
               "periodEnd": "2016-12-31",
-              "value": 3033
+              "value": 12306,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q1",
+              "periodLabel": "Q4 2016/17",
               "periodEnd": "2017-03-31",
-              "value": 2600
+              "value": 11616,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q2",
+              "periodLabel": "Q1 2017/18",
               "periodEnd": "2017-06-30",
-              "value": 2421
+              "value": 7849,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q3",
+              "periodLabel": "Q2 2017/18",
               "periodEnd": "2017-09-30",
-              "value": 2665
+              "value": 9662,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q4",
+              "periodLabel": "Q3 2017/18",
               "periodEnd": "2017-12-31",
-              "value": 3448
+              "value": 14921,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q1",
+              "periodLabel": "Q4 2017/18",
               "periodEnd": "2018-03-31",
-              "value": 3391
+              "value": 12908,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q2",
+              "periodLabel": "Q1 2018/19",
               "periodEnd": "2018-06-30",
-              "value": 3106
+              "value": 11884,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q3",
+              "periodLabel": "Q2 2018/19",
               "periodEnd": "2018-09-30",
-              "value": 2577
+              "value": 11235,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q4",
+              "periodLabel": "Q3 2018/19",
               "periodEnd": "2018-12-31",
-              "value": 2266
+              "value": 10387,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q1",
+              "periodLabel": "Q4 2018/19",
               "periodEnd": "2019-03-31",
-              "value": 2367
+              "value": 10358,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q2",
+              "periodLabel": "Q1 2019/20",
               "periodEnd": "2019-06-30",
-              "value": 2256
+              "value": 9949,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q3",
+              "periodLabel": "Q2 2019/20",
               "periodEnd": "2019-09-30",
-              "value": 2144
+              "value": 10574,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q4",
+              "periodLabel": "Q3 2019/20",
               "periodEnd": "2019-12-31",
-              "value": 2324
+              "value": 11160,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q1",
+              "periodLabel": "Q4 2019/20",
               "periodEnd": "2020-03-31",
-              "value": 2044
+              "value": 10610,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q2",
+              "periodLabel": "Q1 2020/21",
               "periodEnd": "2020-06-30",
-              "value": 693
+              "value": 2621,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q3",
+              "periodLabel": "Q2 2020/21",
               "periodEnd": "2020-09-30",
-              "value": 1013
+              "value": 5362,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q4",
+              "periodLabel": "Q3 2020/21",
               "periodEnd": "2020-12-31",
-              "value": 1100
+              "value": 7880,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q1",
+              "periodLabel": "Q4 2020/21",
               "periodEnd": "2021-03-31",
-              "value": 1134
+              "value": 10348,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q2",
+              "periodLabel": "Q1 2021/22",
               "periodEnd": "2021-06-30",
-              "value": 1181
+              "value": 13290,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q3",
+              "periodLabel": "Q2 2021/22",
               "periodEnd": "2021-09-30",
-              "value": 902
+              "value": 10052,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q4",
+              "periodLabel": "Q3 2021/22",
               "periodEnd": "2021-12-31",
-              "value": 864
+              "value": 8482,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q1",
+              "periodLabel": "Q4 2021/22",
               "periodEnd": "2022-03-31",
-              "value": 802
+              "value": 7918,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q2",
+              "periodLabel": "Q1 2022/23",
               "periodEnd": "2022-06-30",
-              "value": 837
+              "value": 6263,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q3",
+              "periodLabel": "Q2 2022/23",
               "periodEnd": "2022-09-30",
-              "value": 1040
+              "value": 9196,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q4",
+              "periodLabel": "Q3 2022/23",
               "periodEnd": "2022-12-31",
-              "value": 1136
+              "value": 10880,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2023 Q1",
+              "periodLabel": "Q4 2022/23",
               "periodEnd": "2023-03-31",
-              "value": 1287
+              "value": 11434,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2023/24",
+              "periodEnd": "2023-06-30",
+              "value": 9358,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2023/24",
+              "periodEnd": "2023-09-30",
+              "value": 10399,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2023/24",
+              "periodEnd": "2023-12-31",
+              "value": 20175,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2023/24",
+              "periodEnd": "2024-03-31",
+              "value": 18116,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2024/25",
+              "periodEnd": "2024-06-30",
+              "value": 17500,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2024/25",
+              "periodEnd": "2024-09-30",
+              "value": 13511,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2024/25",
+              "periodEnd": "2024-12-31",
+              "value": 21790,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2024/25",
+              "periodEnd": "2025-03-31",
+              "value": 26273,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2025/26",
+              "periodEnd": "2025-06-30",
+              "value": 27534,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q2 2025/26",
+              "periodEnd": "2025-09-30",
+              "value": 30309,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q3 2025/26",
+              "periodEnd": "2025-12-31",
+              "value": 32165,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q4 2025/26",
+              "periodEnd": "2026-03-31",
+              "value": 27689,
+              "seriesStatus": "provisional"
             }
           ],
-          "determined": [
+          "disposals": [
             {
-              "periodLabel": "2010 Q1",
+              "periodLabel": "Q1 2007/08",
+              "periodEnd": "2007-06-30",
+              "value": 37211,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2007/08",
+              "periodEnd": "2007-09-30",
+              "value": 40435,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2007/08",
+              "periodEnd": "2007-12-31",
+              "value": 46039,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2007/08",
+              "periodEnd": "2008-03-31",
+              "value": 48408,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2008/09",
+              "periodEnd": "2008-06-30",
+              "value": 40238,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2008/09",
+              "periodEnd": "2008-09-30",
+              "value": 47483,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2008/09",
+              "periodEnd": "2008-12-31",
+              "value": 43839,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2008/09",
+              "periodEnd": "2009-03-31",
+              "value": 51747,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2009/10",
+              "periodEnd": "2009-06-30",
+              "value": 48791,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2009/10",
+              "periodEnd": "2009-09-30",
+              "value": 55462,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2009/10",
+              "periodEnd": "2009-12-31",
+              "value": 52942,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2009/10",
               "periodEnd": "2010-03-31",
-              "value": 4121
+              "value": 50159,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q2",
+              "periodLabel": "Q1 2010/11",
               "periodEnd": "2010-06-30",
-              "value": 3932
+              "value": 38867,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q3",
+              "periodLabel": "Q2 2010/11",
               "periodEnd": "2010-09-30",
-              "value": 3628
+              "value": 42831,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2010 Q4",
+              "periodLabel": "Q3 2010/11",
               "periodEnd": "2010-12-31",
-              "value": 3042
+              "value": 39768,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q1",
+              "periodLabel": "Q4 2010/11",
               "periodEnd": "2011-03-31",
-              "value": 3057
+              "value": 40738,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q2",
+              "periodLabel": "Q1 2011/12",
               "periodEnd": "2011-06-30",
-              "value": 2812
+              "value": 35573,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q3",
+              "periodLabel": "Q2 2011/12",
               "periodEnd": "2011-09-30",
-              "value": 2654
+              "value": 34586,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2011 Q4",
+              "periodLabel": "Q3 2011/12",
               "periodEnd": "2011-12-31",
-              "value": 2074
+              "value": 32668,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q1",
+              "periodLabel": "Q4 2011/12",
               "periodEnd": "2012-03-31",
-              "value": 2230
+              "value": 29822,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q2",
+              "periodLabel": "Q1 2012/13",
               "periodEnd": "2012-06-30",
-              "value": 2172
+              "value": 24156,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q3",
+              "periodLabel": "Q2 2012/13",
               "periodEnd": "2012-09-30",
-              "value": 2015
+              "value": 21889,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2012 Q4",
+              "periodLabel": "Q3 2012/13",
               "periodEnd": "2012-12-31",
-              "value": 1868
+              "value": 26015,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q1",
+              "periodLabel": "Q4 2012/13",
               "periodEnd": "2013-03-31",
-              "value": 1930
+              "value": 26673,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q2",
+              "periodLabel": "Q1 2013/14",
               "periodEnd": "2013-06-30",
-              "value": 2311
+              "value": 22501,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q3",
+              "periodLabel": "Q2 2013/14",
               "periodEnd": "2013-09-30",
-              "value": 2274
+              "value": 21805,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2013 Q4",
+              "periodLabel": "Q3 2013/14",
               "periodEnd": "2013-12-31",
-              "value": 1810
+              "value": 26691,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q1",
+              "periodLabel": "Q4 2013/14",
               "periodEnd": "2014-03-31",
-              "value": 1535
+              "value": 29125,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q2",
+              "periodLabel": "Q1 2014/15",
               "periodEnd": "2014-06-30",
-              "value": 1496
+              "value": 25296,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q3",
+              "periodLabel": "Q2 2014/15",
               "periodEnd": "2014-09-30",
-              "value": 1426
+              "value": 23557,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2014 Q4",
+              "periodLabel": "Q3 2014/15",
               "periodEnd": "2014-12-31",
-              "value": 1721
+              "value": 21167,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q1",
+              "periodLabel": "Q4 2014/15",
               "periodEnd": "2015-03-31",
-              "value": 2283
+              "value": 21401,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q2",
+              "periodLabel": "Q1 2015/16",
               "periodEnd": "2015-06-30",
-              "value": 2339
+              "value": 20985,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q3",
+              "periodLabel": "Q2 2015/16",
               "periodEnd": "2015-09-30",
-              "value": 2576
+              "value": 20597,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2015 Q4",
+              "periodLabel": "Q3 2015/16",
               "periodEnd": "2015-12-31",
-              "value": 2026
+              "value": 14529,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q1",
+              "periodLabel": "Q4 2015/16",
               "periodEnd": "2016-03-31",
-              "value": 2010
+              "value": 13585,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q2",
+              "periodLabel": "Q1 2016/17",
               "periodEnd": "2016-06-30",
-              "value": 2967
+              "value": 14620,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q3",
+              "periodLabel": "Q2 2016/17",
               "periodEnd": "2016-09-30",
-              "value": 3409
+              "value": 17973,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2016 Q4",
+              "periodLabel": "Q3 2016/17",
               "periodEnd": "2016-12-31",
-              "value": 4195
+              "value": 17834,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q1",
+              "periodLabel": "Q4 2016/17",
               "periodEnd": "2017-03-31",
-              "value": 5266
+              "value": 18757,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q2",
+              "periodLabel": "Q1 2017/18",
               "periodEnd": "2017-06-30",
-              "value": 3469
+              "value": 17575,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q3",
+              "periodLabel": "Q2 2017/18",
               "periodEnd": "2017-09-30",
-              "value": 2889
+              "value": 17193,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2017 Q4",
+              "periodLabel": "Q3 2017/18",
               "periodEnd": "2017-12-31",
-              "value": 2675
+              "value": 14803,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q1",
+              "periodLabel": "Q4 2017/18",
               "periodEnd": "2018-03-31",
-              "value": 3117
+              "value": 14694,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q2",
+              "periodLabel": "Q1 2018/19",
               "periodEnd": "2018-06-30",
-              "value": 2948
+              "value": 14724,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q3",
+              "periodLabel": "Q2 2018/19",
               "periodEnd": "2018-09-30",
-              "value": 2834
+              "value": 15515,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2018 Q4",
+              "periodLabel": "Q3 2018/19",
               "periodEnd": "2018-12-31",
-              "value": 2728
+              "value": 14758,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q1",
+              "periodLabel": "Q4 2018/19",
               "periodEnd": "2019-03-31",
-              "value": 2693
+              "value": 14314,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q2",
+              "periodLabel": "Q1 2019/20",
               "periodEnd": "2019-06-30",
-              "value": 2398
+              "value": 12881,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q3",
+              "periodLabel": "Q2 2019/20",
               "periodEnd": "2019-09-30",
-              "value": 2378
+              "value": 13967,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2019 Q4",
+              "periodLabel": "Q3 2019/20",
               "periodEnd": "2019-12-31",
-              "value": 2199
+              "value": 11958,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q1",
+              "periodLabel": "Q4 2019/20",
               "periodEnd": "2020-03-31",
-              "value": 2070
+              "value": 11097,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q2",
+              "periodLabel": "Q1 2020/21",
               "periodEnd": "2020-06-30",
-              "value": 475
+              "value": 3161,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q3",
+              "periodLabel": "Q2 2020/21",
               "periodEnd": "2020-09-30",
-              "value": 403
+              "value": 3075,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2020 Q4",
+              "periodLabel": "Q3 2020/21",
               "periodEnd": "2020-12-31",
-              "value": 871
+              "value": 6111,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q1",
+              "periodLabel": "Q4 2020/21",
               "periodEnd": "2021-03-31",
-              "value": 945
+              "value": 8048,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q2",
+              "periodLabel": "Q1 2021/22",
               "periodEnd": "2021-06-30",
-              "value": 1038
+              "value": 7935,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q3",
+              "periodLabel": "Q2 2021/22",
               "periodEnd": "2021-09-30",
-              "value": 918
+              "value": 9830,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2021 Q4",
+              "periodLabel": "Q3 2021/22",
               "periodEnd": "2021-12-31",
-              "value": 995
+              "value": 10552,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q1",
+              "periodLabel": "Q4 2021/22",
               "periodEnd": "2022-03-31",
-              "value": 963
+              "value": 12198,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q2",
+              "periodLabel": "Q1 2022/23",
               "periodEnd": "2022-06-30",
-              "value": 1001
+              "value": 10582,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q3",
+              "periodLabel": "Q2 2022/23",
               "periodEnd": "2022-09-30",
-              "value": 911
+              "value": 9130,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2022 Q4",
+              "periodLabel": "Q3 2022/23",
               "periodEnd": "2022-12-31",
-              "value": 802
+              "value": 7995,
+              "seriesStatus": "final"
             },
             {
-              "periodLabel": "2023 Q1",
+              "periodLabel": "Q4 2022/23",
               "periodEnd": "2023-03-31",
-              "value": 1220
+              "value": 10578,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2023/24",
+              "periodEnd": "2023-06-30",
+              "value": 10199,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2023/24",
+              "periodEnd": "2023-09-30",
+              "value": 9803,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2023/24",
+              "periodEnd": "2023-12-31",
+              "value": 9448,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2023/24",
+              "periodEnd": "2024-03-31",
+              "value": 9966,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2024/25",
+              "periodEnd": "2024-06-30",
+              "value": 9364,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2024/25",
+              "periodEnd": "2024-09-30",
+              "value": 9787,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2024/25",
+              "periodEnd": "2024-12-31",
+              "value": 10420,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2024/25",
+              "periodEnd": "2025-03-31",
+              "value": 11420,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2025/26",
+              "periodEnd": "2025-06-30",
+              "value": 12893,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q2 2025/26",
+              "periodEnd": "2025-09-30",
+              "value": 14756,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q3 2025/26",
+              "periodEnd": "2025-12-31",
+              "value": 13903,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q4 2025/26",
+              "periodEnd": "2026-03-31",
+              "value": 15317,
+              "seriesStatus": "provisional"
+            }
+          ],
+          "openCaseload": [
+            {
+              "periodLabel": "Q1 2015/16",
+              "periodEnd": "2015-06-30",
+              "value": 52991,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2015/16",
+              "periodEnd": "2015-09-30",
+              "value": 52628,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2015/16",
+              "periodEnd": "2015-12-31",
+              "value": 57951,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2015/16",
+              "periodEnd": "2016-03-31",
+              "value": 61901,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2016/17",
+              "periodEnd": "2016-06-30",
+              "value": 64821,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2016/17",
+              "periodEnd": "2016-09-30",
+              "value": 62903,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2016/17",
+              "periodEnd": "2016-12-31",
+              "value": 57954,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2016/17",
+              "periodEnd": "2017-03-31",
+              "value": 52365,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2017/18",
+              "periodEnd": "2017-06-30",
+              "value": 43416,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2017/18",
+              "periodEnd": "2017-09-30",
+              "value": 36138,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2017/18",
+              "periodEnd": "2017-12-31",
+              "value": 35106,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2017/18",
+              "periodEnd": "2018-03-31",
+              "value": 36267,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2018/19",
+              "periodEnd": "2018-06-30",
+              "value": 34638,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2018/19",
+              "periodEnd": "2018-09-30",
+              "value": 31547,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2018/19",
+              "periodEnd": "2018-12-31",
+              "value": 27862,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2018/19",
+              "periodEnd": "2019-03-31",
+              "value": 24805,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2019/20",
+              "periodEnd": "2019-06-30",
+              "value": 23233,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2019/20",
+              "periodEnd": "2019-09-30",
+              "value": 20363,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2019/20",
+              "periodEnd": "2019-12-31",
+              "value": 19622,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2019/20",
+              "periodEnd": "2020-03-31",
+              "value": 19845,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2020/21",
+              "periodEnd": "2020-06-30",
+              "value": 20105,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2020/21",
+              "periodEnd": "2020-09-30",
+              "value": 22033,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2020/21",
+              "periodEnd": "2020-12-31",
+              "value": 23526,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2020/21",
+              "periodEnd": "2021-03-31",
+              "value": 24560,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2021/22",
+              "periodEnd": "2021-06-30",
+              "value": 31798,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2021/22",
+              "periodEnd": "2021-09-30",
+              "value": 33111,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2021/22",
+              "periodEnd": "2021-12-31",
+              "value": 31750,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2021/22",
+              "periodEnd": "2022-03-31",
+              "value": 28413,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2022/23",
+              "periodEnd": "2022-06-30",
+              "value": 25084,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2022/23",
+              "periodEnd": "2022-09-30",
+              "value": 25586,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2022/23",
+              "periodEnd": "2022-12-31",
+              "value": 29017,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2022/23",
+              "periodEnd": "2023-03-31",
+              "value": 30548,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2023/24",
+              "periodEnd": "2023-06-30",
+              "value": 30047,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2023/24",
+              "periodEnd": "2023-09-30",
+              "value": 30874,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2023/24",
+              "periodEnd": "2023-12-31",
+              "value": 41484,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2023/24",
+              "periodEnd": "2024-03-31",
+              "value": 50332,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2024/25",
+              "periodEnd": "2024-06-30",
+              "value": 58418,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2024/25",
+              "periodEnd": "2024-09-30",
+              "value": 63016,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2024/25",
+              "periodEnd": "2024-12-31",
+              "value": 74969,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2024/25",
+              "periodEnd": "2025-03-31",
+              "value": 90389,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2025/26",
+              "periodEnd": "2025-06-30",
+              "value": 105522,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2025/26",
+              "periodEnd": "2025-09-30",
+              "value": 121015,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2025/26",
+              "periodEnd": "2025-12-31",
+              "value": 139407,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2025/26",
+              "periodEnd": "2026-03-31",
+              "value": 151767,
+              "seriesStatus": "final"
+            }
+          ],
+          "allowedRatePct": [
+            {
+              "periodLabel": "Q1 2007/08",
+              "periodEnd": "2007-06-30",
+              "value": 35,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2007/08",
+              "periodEnd": "2007-09-30",
+              "value": 34.4,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2007/08",
+              "periodEnd": "2007-12-31",
+              "value": 34.4,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2007/08",
+              "periodEnd": "2008-03-31",
+              "value": 34.1,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2008/09",
+              "periodEnd": "2008-06-30",
+              "value": 34.2,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2008/09",
+              "periodEnd": "2008-09-30",
+              "value": 38.3,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2008/09",
+              "periodEnd": "2008-12-31",
+              "value": 40.4,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2008/09",
+              "periodEnd": "2009-03-31",
+              "value": 41.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2009/10",
+              "periodEnd": "2009-06-30",
+              "value": 40.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2009/10",
+              "periodEnd": "2009-09-30",
+              "value": 39.3,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2009/10",
+              "periodEnd": "2009-12-31",
+              "value": 41,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2009/10",
+              "periodEnd": "2010-03-31",
+              "value": 43.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2010/11",
+              "periodEnd": "2010-06-30",
+              "value": 46.4,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2010/11",
+              "periodEnd": "2010-09-30",
+              "value": 49,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2010/11",
+              "periodEnd": "2010-12-31",
+              "value": 48.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2010/11",
+              "periodEnd": "2011-03-31",
+              "value": 47.9,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2011/12",
+              "periodEnd": "2011-06-30",
+              "value": 46.7,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2011/12",
+              "periodEnd": "2011-09-30",
+              "value": 44.2,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2011/12",
+              "periodEnd": "2011-12-31",
+              "value": 45.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2011/12",
+              "periodEnd": "2012-03-31",
+              "value": 43.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2012/13",
+              "periodEnd": "2012-06-30",
+              "value": 41.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2012/13",
+              "periodEnd": "2012-09-30",
+              "value": 46.2,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2012/13",
+              "periodEnd": "2012-12-31",
+              "value": 44.6,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2012/13",
+              "periodEnd": "2013-03-31",
+              "value": 44.9,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2013/14",
+              "periodEnd": "2013-06-30",
+              "value": 45,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2013/14",
+              "periodEnd": "2013-09-30",
+              "value": 45,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2013/14",
+              "periodEnd": "2013-12-31",
+              "value": 44,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2013/14",
+              "periodEnd": "2014-03-31",
+              "value": 44,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2014/15",
+              "periodEnd": "2014-06-30",
+              "value": 42,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2014/15",
+              "periodEnd": "2014-09-30",
+              "value": 40,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2014/15",
+              "periodEnd": "2014-12-31",
+              "value": 39,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2014/15",
+              "periodEnd": "2015-03-31",
+              "value": 38,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2015/16",
+              "periodEnd": "2015-06-30",
+              "value": 39,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2015/16",
+              "periodEnd": "2015-09-30",
+              "value": 40,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2015/16",
+              "periodEnd": "2015-12-31",
+              "value": 41,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2015/16",
+              "periodEnd": "2016-03-31",
+              "value": 37,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2016/17",
+              "periodEnd": "2016-06-30",
+              "value": 42,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2016/17",
+              "periodEnd": "2016-09-30",
+              "value": 44,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2016/17",
+              "periodEnd": "2016-12-31",
+              "value": 42,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2016/17",
+              "periodEnd": "2017-03-31",
+              "value": 42,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2017/18",
+              "periodEnd": "2017-06-30",
+              "value": 47,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2017/18",
+              "periodEnd": "2017-09-30",
+              "value": 49,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2017/18",
+              "periodEnd": "2017-12-31",
+              "value": 50,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2017/18",
+              "periodEnd": "2018-03-31",
+              "value": 50,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2018/19",
+              "periodEnd": "2018-06-30",
+              "value": 52,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2018/19",
+              "periodEnd": "2018-09-30",
+              "value": 53,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2018/19",
+              "periodEnd": "2018-12-31",
+              "value": 53,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2018/19",
+              "periodEnd": "2019-03-31",
+              "value": 51,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2019/20",
+              "periodEnd": "2019-06-30",
+              "value": 52,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2019/20",
+              "periodEnd": "2019-09-30",
+              "value": 51,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2019/20",
+              "periodEnd": "2019-12-31",
+              "value": 50,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2019/20",
+              "periodEnd": "2020-03-31",
+              "value": 48,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2020/21",
+              "periodEnd": "2020-06-30",
+              "value": 51,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2020/21",
+              "periodEnd": "2020-09-30",
+              "value": 48,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2020/21",
+              "periodEnd": "2020-12-31",
+              "value": 46,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2020/21",
+              "periodEnd": "2021-03-31",
+              "value": 51,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2021/22",
+              "periodEnd": "2021-06-30",
+              "value": 50,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2021/22",
+              "periodEnd": "2021-09-30",
+              "value": 52,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2021/22",
+              "periodEnd": "2021-12-31",
+              "value": 50,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2021/22",
+              "periodEnd": "2022-03-31",
+              "value": 51,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2022/23",
+              "periodEnd": "2022-06-30",
+              "value": 53.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2022/23",
+              "periodEnd": "2022-09-30",
+              "value": 49.7,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2022/23",
+              "periodEnd": "2022-12-31",
+              "value": 47.8,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2022/23",
+              "periodEnd": "2023-03-31",
+              "value": 49.6,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2023/24",
+              "periodEnd": "2023-06-30",
+              "value": 48.1,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2023/24",
+              "periodEnd": "2023-09-30",
+              "value": 47.4,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2023/24",
+              "periodEnd": "2023-12-31",
+              "value": 49.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2023/24",
+              "periodEnd": "2024-03-31",
+              "value": 48.1,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2024/25",
+              "periodEnd": "2024-06-30",
+              "value": 45.1,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q2 2024/25",
+              "periodEnd": "2024-09-30",
+              "value": 45.6,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q3 2024/25",
+              "periodEnd": "2024-12-31",
+              "value": 43.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q4 2024/25",
+              "periodEnd": "2025-03-31",
+              "value": 42.5,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2025/26",
+              "periodEnd": "2025-06-30",
+              "value": 40,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q2 2025/26",
+              "periodEnd": "2025-09-30",
+              "value": 38,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q3 2025/26",
+              "periodEnd": "2025-12-31",
+              "value": 36,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q4 2025/26",
+              "periodEnd": "2026-03-31",
+              "value": 39,
+              "seriesStatus": "provisional"
             }
           ]
         },
         "latestDeterminationBreakdown": [
           {
-            "label": "Appeals lodged",
-            "value": 1287,
-            "metricId": "appeals_lodged"
+            "label": "Receipts",
+            "value": 27689,
+            "metricId": "fttiac_receipts"
           },
           {
-            "label": "Appeals determined",
-            "value": 1220,
-            "metricId": "appeals_determined"
+            "label": "Disposals",
+            "value": 15317,
+            "metricId": "fttiac_disposals"
           },
           {
-            "label": "Allowed",
-            "value": 603,
-            "metricId": "appeals_allowed"
+            "label": "Determined at hearing or on paper",
+            "value": 6978,
+            "metricId": "fttiac_determined_at_hearing"
           },
           {
-            "label": "Dismissed",
-            "value": 495,
-            "metricId": "appeals_dismissed"
+            "label": "Open caseload at quarter end",
+            "value": 151767,
+            "metricId": "fttiac_open_caseload"
+          }
+        ],
+        "caseTypes": [
+          {
+            "id": "asylum_protection",
+            "label": "Asylum, protection and revocation of protection",
+            "receipts": 14748,
+            "disposals": 7799,
+            "openCaseload": 87450,
+            "allowedRatePct": 40,
+            "meanWeeksToClear": 67
           },
           {
-            "label": "Withdrawn",
-            "value": 122,
-            "metricId": "appeals_withdrawn"
+            "id": "human_rights",
+            "label": "Human rights",
+            "receipts": 4713,
+            "disposals": 2885,
+            "openCaseload": 30867,
+            "allowedRatePct": 44,
+            "meanWeeksToClear": 71
+          },
+          {
+            "id": "eea_free_movement",
+            "label": "EEA free movement",
+            "receipts": 8185,
+            "disposals": 4587,
+            "openCaseload": 33149,
+            "allowedRatePct": 30,
+            "meanWeeksToClear": 46
           }
         ]
       },
@@ -6711,7 +7852,7 @@
         ]
       },
       "readingNotes": [
-        "Appeals are part of the post-decision path for some claims, but the latest official appeals dataset is currently much older than the main asylum releases.",
+        "Appeals are part of the post-decision path for refused claims. The tribunal series is now current, but it is a MOJ caseload measure on financial-year quarters, not a Home Office asylum-only count.",
         "Current returns tables are timely but broader than asylum-only case resolution, so they should not be treated as a clean continuation of the asylum claims denominator.",
         "Latest claim-year outcomes remain the main asylum-specific resolution view because they capture later case progression, including appeals and subsequent decisions, within the asylum cohort model."
       ]
@@ -7211,7 +8352,7 @@
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
     "The latest local immigration groups table is a stock snapshot as at 31 March 2026, while resettlement local authority data is a quarterly arrivals series.",
     "Awaiting an initial decision and receiving asylum support overlap, but they are not identical published populations. Support is not a synonym for the backlog.",
-    "The latest machine-readable asylum appeals dataset currently ends at 2023 Q1, so it lags the current quarterly claims, decisions, backlog, and support series.",
+    "Appeals now come from the MOJ tribunal statistics rather than the discontinued Home Office appeals dataset. MOJ counts every First-tier Tribunal immigration and asylum appeal on financial-year quarters, so the volumes are much larger than the old asylum-only series and the periods do not line up with the Home Office calendar quarters.",
     "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
     "A flat local supported-asylum line does not prove there was no movement. Published local tables cannot show how many different people passed through support in an area over the period.",
     "Latest outcomes are grouped by year of claim and can change after appeals or later case progression. They are not the same measure as current-quarter initial decisions.",
@@ -7269,13 +8410,6 @@
       "release_date": "2026-05-21"
     },
     {
-      "source_id": "asylum_appeals_mar_2023",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2023/how-many-people-do-we-grant-protection-to",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2023/how-many-people-do-we-grant-protection-to",
-      "release_date": "2023-05-25"
-    },
-    {
       "source_id": "asylum_support_mar_2026",
       "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
       "attachment_url": "https://assets.publishing.service.gov.uk/media/6a05dfcb5f39105e0848a2c2/asylum-seekers-receipt-support-datasets-mar-2026.xlsx",
@@ -7288,6 +8422,13 @@
       "attachment_url": "https://assets.publishing.service.gov.uk/media/6a05e53022977ebc82cb3fb7/returns-datasets-mar-2026.xlsx",
       "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
       "release_date": "2026-05-21"
+    },
+    {
+      "source_id": "moj_tribunals_q4_2025_26",
+      "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "methodology_url": "https://www.gov.uk/government/collections/tribunals-statistics",
+      "release_date": "2026-06-11"
     }
   ]
 }

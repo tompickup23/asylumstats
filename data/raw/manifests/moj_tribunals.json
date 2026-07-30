@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-07-30T12:47:37.724Z",
+  "datasetId": "moj_tribunals",
+  "releaseTitle": "Tribunal Statistics Quarterly: January to March 2026",
+  "releasePeriodLabel": "Q4 2025/26",
+  "releasePeriodBasis": "financial_year_quarter",
+  "releaseDate": "2026-06-11",
+  "nextEditionDate": "2026-09-10",
+  "landingUrl": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
+  "fetchedFileCount": 2,
+  "files": [
+    {
+      "sourceId": "moj_tribunals_main_tables",
+      "fileName": "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "sizeBytes": 721463,
+      "fileSha256": "06c4699824e6c850617c9a8f04da8382d9c72df84444d419c832703b33cfeec7"
+    },
+    {
+      "sourceId": "moj_tribunals_csvs",
+      "fileName": "CSVs.zip",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296f79a3674dfd3eb50633/CSVs.zip",
+      "sizeBytes": 80650,
+      "fileSha256": "a6f06a2ab70ed97f7e2b90b14e49e20fd835cff0a81f2690819b8d7393ca76f5"
+    }
+  ]
+}
