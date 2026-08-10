@@ -8,6 +8,8 @@ UK Asylum & Refugee Accountability — follow the migrants, follow the money. Da
 **Data**: Government datasets (Home Office, ONS)
 **Automation**: 3 GitHub Actions (deploy, site-checks, refresh-data)
 
+**Consumed by another repo (10 Aug 2026):** `ukdemographics/scripts/transform/transform_asylum_bridge.py` reads `data/raw/uk_routes/*.xlsx` here directly off disk via a hardcoded absolute path. Renaming/moving these raw files breaks that script silently on its next manual run — it's not covered by this repo's own CI.
+
 ## Commands
 
 ```bash
