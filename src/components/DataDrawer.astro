@@ -7,7 +7,10 @@ interface Props {
   open?: boolean;
 }
 
-const { id, label = "Deep dive", title, summary, open = false } = Astro.props;
+// Open by default: the charts inside these drawers are the point of the page, and
+// 85 to 90% of readers never open a disclosure or a non-default tab (Tse, NYT).
+// Collapsing stays available, it is just no longer the default state.
+const { id, label = "Deep dive", title, summary, open = true } = Astro.props;
 ---
 
 <details id={id} class="section section-anchor data-drawer" open={open}>

@@ -149,3 +149,86 @@ export function getSeriesDelta(points: RouteSeriesPoint[]): number {
 
   return points[points.length - 1].value - points[points.length - 2].value;
 }
+
+export interface PeriodComparison {
+  current: number;
+  previous: number;
+  changePct: number;
+  currentLabel: string;
+  previousLabel: string;
+}
+
+/**
+ * Compare the two most recent explicit "Year ending ..." points in a route series.
+ *
+ * Only some route families publish this pair. Where it is absent this returns null,
+ * and the caller must say nothing rather than substituting a different-length period:
+ * a trailing four-quarter total set against a calendar year is not a like-for-like
+ * comparison, and reading one as the other is what put an invented 89% collapse in
+ * small boat arrivals on the live site.
+ */
+export function getYearEndingComparison(points: RouteSeriesPoint[]): PeriodComparison | null {
+  const yearEnding = points.filter((point) => /^Year ending/.test(point.periodLabel));
+
+  if (yearEnding.length < 2) {
+    return null;
+  }
+
+  const previous = yearEnding[yearEnding.length - 2];
+  const current = yearEnding[yearEnding.length - 1];
+
+  if (!previous.value) {
+    return null;
+  }
+
+  return {
+    current: current.value,
+    previous: previous.value,
+    changePct: ((current.value - previous.value) / previous.value) * 100,
+    currentLabel: current.periodLabel,
+    previousLabel: previous.periodLabel
+  };
+}
+
+/**
+ * Recover the year-earlier quarter for a series that publishes calendar-year totals
+ * plus a part-year tail, but no "Year ending" pair. Small boat arrivals is the case:
+ * the headline is a trailing four-quarter window, so the only honest trend claim
+ * beside it compares the same quarter a year apart.
+ *
+ * previousYearQuarter = lastFullCalendarYear + currentQuarter - trailingWindowTotal
+ *
+ * That identity only holds when the part-year tail is exactly the first quarter and
+ * the window ends on it, so both conditions are checked and null is returned
+ * otherwise. Guessing here would reintroduce the bug this guards against.
+ */
+export function getLikeForLikeQuarter(
+  points: RouteSeriesPoint[],
+  trailingWindowTotal: number,
+  trailingWindowLabel: string
+): PeriodComparison | null {
+  if (!/^Year ending March\b/.test(trailingWindowLabel)) {
+    return null;
+  }
+
+  const partial = points.find((point) => point.isPartialYear && /\(Q1 only\)/.test(point.periodLabel));
+  const lastFullYear = [...points].reverse().find((point) => !point.isPartialYear && /^\d{4}$/.test(point.periodLabel));
+
+  if (!partial || !lastFullYear) {
+    return null;
+  }
+
+  const previousQuarter = lastFullYear.value + partial.value - trailingWindowTotal;
+
+  if (previousQuarter <= 0) {
+    return null;
+  }
+
+  return {
+    current: partial.value,
+    previous: previousQuarter,
+    changePct: ((partial.value - previousQuarter) / previousQuarter) * 100,
+    currentLabel: partial.periodLabel.replace(" (Q1 only)", " Q1"),
+    previousLabel: `${lastFullYear.periodLabel} Q1`
+  };
+}
