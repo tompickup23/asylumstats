@@ -18,6 +18,8 @@ export interface RouteSeriesPoint {
   /** True when the point covers fewer than four quarters, so it must not be
    * compared directly against a full year. */
   isPartialYear?: boolean;
+  // Present on MOJ tribunal series, where each period is marked final, revised or provisional.
+  seriesStatus?: "final" | "revised" | "provisional";
 }
 
 export interface RouteFamily {
@@ -71,12 +73,24 @@ export interface RouteQuarterBreakdownRow {
 }
 
 export interface RoutePostDecisionSeries {
-  lodged?: RouteSeriesPoint[];
-  determined?: RouteSeriesPoint[];
+  receipts?: RouteSeriesPoint[];
+  disposals?: RouteSeriesPoint[];
+  openCaseload?: RouteSeriesPoint[];
+  allowedRatePct?: RouteSeriesPoint[];
   total?: RouteSeriesPoint[];
   voluntary?: RouteSeriesPoint[];
   enforced?: RouteSeriesPoint[];
   refusedEntryDeparted?: RouteSeriesPoint[];
+}
+
+export interface RouteAppealCaseType {
+  id: string;
+  label: string;
+  receipts: number | null;
+  disposals: number | null;
+  openCaseload: number | null;
+  allowedRatePct: number | null;
+  meanWeeksToClear: number | null;
 }
 
 export interface RouteDashboard {
@@ -125,12 +139,27 @@ export interface RouteDashboard {
     outcomeCohorts: RouteOutcomeCohort[];
     recentOutcomeCohorts: RouteOutcomeCohort[];
     postDecisionPath: {
+      // First-tier Tribunal Immigration and Asylum Chamber caseload, from the MOJ tribunal
+      // statistics. Periods are financial-year quarters ("Q4 2025/26"), unlike the calendar
+      // quarters used by every Home Office series on this dashboard.
       appeals: {
         latestQuarterLabel: string | null;
         dataCompleteThroughLabel: string | null;
-        dataLagNote: string;
+        periodBasis: string;
+        periodBasisNote: string;
+        scopeLabel: string;
+        scopeNote: string;
+        provisionalNote: string;
+        sourceLabel: string;
+        sourceReleaseDate: string;
+        nextEditionDate: string;
+        meanWeeksToClear: number | null;
+        meanWeeksToClearChange: number | null;
+        allowedRatePct: number | null;
+        allowedRatePctPrevious: number | null;
         series: RoutePostDecisionSeries;
         latestDeterminationBreakdown: RouteQuarterBreakdownRow[];
+        caseTypes: RouteAppealCaseType[];
       };
       returns: {
         latestQuarterLabel: string | null;

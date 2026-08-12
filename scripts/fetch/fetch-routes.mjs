@@ -43,12 +43,8 @@ const sourceFiles = [
     sourceUrl:
       "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"
   },
-  {
-    fileName: "asylum-appeals-lodged-datasets-mar-2023.xlsx",
-    sourceId: "asylum_appeals",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx"
-  },
+  // The Home Office asylum-appeals-lodged dataset ended at 2023 Q1 and is no longer published.
+  // Appeal-stage figures come from scripts/fetch/fetch-tribunals.mjs (MOJ tribunal statistics).
   {
     fileName: "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
     sourceId: "asylum_support",
