@@ -12,7 +12,7 @@ summary: "41,472 people were detected arriving via small boat across the English
 
 **41,472 people** detected arriving via small boat in 2025.
 
-That's **89.2%** of all illegal entry routes. Small boats are not a route among many - they ARE the route.
+That's **89.2%** of all illegal entry routes. Small boats are not one route among many. They are the main one.
 
 The Rwanda deterrent scheme was scrapped by the incoming government. Replacement policy: the Border Security, Asylum and Immigration Command. Result so far: 41,472 arrivals.
 

@@ -22,6 +22,6 @@ Each domain is converted to a percentile rank. The composite score is the mean a
 
 **Blackpool**, **Preston**, and **Blackburn with Darwen** consistently appear in the top five across multiple domains. These are areas where asylum dispersal policy intersects with pre-existing deprivation, rapid demographic change, rising SEND demand, and elevated crime rates.
 
-No other UK public transparency platform combines these five domains at the local authority level. The data is published so that residents, councillors, and policymakers can see the full picture - not just one dimension of pressure at a time.
+No other UK public transparency platform combines these five domains at the local authority level. The data is published so that residents, councillors, and policymakers can see the full picture, not just one dimension of pressure at a time.
 
 This index measures the co-occurrence of pressures. It does not claim that any one domain causes another.

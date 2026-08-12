@@ -76,7 +76,7 @@ The UK pays France approximately £159 million per year under the March 2023 coo
 
 The government committed up to £280 million additional per year by 2028-29 for the new Border Security Command.
 
-We estimate approximately £500 million per year is attributable to asylum-related border operations. This is a judgement call - Border Force protects all UK borders (trade, drugs, people), and asylum is not the only function. A narrower definition would give approximately £350 million. A broader one, including enforcement, would give £650 million.
+We estimate approximately £500 million per year is attributable to asylum-related border operations. This is a judgement call. Border Force protects all UK borders (trade, drugs, people), and asylum is not the only function. A narrower definition would give approximately £350 million. A broader one, including enforcement, would give £650 million.
 
 Source: House of Commons Library CBP-9681. University of York/Liverpool, April 2025.
 

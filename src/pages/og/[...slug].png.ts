@@ -98,7 +98,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     {
       params: { slug: "home" },
       props: {
-        title: "Follow YOUR money",
+        title: "Follow the money",
         stat: `${latestQuarter.supportedAsylum.toLocaleString()}`,
         statLabel: "On asylum support",
         verdict: "info"
@@ -202,7 +202,7 @@ export const GET: APIRoute = async ({ props }) => {
                             color: COLORS.muted,
                             letterSpacing: "0.05em"
                           },
-                          children: "Follow YOUR money"
+                          children: "Follow the money"
                         }
                       }
                     ]

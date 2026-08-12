@@ -42,13 +42,14 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
       <span class="kicker">Regional</span>
       <h1>The regional picture</h1>
       <p>
-        {totalAsylum.toLocaleString()} asylum seekers on support nationally. Not evenly distributed.
-        Some regions carry five times the load of others. Nobody voted for that.
+        {totalAsylum.toLocaleString()} people on asylum support nationally, spread unevenly between regions.
+        The rate per 10,000 residents is the comparable measure and it varies several times over
+        between the highest and lowest regions.
       </p>
       <DataFreshness
-        updated={localRouteLatest.snapshotDate ?? "2025-12-31"}
+        updated={localRouteLatest.snapshotDate}
         source="Home Office"
-        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
+        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
       />
     </section>
   </section>
