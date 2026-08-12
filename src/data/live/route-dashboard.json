@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-05-27T12:24:32.258Z",
-  "localSnapshotDate": "2025-12-31",
+  "generatedAt": "2026-07-30T11:10:41.472Z",
+  "localSnapshotDate": "2026-03-31",
   "routeFamilies": [
     {
       "id": "safe_legal_total",
@@ -123,51 +123,60 @@
         {
           "periodLabel": "2018",
           "periodEnd": "2018-12-31",
-          "value": 299
+          "value": 299,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2019",
           "periodEnd": "2019-12-31",
-          "value": 1843
+          "value": 1843,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2020",
           "periodEnd": "2020-12-31",
-          "value": 8466
+          "value": 8466,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2021",
           "periodEnd": "2021-12-31",
-          "value": 28526
+          "value": 28526,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2022",
           "periodEnd": "2022-12-31",
-          "value": 45774
+          "value": 45774,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2023",
           "periodEnd": "2023-12-31",
-          "value": 29437
+          "value": 29437,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2024",
           "periodEnd": "2024-12-31",
-          "value": 36816
+          "value": 36816,
+          "isPartialYear": false
         },
         {
           "periodLabel": "2025",
           "periodEnd": "2025-12-31",
-          "value": 41472
+          "value": 41472,
+          "isPartialYear": false
         },
         {
-          "periodLabel": "2026",
+          "periodLabel": "2026 (Q1 only)",
           "periodEnd": "2026-12-31",
-          "value": 4441
+          "value": 4441,
+          "isPartialYear": true
         }
       ],
       "latestValue": 4441,
-      "latestPeriod": "2026",
+      "latestPeriod": "2026 (Q1 only)",
       "firstPeriod": "2018"
     },
     {
@@ -180,14 +189,14 @@
       "note": "Quarter-end stock of people receiving asylum support. Changes reflect net movement onto and off support, not the number of distinct people who passed through the system.",
       "series": [
         {
-          "periodLabel": "2025-12-31",
-          "periodEnd": "2025-12-31",
+          "periodLabel": "2026-03-31",
+          "periodEnd": "2026-03-31",
           "value": 97519
         }
       ],
       "latestValue": 97519,
-      "latestPeriod": "2025-12-31",
-      "firstPeriod": "2025-12-31"
+      "latestPeriod": "2026-03-31",
+      "firstPeriod": "2026-03-31"
     },
     {
       "id": "afghan_resettlement_programme",
@@ -554,16 +563,16 @@
     {
       "id": "small_boat_arrivals",
       "label": "Small boat arrivals",
-      "value": 4441,
-      "period": "2026",
-      "detail": "Detected arrivals via small boat across the UK.",
+      "value": 39271,
+      "period": "Year ending March 2026",
+      "detail": "Detected arrivals via small boat across the UK, over the latest four published quarters.",
       "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
     },
     {
       "id": "small_boat_share",
       "label": "Small boat share of illegal entry routes",
-      "value": 83.9,
-      "period": "2026",
+      "value": 89.6,
+      "period": "Year ending March 2026",
       "detail": "Derived from the illegal entry routes dataset.",
       "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
       "valueSuffix": "%"
@@ -572,7 +581,7 @@
       "id": "supported_asylum",
       "label": "Supported asylum population",
       "value": 97519,
-      "period": "As at 2025-12-31",
+      "period": "As at 2026-03-31",
       "detail": "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
       "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
     },
@@ -580,7 +589,7 @@
       "id": "contingency_accommodation",
       "label": "Contingency accommodation population",
       "value": 22428,
-      "period": "As at 2025-12-31",
+      "period": "As at 2026-03-31",
       "detail": "Proxy for the most visible temporary accommodation pressure.",
       "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
     },
@@ -620,21 +629,22 @@
   "illegalEntryMethodsLatestYear": [
     {
       "method": "Small boat arrivals",
-      "value": 4441
-    },
-    {
-      "method": "Recorded detections in the UK",
-      "value": 399
+      "value": 39271
     },
     {
       "method": "Inadequately documented air arrivals",
-      "value": 370
+      "value": 2621
+    },
+    {
+      "method": "Recorded detections in the UK",
+      "value": 1687
     },
     {
       "method": "Recorded detections at UK ports",
-      "value": 82
+      "value": 227
     }
   ],
+  "illegalEntryMethodsPeriodLabel": "Year ending March 2026",
   "smallBoatDecisionGroupsLatestYear": {
     "year": "2025",
     "rows": [
@@ -7199,7 +7209,7 @@
   ],
   "limitations": [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
-    "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    "The latest local immigration groups table is a stock snapshot as at 31 March 2026, while resettlement local authority data is a quarterly arrivals series.",
     "Awaiting an initial decision and receiving asylum support overlap, but they are not identical published populations. Support is not a synonym for the backlog.",
     "The latest machine-readable asylum appeals dataset currently ends at 2023 Q1, so it lags the current quarterly claims, decisions, backlog, and support series.",
     "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",

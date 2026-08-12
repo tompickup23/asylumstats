@@ -155,6 +155,53 @@ function rowObjects(filePath, sheetName, headerRowIndex = 1) {
   });
 }
 
+const MONTH_NAMES = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december"
+];
+
+// Home Office sheet titles carry their own reference date, e.g.
+// "Reg_02: Immigration groups, by Local Authority, as at 31 March 2026".
+// Reading it from the source keeps every published snapshot label in step with
+// whichever release is on disk. Throwing beats defaulting: a silently stale
+// label is the failure this replaced.
+function parseSnapshotDateFromTitle(rows, sheetName) {
+  const title = String(rows?.[0]?.[0] ?? "");
+  const match = title.match(/as at (\d{1,2}) ([A-Za-z]+) (\d{4})/i);
+  if (!match) {
+    throw new Error(
+      `Could not read an "as at" date from the ${sheetName} title row: ${title || "(empty)"}`
+    );
+  }
+
+  const monthIndex = MONTH_NAMES.indexOf(match[2].toLowerCase());
+  if (monthIndex === -1) {
+    throw new Error(`Unrecognised month "${match[2]}" in the ${sheetName} title row: ${title}`);
+  }
+
+  return [
+    match[3],
+    String(monthIndex + 1).padStart(2, "0"),
+    String(Number(match[1])).padStart(2, "0")
+  ].join("-");
+}
+
+function formatSnapshotDateLong(isoDate) {
+  const [year, month, day] = isoDate.split("-");
+  const monthName = MONTH_NAMES[Number(month) - 1];
+  return `${Number(day)} ${monthName[0].toUpperCase()}${monthName.slice(1)} ${year}`;
+}
+
 function roundNumber(value, digits = 2) {
   return Number(value.toFixed(digits));
 }
@@ -474,6 +521,9 @@ const returnsHash = fileSha256(sourceFiles.returns);
 
 const localImmigrationRows = readSheetRows(sourceFiles.localImmigration, "Reg_02");
 const localImmigrationRegionalRows = readSheetRows(sourceFiles.localImmigration, "Reg_01");
+
+const localSnapshotDate = parseSnapshotDateFromTitle(localImmigrationRows, "Reg_02");
+const localSnapshotDateLong = formatSnapshotDateLong(localSnapshotDate);
 const localResettlementRows = rowObjects(sourceFiles.localResettlement, "Data_Res_D01", 1);
 const illegalEntryRows = rowObjects(sourceFiles.illegalEntry, "Data_IER_D01", 1);
 const illegalBoatClaimRows = rowObjects(sourceFiles.illegalEntry, "Data_IER_D02", 1);
@@ -517,7 +567,7 @@ const localAreas = localImmigrationRows
       subsistenceOnly: safeNumber(row[13]),
       allThreePathwaysTotal: safeNumber(row[14]),
       shareOfPopulationPct: parseNumber(row[16]),
-      snapshotDate: "2025-12-31"
+      snapshotDate: localSnapshotDate
     };
 
     area.homesForUkraineRate = area.population
@@ -545,7 +595,7 @@ const localAreas = localImmigrationRows
         periodEnd: area.snapshotDate,
         periodType: "year",
         value: area.homesForUkraineArrivals,
-        notes: "Snapshot of arrivals as at 31 December 2025.",
+        notes: `Snapshot of arrivals as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -573,7 +623,7 @@ const localAreas = localImmigrationRows
         periodEnd: area.snapshotDate,
         periodType: "year",
         value: area.afghanProgrammePopulation,
-        notes: "Population snapshot as at 31 December 2025.",
+        notes: `Population snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -601,7 +651,7 @@ const localAreas = localImmigrationRows
         periodEnd: area.snapshotDate,
         periodType: "year",
         value: area.supportedAsylum,
-        notes: "Population snapshot as at 31 December 2025.",
+        notes: `Population snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -629,7 +679,7 @@ const localAreas = localImmigrationRows
         periodEnd: area.snapshotDate,
         periodType: "year",
         value: area.contingencyAccommodation,
-        notes: "Contingency accommodation snapshot as at 31 December 2025.",
+        notes: `Contingency accommodation snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       })
     );
@@ -657,7 +707,7 @@ const regionalRows = localImmigrationRegionalRows
       allThreePathwaysTotal: safeNumber(row[12]),
       population: safeNumber(row[13]),
       percentageOfPopulation: parseNumber(row[14]),
-      snapshotDate: "2025-12-31"
+      snapshotDate: localSnapshotDate
     };
 
     observationRows.push(
@@ -672,7 +722,7 @@ const regionalRows = localImmigrationRegionalRows
         periodEnd: record.snapshotDate,
         periodType: "year",
         value: record.homesForUkraineArrivals,
-        notes: "Regional or country snapshot as at 31 December 2025.",
+        notes: `Regional or country snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -686,7 +736,7 @@ const regionalRows = localImmigrationRegionalRows
         periodEnd: record.snapshotDate,
         periodType: "year",
         value: record.afghanProgrammePopulation,
-        notes: "Regional or country snapshot as at 31 December 2025.",
+        notes: `Regional or country snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -700,7 +750,7 @@ const regionalRows = localImmigrationRegionalRows
         periodEnd: record.snapshotDate,
         periodType: "year",
         value: record.supportedAsylum,
-        notes: "Regional or country snapshot as at 31 December 2025.",
+        notes: `Regional or country snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       }),
       makeObservation({
@@ -714,7 +764,7 @@ const regionalRows = localImmigrationRegionalRows
         periodEnd: record.snapshotDate,
         periodType: "year",
         value: record.contingencyAccommodation,
-        notes: "Regional or country snapshot as at 31 December 2025.",
+        notes: `Regional or country snapshot as at ${localSnapshotDateLong}.`,
         fileHash: localImmigrationHash
       })
     );
@@ -800,9 +850,12 @@ for (const row of [...resettlementSeriesByArea.values()]) {
 observationRows.push(...resettlementObservations);
 
 const illegalEntryByYearMethod = new Map();
+const illegalEntryByQuarterMethod = new Map();
+const illegalEntryQuartersByYear = new Map();
 
 for (const row of illegalEntryRows) {
   const year = String(row.Year || "").trim();
+  const quarter = String(row.Quarter || "").trim();
   const method = String(row["Method of entry"] || "").trim();
   const value = parseNumber(row["Number of detections"]);
   if (!year || !method || value === null) {
@@ -811,6 +864,37 @@ for (const row of illegalEntryRows) {
 
   const key = `${year}|${method}`;
   illegalEntryByYearMethod.set(key, (illegalEntryByYearMethod.get(key) || 0) + value);
+
+  if (quarter) {
+    const quarterKey = `${quarter}|${method}`;
+    illegalEntryByQuarterMethod.set(
+      quarterKey,
+      (illegalEntryByQuarterMethod.get(quarterKey) || 0) + value
+    );
+
+    if (!illegalEntryQuartersByYear.has(year)) {
+      illegalEntryQuartersByYear.set(year, new Set());
+    }
+    illegalEntryQuartersByYear.get(year).add(quarter);
+  }
+}
+
+// The final calendar year of a quarterly release is nearly always incomplete:
+// the year ending March 2026 edition carries only 2026 Q1. Labelling that bare
+// "2026" put one quarter on a chart beside four-quarter years and read as an
+// 89% collapse in small boat arrivals. Partial years now say so, matching the
+// "2026 (Q1 only)" convention the Home Office uses in its own summary tables.
+function describeYearCoverage(year) {
+  const quarters = [...(illegalEntryQuartersByYear.get(year) ?? [])]
+    .map((quarter) => quarter.replace(`${year} `, ""))
+    .sort();
+
+  if (quarters.length === 0 || quarters.length >= 4) {
+    return { label: year, isComplete: quarters.length >= 4, quarters };
+  }
+
+  const span = quarters.length === 1 ? quarters[0] : `${quarters[0]} to ${quarters.at(-1)}`;
+  return { label: `${year} (${span} only)`, isComplete: false, quarters };
 }
 
 const illegalEntryTotalsByYear = new Map();
@@ -821,10 +905,12 @@ for (const [key, value] of [...illegalEntryByYearMethod.entries()].sort()) {
   illegalEntryTotalsByYear.set(year, (illegalEntryTotalsByYear.get(year) || 0) + value);
 
   if (method === "Small boat arrivals") {
+    const coverage = describeYearCoverage(year);
     smallBoatArrivalsSeries.push({
-      periodLabel: year,
+      periodLabel: coverage.label,
       periodEnd: endOfYear(year),
-      value
+      value,
+      isPartialYear: !coverage.isComplete
     });
 
     observationRows.push(
@@ -845,6 +931,42 @@ for (const [key, value] of [...illegalEntryByYearMethod.entries()].sort()) {
     );
   }
 }
+
+// A trailing four-quarter window gives a like-for-like figure to headline when
+// the newest calendar year is incomplete, and matches the "year ending March"
+// framing every other route family on the dashboard already uses.
+const illegalEntryQuartersInOrder = [
+  ...new Set([...illegalEntryByQuarterMethod.keys()].map((key) => key.split("|")[0]))
+].sort();
+const illegalEntryLatestWindow = illegalEntryQuartersInOrder.slice(-4);
+
+function sumWindowByMethod(method) {
+  return illegalEntryLatestWindow.reduce(
+    (total, quarter) => total + (illegalEntryByQuarterMethod.get(`${quarter}|${method}`) || 0),
+    0
+  );
+}
+
+const illegalEntryWindowLabel = illegalEntryLatestWindow.length === 4
+  ? `Year ending ${
+      ["March", "June", "September", "December"][
+        Number(illegalEntryLatestWindow.at(-1).split("Q")[1]) - 1
+      ]
+    } ${illegalEntryLatestWindow.at(-1).split(" ")[0]}`
+  : (smallBoatArrivalsSeries.at(-1)?.periodLabel ?? "Latest period");
+
+const illegalEntryMethodsLatestWindow = [
+  ...new Set([...illegalEntryByYearMethod.keys()].map((key) => key.split("|")[1]))
+]
+  .map((method) => ({ method, value: sumWindowByMethod(method) }))
+  .filter((row) => row.value > 0)
+  .sort((a, b) => b.value - a.value);
+
+const smallBoatArrivalsLatestWindow = sumWindowByMethod("Small boat arrivals");
+const illegalEntryTotalLatestWindow = illegalEntryMethodsLatestWindow.reduce(
+  (total, row) => total + row.value,
+  0
+);
 
 for (const [year, value] of [...illegalEntryTotalsByYear.entries()].sort()) {
   observationRows.push(
@@ -1627,7 +1749,7 @@ const routeSeries = [
     series: regionalRows
       .filter((row) => row.areaCode === "UK")
       .map((row) => ({
-        periodLabel: "2025-12-31",
+        periodLabel: localSnapshotDate,
         periodEnd: row.snapshotDate,
         value: row.supportedAsylum
       }))
@@ -1800,16 +1922,18 @@ const nationalCards = [
   {
     id: "small_boat_arrivals",
     label: "Small boat arrivals",
-    value: smallBoatArrivalsSeries.at(-1)?.value ?? 0,
-    period: smallBoatArrivalsSeries.at(-1)?.periodLabel ?? "Latest year",
-    detail: "Detected arrivals via small boat across the UK.",
+    value: smallBoatArrivalsLatestWindow,
+    period: illegalEntryWindowLabel,
+    detail: "Detected arrivals via small boat across the UK, over the latest four published quarters.",
     sourceUrl: sourceMeta.illegalEntry.source_url
   },
   {
     id: "small_boat_share",
     label: "Small boat share of illegal entry routes",
-    value: latestSmallBoatShare,
-    period: smallBoatArrivalsSeries.at(-1)?.periodLabel ?? "Latest year",
+    value: illegalEntryTotalLatestWindow
+      ? roundNumber((smallBoatArrivalsLatestWindow / illegalEntryTotalLatestWindow) * 100, 1)
+      : 0,
+    period: illegalEntryWindowLabel,
     detail: "Derived from the illegal entry routes dataset.",
     sourceUrl: sourceMeta.illegalEntry.source_url,
     valueSuffix: "%"
@@ -1818,7 +1942,7 @@ const nationalCards = [
     id: "supported_asylum",
     label: "Supported asylum population",
     value: regionalRows.find((row) => row.areaCode === "UK")?.supportedAsylum ?? 0,
-    period: "As at 2025-12-31",
+    period: `As at ${localSnapshotDate}`,
     detail: "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
     sourceUrl: sourceMeta.localImmigration.source_url
   },
@@ -1826,7 +1950,7 @@ const nationalCards = [
     id: "contingency_accommodation",
     label: "Contingency accommodation population",
     value: regionalRows.find((row) => row.areaCode === "UK")?.contingencyAccommodation ?? 0,
-    period: "As at 2025-12-31",
+    period: `As at ${localSnapshotDate}`,
     detail: "Proxy for the most visible temporary accommodation pressure.",
     sourceUrl: sourceMeta.localImmigration.source_url
   },
@@ -2221,7 +2345,7 @@ const nationalSystemDynamics = {
 
 const routeDashboard = {
   generatedAt: new Date().toISOString(),
-  localSnapshotDate: "2025-12-31",
+  localSnapshotDate,
   routeFamilies: routeSeries.map((route) => ({
     ...route,
     latestValue: route.series.at(-1)?.value ?? 0,
@@ -2229,13 +2353,8 @@ const routeDashboard = {
     firstPeriod: route.series[0]?.periodLabel ?? null
   })),
   nationalCards,
-  illegalEntryMethodsLatestYear: [...illegalEntryByYearMethod.entries()]
-    .filter(([key]) => key.startsWith(`${smallBoatArrivalsSeries.at(-1)?.periodLabel}|`))
-    .map(([key, value]) => ({
-      method: key.split("|")[1],
-      value
-    }))
-    .sort((a, b) => b.value - a.value),
+  illegalEntryMethodsLatestYear: illegalEntryMethodsLatestWindow,
+  illegalEntryMethodsPeriodLabel: illegalEntryWindowLabel,
   smallBoatDecisionGroupsLatestYear: {
     year: latestSmallBoatOutcomeYear,
     rows: smallBoatDecisionGroupsLatestYear
@@ -2244,7 +2363,7 @@ const routeDashboard = {
   topAreasByMetric,
   limitations: [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
-    "The latest local immigration groups table is a stock snapshot as at 31 December 2025, while resettlement local authority data is a quarterly arrivals series.",
+    `The latest local immigration groups table is a stock snapshot as at ${localSnapshotDateLong}, while resettlement local authority data is a quarterly arrivals series.`,
     "Awaiting an initial decision and receiving asylum support overlap, but they are not identical published populations. Support is not a synonym for the backlog.",
     "The latest machine-readable asylum appeals dataset currently ends at 2023 Q1, so it lags the current quarterly claims, decisions, backlog, and support series.",
     "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
@@ -2269,7 +2388,7 @@ const routeDashboard = {
 
 const localRouteLatest = {
   generatedAt: new Date().toISOString(),
-  snapshotDate: "2025-12-31",
+  snapshotDate: localSnapshotDate,
   defaultCompareCodes,
   areas: localAreaSummaries,
   topAreasByMetric,

@@ -15,6 +15,9 @@ export interface RouteSeriesPoint {
   periodLabel: string;
   periodEnd: string | null;
   value: number;
+  /** True when the point covers fewer than four quarters, so it must not be
+   * compared directly against a full year. */
+  isPartialYear?: boolean;
 }
 
 export interface RouteFamily {
@@ -82,6 +85,8 @@ export interface RouteDashboard {
   routeFamilies: RouteFamily[];
   nationalCards: RouteCard[];
   illegalEntryMethodsLatestYear: Array<{ method: string; value: number }>;
+  /** Period the entry-method split actually covers, e.g. "Year ending March 2026". */
+  illegalEntryMethodsPeriodLabel: string;
   smallBoatDecisionGroupsLatestYear: {
     year: string;
     rows: Array<{ outcomeGroup: string; value: number }>;
