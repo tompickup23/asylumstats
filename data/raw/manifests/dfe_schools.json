@@ -1,0 +1,20 @@
+{
+  "dataset": "dfe_schools",
+  "publisher": "Department for Education",
+  "release": "School census 2025/26",
+  "releaseDate": "2026-06-04",
+  "nextEdition": null,
+  "landing": "https://explore-education-statistics.service.gov.uk",
+  "bank": "dfe",
+  "areaTier": "partial",
+  "fileCount": 1,
+  "totalBytes": 36804390,
+  "files": [
+    {
+      "file": "spc_pupils_ethnicity_and_language.csv",
+      "sizeBytes": 36804390,
+      "sha256": "8cf8af8c8608565529aa730b1f93433cab65bb753313aefbcd1a95a867718db1",
+      "modified": "2026-04-13"
+    }
+  ]
+}
