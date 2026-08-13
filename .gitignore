@@ -12,6 +12,7 @@ data/raw/lancashire_cc/spending-index.json
 data/raw/uk_routes/*.xlsx
 data/raw/uk_routes/*.ods
 data/raw/moj_tribunals/*.ods
+data/raw/small_boats/*.ods
 data/raw/moj_tribunals/*.zip
 data/raw/moj_tribunals/csvs/
 data/canonical/moj_tribunals/
@@ -60,3 +61,4 @@ src/data/live/money-ledger.json
 src/data/live/hotel-entity-ledger.json
 src/data/live/hotel-area-sightings.json
 src/data/live/hotel-archive-queue.json
+src/data/live/small-boats.json
