@@ -30,6 +30,8 @@
     "fetch:bordersecurity": "node scripts/fetch/fetch-border-security.mjs",
     "transform:bordersecurity": "node scripts/transform/transform-border-security.mjs",
     "ingest:bordersecurity": "npm run fetch:bordersecurity && npm run transform:bordersecurity",
+    "transform:asylumfinance": "node scripts/transform/transform-asylum-finance.mjs",
+    "transform:asylumfinance:check": "node scripts/transform/transform-asylum-finance.mjs --check",
     "fetch:regionalsources": "node scripts/fetch/fetch-regional-sources.mjs",
     "transform:regionalsources": "node scripts/transform/transform-regional-sources.mjs",
     "ingest:regionalsources": "npm run fetch:regionalsources && npm run transform:regionalsources",
