@@ -17,6 +17,7 @@ import { getRouteInvestigationTrails } from "../lib/investigations";
 import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { getRegionPressureSummaries, getSeriesDelta } from "../lib/route-analytics";
+import { loadBorderSecurity, signedPct } from "../lib/border-security";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -68,6 +69,19 @@ function chartSource(sourceId: string): { source?: string; sourceUrl?: string } 
   };
 }
 const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
+
+const borderSecurity = loadBorderSecurity();
+const oicSummary = borderSecurity.organisedImmigrationCrime.summary;
+const oicQuarterly = borderSecurity.organisedImmigrationCrime.quarterly;
+const oicAgency = borderSecurity.organisedImmigrationCrime.agencyInvolvement;
+const ukFrance = borderSecurity.ukFranceAgreement;
+const findMetric = (level: string) => {
+  const metric = oicSummary.metrics.find((candidate) => candidate.level === level);
+  if (!metric) throw new Error(`Border security mart has no "${level}" disruption metric`);
+  return metric;
+};
+const oicTotal = findMetric("total");
+const oicMajor = findMetric("major");
 const stockFlowCards = nationalSystemDynamics.stockFlowCards;
 const latestQuarter = nationalSystemDynamics.latestQuarter;
 const latestQuarterDecisionBreakdown = nationalSystemDynamics.latestQuarterDecisionBreakdown;
@@ -615,6 +629,127 @@ function formatCardValue(value: number, suffix?: string): string {
       {postDecisionPath.readingNotes.map((note) => (
         <article class="story-card">
           <p class="lede">{note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="enforcement-activity" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Enforcement activity rose faster than the routes it targets</h2>
+        <p class="lede">
+          Recorded disruptions of organised immigration crime reached {oicTotal.latest.toLocaleString()} in
+          {" "}{oicSummary.latestPeriodShort}, {signedPct(oicTotal.changePct)} on the
+          year before, while returns to France under the UK-France agreement ran close to transfers in. Both series come
+          from the Border Security Commander's annual report rather than the quarterly statistics, and neither is a
+          designated official statistic.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip accent">{borderSecurity.statisticsStatus}</span>
+        <span class="chip">Published {formatReleaseDate(borderSecurity.releaseDate)}</span>
+      </div>
+    </div>
+    <div class="viz-grid">
+      <TrendChart
+        points={oicQuarterly.map((row) => ({ label: row.quarterId, value: row.total }))}
+        title="Organised immigration crime disruptions"
+        description="All impact levels. Figures were revised down when this series moved to the annual report, so they do not splice onto the older quarterly tables."
+        tone="accent"
+        source="Border Security Command, disruptions and arrests, released July 2026"
+        sourceUrl={borderSecurity.organisedImmigrationCrime.sourceUrl}
+      />
+      <TrendChart
+        points={oicQuarterly.map((row) => ({ label: row.quarterId, value: row.major }))}
+        title="Major disruptions only"
+        description="The highest impact tier, and the one least sensitive to the recording changes that lifted the minor count."
+        tone="warm"
+        source="Border Security Command, disruptions and arrests, released July 2026"
+        sourceUrl={borderSecurity.organisedImmigrationCrime.sourceUrl}
+      />
+      <TrendChart
+        points={ukFrance.monthly.map((row) => ({ label: row.period, value: row.transferredIn }))}
+        title="Transferred into the UK under the UK-France agreement"
+        description={`${ukFrance.totals.transferredIn.toLocaleString()} in and ${ukFrance.totals.returnedOut.toLocaleString()} out over ${ukFrance.coverage.toLowerCase()}.`}
+        tone="teal"
+        source="Border Security Command, UK-France agreement transfers, released July 2026"
+        sourceUrl={ukFrance.sourceUrl}
+      />
+    </div>
+
+    <div class="split section" style="margin-top: 1rem;">
+      <div class="panel panel-pad">
+        <h3>Disruptions by impact level</h3>
+        <p class="lede">
+          The minor tier grew fastest in absolute terms and the moderate tier fastest in percentage terms. Major
+          disruptions, the tier hardest to record differently, rose {Math.abs(oicMajor.changePct)}%.
+        </p>
+        <div class="trend-table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Impact level</th>
+                <th scope="col">{oicSummary.priorPeriod}</th>
+                <th scope="col">{oicSummary.latestPeriod}</th>
+                <th scope="col">Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {oicSummary.metrics.map((metric) => (
+                <tr>
+                  <th scope="row">
+                    {metric.level === "total"
+                      ? "All disruptions"
+                      : `${metric.level[0].toUpperCase()}${metric.level.slice(1)}`}
+                  </th>
+                  <td>{metric.prior.toLocaleString()}</td>
+                  <td>{metric.latest.toLocaleString()}</td>
+                  <td>{metric.changePct >= 0 ? "+" : ""}{metric.changePct}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel panel-pad">
+        <h3>Arrests, and why the agency table does not add up to them</h3>
+        <p class="lede">
+          The Home Office reports {borderSecurity.organisedImmigrationCrime.arrests.basis}{" "}
+          {borderSecurity.organisedImmigrationCrime.arrests.latest.toLocaleString()} arrests in
+          {" "}{oicSummary.latestPeriodShort}, against
+          {" "}{borderSecurity.organisedImmigrationCrime.arrests.basis}{" "}
+          {borderSecurity.organisedImmigrationCrime.arrests.prior.toLocaleString()} the year before.
+          {" "}{borderSecurity.organisedImmigrationCrime.agencyInvolvement.note}
+        </p>
+        <div class="trend-table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Agency involved</th>
+                <th scope="col">{oicAgency.priorPeriod}</th>
+                <th scope="col">{oicAgency.latestPeriod}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {oicAgency.rows.map((row) => (
+                <tr>
+                  <th scope="row">{row.agency}</th>
+                  <td>{row.prior.toLocaleString()}</td>
+                  <td>{row.latest.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-grid" style="margin-top: 1rem;">
+      {[...borderSecurity.organisedImmigrationCrime.caveats, ...ukFrance.caveats].map((caveat) => (
+        <article class="story-card">
+          <p class="lede">{caveat}</p>
         </article>
       ))}
     </div>

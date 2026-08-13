@@ -40,20 +40,50 @@ export function periodKey(fileName) {
   return year * 100 + MONTHS[month];
 }
 
-/** Every .xlsx/.ods asset linked from a GOV.UK page. */
-export async function listDataFiles(pageUrl) {
+/**
+ * Every data asset linked from a GOV.UK page.
+ *
+ * Defaults to spreadsheets, which is what the quarterly series publish. Annual reports
+ * publish their numbers in a PDF alongside a spreadsheet of core tables, so `extensions`
+ * widens the net rather than forcing a second, near-identical scraper.
+ */
+export async function listDataFiles(pageUrl, { extensions = ["xlsx", "ods"] } = {}) {
   const response = await fetch(pageUrl, { headers: { "user-agent": "asylumstats-data-fetch" } });
   if (!response.ok) throw new Error(`${pageUrl} returned ${response.status}`);
   const html = await response.text();
-  const urls = [
-    ...html.matchAll(
-      /https:\/\/assets\.publishing\.service\.gov\.uk\/media\/[^"' ]+\.(?:xlsx|ods)/gi
-    )
-  ].map((match) => match[0]);
+  const pattern = new RegExp(
+    `https://assets\\.publishing\\.service\\.gov\\.uk/media/[^"' ]+\\.(?:${extensions.join("|")})`,
+    "gi"
+  );
+  const urls = [...html.matchAll(pattern)].map((match) => match[0]);
   return [...new Set(urls)].map((url) => ({
     url,
     fileName: decodeURIComponent(url.split("/").pop())
   }));
+}
+
+/**
+ * Files whose name matches `pattern`, for series with no period in the filename.
+ *
+ * The quarterly releases stamp a period into the filename, so `newestMatching` can sort
+ * them. Annual reports do not: the 2025-26 accounts arrive as
+ * `36.54_HO_ARA_25-26_WEB.pdf` and a core-tables workbook whose name records the date an
+ * internal draft was shared. There is nothing to sort on, so the caller names the shape
+ * it expects and gets everything that matches; an empty result throws rather than
+ * silently leaving whatever is already on disk.
+ */
+export function allMatching(files, pattern, { pageUrl } = {}) {
+  // A global regex carries lastIndex between .test() calls and would skip every other
+  // file. Strip the flag rather than trusting the caller to remember.
+  const stateless = new RegExp(pattern.source, pattern.flags.replace("g", ""));
+  const matches = files.filter((file) => stateless.test(file.fileName));
+  if (!matches.length) {
+    throw new Error(
+      `No file matching ${pattern} on ${pageUrl ?? "the publication page"}. ` +
+        `The page listed ${files.length} data files; the naming convention has probably changed.`
+    );
+  }
+  return matches;
 }
 
 /**

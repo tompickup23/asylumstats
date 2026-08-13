@@ -1,0 +1,289 @@
+{
+  "release": "The Border Security Commander's Annual Report: Data",
+  "releaseDate": "2026-07-16",
+  "statisticsStatus": "ad hoc / in development, not designated official statistics",
+  "organisedImmigrationCrime": {
+    "sourceUrl": "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/disruptions-and-arrests-for-organised-immigration-crime-activity-between-january-2023-and-march-2026",
+    "coverage": "January 2023 to March 2026",
+    "quarterly": [
+      {
+        "year": 2023,
+        "quarter": "January to March",
+        "quarterId": "2023-Q1",
+        "major": 7,
+        "moderate": 45,
+        "minor": 259,
+        "total": 311
+      },
+      {
+        "year": 2023,
+        "quarter": "April to June",
+        "quarterId": "2023-Q2",
+        "major": 14,
+        "moderate": 50,
+        "minor": 314,
+        "total": 378
+      },
+      {
+        "year": 2023,
+        "quarter": "July to September",
+        "quarterId": "2023-Q3",
+        "major": 14,
+        "moderate": 54,
+        "minor": 375,
+        "total": 443
+      },
+      {
+        "year": 2023,
+        "quarter": "October to December",
+        "quarterId": "2023-Q4",
+        "major": 17,
+        "moderate": 47,
+        "minor": 359,
+        "total": 423
+      },
+      {
+        "year": 2024,
+        "quarter": "January to March",
+        "quarterId": "2024-Q1",
+        "major": 13,
+        "moderate": 59,
+        "minor": 461,
+        "total": 533
+      },
+      {
+        "year": 2024,
+        "quarter": "April to June",
+        "quarterId": "2024-Q2",
+        "major": 21,
+        "moderate": 54,
+        "minor": 571,
+        "total": 646
+      },
+      {
+        "year": 2024,
+        "quarter": "July to September",
+        "quarterId": "2024-Q3",
+        "major": 16,
+        "moderate": 66,
+        "minor": 490,
+        "total": 572
+      },
+      {
+        "year": 2024,
+        "quarter": "October to December",
+        "quarterId": "2024-Q4",
+        "major": 21,
+        "moderate": 56,
+        "minor": 482,
+        "total": 559
+      },
+      {
+        "year": 2025,
+        "quarter": "January to March",
+        "quarterId": "2025-Q1",
+        "major": 26,
+        "moderate": 107,
+        "minor": 668,
+        "total": 801
+      },
+      {
+        "year": 2025,
+        "quarter": "April to June",
+        "quarterId": "2025-Q2",
+        "major": 24,
+        "moderate": 86,
+        "minor": 584,
+        "total": 694
+      },
+      {
+        "year": 2025,
+        "quarter": "July to September",
+        "quarterId": "2025-Q3",
+        "major": 22,
+        "moderate": 120,
+        "minor": 759,
+        "total": 901
+      },
+      {
+        "year": 2025,
+        "quarter": "October to December",
+        "quarterId": "2025-Q4",
+        "major": 28,
+        "moderate": 144,
+        "minor": 861,
+        "total": 1033
+      },
+      {
+        "year": 2026,
+        "quarter": "January to March",
+        "quarterId": "2026-Q1",
+        "major": 34,
+        "moderate": 156,
+        "minor": 948,
+        "total": 1138
+      }
+    ],
+    "summary": {
+      "latestPeriod": "1 April 2025 to 31 March 2026",
+      "priorPeriod": "1 April 2024 to 31 March 2025",
+      "latestPeriodShort": "the year to March 2026",
+      "priorPeriodShort": "the year to March 2025",
+      "metrics": [
+        {
+          "level": "major",
+          "latest": 108,
+          "prior": 84,
+          "changePct": 29
+        },
+        {
+          "level": "moderate",
+          "latest": 506,
+          "prior": 283,
+          "changePct": 79
+        },
+        {
+          "level": "minor",
+          "latest": 3152,
+          "prior": 2211,
+          "changePct": 43
+        },
+        {
+          "level": "total",
+          "latest": 3766,
+          "prior": 2578,
+          "changePct": 46
+        }
+      ]
+    },
+    "agencyInvolvement": {
+      "countsArrests": false,
+      "note": "Counts agency involvement in an arrest, not arrests. More than one agency can be involved in the same arrest, so these columns sum to more than the arrest total and must never be added up to produce one.",
+      "latestPeriod": "1 April 2025 to 31 March 2026",
+      "priorPeriod": "1 April 2024 to 31 March 2025",
+      "rows": [
+        {
+          "agency": "National Crime Agency",
+          "prior": 194,
+          "latest": 305
+        },
+        {
+          "agency": "Police Forces",
+          "prior": 382,
+          "latest": 1173
+        },
+        {
+          "agency": "Home Office",
+          "prior": 817,
+          "latest": 902
+        }
+      ]
+    },
+    "arrests": {
+      "basis": "at least",
+      "latest": 1900,
+      "prior": 1100,
+      "latestUkLawEnforcement": 1700,
+      "latestOverseasPartners": 200
+    },
+    "caveats": [
+      "Disruption figures are official statistics in development and are provisional, taken from live operational systems.",
+      "Arrest figures are not classified as official statistics.",
+      "The July 2026 release revises figures down against those previously published in Immigration system statistics, so the two series are not comparable.",
+      "Coverage is limited to the National Crime Agency, Home Office, NPCC police forces, Police Scotland and the PSNI."
+    ]
+  },
+  "ukFranceAgreement": {
+    "sourceUrl": "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30",
+    "coverage": "6 August 2025 to 30 June 2026",
+    "monthly": [
+      {
+        "year": 2025,
+        "month": "August",
+        "period": "August 2025",
+        "transferredIn": 0,
+        "returnedOut": 0
+      },
+      {
+        "year": 2025,
+        "month": "September",
+        "period": "September 2025",
+        "transferredIn": 3,
+        "returnedOut": 17
+      },
+      {
+        "year": 2025,
+        "month": "October",
+        "period": "October 2025",
+        "transferredIn": 51,
+        "returnedOut": 58
+      },
+      {
+        "year": 2025,
+        "month": "November",
+        "period": "November 2025",
+        "transferredIn": 87,
+        "returnedOut": 78
+      },
+      {
+        "year": 2025,
+        "month": "December",
+        "period": "December 2025",
+        "transferredIn": 104,
+        "returnedOut": 64
+      },
+      {
+        "year": 2026,
+        "month": "January",
+        "period": "January 2026",
+        "transferredIn": 122,
+        "returnedOut": 88
+      },
+      {
+        "year": 2026,
+        "month": "February",
+        "period": "February 2026",
+        "transferredIn": 3,
+        "returnedOut": 49
+      },
+      {
+        "year": 2026,
+        "month": "March",
+        "period": "March 2026",
+        "transferredIn": 73,
+        "returnedOut": 109
+      },
+      {
+        "year": 2026,
+        "month": "April",
+        "period": "April 2026",
+        "transferredIn": 138,
+        "returnedOut": 142
+      },
+      {
+        "year": 2026,
+        "month": "May",
+        "period": "May 2026",
+        "transferredIn": 222,
+        "returnedOut": 218
+      },
+      {
+        "year": 2026,
+        "month": "June",
+        "period": "June 2026",
+        "transferredIn": 314,
+        "returnedOut": 264
+      }
+    ],
+    "totals": {
+      "transferredIn": 1117,
+      "returnedOut": 1087
+    },
+    "caveats": [
+      "An ad hoc statistical release from operational reporting systems, not designated official statistics.",
+      "Someone returned to France who later re-enters the UK is counted once, not once per return.",
+      "Returns count completed returns to France, not referrals, detention or readmission requests.",
+      "Figures may be revised for corrections, duplicates or case reclassification."
+    ]
+  }
+}

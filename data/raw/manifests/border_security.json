@@ -1,0 +1,36 @@
+{
+  "dataset": "border_security",
+  "publisher": "Home Office / Border Security Command",
+  "release": "The Border Security Commander's Annual Report: Data",
+  "cadence": "annual (July)",
+  "landing": "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data",
+  "bank": "home-office/transparency",
+  "areaTier": "national",
+  "coveragePeriod": "OIC disruptions January 2023 to March 2026; UK-France transfers 6 August 2025 to 30 June 2026",
+  "releaseDate": "2026-07-16",
+  "nextEdition": "2027-07-31",
+  "statisticsStatus": "ad hoc / in development, not designated official statistics",
+  "supersedes": "organised-immigration-crime-summary-tables-mar-2026.ods",
+  "fileCount": 2,
+  "totalBytes": 190062,
+  "files": [
+    {
+      "file": "oic_disruptions.html",
+      "releaseId": "oic_disruptions",
+      "label": "Disruptions and arrests for organised immigration crime activity",
+      "sourceUrl": "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/disruptions-and-arrests-for-organised-immigration-crime-activity-between-january-2023-and-march-2026",
+      "tableCount": 2,
+      "sizeBytes": 105629,
+      "sha256": "2ee2bf82d9e8e39f058d0fc72b5899dee956ccf47adb5d677c0eb03852c78232"
+    },
+    {
+      "file": "uk_france_transfers.html",
+      "releaseId": "uk_france_transfers",
+      "label": "Transfers into and returns from the UK under the UK-France agreement",
+      "sourceUrl": "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30",
+      "tableCount": 1,
+      "sizeBytes": 84433,
+      "sha256": "a7373c90e0f1c662045adc0dd3e76c9798eaded277eb48cddcecfbf865e7fb67"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+name: Update desktop baselines
+
+# Regenerates the Playwright desktop screenshot baselines on Linux and commits them.
+#
+# The baselines are Linux renders and cannot be produced correctly on a developer Mac:
+# font rendering differs enough that every page diffs. That is why they drifted unnoticed
+# for so long, and why `national` and `regional` have no baseline at all.
+#
+# Run this manually, review the committed PNGs, then set ASSERT_SCREENSHOTS=1 on the
+# test:desktop steps in deploy.yml and site-checks.yml to start enforcing them.
+#
+# There is no interpolation of any GitHub event data into a shell command here.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - env:
+          BUILD_OG: "1"
+        run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - env:
+          ASSERT_SCREENSHOTS: "1"
+        run: npm run test:desktop -- --update-snapshots
+      - name: Commit regenerated baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/desktop-layout.spec.ts-snapshots
+          if git diff --cached --quiet; then
+            echo "Baselines unchanged."
+          else
+            git commit -m "test(desktop): regenerate Linux screenshot baselines"
+            git push
+          fi
