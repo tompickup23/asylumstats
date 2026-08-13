@@ -10,6 +10,7 @@ import { loadMoneyLedger } from "../lib/money-data";
 import { getSignificantDemographicShifts, getEthnicProjection } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
 import rawProjections from "../data/live/ethnic-projections.json";
+import smallBoatsSeries from "../data/live/small-boats.json";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
 
@@ -75,6 +76,34 @@ const familyReunionChange = getYearEndingComparison(routeSeries("refugee_family_
 const irregularEntryMethods = (routeDashboard.illegalEntryMethodsLatestYear as any[]) ?? [];
 const irregularEntryTotal = irregularEntryMethods.reduce((sum: number, m: any) => sum + (m.value ?? 0), 0);
 const smallBoatSharePct = irregularEntryTotal > 0 ? (smallBoatArrivals / irregularEntryTotal) * 100 : null;
+
+// The weekly series, which is a different measure from the quarterly card above and is
+// labelled as such rather than blended into it. The quarterly figure is the official
+// year-ending total; this is the running calendar year, published weekly on Fridays.
+// Presenting both without saying which is which is how the family reunion figures came
+// to read as a contradiction when both were correct.
+const smallBoatsWeekly = smallBoatsSeries as {
+  coverageEnd: string;
+  yearToDate: { year: number; arrivals: number; priorYear: number; priorYearArrivals: number; changePct: number | null };
+};
+const sbYtd = smallBoatsWeekly.yearToDate;
+const sbAsAt = new Date(`${smallBoatsWeekly.coverageEnd}T00:00:00Z`).toLocaleDateString("en-GB", {
+  day: "numeric", month: "long", year: "numeric", timeZone: "UTC"
+});
+
+// One card, two measures, each labelled. The weekly series leads because it is the
+// figure a reader arrives for; the year-ending total follows because it is the official
+// quarterly one and the two are not interchangeable. Two adjacent cards were tried and
+// dropped: they read as a contradiction, and seven cards orphan a row in a three-column
+// grid, which is what the desktop layout test caught.
+const smallBoatsCardContext = [
+  `1 January to ${sbAsAt}, against ${fmtInt(sbYtd.priorYearArrivals)} at the same point in ${sbYtd.priorYear}`,
+  sbYtd.changePct !== null
+    ? `, a ${sbYtd.changePct < 0 ? "fall" : "rise"} of ${Math.abs(sbYtd.changePct).toFixed(0)}%.`
+    : ".",
+  ` Home Office weekly series, updated Fridays. The year ending ${smallBoatPeriod.replace(/^Year ending /, "")} total was ${fmtInt(smallBoatArrivals)}`,
+  smallBoatSharePct !== null ? `, ${smallBoatSharePct.toFixed(0)}% of detected irregular entry.` : "."
+].join("");
 
 // Data vintage, read from the payload. Never hardcode: the stock date moves every quarter.
 const dataVintage = routeDashboard.localSnapshotDate ?? localRouteLatest.snapshotDate;
@@ -253,19 +282,9 @@ function findingColor(verdict: string): string {
         <span class="sys-context">As at {snapshotDate}. Cases lodged but not yet decided at first instance.</span>
       </article>
       <article class="sys-card">
-        <span class="sys-value sys-coral">{fmtInt(smallBoatArrivals)}</span>
-        <span class="sys-label">Small boat arrivals</span>
-        <span class="sys-context">
-          {smallBoatPeriod}.
-          {smallBoatQuarter && (
-            <>
-              {" "}Like for like, {smallBoatQuarter.currentLabel} was {fmtInt(smallBoatQuarter.current)} against{" "}
-              {fmtInt(smallBoatQuarter.previous)} in {smallBoatQuarter.previousLabel}, a{" "}
-              {smallBoatQuarter.changePct < 0 ? "fall" : "rise"} of {Math.abs(smallBoatQuarter.changePct).toFixed(0)}%.
-            </>
-          )}
-          {smallBoatSharePct !== null && ` ${smallBoatSharePct.toFixed(0)}% of detected irregular entry.`}
-        </span>
+        <span class="sys-value sys-coral">{fmtInt(sbYtd.arrivals)}</span>
+        <span class="sys-label">Small boat arrivals, {sbYtd.year} so far</span>
+        <span class="sys-context">{smallBoatsCardContext}</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-coral">{grantRatePct}%</span>

@@ -32,7 +32,8 @@ const SYNCED = {
   "money_ledger/money-ledger.json": "money-ledger.json",
   "hotel_entities/hotel-entity-ledger.json": "hotel-entity-ledger.json",
   "hotel_entities/hotel-area-sightings.json": "hotel-area-sightings.json",
-  "hotel_entities/hotel-archive-queue.json": "hotel-archive-queue.json"
+  "hotel_entities/hotel-archive-queue.json": "hotel-archive-queue.json",
+  "small_boats/small-boats.json": "small-boats.json"
 };
 
 const checkOnly = process.argv.includes("--check");
