@@ -89,7 +89,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     props: {
       title: area.areaName,
       stat: area.supportedAsylum.toLocaleString(),
-      statLabel: `On asylum support - Rank ${rankMap.get(area.areaCode) ?? "?"} of ${localRouteLatest.areas.length} - ${area.supportedAsylumRate?.toFixed(1) ?? "?"} per 10,000`,
+      statLabel: `On asylum support. Rank ${rankMap.get(area.areaCode) ?? "?"} of ${localRouteLatest.areas.length}, ${area.supportedAsylumRate?.toFixed(1) ?? "?"} per 10,000`,
       verdict: (area.supportedAsylumRate ?? 0) > 30 ? "critical" : (area.supportedAsylumRate ?? 0) > 10 ? "alert" : "info"
     }
   }));
