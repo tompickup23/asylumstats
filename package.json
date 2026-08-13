@@ -32,6 +32,7 @@
     "audit:coverage": "node scripts/audit/area-coverage.mjs",
     "audit:coverage:check": "node scripts/audit/area-coverage.mjs --check",
     "audit:freshness": "node scripts/audit/source-freshness.mjs",
+    "audit:model-io": "node scripts/audit/model-io-graph.mjs",
     "sync:live": "node scripts/build/sync-live.mjs",
     "sync:live:check": "node scripts/build/sync-live.mjs --check",
     "ingest:money": "npm run transform:money",
