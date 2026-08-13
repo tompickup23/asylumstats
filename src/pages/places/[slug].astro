@@ -181,16 +181,23 @@ const sendProfile = getSendProfile(area.areaCode);
 const sendPercentile = getSendGrowthPercentile(area.areaCode);
 const ascProfile = getAscProfile(area.areaCode);
 const ascPercentile = getAscSpendPercentile(area.areaCode);
-// Math.round(x / 1_000_000) collapsed every area under about nine people to "£0M per
-// year", which read as a template leak on 59 pages. State nothing where there is
-// nothing to state, and use thousands below a million rather than rounding to zero.
-const estimatedAnnualCostGbp = area.supportedAsylum * 150 * 365;
-const estimatedAnnualCostLabel =
-  area.supportedAsylum === 0
-    ? ""
-    : estimatedAnnualCostGbp < 1_000_000
-      ? ` At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(estimatedAnnualCostGbp / 1_000)}k per year for this area alone.`
-      : ` At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(estimatedAnnualCostGbp / 1_000_000)}M per year for this area alone.`;
+// Per-area cost is withheld until the True Cost figure is settled.
+//
+// The £150/person/day this used to assert was not arbitrary: £5.3bn / 97,519 supported
+// / 365 = £148.90, the site's own True Cost LOW estimate expressed per person per day.
+// It is total-system cost, not accommodation, but the sentence never said so and sat
+// beside accommodation figures, so it read as the latter.
+//
+// The problem is the base. True Cost is currently stated five different ways across the
+// site (£5.3bn to £6.3bn and £169/taxpayer on the homepage, £8bn and £230 in the
+// finding, £207 in that finding's own headline, £8.1B in the nav). Per person per day
+// those bases give £148.90, £176.99 and £224.75. Publishing a per-area £ figure derived
+// from a disputed base, on 373 pages, is not defensible on a site whose proposition is
+// that every figure traces to a source.
+//
+// Reinstate this from the single canonical True Cost constant once that lands, the same
+// way the projection interval returns once the model is reconciled.
+const estimatedAnnualCostLabel = "";
 
 const pressureScore = computePressureScore(
   area.areaCode,
