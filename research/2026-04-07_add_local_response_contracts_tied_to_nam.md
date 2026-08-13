@@ -4,7 +4,7 @@ Generated: 2026-04-07
 Project: asylum_stats
 
 # **Research Brief: Adding Local Response Contracts Tied to Named Hotels**
-**Priority:** M | **Project:** Asylum Stats | **Owner:** Tom Pickup
+**Priority:** M | **Project:** Asylum Stats | **Owner:** Asylum Stats
 
 ---
 

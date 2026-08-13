@@ -4,7 +4,7 @@ Generated: 2026-04-07
 Project: asylum_stats
 
 ### **Research Brief: Supplier Detail Pages from Money + Hotel Entity Ledgers**
-**Priority: H** | **Project: Asylum Stats** | **Owner: Tom Pickup**
+**Priority: H** | **Project: Asylum Stats** | **Owner: Asylum Stats**
 
 ---
 
