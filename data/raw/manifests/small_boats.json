@@ -15,5 +15,7 @@
       "sizeBytes": 75168,
       "sha256": "f4a656ed7a67a3759b75c0442c653ccbffabf2d1449ef6fd4958104aaa032dac"
     }
-  ]
+  ],
+  "coverageEnd": "2026-08-06",
+  "maxAgeDays": 10
 }

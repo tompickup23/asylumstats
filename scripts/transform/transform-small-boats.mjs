@@ -161,4 +161,21 @@ console.log(
     `${priorYtd.toLocaleString()} at the same point in ${latestYear - 1} ` +
     `(${mart.yearToDate.changePct > 0 ? "+" : ""}${mart.yearToDate.changePct}%)`
 );
+// Stamp the manifest with how current the data actually is. A weekly source has no
+// "next edition" date to check against, so freshness has to come from the data itself:
+// source-freshness.mjs compares coverageEnd against maxAgeDays. Without this the series
+// most likely to go stale was the one classified "no-cycle" and never checked.
+const manifestPath = resolve(ROOT, "data/raw/manifests/small_boats.json");
+try {
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  manifest.coverageEnd = mart.coverageEnd;
+  // Published Fridays; 10 days allows for a bank holiday or a late release without
+  // crying wolf, while still catching a series that has genuinely stopped updating.
+  manifest.maxAgeDays = 10;
+  writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  console.log(`Stamped manifest with coverageEnd ${mart.coverageEnd}`);
+} catch (cause) {
+  console.warn(`Could not stamp the manifest: ${cause.message}`);
+}
+
 console.log(`Wrote data/marts/small_boats/small-boats.json`);
