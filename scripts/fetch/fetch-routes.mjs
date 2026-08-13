@@ -2,68 +2,59 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { listDataFiles, newestMatching } from "../lib/govuk-discover.mjs";
 
 const rawDir = path.resolve("data/raw/uk_routes");
 const manifestDir = path.resolve("data/raw/manifests");
 
-const sourceFiles = [
-  {
-    fileName: "regional-and-local-authority-dataset-dec-2025.ods",
-    sourceId: "local_immigration_groups",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods"
-  },
-  {
-    fileName: "resettlement-local-authority-datasets-dec-2025.xlsx",
-    sourceId: "local_resettlement_routes",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx"
-  },
-  {
-    fileName: "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
-    sourceId: "illegal_entry_routes",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx"
-  },
-  {
-    fileName: "asylum-claims-datasets-dec-2025.xlsx",
-    sourceId: "asylum_claims",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx"
-  },
-  {
-    fileName: "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
-    sourceId: "asylum_awaiting_decision",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx"
-  },
-  {
-    fileName: "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
-    sourceId: "asylum_outcome_analysis",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx"
-  },
+// Where each dataset lives. Seven sit on the quarterly data tables page; the regional
+// and local authority file has its own statistical data set page.
+const DATA_TABLES =
+  "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables";
+const REGIONAL_LA =
+  "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data";
+
+/**
+ * Sources named by the STABLE part of the filename, not by URL.
+ *
+ * These were eight hardcoded dec-2025 links, still pointing at December 2025 months
+ * after the mar-2026 release. Running this would have re-fetched last year's data
+ * without complaint, which is why data/raw/manifests/uk_routes.json described files that
+ * were no longer the ones the site used. Each URL carries a release period and a media
+ * hash, so it cannot be written down and left.
+ */
+const sourceStems = [
+  { stem: "regional-and-local-authority-dataset", sourceId: "local_immigration_groups", page: REGIONAL_LA },
+  { stem: "resettlement-local-authority-datasets", sourceId: "local_resettlement_routes", page: DATA_TABLES },
+  { stem: "illegal-entry-routes-to-the-uk-dataset", sourceId: "illegal_entry_routes", page: DATA_TABLES },
+  { stem: "asylum-claims-datasets", sourceId: "asylum_claims", page: DATA_TABLES },
+  { stem: "asylum-claims-awaiting-decision-datasets", sourceId: "asylum_awaiting_decision", page: DATA_TABLES },
+  { stem: "outcome-analysis-asylum-claims-datasets", sourceId: "asylum_outcome_analysis", page: DATA_TABLES },
   // The Home Office asylum-appeals-lodged dataset ended at 2023 Q1 and is no longer published.
   // Appeal-stage figures come from scripts/fetch/fetch-tribunals.mjs (MOJ tribunal statistics).
-  {
-    fileName: "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
-    sourceId: "asylum_support",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx"
-  },
-  {
-    fileName: "returns-datasets-dec-2025.xlsx",
-    sourceId: "returns",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx"
-  },
-  {
-    fileName: "safe-legal-routes-summary-tables-dec-2025.ods",
-    sourceId: "safe_legal_routes_summary",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods"
-  }
+  { stem: "asylum-seekers-receipt-support-datasets", sourceId: "asylum_support", page: DATA_TABLES },
+  { stem: "returns-datasets", sourceId: "returns", page: DATA_TABLES },
+  { stem: "safe-legal-routes-summary-tables", sourceId: "safe_legal_routes_summary", page: DATA_TABLES }
 ];
+
+// Resolve each stem to the newest published file. Pages are fetched once and reused.
+const pageCache = new Map();
+const sourceFiles = [];
+for (const source of sourceStems) {
+  if (!pageCache.has(source.page)) {
+    pageCache.set(source.page, await listDataFiles(source.page));
+  }
+  const newest = newestMatching(pageCache.get(source.page), source.stem);
+  if (!newest) {
+    throw new Error(
+      `No current file found for "${source.stem}" on ${source.page}. ` +
+        "Refusing to fall back to whatever is on disk: that is how eight dec-2025 URLs " +
+        "survived the mar-2026 release."
+    );
+  }
+  console.log(`  ${source.sourceId.padEnd(28)} ${newest.fileName}`);
+  sourceFiles.push({ fileName: newest.fileName, sourceId: source.sourceId, sourceUrl: newest.url });
+}
 
 function downloadFile(url, destination) {
   execFileSync("curl", ["-sS", "-L", url, "-o", destination], {
