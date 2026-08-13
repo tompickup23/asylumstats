@@ -49,10 +49,21 @@ function fmtGbp(n: number) {
 // figures cannot drift onto different denominators.
 const annualCostGbp = dailyCostGbp * 365;
 const perTaxpayerGbp = Math.round(annualCostGbp / UK_TAXPAYERS);
-const costPerResidentPerDay = latestQuarter.hotelAccommodation > 0
-  ? Math.round(dailyCostGbp / latestQuarter.hotelAccommodation)
-  : 186;
-const costPerResidentPerYear = costPerResidentPerDay * 365;
+// Per-night hotel cost is NOT derived from the current hotel population.
+//
+// It used to be: dailyCostGbp / latestQuarter.hotelAccommodation. That divides a
+// 2024/25 average cost by the population at 31 March 2026, and because hotel numbers
+// have fallen hard (38,054 at end 2024, 30,657 at end 2025, 20,885 now) it inflated the
+// rate to £276 a night and £100,740 a year per resident. The page footnote admitted the
+// periods differed and published it anyway.
+//
+// On matched 2024/25 figures the rate is about £169 a night, and the Migration
+// Observatory independently publishes about £170 for the same year. So the published
+// figure overstated by roughly 60%.
+//
+// The honest card states the rate for the year the cost belongs to, and shows the
+// current hotel population as its own separate, current fact.
+const HOTEL_NIGHTLY_2024_25 = 170;
 
 // System flow stats
 const smallBoatCard = routeDashboard.nationalCards?.[0];
@@ -184,7 +195,7 @@ function findingColor(verdict: string): string {
 
 <BaseLayout
   title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-  description={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum accommodation, about £${perTaxpayerGbp} per income taxpayer per year. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
+  description={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum hotels, about £${perTaxpayerGbp} per income taxpayer per year. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
   image="/og/home.png"
 >
   <!-- ═══ HERO ═══ -->
@@ -193,7 +204,7 @@ function findingColor(verdict: string): string {
       <div class="hero-eyebrow">Home Office asylum accommodation</div>
       <h1 class="hero-headline">
         <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
-        <span class="hero-label">a day on asylum accommodation.</span>
+        <span class="hero-label">a day on asylum hotels.</span>
       </h1>
       <p class="hero-subline">
         That is about £{perTaxpayerGbp} per income taxpayer per year.
@@ -247,9 +258,9 @@ function findingColor(verdict: string): string {
         <span class="cost-calc">£{(TOTAL_GBP_M.central / 1000).toFixed(1)}B total / 34.1M taxpayers. Hotels alone = £{perTaxpayerGbp}.</span>
       </div>
       <div class="cost-item">
-        <span class="cost-number">£{fmtInt(costPerResidentPerYear)}</span>
-        <span class="cost-label">per hotel resident per year</span>
-        <span class="cost-context">£{costPerResidentPerDay}/night. {fmtInt(latestQuarter.hotelAccommodation)} people in asylum hotels at {snapshotDate}.</span>
+        <span class="cost-number">£{HOTEL_NIGHTLY_2024_25}</span>
+        <span class="cost-label">per person per night in a hotel</span>
+        <span class="cost-context">2024/25 average, the year the £{(dailyCostGbp / 1_000_000).toFixed(2)}M daily figure covers. {fmtInt(latestQuarter.hotelAccommodation)} people were in asylum hotels at {snapshotDate}, down from 30,657 at the end of 2025.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">{fmtGbp(tenYearGbp)}</span>
@@ -257,7 +268,7 @@ function findingColor(verdict: string): string {
         <span class="cost-context">NAO forecast. The 10-year asylum accommodation contract rose from £4.5B to £15.3B.</span>
       </div>
     </div>
-    <p class="cost-source">Total cost: Home Office Annual Report and Accounts 2025-26 for the audited departmental lines, published figures and stated estimates for the rest. Daily cost: Home Office factsheet (2024/25 average). Taxpayers: HMRC projected 2024-25. Per-resident: daily average / Q4 2025 hotel count (time periods differ). 10-year: NAO Investigation into Asylum Accommodation, Nov 2024.</p>
+    <p class="cost-source">Total cost: Home Office Annual Report and Accounts 2025-26 for the audited departmental lines, published figures and stated estimates for the rest. Daily cost: Home Office factsheet (2024/25 average). Taxpayers: HMRC projected 2024-25. Per-night hotel rate: Migration Observatory, 2024/25, the same year as the daily cost. 10-year: NAO Investigation into Asylum Accommodation, Nov 2024.</p>
   </section>
 
   <!-- ═══ THE SYSTEM IN NUMBERS ═══ -->
@@ -504,7 +515,7 @@ function findingColor(verdict: string): string {
   <section class="cta-section shell">
     <div class="cta-inner">
       <h2>Every number sourced. Every source linked.</h2>
-      <p>No spin. No hedging. Just data. Click any figure and trace it back to the government's own publications. Then decide for yourself.</p>
+      <p>Click any figure and trace it back to the government's own publications. Then decide for yourself.</p>
       <div class="cta-buttons">
         <a href="/places/" class="cta-btn cta-btn--primary">Look up your area</a>
         <a href="/findings/" class="cta-btn cta-btn--secondary">Read the findings</a>
@@ -514,7 +525,7 @@ function findingColor(verdict: string): string {
         <ShareButton
           url={SITE_URL}
           title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-          text={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum accommodation, about £${perTaxpayerGbp} per income taxpayer per year. Sourced data by local authority: ${SITE_URL}`}
+          text={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum hotels, about £${perTaxpayerGbp} per income taxpayer per year. Sourced data by local authority: ${SITE_URL}`}
           compact
         />
       </div>

@@ -1,5 +1,5 @@
 ---
-headline: "The Home Office is wrong by 14.6 percentage points: the appeal uplift across 70 nationalities"
+headline: "Asylum grant rates rise sharply on appeal, across 70 nationalities"
 date: "2026-05-27"
 category: routes
 content_type: article
@@ -11,25 +11,25 @@ source_label: "Home Office Asy_D04 Outcome Analysis, YE March 2026 release"
 summary: "Across 70 nationalities tracked in the Asy_D04 outcome analysis, asylum grant rates rise by an average of 14.6 percentage points between initial decision and final outcome after appeal. Sri Lanka 31 percent initial to 60 percent after appeals. Iraq 38 percent to 57 percent. Russia 61 percent to 79 percent. The published initial grant rate of 39 percent for YE March 2026 understates the true protection rate by approximately 14 percentage points."
 ---
 
-**Every quoted asylum grant rate is wrong. The Home Office knows it. The Asy_D04 Outcome Analysis dataset, released 21 May 2026, shows the gap.**
+**The initial-decision grant rate is not the final grant rate, and the gap is large. The Home Office publishes both, in the Asy_D04 Outcome Analysis dataset released 21 May 2026. Almost nobody quotes the second one.**
 
 When the Home Office initial-decision system refuses an asylum claim, the refused applicant can appeal to the First-Tier Tribunal (Immigration and Asylum Chamber). Across 70 nationalities tracked in the Asy_D04 outcome analysis dataset, the appeal process lifts the grant rate by an average of 14.6 percentage points compared with the initial decision.
 
 For some nationalities the gap is enormous.
 
-| Nationality | Initial grant rate | After appeals | Appeal uplift |
-|---|---:|---:|---:|
-| Sri Lanka | 31.0% | 60.1% | +33.2pp |
-| Iraq | 37.7% | 57.0% | +26.1pp |
-| DR Congo | 44.0% | 60.3% | +26.8pp |
-| Zimbabwe | 35.2% | 48.8% | +24.9pp |
-| Russia | 60.7% | 79.4% | +21.6pp |
-| Ethiopia | 64.0% | 80.3% | +21.1pp |
-| Cameroon | 60.6% | 74.2% | +20.3pp |
-| Iran | 72.0% | 85.8% | +19.1pp |
-| Vietnam | 37.7% | 65.2% | +16.2pp |
-| Albania | 17.2% | 31.7% | +16.6pp |
-| Pakistan | 39.0% | 49.8% | +14.0pp |
+| Nationality | Initial grant rate | After appeals |
+|---|---:|---:|
+| Sri Lanka | 31.0% | 60.1% |
+| Iraq | 37.7% | 57.0% |
+| DR Congo | 44.0% | 60.3% |
+| Zimbabwe | 35.2% | 48.8% |
+| Russia | 60.7% | 79.4% |
+| Ethiopia | 64.0% | 80.3% |
+| Cameroon | 60.6% | 74.2% |
+| Iran | 72.0% | 85.8% |
+| Vietnam | 37.7% | 65.2% |
+| Albania | 17.2% | 31.7% |
+| Pakistan | 39.0% | 49.8% |
 
 The biggest UK asylum cohort, Iran (40,884 substantive decisions tracked in Asy_D04), sees its 72 percent initial grant rate rise to 85.8 percent after appeals. Iraq, with 24,178 substantive decisions tracked, sees 37.7 percent initial grants rise to 57.0 percent. An Iraqi claim that the Home Office initially refused had close to a one-in-two chance of being granted on appeal.
 
@@ -45,9 +45,9 @@ The decline in the initial-decision rate is real. The decline in the actual outc
 
 Each appealed claim runs through three to twelve months of legal proceedings before the First-Tier Tribunal. The applicant is supported on Section 95 asylum support throughout the wait, at a cost calculated by Home Office submissions at approximately £40 per day per person plus accommodation. Legal aid for the appellant runs to around £1,000 to £3,000 per case in publicly funded cases. The Tribunal Service estimates the public cost per asylum appeal at £700 to £1,400.
 
-Multiplied across the 50,000 to 70,000 initial refusals each year that proceed to appeal, the appeal-stage costs alone run into the hundreds of millions of pounds annually. None of this would be necessary if the initial decision was right the first time.
+Multiplied across the 50,000 to 70,000 initial refusals each year that proceed to appeal, the appeal-stage costs alone run into the hundreds of millions of pounds annually. Some of that cost reflects initial decisions that were wrong. Some reflects evidence that only emerged at appeal, or country conditions that changed while the claim was waiting. The published data does not separate the two.
 
-The exact public cost cannot be disaggregated from the Home Office and Ministry of Justice budgets without further work. The 2024 to 2025 Home Office annual report puts asylum support spending at around £4.7 billion, a portion of which is attributable to the appeals-pipeline wait.
+The exact public cost cannot be disaggregated from the Home Office and Ministry of Justice budgets without further work. The Home Office Annual Report and Accounts puts asylum support, resettlement and accommodation at £4,513 million in 2024-25 and £4,181 million in 2025-26, a portion of which is attributable to the appeals-pipeline wait.
 
 ### Which framing fits the data
 

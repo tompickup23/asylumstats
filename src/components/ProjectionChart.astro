@@ -29,7 +29,10 @@ const { title, lines, confidenceBand, nowYear = 2021, yLabel = "%", height: char
 
 const width = 560;
 const height = chartHeight;
-const pad = { top: 14, right: 16, bottom: 34, left: 42 };
+// right is wide because each line carries a direct end label ("White British 52% by
+// 2051"). At right: 16 those labels ran off the canvas and were clipped to "Wh...", so
+// the chart showed trajectories with no readable values at all.
+const pad = { top: 14, right: 132, bottom: 34, left: 42 };
 const uw = width - pad.left - pad.right;
 const uh = height - pad.top - pad.bottom;
 
@@ -63,6 +66,40 @@ function buildBandPath(band: BandPoint[]): string {
   const lower = [...band].reverse().map(b => `${x(b.year).toFixed(1)} ${y(b.low).toFixed(1)}`);
   return `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`;
 }
+
+/**
+ * End-label positions, nudged apart so they do not overprint.
+ *
+ * Each line carries a direct label at its final point, which is the right way to label a
+ * multi-line chart. But lines that finish close together produce labels that sit on top
+ * of each other: on the national ethnic chart, Asian ends at 12.4% and White Other at
+ * 12.7%, so the two labels were unreadable on top of one another.
+ *
+ * This walks the labels in value order and pushes any that are closer than MIN_GAP apart,
+ * keeping them inside the plot. It only moves the text; the dot stays on the real data
+ * point, so nothing here misplaces a value.
+ */
+const END_LABEL_MIN_GAP = 13;
+const endLabels = lines
+  .map((line, index) => {
+    const last = line.points[line.points.length - 1];
+    return last ? { index, line, last, y: y(last.value) } : null;
+  })
+  .filter((entry): entry is { index: number; line: LineData; last: { year: number; value: number }; y: number } => entry !== null)
+  .sort((a, b) => a.y - b.y);
+
+for (let i = 1; i < endLabels.length; i += 1) {
+  const gap = endLabels[i].y - endLabels[i - 1].y;
+  if (gap < END_LABEL_MIN_GAP) {
+    endLabels[i].y = endLabels[i - 1].y + END_LABEL_MIN_GAP;
+  }
+}
+// Keep the stack inside the canvas if pushing down ran past the bottom.
+const overshoot = (endLabels.at(-1)?.y ?? 0) - (pad.top + uh);
+if (overshoot > 0) {
+  for (const entry of endLabels) entry.y -= overshoot;
+}
+const endLabelY = new Map(endLabels.map((entry) => [entry.index, entry.y]));
 
 // Year labels
 const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= maxYear && yr > nowYear))].filter((v, i, a) => a.indexOf(v) === i);
@@ -105,16 +142,16 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
     )}
 
     <!-- Lines -->
-    {lines.map(line => (
+    {lines.map((line, lineIndex) => (
       <>
         <path d={buildLinePath(line.points)} fill="none" stroke={line.color}
               stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
         {/* End label */}
         {line.points.length > 0 && (
-          <text x={x(line.points[line.points.length - 1].year) + 4}
-                y={y(line.points[line.points.length - 1].value) + 4}
+          <text x={x(line.points[line.points.length - 1].year) + 8}
+                y={(endLabelY.get(lineIndex) ?? y(line.points[line.points.length - 1].value)) + 4}
                 class="proj-line-label" fill={line.color}>
-            {line.label} {line.points[line.points.length - 1].value.toFixed(0)}%
+            {line.label} {line.points[line.points.length - 1].value.toFixed(0)}% in {line.points[line.points.length - 1].year}
           </text>
         )}
         {/* End dot */}

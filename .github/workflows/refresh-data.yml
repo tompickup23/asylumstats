@@ -39,6 +39,15 @@ jobs:
       - name: Check source freshness
         run: node scripts/audit/source-freshness.mjs "$(date -u +%F)"
 
+      # Link rot, checked weekly rather than on every push, because it depends on other
+      # people's servers being up. Advisory: a flaky external host must not fail the data
+      # refresh. This exists because the most prominent figure on the homepage, the
+      # £5.77M a day hotel cost, linked to a Home Office factsheet that had been taken
+      # down, and nothing noticed. No GitHub event data is interpolated here.
+      - name: Check source links resolve
+        continue-on-error: true
+        run: npm run audit:links
+
       # Ignore run timestamps when deciding whether anything changed.
       #
       # Six transforms stamp `generatedAt`/`generated_at` with new Date() into committed

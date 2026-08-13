@@ -36,18 +36,18 @@ const sourceFiles = {
 const sourceMeta = {
   localImmigration: {
     source_id: "local_immigration_groups_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+    source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
     attachment_url:
       "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
-    methodology_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+    methodology_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
     release_date: "2026-05-21"
   },
   localResettlement: {
     source_id: "local_resettlement_routes_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+    source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
     attachment_url:
       "https://assets.publishing.service.gov.uk/media/6a05e4ef22977ebc82cb3fb6/resettlement-local-authority-datasets-mar-2026.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+    methodology_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
     release_date: "2026-05-21"
   },
   illegalEntry: {

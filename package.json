@@ -42,6 +42,8 @@
     "audit:coverage": "node scripts/audit/area-coverage.mjs",
     "audit:coverage:check": "node scripts/audit/area-coverage.mjs --check",
     "audit:freshness": "node scripts/audit/source-freshness.mjs",
+    "audit:links": "node scripts/audit/source-links.mjs",
+    "audit:links:strict": "node scripts/audit/source-links.mjs --strict",
     "audit:model-io": "node scripts/audit/model-io-graph.mjs",
     "sync:live": "node scripts/build/sync-live.mjs",
     "sync:live:check": "node scripts/build/sync-live.mjs --check",

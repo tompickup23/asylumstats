@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-30T11:10:41.472Z",
+  "generatedAt": "2026-08-13T14:19:13.391Z",
   "localSnapshotDate": "2026-03-31",
   "routeFamilies": [
     {
@@ -185,7 +185,7 @@
       "group": "Asylum support system",
       "schemeStatus": "Not a refugee scheme",
       "localBreakdown": "Latest local authority snapshot available",
-      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
       "note": "Quarter-end stock of people receiving asylum support. Changes reflect net movement onto and off support, not the number of distinct people who passed through the system.",
       "series": [
         {
@@ -583,7 +583,7 @@
       "value": 97519,
       "period": "As at 2026-03-31",
       "detail": "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
+      "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
     },
     {
       "id": "contingency_accommodation",
@@ -591,7 +591,7 @@
       "value": 22428,
       "period": "As at 2026-03-31",
       "detail": "Proxy for the most visible temporary accommodation pressure.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
+      "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
     },
     {
       "id": "afghan_arrivals",
@@ -8362,16 +8362,16 @@
   "sources": [
     {
       "source_id": "local_immigration_groups_mar_2026",
-      "source_url": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "source_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
       "attachment_url": "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
-      "methodology_url": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
+      "methodology_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
       "release_date": "2026-05-21"
     },
     {
       "source_id": "local_resettlement_routes_mar_2026",
-      "source_url": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+      "source_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
       "attachment_url": "https://assets.publishing.service.gov.uk/media/6a05e4ef22977ebc82cb3fb6/resettlement-local-authority-datasets-mar-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
+      "methodology_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
       "release_date": "2026-05-21"
     },
     {

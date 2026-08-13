@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T11:50:23.945Z",
+  "generatedAt": "2026-08-13T14:13:49.598Z",
   "summary": {
     "totalRecords": 11,
     "primeContractRows": 3,
@@ -184,10 +184,10 @@
       "geographyScope": "UK",
       "siteIds": [],
       "linkedSites": [],
-      "sourceTitle": "Factsheet: asylum accommodation and support",
-      "sourceUrl": "https://homeofficemedia.blog.gov.uk/2025/06/12/factsheet-asylum-accommodation-and-support/",
-      "confidence": "high",
-      "notes": "Home Office said hotel use averaged GBP 5.77 million per day in 2024/25."
+      "sourceTitle": "Asylum accommodation in the UK (Migration Observatory)",
+      "sourceUrl": "citing Home Office 2024/25",
+      "confidence": "https://migrationobservatory.ox.ac.uk/resources/briefings/asylum-accommodation-in-the-uk/",
+      "notes": "high"
     },
     {
       "recordId": "money_homes-for-ukraine-tariff-2025-26",

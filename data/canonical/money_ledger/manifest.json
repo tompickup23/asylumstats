@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-25T11:50:23.945Z",
+  "generated_at": "2026-08-13T14:13:49.598Z",
   "dataset_id": "money_ledger",
   "source_files": [
     {
       "name": "contractLedger",
       "path": "data/manual/asylum-contract-ledger.csv",
-      "sha256": "b37e4407fe58183eb2aa08eb6f026a124c8a92d098eca1ea130ec28c81d612ac"
+      "sha256": "57a002f13dc969064dc9af42959d5b0cacf9af45e6b32cd7d9cea7c7eab78f11"
     },
     {
       "name": "hotelEntityLedger",

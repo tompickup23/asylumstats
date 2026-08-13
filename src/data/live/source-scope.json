@@ -6,7 +6,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Small boat arrivals, illegal entry route figures, grants of protection, and refugee family reunion context.",
-    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/how-many-people-do-we-grant-protection-to"
+    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk"
   },
   {
     "name": "Data on asylum and resettlement in local authority areas",
@@ -15,7 +15,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Area comparison for asylum support, resettlement, and local refugee pressure where published.",
-    "sourceUrl": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas"
+    "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
   },
   {
     "name": "Local authority data on immigration groups",
@@ -24,7 +24,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Latest local tables for asylum support, Afghan Resettlement Programme, and Homes for Ukraine.",
-    "sourceUrl": "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups"
+    "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
   },
   {
     "name": "Safe and legal humanitarian routes chapter",
@@ -33,7 +33,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Refugee resettlement schemes, Afghan programme totals, UKRS, Mandate, and community sponsorship context.",
-    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025/summary-of-latest-statistics"
+    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
   },
   {
     "name": "Asylum accommodation and support contracts",
