@@ -1,7 +1,7 @@
 {
   "name": "Asylum Stats",
   "short_name": "AS",
-  "description": "UK Asylum Accountability — Routes, hotel secrecy, public money, and local pressure",
+  "description": "UK Asylum Accountability: routes, hotel secrecy, public money, and local pressure",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#04070d",

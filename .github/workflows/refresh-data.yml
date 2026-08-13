@@ -39,10 +39,31 @@ jobs:
       - name: Check source freshness
         run: node scripts/audit/source-freshness.mjs "$(date -u +%F)"
 
+      # Ignore run timestamps when deciding whether anything changed.
+      #
+      # Six transforms stamp `generatedAt`/`generated_at` with new Date() into committed
+      # artefacts. Those move on every run whether or not a single figure did, so
+      # `git diff --quiet` was always false and this workflow committed every Monday
+      # regardless. That buries a real data change in a stream of identical ones and
+      # makes the history useless for answering "when did this number last move".
+      #
+      # So the comparison drops timestamp-only lines. A diff that is nothing but
+      # generatedAt is not a data change. No GitHub event data is interpolated here.
       - name: Check for data changes
         id: changes
         run: |
-          git diff --quiet src/data/live/ data/marts/ data/canonical/ data/raw/manifests/ || echo "changed=true" >> "$GITHUB_OUTPUT"
+          substantive=$(git diff -U0 src/data/live/ data/marts/ data/canonical/ data/raw/manifests/ \
+            | grep -E '^[+-]' \
+            | grep -Ev '^(\+\+\+|---)' \
+            | grep -Ev '"(generatedAt|generated_at)"' \
+            || true)
+          if [ -n "$substantive" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Substantive data changes found:"
+            echo "$substantive" | head -40
+          else
+            echo "Only run timestamps moved. Nothing to commit."
+          fi
       - name: Commit and push updated data
         if: steps.changes.outputs.changed == 'true'
         run: |
