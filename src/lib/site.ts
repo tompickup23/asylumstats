@@ -1,5 +1,4 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
-import { loadHotelEntityLedger } from "./hotel-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
 
 export const SITE_NAME = "asylumstats";
@@ -63,19 +62,22 @@ export function buildPublicPlaceRegionPath(regionName: string): string {
   return `/places/regions/${buildPublicPlaceRegionSlug(regionName)}/`;
 }
 
+/**
+ * Every local authority in the routes dataset gets a page.
+ *
+ * This used to filter on `supportedAsylum >= 200` (plus league-table and hotel
+ * membership), which built 152 of 361 pages while the homepage advertised 361 and the
+ * directory advertised 307. Areas that fell under the line 404'd with no explanation:
+ * Brighton and Hove at 179 had no page, an area at 201 did. The excluded 209 held
+ * 9,871 people on asylum support, 10.1% of the national total, and only 17 of them had
+ * none at all.
+ *
+ * The data exists for all 361, so the threshold was a rendering choice rather than a
+ * data gap. Sections whose datasets do not reach an area already gate themselves on a
+ * null profile, so a sparse page degrades to what is genuinely known about that area.
+ */
 export function getPublicPlaceAreas(): LocalRouteAreaSummary[] {
-  const localRouteLatest = loadLocalRouteLatest();
-  const hotelLedger = loadHotelEntityLedger();
-  const topCodes = new Set(localRouteLatest.topAreasByMetric.flatMap((group) => group.rows.map((row) => row.areaCode)));
-  const hotelLinkedCodes = new Set(
-    [...hotelLedger.sites.map((site) => site.areaCode), ...hotelLedger.areas.map((area) => area.areaCode)].filter(
-      (areaCode): areaCode is string => Boolean(areaCode)
-    )
-  );
-
-  return localRouteLatest.areas.filter(
-    (area) => topCodes.has(area.areaCode) || area.supportedAsylum >= 200 || hotelLinkedCodes.has(area.areaCode)
-  );
+  return loadLocalRouteLatest().areas;
 }
 
 export function getPublicPlaceRegions(): Array<{ regionName: string; countryName: string; publicPlaceCount: number }> {

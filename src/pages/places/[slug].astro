@@ -30,6 +30,7 @@ import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
 import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
+import { consistentBand, consistentBandSeries } from "../../lib/projection-consistency";
 import { getMPsForArea } from "../../lib/mp-data";
 import schoolValidationData from "../../data/live/school-validation.json";
 import scenarioSummaries from "../../data/live/scenario-summaries.json";
@@ -132,11 +133,26 @@ const ethChartLines = ethnicTimeline ? (() => {
   }));
 })() : [];
 
-const ethConfidenceBand = stochasticData
+// The band comes from the stochastic run and the line from the deterministic one, so
+// only keep years where the interval actually brackets the line it is drawn around.
+const ethProjectedWbi = (year: number): number | null =>
+  ethnicProjection?.projections?.[String(year)]?.white_british ?? null;
+
+const ethConfidenceBandRaw = stochasticData
   ? [2031, 2041, 2051].filter(y => stochasticData[y]).map(y => ({
       year: y, low: stochasticData[y].wbi.p10, high: stochasticData[y].wbi.p90
     }))
   : undefined;
+
+// An empty array is truthy, so collapse it to undefined or the chart still renders an
+// "80% CI" legend for a band with no years left in it.
+const ethConfidenceBandChecked = ethConfidenceBandRaw
+  ? consistentBandSeries(ethConfidenceBandRaw, ethProjectedWbi)
+  : [];
+const ethConfidenceBand = ethConfidenceBandChecked.length > 0 ? ethConfidenceBandChecked : undefined;
+
+const wbi2051 = ethnicProjection?.projections?.["2051"]?.white_british ?? null;
+const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null);
 
 const relChartLines = religionData ? (() => {
   const relGroups = [
@@ -165,6 +181,24 @@ const sendProfile = getSendProfile(area.areaCode);
 const sendPercentile = getSendGrowthPercentile(area.areaCode);
 const ascProfile = getAscProfile(area.areaCode);
 const ascPercentile = getAscSpendPercentile(area.areaCode);
+// Per-area cost is withheld until the True Cost figure is settled.
+//
+// The £150/person/day this used to assert was not arbitrary: £5.3bn / 97,519 supported
+// / 365 = £148.90, the site's own True Cost LOW estimate expressed per person per day.
+// It is total-system cost, not accommodation, but the sentence never said so and sat
+// beside accommodation figures, so it read as the latter.
+//
+// The problem is the base. True Cost is currently stated five different ways across the
+// site (£5.3bn to £6.3bn and £169/taxpayer on the homepage, £8bn and £230 in the
+// finding, £207 in that finding's own headline, £8.1B in the nav). Per person per day
+// those bases give £148.90, £176.99 and £224.75. Publishing a per-area £ figure derived
+// from a disputed base, on 373 pages, is not defensible on a site whose proposition is
+// that every figure traces to a source.
+//
+// Reinstate this from the single canonical True Cost constant once that lands, the same
+// way the projection interval returns once the model is reconciled.
+const estimatedAnnualCostLabel = "";
+
 const pressureScore = computePressureScore(
   area.areaCode,
   area.areaName,
@@ -289,7 +323,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <section id="place-summary" class="section section-anchor">
     <PlainEnglish
       headline={`${area.supportedAsylum.toLocaleString()} people housed on asylum support in ${area.areaName}`}
-      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""} At roughly £150/person/day, that costs the taxpayer an estimated £${Math.round(area.supportedAsylum * 150 * 365 / 1_000_000)}M per year for this area alone.`}
+      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""}${estimatedAnnualCostLabel}`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
     />
     <CostCalculator
@@ -443,7 +477,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             {area.areaName}: WBI {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
             → {ethnicProjection.projections?.["2051"]?.white_british?.toFixed(1) ?? "?"}% (2051).
             {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
-            {stochasticData?.[2051] ? ` 80% CI: ${stochasticData[2051].wbi.p10}, ${stochasticData[2051].wbi.p90}%.` : ""}
+            {wbi2051Band ? ` 80% CI: ${wbi2051Band.p10}, ${wbi2051Band.p90}%.` : ""}
           </p>
         </div>
       </div>

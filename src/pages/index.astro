@@ -10,13 +10,18 @@ import { loadMoneyLedger } from "../lib/money-data";
 import { getSignificantDemographicShifts, getEthnicProjection } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
 import rawProjections from "../data/live/ethnic-projections.json";
-import { slugifyAreaName, SITE_URL } from "../lib/site";
+import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
 const moneyLedger = loadMoneyLedger();
 const placeDirectory = getPlaceDirectory();
+// Derived, never hardcoded: the copy used to advertise 361 profiles while 152 built.
+const placeCount = getPublicPlaceAreas().length;
+// Model denominators, derived. The copy carried 316 and 301 as hardcoded numbers while
+// the file holds a different count again; they read as carelessness rather than scope.
+const projectionAreaCount = Object.keys((rawProjections as { areas: Record<string, unknown> }).areas).length;
 const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
 
 const dailyCostRecord = moneyLedger.records.find(
@@ -291,14 +296,14 @@ function findingColor(verdict: string): string {
       <h2 class="section-title">The ONS does not project ethnic composition by local authority. This model does.</h2>
       <p class="section-desc" style="max-width: 700px;">
         The ONS will not project ethnic composition at local authority level. So we built a model that does.
-        316 local authorities. Census 2011 and 2021 observed data. Hamilton-Perry CCR methodology.
+        {projectionAreaCount} local authorities in England. Census 2011 and 2021 observed data. Hamilton-Perry CCR methodology.
         1,000 Monte Carlo simulations. Every ratio traced to Census observations.
       </p>
 
       <!-- National trajectory -->
       <div class="demo-national">
         <div class="demo-trajectory">
-          <span class="demo-traj-label">White British share (population-weighted, 301 local authorities in model)</span>
+          <span class="demo-traj-label">White British share (population-weighted, {projectionAreaCount} local authorities in model)</span>
           <div class="demo-traj-bar">
             <div class="demo-traj-segment" style="width: 100%;">
               <span class="demo-traj-year">2011 Census</span>
@@ -377,7 +382,7 @@ function findingColor(verdict: string): string {
       <span class="chip accent" style="margin-bottom: 0.5rem;">Explore the data</span>
       <h2 class="section-title">What does your area look like in 2051?</h2>
       <p class="section-desc" style="max-width: 600px;">
-        361 local authority profiles. Asylum numbers, demographic projections to 2061, hotel sites, crime, schools, your MP, your council. All sourced. All free.
+        {placeCount} local authority profiles. Asylum numbers, demographic projections to 2061, hotel sites, crime, schools, your MP, your council. All sourced. All free.
       </p>
       <div class="future-search">
         <input
@@ -410,7 +415,7 @@ function findingColor(verdict: string): string {
           <a class="cta-btn cta-btn--primary" id="future-link" href="/places/">See the full profile &rarr;</a>
         </div>
       </div>
-      <a href="/places/" class="cta-link" style="margin-top: 1rem;">Browse all 361 areas &rarr;</a>
+      <a href="/places/" class="cta-link" style="margin-top: 1rem;">Browse all {placeCount} areas &rarr;</a>
     </div>
   </section>
 
@@ -434,7 +439,7 @@ function findingColor(verdict: string): string {
         </a>
       ))}
     </div>
-    <a href="/places/" class="cta-link">See all 361 areas &rarr;</a>
+    <a href="/places/" class="cta-link">See all {placeCount} areas &rarr;</a>
   </section>
 
   <!-- ═══ REGIONAL PRESSURE ═══ -->
