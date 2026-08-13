@@ -33,6 +33,12 @@ jobs:
         run: npm run ingest:hotels
       - name: Transform money ledger
         run: npm run ingest:money
+      # Runs after the ingests so a fetch failure does not mask a stale source, and
+      # the date is passed in rather than read inside the script so a local run of the
+      # same commit gives the same answer. No GitHub event data is interpolated here.
+      - name: Check source freshness
+        run: node scripts/audit/source-freshness.mjs "$(date -u +%F)"
+
       - name: Check for data changes
         id: changes
         run: |
@@ -45,3 +51,10 @@ jobs:
           git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
           git commit -m "data: refresh tribunal + route + hotel + money data $(date -u +%Y-%m-%d)"
           git push
+
+      # Last, and strict: the data above has already been committed, so this only
+      # decides whether the run ends loudly. Every stale item found on 13 Aug 2026 had
+      # slipped past this cron precisely because nothing compared next-edition dates
+      # against today.
+      - name: Fail if a source is past its next edition
+        run: node scripts/audit/source-freshness.mjs "$(date -u +%F)" --strict
