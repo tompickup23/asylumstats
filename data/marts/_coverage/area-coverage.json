@@ -33,7 +33,7 @@
     {
       "id": "ethnic-projections",
       "tier": "national",
-      "scope": "England only (Hamilton-Perry model)",
+      "scope": "England and Wales (Hamilton-Perry model)",
       "covered": 318,
       "missing": 43,
       "pct": 88.1,
@@ -42,7 +42,7 @@
     {
       "id": "scenario-summaries",
       "tier": "national",
-      "scope": "England only, model scenarios",
+      "scope": "England and Wales, model scenarios",
       "covered": 296,
       "missing": 65,
       "pct": 82,
