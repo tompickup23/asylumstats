@@ -11,9 +11,14 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * runs it, and that is the point: the neutral register is the product.
  *
  * The site itself has always been clean, but on 13 Aug 2026 two tracked research notes
- * in this public repository carried "Owner: Tom Pickup", and a third that had never been
- * committed carried "Action Owner: Tom Pickup (Councillor/Tech Lead)". Nothing checked,
- * so nothing caught it.
+ * in this public repository carried an "Owner:" line naming the author, and a third that
+ * had never been committed named him with his council role attached. Nothing checked, so
+ * nothing caught it.
+ *
+ * This file deliberately does not spell out the name it looks for. An earlier draft did,
+ * in this very comment, and the test failed on itself the moment it was committed and
+ * became a tracked file. Excluding the test from its own scan would have been the wrong
+ * fix: it would leave a file where an attribution could hide.
  *
  * The GitHub account name is deliberately not covered here. It appears throughout the
  * data as the source of the Lancashire transparency files
@@ -27,9 +32,15 @@ describe("publication anonymity", () => {
     .split("\0")
     .filter(Boolean);
 
-  // Personal-name attribution, not the account handle. Spaced and separated forms both,
-  // since "Tom Pickup", "Tom  Pickup" and "Pickup, Tom" all read the same to a reader.
-  const NAME_PATTERNS = [/\btom\s+pickup\b/i, /\bpickup,\s*tom\b/i];
+  // Personal-name attribution, not the account handle. Built from parts so this file
+  // does not itself contain the string it searches for. Both orders, because
+  // "<first> <last>" and "<last>, <first>" read the same to a reader.
+  const FIRST = "tom";
+  const LAST = "pickup";
+  const NAME_PATTERNS = [
+    new RegExp(`\\b${FIRST}\\s+${LAST}\\b`, "i"),
+    new RegExp(`\\b${LAST},\\s*${FIRST}\\b`, "i")
+  ];
 
   it("names no individual in any tracked file", () => {
     const offenders: string[] = [];
