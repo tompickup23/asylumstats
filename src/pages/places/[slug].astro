@@ -30,6 +30,7 @@ import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
 import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
+import { consistentBand, consistentBandSeries } from "../../lib/projection-consistency";
 import { getMPsForArea } from "../../lib/mp-data";
 import schoolValidationData from "../../data/live/school-validation.json";
 import scenarioSummaries from "../../data/live/scenario-summaries.json";
@@ -132,11 +133,26 @@ const ethChartLines = ethnicTimeline ? (() => {
   }));
 })() : [];
 
-const ethConfidenceBand = stochasticData
+// The band comes from the stochastic run and the line from the deterministic one, so
+// only keep years where the interval actually brackets the line it is drawn around.
+const ethProjectedWbi = (year: number): number | null =>
+  ethnicProjection?.projections?.[String(year)]?.white_british ?? null;
+
+const ethConfidenceBandRaw = stochasticData
   ? [2031, 2041, 2051].filter(y => stochasticData[y]).map(y => ({
       year: y, low: stochasticData[y].wbi.p10, high: stochasticData[y].wbi.p90
     }))
   : undefined;
+
+// An empty array is truthy, so collapse it to undefined or the chart still renders an
+// "80% CI" legend for a band with no years left in it.
+const ethConfidenceBandChecked = ethConfidenceBandRaw
+  ? consistentBandSeries(ethConfidenceBandRaw, ethProjectedWbi)
+  : [];
+const ethConfidenceBand = ethConfidenceBandChecked.length > 0 ? ethConfidenceBandChecked : undefined;
+
+const wbi2051 = ethnicProjection?.projections?.["2051"]?.white_british ?? null;
+const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null);
 
 const relChartLines = religionData ? (() => {
   const relGroups = [
@@ -443,7 +459,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             {area.areaName}: WBI {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
             → {ethnicProjection.projections?.["2051"]?.white_british?.toFixed(1) ?? "?"}% (2051).
             {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
-            {stochasticData?.[2051] ? ` 80% CI: ${stochasticData[2051].wbi.p10}, ${stochasticData[2051].wbi.p90}%.` : ""}
+            {wbi2051Band ? ` 80% CI: ${wbi2051Band.p10}, ${wbi2051Band.p90}%.` : ""}
           </p>
         </div>
       </div>

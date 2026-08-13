@@ -8,9 +8,12 @@ import { buildPlaceSubregions } from "../../lib/place-subregions";
 import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../lib/route-analytics";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../../lib/route-data";
+import { getPublicPlaceAreas } from "../../lib/site";
 
 const localRouteLatest = loadLocalRouteLatest();
 const routeDashboard = loadRouteDashboard();
+// Derived: this line previously claimed 307 while 152 pages built.
+const placeCount = getPublicPlaceAreas().length;
 const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
@@ -421,7 +424,7 @@ const pageDescription =
   <section id="place-search" class="section section-anchor priority-section" style="padding: 2.5rem 0;">
     <div style="max-width: 700px; margin: 0 auto; text-align: center;">
       <h1 style="font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Find your area</h1>
-      <p class="lede" style="margin-bottom: 1.5rem;">307 local authorities with asylum, demographic, religion, and socioeconomic data.</p>
+      <p class="lede" style="margin-bottom: 1.5rem;">{placeCount} local authorities. Asylum support for every one; demographic, religion and socioeconomic data where the source covers it.</p>
       <div class="lookup-field">
         <input
           type="search"
