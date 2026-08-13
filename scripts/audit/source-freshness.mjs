@@ -60,8 +60,24 @@ for (const file of readdirSync(MANIFESTS).filter((name) => name.endsWith(".json"
     continue;
   }
   if (!manifest.nextEdition) {
-    // A source with no scheduled successor (a one-off academic dataset, say) is not
-    // stale, it is simply not on a cycle. Say so rather than scoring it.
+    // A source can be on a cycle without having a next-edition date: the small boats
+    // series publishes every Friday and never announces a date. For those, freshness
+    // comes from the data itself, via coverageEnd and maxAgeDays stamped by the
+    // transform. Without this the series most likely to go stale was the one classified
+    // "no-cycle" and never checked.
+    if (manifest.coverageEnd && manifest.maxAgeDays) {
+      const ageDays = daysBetween(manifest.coverageEnd, today);
+      rows.push({
+        dataset,
+        state: ageDays > manifest.maxAgeDays ? "OVERDUE" : "current",
+        detail: manifest.cadence ?? manifest.release ?? "",
+        nextEdition: `data to ${manifest.coverageEnd}`,
+        overdueDays: ageDays - manifest.maxAgeDays,
+        ageDays
+      });
+      continue;
+    }
+    // Genuinely not on a cycle: a one-off academic dataset, say.
     rows.push({ dataset, state: "no-cycle", detail: manifest.release ?? "" });
     continue;
   }
@@ -83,9 +99,17 @@ console.log(`\nSource freshness as at ${today}\n`);
 for (const row of rows) {
   const label = row.dataset.padEnd(26);
   if (row.state === "OVERDUE") {
-    console.log(`${label} OVERDUE by ${row.overdueDays}d  (next edition was ${row.nextEdition})`);
+    console.log(
+      row.ageDays === undefined
+        ? `${label} OVERDUE by ${row.overdueDays}d  (next edition was ${row.nextEdition})`
+        : `${label} OVERDUE      (${row.detail}, newest data ${row.ageDays}d old, limit ${row.ageDays - row.overdueDays}d)`
+    );
   } else if (row.state === "current") {
-    console.log(`${label} current      (next edition ${row.nextEdition}, in ${-row.overdueDays}d)`);
+    console.log(
+      row.ageDays === undefined
+        ? `${label} current      (next edition ${row.nextEdition}, in ${-row.overdueDays}d)`
+        : `${label} current      (${row.detail}, newest data ${row.ageDays}d old)`
+    );
   } else {
     console.log(`${label} ${row.state.padEnd(12)} ${row.detail}`);
   }
