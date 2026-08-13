@@ -1,77 +1,164 @@
 {
-  "generatedAt": "2026-05-25T11:48:30.370Z",
-  "datasetId": "uk_routes",
-  "fetchedFileCount": 10,
+  "dataset": "uk_routes",
+  "publisher": "Home Office",
+  "release": "Immigration system statistics, year ending March 2026",
+  "releaseDate": "2026-05-21",
+  "nextEdition": "2026-08-27",
+  "landing": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026",
+  "bank": "home-office/quarterly",
+  "areaTier": "spine",
+  "fileCount": 25,
+  "totalBytes": 108861670,
   "files": [
     {
-      "sourceId": "local_immigration_groups",
-      "fileName": "regional-and-local-authority-dataset-dec-2025.ods",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
-      "sizeBytes": 271726,
-      "fileSha256": "597e625921dfb35dc2a1a87af5fcc66bd68ec3a979c522c571a0af7215d26f28"
+      "file": "applications-section-95-support-datasets-mar-2026.xlsx",
+      "sizeBytes": 298815,
+      "sha256": "a14f218383084943e2e28b3160101eb3501f82af93f0c40f686bb08a32f644ce",
+      "modified": "2026-05-27"
     },
     {
-      "sourceId": "local_resettlement_routes",
-      "fileName": "resettlement-local-authority-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959395bfdab2546272bf06/resettlement-local-authority-datasets-dec-2025.xlsx",
-      "sizeBytes": 221431,
-      "fileSha256": "5fe7e8a84127d5da7b8e4e0e5faf818a2f508d8836e72b276676cfc31aa870b8"
+      "file": "asylum-appeals-lodged-datasets-mar-2023.xlsx",
+      "sizeBytes": 864910,
+      "sha256": "fa89aa8ecce418a815df20659eb9b57870a569ea6dd3b0bfc52eabee73cd56db",
+      "modified": "2026-04-13"
     },
     {
-      "sourceId": "illegal_entry_routes",
-      "fileName": "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69959205b33a4db7ff889d49/illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
-      "sizeBytes": 2577648,
-      "fileSha256": "21974cb8040d5c5bb256375dc528a0f59256bb87a653f5b7caca922ef5f1ba19"
+      "file": "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+      "sizeBytes": 3934947,
+      "sha256": "9b95d47625995825c23aec6616a493923f85d2ba8c3b82a215d0f1952768bf73",
+      "modified": "2026-04-13"
     },
     {
-      "sourceId": "asylum_claims",
-      "fileName": "asylum-claims-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f76b33a4db7ff889d43/asylum-claims-datasets-dec-2025.xlsx",
-      "sizeBytes": 12116999,
-      "fileSha256": "fdc3e2e7783bb26c074074456bda72e2f0c489a5563c487ab0c1c3c30da57a71"
-    },
-    {
-      "sourceId": "asylum_awaiting_decision",
-      "fileName": "asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f39b33a4db7ff889d42/asylum-claims-awaiting-decision-datasets-dec-2025.xlsx",
+      "file": "asylum-claims-awaiting-decision-datasets-mar-2026.xlsx",
       "sizeBytes": 3991336,
-      "fileSha256": "d888bf2c5527e0b20ddf164412af02ec9094257298ff1c1c97a38191a2f19647"
+      "sha256": "d888bf2c5527e0b20ddf164412af02ec9094257298ff1c1c97a38191a2f19647",
+      "modified": "2026-05-27"
     },
     {
-      "sourceId": "asylum_outcome_analysis",
-      "fileName": "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6995934ba58a315dbe72bf03/outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
-      "sizeBytes": 357589,
-      "fileSha256": "f78f54d9de6316e431318623cbd986ff0aa1a08b44aeabfcaa3bf1ba55cfc13a"
+      "file": "asylum-claims-datasets-dec-2025.xlsx",
+      "sizeBytes": 11316776,
+      "sha256": "19c5522167bf78a215c1459482d6497ead3cacee1ccd6505e2d2e698c8476637",
+      "modified": "2026-04-13"
     },
     {
-      "sourceId": "asylum_appeals",
-      "fileName": "asylum-appeals-lodged-datasets-mar-2023.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f1d4222708fdcf8d2f2/asylum-appeals-lodged-datasets-mar-2023.xlsx",
-      "sizeBytes": 829072,
-      "fileSha256": "80df524b58ffe66d58b8465953ad51248441f2ff5ff9f2e07ec12e005827f803"
+      "file": "asylum-claims-datasets-mar-2026.xlsx",
+      "sizeBytes": 12116999,
+      "sha256": "fdc3e2e7783bb26c074074456bda72e2f0c489a5563c487ab0c1c3c30da57a71",
+      "modified": "2026-05-27"
     },
     {
-      "sourceId": "asylum_support",
-      "fileName": "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/69958f9bb33a4db7ff889d44/asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+      "file": "asylum-seekers-receipt-support-datasets-dec-2025.xlsx",
+      "sizeBytes": 3795022,
+      "sha256": "939832dbc9416dd732407e117486ddbbe2b3065f7622cc9862cf1008b9d1093f",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "asylum-seekers-receipt-support-datasets-mar-2026.xlsx",
       "sizeBytes": 3930149,
-      "fileSha256": "c772fc98be7b4bec5a0eac7a9cd2942f5cd55257a361160d46ee59a52f0458c2"
+      "sha256": "c772fc98be7b4bec5a0eac7a9cd2942f5cd55257a361160d46ee59a52f0458c2",
+      "modified": "2026-05-27"
     },
     {
-      "sourceId": "returns",
-      "fileName": "returns-datasets-dec-2025.xlsx",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/699593e4b33a4db7ff889d4d/returns-datasets-dec-2025.xlsx",
+      "file": "eu-settlement-scheme-datasets-mar-2026.xlsx",
+      "sizeBytes": 12357044,
+      "sha256": "3d0151faac909ca1ef9f70021884baabc6c5c2f0d067a1e8ba176c608fcd13fb",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "illegal-entry-routes-to-the-uk-dataset-dec-2025.xlsx",
+      "sizeBytes": 2427668,
+      "sha256": "f59e2865d4e7be3449ffdefb23e98710beb40b76509066a38623b2e6c34bda29",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx",
+      "sizeBytes": 2577648,
+      "sha256": "21974cb8040d5c5bb256375dc528a0f59256bb87a653f5b7caca922ef5f1ba19",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "immigration-detention-datasets-mar-2026.xlsx",
+      "sizeBytes": 12163516,
+      "sha256": "6b387ec03e4c73c036aecaafe9372aac70be04c66866fc82fae146ef61427972",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "organised-immigration-crime-summary-tables-mar-2026.ods",
+      "sizeBytes": 13852,
+      "sha256": "ea30326a8a0849518c8b0dd04a16b478b79e3af58793655ef5dcbb7f15270be7",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "outcome-analysis-asylum-claims-datasets-dec-2025.xlsx",
+      "sizeBytes": 349243,
+      "sha256": "4c442ad882ef9d6fdab44eb7ff236a099c3ab7d474452378154dbbc5def2b997",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "outcome-analysis-asylum-claims-datasets-mar-2026.xlsx",
+      "sizeBytes": 357589,
+      "sha256": "f78f54d9de6316e431318623cbd986ff0aa1a08b44aeabfcaa3bf1ba55cfc13a",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "regional-and-local-authority-dataset-dec-2025.ods",
+      "sizeBytes": 271726,
+      "sha256": "597e625921dfb35dc2a1a87af5fcc66bd68ec3a979c522c571a0af7215d26f28",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "regional-and-local-authority-dataset-mar-2026.ods",
+      "sizeBytes": 272769,
+      "sha256": "1dd0e75630e1531ade660944ff02b608344efa1e00809f0fee92fb727b299bc2",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "resettlement-local-authority-datasets-dec-2025.xlsx",
+      "sizeBytes": 219262,
+      "sha256": "6242e4e29cd0b637ef8394de292618239a4442e55a0f348f18ef3212ef6e6ac0",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "resettlement-local-authority-datasets-mar-2026.xlsx",
+      "sizeBytes": 221431,
+      "sha256": "5fe7e8a84127d5da7b8e4e0e5faf818a2f508d8836e72b276676cfc31aa870b8",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "resettlement-scheme-datasets-mar-2026.xlsx",
+      "sizeBytes": 5028998,
+      "sha256": "478b9bc80ad8a96e522b1e65f5a3456082c5669225c5ccaee52e65e96ae65486",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "returns-datasets-dec-2025.xlsx",
+      "sizeBytes": 14951946,
+      "sha256": "ecc481a4f7c833e504db378fa85681ce109aa01c64c5a05c0c0322717aaa378b",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "returns-datasets-mar-2026.xlsx",
       "sizeBytes": 15942682,
-      "fileSha256": "b2675b02c0ce8f5ab84721d74ad246d6e85de0507c5196c7c609de8daced2110"
+      "sha256": "b2675b02c0ce8f5ab84721d74ad246d6e85de0507c5196c7c609de8daced2110",
+      "modified": "2026-05-27"
     },
     {
-      "sourceId": "safe_legal_routes_summary",
-      "fileName": "safe-legal-routes-summary-tables-dec-2025.ods",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6996f20c339ee33f3ad0b92b/safe-legal-routes-summary-tables-dec-2025.ods",
+      "file": "safe-legal-routes-summary-tables-mar-2026.ods",
       "sizeBytes": 57592,
-      "fileSha256": "0e6c55923b09bf1dfb3d0014ad24ef6898e1539a3b3c8d8f0a055e157694f91e"
+      "sha256": "0e6c55923b09bf1dfb3d0014ad24ef6898e1539a3b3c8d8f0a055e157694f91e",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "support-local-authority-datasets-mar-2026.xlsx",
+      "sizeBytes": 1338871,
+      "sha256": "ac085e192e3b60fa6ec7bb720ee7bc2f93f8018b28f763cedc1e8d93e3a92e8a",
+      "modified": "2026-05-27"
+    },
+    {
+      "file": "visas-summary-mar-2026-tables.ods",
+      "sizeBytes": 60879,
+      "sha256": "aa865c2ee2a5de5938356619baaea44f04539b8f143ff0b0ce30983980fb1bf9",
+      "modified": "2026-05-27"
     }
   ]
 }

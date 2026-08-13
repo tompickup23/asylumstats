@@ -1,0 +1,26 @@
+{
+  "dataset": "census_ethnicity_detail",
+  "publisher": "ONS",
+  "release": "Census 2021 ethnicity detail",
+  "releaseDate": null,
+  "nextEdition": null,
+  "landing": "https://www.ons.gov.uk/census",
+  "bank": "model-inputs",
+  "areaTier": "national",
+  "fileCount": 2,
+  "totalBytes": 929458,
+  "files": [
+    {
+      "file": "census2021_rm032_ethnic_age_sex_la.csv",
+      "sizeBytes": 632655,
+      "sha256": "acbd831ec7b34b073275a90150c57443fd91da2ba2ab8c424616545a653ce72a",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "census2021-ts022-ltla.csv",
+      "sizeBytes": 296803,
+      "sha256": "6a5d4ccafa019af7d122f41b14d3f023541d6ff9d139320e6c5d4fe7b9d3f28d",
+      "modified": "2022-11-28"
+    }
+  ]
+}

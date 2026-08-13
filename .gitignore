@@ -50,3 +50,13 @@ assets/output/
 !.env.sample
 **/.env
 **/.env.*
+
+# Build artefacts: generated from data/marts by scripts/build/sync-live.mjs (prebuild).
+# These were previously committed twice, byte-identical, in both marts and live.
+src/data/live/local-route-latest.json
+src/data/live/route-dashboard.json
+src/data/live/tribunal-appeals.json
+src/data/live/money-ledger.json
+src/data/live/hotel-entity-ledger.json
+src/data/live/hotel-area-sightings.json
+src/data/live/hotel-archive-queue.json

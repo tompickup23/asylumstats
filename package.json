@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/build/sync-live.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
@@ -27,6 +28,10 @@
     "transform:hotels": "node scripts/transform/transform-hotel-entities.mjs",
     "ingest:hotels": "npm run fetch:hotels && npm run transform:hotels",
     "transform:money": "node scripts/transform/transform-money-ledger.mjs",
+    "audit:coverage": "node scripts/audit/area-coverage.mjs",
+    "audit:coverage:check": "node scripts/audit/area-coverage.mjs --check",
+    "sync:live": "node scripts/build/sync-live.mjs",
+    "sync:live:check": "node scripts/build/sync-live.mjs --check",
     "ingest:money": "npm run transform:money",
     "test": "vitest run",
     "test:mobile": "playwright test tests/mobile-layout.spec.ts --project=mobile-chromium",
