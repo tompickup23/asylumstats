@@ -31,6 +31,7 @@ import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
 import { consistentBand, consistentBandSeries } from "../../lib/projection-consistency";
+import { plausibleThrough, isTruncated, publishableValue } from "../../lib/projection-plausibility";
 import { getMPsForArea } from "../../lib/mp-data";
 import schoolValidationData from "../../data/live/school-validation.json";
 import scenarioSummaries from "../../data/live/scenario-summaries.json";
@@ -111,7 +112,13 @@ const regionalPeerMax = Math.max(...regionalPeerRows.map((c) => c.supportedAsylu
 
 const ethnicProjection = getEthnicProjection(area.areaCode);
 const ethnicTimeline = getEthnicCompositionTimeline(area.areaCode);
-const wbThreshold = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
+const projHorizonForThreshold = plausibleThrough(ethnicProjection as any);
+const wbThresholdRaw = ethnicProjection?.thresholds.find((t) => t.label === "White British <50%") ?? null;
+// A crossing year read off a diverged trajectory is not publishable either.
+const wbThreshold =
+  wbThresholdRaw && projHorizonForThreshold !== null && wbThresholdRaw.year <= projHorizonForThreshold
+    ? wbThresholdRaw
+    : null;
 const significantShift = wbThreshold && wbThreshold.year <= 2070;
 const religionData = getReligionData(area.areaCode);
 const nativityData = getNativityData(area.areaCode);
@@ -122,14 +129,22 @@ const englishProf = getEnglishProficiency(area.areaCode);
 const migrationProfile = getMigrationProfile(area.areaCode);
 const socioData = getSocioeconomicData(area.areaCode);
 
+// Withhold projection years where the model diverged rather than projected. The
+// same guard runs on ukdemographics, which publishes this identical model run.
+const projHorizon = plausibleThrough(ethnicProjection as any);
+const projTruncated = isTruncated(ethnicProjection as any);
+const publishableTimeline = (ethnicTimeline ?? []).filter(
+  (t: any) => !t.isProjection || (projHorizon !== null && Number(t.year) <= projHorizon)
+);
+
 // Build ProjectionChart line data
-const ethChartLines = ethnicTimeline ? (() => {
+const ethChartLines = publishableTimeline.length > 0 ? (() => {
   const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
   const colors: Record<string, string> = { white_british: "#06b6d4", white_other: "#8b9cb3", asian: "#f59e0b", black: "#a78bfa", mixed: "#10b981", other: "#6b7280" };
   const labels: Record<string, string> = { white_british: "White British", white_other: "White Other", asian: "Asian", black: "Black", mixed: "Mixed", other: "Other" };
-  return groups.filter(g => Math.max(...ethnicTimeline.map(t => t.groups[g])) > 3).map(g => ({
+  return groups.filter(g => Math.max(...publishableTimeline.map((t: any) => t.groups[g])) > 3).map(g => ({
     label: labels[g], color: colors[g],
-    points: ethnicTimeline.map(t => ({ year: Number(t.year), value: t.groups[g] }))
+    points: publishableTimeline.map((t: any) => ({ year: Number(t.year), value: t.groups[g] }))
   }));
 })() : [];
 
@@ -139,7 +154,7 @@ const ethProjectedWbi = (year: number): number | null =>
   ethnicProjection?.projections?.[String(year)]?.white_british ?? null;
 
 const ethConfidenceBandRaw = stochasticData
-  ? [2031, 2041, 2051].filter(y => stochasticData[y]).map(y => ({
+  ? [2031, 2041, 2051].filter(y => stochasticData[y] && projHorizon !== null && y <= projHorizon).map(y => ({
       year: y, low: stochasticData[y].wbi.p10, high: stochasticData[y].wbi.p90
     }))
   : undefined;
@@ -151,7 +166,11 @@ const ethConfidenceBandChecked = ethConfidenceBandRaw
   : [];
 const ethConfidenceBand = ethConfidenceBandChecked.length > 0 ? ethConfidenceBandChecked : undefined;
 
-const wbi2051 = ethnicProjection?.projections?.["2051"]?.white_british ?? null;
+const wbi2051 = publishableValue(
+  ethnicProjection as any,
+  2051,
+  ethnicProjection?.projections?.["2051"]?.white_british ?? null
+);
 const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null);
 
 const relChartLines = religionData ? (() => {
@@ -473,9 +492,17 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
       <div class="section-head">
         <div>
           <h2>Ethnic composition projection</h2>
+          {projTruncated && (
+            <p class="lede projection-withheld">
+              Shown to {projHorizon ?? "2021"} rather than 2061. Past that point the
+              model puts a residual Census category above a quarter of the population
+              and several times its 2021 share, which is unconstrained compounding
+              rather than a forecast, so those years are withheld.
+            </p>
+          )}
           <p class="lede">
-            {area.areaName}: WBI {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
-            → {ethnicProjection.projections?.["2051"]?.white_british?.toFixed(1) ?? "?"}% (2051).
+            {area.areaName}: White British {ethnicProjection.current.groups.white_british.toFixed(1)}% (2021)
+            {wbi2051 != null ? ` to ${wbi2051.toFixed(1)}% (2051).` : `, projected to ${projHorizon ?? 2021}.`}
             {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
             {wbi2051Band ? ` 80% CI: ${wbi2051Band.p10}, ${wbi2051Band.p90}%.` : ""}
           </p>
@@ -489,9 +516,9 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         yLabel="% of population"
         caption="Each line shows one ethnic group's share of the local population. The shaded band is the 80% confidence range. Values after 2051 are illustrative only."
       />
-      {ethnicTimeline && ethnicTimeline.length > 0 && (
+      {publishableTimeline.length > 0 && (
         <div style="margin-top: 1.25rem;">
-          <EthnicityTimeline timeline={ethnicTimeline} areaName={area.areaName} />
+          <EthnicityTimeline timeline={publishableTimeline as any} areaName={area.areaName} />
         </div>
       )}
       <details class="method-note" style="margin-top: 0.5rem;">
