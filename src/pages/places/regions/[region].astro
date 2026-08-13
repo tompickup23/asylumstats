@@ -7,6 +7,10 @@ import { slugifyAreaName } from "../../../lib/site";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import rawProjections from "../../../data/live/ethnic-projections.json";
+import {
+  ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
+  accommodationCostForArea
+} from "../../../lib/true-cost";
 
 const localRouteLatest = loadLocalRouteLatest();
 
@@ -23,6 +27,13 @@ const { region } = Astro.props as { region: PlaceDirectoryRegion };
 const areasSorted = [...region.areas].sort((a, b) => b.area.supportedAsylum - a.area.supportedAsylum);
 const maxAreaAsylum = areasSorted[0]?.area.supportedAsylum ?? 1;
 const totalRegional = region.supportedAsylum;
+// Per-region cost, on the accommodation and support basis. Withheld since PR #36 while
+// True Cost was stated five ways; reinstated from the single constant. Deliberately NOT
+// the system total per head, which would attribute post-decision welfare and offender
+// costs to people currently on support and overstate the region by roughly twice.
+const regionalAccommodationCostLabel = totalRegional > 0
+  ? ` Accommodation and support at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(totalRegional) / 1_000_000).toFixed(0)}M a year.`
+  : "";
 
 // Compute regional WBI
 const allAreas = (rawProjections as any).areas as Record<string, any>;
@@ -88,7 +99,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 
   <PlainEnglish
     headline={`${totalRegional.toLocaleString()} people on asylum support in ${region.regionName}`}
-    body={`${region.areas.length} local authorities in this region. Rate of ${region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000 residents.${regionWbi2021 !== null ? ` Average White British share: ${regionWbi2021.toFixed(0)}% (2021) projected to ${regionWbi2051?.toFixed(0)}% by 2051.` : ""}`}
+    body={`${region.areas.length} local authorities in this region. Rate of ${region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000 residents.${regionWbi2021 !== null ? ` Average White British share: ${regionWbi2021.toFixed(0)}% (2021) projected to ${regionWbi2051?.toFixed(0)}% by 2051.` : ""}${regionalAccommodationCostLabel}`}
     tone={totalRegional > 10000 ? "alert" : totalRegional > 3000 ? "info" : "success"}
   />
 

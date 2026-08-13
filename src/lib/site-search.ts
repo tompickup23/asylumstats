@@ -1,6 +1,7 @@
 import { getPlaceDirectory } from "./place-directory";
 import { getPublicPlaceAreas } from "./site";
 import { getEthnicProjection } from "./ethnic-projections";
+import { TOTAL_GBP_M } from "./true-cost";
 
 export interface SiteSearchEntry {
   href: string;
@@ -71,9 +72,9 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     title: "Spending",
     kind: "page",
     kicker: "Money trail",
-    description: "£8.1B True Cost breakdown of UK asylum spend by department, supplier, and route, with every figure tied to a public money row.",
+    description: `£${(TOTAL_GBP_M.central / 1000).toFixed(1)}B True Cost breakdown of UK asylum spend by department, supplier, and route, with every figure tied to a public money row.`,
     priority: 117,
-    searchText: "spending true cost money asylum costs eight billion 8.1bn departments suppliers contracts routes money trail expenditure budget"
+    searchText: "spending true cost money asylum costs billion departments suppliers contracts routes money trail expenditure budget annual report accounts"
   },
   {
     href: "/entities/",

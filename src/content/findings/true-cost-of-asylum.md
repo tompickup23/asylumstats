@@ -1,31 +1,64 @@
 ---
-headline: "The true cost of asylum: at least £207 per taxpayer, per year"
-date: "2026-04-14"
+headline: "The true cost of asylum: £234 per income taxpayer, per year"
+date: "2026-08-13"
 category: spending
 content_type: "article"
-stat_value: "£8B+"
+stat_value: "£8.0B"
 stat_label: "Annual cost (central estimate)"
 verdict: critical
-source_url: "https://www.nao.org.uk/reports/an-analysis-of-the-asylum-system/"
-source_label: "NAO, Home Office, MoJ, HMCTS, DfE, NHS Digital"
-summary: "The total annual cost of the UK asylum system is at least £8 billion. That is over £230 per income taxpayer per year. The hotel bill (£2.1 billion) is only 26% of the true figure. This calculation now includes post-decision welfare costs, family reunion, criminal justice, integration, and modern slavery support. Every figure sourced from published government data."
+source_url: "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026"
+source_label: "Home Office Annual Report and Accounts 2025-26, NAO, MoJ, HMCTS, DfE"
+summary: "The total annual cost of the UK asylum system is around £8.0 billion, or £234 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
 video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/cards/true-cost-of-asylum_og.png"
 ---
 
-> **Updated 14 April 2026.** Second edition. Adds seven cost categories not in the original: post-decision welfare, family reunion dependants, criminal justice, integration, translation, and modern slavery support. The total rises from £5.8 billion to over £8 billion.
+> **Third edition, 13 August 2026.** Rebuilt on the Home Office Annual Report and Accounts 2025-26 (HC 440), published 14 July 2026, which this site did not previously use. The departmental costs are now audited outturn rather than our estimates. The central total moves from £8.05 billion to £7.97 billion, and £236 per taxpayer to £234.
+>
+> The second edition's figures were not wrong so much as unverifiable: they estimated from NAO reports and factsheets what the accounts now state directly. Where the two disagree, the accounts win.
 
-**£5.77 million per day on asylum hotels.** That is the number the Home Office publishes. It is real. It is sourced. And it is less than a third of the actual bill.
+**£4,181 million.** That is what the Home Office spent on asylum support, resettlement and accommodation in the year to March 2026, signed off by the Comptroller and Auditor General. It is the single biggest number in the asylum system, it is down from £4,513 million the year before, and it is roughly half the true bill.
 
-The total annual cost of the UK asylum system is **at least £8 billion**. Over £230 for every income taxpayer. Every year. That is the minimum defensible figure from published government data. The actual cost is almost certainly higher.
+The total annual cost of the UK asylum system is around **£8.0 billion**, or **£234 per income taxpayer**. The defensible range is £7.2 billion to £8.8 billion, and the width of that range is itself the finding: about 60% of the total is now audited, and the rest is estimated because no government body publishes it.
 
-No official body has published the complete total. The Home Office publishes hotel costs. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did.
+No official body publishes the complete total. The Home Office publishes its own accounts. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did, and we show which parts are audited and which are not.
+
+## What is audited and what is not
+
+This matters more than the headline figure, so it comes first.
+
+| Basis | What it means | Share of the central total |
+|---|---|---|
+| **Audited** | An outturn line in the Home Office accounts, examined by the National Audit Office | £4,363M |
+| **Attributed** | An audited total multiplied by a stated asylum share, because the directorate does more than asylum | £657M |
+| **Published** | Another body publishes it, but not as an asylum-specific total | £175M |
+| **Estimated** | Our estimate, with the method shown below | £2,778M |
+
+Every figure in the first two rows can be traced to a page of HC 440. The fourth row cannot, and the reason is the same in each case: the department that incurs the cost does not record it by immigration status.
+
+### Two things this calculation deliberately does not do
+
+**It does not add expense types to budget segments.** The accounts report "asylum costs excluding grants" of £2,962 million and "detention costs" of £159 million. Those are expense *types* spread across the department. They sit *inside* the budget segments counted below. Adding both would count the same money twice, which is the most common way a total like this goes wrong.
+
+**It does not apply the system total to a local population.** The £8.0 billion includes post-decision welfare, family reunion and offender costs, which are incurred for people who are not on asylum support. Dividing it by the 97,519 people on support and calling the result a per-person cost overstates what an area actually costs by roughly twice. Where this site shows a per-area figure, it uses the accommodation and support cost of £117 per supported person per day, which has the same people in the numerator and the denominator.
 
 ## The full breakdown
 
-### Accommodation: £2.7 billion
+### Asylum support, resettlement and accommodation: £4,181 million (audited)
 
-The biggest single cost. Three private companies run every asylum hotel, dispersal house, and reception centre in the country under 10-year AASC contracts:
+The biggest single cost, and as of this edition an audited one. It is the resource outturn for the Home Office business group of that name, and it covers contracted accommodation, subsistence payments, the resettlement schemes, and the grants paid to local authorities. In the previous edition those were three separately estimated lines totalling about £3,970 million; the accounts put the real figure at £4,181 million.
+
+It is falling, and fast:
+
+| Year | ASRA resource outturn |
+|---|---|
+| 2023-24 | £5,425M |
+| 2024-25 | £4,513M |
+| 2025-26 | **£4,181M** |
+
+That is a fall of 23% in two years. The department's own forward plans continue the trajectory: £4,116M in 2026-27, £3,796M in 2027-28 and £3,622M in 2028-29, under the segment's new name of Asylum Group. Against budget, the group underspent by £150 million, which the accounts attribute mainly to Afghan resettlement arrivals running below assumption. Home Office costs for Afghan resettlement were £222.1 million, up from £205 million.
+
+Within this, three private companies run every asylum hotel, dispersal house, and reception centre in the country under 10-year AASC contracts:
 
 | Contractor | Region | Contract value (10-year) |
 |-----------|--------|------------------------|
@@ -36,7 +69,7 @@ The biggest single cost. Three private companies run every asylum hotel, dispers
 
 The original forecast was £4.5 billion. It has more than tripled.
 
-- Hotels: £2.1 billion (30,657 people). Average hotel cost: **£119 per person per night** (reduced from £162/night in early 2024-25 through higher occupancy).
+- Hotels: £2.1 billion, housing 30,657 people at the end of December 2025 (a figure the accounts confirm, down 19% on 2024 and 45% below the September 2023 peak of 56,018). That implies roughly **£190 per person per night**. The Migration Observatory independently estimates about £170 per night for 2024/25. A previous edition of this article stated £119 per night; we can no longer source that figure and have withdrawn it.
 - Dispersal accommodation: approximately £500 million (68,538 people). Cost: approximately **£27 per person per day**. That is six times cheaper than hotels.
 - Initial and contingency accommodation: approximately £100 million.
 
@@ -44,41 +77,31 @@ Hotels house 29% of the asylum population but consume **76% of the accommodation
 
 Performance deductions from contractors since 2019: just **£4 million**. The total contract value is £15.3 billion.
 
-Source: NAO, "The Home Office's asylum accommodation contracts," May 2025. Home Office factsheet, June 2025.
+Source: Home Office Annual Report and Accounts 2025-26 (HC 440), Statement of Outturn against Estimate. Contract values: NAO, "The Home Office's asylum accommodation contracts," May 2025.
 
-### Home Office processing: £442 million
+### Border Security Command: £182 million (audited)
 
-2,057 staff in the Asylum and Protection Directorate. Caseworkers, country specialists, policy teams, intake units. The Home Office made 160,077 initial decisions in 2025 but 100,625 new claims arrived. The queue shrinks slowly while the processing machine runs at full capacity.
+Stood up in July 2024 and counted here in full, because unlike Border Force it exists specifically to tackle small boats and organised immigration crime. Its audited outturn rose from £41 million in 2024-25 to £182 million in 2025-26, and its budget is planned to reach £797 million in 2026-27.
 
-Source: NAO Home Office Overview 2024-25.
+The command's first annual report, published 16 July 2026, records 3,766 disruptions of organised immigration crime in the year to March 2026 against 2,578 the year before, and at least 1,900 arrests against at least 1,100. Those are official statistics in development, not designated official statistics, and the July release revised the earlier figures down.
 
-### Local authority costs: at least £930 million
+Source: Home Office Annual Report and Accounts 2025-26. Border Security Commander's Annual Report: Data, July 2026.
 
-Councils receive the following grants from central government:
+### Immigration enforcement, asylum share: £385 million (attributed)
 
-**Asylum dispersal grant (2025-26):** £1,200 per asylum seeker per year (based on occupied bedspaces at 30 March 2025), plus £100 per month for each additional bedspace above the March baseline. This covers statutory and non-statutory services including education, social care, waste, interpreting, and orientation support.
+Immigration Enforcement's audited outturn was £770 million, down from £819 million. Enforcement covers all immigration offending, not only asylum, so this counts 40% to 60% of it with a central case of 50%. That is the same basis the previous edition used, now applied to an audited total rather than an estimated one.
 
-**UASC grant:** £143 per child per night, a single rate regardless of age. That is **£52,195 per year per child**. The National Transfer Scheme offers £10,000 for transfers completed within 2 working days and £5,000 within 5 working days. Former UASC care leavers over 18 receive £270 per week.
+**Detention costs sit inside this segment and are not added to it.** They are worth stating separately because they are the one asylum cost line moving the wrong way: £159.3 million in 2025-26 against £131.3 million in 2024-25, a rise of 21.3%, in a year when every other major line fell.
 
-**Afghan schemes (ARAP + ACRS):** £24,110 per person over 3 years (consolidated tariff from March 2025). 4,004 people remain in transitional accommodation. LAs receive £28/person/day for wraparound support.
+An enforced removal costs £48,800 per person. A voluntary return costs £4,300.
 
-**Homes for Ukraine:** £5,900 per guest (arrivals from January 2023). DfE education tariffs: £3,000 (early years), £6,580 (primary), £8,755 (secondary) per child. Host thank-you payments: £350/month per residential address.
+Source: Home Office Annual Report and Accounts 2025-26, Statement of Outturn against Estimate and Note 3, Purchase of goods and services.
 
-Failed asylum seekers with no recourse to public funds cost local authorities a further £55-65 million per year (NRPF Network data). Leaving care support for former UASC adds an estimated £50-80 million.
+### Border Force, asylum share: £272 million (attributed)
 
-The NAO noted in December 2025 that asylum costs for councils are "poorly understood." The £1,200 per asylum seeker grant falls well short of actual service costs. Our central estimate, including unfunded costs, is £1,050 million.
+Border Force's audited outturn was £1,359 million. It protects all UK borders, including trade and drugs, so most of that is not asylum. This counts 15% to 25%, central case 20%. This is a judgement and a debatable one; a narrower reading of what counts as asylum-attributable would put it lower.
 
-Source: Home Office Asylum Grant Funding Instruction 2025-26. UASC Funding Instructions 2025-26. Afghan Resettlement Programme FY 2025-26. GOV.UK Homes for Ukraine guidance. NAO December 2025. NRPF Network.
-
-### Border and Channel operations: approximately £500 million
-
-The UK pays France approximately £159 million per year under the March 2023 cooperation deal (EUR 541 million over three years). Border Force runs interception and processing operations at Dover, Manston, and Western Jet Foil. Research by the Universities of York and Liverpool found that the government spent £3.77 billion on contracts to manage small boat crossings between 2017 and 2024.
-
-The government committed up to £280 million additional per year by 2028-29 for the new Border Security Command.
-
-We estimate approximately £500 million per year is attributable to asylum-related border operations. This is a judgement call. Border Force protects all UK borders (trade, drugs, people), and asylum is not the only function. A narrower definition would give approximately £350 million. A broader one, including enforcement, would give £650 million.
-
-Source: House of Commons Library CBP-9681. University of York/Liverpool, April 2025.
+Source: Home Office Annual Report and Accounts 2025-26.
 
 ### Healthcare (NHS): estimated £200-300 million
 
@@ -105,34 +128,6 @@ Per-pupil funding averages £6,000 per year (DfE National Funding Formula). Engl
 - Upper estimate (25,000 children + EAL + SEND): **£185 million**
 
 We use £140 million as the central figure. As with healthcare, the true number is unknown because the government does not publish asylum-specific education data.
-
-### Enforcement and detention: approximately £310 million
-
-Immigration Removal Centres cost £117 million per year to operate (Detention Action, citing MoJ/Home Office data). Not all detainees are asylum seekers; we estimate approximately 50% are, giving an asylum-attributable cost of approximately £58 million.
-
-The NAO reported £46 million in asylum-specific detention and removal costs in 2024-25 (£15.2 million detention beds, £30.4 million assisted voluntary removals).
-
-An enforced removal costs £48,800 per person. A voluntary return costs £4,300. (Home Office, FY 2024-25.)
-
-The broader immigration enforcement budget is approximately £500 million. We attribute 50-60% to asylum, giving approximately £250-300 million. Combined with asylum-specific detention, our central estimate is £310 million.
-
-The Rwanda scheme, before it was scrapped, cost **£715 million** and achieved zero involuntary deportations (4 people relocated voluntarily).
-
-Source: NAO December 2025. Home Office return cost data. Detention Action, October 2024.
-
-### Subsistence payments: £220 million
-
-107,003 people receive financial support via the ASPEN card system. Exact rates (since January 2024):
-
-- Self-catered accommodation: **£49.18 per person per week**
-- Full-board (hotels): **£8.86 per person per week**
-- Additional for pregnant mothers: £5.25/week
-- Additional for baby under 1: £9.50/week
-- Additional for child aged 1-3: £5.25/week
-
-The blended total was £220 million in 2024-25 (NAO published figure).
-
-Source: NAO December 2025. Home Office Review of Weekly Allowances 2023.
 
 ### Tribunals and courts: approximately £115 million
 
@@ -222,52 +217,69 @@ There is significant overlap between NRM referrals and the asylum system. Approx
 
 Source: Home Office, National Referral Mechanism Statistics (year ending December 2024). Salvation Army Modern Slavery Victim Care Contract.
 
+### Local authority unfunded costs: approximately £125 million
+
+The grants councils receive from the Home Office are already counted inside ASRA above. What is not counted there is the gap between those grants and what the services actually cost.
+
+Failed asylum seekers with no recourse to public funds cost local authorities £55-65 million per year (NRPF Network). Leaving-care support for former unaccompanied children adds an estimated £50-80 million. The NAO noted in December 2025 that asylum costs for councils are "poorly understood" and that the £1,200 per asylum seeker dispersal grant falls well short of actual service costs.
+
+- Conservative estimate: **£105 million**
+- Central estimate: **£125 million**
+- Upper estimate: **£145 million**
+
+This is the least well evidenced line in the calculation and is probably understated, because no council publishes a full asylum cost centre.
+
+Source: NRPF Network local authority cost data. NAO, "An analysis of the asylum system," December 2025.
+
 ## The total
 
-| Component | Conservative | Central | Upper |
-|-----------|-------------|---------|-------|
-| Accommodation | £2,700M | £2,700M | £2,700M |
-| Home Office processing | £442M | £442M | £442M |
-| Local authority costs | £930M | £1,050M | £1,200M |
-| **Post-decision welfare** | **£740M** | **£924M** | **£1,098M** |
-| Border/Channel operations | £350M | £500M | £650M |
-| **Family reunion dependants** | **£377M** | **£500M** | **£623M** |
-| **NRM / Modern slavery** | **£255M** | **£340M** | **£425M** |
-| Enforcement/detention | £200M | £310M | £400M |
-| **ESOL / Integration** | **£200M** | **£250M** | **£300M** |
-| Healthcare (NHS) | £204M | £222M | £259M |
-| Subsistence payments | £220M | £220M | £220M |
-| **Criminal justice / FNO** | **£127M** | **£152M** | **£203M** |
-| Education | £105M | £140M | £185M |
-| **Translation / Interpreting** | **£80M** | **£125M** | **£170M** |
-| Tribunals/courts | £102M | £115M | £130M |
-| Legal aid | £55M | £60M | £70M |
-| **Total** | **£7,087M** | **£8,050M** | **£9,075M** |
+Categories are ordered by central value. The basis column is the point of the table: it says which figures a reader can check against an audited account and which rest on our method.
 
-Seven new cost categories (shown in **bold**) account for an additional £1.8-2.8 billion over the original 10-category total. The conservative total uses only published, verified figures with the lowest reasonable assumptions. The upper estimate includes plausible costs that are not separately reported by government.
+| Component | Basis | Conservative | Central | Upper |
+|---|---|---|---|---|
+| Asylum support, resettlement and accommodation | Audited | £4,181M | £4,181M | £4,181M |
+| Post-decision welfare | Estimated | £740M | £924M | £1,098M |
+| Family reunion dependants | Estimated | £377M | £500M | £623M |
+| Immigration enforcement, asylum share | Attributed | £308M | £385M | £462M |
+| Modern slavery support | Estimated | £255M | £340M | £425M |
+| Border Force, asylum share | Attributed | £204M | £272M | £340M |
+| ESOL and integration | Estimated | £200M | £250M | £300M |
+| Healthcare | Estimated | £204M | £222M | £259M |
+| Border Security Command | Audited | £182M | £182M | £182M |
+| Criminal justice | Estimated | £127M | £152M | £203M |
+| Education | Estimated | £105M | £140M | £185M |
+| Translation and interpreting | Estimated | £80M | £125M | £170M |
+| Local authority unfunded costs | Estimated | £105M | £125M | £145M |
+| Tribunals and courts | Published | £102M | £115M | £130M |
+| Legal aid | Published | £55M | £60M | £70M |
+| **Total** | | **£7,225M** | **£7,973M** | **£8,773M** |
+
+The conservative column uses the lowest defensible assumption in each estimated category and the lowest attribution share. The upper column uses the highest. The audited rows do not vary, which is why the range narrowed against the previous edition: more of the total is now a fact rather than a judgement.
+
+**The audited rebuild landed within 1% of the estimate-built one.** The second edition put the central total at £8,050M by estimating the departmental costs; the accounts put the same block at a figure that produces £7,973M. That agreement is worth stating because it is the closest thing to a check available on a number nobody else calculates.
 
 ## YOUR bill
 
 | | Conservative | Central | Upper |
 |--|-------------|---------|-------|
-| **Annual cost** | £7.1 billion | £8.1 billion | £9.1 billion |
-| **Per income taxpayer** | £208 | £236 | £266 |
-| **Per household** | £255 | £290 | £327 |
-| **Per day nationally** | £19.4M | £22.1M | £24.9M |
+| **Annual cost** | £7.2 billion | £8.0 billion | £8.8 billion |
+| **Per income taxpayer** | £212 | £234 | £257 |
+| **Per household** | £260 | £287 | £316 |
+| **Per day nationally** | £19.8M | £21.8M | £24.0M |
 
-**At minimum, the asylum system costs over £207 per taxpayer per year.** The central estimate is £236. The true figure is likely higher because several cost categories (healthcare, education, criminal justice) rely on estimates rather than published asylum-specific data.
+**The central estimate is £234 per income taxpayer per year**, on a range of £212 to £257. Taxpayers: 34.1 million, HMRC projected 2024-25. Households: 27.8 million, ONS.
 
-The hotel bill alone (£62/taxpayer) is only 26% of the central total, and 30% of the conservative total.
+Around 60% of that is now audited. The remainder is estimated because the departments that incur it, principally DWP, NHS and DfE, do not record spending by immigration status. If any of them published asylum-specific figures, this article would be shorter and its range narrower.
 
 ## What this does NOT include
 
-This expanded calculation now covers 17 cost categories but still deliberately excludes costs we cannot reasonably estimate:
+This calculation covers 15 cost categories and still deliberately excludes costs we cannot reasonably estimate:
 - **Cumulative welfare liability**: We count one year's intake (55,000 grants). The cumulative cost of all cohorts still receiving welfare is far higher. Counting it would require assumptions about employment rates and benefit duration that vary enormously by nationality and year of arrival.
 - **Economic opportunity cost**: Asylum seekers are prohibited from working for at least 12 months. The lost economic output and tax revenue are real but difficult to quantify.
 - **Housing market displacement**: Dispersal of asylum seekers into areas with tight housing stock increases rents and reduces availability for local residents. No published estimate exists.
 - **The £715 million spent on the now-scrapped Rwanda scheme**: A sunk cost, not an annual liability.
 - **Social cohesion costs**: Policing community tensions, far-right activity, counter-extremism programmes in dispersal areas.
-- **Local government unfunded costs**: The £1,200 per asylum seeker grant falls far short of actual costs. The true local government figure is higher than our £1.05B estimate.
+- **Most local government unfunded costs**: only the two quantifiable parts are counted above. The £1,200 per asylum seeker dispersal grant falls far short of actual service costs and no council publishes the difference.
 
 ## The lifetime fiscal impact
 
@@ -314,13 +326,17 @@ Source: Statistics on International Development, provisional UK ODA spend 2024.
 
 Every component uses the most recent published figure available. Where no published figure exists (healthcare, education), we show the estimation method and provide conservative, central, and upper estimates. Two components (healthcare and education) rely entirely on estimates because the government does not publish asylum-specific costs in these areas.
 
-The border operations figure requires a judgement about what proportion of Border Force spending is asylum-attributable. We use 50-60% as the central case, but this is debatable.
+Two figures rest on an attribution judgement rather than a measurement: what share of Immigration Enforcement (40-60%, central 50%) and of Border Force (15-25%, central 20%) is asylum-attributable. Both directorates do substantially more than asylum. These are the numbers to argue with first, and moving them moves the total by several hundred million.
+
+The audited lines carry no such judgement. They are the outturn the Home Office reported and the National Audit Office examined, and they can be checked against HC 440 directly.
 
 All source documents are listed below and linked where available online. We welcome correction. If any figure in this article is wrong, contact us and we will update it.
 
 ## Sources
 
 **Core government sources:**
+- Home Office Annual Report and Accounts 2025-26 (HC 440), published 14 July 2026: Statement of Outturn against Estimate, and Note 3 Purchase of goods and services
+- Border Security Commander's Annual Report: Data, 16 July 2026
 - NAO, "An analysis of the asylum system," December 2025
 - NAO, "The Home Office's asylum accommodation contracts," May 2025
 - NAO, Home Office Overview 2024-25, October 2025
@@ -359,4 +375,4 @@ All source documents are listed below and linked where available online. We welc
 - Detention Action briefing paper, October 2024
 - Salvation Army Modern Slavery Victim Care Contract
 
-Over £7 billion. At least £207 per taxpayer. Every year. Those are the minimum defensible numbers. The actual cost is higher.
+Around £8.0 billion. £234 per income taxpayer. Every year. The biggest single component is falling and is now audited; the parts nobody audits are the parts nobody publishes.

@@ -1,6 +1,13 @@
 ---
+import { TOTAL_GBP_M } from "../lib/true-cost";
+
 type NavItem = { href: string; label: string; desc: string };
 type NavGroup = { label: string; items: NavItem[] };
+
+// Derived, not written in. This description sits on every page of the site, so when it
+// held a hardcoded "£8.1B" it was the widest-reaching of the five conflicting True Cost
+// figures.
+const trueCostBn = (TOTAL_GBP_M.central / 1000).toFixed(1);
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -15,7 +22,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Money Trail",
     items: [
-      { href: "/spending", label: "Spending", desc: "£8.1B True Cost breakdown" },
+      { href: "/spending", label: "Spending", desc: `£${trueCostBn}B True Cost breakdown` },
       { href: "/entities", label: "Entities", desc: "Suppliers & contractors" },
       { href: "/routes", label: "Routes", desc: "Small-boat & resettlement" },
       { href: "/compare", label: "Compare", desc: "Side-by-side any place" },

@@ -13,6 +13,7 @@ import rawProjections from "../data/live/ethnic-projections.json";
 import smallBoatsSeries from "../data/live/small-boats.json";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
+import { PER_TAXPAYER_GBP, TOTAL_GBP_M, UK_TAXPAYERS } from "../lib/true-cost";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -44,9 +45,8 @@ function fmtGbp(n: number) {
 }
 
 // Cost calculations
-// HMRC projected individual income taxpayers 2024-25: 34.1M (Table 2.1, Nov 2024 forecast)
-// Source: https://www.gov.uk/government/statistics/income-tax-liabilities-statistics
-const UK_TAXPAYERS = 34_100_000;
+// Taxpayer count now comes from lib/true-cost, so the homepage and the True Cost
+// figures cannot drift onto different denominators.
 const annualCostGbp = dailyCostGbp * 365;
 const perTaxpayerGbp = Math.round(annualCostGbp / UK_TAXPAYERS);
 const costPerResidentPerDay = latestQuarter.hotelAccommodation > 0
@@ -241,10 +241,10 @@ function findingColor(verdict: string): string {
   <section class="cost-strip shell">
     <div class="cost-strip-inner">
       <div class="cost-item cost-item--hero">
-        <span class="cost-number">£155+</span>
-        <span class="cost-label">minimum total cost per taxpayer per year</span>
-        <span class="cost-context">Hotels, processing, local authority, border ops, NHS, education, enforcement, tribunals, subsistence, legal aid. Central estimate: £169. <a href="/findings/true-cost-of-asylum/" style="color: var(--accent);">Full breakdown.</a></span>
-        <span class="cost-calc">£5.3B-£6.3B total / 34.1M taxpayers. Hotels alone = £{perTaxpayerGbp}.</span>
+        <span class="cost-number">£{PER_TAXPAYER_GBP.central}</span>
+        <span class="cost-label">total cost per income taxpayer per year</span>
+        <span class="cost-context">Accommodation and support, enforcement, border security, welfare after a decision, NHS, education, tribunals, legal aid. Range £{PER_TAXPAYER_GBP.conservative} to £{PER_TAXPAYER_GBP.upper}. <a href="/findings/true-cost-of-asylum/" style="color: var(--accent);">Full breakdown.</a></span>
+        <span class="cost-calc">£{(TOTAL_GBP_M.central / 1000).toFixed(1)}B total / 34.1M taxpayers. Hotels alone = £{perTaxpayerGbp}.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">£{fmtInt(costPerResidentPerYear)}</span>
@@ -257,7 +257,7 @@ function findingColor(verdict: string): string {
         <span class="cost-context">NAO forecast. The 10-year asylum accommodation contract rose from £4.5B to £15.3B.</span>
       </div>
     </div>
-    <p class="cost-source">Daily cost: Home Office factsheet (2024/25 average). Taxpayers: HMRC projected 2024-25. Per-resident: daily average / Q4 2025 hotel count (time periods differ). 10-year: NAO Investigation into Asylum Accommodation, Nov 2024.</p>
+    <p class="cost-source">Total cost: Home Office Annual Report and Accounts 2025-26 for the audited departmental lines, published figures and stated estimates for the rest. Daily cost: Home Office factsheet (2024/25 average). Taxpayers: HMRC projected 2024-25. Per-resident: daily average / Q4 2025 hotel count (time periods differ). 10-year: NAO Investigation into Asylum Accommodation, Nov 2024.</p>
   </section>
 
   <!-- ═══ THE SYSTEM IN NUMBERS ═══ -->
