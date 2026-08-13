@@ -156,4 +156,16 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
   .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--muted); }
   .proj-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
   .proj-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.4; }
+
+  /* SVG text scales with the viewBox: at width:100% in a narrow card an 11px tick lands
+     at 5.5 real pixels. A container query, not a viewport one, because a chart in a
+     342px desktop column is just as unreadable as one on a phone.
+     Non-SVG text (legend, caption) is in rem and already correct, so it is left alone. */
+  @container viz (max-width: 430px) {
+    .proj-tick { font-size: 22px; }
+    .proj-axis-label { font-size: 22px; }
+    .proj-now-label { font-size: 22px; }
+    .proj-line-label { font-size: 22px; }
+    .proj-year-label { font-size: 22px; }
+  }
 </style>

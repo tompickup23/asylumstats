@@ -926,6 +926,11 @@ main {
 .benchmark-card {
   position: relative;
   overflow: hidden;
+  /* Chart text scales with the SVG viewBox, so legibility depends on how wide THIS card
+     is, not how wide the window is. Declaring a query container lets the chart styles
+     respond to the card. See the @container block below .trend-event-label. */
+  container-type: inline-size;
+  container-name: viz;
   padding: 1.2rem;
   border: 1px solid var(--border);
   border-radius: 24px;
@@ -3098,6 +3103,66 @@ button.region-map-shortlist-link {
   letter-spacing: 0.02em;
 }
 
+/* SVG text scales with the viewBox, so a chart shrunk to fit its container shrinks its
+   labels with it. These charts are authored at 560 units wide and rendered at
+   width:100%, so a 10px tick rendered at 5px in a 320px card on a phone.
+
+   This is a CONTAINER query, not a viewport one, and that distinction is the whole
+   point: a first attempt used @media (max-width: 640px) and fixed phones while leaving
+   desktop charts that sit in a 342px column rendering at 6.1px. Legibility depends on
+   how wide THIS card is, not how wide the window is.
+
+   Sizes are in viewBox units, so doubling them below the threshold cancels the
+   downscale and lands each label back at 10 to 11 real pixels. The geometry is
+   untouched, so lines, bars and annotations stay where they were. */
+@container viz (max-width: 430px) {
+  .trend-label,
+  .benchmark-label {
+    font-size: 22px;
+    letter-spacing: 0.04em;
+  }
+
+  .trend-tick {
+    font-size: 22px;
+  }
+
+  .trend-annotation {
+    font-size: 22px;
+  }
+
+  /* See TrendChart.astro: at double size the intermediate gridline values overlap the
+     line and the peak annotation. The top and bottom ticks carry the scale, and every
+     value is in the Exact values table, so the middle pair is dropped rather than
+     shrunk back below the legibility floor. */
+  .trend-tick--intermediate {
+    display: none;
+  }
+
+  /* The top tick sits six units above the highest gridline, which is fine at 10px and
+     clips against the top of the viewBox at 22px: "59,086" was cut in half. Only the
+     top one moves; nudging all of them would push the zero tick into the x-axis
+     labels. */
+  .trend-tick--top {
+    transform: translateY(9px);
+  }
+
+  /* The peak annotation is clamped to y=16 so it cannot leave the top of the plot, and
+     the top tick label sits at that same height on the right, so at double size the two
+     collided on every chart on the page. transform is one of the few things settable on
+     SVG text from CSS (x, y and dy are not), so the annotation drops below the tick row
+     on mobile only. 26 user units is about 13 real pixels at this scale. */
+  .trend-annotation {
+    transform: translateY(44px);
+  }
+
+  /* Event labels sit inside the plot and would collide at double size, so they take a
+     smaller multiple: 15 units renders at about 7.5px, still small but readable, and
+     they are secondary to the line itself. */
+  .trend-event-label {
+    font-size: 15px;
+  }
+}
+
 .region-map-label {
   font-size: 11px;
   font-weight: 800;
@@ -3141,6 +3206,20 @@ button.region-map-shortlist-link {
   stroke-linejoin: round;
   pointer-events: none;
 }
+
+/* KNOWN GAP, deliberately left alone: region map labels render at about 4.4px on a
+   375px screen.
+   The map is a 620x760 viewBox in a 247px card, a scale of 0.40, so the 11px labels
+   land at 4.4px. Scaling them to clear an 11px floor was tried and reverted: at 28
+   units the names overlap each other on 16 pairs ("North West" into "Yorkshire
+   Humber", "Wales" into "West Midlands"), and hiding the values alongside them does
+   not help because the collisions are name against name.
+   Hiding the labels is not an option either: eight region names (Yorkshire Humber,
+   Wales, both Midlands, both Souths, East of England, London) appear ONLY on the map,
+   so removing them removes the content.
+   A real fix needs a mobile-specific treatment, most likely abbreviated names or a
+   taller single-column tile layout, not a font-size change. Tracked in the launch
+   readiness plan under presentation. */
 
 .region-map-outline {
   fill: rgba(255, 255, 255, 0.035);

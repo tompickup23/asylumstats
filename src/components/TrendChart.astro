@@ -70,6 +70,17 @@ const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${getX
 const areaPath = `${linePath} L ${getX(points.length - 1)} ${padding.top + usableHeight} L ${getX(0)} ${padding.top + usableHeight} Z`;
 const peak = points.reduce((current, point) => (point.value > current.value ? point : current), points[0]);
 const peakIndex = points.findIndex((point) => point === peak);
+
+// The peak annotation is centred on its point, so a peak near either end runs off the
+// plot: "Peak 2023 Q4" was clipped mid-word at the right edge. Clamp it back inside
+// using an estimate of half its width.
+//
+// The estimate must assume the MOBILE font size. This label is 11 units on desktop and
+// 22 on mobile, and the clamp is baked in at build time, so sizing it for desktop left
+// it overflowing by up to 19px on a phone. Sizing it for mobile insets desktop labels
+// slightly more than strictly needed, which is invisible; the reverse is a clipped
+// word.
+const peakLabelHalfWidth = peak ? Math.round((`Peak ${peak.label}`.length * 12) / 2) : 0;
 const colors =
   tone === "teal"
     ? {
@@ -99,7 +110,7 @@ const colors =
     <span class="chip">{formatValue(points[points.length - 1]?.value ?? 0)}</span>
   </div>
   <svg class="trend-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={altText}>
-    {tickValues.map((tick) => (
+    {tickValues.map((tick, tickIndex) => (
       <>
         <line
           x1={padding.left}
@@ -110,7 +121,21 @@ const colors =
           stroke-width="1"
           stroke-dasharray="4 6"
         />
-        <text x={width - padding.right} y={getY(tick) - 6} text-anchor="end" class="trend-tick">
+        <text
+          x={width - padding.right}
+          y={getY(tick) - 6}
+          text-anchor="end"
+          class:list={[
+            "trend-tick",
+            // Tick labels sit inside the plot, right-anchored. On mobile they render at
+            // twice the viewBox size to stay legible, which is enough to collide with
+            // the line and the peak annotation. The extremes carry the scale; the two
+            // intermediate values are in the Exact values table below, so they are the
+            // ones that go.
+            tickIndex === 0 && "trend-tick--top",
+            tickIndex !== 0 && tickIndex !== tickValues.length - 1 && "trend-tick--intermediate"
+          ]}
+        >
           {formatValue(Math.round(tick))}
         </text>
       </>
@@ -132,7 +157,15 @@ const colors =
       {points[points.length - 1]?.label}
     </text>
     {peak && (
-      <text x={getX(peakIndex)} y={Math.max(16, getY(peak.value) - 12)} text-anchor="middle" class="trend-annotation">
+      <text
+        x={Math.min(
+          Math.max(getX(peakIndex), padding.left + peakLabelHalfWidth),
+          width - padding.right - peakLabelHalfWidth
+        )}
+        y={Math.max(16, getY(peak.value) - 12)}
+        text-anchor="middle"
+        class="trend-annotation"
+      >
         Peak {peak.label}
       </text>
     )}
