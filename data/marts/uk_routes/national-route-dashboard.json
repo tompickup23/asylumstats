@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T14:19:13.391Z",
+  "generatedAt": "2026-08-14T16:06:47.499Z",
   "localSnapshotDate": "2026-03-31",
   "routeFamilies": [
     {
@@ -3983,7 +3983,14 @@
         "latestAdministrativeCount": 614,
         "initialGrantRatePct": 29.6,
         "latestGrantRatePct": 50.5,
-        "latestOutcomeKnownPct": 98.1
+        "latestOutcomeKnownPct": 98.1,
+        "enforcedReturns": 4582,
+        "voluntaryReturns": 2246,
+        "returnsCount": 6828,
+        "returnableOutcomeCount": 12135,
+        "returnRatePct": 56.3,
+        "cohortAgeYears": 19,
+        "returnsSettled": true
       },
       {
         "claimYear": "2008",
@@ -3999,7 +4006,14 @@
         "latestAdministrativeCount": 261,
         "initialGrantRatePct": 31.6,
         "latestGrantRatePct": 53.1,
-        "latestOutcomeKnownPct": 98.3
+        "latestOutcomeKnownPct": 98.3,
+        "enforcedReturns": 5122,
+        "voluntaryReturns": 2429,
+        "returnsCount": 7551,
+        "returnableOutcomeCount": 13587,
+        "returnRatePct": 55.6,
+        "cohortAgeYears": 18,
+        "returnsSettled": true
       },
       {
         "claimYear": "2009",
@@ -4015,7 +4029,14 @@
         "latestAdministrativeCount": 223,
         "initialGrantRatePct": 27,
         "latestGrantRatePct": 52.7,
-        "latestOutcomeKnownPct": 98
+        "latestOutcomeKnownPct": 98,
+        "enforcedReturns": 4894,
+        "voluntaryReturns": 2051,
+        "returnsCount": 6945,
+        "returnableOutcomeCount": 12783,
+        "returnRatePct": 54.3,
+        "cohortAgeYears": 17,
+        "returnsSettled": true
       },
       {
         "claimYear": "2010",
@@ -4031,7 +4052,14 @@
         "latestAdministrativeCount": 223,
         "initialGrantRatePct": 27.2,
         "latestGrantRatePct": 50,
-        "latestOutcomeKnownPct": 98.1
+        "latestOutcomeKnownPct": 98.1,
+        "enforcedReturns": 4245,
+        "voluntaryReturns": 1343,
+        "returnsCount": 5588,
+        "returnableOutcomeCount": 9597,
+        "returnRatePct": 58.2,
+        "cohortAgeYears": 16,
+        "returnsSettled": true
       },
       {
         "claimYear": "2011",
@@ -4047,7 +4075,14 @@
         "latestAdministrativeCount": 208,
         "initialGrantRatePct": 34.8,
         "latestGrantRatePct": 53.2,
-        "latestOutcomeKnownPct": 98.3
+        "latestOutcomeKnownPct": 98.3,
+        "enforcedReturns": 4144,
+        "voluntaryReturns": 1446,
+        "returnsCount": 5590,
+        "returnableOutcomeCount": 10098,
+        "returnRatePct": 55.4,
+        "cohortAgeYears": 15,
+        "returnsSettled": true
       },
       {
         "claimYear": "2012",
@@ -4063,7 +4098,14 @@
         "latestAdministrativeCount": 194,
         "initialGrantRatePct": 36.6,
         "latestGrantRatePct": 53.7,
-        "latestOutcomeKnownPct": 99.5
+        "latestOutcomeKnownPct": 99.5,
+        "enforcedReturns": 4647,
+        "voluntaryReturns": 1477,
+        "returnsCount": 6124,
+        "returnableOutcomeCount": 11341,
+        "returnRatePct": 54,
+        "cohortAgeYears": 14,
+        "returnsSettled": true
       },
       {
         "claimYear": "2013",
@@ -4079,7 +4121,14 @@
         "latestAdministrativeCount": 284,
         "initialGrantRatePct": 37.6,
         "latestGrantRatePct": 54.8,
-        "latestOutcomeKnownPct": 99.3
+        "latestOutcomeKnownPct": 99.3,
+        "enforcedReturns": 5190,
+        "voluntaryReturns": 1169,
+        "returnsCount": 6359,
+        "returnableOutcomeCount": 11848,
+        "returnRatePct": 53.7,
+        "cohortAgeYears": 13,
+        "returnsSettled": true
       },
       {
         "claimYear": "2014",
@@ -4095,7 +4144,14 @@
         "latestAdministrativeCount": 230,
         "initialGrantRatePct": 44.3,
         "latestGrantRatePct": 63.8,
-        "latestOutcomeKnownPct": 99.1
+        "latestOutcomeKnownPct": 99.1,
+        "enforcedReturns": 3724,
+        "voluntaryReturns": 1129,
+        "returnsCount": 4853,
+        "returnableOutcomeCount": 10296,
+        "returnRatePct": 47.1,
+        "cohortAgeYears": 12,
+        "returnsSettled": true
       },
       {
         "claimYear": "2015",
@@ -4111,7 +4167,14 @@
         "latestAdministrativeCount": 273,
         "initialGrantRatePct": 40.6,
         "latestGrantRatePct": 64.3,
-        "latestOutcomeKnownPct": 98.8
+        "latestOutcomeKnownPct": 98.8,
+        "enforcedReturns": 2609,
+        "voluntaryReturns": 1526,
+        "returnsCount": 4135,
+        "returnableOutcomeCount": 13364,
+        "returnRatePct": 30.9,
+        "cohortAgeYears": 11,
+        "returnsSettled": true
       },
       {
         "claimYear": "2016",
@@ -4127,7 +4190,14 @@
         "latestAdministrativeCount": 265,
         "initialGrantRatePct": 32.5,
         "latestGrantRatePct": 58.3,
-        "latestOutcomeKnownPct": 98.5
+        "latestOutcomeKnownPct": 98.5,
+        "enforcedReturns": 2408,
+        "voluntaryReturns": 1649,
+        "returnsCount": 4057,
+        "returnableOutcomeCount": 14531,
+        "returnRatePct": 27.9,
+        "cohortAgeYears": 10,
+        "returnsSettled": true
       },
       {
         "claimYear": "2017",
@@ -4143,7 +4213,14 @@
         "latestAdministrativeCount": 303,
         "initialGrantRatePct": 32.6,
         "latestGrantRatePct": 61.5,
-        "latestOutcomeKnownPct": 98.4
+        "latestOutcomeKnownPct": 98.4,
+        "enforcedReturns": 1645,
+        "voluntaryReturns": 1265,
+        "returnsCount": 2910,
+        "returnableOutcomeCount": 12150,
+        "returnRatePct": 24,
+        "cohortAgeYears": 9,
+        "returnsSettled": true
       },
       {
         "claimYear": "2018",
@@ -4159,7 +4236,14 @@
         "latestAdministrativeCount": 345,
         "initialGrantRatePct": 48.6,
         "latestGrantRatePct": 71.6,
-        "latestOutcomeKnownPct": 98.2
+        "latestOutcomeKnownPct": 98.2,
+        "enforcedReturns": 1037,
+        "voluntaryReturns": 1291,
+        "returnsCount": 2328,
+        "returnableOutcomeCount": 11197,
+        "returnRatePct": 20.8,
+        "cohortAgeYears": 8,
+        "returnsSettled": true
       },
       {
         "claimYear": "2019",
@@ -4175,7 +4259,14 @@
         "latestAdministrativeCount": 453,
         "initialGrantRatePct": 57.6,
         "latestGrantRatePct": 75,
-        "latestOutcomeKnownPct": 98
+        "latestOutcomeKnownPct": 98,
+        "enforcedReturns": 963,
+        "voluntaryReturns": 1921,
+        "returnsCount": 2884,
+        "returnableOutcomeCount": 13467,
+        "returnRatePct": 21.4,
+        "cohortAgeYears": 7,
+        "returnsSettled": false
       },
       {
         "claimYear": "2020",
@@ -4191,7 +4282,14 @@
         "latestAdministrativeCount": 1030,
         "initialGrantRatePct": 60.3,
         "latestGrantRatePct": 80.1,
-        "latestOutcomeKnownPct": 99.6
+        "latestOutcomeKnownPct": 99.6,
+        "enforcedReturns": 664,
+        "voluntaryReturns": 1394,
+        "returnsCount": 2058,
+        "returnableOutcomeCount": 9293,
+        "returnRatePct": 22.1,
+        "cohortAgeYears": 6,
+        "returnsSettled": false
       },
       {
         "claimYear": "2021",
@@ -4207,7 +4305,14 @@
         "latestAdministrativeCount": 3091,
         "initialGrantRatePct": 70.9,
         "latestGrantRatePct": 80.2,
-        "latestOutcomeKnownPct": 99.6
+        "latestOutcomeKnownPct": 99.6,
+        "enforcedReturns": 1037,
+        "voluntaryReturns": 2163,
+        "returnsCount": 3200,
+        "returnableOutcomeCount": 15160,
+        "returnRatePct": 21.1,
+        "cohortAgeYears": 5,
+        "returnsSettled": false
       },
       {
         "claimYear": "2022",
@@ -4223,7 +4328,14 @@
         "latestAdministrativeCount": 5786,
         "initialGrantRatePct": 60.1,
         "latestGrantRatePct": 67.3,
-        "latestOutcomeKnownPct": 99.5
+        "latestOutcomeKnownPct": 99.5,
+        "enforcedReturns": 2896,
+        "voluntaryReturns": 6126,
+        "returnsCount": 9022,
+        "returnableOutcomeCount": 35035,
+        "returnRatePct": 25.8,
+        "cohortAgeYears": 4,
+        "returnsSettled": false
       },
       {
         "claimYear": "2023",
@@ -4239,7 +4351,14 @@
         "latestAdministrativeCount": 2808,
         "initialGrantRatePct": 42.8,
         "latestGrantRatePct": 47.6,
-        "latestOutcomeKnownPct": 95.4
+        "latestOutcomeKnownPct": 95.4,
+        "enforcedReturns": 1393,
+        "voluntaryReturns": 3924,
+        "returnsCount": 5317,
+        "returnableOutcomeCount": 38488,
+        "returnRatePct": 13.8,
+        "cohortAgeYears": 3,
+        "returnsSettled": false
       },
       {
         "claimYear": "2024",
@@ -4255,7 +4374,14 @@
         "latestAdministrativeCount": 1987,
         "initialGrantRatePct": 41.4,
         "latestGrantRatePct": 44,
-        "latestOutcomeKnownPct": 91.6
+        "latestOutcomeKnownPct": 91.6,
+        "enforcedReturns": 1114,
+        "voluntaryReturns": 3190,
+        "returnsCount": 4304,
+        "returnableOutcomeCount": 46046,
+        "returnRatePct": 9.3,
+        "cohortAgeYears": 2,
+        "returnsSettled": false
       }
     ],
     "recentOutcomeCohorts": [
@@ -4273,7 +4399,14 @@
         "latestAdministrativeCount": 3091,
         "initialGrantRatePct": 70.9,
         "latestGrantRatePct": 80.2,
-        "latestOutcomeKnownPct": 99.6
+        "latestOutcomeKnownPct": 99.6,
+        "enforcedReturns": 1037,
+        "voluntaryReturns": 2163,
+        "returnsCount": 3200,
+        "returnableOutcomeCount": 15160,
+        "returnRatePct": 21.1,
+        "cohortAgeYears": 5,
+        "returnsSettled": false
       },
       {
         "claimYear": "2022",
@@ -4289,7 +4422,14 @@
         "latestAdministrativeCount": 5786,
         "initialGrantRatePct": 60.1,
         "latestGrantRatePct": 67.3,
-        "latestOutcomeKnownPct": 99.5
+        "latestOutcomeKnownPct": 99.5,
+        "enforcedReturns": 2896,
+        "voluntaryReturns": 6126,
+        "returnsCount": 9022,
+        "returnableOutcomeCount": 35035,
+        "returnRatePct": 25.8,
+        "cohortAgeYears": 4,
+        "returnsSettled": false
       },
       {
         "claimYear": "2023",
@@ -4305,7 +4445,14 @@
         "latestAdministrativeCount": 2808,
         "initialGrantRatePct": 42.8,
         "latestGrantRatePct": 47.6,
-        "latestOutcomeKnownPct": 95.4
+        "latestOutcomeKnownPct": 95.4,
+        "enforcedReturns": 1393,
+        "voluntaryReturns": 3924,
+        "returnsCount": 5317,
+        "returnableOutcomeCount": 38488,
+        "returnRatePct": 13.8,
+        "cohortAgeYears": 3,
+        "returnsSettled": false
       },
       {
         "claimYear": "2024",
@@ -4321,7 +4468,14 @@
         "latestAdministrativeCount": 1987,
         "initialGrantRatePct": 41.4,
         "latestGrantRatePct": 44,
-        "latestOutcomeKnownPct": 91.6
+        "latestOutcomeKnownPct": 91.6,
+        "enforcedReturns": 1114,
+        "voluntaryReturns": 3190,
+        "returnsCount": 4304,
+        "returnableOutcomeCount": 46046,
+        "returnRatePct": 9.3,
+        "cohortAgeYears": 2,
+        "returnsSettled": false
       }
     ],
     "postDecisionPath": {

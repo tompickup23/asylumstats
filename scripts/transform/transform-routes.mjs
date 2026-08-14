@@ -538,6 +538,43 @@ const asylumClaimsRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D01", 1)
 const asylumInitialDecisionRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D02", 1);
 const asylumAwaitingDecisionRows = rowObjects(sourceFiles.asylumAwaitingDecision, "Data_Asy_D03", 1);
 const asylumOutcomeAnalysisRows = rowObjects(sourceFiles.asylumOutcomeAnalysis, "Data_Asy_D04", 1);
+
+/**
+ * Extraction date of the outcome analysis, parsed from the release's own Notes sheet.
+ *
+ * Needed because a cohort's return rate keeps rising for years after its claims are
+ * decided: a refusal is settled long before the removal happens. So the honest question
+ * is not "is the outcome known" (2021 is 99.6% known and still moving) but "has this
+ * cohort had long enough". That requires knowing when the data was cut.
+ *
+ * Parsed, never written down. A hardcoded date is exactly what put a stale period label
+ * on 200 pages before, and this one moves every edition.
+ */
+function readOutcomeExtractionYear(filePath) {
+  const notes = readSheetRows(filePath, "Notes")
+    .flat()
+    .map((cell) => String(cell || ""));
+  for (const note of notes) {
+    const match = note.match(/latest case outcomes[^.]*?as at\s+(?:(\w+)\s+)?(\d{4})/i);
+    if (match) return Number(match[2]);
+  }
+  throw new Error(
+    `Could not find the "as at <date>" note in ${filePath}. The outcome analysis cannot ` +
+      `be aged without it, and guessing would silently mislabel which cohorts are settled.`
+  );
+}
+
+const outcomeExtractionYear = readOutcomeExtractionYear(sourceFiles.asylumOutcomeAnalysis);
+
+/**
+ * Years after the claim year before a cohort's return rate stops moving.
+ *
+ * Measured, not assumed: comparing the March 2026 edition against December 2025, every
+ * cohort up to 2018 moved by less than 0.3pp in the quarter, while 2019 onward moved by
+ * 0.7pp to 3.6pp. With a January 2026 extraction that puts the boundary at eight years,
+ * and 2018 sits exactly on it.
+ */
+const RETURN_COHORT_SETTLED_AFTER_YEARS = 8;
 const asylumSupportRows = rowObjects(sourceFiles.asylumSupport, "Data_Asy_D09", 1);
 const returnsRows = rowObjects(sourceFiles.returns, "Data_Ret_D01", 1);
 
@@ -1198,7 +1235,9 @@ for (const row of asylumOutcomeAnalysisRows) {
     latestRefusals: 0,
     latestWithdrawals: 0,
     latestAdministrative: 0,
-    latestNotYetKnown: 0
+    latestNotYetKnown: 0,
+    enforcedReturns: 0,
+    voluntaryReturns: 0
   };
 
   current.totalClaims += totalClaims;
@@ -1207,6 +1246,8 @@ for (const row of asylumOutcomeAnalysisRows) {
   current.initialGrantOtherLeave += safeNumber(row["Initial: Grants of Other Leave"]);
   current.initialRefusals += safeNumber(row["Initial: Refusals"]);
   current.initialWithdrawals += safeNumber(row["Initial: Withdrawals"]);
+  current.enforcedReturns += safeNumber(row["Enforced Returns"]);
+  current.voluntaryReturns += safeNumber(row["Voluntary Returns"]);
   current.initialAdministrative += safeNumber(row["Initial: Administrative Outcomes"]);
   current.initialNotYetKnown += safeNumber(row["Initial: Not yet known"]);
   current.latestGrantProtection += safeNumber(row["Latest: Grants of Protection"]);
@@ -1378,7 +1419,41 @@ const asylumOutcomeCohorts = [...asylumOutcomeByClaimYear.values()]
         : null,
       latestOutcomeKnownPct: row.totalClaims
         ? roundNumber((latestOutcomeKnownCount / row.totalClaims) * 100, 1)
-        : null
+        : null,
+
+      // Returns for this claim cohort, and the only asylum-specific return rate the
+      // Home Office publishes. The quarterly Returns tables carry no asylum dimension at
+      // all: nationality, destination, return type, sex, age and an offender flag, and
+      // nothing that says whether the person ever claimed asylum. So "refusals against
+      // returns" computed from those tables compares two different populations.
+      //
+      // DENOMINATOR. Refusals plus withdrawals, not refusals alone. A withdrawn claim
+      // still leaves someone liable to removal, and in the 2022 cohort the Albania
+      // returns were overwhelmingly people who withdrew: measured against refusals only
+      // that cohort returns 179% of the people it refused, which is impossible.
+      // Administrative outcomes are excluded because they are void, suspended and
+      // deceased cases, which are not returnable.
+      enforcedReturns: row.enforcedReturns,
+      voluntaryReturns: row.voluntaryReturns,
+      returnsCount: row.enforcedReturns + row.voluntaryReturns,
+      returnableOutcomeCount: row.latestRefusals + row.latestWithdrawals,
+      returnRatePct:
+        row.latestRefusals + row.latestWithdrawals
+          ? roundNumber(
+              ((row.enforcedReturns + row.voluntaryReturns) /
+                (row.latestRefusals + row.latestWithdrawals)) *
+                100,
+              1
+            )
+          : null,
+
+      // Whether the cohort has had long enough for its returns to complete. The Home
+      // Office warns this dataset "is not comparable over time" because recent cohorts
+      // are still progressing; this is that warning made machine-readable, so a page
+      // cannot accidentally rank a 2024 cohort against a 2010 one.
+      cohortAgeYears: outcomeExtractionYear - Number(row.claimYear),
+      returnsSettled:
+        outcomeExtractionYear - Number(row.claimYear) >= RETURN_COHORT_SETTLED_AFTER_YEARS
     };
   });
 

@@ -70,6 +70,52 @@ function chartSource(sourceId: string): { source?: string; sourceUrl?: string } 
 }
 const nationalSystemDynamics = routeDashboard.nationalSystemDynamics;
 
+// Asylum return rate, from the outcome analysis cohorts.
+//
+// Split into settled and still-accruing because the Home Office says this dataset "is
+// not comparable over time", and ranking a 2024 cohort against a 2010 one is the exact
+// error that warning describes. The split is derived in the transform from the release's
+// own extraction date, not written down here.
+const RETURN_SETTLED_YEARS = 8;
+const returnCohorts = nationalSystemDynamics.outcomeCohorts.filter(
+  (cohort) => cohort.totalClaims >= 500 && cohort.returnRatePct !== null
+);
+const settledCohorts = returnCohorts.filter((cohort) => cohort.returnsSettled);
+const unsettledCohorts = returnCohorts.filter((cohort) => !cohort.returnsSettled);
+
+function summariseCohorts(cohorts: typeof returnCohorts, label: string) {
+  const returns = cohorts.reduce((total, cohort) => total + cohort.returnsCount, 0);
+  const returnable = cohorts.reduce((total, cohort) => total + cohort.returnableOutcomeCount, 0);
+  return {
+    label,
+    returns,
+    returnable,
+    ratePct: returnable ? Math.round((returns / returnable) * 1000) / 10 : null
+  };
+}
+
+// The two halves of the settled span, which is where the change actually shows.
+const settledYears = settledCohorts.map((cohort) => Number(cohort.claimYear));
+const settledSplitYear = 2014;
+const earlyGroup = settledCohorts.filter((cohort) => Number(cohort.claimYear) < settledSplitYear);
+const lateGroup = settledCohorts.filter((cohort) => Number(cohort.claimYear) > settledSplitYear);
+const settledEarly = summariseCohorts(
+  earlyGroup,
+  `${Math.min(...earlyGroup.map((c) => Number(c.claimYear)))} to ${Math.max(...earlyGroup.map((c) => Number(c.claimYear)))}`
+);
+const settledLate = summariseCohorts(
+  lateGroup,
+  `${Math.min(...lateGroup.map((c) => Number(c.claimYear)))} to ${Math.max(...lateGroup.map((c) => Number(c.claimYear)))}`
+);
+
+const returnRateNotes = [
+  "The denominator is refusals plus withdrawals, not refusals alone. A withdrawn claim still leaves someone liable to removal, and in the 2022 cohort the Albania returns were overwhelmingly withdrawals: measured against refusals only, that cohort returns 179% of the people it refused.",
+  "Void, suspended and deceased cases are excluded from the denominator, because they are not returnable.",
+  "Figures cover main applicants. The outcome analysis counts claims on the same basis as returns, so dependants are outside this measure on both sides.",
+  "Only recorded returns count. People who leave without notifying the Home Office, and people who remain without permission, are invisible to this series in either direction.",
+  `Cohorts are treated as settled after ${RETURN_SETTLED_YEARS} years. That threshold is measured rather than assumed: against the previous edition of this dataset, every cohort up to 2018 moved by less than 0.3 percentage points in a quarter, while 2019 onward moved by 0.7 to 3.6 points.`
+];
+
 const borderSecurity = loadBorderSecurity();
 const oicSummary = borderSecurity.organisedImmigrationCrime.summary;
 const oicQuarterly = borderSecurity.organisedImmigrationCrime.quarterly;
@@ -627,6 +673,98 @@ function formatCardValue(value: number, suffix?: string): string {
     </div>
     <div class="story-grid" style="margin-top: 1rem;">
       {postDecisionPath.readingNotes.map((note) => (
+        <article class="story-card">
+          <p class="lede">{note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="return-rate" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Among cohorts old enough to judge, the return rate has roughly halved</h2>
+        <p class="lede">
+          This is the only asylum-specific return rate the Home Office publishes. The quarterly returns tables carry
+          no asylum dimension at all, so they cannot say whether someone returned had ever claimed asylum. The outcome
+          analysis can, because it follows each year of claims through to its final outcome and records the returns for
+          that cohort.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="chip accent">{settledEarly.label}: {settledEarly.ratePct}%</span>
+        <span class="chip">{settledLate.label}: {settledLate.ratePct}%</span>
+      </div>
+    </div>
+
+    <div class="split section">
+      <div class="panel panel-pad">
+        <h3>Settled cohorts</h3>
+        <p class="lede">
+          Of {settledEarly.returnable.toLocaleString()} people in the {settledEarly.label} cohorts whose claim ended in
+          a refusal or a withdrawal, {settledEarly.returns.toLocaleString()} were recorded as returned, enforced or
+          voluntary. For {settledLate.label} it is {settledLate.returns.toLocaleString()} of
+          {" "}{settledLate.returnable.toLocaleString()}.
+        </p>
+        <div class="trend-table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Year of claim</th>
+                <th scope="col">Refused or withdrawn</th>
+                <th scope="col">Returned</th>
+                <th scope="col">Return rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {settledCohorts.map((cohort) => (
+                <tr>
+                  <th scope="row">{cohort.claimYear}</th>
+                  <td>{cohort.returnableOutcomeCount.toLocaleString()}</td>
+                  <td>{cohort.returnsCount.toLocaleString()}</td>
+                  <td>{cohort.returnRatePct?.toFixed(1)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel panel-pad">
+        <h3>Cohorts still accruing returns, which cannot be compared with those above</h3>
+        <p class="lede">
+          A refusal is settled long before a removal happens, so a recent cohort's rate is not a low rate, it is an
+          incomplete one. The Home Office states plainly that this dataset is not comparable over time. These
+          {" "}{unsettledCohorts.length} cohorts have had fewer than {RETURN_SETTLED_YEARS} years and are shown
+          separately for that reason.
+        </p>
+        <div class="trend-table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Year of claim</th>
+                <th scope="col">Years elapsed</th>
+                <th scope="col">Returned so far</th>
+                <th scope="col">Rate so far</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unsettledCohorts.map((cohort) => (
+                <tr>
+                  <th scope="row">{cohort.claimYear}</th>
+                  <td>{cohort.cohortAgeYears}</td>
+                  <td>{cohort.returnsCount.toLocaleString()}</td>
+                  <td>{cohort.returnRatePct?.toFixed(1)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-grid" style="margin-top: 1rem;">
+      {returnRateNotes.map((note) => (
         <article class="story-card">
           <p class="lede">{note}</p>
         </article>
