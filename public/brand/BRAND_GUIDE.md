@@ -1,20 +1,20 @@
-# Asylum Stats — Brand Guide
+# Asylum Stats: Brand Guide
 
 ## Identity
 
 **Name:** Asylum Stats
 **Tagline:** UK Asylum Accountability
 **Subtitle:** Routes, hotel secrecy, public money, and local pressure
-**Concept:** A radar scanner actively monitoring data points across the UK. The sweep reveals what's hidden — hotel locations, spending patterns, geographic pressure. Orange blips = alerts (hotels, costs). Cyan = data points. Green = resolved areas.
+**Concept:** A radar scanner actively monitoring data points across the UK. The sweep reveals what's hidden: hotel locations, spending patterns, geographic pressure. Orange blips = alerts (hotels, costs). Cyan = data points. Green = resolved areas.
 
 ## Logo Variants
 
 | File | Use Case |
 |------|----------|
-| `logo.svg` | Primary horizontal — website header, press, reports |
-| `logo-stacked.svg` | Square — social media avatars, app icon |
-| `icon.svg` | Radar icon only (dark bg) — favicons, UI elements |
-| `icon-light.svg` | Radar icon only (light bg) — print, email |
+| `logo.svg` | Primary horizontal: website header, press, reports |
+| `logo-stacked.svg` | Square: social media avatars, app icon |
+| `icon.svg` | Radar icon only (dark bg): favicons, UI elements |
+| `icon-light.svg` | Radar icon only (light bg): print, email |
 | `favicon.svg` | Browser tab (32x32, dark bg with radar) |
 | `apple-touch-icon.svg` | iOS home screen (180x180) |
 
@@ -34,7 +34,7 @@
 
 | Name | Hex | Usage |
 |------|-----|-------|
-| **Abyss** | `#04070d` | Page background — near-black with blue undertone |
+| **Abyss** | `#04070d` | Page background, near-black with blue undertone |
 | **Deep** | `#0b1220` | Card backgrounds, elevated surfaces |
 | **Slate** | `#1e293b` | Borders, dividers, input backgrounds |
 | **Muted** | `#91a7c4` | Secondary text, labels, timestamps |
@@ -45,11 +45,11 @@
 
 | Meaning | Hex | Usage |
 |---------|-----|-------|
-| **Hotel/Alert** | `#f59e0b` | Orange blip — active hotel, cost spike |
-| **Data Point** | `#06b6d4` | Cyan blip — standard observation |
-| **Resolved** | `#10b981` | Green blip — area with full data coverage |
-| **Critical** | `#ef4444` | Red — spending anomaly, secrecy flag |
-| **Neutral** | `#6b7280` | Grey — no data, pending |
+| **Hotel/Alert** | `#f59e0b` | Orange blip: active hotel, cost spike |
+| **Data Point** | `#06b6d4` | Cyan blip: standard observation |
+| **Resolved** | `#10b981` | Green blip: area with full data coverage |
+| **Critical** | `#ef4444` | Red: spending anomaly, secrecy flag |
+| **Neutral** | `#6b7280` | Grey: no data, pending |
 
 ## Typography
 
@@ -69,14 +69,14 @@
 ## The Radar Icon
 
 The radar scanner is the core brand mark:
-- **3 concentric rings** — tracking depth (national → regional → local)
-- **Sweep wedge** — active scanning, real-time monitoring
-- **Crosshair lines** — precision, data accuracy
-- **Data blips** — each color represents a data category:
+- **3 concentric rings**: tracking depth (national → regional → local)
+- **Sweep wedge**: active scanning, real-time monitoring
+- **Crosshair lines**: precision, data accuracy
+- **Data blips**: each color represents a data category:
   - Orange: alerts (hotels, cost spikes, secrecy flags)
   - Cyan: standard data points (route observations)
   - Green: resolved (full coverage areas)
-- **Centre dot** — the observer, the platform itself
+- **Centre dot**: the observer, the platform itself
 
 ### Icon at Scale
 - 80px+: Full detail (all rings, blips, crosshairs)
@@ -85,13 +85,13 @@ The radar scanner is the core brand mark:
 
 ## Logo Usage Rules
 
-1. **Dark backgrounds only** for primary logo — the radar needs contrast
+1. **Dark backgrounds only** for primary logo, because the radar needs contrast
 2. Use `icon-light.svg` on white/light backgrounds (darker cyan #0891b2)
 3. **Minimum size:** Icon at 24px, full logo at 140px wide
 4. **Clear space:** 1x icon diameter on all sides
 5. **Never** fill the radar rings with solid color
 6. **Never** change the blip colors (they encode data meaning)
-7. The sweep direction (NE quadrant) is fixed — it represents forward scanning
+7. The sweep direction (NE quadrant) is fixed, representing forward scanning
 
 ## CSS Custom Properties
 
@@ -129,8 +129,8 @@ The radar scanner is the core brand mark:
 
 ## Legal Notes
 
-- "Asylum Stats" is purely descriptive — tracks public asylum statistics
+- "Asylum Stats" is purely descriptive: it tracks public asylum statistics
 - All data sourced from official government publications (Home Office, ONS)
-- The radar icon is original artwork — no IP conflicts
-- The color palette uses standard Tailwind CSS colors — no proprietary claims
+- The radar icon is original artwork, with no IP conflicts
+- The color palette uses standard Tailwind CSS colors, with no proprietary claims
 - Content follows strict editorial scope rules (documented in AGENTS.md)
