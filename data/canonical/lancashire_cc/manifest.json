@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-02-28T15:44:58.690Z",
+  "body_id": "lancashire_cc",
+  "domains": [
+    "spending",
+    "budgets",
+    "budget_mapping"
+  ],
+  "record_counts": {
+    "spending_transactions": 753220,
+    "budget_records": 114,
+    "mapping_records": 3840
+  },
+  "outputs": [
+    "spending/transactions-YYYY-MM.ndjson",
+    "spending_transactions_manifest.json",
+    "budgets/budget-outturn.json",
+    "mappings/budget-mapping.json"
+  ]
+}

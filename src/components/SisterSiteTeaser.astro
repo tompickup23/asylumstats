@@ -1,0 +1,339 @@
+---
+// Teaser promoting ukdemographics.co.uk from asylumstats.
+// Shows the national ethnic trajectory with a compact sparkline and CTA.
+// Uses the same ethnic-projections data shared across both sites.
+
+import rawProjections from "../data/live/ethnic-projections.json";
+import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+
+const projData = rawProjections as any;
+const allAreaCodes = Object.keys(projData.areas);
+
+// National trajectory figures (population-weighted, observed 2011 + 2021,
+// projected 2051 + 2061). Matches the home-page demographic section.
+const trajectory = [
+  { year: 2011, pct: 80.5, kind: "census" },
+  { year: 2021, pct: 73.3, kind: "census" },
+  { year: 2051, pct: 48.7, kind: "projected" },
+  { year: 2061, pct: 40.2, kind: "illustrative" },
+];
+
+const shifts2051 = getSignificantDemographicShifts(2051);
+const areasBelow50by2051 = shifts2051.length;
+const muslimMajority2051 = allAreaCodes.filter((code) => {
+  const mp = projData.areas[code]?.muslimPct2051;
+  return mp && mp > 50;
+}).length;
+const foreignBornMajority2051 = allAreaCodes.filter((code) => {
+  const fb = projData.areas[code]?.nativity?.["2051"]?.foreignBornPct;
+  return fb && fb > 50;
+}).length;
+
+// Sparkline geometry: 4 points over 2011-2061, plotted in a 200x60 viewBox.
+const VB_W = 200;
+const VB_H = 60;
+const PAD_X = 10;
+const PAD_Y = 8;
+const xs = trajectory.map((p, i) => PAD_X + (i * (VB_W - PAD_X * 2)) / (trajectory.length - 1));
+const ys = trajectory.map((p) => PAD_Y + ((100 - p.pct) / 100) * (VB_H - PAD_Y * 2));
+const pathD = xs.map((x, i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${ys[i].toFixed(1)}`).join(" ");
+const areaD = `${pathD} L ${xs[xs.length - 1].toFixed(1)} ${VB_H - PAD_Y} L ${xs[0].toFixed(1)} ${VB_H - PAD_Y} Z`;
+---
+
+<section class="sister-teaser shell" aria-labelledby="sister-teaser-title">
+  <div class="st-inner">
+    <div class="st-head">
+      <span class="st-eyebrow">Sister site &middot; ukdemographics.co.uk</span>
+      <h2 class="st-title" id="sister-teaser-title">
+        The demographic shift behind every asylum number
+      </h2>
+      <p class="st-desc">
+        We track the fiscal bill here. Over on <strong>ukdemographics.co.uk</strong> we track
+        who this country is becoming. 320 local authorities, ethnic projections to 2061,
+        schools, housing and health demand. Same government data. Two lenses. Follow both.
+      </p>
+    </div>
+
+    <div class="st-grid">
+      <!-- Sparkline visualization -->
+      <div class="st-viz">
+        <span class="st-viz-title">White British share (population-weighted, England)</span>
+        <svg
+          viewBox={`0 0 ${VB_W} ${VB_H}`}
+          preserveAspectRatio="none"
+          class="st-spark"
+          role="img"
+          aria-label="White British share: 80.5% in 2011, 73.3% in 2021, 48.7% projected by 2051, 40.2% illustrative by 2061"
+        >
+          <defs>
+            <linearGradient id="stFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#818cf8" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#818cf8" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d={areaD} fill="url(#stFill)" />
+          <path d={pathD} stroke="#818cf8" stroke-width="2" fill="none" stroke-linejoin="round" />
+          {xs.map((x, i) => (
+            <circle
+              cx={x}
+              cy={ys[i]}
+              r={i < 2 ? 3 : 2.5}
+              fill={trajectory[i].kind === "census" ? "#818cf8" : trajectory[i].kind === "illustrative" ? "rgba(239, 68, 68, 0.6)" : "#ef4444"}
+              stroke="var(--panel)"
+              stroke-width="1.5"
+            />
+          ))}
+        </svg>
+        <div class="st-spark-labels">
+          {trajectory.map((p) => (
+            <div class={`st-spark-label st-spark-label--${p.kind}`}>
+              <span class="ss-year">{p.year}</span>
+              <span class="ss-pct">{p.pct.toFixed(1)}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Stats column -->
+      <div class="st-stats">
+        <div class="st-stat st-stat--hero">
+          <span class="st-stat-value">73.3 &rarr; 48.7%</span>
+          <span class="st-stat-label">White British share, 2021 &rarr; 2051</span>
+          <span class="st-stat-context">Hamilton-Perry CCR model, 1,000 Monte Carlo sims, MAE 1.72pp</span>
+        </div>
+        <div class="st-stat">
+          <span class="st-stat-value">{areasBelow50by2051}</span>
+          <span class="st-stat-label">local authorities below 50% by 2051</span>
+        </div>
+        <div class="st-stat">
+          <span class="st-stat-value">{foreignBornMajority2051}</span>
+          <span class="st-stat-label">projected foreign-born majority by 2051</span>
+        </div>
+        <div class="st-stat">
+          <span class="st-stat-value">{muslimMajority2051}</span>
+          <span class="st-stat-label">projected Muslim majority by 2051</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="st-cta-row">
+      <a
+        href="https://ukdemographics.co.uk"
+        class="st-cta-btn"
+        target="_blank"
+        rel="noopener"
+      >
+        See the full demographic outlook &rarr; ukdemographics.co.uk
+      </a>
+      <a
+        href="https://ukdemographics.co.uk/methodology/"
+        class="st-cta-link"
+        target="_blank"
+        rel="noopener"
+      >
+        How the model works &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sister-teaser {
+    margin-top: 3rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(129, 140, 248, 0.06) 0%, transparent 70%);
+    position: relative;
+    overflow: hidden;
+  }
+  .sister-teaser::before {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .st-inner { position: relative; z-index: 1; }
+
+  .st-head { max-width: 760px; margin-bottom: 1.5rem; }
+  .st-eyebrow {
+    font-family: "Sora", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #818cf8;
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    border-radius: 999px;
+    background: rgba(129, 140, 248, 0.1);
+    margin-bottom: 0.75rem;
+  }
+  .st-title {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.25rem, 2.8vw, 1.65rem);
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .st-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .st-desc strong { color: #818cf8; font-weight: 700; }
+
+  .st-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  /* Visualization column */
+  .st-viz {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .st-viz-title {
+    font-family: "Sora", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .st-spark {
+    width: 100%;
+    height: 90px;
+    display: block;
+  }
+  .st-spark-labels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  }
+  .st-spark-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.4rem 0.3rem;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .st-spark-label--census { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.25); }
+  .st-spark-label--projected { background: rgba(239, 68, 68, 0.06); border-color: rgba(239, 68, 68, 0.2); }
+  .st-spark-label--illustrative { opacity: 0.7; border-style: dashed; }
+  .ss-year {
+    font-family: "Sora", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .ss-pct {
+    font-family: "Sora", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  /* Stats column */
+  .st-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .st-stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid #818cf8;
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .st-stat--hero {
+    border-left-width: 4px;
+    background: linear-gradient(180deg, rgba(129, 140, 248, 0.06) 0%, var(--panel) 100%);
+  }
+  .st-stat-value {
+    font-family: "Sora", sans-serif;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #818cf8;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .st-stat--hero .st-stat-value {
+    font-size: 1.75rem;
+    color: var(--coral);
+  }
+  .st-stat-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 0.2rem;
+  }
+  .st-stat-context {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 0.15rem;
+  }
+
+  .st-cta-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .st-cta-btn {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 180ms, box-shadow 180ms;
+    box-shadow: 0 2px 12px rgba(129, 140, 248, 0.3);
+  }
+  .st-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(129, 140, 248, 0.45);
+  }
+  .st-cta-link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #818cf8;
+    text-decoration: none;
+  }
+  .st-cta-link:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .st-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .st-spark-labels { grid-template-columns: repeat(4, 1fr); }
+    .ss-pct { font-size: 0.82rem; }
+    .st-cta-row { flex-direction: column; align-items: flex-start; }
+    .st-cta-btn { width: 100%; text-align: center; }
+  }
+</style>
