@@ -1,0 +1,26 @@
+{
+  "dataset": "snpp",
+  "publisher": "ONS",
+  "release": "Subnational population projections, 2022-based",
+  "releaseDate": null,
+  "nextEdition": null,
+  "landing": "https://www.ons.gov.uk",
+  "bank": "ons",
+  "areaTier": "national",
+  "fileCount": 2,
+  "totalBytes": 16536585,
+  "files": [
+    {
+      "file": "2022 SNPP Population persons.csv",
+      "sizeBytes": 7814873,
+      "sha256": "1fe9e4d9ccbb4aeecf0fa898e5abaf5c499b05077d4bdef6c8355b38e55f0b08",
+      "modified": "2025-06-10"
+    },
+    {
+      "file": "snpp_z1.zip",
+      "sizeBytes": 8721712,
+      "sha256": "66d84d0ed6d84e3bb40b1c6bb0495a8851218284f9bd96143ba010803b30c5a1",
+      "modified": "2026-04-11"
+    }
+  ]
+}

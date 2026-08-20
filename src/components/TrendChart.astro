@@ -1,0 +1,235 @@
+---
+interface Point {
+  label: string;
+  value: number;
+}
+
+interface Annotation {
+  label: string;
+  pointLabel: string;
+  color?: string;
+}
+
+interface Props {
+  points: Point[];
+  title: string;
+  description?: string;
+  tone?: "accent" | "teal" | "warm";
+  valueSuffix?: string;
+  annotations?: Annotation[];
+  /** Rendered under the chart. Every public chart carries a source line (JCOM 2018). */
+  source?: string;
+  sourceUrl?: string;
+}
+
+const { points, title, description, tone = "accent", valueSuffix = "", annotations = [], source, sourceUrl } = Astro.props;
+
+const width = 560;
+const height = 230;
+const padding = { top: 18, right: 20, bottom: 38, left: 18 };
+const usableWidth = width - padding.left - padding.right;
+const usableHeight = height - padding.top - padding.bottom;
+const values = points.map((point) => point.value);
+const maxValue = Math.max(...values, 1);
+const minValue = Math.min(...values, 0);
+const range = Math.max(maxValue - minValue, 1);
+const tickValues = Array.from({ length: 4 }, (_, index) => minValue + (range / 3) * index).reverse();
+
+function getX(index: number): number {
+  if (points.length <= 1) {
+    return padding.left + usableWidth / 2;
+  }
+
+  return padding.left + (usableWidth / (points.length - 1)) * index;
+}
+
+function getY(value: number): number {
+  const scaled = (value - minValue) / range;
+  return padding.top + usableHeight - scaled * usableHeight;
+}
+
+function formatValue(value: number): string {
+  return `${value.toLocaleString()}${valueSuffix}`;
+}
+
+// Story-bearing alt text: chart type, what is plotted, the range, and the direction of
+// travel. One third of readers have low graph literacy, and a bare title tells them nothing.
+const firstPoint = points[0];
+const lastPoint = points[points.length - 1];
+const direction =
+  !firstPoint || !lastPoint || firstPoint.value === lastPoint.value
+    ? "little changed"
+    : lastPoint.value > firstPoint.value
+      ? "higher at the end of the period than the start"
+      : "lower at the end of the period than the start";
+const altText = points.length
+  ? `Line chart. ${title}. ${firstPoint.label} ${formatValue(firstPoint.value)} to ${lastPoint.label} ${formatValue(lastPoint.value)}, ${direction}.`
+  : `Line chart. ${title}. No data available.`;
+
+const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${getX(index)} ${getY(point.value)}`).join(" ");
+const areaPath = `${linePath} L ${getX(points.length - 1)} ${padding.top + usableHeight} L ${getX(0)} ${padding.top + usableHeight} Z`;
+const peak = points.reduce((current, point) => (point.value > current.value ? point : current), points[0]);
+const peakIndex = points.findIndex((point) => point === peak);
+
+// The peak annotation is centred on its point, so a peak near either end runs off the
+// plot: "Peak 2023 Q4" was clipped mid-word at the right edge. Clamp it back inside
+// using an estimate of half its width.
+//
+// The estimate must assume the MOBILE font size. This label is 11 units on desktop and
+// 22 on mobile, and the clamp is baked in at build time, so sizing it for desktop left
+// it overflowing by up to 19px on a phone. Sizing it for mobile insets desktop labels
+// slightly more than strictly needed, which is invisible; the reverse is a clipped
+// word.
+const peakLabelHalfWidth = peak ? Math.round((`Peak ${peak.label}`.length * 12) / 2) : 0;
+const colors =
+  tone === "teal"
+    ? {
+        stroke: "#4EE4C3",
+        fill: "rgba(78, 228, 195, 0.18)",
+        marker: "#C6FFF4"
+      }
+    : tone === "warm"
+      ? {
+          stroke: "#FF8B61",
+          fill: "rgba(255, 139, 97, 0.18)",
+          marker: "#FFD5C6"
+        }
+      : {
+          stroke: "#7DD3FC",
+          fill: "rgba(125, 211, 252, 0.18)",
+          marker: "#D9F5FF"
+        };
+---
+
+<figure class={`viz-card tone-${tone}`}>
+  <div class="viz-head">
+    <div>
+      <h3>{title}</h3>
+      {description && <p class="tiny">{description}</p>}
+    </div>
+    <span class="chip">{formatValue(points[points.length - 1]?.value ?? 0)}</span>
+  </div>
+  <svg class="trend-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={altText}>
+    {tickValues.map((tick, tickIndex) => (
+      <>
+        <line
+          x1={padding.left}
+          y1={getY(tick)}
+          x2={width - padding.right}
+          y2={getY(tick)}
+          stroke="rgba(255,255,255,0.08)"
+          stroke-width="1"
+          stroke-dasharray="4 6"
+        />
+        <text
+          x={width - padding.right}
+          y={getY(tick) - 6}
+          text-anchor="end"
+          class:list={[
+            "trend-tick",
+            // Tick labels sit inside the plot, right-anchored. On mobile they render at
+            // twice the viewBox size to stay legible, which is enough to collide with
+            // the line and the peak annotation. The extremes carry the scale; the two
+            // intermediate values are in the Exact values table below, so they are the
+            // ones that go.
+            tickIndex === 0 && "trend-tick--top",
+            tickIndex !== 0 && tickIndex !== tickValues.length - 1 && "trend-tick--intermediate"
+          ]}
+        >
+          {formatValue(Math.round(tick))}
+        </text>
+      </>
+    ))}
+    <path d={areaPath} fill={colors.fill}></path>
+    <path d={linePath} fill="none" stroke={colors.stroke} stroke-width="4" stroke-linejoin="round" stroke-linecap="round"></path>
+    {points.map((point, index) => (
+      <circle
+        cx={getX(index)}
+        cy={getY(point.value)}
+        r={index === points.length - 1 || index === peakIndex ? 5 : 3}
+        fill={index === points.length - 1 || index === peakIndex ? colors.marker : colors.stroke}
+      />
+    ))}
+    <text x={getX(0)} y={height - 10} class="trend-label">
+      {points[0]?.label}
+    </text>
+    <text x={getX(points.length - 1)} y={height - 10} text-anchor="end" class="trend-label">
+      {points[points.length - 1]?.label}
+    </text>
+    {peak && (
+      <text
+        x={Math.min(
+          Math.max(getX(peakIndex), padding.left + peakLabelHalfWidth),
+          width - padding.right - peakLabelHalfWidth
+        )}
+        y={Math.max(16, getY(peak.value) - 12)}
+        text-anchor="middle"
+        class="trend-annotation"
+      >
+        Peak {peak.label}
+      </text>
+    )}
+    {/* Policy event annotations - staggered vertically to avoid overlap */}
+    {annotations.map((ann, annIdx) => {
+      const matchIndex = points.findIndex((p) => p.label === ann.pointLabel);
+      if (matchIndex < 0) return null;
+      const ax = getX(matchIndex);
+      const staggerY = padding.top + 10 + (annIdx % 4) * 14;
+      return (
+        <>
+          <line x1={ax} y1={staggerY - 2} x2={ax} y2={padding.top + usableHeight}
+                stroke={ann.color ?? "rgba(245,158,11,0.25)"} stroke-width="1" stroke-dasharray="2 4" />
+          <text x={ax + 3} y={staggerY} class="trend-event-label"
+                fill={ann.color ?? "rgba(245,158,11,0.6)"}>
+            {ann.label}
+          </text>
+        </>
+      );
+    })}
+  </svg>
+
+  <details class="trend-table-toggle">
+    <summary>Exact values</summary>
+    <div class="trend-table-scroll">
+      <table class="trend-table">
+        <thead>
+          <tr><th scope="col">Period</th><th scope="col" class="num">Value</th></tr>
+        </thead>
+        <tbody>
+          {points.map((point) => (
+            <tr>
+              <th scope="row">{point.label}</th>
+              <td class="num">{formatValue(point.value)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  {source && (
+    <figcaption class="trend-source">
+      Source: {sourceUrl ? <a href={sourceUrl} target="_blank" rel="noopener">{source}</a> : source}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .trend-table-toggle { margin-top: 0.6rem; }
+  .trend-table-toggle summary {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--muted);
+    list-style: none;
+  }
+  .trend-table-toggle summary::-webkit-details-marker { display: none; }
+  .trend-table-toggle summary::before { content: "▸ "; }
+  .trend-table-toggle[open] summary::before { content: "▾ "; }
+  .trend-table-scroll { max-height: 15rem; overflow: auto; margin-top: 0.4rem; }
+  .trend-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .trend-table th, .trend-table td { padding: 0.2rem 0.4rem; text-align: left; font-weight: 400; }
+  .trend-table thead th { position: sticky; top: 0; background: var(--bg, #0b1220); color: var(--muted); }
+  .trend-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .trend-source { font-size: 0.78rem; color: var(--muted); margin-top: 0.5rem; }
+  .trend-source a { color: inherit; }
+</style>

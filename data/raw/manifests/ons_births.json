@@ -1,0 +1,38 @@
+{
+  "dataset": "ons_births",
+  "publisher": "ONS",
+  "release": "Births in England and Wales 2025",
+  "releaseDate": "2026-05-27",
+  "nextEdition": null,
+  "landing": "https://www.ons.gov.uk",
+  "bank": "ons",
+  "areaTier": "national",
+  "fileCount": 4,
+  "totalBytes": 2166226,
+  "files": [
+    {
+      "file": "2023linkedbirths.xlsx",
+      "sizeBytes": 218330,
+      "sha256": "7b74bc54c96ee3341e0700517e8d2575a37647ee3461ccd25050762ac8e0c291",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "2024birthslinked.xlsx",
+      "sizeBytes": 231961,
+      "sha256": "6385788c8cdea4cd6896745669dc1341d95f5d3f512beca3ac632bdd46ff3bdf",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "birthcharacteristics2022.xlsx",
+      "sizeBytes": 305601,
+      "sha256": "bb5e56a5d855dbcbd7401c91d9a7467d2f253122dd9dc27771139cf807917eab",
+      "modified": "2026-04-13"
+    },
+    {
+      "file": "census2021-ts022.zip",
+      "sizeBytes": 1410334,
+      "sha256": "18885a23e72f928f53f4b1ea5fed7806cdad4b1dd06321b225fca99cbc667af5",
+      "modified": "2026-04-13"
+    }
+  ]
+}

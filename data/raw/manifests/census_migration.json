@@ -1,0 +1,20 @@
+{
+  "dataset": "census_migration",
+  "publisher": "ONS",
+  "release": "Census 2021 migration",
+  "releaseDate": null,
+  "nextEdition": null,
+  "landing": "https://www.ons.gov.uk/census",
+  "bank": "model-inputs",
+  "areaTier": "national",
+  "fileCount": 1,
+  "totalBytes": 4384158,
+  "files": [
+    {
+      "file": "census2021_migration_indicator_ethnicity.csv",
+      "sizeBytes": 4384158,
+      "sha256": "28ce01fc7b382cb31363180e229e408052f01bc3cad97f0b635f835653788803",
+      "modified": "2026-04-17"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "generated_at": "2026-02-28T15:44:58.595Z",
+  "body_id": "lancashire_cc",
+  "total_records": 753220,
+  "total_spend_gbp": 3558124490.37,
+  "first_date": "2024-04-02",
+  "last_date": "2025-12-31",
+  "months": [
+    {
+      "month": "2024-04",
+      "source_file": "spending-2024-04.json",
+      "canonical_file": "transactions-2024-04.ndjson",
+      "record_count": 46961,
+      "total_spend_gbp": 214507963.57,
+      "source_sha256": "487382dcba39097567f4d38acb29862ec0471e370e4090205594d37091fbf5cf",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-04.json"
+    },
+    {
+      "month": "2024-05",
+      "source_file": "spending-2024-05.json",
+      "canonical_file": "transactions-2024-05.ndjson",
+      "record_count": 44304,
+      "total_spend_gbp": 161719647.62,
+      "source_sha256": "b29c56e89f56284dd12713982cf65dc702f6055ea29b937378772c2e9c951866",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-05.json"
+    },
+    {
+      "month": "2024-06",
+      "source_file": "spending-2024-06.json",
+      "canonical_file": "transactions-2024-06.ndjson",
+      "record_count": 41060,
+      "total_spend_gbp": 128162264.28,
+      "source_sha256": "68f74601c9054db849b622820353380cf06766dd93098a2b72cbfd5a741196e8",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-06.json"
+    },
+    {
+      "month": "2024-07",
+      "source_file": "spending-2024-07.json",
+      "canonical_file": "transactions-2024-07.ndjson",
+      "record_count": 38852,
+      "total_spend_gbp": 153190885.14,
+      "source_sha256": "b2a1d67edf890c70d21fb7cb2d08e698522740be367677e23b71771df0b59b11",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-07.json"
+    },
+    {
+      "month": "2024-09",
+      "source_file": "spending-2024-09.json",
+      "canonical_file": "transactions-2024-09.ndjson",
+      "record_count": 38267,
+      "total_spend_gbp": 176129680.64,
+      "source_sha256": "7d569cde2ee1632fa3ea21e8e214cf3b40ad66817eb56b57c89adef304e36c61",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-09.json"
+    },
+    {
+      "month": "2024-10",
+      "source_file": "spending-2024-10.json",
+      "canonical_file": "transactions-2024-10.ndjson",
+      "record_count": 40190,
+      "total_spend_gbp": 169164269.69,
+      "source_sha256": "fbcf3efb99cbcb3cbcd2d7a6df821b79f603d5d7e7d356bf32143cec519f0475",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-10.json"
+    },
+    {
+      "month": "2024-11",
+      "source_file": "spending-2024-11.json",
+      "canonical_file": "transactions-2024-11.ndjson",
+      "record_count": 50512,
+      "total_spend_gbp": 192113662.65,
+      "source_sha256": "62faf7be452b94d83ec4df3f740ad87a5cb6142f347df1ce4c037e31e43b8126",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-11.json"
+    },
+    {
+      "month": "2024-12",
+      "source_file": "spending-2024-12.json",
+      "canonical_file": "transactions-2024-12.ndjson",
+      "record_count": 37980,
+      "total_spend_gbp": 147834909.99,
+      "source_sha256": "490a56f459f00d1357e29a32e7183acb97b8e717508d84c4aed0205aa8f1a479",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2024-12.json"
+    },
+    {
+      "month": "2025-01",
+      "source_file": "spending-2025-01.json",
+      "canonical_file": "transactions-2025-01.ndjson",
+      "record_count": 37556,
+      "total_spend_gbp": 176528743.82,
+      "source_sha256": "d8d3cc007360f58b244629c837fb4823c2dbe2df30800b14978265237de4d722",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-01.json"
+    },
+    {
+      "month": "2025-02",
+      "source_file": "spending-2025-02.json",
+      "canonical_file": "transactions-2025-02.ndjson",
+      "record_count": 45631,
+      "total_spend_gbp": 142924923.18,
+      "source_sha256": "4a4e028e704cf9876bd94591e75154e1825f75d9ebb1cff325e9e6eb1856ffac",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-02.json"
+    },
+    {
+      "month": "2025-03",
+      "source_file": "spending-2025-03.json",
+      "canonical_file": "transactions-2025-03.ndjson",
+      "record_count": 33558,
+      "total_spend_gbp": 204049027.88,
+      "source_sha256": "150fbeb064769d40237f78006c494997b24c61640444abe363beb21ad157e683",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-03.json"
+    },
+    {
+      "month": "2025-04",
+      "source_file": "spending-2025-04.json",
+      "canonical_file": "transactions-2025-04.ndjson",
+      "record_count": 24981,
+      "total_spend_gbp": 178371078.03,
+      "source_sha256": "8c315662028c02b505d85b69c67b0b8312e3298717107414015a79bbeeff48f2",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-04.json"
+    },
+    {
+      "month": "2025-05",
+      "source_file": "spending-2025-05.json",
+      "canonical_file": "transactions-2025-05.ndjson",
+      "record_count": 34089,
+      "total_spend_gbp": 168435395.83,
+      "source_sha256": "1cbca68ce604df2ffb03791cf6ec7a0d36a018ac76d9ec6de538eb923aa13a42",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-05.json"
+    },
+    {
+      "month": "2025-06",
+      "source_file": "spending-2025-06.json",
+      "canonical_file": "transactions-2025-06.ndjson",
+      "record_count": 43122,
+      "total_spend_gbp": 183476096.61,
+      "source_sha256": "0b60216c5d993c62238cc44662b21869ab7b605f6ecdd02a6d6c9a83f22da0a1",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-06.json"
+    },
+    {
+      "month": "2025-07",
+      "source_file": "spending-2025-07.json",
+      "canonical_file": "transactions-2025-07.ndjson",
+      "record_count": 42841,
+      "total_spend_gbp": 215564533.2,
+      "source_sha256": "33e593ea7fcc7ffc667c1ba2e0407668f0d64dc512c7fe4a3e48d1dc766b1964",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-07.json"
+    },
+    {
+      "month": "2025-08",
+      "source_file": "spending-2025-08.json",
+      "canonical_file": "transactions-2025-08.ndjson",
+      "record_count": 48200,
+      "total_spend_gbp": 275698133.72,
+      "source_sha256": "d946498693867244b4056d5bb7f48a9b48df16f9280f44e1b133619fd287c0a5",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-08.json"
+    },
+    {
+      "month": "2025-09",
+      "source_file": "spending-2025-09.json",
+      "canonical_file": "transactions-2025-09.ndjson",
+      "record_count": 27835,
+      "total_spend_gbp": 204921392.49,
+      "source_sha256": "80477de381f4f6908d092d91be82da61ac8d04449445a86e540ea5a165b5cef2",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-09.json"
+    },
+    {
+      "month": "2025-10",
+      "source_file": "spending-2025-10.json",
+      "canonical_file": "transactions-2025-10.ndjson",
+      "record_count": 22781,
+      "total_spend_gbp": 168494399.95,
+      "source_sha256": "81d645c741bad1994c67dfb70a440ce941b1f2ebbf74141cc3751497ce713351",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-10.json"
+    },
+    {
+      "month": "2025-11",
+      "source_file": "spending-2025-11.json",
+      "canonical_file": "transactions-2025-11.ndjson",
+      "record_count": 24952,
+      "total_spend_gbp": 130721290.97,
+      "source_sha256": "4b4f860fda7e2131ecbe6616bda3779ea326e96d1dd68961ec2bd7aabd29b07f",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-11.json"
+    },
+    {
+      "month": "2025-12",
+      "source_file": "spending-2025-12.json",
+      "canonical_file": "transactions-2025-12.ndjson",
+      "record_count": 29548,
+      "total_spend_gbp": 166116191.11,
+      "source_sha256": "4daca93430d15d1a8df715c79029ad4a7d215117537a3440ba10d8c901b5adb7",
+      "source_url": "https://raw.githubusercontent.com/tompickup23/lancashire/gh-pages/lancashirecc/data/spending-2025-12.json"
+    }
+  ]
+}

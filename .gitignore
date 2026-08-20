@@ -1,0 +1,64 @@
+node_modules
+dist
+.astro
+.DS_Store
+coverage
+playwright-report
+test-results
+
+# Large regenerable data files (run npm run ingest:* to regenerate)
+data/raw/lancashire_cc/spending-*.json
+data/raw/lancashire_cc/spending-index.json
+data/raw/uk_routes/*.xlsx
+data/raw/uk_routes/*.ods
+data/raw/moj_tribunals/*.ods
+data/raw/small_boats/*.ods
+data/raw/moj_tribunals/*.zip
+data/raw/moj_tribunals/csvs/
+data/canonical/moj_tribunals/
+data/canonical/lancashire_cc/spending/
+data/canonical/uk_routes/
+data/raw/lancashire_cc/budgets_govuk.json
+data/raw/lancashire_cc/budget_mapping.json
+data/raw/regional_sources/*.json
+data/raw/regional_sources/*.xlsx
+data/raw/regional_sources/*.html
+data/raw/hotel_entities/*.json
+data/raw/census_ethnicity/
+data/raw/crime/
+data/raw/supplementary/
+data/raw/newethpop/
+data/model/
+data/raw/census_base/
+data/raw/census_single_year/
+data/raw/dfe_schools/
+data/raw/ons_births/
+data/raw/census_ethnicity_detail/
+data/raw/snpp/
+data/raw/census_2011_ethnicity_age/
+data/raw/census_2011_migration/
+data/raw/census_migration/
+
+# Video / audio binaries (footage + narration for explainer reels)
+assets/footage/
+assets/output/
+
+# Environment and credential files
+*.env
+.env
+.env.*
+!.env.example
+!.env.sample
+**/.env
+**/.env.*
+
+# Build artefacts: generated from data/marts by scripts/build/sync-live.mjs (prebuild).
+# These were previously committed twice, byte-identical, in both marts and live.
+src/data/live/local-route-latest.json
+src/data/live/route-dashboard.json
+src/data/live/tribunal-appeals.json
+src/data/live/money-ledger.json
+src/data/live/hotel-entity-ledger.json
+src/data/live/hotel-area-sightings.json
+src/data/live/hotel-archive-queue.json
+src/data/live/small-boats.json
