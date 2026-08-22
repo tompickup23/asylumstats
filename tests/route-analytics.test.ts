@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { LocalRouteAreaSummary, RouteSeriesPoint } from "../src/lib/route-data";
+import routeDashboard from "../src/data/live/route-dashboard.json";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -123,5 +124,88 @@ describe("route analytics helpers", () => {
     ];
 
     expect(getSeriesDelta(points)).toBe(-75);
+  });
+});
+
+/**
+ * Asylum return rate, from the Asy_D04 outcome cohorts.
+ *
+ * Two things here have already gone wrong once and must not go wrong silently again.
+ *
+ * The denominator. Returns include people who withdrew, not only people refused: the
+ * 2022 Albania returns were overwhelmingly withdrawals. Measured against refusals alone
+ * that cohort returns 179% of the people it refused, which is impossible and was the
+ * first version of this analysis. The denominator is refusals plus withdrawals.
+ *
+ * The comparison. The Home Office states this dataset "is not comparable over time"
+ * because recent cohorts are still accruing returns. Ranking a 2024 cohort against a
+ * 2010 one is precisely that error, so settled and unsettled cohorts are separated in
+ * the data rather than left to the page to remember.
+ */
+describe("asylum return rate cohorts", () => {
+  const cohorts = (routeDashboard as any).nationalSystemDynamics.outcomeCohorts as Array<{
+    claimYear: string;
+    returnsCount: number;
+    enforcedReturns: number;
+    voluntaryReturns: number;
+    returnableOutcomeCount: number;
+    latestRefusalCount: number;
+    latestWithdrawalCount: number;
+    returnRatePct: number | null;
+    cohortAgeYears: number;
+    returnsSettled: boolean;
+    totalClaims: number;
+  }>;
+
+  it("uses refusals plus withdrawals as the denominator, never refusals alone", () => {
+    for (const cohort of cohorts) {
+      expect(cohort.returnableOutcomeCount).toBe(
+        cohort.latestRefusalCount + cohort.latestWithdrawalCount
+      );
+    }
+  });
+
+  it("keeps every cohort's return rate at or below 100%", () => {
+    // The guard against the denominator regressing to refusals-only: that produced
+    // Albania 2022 at 179%.
+    for (const cohort of cohorts) {
+      if (cohort.returnRatePct === null) continue;
+      expect(cohort.returnRatePct, `${cohort.claimYear} exceeds 100%`).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it("totals enforced and voluntary into the returns count", () => {
+    for (const cohort of cohorts) {
+      expect(cohort.returnsCount).toBe(cohort.enforcedReturns + cohort.voluntaryReturns);
+    }
+  });
+
+  it("marks cohorts settled only after enough years have elapsed", () => {
+    for (const cohort of cohorts) {
+      expect(cohort.returnsSettled).toBe(cohort.cohortAgeYears >= 8);
+    }
+    const settled = cohorts.filter((c) => c.returnsSettled).map((c) => Number(c.claimYear));
+    const unsettled = cohorts.filter((c) => !c.returnsSettled).map((c) => Number(c.claimYear));
+    // Measured against the previous edition: 2018 moved 0.26pp in a quarter, 2019 moved
+    // 0.67pp. The boundary sits between them.
+    expect(Math.max(...settled)).toBe(2018);
+    expect(Math.min(...unsettled)).toBe(2019);
+  });
+
+  it("shows the halving that the settled cohorts actually support", () => {
+    const sum = (years: number[]) =>
+      cohorts
+        .filter((c) => years.includes(Number(c.claimYear)))
+        .reduce(
+          (acc, c) => ({
+            r: acc.r + c.returnsCount,
+            d: acc.d + c.returnableOutcomeCount
+          }),
+          { r: 0, d: 0 }
+        );
+    const early = sum([2007, 2008, 2009, 2010, 2011, 2012, 2013]);
+    const late = sum([2015, 2016, 2017, 2018]);
+    expect(Math.round((early.r / early.d) * 1000) / 10).toBe(55.3);
+    expect(Math.round((late.r / late.d) * 1000) / 10).toBe(26.2);
   });
 });

@@ -241,7 +241,25 @@ const spendingSections = [
       </p>
     </section>
 
-    <BacklogClock dailyCostMillions={5.77} label="asylum hotel bill" />
+    {/*
+      The live cost clock is removed, for one accuracy reason and one register reason.
+
+      Accuracy: it accrued from £5.77M a day and told the reader "since you opened this
+      page, the asylum hotel bill has cost" that much in real time. £5.77M is the 2024/25
+      average (£2.1bn / 365). Hotel numbers have fallen 32% since, from 30,657 at the end
+      of 2025 to 20,885 now, so the counter overstated current spend while presenting
+      itself as live.
+
+      Register: a ticking money counter is a campaign device. This site's whole
+      proposition is being cited by people who do not know or care who runs it, and the
+      presentation profile for it sets anger_budget to none. The clock was the single
+      most campaign-coded element on the site and it sat on the money page, which is
+      exactly where a sceptical reader looks for a reason to dismiss the numbers.
+
+      The component is kept in src/components/BacklogClock.astro, so restoring it is one
+      line if Tom disagrees. The daily figure itself still appears on this page and the
+      homepage, sourced and with its year stated.
+    */}
 
     <aside class="page-rail">
       <article class="panel panel-pad">

@@ -5518,3 +5518,66 @@ tr:last-child td {
   border-top: 1px solid var(--border);
   margin: 0.5rem 0.85rem;
 }
+
+/* ── Region map key (mobile) ───────────────────────────────────────────────
+   Desktop reads the names off the map. On a phone it cannot: the map paints at
+   scale 0.567 there, so the 11px in-map labels render at 6.2px. This key carries
+   the names in real CSS pixels instead, so a viewBox zoom cannot shrink them.
+   See the comment in RegionTileMap.astro for the two attempts that failed. */
+.region-map-key {
+  display: none;
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+
+@media (max-width: 700px) {
+  .region-map-key {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* The names are now in the key, so the map keeps only shape and intensity.
+     Leaving both would print the same word twice, once illegibly. */
+  .region-map-key ~ * .region-map-label,
+  .region-map-canvas .region-map-label,
+  .region-map-canvas .region-map-callout {
+    display: none;
+  }
+
+  .region-map-key-item {
+    display: grid;
+    grid-template-columns: 0.85rem 1fr auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    background: var(--surface, #0b1220);
+  }
+
+  .region-map-key-item.is-selected {
+    background: rgba(6, 182, 212, 0.14);
+  }
+
+  .region-map-key-swatch {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .region-map-key-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .region-map-key-value {
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+}

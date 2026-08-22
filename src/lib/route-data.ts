@@ -64,6 +64,24 @@ export interface RouteOutcomeCohort {
   initialGrantRatePct: number | null;
   latestGrantRatePct: number | null;
   latestOutcomeKnownPct: number | null;
+  /** Enforced and voluntary returns recorded for this claim cohort. */
+  enforcedReturns: number;
+  voluntaryReturns: number;
+  returnsCount: number;
+  /**
+   * Refusals plus withdrawals. NOT refusals alone: a withdrawn claim still leaves
+   * someone liable to removal, and the 2022 Albania returns were overwhelmingly
+   * withdrawals, so a refusals-only denominator puts that cohort at 179%.
+   */
+  returnableOutcomeCount: number;
+  returnRatePct: number | null;
+  cohortAgeYears: number;
+  /**
+   * False while a cohort's returns are still accruing. The Home Office warns this
+   * dataset is not comparable over time; comparing an unsettled cohort against a
+   * settled one is the specific error that warning is about.
+   */
+  returnsSettled: boolean;
 }
 
 export interface RouteQuarterBreakdownRow {

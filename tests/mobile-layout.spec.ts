@@ -207,3 +207,56 @@ test.describe("mobile filtered views", () => {
     });
   }
 });
+
+/**
+ * Region names must be readable on a phone.
+ *
+ * The in-map SVG labels render at 6.2px on /compare/, because the map paints at scale
+ * 0.567 and the viewBox is rewritten at runtime to zoom on the selected region. Two
+ * fixes failed before this one: scaling the type overlapped 16 pairs of names, and
+ * abbreviating measured fine but visibly swamped the geography.
+ *
+ * The measurement that matters is the rendered CSS pixel size of the name a reader
+ * actually looks at, so that is what this asserts. It deliberately does NOT assert an
+ * SVG font-size: that was the number that lied, because a per-element scale calculation
+ * cannot see a transform or a viewBox change above it.
+ */
+test.describe("mobile region map legibility", () => {
+  test("region names render at a readable size and cover every region", async ({ page }) => {
+    await page.goto("/compare/", { waitUntil: "networkidle" });
+
+    const key = page.locator(".region-map-key").first();
+    await expect(key).toBeVisible();
+
+    // In-map labels are hidden, so the same name is not printed twice, once illegibly.
+    const inMapLabel = page.locator(".region-map-label").first();
+    await expect(inMapLabel).toBeHidden();
+
+    const names = key.locator(".region-map-key-name");
+    const count = await names.count();
+    expect(count).toBe(12);
+
+    const smallest = await key.evaluate((element) =>
+      Math.min(
+        ...[...element.querySelectorAll(".region-map-key-name")].map((name) =>
+          parseFloat(getComputedStyle(name).fontSize)
+        )
+      )
+    );
+    expect(smallest).toBeGreaterThanOrEqual(11);
+
+    // The eight names that appear nowhere else on the page at mobile width.
+    for (const region of [
+      "Yorkshire and The Humber",
+      "Wales",
+      "West Midlands",
+      "East Midlands",
+      "South West",
+      "South East",
+      "East of England",
+      "London"
+    ]) {
+      await expect(key.getByText(region, { exact: true }).first()).toBeVisible();
+    }
+  });
+});

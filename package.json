@@ -25,6 +25,13 @@
     "fetch:smallboats": "node scripts/fetch/fetch-small-boats.mjs",
     "transform:smallboats": "node scripts/transform/transform-small-boats.mjs",
     "ingest:smallboats": "npm run fetch:smallboats && npm run transform:smallboats",
+    "fetch:annualreport": "node scripts/fetch/fetch-annual-report.mjs",
+    "ingest:annualreport": "npm run fetch:annualreport",
+    "fetch:bordersecurity": "node scripts/fetch/fetch-border-security.mjs",
+    "transform:bordersecurity": "node scripts/transform/transform-border-security.mjs",
+    "ingest:bordersecurity": "npm run fetch:bordersecurity && npm run transform:bordersecurity",
+    "transform:asylumfinance": "node scripts/transform/transform-asylum-finance.mjs",
+    "transform:asylumfinance:check": "node scripts/transform/transform-asylum-finance.mjs --check",
     "fetch:regionalsources": "node scripts/fetch/fetch-regional-sources.mjs",
     "transform:regionalsources": "node scripts/transform/transform-regional-sources.mjs",
     "ingest:regionalsources": "npm run fetch:regionalsources && npm run transform:regionalsources",
@@ -35,6 +42,8 @@
     "audit:coverage": "node scripts/audit/area-coverage.mjs",
     "audit:coverage:check": "node scripts/audit/area-coverage.mjs --check",
     "audit:freshness": "node scripts/audit/source-freshness.mjs",
+    "audit:links": "node scripts/audit/source-links.mjs",
+    "audit:links:strict": "node scripts/audit/source-links.mjs --strict",
     "audit:model-io": "node scripts/audit/model-io-graph.mjs",
     "sync:live": "node scripts/build/sync-live.mjs",
     "sync:live:check": "node scripts/build/sync-live.mjs --check",
@@ -50,9 +59,10 @@
     "@fontsource-variable/sora": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.1.10",
+    "astro": "^6.4.8",
     "satori": "^0.26.0",
     "sharp": "^0.34.5",
+    "svgo": "^4.0.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
@@ -60,6 +70,6 @@
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.3.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.10"
   }
 }

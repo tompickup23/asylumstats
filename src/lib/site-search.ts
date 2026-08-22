@@ -71,9 +71,9 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     title: "Spending",
     kind: "page",
     kicker: "Money trail",
-    description: "£8.1B True Cost breakdown of UK asylum spend by department, supplier, and route, with every figure tied to a public money row.",
+    description: "Contracts, suppliers and public money rows, with disclosed values, contractual control and scrutiny estimates kept separate rather than collapsed into one total.",
     priority: 117,
-    searchText: "spending true cost money asylum costs eight billion 8.1bn departments suppliers contracts routes money trail expenditure budget"
+    searchText: "spending true cost money asylum costs billion departments suppliers contracts routes money trail expenditure budget annual report accounts"
   },
   {
     href: "/entities/",

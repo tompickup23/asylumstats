@@ -38,6 +38,10 @@ import scenarioSummaries from "../../data/live/scenario-summaries.json";
 import migrationEthnicity from "../../data/live/migration-ethnicity.json";
 import schoolFertilityProxy from "../../data/live/school-fertility-proxy.json";
 import {
+  ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
+  accommodationCostForArea
+} from "../../lib/true-cost";
+import {
   formatOrdinal,
   getDistributionStats,
   getPercentileRank
@@ -182,23 +186,25 @@ const sendProfile = getSendProfile(area.areaCode);
 const sendPercentile = getSendGrowthPercentile(area.areaCode);
 const ascProfile = getAscProfile(area.areaCode);
 const ascPercentile = getAscSpendPercentile(area.areaCode);
-// Per-area cost is withheld until the True Cost figure is settled.
+// Per-area cost, reinstated on the True Cost v3 constant.
 //
-// The £150/person/day this used to assert was not arbitrary: £5.3bn / 97,519 supported
-// / 365 = £148.90, the site's own True Cost LOW estimate expressed per person per day.
-// It is total-system cost, not accommodation, but the sentence never said so and sat
-// beside accommodation figures, so it read as the latter.
+// Withheld since PR #36 because the base was disputed. It is settled now, but the fix
+// was not simply to swap in the new total. The £150/person/day this used to assert was
+// £5.3bn / 97,519 supported / 365: a TOTAL-SYSTEM numerator over a SUPPORTED-POPULATION
+// denominator. The system total includes post-decision welfare, family reunion and
+// offender costs, incurred for people who are not on asylum support, so that division
+// overstates what an area costs by roughly twice.
 //
-// The problem is the base. True Cost is currently stated five different ways across the
-// site (£5.3bn to £6.3bn and £169/taxpayer on the homepage, £8bn and £230 in the
-// finding, £207 in that finding's own headline, £8.1B in the nav). Per person per day
-// those bases give £148.90, £176.99 and £224.75. Publishing a per-area £ figure derived
-// from a disputed base, on 373 pages, is not defensible on a site whose proposition is
-// that every figure traces to a source.
-//
-// Reinstate this from the single canonical True Cost constant once that lands, the same
-// way the projection interval returns once the model is reconciled.
-const estimatedAnnualCostLabel = "";
+// So this uses the accommodation and support figure instead: audited ASRA outturn over
+// the MEAN supported population of the same financial year, which has the same people
+// top and bottom over the same period. Around £107 per person per day, which sits
+// sensibly against the £119 a night the Home Office publishes for hotels. Dividing by
+// the latest quarter instead would read £117, because supported numbers fell through
+// 2025-26 and the closing stock is the lowest point in the year. See the basis warning
+// in lib/true-cost.ts.
+const estimatedAnnualCostLabel = area.supportedAsylum > 0
+  ? ` Accommodation and support for ${area.supportedAsylum.toLocaleString()} people at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(area.supportedAsylum) / 1_000_000).toFixed(1)}M a year.`
+  : "";
 
 const pressureScore = computePressureScore(
   area.areaCode,

@@ -272,6 +272,39 @@ const mapInteractionCaption =
           );
         })}
       </svg>
+      {/*
+        Mobile region key.
+
+        The in-map labels are unreadable on a phone: on /compare/ the map renders at
+        scale 0.567, so 11px type paints at 6.2px. Two earlier attempts failed and are
+        worth not repeating. Scaling the type up overlaps 16 pairs of names at a legible
+        size. Abbreviating behind a container query measured fine and looked wrong: the
+        screenshot showed the abbreviations swamping the geography.
+
+        Both failed for the same underlying reason. The viewBox is rewritten at runtime
+        to zoom on the selected region, so anything sized in user units renders at a
+        scale that is not knowable from the markup, and differs between instances on the
+        same page (0.567 here, 1.94 on /routes/). That also rules out leader lines, which
+        would need positions that survive the zoom.
+
+        So the names come out of the map. This is a colour key in real CSS pixels, which
+        no viewBox change can shrink. The map keeps shape and intensity, which is what a
+        choropleth is for, and stays tappable. Nine of the twelve regions appear nowhere
+        else on the page at mobile width, so without this they were effectively unlabelled.
+      */}
+      <ul class="region-map-key" aria-label={`${title}: region key`}>
+        {renderedRegions.map(({ item }) => (
+          <li class:list={["region-map-key-item", item.regionName === initialRegionName && "is-selected"]}>
+            <span
+              class="region-map-key-swatch"
+              style={`background:${getFill(item.value)}`}
+              aria-hidden="true"
+            ></span>
+            <span class="region-map-key-name">{item.regionName}</span>
+            <span class="region-map-key-value">{formatValue(item.value)}</span>
+          </li>
+        ))}
+      </ul>
       {overlayShortcutGroups.length > 0 && (
         <section class="region-map-insets" aria-label="Dense region inset controls">
           {overlayShortcutGroups.map((group) => (

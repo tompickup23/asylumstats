@@ -2,6 +2,10 @@
 type NavItem = { href: string; label: string; desc: string };
 type NavGroup = { label: string; items: NavItem[] };
 
+// No True Cost figure here any more. This description sits on every page, and it used
+// to read "£8.1B True Cost breakdown", which was both a fifth conflicting figure and a
+// promise /spending/ does not keep: that page is an 11-row starter ledger with no True
+// Cost content. The breakdown is the finding, and the homepage tile links to it.
 const NAV_GROUPS: NavGroup[] = [
   {
     label: "Explore",
@@ -15,7 +19,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Money Trail",
     items: [
-      { href: "/spending", label: "Spending", desc: "£8.1B True Cost breakdown" },
+      { href: "/spending", label: "Spending", desc: "Contracts, suppliers, public money rows" },
       { href: "/entities", label: "Entities", desc: "Suppliers & contractors" },
       { href: "/routes", label: "Routes", desc: "Small-boat & resettlement" },
       { href: "/compare", label: "Compare", desc: "Side-by-side any place" },

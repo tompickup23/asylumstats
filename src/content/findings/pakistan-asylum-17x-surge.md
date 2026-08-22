@@ -8,10 +8,10 @@ stat_label: "Increase in Pakistani UK asylum decisions 2022 to 2025"
 verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
 source_label: "Home Office Asy_D02 + Asy_D04, YE March 2026 release"
-summary: "Pakistani UK asylum decisions rose from 989 in 2022 to 17,592 in 2025, an 17.8 times increase in three years. Initial grant rate fell from 60 percent (2022) to 32 percent (2025) as throughput rose. The true grant rate after appeals stabilises at 49.8 percent. Pakistan is now the largest single source of UK asylum claims. The Pakistani political situation since 2023 (Imran Khan jailed, PTI persecuted, blasphemy laws, religious minority attacks) is the demand-side driver. The Home Office's own Country Policy and Information Note February 2026 documents the case-handling framework."
+summary: "Pakistani UK asylum decisions rose from 989 in 2022 to 17,592 in 2025, a 17.8 times increase in three years. Initial grant rate fell from 60 percent (2022) to 32 percent (2025) as throughput rose. The true grant rate after appeals stabilises at 49.8 percent. Pakistan is now the largest single source of UK asylum claims. The Pakistani political situation since 2023 (Imran Khan jailed, PTI persecuted, blasphemy laws, religious minority attacks) is the demand-side driver. The Home Office's own Country Policy and Information Note February 2026 documents the case-handling framework."
 ---
 
-**Pakistan is now the UK's largest single source of asylum claims. The Home Office processed 17,592 Pakistani asylum decisions in calendar 2025, up from 989 in calendar 2022. That is an 17.8 times increase in three years.**
+**Pakistan is now the UK's largest single source of asylum claims. The Home Office processed 17,592 Pakistani asylum decisions in calendar 2025, up from 989 in calendar 2022. That is a 17.8 times increase in three years.**
 
 The Asy_D02 dataset, released 21 May 2026, tracks Pakistani decisions by year:
 

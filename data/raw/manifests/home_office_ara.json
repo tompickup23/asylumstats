@@ -1,0 +1,28 @@
+{
+  "dataset": "home_office_ara",
+  "publisher": "Home Office",
+  "release": "Home Office Annual Report and Accounts 2025-26 (HC 440)",
+  "cadence": "annual (July)",
+  "landing": "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026",
+  "bank": "home-office/annual-report",
+  "areaTier": "national",
+  "coveragePeriod": "2025-26 financial year, 1 April 2025 to 31 March 2026",
+  "releaseDate": "2026-07-14",
+  "nextEdition": "2027-07-31",
+  "fileCount": 2,
+  "totalBytes": 20334337,
+  "files": [
+    {
+      "file": "36.54_HO_ARA_25-26_WEB.pdf",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a58e9953ae256c99b702f50/36.54_HO_ARA_25-26_WEB.pdf",
+      "sizeBytes": 18763104,
+      "sha256": "c8cda7ee5f28700b4a2174b3889cb203c410503c60222e6a03102d92642c1350"
+    },
+    {
+      "file": "Core_Data_Tables_2026_Home_Office__draft__based_on_ARA_model_shared_29th_June__-_FINAL__FRT_.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a5651389e63154454413675/Core_Data_Tables_2026_Home_Office__draft__based_on_ARA_model_shared_29th_June__-_FINAL__FRT_.xlsx",
+      "sizeBytes": 1571233,
+      "sha256": "8860a2fe3e2b1d1d41e4c7264fc313d2a7cf8d7becf9f9e78456083e51bcda29"
+    }
+  ]
+}
