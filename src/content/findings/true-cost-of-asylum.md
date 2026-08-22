@@ -73,7 +73,7 @@ The original forecast was £4.5 billion. It has more than tripled.
 - Dispersal accommodation: approximately £500 million (68,538 people). Cost: approximately **£27 per person per day**. That is six times cheaper than hotels.
 - Initial and contingency accommodation: approximately £100 million.
 
-Hotels house 29% of the asylum population but consume **76% of the accommodation budget**.
+Hotels house 29% of the asylum population and took **76% of the cost of the accommodation contracts** in the first seven months of 2024-25, £1.3 billion of an estimated £1.7 billion (NAO HC 874, as corrected on 1 July 2025).
 
 Performance deductions from contractors since 2019: just **£4 million**. The total contract value is £15.3 billion.
 
