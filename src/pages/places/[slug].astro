@@ -18,6 +18,7 @@ import { getAreaTrendSummary } from "../../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
 import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
+import { countyForAreaCode, buildCountyPath } from "../../lib/county-directory";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 import {
@@ -239,6 +240,10 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
   return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
 }
+// County the area sits in, for the breadcrumb link up to the county page. Null outside
+// England, where this site has no county tier.
+const areaCountyName = countyForAreaCode(area.areaCode);
+
 ---
 
 <BaseLayout
@@ -250,6 +255,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <Breadcrumbs items={[
     { label: "Places", href: "/places/" },
     { label: area.regionName, href: `/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/` },
+    ...(areaCountyName ? [{ label: areaCountyName, href: buildCountyPath(areaCountyName) }] : []),
     { label: area.areaName }
   ]} />
 

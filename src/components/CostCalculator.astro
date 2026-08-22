@@ -2,7 +2,8 @@
 /**
  * Local asylum cost calculator.
  * Estimates what asylum support costs in this area based on:
- * - National hotel spend: £5.77M/day (£2.1B/year)
+ * - National hotel spend: £5.77M/day, ie £2.1bn in 2024/25
+ *   (House of Commons Library, CDP-2025-0184, not the NAO: the NAO publishes no per-day figure)
  * - National subsistence: £49.18/week per person
  * - Local authority grant: ~£1,200/year per dispersed person
  * - Local supported asylum seekers count
@@ -17,8 +18,12 @@ interface Props {
 
 const { areaName, supportedAsylum, totalHouseholds, hotelSites = 0 } = Astro.props;
 
-// National figures (Home Office / NAO)
-const NATIONAL_HOTEL_DAILY = 5_770_000; // £5.77M/day (2024/25 average, NAO)
+// National figures. The per-day hotel figure comes from the House of Commons Library
+// debate pack CDP-2025-0184: "In 2024/25, the Home Office spent £4bn on asylum support.
+// This includes £2.1bn on hotel accommodation for asylum seekers, which is equivalent to
+// £5.77m per day." It is NOT an NAO figure; the NAO publishes no per-day rate, and
+// crediting it there was a real defect until 21 Aug 2026.
+const NATIONAL_HOTEL_DAILY = 5_770_000; // £5.77M/day, 2024/25 (Commons Library CDP-2025-0184)
 const NATIONAL_SUPPORTED_TOTAL = 107_003; // Total on support nationally
 const SUBSISTENCE_WEEKLY = 49.18; // Per person per week
 const LA_GRANT_ANNUAL = 1_200; // Per dispersed person per year
@@ -34,9 +39,6 @@ const localPerHousehold = totalHouseholds && totalHouseholds > 0
   ? Math.round(localTotalAnnual / totalHouseholds)
   : null;
 
-// National per-taxpayer
-const TAXPAYERS = 34_100_000;
-const nationalPerTaxpayer = Math.round(NATIONAL_HOTEL_DAILY * 365 / TAXPAYERS);
 
 function fmt(n: number): string {
   if (n >= 1_000_000) return `£${(n / 1_000_000).toFixed(1)}M`;
@@ -71,10 +73,9 @@ function fmt(n: number): string {
     <p class="cost-note tiny">
       Estimates based on {supportedAsylum.toLocaleString()} people on asylum support in {areaName}
       ({(localSharePct * 100).toFixed(2)}% of {NATIONAL_SUPPORTED_TOTAL.toLocaleString()} nationally).
-      Hotel costs pro-rated from £5.77M/day national spend (2024/25 average, NAO).
+      Hotel costs pro-rated from £5.77M/day national spend in 2024/25 (House of Commons Library, CDP-2025-0184).
       Subsistence: £{SUBSISTENCE_WEEKLY}/week per person.
       {hotelSites > 0 ? ` ${hotelSites} known hotel sites in this area.` : ""}
-      Nationally, the hotel bill alone costs £{nationalPerTaxpayer} per taxpayer per year.
     </p>
   </div>
 )}

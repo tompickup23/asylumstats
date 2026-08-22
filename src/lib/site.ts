@@ -1,5 +1,6 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
+import { getCounties } from "./county-directory";
 
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
@@ -19,6 +20,7 @@ export interface ReleaseEntry {
 const INDEXABLE_STATIC_PATHS = [
   "/",
   "/places/",
+  "/places/counties/",
   "/national/",
   "/regional/",
   "/councils/",
@@ -108,6 +110,12 @@ export function getIndexableSitePaths(): string[] {
 
   for (const area of getPublicPlaceAreas()) {
     paths.add(buildPlacePath(area));
+  }
+
+  // Counties are produced by getStaticPaths, which this function cannot see. They have to
+  // be added here by hand or they build fine and never reach the sitemap.
+  for (const county of getCounties()) {
+    paths.add(county.countyPath);
   }
 
   return [...paths].sort((a, b) => a.localeCompare(b));

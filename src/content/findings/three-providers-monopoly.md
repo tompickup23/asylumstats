@@ -24,7 +24,7 @@ Each prime provider controls all asylum accommodation in their region. Dispersal
 
 **The scale:**
 
-107,003 people in asylum support nationally. ~31,000 in hotel accommodation (76% of the budget). ~76,000 in dispersal housing. 197 hotels identified in the system. 10-year contract forecast: **£15.3 billion** (NAO).
+107,003 people in asylum support nationally. ~31,000 in hotel accommodation, taking 76% of the accommodation contract cost over the first seven months of 2024-25. ~76,000 in dispersal housing. 197 hotels identified in the system. 10-year contract forecast: **£15.3 billion** (NAO).
 
 Regional monopoly. No competition for individual placements. A council objects to a hotel in their area. The prime provider proceeds anyway. The Home Office contract overrides local planning.
 
