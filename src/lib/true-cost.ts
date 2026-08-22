@@ -52,10 +52,73 @@ export const UK_TAXPAYERS = 34_100_000;
 export const UK_TAXPAYERS_SOURCE =
   "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics";
 
-/** People on asylum support at the latest published quarter end. */
+/**
+ * People on asylum support at the latest published quarter end.
+ *
+ * A CURRENT fact, for stating how many people are supported today. It is deliberately
+ * NOT the denominator of any cost rate: see the financial-year mean below.
+ */
 export const SUPPORTED_ASYLUM_POPULATION =
   routeDashboard.nationalSystemDynamics.latestQuarter.supportedAsylum;
 export const SUPPORTED_ASYLUM_AS_AT = routeDashboard.localSnapshotDate;
+
+/**
+ * The financial year the ASRA outturn covers, parsed from the accounts provenance rather
+ * than written down twice. "2025-26" means 1 April 2025 to 31 March 2026.
+ */
+const [ASRA_FY_START_YEAR] = araCosts._provenance.financialYear.split("-").map(Number);
+export const ASRA_FY_OPENS = `${ASRA_FY_START_YEAR}-03-31`;
+export const ASRA_FY_CLOSES = `${ASRA_FY_START_YEAR + 1}-03-31`;
+
+/**
+ * Mean supported population across the financial year the cost covers.
+ *
+ * ── Why this is not the latest quarter ───────────────────────────────────────
+ *
+ * ASRA is a FULL YEAR of spending. Dividing it by a single quarter-end stock answers a
+ * different question, and it is the same mistake that put £276 a night and £100,740 a
+ * year on the homepage: a 2024/25 cost over a March 2026 population. Here the endpoint
+ * happens to be the LOWEST point in the year (97,519 against a 106,719 mean, because
+ * supported numbers fell hard through 2025-26), so the endpoint basis overstated the
+ * rate by about 9%, £117 a night against £107.
+ *
+ * Averaging a stock over a period is a trapezoid: opening and closing balances count
+ * half, the quarter-ends between them count whole.
+ *
+ * ── Why it is pinned to a closed year ────────────────────────────────────────
+ *
+ * The window is fixed by the accounts, not by "latest". When the next quarterly release
+ * lands, the series gains a point outside this window and every figure below is
+ * unchanged. Nothing drifts between refreshes without someone re-transcribing the
+ * accounts, which is the only event that should move an audited cost rate.
+ */
+const supportedSeries = routeDashboard.nationalSystemDynamics.stockSeries
+  .supportedAsylum as Array<{ periodEnd: string; value: number }>;
+
+const asraYearPoints = supportedSeries
+  .filter((point) => point.periodEnd >= ASRA_FY_OPENS && point.periodEnd <= ASRA_FY_CLOSES)
+  .sort((a, b) => a.periodEnd.localeCompare(b.periodEnd));
+
+// Fail loudly rather than quietly averaging a partial year. A cost rate built on three
+// quarters of a five-point year is wrong in a way no range check would catch.
+if (asraYearPoints.length !== 5) {
+  throw new Error(
+    `True Cost: expected 5 quarter-end supported-population points from ${ASRA_FY_OPENS} to ` +
+      `${ASRA_FY_CLOSES} to average the ${araCosts._provenance.financialYear} ASRA outturn, ` +
+      `found ${asraYearPoints.length} (${asraYearPoints.map((p) => p.periodEnd).join(", ")}). ` +
+      `Either the accounts moved to a new financial year and need re-transcribing, or the ` +
+      `supported-population series no longer covers it. See src/lib/true-cost.ts.`
+  );
+}
+
+export const SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR = Math.round(
+  asraYearPoints.reduce(
+    (total, point, index) =>
+      total + (index === 0 || index === asraYearPoints.length - 1 ? point.value / 2 : point.value),
+    0
+  ) /
+    (asraYearPoints.length - 1)
+);
 
 export type CostBasis = "audited" | "attributed" | "published" | "estimated";
 
@@ -280,16 +343,18 @@ export const PER_TAXPAYER_GBP = {
  * Accommodation and support cost per supported person per day.
  *
  * THE ONLY per-person figure a place or region page may use. It is the audited ASRA
- * outturn over the supported population, so both numerator and denominator describe the
- * same people. Roughly £117 on current figures, which sits sensibly against the £119 a
- * night the Home Office publishes for hotels.
+ * outturn over the mean supported population of the SAME financial year, so numerator
+ * and denominator describe the same people over the same period. Roughly £107, which
+ * sits sensibly against the £119 a night the Home Office publishes for hotels.
  *
- * Do NOT substitute a system-total-derived figure here. That is what produced £150 a day
- * and it silently attributes post-decision welfare and offender costs to people
- * currently on support.
+ * Two substitutions are banned here, both of which have been live on this site:
+ *   - a system-total numerator, which produced £150 a day and silently attributes
+ *     post-decision welfare and offender costs to people currently on support;
+ *   - a latest-quarter denominator, which produced £276 a night on the homepage by
+ *     dividing one year's cost by another year's population.
  */
 export const ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY = Math.round(
-  (asra * 1_000_000) / SUPPORTED_ASYLUM_POPULATION / 365
+  (asra * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365
 );
 
 export const ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR =
@@ -301,7 +366,7 @@ export const ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR =
  * See the basis warning above.
  */
 export const SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA = Math.round(
-  (TOTAL_GBP_M.central * 1_000_000) / SUPPORTED_ASYLUM_POPULATION / 365
+  (TOTAL_GBP_M.central * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365
 );
 
 /** Cost of a named area's supported population, on the accommodation and support basis. */

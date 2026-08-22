@@ -196,9 +196,12 @@ const ascPercentile = getAscSpendPercentile(area.areaCode);
 // overstates what an area costs by roughly twice.
 //
 // So this uses the accommodation and support figure instead: audited ASRA outturn over
-// the supported population, which has the same people top and bottom. Around £117 per
-// person per day, which sits sensibly against the £119 a night the Home Office
-// publishes for hotels. See the basis warning in lib/true-cost.ts.
+// the MEAN supported population of the same financial year, which has the same people
+// top and bottom over the same period. Around £107 per person per day, which sits
+// sensibly against the £119 a night the Home Office publishes for hotels. Dividing by
+// the latest quarter instead would read £117, because supported numbers fell through
+// 2025-26 and the closing stock is the lowest point in the year. See the basis warning
+// in lib/true-cost.ts.
 const estimatedAnnualCostLabel = area.supportedAsylum > 0
   ? ` Accommodation and support for ${area.supportedAsylum.toLocaleString()} people at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(area.supportedAsylum) / 1_000_000).toFixed(1)}M a year.`
   : "";

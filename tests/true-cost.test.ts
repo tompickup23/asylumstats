@@ -6,6 +6,9 @@ import {
   COST_CATEGORIES,
   PER_TAXPAYER_GBP,
   SUPPORTED_ASYLUM_POPULATION,
+  SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR,
+  ASRA_FY_OPENS,
+  ASRA_FY_CLOSES,
   SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA,
   TOTAL_GBP_M,
   UK_TAXPAYERS,
@@ -124,7 +127,43 @@ describe("the per-person basis", () => {
       araCosts.directorates.asylumSupportResettlementAccommodation.resourceOutturn / 1000
     );
     expect(ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY).toBe(
-      Math.round((asraMillions * 1_000_000) / SUPPORTED_ASYLUM_POPULATION / 365)
+      Math.round((asraMillions * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365)
+    );
+  });
+
+  it("averages the population over the cost's own year, not the latest quarter", () => {
+    // The check that has to exist. Restating the module's own formula proves nothing:
+    // it passed happily while the denominator was a single quarter-end, which is the
+    // £276-a-night error in miniature. This asserts the BASIS instead.
+    //
+    // Supported numbers fell through 2025-26, so the closing stock is below the mean.
+    // If someone swaps the denominator back to the latest quarter, the rate rises and
+    // this fails.
+    expect(SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR).toBeGreaterThan(SUPPORTED_ASYLUM_POPULATION);
+
+    const onLatestQuarter = Math.round(
+      (Math.round(
+        araCosts.directorates.asylumSupportResettlementAccommodation.resourceOutturn / 1000
+      ) *
+        1_000_000) /
+        SUPPORTED_ASYLUM_POPULATION /
+        365
+    );
+    expect(ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY).toBeLessThan(onLatestQuarter);
+  });
+
+  it("holds the cost rate steady when a new quarter lands", () => {
+    // The refresh guard. A quarterly release adds a point after the accounts year, and
+    // the window is pinned to the accounts, so the mean must not move. Simulating the
+    // next release here is cheaper than discovering the drift on 362 live place pages.
+    const closingYear = Number(ASRA_FY_CLOSES.slice(0, 4));
+    expect(ASRA_FY_OPENS < ASRA_FY_CLOSES).toBe(true);
+
+    const nextRelease = { periodEnd: `${closingYear}-06-30`, value: 80_000 };
+    const inWindow =
+      nextRelease.periodEnd >= ASRA_FY_OPENS && nextRelease.periodEnd <= ASRA_FY_CLOSES;
+    expect(inWindow, "a post-year-end quarter must fall outside the averaging window").toBe(
+      false
     );
   });
 

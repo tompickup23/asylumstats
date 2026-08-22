@@ -13,7 +13,7 @@ import rawProjections from "../data/live/ethnic-projections.json";
 import smallBoatsSeries from "../data/live/small-boats.json";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
-import { PER_TAXPAYER_GBP, TOTAL_GBP_M, UK_TAXPAYERS } from "../lib/true-cost";
+import { PER_TAXPAYER_GBP, TOTAL_GBP_M } from "../lib/true-cost";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -48,7 +48,17 @@ function fmtGbp(n: number) {
 // Taxpayer count now comes from lib/true-cost, so the homepage and the True Cost
 // figures cannot drift onto different denominators.
 const annualCostGbp = dailyCostGbp * 365;
-const perTaxpayerGbp = Math.round(annualCostGbp / UK_TAXPAYERS);
+// There is no hotels-only per-taxpayer figure on this page.
+//
+// It used to say "about £62 per income taxpayer per year" in the hero, the meta
+// description and the share text, while the cost strip immediately below said £234 per
+// income taxpayer per year. Both were arithmetically fine and they measured different
+// things: £62 is hotels alone, £234 is the whole system. Printed in the same unit on the
+// same screen, they simply read as the site contradicting itself, and the smaller number
+// was the one search engines quoted back.
+//
+// The hero now states the hotel spend as money, and the per-taxpayer unit belongs to the
+// True Cost total alone.
 // Per-night hotel cost is NOT derived from the current hotel population.
 //
 // It used to be: dailyCostGbp / latestQuarter.hotelAccommodation. That divides a
@@ -195,7 +205,7 @@ function findingColor(verdict: string): string {
 
 <BaseLayout
   title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-  description={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum hotels, about £${perTaxpayerGbp} per income taxpayer per year. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
+  description={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in 2024/25, ${fmtGbp(dailyCostGbp)} a day. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
   image="/og/home.png"
 >
   <!-- ═══ HERO ═══ -->
@@ -207,7 +217,7 @@ function findingColor(verdict: string): string {
         <span class="hero-label">a day on asylum hotels.</span>
       </h1>
       <p class="hero-subline">
-        That is about £{perTaxpayerGbp} per income taxpayer per year.
+        That is {fmtGbp(annualCostGbp)} across 2024/25, inside the £4bn the Home Office spent on asylum support altogether.
         {fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at {snapshotDate}.
         Every figure on this site links back to the government release it came from.
       </p>
@@ -255,7 +265,7 @@ function findingColor(verdict: string): string {
         <span class="cost-number">£{PER_TAXPAYER_GBP.central}</span>
         <span class="cost-label">total cost per income taxpayer per year</span>
         <span class="cost-context">Accommodation and support, enforcement, border security, welfare after a decision, NHS, education, tribunals, legal aid. Range £{PER_TAXPAYER_GBP.conservative} to £{PER_TAXPAYER_GBP.upper}. <a href="/findings/true-cost-of-asylum/" style="color: var(--accent);">Full breakdown.</a></span>
-        <span class="cost-calc">£{(TOTAL_GBP_M.central / 1000).toFixed(1)}B total / 34.1M taxpayers. Hotels alone = £{perTaxpayerGbp}.</span>
+        <span class="cost-calc">£{(TOTAL_GBP_M.central / 1000).toFixed(1)}B total / 34.1M taxpayers.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">£{HOTEL_NIGHTLY_2024_25}</span>
@@ -525,7 +535,7 @@ function findingColor(verdict: string): string {
         <ShareButton
           url={SITE_URL}
           title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-          text={`The Home Office spends ${fmtGbp(dailyCostGbp)} a day on asylum hotels, about £${perTaxpayerGbp} per income taxpayer per year. Sourced data by local authority: ${SITE_URL}`}
+          text={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in 2024/25, ${fmtGbp(dailyCostGbp)} a day. Sourced data by local authority: ${SITE_URL}`}
           compact
         />
       </div>
