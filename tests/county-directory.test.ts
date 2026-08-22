@@ -85,7 +85,7 @@ describe("reconciliation against the published England totals", () => {
   it("exposes no combined total across the three measures", () => {
     // A stock and a cumulative arrivals count must never be added together. If someone
     // adds such a field, this test is the place that should stop them.
-    const county = getCounties()[0] as Record<string, unknown>;
+    const county = getCounties()[0] as unknown as Record<string, unknown>;
     for (const key of Object.keys(county)) {
       expect(key.toLowerCase()).not.toContain("allthreepathways");
       expect(key.toLowerCase()).not.toContain("refugeetotal");
