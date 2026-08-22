@@ -37,6 +37,7 @@ const topSuppliers = moneyLedger.supplierProfiles.slice(0, 4);
 const dailyCostRecord = moneyLedger.records.find(
   (r: any) => r.valueKind === "daily_cost_average" && r.valueGbp > 0
 );
+// Fallback: £5.77m/day, 2024/25. House of Commons Library CDP-2025-0184, NOT the NAO.
 const dailyCostGbp = dailyCostRecord?.valueGbp ?? 5_770_000;
 
 function fmtGbp(n: number) {
