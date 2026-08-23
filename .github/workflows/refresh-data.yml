@@ -42,24 +42,26 @@ jobs:
       # No GitHub event data is interpolated here.
       - name: Fetch and transform small boats
         run: npm run ingest:smallboats
+      # Hotels must run before money: the money ledger is built on top of the hotel entity
+      # ledger it produces. That dependency was undeclared and only surfaced when this
+      # workflow was reordered, because until then the job always died at regional sources
+      # before either of them ran.
+      - name: Fetch and transform hotels
+        run: npm run ingest:hotels
       - name: Transform money ledger
         run: npm run ingest:money
 
-      # Secondary context, and allowed to fail without taking the Home Office data with it.
-      # On 17 August one unreachable host, www.wsmp.wales, hung for 133 seconds and then
-      # aborted the whole job, so tribunals, routes and money never reached the commit step
-      # below and nothing on the site refreshed. Regional partner pages are colour around
-      # the national figures; they are not worth the national figures. A failure here still
-      # ends the run loudly, at the bottom, once the core data is safely committed.
+      # Regional partner pages, and the one ingest allowed to fail without taking the Home
+      # Office data with it. On 17 August a single unreachable host, www.wsmp.wales, hung
+      # for 133 seconds and then aborted the whole job, so tribunals, routes and money never
+      # reached the commit step below and nothing on the site refreshed. This is colour
+      # around the national figures; it is not worth the national figures. A failure here
+      # still ends the run red, at the bottom, once the core data is safely committed.
       # No GitHub event data is interpolated here.
       - name: Fetch and transform regional sources
         id: regional
         continue-on-error: true
         run: npm run ingest:regionalsources
-      - name: Fetch and transform hotels
-        id: hotels
-        continue-on-error: true
-        run: npm run ingest:hotels
       # Runs after the ingests so a fetch failure does not mask a stale source, and
       # the date is passed in rather than read inside the script so a local run of the
       # same commit gives the same answer. No GitHub event data is interpolated here.
@@ -124,14 +126,10 @@ jobs:
         if: always()
         env:
           REGIONAL_OUTCOME: ${{ steps.regional.outcome }}
-          HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
         run: |
           skipped=""
           if [ "$REGIONAL_OUTCOME" = "failure" ]; then
             skipped="$skipped regional-sources"
-          fi
-          if [ "$HOTELS_OUTCOME" = "failure" ]; then
-            skipped="$skipped hotels"
           fi
           if [ -n "$skipped" ]; then
             echo "Secondary ingest failed:$skipped"

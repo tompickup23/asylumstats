@@ -4,9 +4,19 @@ import { fileSha256, hashId, readCsv } from "../lib/csv-parser.mjs";
 
 const generatedAt = new Date().toISOString();
 
+// The hotel ledger comes from the mart, not from src/data/live.
+//
+// Both copies exist and are identical, but the live one is a build artefact: gitignored,
+// written by transform-hotel-entities.mjs, absent from a fresh checkout. Reading it made
+// this transform depend on hotels having already run in the same job, silently, and the
+// dependency broke the moment the refresh workflow was reordered. data/marts is the
+// documented source of truth, so read that and say so when it is missing.
+//
+// follow-money.json is a different case: it is committed, written directly by its own
+// generator, and has no mart yet.
 const sourceFiles = {
   contractLedger: path.resolve("data/manual/asylum-contract-ledger.csv"),
-  hotelEntityLedger: path.resolve("src/data/live/hotel-entity-ledger.json"),
+  hotelEntityLedger: path.resolve("data/marts/hotel_entities/hotel-entity-ledger.json"),
   followMoney: path.resolve("src/data/live/follow-money.json")
 };
 
@@ -29,8 +39,12 @@ function writeNdjson(filePath, rows) {
 
 
 
-function readJson(filePath) {
-  return JSON.parse(readFileSync(filePath, "utf8"));
+function readJson(filePath, hint) {
+  try {
+    return JSON.parse(readFileSync(filePath, "utf8"));
+  } catch (error) {
+    throw new Error(`Cannot read ${filePath}: ${error.message}.${hint ? ` ${hint}` : ""}`);
+  }
 }
 
 function normalizeText(value) {
@@ -121,7 +135,10 @@ function moneyRecordSortValue(recordType) {
   return ranking[recordType] ?? 99;
 }
 
-const hotelLedger = readJson(sourceFiles.hotelEntityLedger);
+const hotelLedger = readJson(
+  sourceFiles.hotelEntityLedger,
+  'Run "npm run ingest:hotels" first: the money ledger is built on top of the hotel ledger.'
+);
 const followMoney = readJson(sourceFiles.followMoney);
 
 const siteIndex = new Map(hotelLedger.sites.map((site) => [site.siteId, site]));
