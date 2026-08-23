@@ -18,6 +18,46 @@ describe("MOJ tribunal appeals mart", () => {
     expect(tribunal.latestPeriodLabel).toBe("Q4 2025/26");
   });
 
+  /**
+   * The assertions above pin the current edition on purpose, so a new release is noticed.
+   * These pin the SHAPE, so that when the April to June edition lands and those literals are
+   * updated, the parts that must stay internally consistent still are. The release is now
+   * discovered from GOV.UK rather than written into the fetcher, and the failure this guards
+   * against is the discovery returning one quarter while the labels describe another.
+   */
+  it("describes one release consistently, whichever release it is", () => {
+    const { title, periodLabel, periodCoverage, publishedDate, nextEditionDate, nextEditionCoverage } =
+      tribunal.release;
+
+    expect(title).toBe(`Tribunal Statistics Quarterly: ${periodCoverage}`);
+    expect(periodLabel).toMatch(FINANCIAL_QUARTER);
+    expect(tribunal.latestPeriodLabel).toBe(periodLabel);
+
+    // A quarter is published after it ends, and before the edition that follows it.
+    const coverageYear = Number(periodCoverage.slice(-4));
+    expect(Number(publishedDate.slice(0, 4))).toBeGreaterThanOrEqual(coverageYear);
+    expect(nextEditionDate > publishedDate).toBe(true);
+    expect(nextEditionCoverage).not.toBe(periodCoverage);
+
+    // The year-ago comparison is the same quarter one financial year back, and both series
+    // must actually carry it. Getting this wrong compares Q1 against Q4.
+    const [quarter, year] = periodLabel.split(" ");
+    const previousStart = Number(year.split("/")[0]) - 1;
+    expect(tribunal.previousPeriodLabel).toBe(
+      `${quarter} ${previousStart}/${String((previousStart + 1) % 100).padStart(2, "0")}`
+    );
+    expect(tribunal.latestAnnualLabel).toBe(year);
+  });
+
+  it("carries no release period in its source id", () => {
+    // moj_tribunals_q4_2025_26 would have stopped resolving on the next edition, and
+    // chartSource returns {} on a miss, so two public charts would have lost their source
+    // line with nothing failing.
+    for (const source of tribunal.sources ?? []) {
+      expect(source.source_id).toBe("moj_tribunals");
+    }
+  });
+
   // These are the published headline figures for Q4 2025/26 against Q4 2024/25. The transform
   // asserts them at build time too, so a silent change in the MOJ table cannot slip through.
   it("matches the published headline figures", () => {
@@ -120,7 +160,8 @@ describe("route dashboard appeals block", () => {
     expect(appeals.series).not.toHaveProperty("lodged");
     expect(appeals.series).not.toHaveProperty("determined");
     expect(dashboard.sources.some((source) => source.source_id === "asylum_appeals_mar_2023")).toBe(false);
-    expect(dashboard.sources.some((source) => source.source_id === "moj_tribunals_q4_2025_26")).toBe(true);
+    expect(dashboard.sources.some((source) => source.source_id === "moj_tribunals")).toBe(true);
+    expect(dashboard.sources.filter((source) => String(source.source_id).startsWith("moj_tribunals"))).toHaveLength(1);
 
     // No data point may still sit on the old calendar-quarter labels, and none may predate the
     // dead series' final quarter while pretending to be current.

@@ -4493,7 +4493,7 @@
         "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
         "scopeLabel": "First-tier Tribunal, Immigration and Asylum Chamber, all case types",
         "scopeNote": "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.",
-        "provisionalNote": "Q4 2025/26 figures are provisional and subject to revision. Q1 to Q3 2025/26 were revised in this edition as part of the annual reconciliation exercise, and 2024/25 is now final.",
+        "provisionalNote": "Q4 2025/26 figures are provisional and subject to revision. Earlier quarters of 2025/26 are revised as later editions land, and 2024/25 is now final.",
         "sourceLabel": "Tribunal Statistics Quarterly: January to March 2026",
         "sourceReleaseDate": "2026-06-11",
         "nextEditionDate": "2026-09-10",
@@ -8594,7 +8594,7 @@
       "period_label": "Year ending March 2026"
     },
     {
-      "source_id": "moj_tribunals_q4_2025_26",
+      "source_id": "moj_tribunals",
       "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
       "attachment_url": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
       "methodology_url": "https://www.gov.uk/government/collections/tribunals-statistics",

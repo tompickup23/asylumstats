@@ -2,27 +2,30 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { discoverLatestTribunalRelease } from "../lib/tribunal-release.mjs";
 
 const rawDir = path.resolve("data/raw/moj_tribunals");
 const manifestDir = path.resolve("data/raw/manifests");
 
-// Ministry of Justice, "Tribunal Statistics Quarterly: January to March 2026" (Q4 2025/26),
-// published 11 June 2026. This release replaces the discontinued Home Office
-// "asylum appeals lodged" dataset, which ended at 2023 Q1.
-//
-// MOJ publishes on financial-year quarters, so Q4 2025/26 covers January to March 2026.
-// The next edition (April to June 2026) is due on 10 September 2026.
+// Which release, and which files, is discovered from GOV.UK rather than written here. See
+// scripts/lib/tribunal-release.mjs for why: this file previously named the release, its
+// publication date, its next edition and both asset URLs by hand, and transform-tribunals.mjs
+// named the ODS a second time, so the 10 September edition would have been fetched and then
+// described as January to March 2026.
+const release = await discoverLatestTribunalRelease();
+
 const sourceFiles = [
   {
-    fileName: "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+    fileName: path.basename(new URL(release.mainTablesUrl).pathname),
     sourceId: "moj_tribunals_main_tables",
-    sourceUrl:
-      "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods"
+    sourceUrl: release.mainTablesUrl,
+    role: "main_tables"
   },
   {
     fileName: "CSVs.zip",
     sourceId: "moj_tribunals_csvs",
-    sourceUrl: "https://assets.publishing.service.gov.uk/media/6a296f79a3674dfd3eb50633/CSVs.zip"
+    sourceUrl: release.csvsUrl,
+    role: "csvs"
   }
 ];
 
@@ -54,17 +57,21 @@ const manifest = {
   datasetId: "moj_tribunals",
   publisher: "Ministry of Justice",
   cadence: "quarterly",
-  release: "Tribunal Statistics Quarterly: January to March 2026",
-  releaseTitle: "Tribunal Statistics Quarterly: January to March 2026",
-  releasePeriodLabel: "Q4 2025/26",
+  release: release.title,
+  releaseTitle: release.title,
+  releasePeriodLabel: release.periodLabel,
+  releasePeriodCoverage: release.coverage,
   releasePeriodBasis: "financial_year_quarter",
-  releaseDate: "2026-06-11",
-  nextEdition: "2026-09-10",
-  nextEditionDate: "2026-09-10",
-  landing:
-    "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-  landingUrl:
-    "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
+  releaseDate: release.publishedDate,
+  nextEdition: release.nextEditionDate,
+  nextEditionDate: release.nextEditionDate,
+  nextEditionCoverage: release.nextEditionCoverage,
+  // Derived rather than announced: GOV.UK carries no next-release date for this series, and
+  // MOJ has slipped twice in two years. The freshness audit should start asking on this date,
+  // not treat it as a promise.
+  nextEditionIsExpected: release.nextEditionIsExpected,
+  landing: release.releasePage,
+  landingUrl: release.releasePage,
   fetchedFileCount: sourceFiles.length,
   files: []
 };
@@ -97,4 +104,7 @@ mkdirSync(csvDir, { recursive: true });
 execFileSync("unzip", ["-o", "-q", path.join(rawDir, "CSVs.zip"), "-d", csvDir], { stdio: "inherit" });
 
 writeFileSync(path.join(manifestDir, "moj_tribunals.json"), `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(`Fetched ${sourceFiles.length} official MOJ tribunal files.`);
+console.log(
+  `Fetched ${sourceFiles.length} official MOJ tribunal files for ${release.title} ` +
+    `(published ${release.publishedDate}, next edition expected ${release.nextEditionDate}).`
+);

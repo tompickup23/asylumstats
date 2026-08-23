@@ -4,22 +4,30 @@
 // Uses the same ethnic-projections data shared across both sites.
 
 import rawProjections from "../data/live/ethnic-projections.json";
-import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import {
+  areasBelowFiftyBy,
+  distinctAreaCodes,
+  nationalWhiteBritishShare,
+} from "../lib/ethnic-projections";
 
 const projData = rawProjections as any;
-const allAreaCodes = Object.keys(projData.areas);
+const allAreaCodes = distinctAreaCodes();
 
-// National trajectory figures (population-weighted, observed 2011 + 2021,
-// projected 2051 + 2061). Matches the home-page demographic section.
-const trajectory = [
-  { year: 2011, pct: 80.5, kind: "census" },
-  { year: 2021, pct: 73.3, kind: "census" },
-  { year: 2051, pct: 48.7, kind: "projected" },
-  { year: 2061, pct: 40.2, kind: "illustrative" },
-];
+// Derived, not written in. These were four hardcoded v7.0 percentages that the
+// recalibrated model could not move, so they stayed on the homepage through the v8.0
+// merge while the stat beside them was corrected. The 2061 point is gone with them: 49
+// areas have no 2061 projection and they are not a random 49, so that point was never on
+// the same footing as the three before it.
+const trajectory = [2011, 2021, 2051]
+  .map((year) => ({
+    year,
+    pct: nationalWhiteBritishShare(year)?.pct ?? null,
+    kind: year <= 2021 ? "census" : "projected",
+  }))
+  .filter((point): point is { year: number; pct: number; kind: string } => point.pct !== null)
+  .map((point) => ({ ...point, pct: Number(point.pct.toFixed(1)) }));
 
-const shifts2051 = getSignificantDemographicShifts(2051);
-const areasBelow50by2051 = shifts2051.length;
+const areasBelow50by2051 = areasBelowFiftyBy(2051).total;
 const muslimMajority2051 = allAreaCodes.filter((code) => {
   const mp = projData.areas[code]?.muslimPct2051;
   return mp && mp > 50;
@@ -57,13 +65,15 @@ const areaD = `${pathD} L ${xs[xs.length - 1].toFixed(1)} ${VB_H - PAD_Y} L ${xs
     <div class="st-grid">
       <!-- Sparkline visualization -->
       <div class="st-viz">
-        <span class="st-viz-title">White British share (population-weighted, England)</span>
+        <span class="st-viz-title">White British share (population-weighted, {allAreaCodes.length} local authorities)</span>
         <svg
           viewBox={`0 0 ${VB_W} ${VB_H}`}
           preserveAspectRatio="none"
           class="st-spark"
           role="img"
-          aria-label="White British share: 80.5% in 2011, 73.3% in 2021, 48.7% projected by 2051, 40.2% illustrative by 2061"
+          aria-label={`White British share: ${trajectory
+            .map((point) => `${point.pct}% ${point.kind === "census" ? "in" : "projected by"} ${point.year}`)
+            .join(", ")}`}
         >
           <defs>
             <linearGradient id="stFill" x1="0" y1="0" x2="0" y2="1">
