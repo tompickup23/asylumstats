@@ -3,7 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
-import { slugifyAreaName } from "../../../lib/site";
+import { slugifyAreaName, regionNameInSentence } from "../../../lib/site";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import rawProjections from "../../../data/live/ethnic-projections.json";
@@ -52,7 +52,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 ---
 
 <BaseLayout
-  title={`${region.regionName} | asylumstats`}
+  title={`Asylum seekers in ${regionNameInSentence(region.regionName)}: ${totalRegional.toLocaleString()} on support`}
   description={pageDescription}
 >
   <Breadcrumbs items={[

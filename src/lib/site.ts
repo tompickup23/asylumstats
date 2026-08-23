@@ -35,6 +35,30 @@ const INDEXABLE_STATIC_PATHS = [
   "/glossary/"
 ] as const;
 
+/**
+ * Regions whose name takes "the" in a sentence.
+ *
+ * Listed rather than guessed. A heuristic on the name gets "the London" or "North West"
+ * wrong depending on which way it leans, and these strings go straight into page titles,
+ * so the article is part of the published copy.
+ */
+const REGIONS_TAKING_THE = new Set([
+  "East Midlands",
+  "East of England",
+  "North East",
+  "North West",
+  "South East",
+  "South West",
+  "West Midlands"
+  // Not "Yorkshire and The Humber": the name already carries its own article, and
+  // "the Yorkshire and The Humber" is not English.
+]);
+
+/** "the North West", but "London". For use inside a sentence or a page title. */
+export function regionNameInSentence(regionName: string): string {
+  return REGIONS_TAKING_THE.has(regionName) ? `the ${regionName}` : regionName;
+}
+
 function slugifyRegionName(regionName: string): string {
   return regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
