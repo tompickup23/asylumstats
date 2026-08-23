@@ -353,16 +353,16 @@ const areaCountyName = countyForAreaCode(area.areaCode);
 
   <!-- SUMMARY -->
   <section id="place-summary" class="section section-anchor">
+    {/*
+      "on asylum support", not "housed on asylum support". supportedAsylum is the Home
+      Office's total for the area and it includes people on Section 95 subsistence only,
+      who receive money and not accommodation. 295 of the 344 areas with any support
+      carried a housed count that was too high, and in eight of them nobody was housed at
+      all: Cambridge's page said 14 people were housed when the number was zero. The
+      homepage has always worded this correctly as "receiving Home Office accommodation,
+      subsistence, or both"; this line had not.
+    */}
     <PlainEnglish
-      {/*
-        "on asylum support", not "housed on asylum support". supportedAsylum is the Home
-        Office's total for the area and it includes people on Section 95 subsistence only,
-        who receive money and not accommodation. 295 of the 344 areas with any support
-        carried a housed count that was too high, and in eight of them nobody was housed at
-        all: Cambridge's page said 14 people were housed when the number was zero. The
-        homepage has always worded this correctly as "receiving Home Office accommodation,
-        subsistence, or both"; this line had not.
-      */}
       headline={`${area.supportedAsylum.toLocaleString()} people on asylum support in ${area.areaName}`}
       body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 90 ? "this area carries more asylum seekers per head than 90% of the country" : ratePercentile >= 70 ? "this area carries more than most" : ratePercentile >= 30 ? "a moderate load compared to the national picture" : "fewer than most areas"}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.subsistenceOnly > 0 ? ` ${area.subsistenceOnly.toLocaleString()} of them receive subsistence only and are not in Home Office accommodation.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""}${estimatedAnnualCostLabel}`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
