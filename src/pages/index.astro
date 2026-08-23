@@ -7,7 +7,7 @@ import SisterSiteTeaser from "../components/SisterSiteTeaser.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
-import { getSignificantDemographicShifts, getEthnicProjection } from "../lib/ethnic-projections";
+import { getSignificantDemographicShifts, getEthnicProjection, areasBelowFiftyBy, nationalWhiteBritishShare, distinctAreaCodes } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
 import rawProjections from "../data/live/ethnic-projections.json";
 import smallBoatsSeries from "../data/live/small-boats.json";
@@ -23,7 +23,7 @@ const placeDirectory = getPlaceDirectory();
 const placeCount = getPublicPlaceAreas().length;
 // Model denominators, derived. The copy carried 316 and 301 as hardcoded numbers while
 // the file holds a different count again; they read as carelessness rather than scope.
-const projectionAreaCount = Object.keys((rawProjections as { areas: Record<string, unknown> }).areas).length;
+const projectionAreaCount = distinctAreaCodes().length;
 const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
 
 const dailyCostRecord = moneyLedger.records.find(
@@ -188,14 +188,20 @@ const snapshotDate = latestQuarter.stockPeriodLabel ?? "Q4 2025";
 
 // Demographic modelling data
 const demographicShifts = getSignificantDemographicShifts(2051);
-const areasBelow50 = demographicShifts.length;
+// Counted off the decadal projections with the plausibility guard applied, which
+// is the basis the findings publish. getSignificantDemographicShifts reads the
+// interpolated thresholds array and returns a different number.
+const areasBelow50 = areasBelowFiftyBy(2051).total;
+const areasBelow50by2061 = areasBelowFiftyBy(2061).total;
 const demographicShifts2061 = getSignificantDemographicShifts(2061);
-const areasBelow50by2061 = demographicShifts2061.length;
+const wbi2011 = nationalWhiteBritishShare(2011);
+const wbi2021 = nationalWhiteBritishShare(2021);
+const wbi2051 = nationalWhiteBritishShare(2051);
 const areasBelow30by2051 = demographicShifts.filter(a => a.currentWbPct < 30 || (a.currentWbPct - a.annualDeclinePp * 30) < 30).length;
 
 // Dynamic demographic counts (not hardcoded)
 const projData = rawProjections as any;
-const allAreaCodes = Object.keys(projData.areas);
+const allAreaCodes = distinctAreaCodes();
 const muslimMajority2051 = allAreaCodes.filter(code => {
   const mp = projData.areas[code]?.muslimPct2051;
   return mp && mp > 50;
@@ -387,31 +393,25 @@ function findingColor(verdict: string): string {
         <div class="demo-trajectory">
           <span class="demo-traj-label">White British share (population-weighted, {projectionAreaCount} local authorities in model)</span>
           <div class="demo-traj-bar">
-            <div class="demo-traj-segment" style="width: 100%;">
+            <div class="demo-traj-segment" style={`width: ${wbi2011!.pct.toFixed(1)}%;`}>
               <span class="demo-traj-year">2011 Census</span>
-              <span class="demo-traj-pct">80.5%</span>
+              <span class="demo-traj-pct">{wbi2011!.pct.toFixed(1)}%</span>
             </div>
           </div>
           <div class="demo-traj-bar">
-            <div class="demo-traj-segment demo-traj-current" style="width: 73.3%;">
+            <div class="demo-traj-segment demo-traj-current" style={`width: ${wbi2021!.pct.toFixed(1)}%;`}>
               <span class="demo-traj-year">2021 Census</span>
-              <span class="demo-traj-pct">73.3%</span>
+              <span class="demo-traj-pct">{wbi2021!.pct.toFixed(1)}%</span>
             </div>
           </div>
           <div class="demo-traj-bar">
-            <div class="demo-traj-segment demo-traj-proj" style="width: 48.7%;">
+            <div class="demo-traj-segment demo-traj-proj" style={`width: ${wbi2051!.pct.toFixed(1)}%;`}>
               <span class="demo-traj-year">2051 projected</span>
-              <span class="demo-traj-pct">48.7%</span>
-            </div>
-          </div>
-          <div class="demo-traj-bar">
-            <div class="demo-traj-segment demo-traj-proj demo-traj-illustrative" style="width: 40.2%;">
-              <span class="demo-traj-year">2061 illustrative</span>
-              <span class="demo-traj-pct">40.2%</span>
+              <span class="demo-traj-pct">{wbi2051!.pct.toFixed(1)}%</span>
             </div>
           </div>
         </div>
-        <span class="demo-traj-note">Census figures observed. 2051/2061 projected by Hamilton-Perry CCR model. 2061 is illustrative only. <a href="/methodology/">Full methodology</a></span>
+        <span class="demo-traj-note">Census figures observed. 2051 projected by the Hamilton-Perry v8.0 model, which is tested one decade out of sample (MAE 1.56pp) and not beyond, so read 2051 as materially more uncertain than that error bar. The series stops at 2051 because 49 areas have no 2061 projection and they are not a random 49, so a 2061 bar would not be comparable with the ones above it. <a href="/methodology/">Full methodology</a></span>
       </div>
 
       <!-- Key stats grid -->

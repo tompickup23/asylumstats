@@ -25,6 +25,6 @@ ONS Linked Births 2024. 567,460 births with ethnicity recorded. gives us the fir
 - Indian to White British: 1.66×
 - Black Caribbean to White British: 0.86× (lower than WBI)
 
-**The model implication.** The HP model uses Census 2021 child-woman ratios, based on 2016-2021 births (children aged 0-4 in 2021). ONS 2024 data shows fertility has fallen further since, particularly for White British. The current projections may slightly understate the pace of diversification. WBI births are falling faster than the model's CWR-based fertility implies.
+**The model implication.** The HP model uses Census 2021 child-woman ratios, based on 2016-2021 births (children aged 0-4 in 2021). ONS 2024 data shows fertility has fallen further since, particularly for White British, so WBI births are falling faster than the model's CWR-based fertility implies. That is an argument about an input that has moved since the base year, and it points one way. It is not a measured property of the model: on the out-of-sample test the White British bias is +0.05pp, close to unbiased, and the settings replaced in August 2026 ran the other way from the claim once made here, projecting change too fast rather than too slow.
 
 **Methodology:** Empirical TFR ≈ (annual births by ethnicity) / (female population aged 15-44 by ethnicity) × 30. Female population denominators from Census 2021 custom dataset. This is a simplified computation. precise TFRs require age-specific rates. ONS births data includes age of mother, enabling precise ASFR computation in future model updates.

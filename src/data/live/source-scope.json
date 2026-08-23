@@ -51,7 +51,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Baseline and marginal asylum-grant tariff rows in the public money ledger.",
-    "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-to-2026-accessible-html"
+    "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-2026"
   },
   {
     "name": "UK resettlement programmes funding instructions 2025 to 2026",
@@ -60,7 +60,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Official refugee-resettlement funding instruction rows and future tariff normalization.",
-    "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instructions-2025-to-2026/uk-resettlement-programmes-funding-instructions-2025-to-2026"
+    "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instruction-2025-to-2026/funding-instruction-for-local-authorities-in-the-support-of-the-united-kingdoms-resettlement-schemes-2025-to-2026-accessible"
   },
   {
     "name": "Afghan schemes funding instructions 2024 to 2025",
@@ -69,7 +69,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Official Afghan-programme funding instruction rows pending deeper scheme-component normalization.",
-    "sourceUrl": "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/afghan-schemes-funding-instructions-2024-to-2025"
+    "sourceUrl": "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/funding-instruction-for-afghan-schemes-integration-support-2024-to-2025-accessible"
   },
   {
     "name": "Homes for Ukraine funding arrangements and councillor guidance",
@@ -78,7 +78,7 @@
     "scope": "route_specific",
     "publiclyIncluded": "yes",
     "use": "Tariff and welcome-payment rows for the humanitarian-route money layer.",
-    "sourceUrl": "https://www.gov.uk/government/publications/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025"
+    "sourceUrl": "https://www.gov.uk/guidance/role-of-sponsors-voluntary-and-community-sector-councils-and-where-to-focus-tariff-funding-homes-for-ukraine"
   },
   {
     "name": "National Audit Office asylum accommodation investigation",

@@ -405,7 +405,7 @@ const investigativeLeads = [
     id: "funding-rows-still-opaque",
     title: "Official funding instructions exist, but several tariff tables still need normalization",
     detail: `${fundingRowsWithoutTariffBreakdown.length} funding-instruction rows are in scope but still need machine-readable component tables before place-level funding comparisons are safe to publish.`,
-    sourceUrl: "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instructions-2025-to-2026/uk-resettlement-programmes-funding-instructions-2025-to-2026",
+    sourceUrl: "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instruction-2025-to-2026/funding-instruction-for-local-authorities-in-the-support-of-the-united-kingdoms-resettlement-schemes-2025-to-2026-accessible",
     severity: "info"
   },
   {

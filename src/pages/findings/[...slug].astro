@@ -95,17 +95,6 @@ const verdictLabel: Record<string, string> = {
       </aside>
     )}
 
-    {finding.data.model_recalibrated && (
-      <aside class="recalibrated-note">
-        <strong>The model behind these figures has been recalibrated.</strong> The counts on
-        this page are the output of the projection version this site currently publishes.
-        The same model has since been re-fitted against an out-of-sample test, on
-        <a href="https://ukdemographics.co.uk/methodology/" rel="noopener">ukdemographics.co.uk</a>,
-        which changes them. Treat the numbers here as the earlier version until this site
-        carries the recalibrated run. Our <a href="/methodology/">methodology page</a> sets
-        out what was withdrawn and why.
-      </aside>
-    )}
 
     <div class="finding-detail-meta">
       <span
@@ -192,21 +181,6 @@ const verdictLabel: Record<string, string> = {
     padding-top: 2.5rem;
     padding-bottom: 3rem;
   }
-
-  .recalibrated-note {
-    display: block;
-    margin-bottom: 1.5rem;
-    padding: 1rem 1.15rem;
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--warning);
-    border-radius: var(--radius-sm);
-    background: var(--bg-subtle);
-    font-size: 0.92rem;
-    line-height: 1.6;
-    color: var(--text-muted);
-  }
-  .recalibrated-note strong { color: var(--text); }
-  .recalibrated-note a { color: var(--accent); font-weight: 600; }
 
   .superseded-note {
     display: block;
