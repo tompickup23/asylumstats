@@ -9,6 +9,8 @@
  * - Local supported asylum seekers count
  * - Area households (for per-household figure)
  */
+import { loadLocalRouteLatest } from "../lib/route-data";
+
 interface Props {
   areaName: string;
   supportedAsylum: number;
@@ -24,7 +26,23 @@ const { areaName, supportedAsylum, totalHouseholds, hotelSites = 0 } = Astro.pro
 // £5.77m per day." It is NOT an NAO figure; the NAO publishes no per-day rate, and
 // crediting it there was a real defect until 21 Aug 2026.
 const NATIONAL_HOTEL_DAILY = 5_770_000; // £5.77M/day, 2024/25 (Commons Library CDP-2025-0184)
-const NATIONAL_SUPPORTED_TOTAL = 107_003; // Total on support nationally
+// Derived from the same snapshot the area's own count comes from, never written down.
+//
+// This was hardcoded at 107,003, an undated figure roughly nine months behind the data on
+// the rest of the site, which publishes 97,519 at 31 March 2026. Every place page was
+// therefore telling the reader its area was a smaller share of the country than the site's
+// own homepage implied, and because the share also scales the local hotel estimate, every
+// one of those estimates was about nine per cent low.
+//
+// Summing the areas gives exactly the published national quarter figure, so the two cannot
+// drift apart: if the snapshot moves, both move together.
+const localRouteLatest = loadLocalRouteLatest();
+const NATIONAL_SUPPORTED_TOTAL = localRouteLatest.areas.reduce(
+  (total, area) => total + (area.supportedAsylum ?? 0),
+  0
+);
+const NATIONAL_SNAPSHOT_LABEL = new Date(`${localRouteLatest.snapshotDate}T00:00:00Z`)
+  .toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 const SUBSISTENCE_WEEKLY = 49.18; // Per person per week
 const LA_GRANT_ANNUAL = 1_200; // Per dispersed person per year
 
@@ -72,7 +90,8 @@ function fmt(n: number): string {
     </div>
     <p class="cost-note tiny">
       Estimates based on {supportedAsylum.toLocaleString()} people on asylum support in {areaName}
-      ({(localSharePct * 100).toFixed(2)}% of {NATIONAL_SUPPORTED_TOTAL.toLocaleString()} nationally).
+      ({(localSharePct * 100).toFixed(2)}% of {NATIONAL_SUPPORTED_TOTAL.toLocaleString()} nationally
+      at {NATIONAL_SNAPSHOT_LABEL}).
       Hotel costs pro-rated from £5.77M/day national spend in 2024/25 (House of Commons Library, CDP-2025-0184).
       Subsistence: £{SUBSISTENCE_WEEKLY}/week per person.
       {hotelSites > 0 ? ` ${hotelSites} known hotel sites in this area.` : ""}

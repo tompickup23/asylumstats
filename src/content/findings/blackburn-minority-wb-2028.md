@@ -4,6 +4,7 @@ date: "2026-04-14"
 category: demographics
 stat_value: "2028"
 stat_label: "Blackburn WBI <50% year"
+model_recalibrated: true
 verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v7.0"

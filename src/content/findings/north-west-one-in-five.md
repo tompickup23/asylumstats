@@ -4,10 +4,11 @@ date: "2026-04-14"
 category: routes
 stat_value: "19.5%"
 stat_label: "NW share of national caseload"
+model_recalibrated: true
 verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
 source_label: "Home Office Local Authority Data, Dec 2025"
-summary: "20,864 people on asylum support in the North West. 19.5% of the 107,003 national total. Liverpool (2,189), Manchester (1,846), Rochdale (1,359), Bolton (1,281), Oldham (1,111). Lancashire carries its share too: Blackburn (649), Preston (554), Burnley (461). The region that voted most heavily for change carries the heaviest load."
+summary: "20,864 people on asylum support in the North West. 19.5% of the 107,003 national total at 31 December 2025. Liverpool (2,189), Manchester (1,846), Rochdale (1,359), Bolton (1,281), Oldham (1,111). Lancashire carries its share too: Blackburn (649), Preston (554), Burnley (461). The region that voted most heavily for change carries the heaviest load."
 ---
 
 **20,864 asylum seekers supported in the North West. One in five nationally.**

@@ -914,6 +914,18 @@ function formatCardValue(value: number, suffix?: string): string {
           <p class="metric-value">{route.latestValue.toLocaleString()}</p>
           <p class="lede">{route.note}</p>
           <div class="data-list">
+            {(route as any).split && (
+              <>
+                <div class="data-row">
+                  <span>{(route as any).split.outOfCountryLabel}</span>
+                  <span class="data-row-value">{(route as any).split.outOfCountry.toLocaleString()}</span>
+                </div>
+                <div class="data-row">
+                  <span>{(route as any).split.inCountryLabel}</span>
+                  <span class="data-row-value">{(route as any).split.inCountry.toLocaleString()}</span>
+                </div>
+              </>
+            )}
             <div class="data-row">
               <span>Scheme status</span>
               <span class="data-row-value">{route.schemeStatus}</span>

@@ -2,12 +2,12 @@
 headline: "Academic ethnic projections underestimated diversity in 95% of areas"
 date: "2026-04-11"
 category: demographics
-stat_value: "2.58pp"
-stat_label: "NEWETHPOP error vs our 1.71pp"
+stat_value: "3.95pp"
+stat_label: "NEWETHPOP mean error, 296 areas"
 verdict: alert
 source_url: "https://reshare.ukdataservice.ac.uk/852508/"
 source_label: "NEWETHPOP (University of Leeds)"
-summary: "The NEWETHPOP cohort-component model, the UK's most cited academic ethnic projection, over-predicted White British population share in 282 out of 296 local authorities. NEWETHPOP MAE: 2.58pp. Our Hamilton-Perry v7.0 model achieves MAE 1.71pp. 33% more accurate. using Census 2011 DC2101EW (18 groups, observed) and Census 2021 custom dataset (20 groups, direct)."
+summary: "The NEWETHPOP cohort-component model, the UK's most cited academic ethnic projection, over-predicted White British population share in 282 out of 296 local authorities. Mean absolute error 3.95 percentage points, RMSE 5.21pp, with only 16 per cent of areas accurate to within a point."
 video_url: "/videos/newethpop_validation_reel.mp4"
 ---
 
@@ -35,7 +35,9 @@ All five worst misses are in London and the Thames Gateway, areas where internat
 
 Every ethnic demographic projection for the UK, including Goodwin's CHSS report (2025) projecting White British minority by 2063, inherits assumptions from the same academic tradition. The gold-standard model underestimated diversity growth by an average of 4 percentage points over just 10 years. Forward projections to 2050 or 2060 are likely understating the pace of demographic change.
 
-Our own model (Hamilton-Perry v7.0 with Census 2011 DC2101EW observed base and Census 2021 direct observations, 20 ethnic groups) addresses this by using observed Census-to-Census ratios rather than modelled component rates. In backcast validation across 269 areas, our model achieves MAE 1.71pp. outperforming NEWETHPOP's 2.58pp by 33% while using a simpler, more transparent method. The v7.0 upgrade (Census 2011 DC2101EW replacing proportional splitting, Census 2021 direct base, DfE school calibration) delivered the most accurate subnational ethnic projection model publicly available. Full limitations documented on our methodology page.
+Our own model addresses this by using observed Census-to-Census ratios rather than modelled component rates.
+
+> **Correction, 23 August 2026.** This article previously reported NEWETHPOP's error as 2.58pp and our own as 1.71pp, a 33 per cent improvement. Both figures are withdrawn. The 2.58pp had no backing in our published validation data, which records NEWETHPOP at 3.95pp across 296 areas, four paragraphs above where the 2.58pp appeared. The 1.71pp came from a backcast that fitted its ratios on the same two Censuses it was then tested against, so it measured the model's own guardrails rather than its accuracy, and it had the direction of the bias backwards. A head-to-head belongs here, on out-of-sample figures for both models, and will return when the recalibrated model reaches this site. Full limitations are documented on our methodology page.
 
 **Accuracy distribution across 296 areas:**
 - Within 1pp: 48 areas (16%)
@@ -45,4 +47,4 @@ Our own model (Hamilton-Perry v7.0 with Census 2011 DC2101EW observed base and C
 
 **Nobody else has published this validation.** The NEWETHPOP dataset has been downloaded and cited by researchers worldwide, but no systematic comparison against Census 2021 actuals has been published. This finding is, to our knowledge, the first.
 
-**Data:** NEWETHPOP Leeds2 projection (DOI: 10.5255/UKDA-SN-852508) vs ONS Census 2021 TS021 via NOMIS API. Full validation data and error tables published at asylumstats.co.uk. Methodology: Hamilton-Perry v7.0 single-year-of-age model, 20 ethnic groups, Census 2011 DC2101EW (18 groups, observed) + Census 2021 custom dataset (20 groups, direct), DfE School Census 2024/25 calibration, James-Stein shrinkage, 1,000 Monte Carlo simulations, backcast validation (MAE 1.71pp vs NEWETHPOP 2.58pp across 269 areas).
+**Data:** NEWETHPOP Leeds2 projection (DOI: 10.5255/UKDA-SN-852508) vs ONS Census 2021 TS021 via NOMIS API. Full validation data and error tables published at asylumstats.co.uk. Methodology: Hamilton-Perry v7.0 single-year-of-age model, 20 ethnic groups, Census 2011 DC2101EW (18 groups, observed) + Census 2021 custom dataset (20 groups, direct), DfE School Census 2024/25 calibration, James-Stein shrinkage, 1,000 Monte Carlo simulations, NEWETHPOP validation across 296 areas (MAE 3.95pp, RMSE 5.21pp).

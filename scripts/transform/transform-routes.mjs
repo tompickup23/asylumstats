@@ -1640,6 +1640,34 @@ const communitySponsorshipCumulative =
     (point) => point.periodLabel === "2014 - 2025"
   )?.value ?? null;
 
+// Most of this total is not an arrival.
+//
+// Hum_01 splits its own total into "out of country grants", which are people offered a
+// route from outside the UK, and "in country grants", which the Home Office's notes
+// define as "those granted extensions within the UK: Ukraine Extension Schemes grants and
+// BN(O) Route extension grants". For the year ending March 2026 that split is 43,620
+// against 147,189: 77 per cent of the headline is an extension for someone already here.
+//
+// It is also what the apparent surge is made of. The total went 74,953 to 190,809 in a
+// year, and in-country grants went 16,494 to 147,189 over the same period as the Ukraine
+// Permission Extension Scheme opened. Read as arrivals, that is a 155 per cent rise in
+// people coming to Britain. Out of country grants actually FELL, 58,459 to 43,620.
+//
+// So the split travels with the series. A figure this easy to misread should not be
+// available without it.
+const humanitarianSplitPoint = (label) =>
+  (humSeries.get(label) || []).filter((point) => point.value !== null).at(-1) ?? null;
+
+const humanitarianOutOfCountry = humanitarianSplitPoint("Of which out of country grants");
+const humanitarianInCountry = humanitarianSplitPoint("Of which in country grants");
+
+if (!humanitarianOutOfCountry || !humanitarianInCountry) {
+  throw new Error(
+    "Hum_01 no longer carries its out of country / in country split. The safe and legal " +
+      "total is 77% in-country extensions and must not be published as arrivals without it."
+  );
+}
+
 const routeSeries = [
   {
     id: "safe_legal_total",
@@ -1648,7 +1676,20 @@ const routeSeries = [
     schemeStatus: "Mixed route family",
     localBreakdown: "No single local authority split",
     sourceUrl: sourceMeta.safeLegal.source_url,
-    note: "Includes refugee resettlement, refugee family reunion, Ukraine, and BN(O) routes. Do not present as a refugee total.",
+    note:
+      "Includes refugee resettlement, refugee family reunion, Ukraine and BN(O) routes. " +
+      "Do not present as a refugee total, and do not read it as arrivals: " +
+      `${humanitarianInCountry.value.toLocaleString()} of the ` +
+      `${((humSeries.get("Total") || []).filter((p) => p.value !== null).at(-1)?.value ?? 0).toLocaleString()} ` +
+      `in ${humanitarianInCountry.periodLabel} were granted in country, which the Home Office ` +
+      "defines as extensions for people already in the UK.",
+    split: {
+      periodLabel: humanitarianOutOfCountry.periodLabel,
+      outOfCountry: humanitarianOutOfCountry.value,
+      inCountry: humanitarianInCountry.value,
+      outOfCountryLabel: "Granted out of country",
+      inCountryLabel: "Extensions granted in country"
+    },
     series: (humSeries.get("Total") || []).filter((point) => point.value !== null)
   },
   {
