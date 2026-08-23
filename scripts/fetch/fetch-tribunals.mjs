@@ -40,14 +40,29 @@ function fileSha256(filePath) {
 mkdirSync(rawDir, { recursive: true });
 mkdirSync(manifestDir, { recursive: true });
 
+// Two vocabularies in one file, on purpose. This fetcher named its fields
+// releaseTitle/nextEditionDate/landingUrl; scripts/audit/source-freshness.mjs reads
+// release/nextEdition/landing, because that is what build-source-manifest.mjs writes.
+// The audit was reading a hand-built manifest that this fetcher then overwrote the first
+// time the refresh cron actually completed, on 23 August, which quietly took moj_tribunals
+// out of the freshness check altogether: it reported "no-cycle" and would have said
+// nothing at all if the 10 September release were missed. Both spellings are written now,
+// so whichever runs last leaves the alarm armed.
 const manifest = {
   generatedAt: new Date().toISOString(),
+  dataset: "moj_tribunals",
   datasetId: "moj_tribunals",
+  publisher: "Ministry of Justice",
+  cadence: "quarterly",
+  release: "Tribunal Statistics Quarterly: January to March 2026",
   releaseTitle: "Tribunal Statistics Quarterly: January to March 2026",
   releasePeriodLabel: "Q4 2025/26",
   releasePeriodBasis: "financial_year_quarter",
   releaseDate: "2026-06-11",
+  nextEdition: "2026-09-10",
   nextEditionDate: "2026-09-10",
+  landing:
+    "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
   landingUrl:
     "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
   fetchedFileCount: sourceFiles.length,
