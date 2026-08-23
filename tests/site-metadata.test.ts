@@ -36,8 +36,11 @@ describe("site metadata helpers", () => {
     expect(paths).toContain("/routes/");
     expect(paths).toContain("/entities/");
     expect(paths).toContain("/spending/");
-    expect(paths).toContain("/councils/");
     expect(paths).not.toContain("/hotels/");
+    // /councils/ is noIndex research infrastructure and is deliberately not listed. The
+    // hub used to be here while its own page carried noIndex, which asked search engines
+    // to index a page telling them not to.
+    expect(paths).not.toContain("/councils/");
     // Hub pages are indexable; individual noindex'd profile pages must not slip in
     expect(paths.some((path) => /^\/entities\/[^/]+/.test(path))).toBe(false);
     expect(paths.some((path) => /^\/councils\/[^/]+/.test(path))).toBe(false);

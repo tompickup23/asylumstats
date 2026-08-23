@@ -13,7 +13,11 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/places", label: "Places", desc: "Every UK local authority" },
       { href: "/national", label: "National", desc: "UK-wide totals" },
       { href: "/regional", label: "Regional", desc: "9 English regions + nations" },
-      { href: "/councils", label: "Councils", desc: "Accommodation by council" },
+      // /councils is not linked here on purpose. It is noIndex research infrastructure
+      // that describes itself as "context only", and its headline £3.6bn is Lancashire
+      // County Council's entire spend corpus rather than asylum spend. Putting it in the
+      // primary nav pointed all 478 pages at it and invited that figure to be read as an
+      // asylum number. The page still resolves at its URL for anyone working with it.
     ],
   },
   {

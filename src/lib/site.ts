@@ -23,7 +23,11 @@ const INDEXABLE_STATIC_PATHS = [
   "/places/counties/",
   "/national/",
   "/regional/",
-  "/councils/",
+  // /councils/ is deliberately absent. Its own page calls itself "context infrastructure,
+  // context only", it holds a single body, and its headline figure is Lancashire County
+  // Council's whole £3.6bn spend corpus, which is explicitly NOT asylum spend. It keeps
+  // its noIndex, so listing it here would ask search engines to index a page that tells
+  // them not to. Individual /councils/<body>/ pages are noIndex for the same reason.
   "/spending/",
   "/entities/",
   "/compare/",
