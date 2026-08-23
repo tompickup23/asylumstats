@@ -116,6 +116,34 @@ describe("the same metric reads the same on every page that prints it", () => {
     expect(teaser).toContain("74.4 &rarr; 55.0%");
   });
 
+  /**
+   * The one this file missed the first time. The teaser carried the corrected stat
+   * (74.4 -> 55.0%) beside a sparkline still plotting the v7.0 series from a hardcoded
+   * array, plus an aria-label spelling all four old numbers out. Checking that the right
+   * figure appears somewhere on a page does not establish that the wrong one is gone, so
+   * this asserts the absence of the superseded values rather than the presence of the new.
+   */
+  it("carries no superseded national percentage in a rendered component", () => {
+    const superseded = ["80.5", "73.3", "48.7", "40.2", "72.5", "50.5", "52.7"];
+    const offenders: string[] = [];
+    for (const file of ["src/components/SisterSiteTeaser.astro", "src/pages/index.astro"]) {
+      const text = read(file);
+      for (const value of superseded) {
+        if (new RegExp(`${value.replace(".", "\\.")}\\s?%|pct: ${value.replace(".", "\\.")}`).test(text)) {
+          offenders.push(`${file}: ${value}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("derives the national trajectory rather than writing it in", () => {
+    // Both surfaces must go through the helper, so a model change moves them.
+    for (const file of ["src/components/SisterSiteTeaser.astro", "src/pages/index.astro"]) {
+      expect(read(file), file).toContain("nationalWhiteBritishShare");
+    }
+  });
+
   it("agrees on the area count", () => {
     const n = distinctAreaCodes().length;
     expect(finding).toContain(`${n} distinct local authorities`);
@@ -139,7 +167,7 @@ describe("the withdrawn claim cannot come back", () => {
     "src/content/findings/newethpop-validation-2021.md",
     // Its own correction notice has to be able to say it used to read 109.
     "src/content/findings/109-areas-minority-wbi-2051.md",
-    "src/data/mock/releases.json",
+    "src/data/site/releases.json",
     "src/pages/releases.astro",
   ];
 

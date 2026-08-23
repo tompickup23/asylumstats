@@ -46,12 +46,24 @@ const SOURCE_DATASET_NAMES: Record<string, string> = {
   asylum_awaiting_decision: "asylum work in progress",
   asylum_outcome_analysis: "asylum outcome analysis",
   asylum_support: "asylum support",
-  asylum_appeals_mar_2023: "asylum appeals lodged (series discontinued after 2023 Q1)",
+  moj_tribunals: "tribunal statistics quarterly",
   returns: "returns",
   illegal_entry_routes: "irregular entry detections",
   local_immigration_groups: "local authority immigration groups"
 };
 
+const SOURCE_PUBLISHERS: Record<string, string> = {
+  moj_tribunals: "Ministry of Justice"
+};
+
+/**
+ * Every chart on this page carries a source line, and this is the only thing that makes that
+ * true. It returns {} on a miss, so a chart pointed at an id that is not in the payload loses
+ * its attribution silently rather than failing the build: the two tribunal charts were pointed
+ * at asylum_appeals_mar_2023, a discontinued Home Office series the transform deliberately
+ * drops from the registry, and rendered with no source at all. The test suite now asserts that
+ * every id used here resolves.
+ */
 function chartSource(sourceId: string): { source?: string; sourceUrl?: string } {
   const entry = sourceRegistry.get(sourceId);
   if (!entry) {
@@ -63,8 +75,13 @@ function chartSource(sourceId: string): { source?: string; sourceUrl?: string } 
     ? new Date(entry.release_date).toLocaleDateString("en-GB", { month: "long", year: "numeric" })
     : null;
 
+  // Publisher per dataset. Everything on this page is Home Office except the tribunal
+  // series, which is MOJ, and attributing an MOJ release to the Home Office is wrong in the
+  // one place a reader would go to check it.
+  const publisher = SOURCE_PUBLISHERS[sourceId] ?? "Home Office";
+
   return {
-    source: released ? `Home Office, ${datasetName}, released ${released}` : `Home Office, ${datasetName}`,
+    source: released ? `${publisher}, ${datasetName}, released ${released}` : `${publisher}, ${datasetName}`,
     sourceUrl: entry.source_url
   };
 }
@@ -562,7 +579,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Tribunal appeals received"
         description={postDecisionPath.appeals.scopeNote}
         tone="warm"
-      {...chartSource("asylum_appeals_mar_2023")}
+      {...chartSource("moj_tribunals")}
         />
       <TrendChart
         points={(postDecisionPath.appeals.series.openCaseload ?? []).map((point) => ({
@@ -572,7 +589,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Tribunal open caseload"
         description="Cases still open at the end of each financial-year quarter. Receipts have outrun disposals for several years, so the backlog compounds."
         tone="teal"
-      {...chartSource("asylum_appeals_mar_2023")}
+      {...chartSource("moj_tribunals")}
         />
       <TrendChart
         points={(postDecisionPath.returns.series.total ?? []).map((point) => ({

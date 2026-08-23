@@ -10,33 +10,73 @@ const canonicalDir = path.resolve("data/canonical/moj_tribunals");
 const martsDir = path.resolve("data/marts/moj_tribunals");
 const liveDir = path.resolve("src/data/live");
 
+// Read from the manifest the fetcher wrote, never named here. This block used to restate the
+// release and open the ODS by its Q4 2025/26 filename, so on 10 September the fetcher would
+// have pulled April to June and this file would have failed to find it, or silently
+// re-transformed the previous quarter on a machine that still had the old file on disk.
+const fetchManifest = JSON.parse(
+  readFileSync(path.resolve("data/raw/manifests/moj_tribunals.json"), "utf8")
+);
+
+function manifestFile(role, pattern) {
+  const entry = fetchManifest.files?.find((file) => pattern.test(file.fileName));
+  if (!entry) {
+    throw new Error(
+      `No ${role} file in data/raw/manifests/moj_tribunals.json. Files listed: ` +
+        (fetchManifest.files ?? []).map((file) => file.fileName).join(", ") +
+        ". Run `npm run fetch:tribunals` first; this transform will not guess a filename."
+    );
+  }
+  return entry;
+}
+
+const mainTablesEntry = manifestFile("main tables", /Main_Tables.*\.ods$/i);
+
 const sourceFiles = {
-  mainTables: path.join(rawDir, "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods"),
+  mainTables: path.join(rawDir, mainTablesEntry.fileName),
   nationalCsv: path.join(rawDir, "csvs", "Receipts and Disposals National.csv")
 };
 
 const release = {
-  title: "Tribunal Statistics Quarterly: January to March 2026",
-  periodLabel: "Q4 2025/26",
-  periodCoverage: "January to March 2026",
-  publishedDate: "2026-06-11",
-  nextEditionDate: "2026-09-10",
-  nextEditionCoverage: "April to June 2026"
+  title: fetchManifest.releaseTitle,
+  periodLabel: fetchManifest.releasePeriodLabel,
+  periodCoverage: fetchManifest.releasePeriodCoverage,
+  publishedDate: fetchManifest.releaseDate,
+  nextEditionDate: fetchManifest.nextEditionDate,
+  nextEditionCoverage: fetchManifest.nextEditionCoverage
 };
+
+for (const [field, value] of Object.entries(release)) {
+  if (!value) {
+    throw new Error(
+      `data/raw/manifests/moj_tribunals.json has no ${field}. The manifest predates the ` +
+        "derived-release fetcher. Re-run `npm run fetch:tribunals`."
+    );
+  }
+}
 
 const sourceMeta = {
   mojTribunals: {
-    source_id: "moj_tribunals_q4_2025_26",
-    source_url:
-      "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+    // Period-free, deliberately. This id was moj_tribunals_q4_2025_26, and routes.astro looks
+    // charts up by it: chartSource returns {} on a miss, so the next release would have
+    // silently stripped the source line off the tribunal charts rather than failing.
+    source_id: "moj_tribunals",
+    source_url: fetchManifest.landingUrl,
+    attachment_url: mainTablesEntry.sourceUrl,
     methodology_url: "https://www.gov.uk/government/collections/tribunals-statistics",
     release_date: release.publishedDate
   }
 };
 
 const CHAMBER_LABEL = "First-tier Tribunal, Immigration and Asylum Chamber";
+
+/** "2025/26" shifted by n years, e.g. -1 gives "2024/25". */
+function shiftFinancialYear(label, offset) {
+  const match = /^(\d{4})\/(\d{2})$/.exec(label);
+  if (!match) throw new Error(`Unrecognised financial-year label "${label}".`);
+  const start = Number(match[1]) + offset;
+  return `${start}/${String((start + 1) % 100).padStart(2, "0")}`;
+}
 
 // Case-type columns we publish. The MOJ table also carries Managed Migration, Entry Clearance,
 // Family Visit Visa, Deport and others, Deportation Appeals and Deprivation of Citizenship, but
@@ -388,10 +428,20 @@ const annual = {
   disposals: pickSeries(disposalsRows, { periodType: "year", column: "Total", outcome: DISPOSALS_OUTCOME })
 };
 
+// All four derive from the release. The three that were written in here meant a new edition
+// would compare the wrong quarters: on the April to June release, "Q4 2024/25" is not the
+// year-ago comparison for Q1 2026/27.
 const latestPeriodLabel = release.periodLabel;
-const previousPeriodLabel = "Q4 2024/25";
-const latestAnnualLabel = "2025/26";
-const previousAnnualLabel = "2024/25";
+const [latestQuarterToken, latestAnnualLabel] = latestPeriodLabel.split(" ");
+const previousAnnualLabel = shiftFinancialYear(latestAnnualLabel, -1);
+const previousPeriodLabel = `${latestQuarterToken} ${previousAnnualLabel}`;
+
+// "January to March 2026" and its year-ago counterpart, for the timeliness table headers.
+const latestQuarterCoverage = release.periodCoverage;
+const previousQuarterCoverage = release.periodCoverage.replace(
+  /(\d{4})$/,
+  (year) => String(Number(year) - 1)
+);
 
 const caseTypeSeries = CASE_TYPES.map((caseType) => {
   const receipts = pickSeries(receiptsRows, { periodType: "quarter", column: caseType.column });
@@ -443,13 +493,13 @@ function readTimelinessBlock(rows, chamberMatcher, labels) {
 const annualTimeliness = readTimelinessBlock(
   timelinessAnnualRows,
   /First-tier Tribunal \(Immigration and Asylum Chamber\)/,
-  { "2024/25": "previousMeanWeeks", "2025/26": "latestMeanWeeks" }
+  { [previousAnnualLabel]: "previousMeanWeeks", [latestAnnualLabel]: "latestMeanWeeks" }
 );
 
 const quarterlyTimeliness = readTimelinessBlock(
   timelinessQuarterRows,
   /First Tier Tribunal \(Immigration and Asylum Chamber\)/,
-  { "January to March 2025": "previousMeanWeeks", "January to March 2026": "latestMeanWeeks" }
+  { [previousQuarterCoverage]: "previousMeanWeeks", [latestQuarterCoverage]: "latestMeanWeeks" }
 );
 
 const caseTypeTimelinessStart = timelinessCaseTypeRows.findIndex((row) =>
@@ -467,6 +517,12 @@ for (const row of timelinessCaseTypeRows.slice(caseTypeTimelinessStart + 1, case
 // ---------------------------------------------------------------------------
 // Reconcile
 // ---------------------------------------------------------------------------
+
+// The reconciliation anchors below were read off the published tables for this release and
+// are the only thing establishing that the ODS parse is reading the right cells. MOJ moves
+// columns between editions, so they are deliberately release-specific and the transform
+// refuses to run when they stop matching.
+const ANCHORS_RECORDED_FOR = "Q4 2025/26";
 
 const reconciliationChecks = [];
 
@@ -496,7 +552,7 @@ check(
   findPoint(asylumProtection.openCaseload, previousPeriodLabel)?.value,
   50976
 );
-check("mean weeks to clear, January to March 2026", quarterlyTimeliness.latestMeanWeeks, 61);
+check(`mean weeks to clear, ${latestQuarterCoverage}`, quarterlyTimeliness.latestMeanWeeks, 61);
 for (const caseType of CASE_TYPES) {
   check(
     `mean weeks to clear by case type, ${caseType.id}`,
@@ -563,9 +619,19 @@ if (failedChecks.length > 0) {
   const detail = failedChecks
     .map((entry) => `  ${entry.label}: parsed ${entry.actual}, expected ${entry.expected}`)
     .join("\n");
+  const newEdition = latestPeriodLabel !== ANCHORS_RECORDED_FOR;
   throw new Error(
-    `MOJ tribunal reconciliation failed. The published figures no longer match the parse:\n${detail}\n` +
-      "If this is a new MOJ edition, update the expected values in scripts/transform/transform-tribunals.mjs."
+    `MOJ tribunal reconciliation failed. The published figures no longer match the parse:\n${detail}\n\n` +
+      (newEdition
+        ? `This is ${latestPeriodLabel} and the anchors above were recorded for ` +
+          `${ANCHORS_RECORDED_FOR}, so this is the expected failure on a new edition rather ` +
+          "than a broken parse. Read the new figures off the published tables at " +
+          `${fetchManifest.landingUrl}, replace the expected values in ` +
+          "scripts/transform/transform-tribunals.mjs, and move ANCHORS_RECORDED_FOR to " +
+          `${latestPeriodLabel}. Do not copy them from the parse output: the point of these ` +
+          "numbers is that a human checked them against what MOJ published."
+        : `This is still ${latestPeriodLabel}, the edition the anchors were recorded for, so ` +
+          "the parse has changed rather than the data. Something is reading the wrong cells.")
   );
 }
 
@@ -634,13 +700,13 @@ const revisionStatusByPeriod = quarterly.receipts
   }));
 
 const periodBasisNote =
-  "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.";
+  `MOJ publishes tribunal statistics on financial-year quarters, so ${latestPeriodLabel} covers ${latestQuarterCoverage}. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.`;
 
 const continuityNote =
   "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.";
 
 const provisionalNote =
-  "Q4 2025/26 figures are provisional and subject to revision. Q1 to Q3 2025/26 were revised in this edition as part of the annual reconciliation exercise, and 2024/25 is now final.";
+  `${latestPeriodLabel} figures are provisional and subject to revision. Earlier quarters of ${latestAnnualLabel} are revised as later editions land, and ${previousAnnualLabel} is now final.`;
 
 const tribunalAppeals = {
   generatedAt: new Date().toISOString(),
@@ -661,7 +727,7 @@ const tribunalAppeals = {
   caseTypes,
   timeliness: {
     quarterly: {
-      basisLabel: "January to March 2026 against January to March 2025",
+      basisLabel: `${latestQuarterCoverage} against ${previousQuarterCoverage}`,
       latestMeanWeeks: quarterlyTimeliness.latestMeanWeeks ?? null,
       previousMeanWeeks: quarterlyTimeliness.previousMeanWeeks ?? null,
       changeWeeks:
@@ -835,12 +901,19 @@ for (const target of dashboardTargets) {
 
   dashboard.nationalSystemDynamics.postDecisionPath.appeals = appealsBlock;
 
+  // Replace, do not append. This used to add the tribunal source only when its exact id was
+  // absent, so when the id stopped carrying the release period the dashboard ended up
+  // carrying both moj_tribunals_q4_2025_26 and moj_tribunals. Under the old scheme every
+  // edition would have left another dead id behind.
   const sources = Array.isArray(dashboard.sources) ? dashboard.sources : [];
-  const withoutDeadAppeals = sources.filter((entry) => entry.source_id !== "asylum_appeals_mar_2023");
-  if (!withoutDeadAppeals.some((entry) => entry.source_id === sourceMeta.mojTribunals.source_id)) {
-    withoutDeadAppeals.push(sourceMeta.mojTribunals);
-  }
-  dashboard.sources = withoutDeadAppeals;
+  dashboard.sources = [
+    ...sources.filter(
+      (entry) =>
+        entry.source_id !== "asylum_appeals_mar_2023" &&
+        !String(entry.source_id ?? "").startsWith("moj_tribunals")
+    ),
+    sourceMeta.mojTribunals
+  ];
 
   if (Array.isArray(dashboard.limitations)) {
     dashboard.limitations = dashboard.limitations.map((item) =>

@@ -1,0 +1,71 @@
+[
+  {
+    "date": "2026-08-23",
+    "title": "Model v8.0: recalibrated on an out-of-sample test, and the counts that follow from it",
+    "summary": "The projection model was re-fitted and tested by fitting cohort change ratios on Census 2001 to 2011, forecasting 2021, and scoring against the actual Census 2021, so the fitting window never touches the target. On the White British share it scores mean absolute error 1.56pp with a bias of +0.05pp across 285 areas. The settings it replaces scored 2.82pp with a bias of -2.13pp on the same test, meaning the previous model projected change too fast rather than too slow. Shrinkage toward the national ratio is K=25 and the growth ceiling is 1.65 per decade, both chosen on that test. Counts move with it: 86 local authorities are projected below a 50% White British share by 2051 rather than 109, 59 of them currently majority, and Birmingham's 2051 share is 14.9% rather than 10.7%. The backcast comparison with NEWETHPOP is withdrawn; the defensible comparison is out-of-sample against out-of-sample, this model at 1.56pp across 285 areas against NEWETHPOP at 3.95pp across 296. Only a one-decade horizon has been tested.",
+    "sourceUrl": "https://www.ons.gov.uk/census"
+  },
+  {
+    "date": "2026-08-23",
+    "title": "Estate design system, five claim corrections, and a data refresh that had been failing since July",
+    "summary": "The site moved onto the shared visual system used across the network. Five published claims were corrected: the 190,809 safe-and-legal humanitarian grants for year ending March 2026 are 77 per cent in-country extensions rather than arrivals, and out-of-country grants fell from 58,459 to 43,620; the 107,003 people in supported accommodation was the 31 December 2025 quarter end, not the current 97,519 at 31 March 2026, and it had been understating every area's share by about 9 per cent; and the claim that 70 nationalities see grant rates rise after appeal was never right, the figure being 101 of 105. Separately, the scheduled data refresh had failed on every run since at least 13 July, across five distinct faults, and now runs Monday and Thursday and deploys what it commits.",
+    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
+  },
+  {
+    "date": "2026-08-21",
+    "title": "Small boats weekly series refreshed to 20 August 2026",
+    "summary": "The Home Office weekly time series was 17 days past its own publication cadence and had been left behind by a refresh job that never included it. Now current to 20 August 2026.",
+    "sourceUrl": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats"
+  },
+  {
+    "date": "2026-06-11",
+    "title": "Tribunal appeal outcomes updated to January to March 2026",
+    "summary": "MOJ tribunal statistics for Q4 2025/26, covering January to March 2026 in the First-tier Tribunal Immigration and Asylum Chamber. These are financial-year quarters and are not interchangeable with the calendar quarters used for Home Office claims, decisions and support elsewhere on this site. Next edition 10 September 2026, covering April to June 2026.",
+    "sourceUrl": "https://www.gov.uk/government/collections/tribunals-statistics"
+  },
+  {
+    "date": "2026-05-21",
+    "title": "Immigration system statistics, year ending March 2026",
+    "summary": "The Home Office quarterly release. Routes, claims, decisions, backlog, support and returns updated to the year ending March 2026, with the accommodation snapshot at 31 March 2026.",
+    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
+  },
+  {
+    "date": "2026-04-14",
+    "title": "Model v7.0: Census 2011 DC2101EW, per-LA migration, 25 findings",
+    "summary": "Major model upgrade. Census 2011 DC2101EW (18 groups, observed) replaces NEWETHPOP proportional splitting. MAE improved 2.45 to 1.71pp. Per-LA ethnic migration rates from Census 2021. Scenario selector on every place page. Cost calculator. Backlog clock. Postcode resolver. Grant rate appeal toggle. 25 findings live. Withdrawn 13 August 2026: the 1.71pp was a backcast that fitted its ratios on the same two Censuses it was then scored against, so it measured the model's guardrails rather than its accuracy, and its bias ran the opposite way to the truth. The figures above are recorded as reported at the time and should not be quoted. Superseded by v8.0 on 23 August 2026."
+  },
+  {
+    "date": "2026-04-14",
+    "title": "Asy_D04 outcome analysis: true grant rates after appeals",
+    "summary": "Home Office outcome analysis (Dec 2025) integrated. 103 nationalities with initial + appeal-adjusted grant rates. Average uplift +14.1pp. Iran 67% initial to 85% after appeals. Sri Lanka 27% to 59%."
+  },
+  {
+    "date": "2026-04-14",
+    "title": "ONS Births 2024 fertility data integrated",
+    "summary": "Empirical TFRs from ONS Linked Births 2024. White British TFR 1.31, Pakistani 2.52. National ASFRs by age band. IMD deprivation fertility gradient 1.66x. 567,460 births analysed."
+  },
+  {
+    "date": "2026-02-26",
+    "title": "National asylum statistics updated",
+    "summary": "Year ending December 2025 figures published, including 107,200 people on support and 31,000 in hotels.",
+    "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
+  },
+  {
+    "date": "2026-01-23",
+    "title": "Committee report confirms 197 hotels in use",
+    "summary": "Home Affairs Committee report captures the official count of hotels in use as of 5 January 2026.",
+    "sourceUrl": "https://publications.parliament.uk/pa/cm5901/cmselect/cmhaff/541/report.html"
+  },
+  {
+    "date": "2025-11-27",
+    "title": "Local authority asylum and resettlement tables updated",
+    "summary": "Latest public local release remained the year ending September 2025, with Glasgow still highest by count.",
+    "sourceUrl": "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas"
+  },
+  {
+    "date": "2025-06-12",
+    "title": "Home Office publishes hotel cost factsheet",
+    "summary": "Average daily hotel cost for 2024/25 published at GBP 5.77 million.",
+    "sourceUrl": "https://homeofficemedia.blog.gov.uk/2025/06/12/factsheet-asylum-accommodation-and-support/"
+  }
+]
