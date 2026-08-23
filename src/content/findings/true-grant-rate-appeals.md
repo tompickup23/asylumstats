@@ -7,6 +7,7 @@ stat_label: "avg appeal uplift"
 verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
 source_label: "Home Office Asy_D04 Outcome Analysis, Dec 2025"
+superseded_by: "home-office-appeal-uplift-may2026"
 summary: "Home Office outcome analysis data shows initial asylum decision grant rates understate the true protection rate. Of 105 nationalities tracked, 101 see appeal outcomes lift grant rates, by an average of 14.0 percentage points. Sri Lanka: 27% initial to 59% after appeals. Iran: 67% to 85%. Iraq: 31% to 56%."
 ---
 

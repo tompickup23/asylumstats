@@ -14,6 +14,16 @@ const findings = defineCollection({
     source_url: z.string().url(),
     source_label: z.string().default("Source"),
     summary: z.string(),
+    /**
+     * Slug of the article that replaces this one.
+     *
+     * Set when a later article covers the same claim on a newer data release. The page
+     * stays at its URL, because deleting a published URL throws away whatever inbound
+     * links and ranking it has, but it points its canonical at the replacement so search
+     * engines consolidate the two rather than treating them as competing duplicates.
+     * It also drops out of the listings, the sitemap and the search index.
+     */
+    superseded_by: z.string().optional(),
     // SR integration
     sr_article_id: z.string().optional(),
     sr_published: z.boolean().default(false),

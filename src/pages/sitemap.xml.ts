@@ -17,7 +17,9 @@ export const GET: APIRoute = async () => {
   const paths = getIndexableSitePaths();
 
   // Add findings
-  const findings = await getCollection("findings");
+  // A superseded article declares another page canonical, so listing it here would ask
+  // search engines to index a URL we have just told them is not the canonical one.
+  const findings = (await getCollection("findings")).filter((f) => !f.data.superseded_by);
   for (const finding of findings) {
     paths.push(`/findings/${finding.id.replace(/\.md$/, "")}/`);
   }

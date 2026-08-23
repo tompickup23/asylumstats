@@ -157,6 +157,7 @@ const topAreas = localRouteLatest.areas
 // Get latest 3 findings for the strip
 const allFindings = await getCollection("findings");
 const topFindings = allFindings
+  .filter((f) => !f.data.superseded_by)
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
 

@@ -8,7 +8,7 @@ export const GET: APIRoute = async () => {
   const entries = getPublicSearchEntries();
 
   // Add findings to search index
-  const findings = await getCollection("findings");
+  const findings = (await getCollection("findings")).filter((f) => !f.data.superseded_by);
   const findingEntries = findings.map((f) => ({
     href: `/findings/${f.id.replace(/\.md$/, "")}/`,
     title: f.data.headline,
