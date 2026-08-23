@@ -2,14 +2,24 @@ name: Refresh data
 
 on:
   schedule:
+    # Monday morning, the standing refresh.
     - cron: "0 8 * * 1"
+    # Thursday lunchtime, for the quarterly. The Home Office publishes the whole asylum
+    # corpus at 09:30 on the last Thursday of February, May, August and November, and a
+    # Monday-only cron leaves the site showing the previous quarter for up to four days
+    # after the release it is meant to be reporting. 12:00 UTC clears the 08:30 UTC
+    # publication with hours to spare, and on the other fifty weeks of the year the run
+    # finds nothing new and commits nothing.
+    - cron: "0 12 * * 4"
   workflow_dispatch:
 
 # The job commits and pushes refreshed data back to main, so the workflow
 # token needs contents: write. Without this it defaults to read-only and
-# the final `git push` fails with 403.
+# the final `git push` fails with 403. actions: write is for the deploy
+# dispatch at the end; see the comment on that step.
 permissions:
   contents: write
+  actions: write
 
 jobs:
   refresh:
@@ -27,30 +37,96 @@ jobs:
         run: npm run ingest:tribunals
       - name: Fetch and transform routes
         run: npm run ingest:routes
-      - name: Fetch and transform regional sources
-        run: npm run ingest:regionalsources
+      # Small boats was missing from this workflow entirely, which is why the site's most
+      # newsworthy weekly figure could only ever go stale: the Home Office publishes it on
+      # Fridays, this runs on Mondays, and nothing here fetched it. It sat seventeen days
+      # behind its own ten-day limit until 23 August, when it was refreshed by hand.
+      # No GitHub event data is interpolated here.
+      - name: Fetch and transform small boats
+        run: npm run ingest:smallboats
+      # Hotels must run before money: the money ledger is built on top of the hotel entity
+      # ledger it produces. That dependency was undeclared and only surfaced when this
+      # workflow was reordered, because until then the job always died at regional sources
+      # before either of them ran.
       - name: Fetch and transform hotels
         run: npm run ingest:hotels
       - name: Transform money ledger
         run: npm run ingest:money
+
+      # Regional partner pages, and the one ingest allowed to fail without taking the Home
+      # Office data with it. On 17 August a single unreachable host, www.wsmp.wales, hung
+      # for 133 seconds and then aborted the whole job, so tribunals, routes and money never
+      # reached the commit step below and nothing on the site refreshed. This is colour
+      # around the national figures; it is not worth the national figures. A failure here
+      # still ends the run red, at the bottom, once the core data is safely committed.
+      # No GitHub event data is interpolated here.
+      - name: Fetch and transform regional sources
+        id: regional
+        continue-on-error: true
+        run: npm run ingest:regionalsources
       # Runs after the ingests so a fetch failure does not mask a stale source, and
       # the date is passed in rather than read inside the script so a local run of the
       # same commit gives the same answer. No GitHub event data is interpolated here.
       - name: Check source freshness
         run: node scripts/audit/source-freshness.mjs "$(date -u +%F)"
 
+      # Link rot, checked weekly rather than on every push, because it depends on other
+      # people's servers being up. Advisory: a flaky external host must not fail the data
+      # refresh. This exists because the most prominent figure on the homepage, the
+      # £5.77M a day hotel cost, linked to a Home Office factsheet that had been taken
+      # down, and nothing noticed. No GitHub event data is interpolated here.
+      - name: Check source links resolve
+        continue-on-error: true
+        run: npm run audit:links
+
+      # Ignore run timestamps when deciding whether anything changed.
+      #
+      # Six transforms stamp `generatedAt`/`generated_at` with new Date() into committed
+      # artefacts. Those move on every run whether or not a single figure did, so
+      # `git diff --quiet` was always false and this workflow committed every Monday
+      # regardless. That buries a real data change in a stream of identical ones and
+      # makes the history useless for answering "when did this number last move".
+      #
+      # So the comparison drops timestamp-only lines. A diff that is nothing but
+      # generatedAt is not a data change. No GitHub event data is interpolated here.
       - name: Check for data changes
         id: changes
         run: |
-          git diff --quiet src/data/live/ data/marts/ data/canonical/ data/raw/manifests/ || echo "changed=true" >> "$GITHUB_OUTPUT"
+          substantive=$(git diff -U0 src/data/live/ data/marts/ data/canonical/ data/raw/manifests/ \
+            | grep -E '^[+-]' \
+            | grep -Ev '^(\+\+\+|---)' \
+            | grep -Ev '"(generatedAt|generated_at)"' \
+            || true)
+          if [ -n "$substantive" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Substantive data changes found:"
+            echo "$substantive" | head -40
+          else
+            echo "Only run timestamps moved. Nothing to commit."
+          fi
       - name: Commit and push updated data
         if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
-          git commit -m "data: refresh tribunal + route + hotel + money data $(date -u +%Y-%m-%d)"
+          git commit -m "data: refresh tribunal + route + small boats + hotel + money data $(date -u +%Y-%m-%d)"
           git push
+
+      # Ask for a deploy, because the push above will not produce one.
+      #
+      # GitHub does not raise workflow events for pushes made with the default
+      # GITHUB_TOKEN, which exists to stop workflows triggering themselves forever. The
+      # side effect here is that this job could commit fresh Home Office data to main and
+      # the live site would keep serving the old data until some unrelated human push
+      # happened along. On a quarterly release day that is the whole point of the run,
+      # lost. Dispatching deploy.yml explicitly is the documented way round it.
+      # No GitHub event data is interpolated here.
+      - name: Deploy the refreshed data
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main
 
       # Last, and strict: the data above has already been committed, so this only
       # decides whether the run ends loudly. Every stale item found on 13 Aug 2026 had
@@ -58,3 +134,23 @@ jobs:
       # against today.
       - name: Fail if a source is past its next edition
         run: node scripts/audit/source-freshness.mjs "$(date -u +%F)" --strict
+
+      # Same principle as the gate above: the core data has already been committed, so this
+      # only decides whether the run ends red. `always()` so a stale source and a dead
+      # regional host both get reported rather than the first one hiding the second.
+      # Reads step outcomes only; no GitHub event data is interpolated here.
+      - name: Fail if a secondary source was skipped
+        if: always()
+        env:
+          REGIONAL_OUTCOME: ${{ steps.regional.outcome }}
+        run: |
+          skipped=""
+          if [ "$REGIONAL_OUTCOME" = "failure" ]; then
+            skipped="$skipped regional-sources"
+          fi
+          if [ -n "$skipped" ]; then
+            echo "Secondary ingest failed:$skipped"
+            echo "The Home Office data still refreshed and was committed."
+            exit 1
+          fi
+          echo "Secondary ingests completed."

@@ -1,13 +1,14 @@
 ---
-headline: "107,003 on asylum support. 20% are in just 10 councils."
+headline: "107,003 on asylum support at end-2025. 20% are in just 10 councils."
 date: "2026-04-14"
 category: routes
 stat_value: "20%"
 stat_label: "In 10 councils"
+model_recalibrated: true
 verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
 source_label: "Home Office Local Authority Data, Dec 2025"
-summary: "21,205 of the 107,003 people on asylum support are concentrated in just 10 local authorities. Glasgow leads with 3,835 (rate 59 per 10,000). Birmingham: 2,637. Liverpool: 2,189. Meanwhile dozens of councils take zero. The dispersal system is not dispersing."
+summary: "21,205 of the 107,003 people on asylum support at 31 December 2025 are concentrated in just 10 local authorities. Glasgow leads with 3,835 (rate 59 per 10,000). Birmingham: 2,637. Liverpool: 2,189. Meanwhile dozens of councils take zero. The dispersal system is not dispersing."
 ---
 
 **Ten councils carry a fifth of the national asylum caseload. Dozens carry nothing.**
@@ -25,7 +26,7 @@ summary: "21,205 of the 107,003 people on asylum support are concentrated in jus
 | Coventry | 1,719 | 46.6 |
 | Nottingham | 1,605 | 48.5 |
 
-**21,205 people.** 19.8% of 107,003. In 10 councils out of 400+.
+**21,205 people.** 19.8% of the 107,003 on support at 31 December 2025. In 10 councils out of 400+.
 
 Hillingdon: 64.8 per 10,000 residents. The national average is approximately 18. Hillingdon carries 3.6 times the average load. It is also the borough containing Heathrow Airport.
 

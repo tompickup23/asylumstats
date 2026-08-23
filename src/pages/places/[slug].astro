@@ -18,6 +18,7 @@ import { getAreaTrendSummary } from "../../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
 import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
+import { countyForAreaCode, buildCountyPath } from "../../lib/county-directory";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 import {
@@ -37,6 +38,10 @@ import schoolValidationData from "../../data/live/school-validation.json";
 import scenarioSummaries from "../../data/live/scenario-summaries.json";
 import migrationEthnicity from "../../data/live/migration-ethnicity.json";
 import schoolFertilityProxy from "../../data/live/school-fertility-proxy.json";
+import {
+  ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
+  accommodationCostForArea
+} from "../../lib/true-cost";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -140,7 +145,7 @@ const publishableTimeline = (ethnicTimeline ?? []).filter(
 // Build ProjectionChart line data
 const ethChartLines = publishableTimeline.length > 0 ? (() => {
   const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
-  const colors: Record<string, string> = { white_british: "#06b6d4", white_other: "#8b9cb3", asian: "#f59e0b", black: "#a78bfa", mixed: "#10b981", other: "#6b7280" };
+  const colors: Record<string, string> = { white_british: "#1a6ba8", white_other: "#8b939c", asian: "#b45309", black: "#6d28d9", mixed: "#a51d5c", other: "#6b7280" };
   const labels: Record<string, string> = { white_british: "White British", white_other: "White Other", asian: "Asian", black: "Black", mixed: "Mixed", other: "Other" };
   return groups.filter(g => Math.max(...publishableTimeline.map((t: any) => t.groups[g])) > 3).map(g => ({
     label: labels[g], color: colors[g],
@@ -175,11 +180,11 @@ const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null)
 
 const relChartLines = religionData ? (() => {
   const relGroups = [
-    { key: "Christian", color: "#7dd3fc", label: "Christian" },
+    { key: "Christian", color: "#1a6ba8", label: "Christian" },
     { key: "No religion", color: "#6b7280", label: "No religion" },
-    { key: "Muslim", color: "#f59e0b", label: "Muslim" },
-    { key: "Hindu", color: "#a78bfa", label: "Hindu" },
-    { key: "Sikh", color: "#10b981", label: "Sikh" }
+    { key: "Muslim", color: "#b45309", label: "Muslim" },
+    { key: "Hindu", color: "#6d28d9", label: "Hindu" },
+    { key: "Sikh", color: "#a51d5c", label: "Sikh" }
   ];
   const years = [2021, 2031, 2041, 2051].filter(y => religionData[y]);
   return relGroups
@@ -190,8 +195,8 @@ const relChartLines = religionData ? (() => {
 const natChartLines = nativityData ? (() => {
   const years = [2021, 2031, 2041, 2051].filter(y => nativityData[y]);
   return [
-    { label: "UK-born", color: "#06b6d4", points: years.map(y => ({ year: y, value: nativityData[y].ukBornPct })) },
-    { label: "Foreign-born", color: "#f59e0b", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
+    { label: "UK-born", color: "#1a6ba8", points: years.map(y => ({ year: y, value: nativityData[y].ukBornPct })) },
+    { label: "Foreign-born", color: "#b45309", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
   ];
 })() : [];
 const crimeProfile = getCrimeProfile(area.areaCode);
@@ -200,23 +205,25 @@ const sendProfile = getSendProfile(area.areaCode);
 const sendPercentile = getSendGrowthPercentile(area.areaCode);
 const ascProfile = getAscProfile(area.areaCode);
 const ascPercentile = getAscSpendPercentile(area.areaCode);
-// Per-area cost is withheld until the True Cost figure is settled.
+// Per-area cost, reinstated on the True Cost v3 constant.
 //
-// The £150/person/day this used to assert was not arbitrary: £5.3bn / 97,519 supported
-// / 365 = £148.90, the site's own True Cost LOW estimate expressed per person per day.
-// It is total-system cost, not accommodation, but the sentence never said so and sat
-// beside accommodation figures, so it read as the latter.
+// Withheld since PR #36 because the base was disputed. It is settled now, but the fix
+// was not simply to swap in the new total. The £150/person/day this used to assert was
+// £5.3bn / 97,519 supported / 365: a TOTAL-SYSTEM numerator over a SUPPORTED-POPULATION
+// denominator. The system total includes post-decision welfare, family reunion and
+// offender costs, incurred for people who are not on asylum support, so that division
+// overstates what an area costs by roughly twice.
 //
-// The problem is the base. True Cost is currently stated five different ways across the
-// site (£5.3bn to £6.3bn and £169/taxpayer on the homepage, £8bn and £230 in the
-// finding, £207 in that finding's own headline, £8.1B in the nav). Per person per day
-// those bases give £148.90, £176.99 and £224.75. Publishing a per-area £ figure derived
-// from a disputed base, on 373 pages, is not defensible on a site whose proposition is
-// that every figure traces to a source.
-//
-// Reinstate this from the single canonical True Cost constant once that lands, the same
-// way the projection interval returns once the model is reconciled.
-const estimatedAnnualCostLabel = "";
+// So this uses the accommodation and support figure instead: audited ASRA outturn over
+// the MEAN supported population of the same financial year, which has the same people
+// top and bottom over the same period. Around £107 per person per day, which sits
+// sensibly against the £119 a night the Home Office publishes for hotels. Dividing by
+// the latest quarter instead would read £117, because supported numbers fell through
+// 2025-26 and the closing stock is the lowest point in the year. See the basis warning
+// in lib/true-cost.ts.
+const estimatedAnnualCostLabel = area.supportedAsylum > 0
+  ? ` Accommodation and support for ${area.supportedAsylum.toLocaleString()} people at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(area.supportedAsylum) / 1_000_000).toFixed(1)}M a year.`
+  : "";
 
 const pressureScore = computePressureScore(
   area.areaCode,
@@ -258,6 +265,10 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
   return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
 }
+// County the area sits in, for the breadcrumb link up to the county page. Null outside
+// England, where this site has no county tier.
+const areaCountyName = countyForAreaCode(area.areaCode);
+
 ---
 
 <BaseLayout
@@ -269,6 +280,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   <Breadcrumbs items={[
     { label: "Places", href: "/places/" },
     { label: area.regionName, href: `/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/` },
+    ...(areaCountyName ? [{ label: areaCountyName, href: buildCountyPath(areaCountyName) }] : []),
     { label: area.areaName }
   ]} />
 
@@ -311,9 +323,9 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
             <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
           </article>
           {wbThreshold && (
-            <article class="stat-tile" style="border-left: 2px solid var(--coral);">
+            <article class="stat-tile" style="border-left: 2px solid var(--critical);">
               <span class="tiny">WB minority by</span>
-              <strong style="color: var(--coral);">~{wbThreshold.year}</strong>
+              <strong style="color: var(--critical);">~{wbThreshold.year}</strong>
             </article>
           )}
         </div>
@@ -363,8 +375,8 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
         annotations={[
           { label: "Rwanda scheme", pointLabel: "Jun 2022" },
           { label: "Albania deal", pointLabel: "Dec 2022" },
-          { label: "Bibby Stockholm", pointLabel: "Sept 2023", color: "rgba(239,68,68,0.4)" },
-          { label: "Rwanda scrapped", pointLabel: "Sept 2024", color: "rgba(239,68,68,0.5)" },
+          { label: "Bibby Stockholm", pointLabel: "Sept 2023", color: "color-mix(in srgb, var(--critical) 40%, transparent)" },
+          { label: "Rwanda scrapped", pointLabel: "Sept 2024", color: "color-mix(in srgb, var(--critical) 50%, transparent)" },
         ]}
       />
       <article class="panel panel-pad">
@@ -756,7 +768,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
           {(schoolFertilityProxy as any)?.areas?.[area.areaCode] && (() => {
             const sfp = (schoolFertilityProxy as any).areas[area.areaCode];
             return sfp.annualWbiChangePp !== 0 ? (
-              <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: rgba(6,182,212,0.04); border-radius: 6px; border: 1px solid rgba(6,182,212,0.1);">
+              <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: color-mix(in srgb, var(--accent) 4%, transparent); border-radius: 6px; border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);">
                 <p class="tiny" style="margin: 0;">
                   <strong>Fertility proxy (10-year school trend):</strong> WBI share in primary schools changing at {sfp.annualWbiChangePp > 0 ? "+" : ""}{sfp.annualWbiChangePp}pp/year.
                   {sfp.annualWbiChangePp < -1 ? " Rapid diversification in young cohorts. The demographic wave is accelerating." :
@@ -848,7 +860,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
                   <div class="stacked-bar-label" style="min-width: 8rem;">
                     <span style="font-size: 0.78rem;">{item.type}</span>
                   </div>
-                  <div class="stacked-bar" style="background: var(--panel-soft);">
+                  <div class="stacked-bar" style="background: var(--bg-subtle);">
                     <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
                   </div>
                   <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
@@ -907,7 +919,7 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
                 <div class="stacked-bar-label" style="min-width: 8rem;">
                   <span style="font-size: 0.78rem;">{need.need}</span>
                 </div>
-                <div class="stacked-bar" style="background: var(--panel-soft);">
+                <div class="stacked-bar" style="background: var(--bg-subtle);">
                   <div class="bar-seg mixed" style={`width: ${need.pct}%`}></div>
                 </div>
                 <div class="stacked-bar-pct">{need.pct.toFixed(1)}%</div>

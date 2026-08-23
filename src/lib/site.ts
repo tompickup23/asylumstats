@@ -1,5 +1,6 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
+import { getCounties } from "./county-directory";
 
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
@@ -19,9 +20,14 @@ export interface ReleaseEntry {
 const INDEXABLE_STATIC_PATHS = [
   "/",
   "/places/",
+  "/places/counties/",
   "/national/",
   "/regional/",
-  "/councils/",
+  // /councils/ is deliberately absent. Its own page calls itself "context infrastructure,
+  // context only", it holds a single body, and its headline figure is Lancashire County
+  // Council's whole £3.6bn spend corpus, which is explicitly NOT asylum spend. It keeps
+  // its noIndex, so listing it here would ask search engines to index a page that tells
+  // them not to. Individual /councils/<body>/ pages are noIndex for the same reason.
   "/spending/",
   "/entities/",
   "/compare/",
@@ -32,6 +38,30 @@ const INDEXABLE_STATIC_PATHS = [
   "/methodology/",
   "/glossary/"
 ] as const;
+
+/**
+ * Regions whose name takes "the" in a sentence.
+ *
+ * Listed rather than guessed. A heuristic on the name gets "the London" or "North West"
+ * wrong depending on which way it leans, and these strings go straight into page titles,
+ * so the article is part of the published copy.
+ */
+const REGIONS_TAKING_THE = new Set([
+  "East Midlands",
+  "East of England",
+  "North East",
+  "North West",
+  "South East",
+  "South West",
+  "West Midlands"
+  // Not "Yorkshire and The Humber": the name already carries its own article, and
+  // "the Yorkshire and The Humber" is not English.
+]);
+
+/** "the North West", but "London". For use inside a sentence or a page title. */
+export function regionNameInSentence(regionName: string): string {
+  return REGIONS_TAKING_THE.has(regionName) ? `the ${regionName}` : regionName;
+}
 
 function slugifyRegionName(regionName: string): string {
   return regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -108,6 +138,12 @@ export function getIndexableSitePaths(): string[] {
 
   for (const area of getPublicPlaceAreas()) {
     paths.add(buildPlacePath(area));
+  }
+
+  // Counties are produced by getStaticPaths, which this function cannot see. They have to
+  // be added here by hand or they build fine and never reach the sitemap.
+  for (const county of getCounties()) {
+    paths.add(county.countyPath);
   }
 
   return [...paths].sort((a, b) => a.localeCompare(b));

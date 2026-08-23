@@ -1,30 +1,98 @@
 @import "tailwindcss";
-@import "@fontsource-variable/manrope";
-@import "@fontsource-variable/sora";
+
+/* Estate brand system, 23 August 2026.
+   briefings/uk-network-brand/BRAND-SYSTEM-2026-08-23.md in the clawd repo is the
+   source of truth; the tokens below are that file's asylumstats block verbatim.
+
+   Source Serif 4 for display, Source Sans 3 for UI. Both are a designed superfamily,
+   both carry real tabular figures, which matters on a site that is almost entirely
+   league tables and stat tiles. Latin and latin-ext only: latin-ext costs 18.4KB and
+   only downloads when a page actually needs one of its glyphs. Self-hosted, because
+   every site in this estate runs a CSP with no font host, so a Google Fonts link would
+   be blocked at the browser.
+
+   Display is loaded at 600 only, UI at 400 and 600. Nothing else is used, so nothing
+   else is shipped. */
+@import "@fontsource/source-serif-4/latin-600.css";
+@import "@fontsource/source-serif-4/latin-ext-600.css";
+@import "@fontsource/source-sans-3/latin-400.css";
+@import "@fontsource/source-sans-3/latin-600.css";
+@import "@fontsource/source-sans-3/latin-ext-400.css";
+@import "@fontsource/source-sans-3/latin-ext-600.css";
 
 :root {
-  color-scheme: dark;
-  /* Brand: Asylum Stats, radar/accountability theme */
-  --bg: #04070d;        /* brand bg: abyss */
-  --bg-soft: #0b1220;   /* brand surface */
-  --bg-deep: #07101d;
-  --ink: #f5f7fb;        /* brand text_bright */
-  --ink-soft: #dbe7f7;   /* brand text */
-  --muted: #91a7c4;      /* brand text_muted */
-  --panel: linear-gradient(180deg, rgba(16, 24, 40, 0.86), rgba(7, 12, 24, 0.94));
-  --panel-strong: linear-gradient(180deg, rgba(18, 30, 52, 0.96), rgba(8, 12, 24, 0.98));
-  --panel-soft: rgba(255, 255, 255, 0.05);
-  --border: #1e293b;     /* brand border */
-  --border-strong: rgba(255, 255, 255, 0.18);
-  --accent: #06b6d4;     /* brand accent: cyan (radar) */
-  --accent-2: #10b981;   /* brand success: emerald */
-  --accent-3: #f59e0b;   /* brand warning: amber */
-  --accent-glow: rgba(6, 182, 212, 0.28);
-  --coral: #ef4444;      /* brand critical */
-  --shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
-  --shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.28);
-  --radius: 28px;
-  --radius-sm: 20px;
+  color-scheme: light;
+
+  /* Shared across the five estate sites. Identical everywhere; only the accent varies. */
+  --bg: #ffffff;
+  --bg-subtle: #f5f6f7;
+  --bg-card: #ffffff;
+  --border: #dbdfe3;
+  --border-strong: #c2c8ce;
+  --text: #171b1f;
+  --text-muted: #545c63;
+  --text-faint: #616970;
+
+  /* The Asylum Stats accent triple. Slate blue at hue 205, deliberately spaced from the
+     other four sites, and deliberately not the #06b6d4 cyan this site used before: that
+     sat 27 degrees from the food hygiene green, and hue is the only thing separating
+     one site in this family from another.
+
+     deep is links, headings and rules. bright is the mark on the dark ground. wash is
+     stat tiles and hovers. */
+  --accent: #2f5773;
+  --accent-bright: #82abcb;
+  --accent-wash: #eef3f7;
+
+  /* The dark ground. Social and Open Graph surfaces only, plus the footer, which is the
+     one place on the page that plays the same role: a closing band, not content. */
+  --ground: #0f1317;
+  --ground-ink: #f4f6f7;
+  --ground-muted: #98a3ac;
+
+  /* Semantic colours. The estate spec does not define these, because it covers identity
+     rather than data. They are the site's own, chosen the way the spec chooses its
+     tokens: computed against all three backgrounds rather than eyeballed, and asserted
+     in tests/brand-contrast.test.mjs.
+
+       positive  6.10 on white, 5.63 on subtle, 5.46 on wash
+       warning   5.91 / 5.47 / 5.29
+       critical  6.57 / 6.08 / 5.89 */
+  --positive: #1f6f4f;
+  --warning: #8a5a10;
+  --critical: #b42318;
+
+  /* Chart series. Four identity hues in a fixed order, then two neutrals for residual
+     buckets. Assigned in order and never cycled.
+
+     The old set was the dark build's: cyan, amber, violet, mint, on near-black. Two of
+     those measured 2.34 and 2.98 against white and the mint and cyan were barely
+     separable once moved onto a light ground.
+
+     This set was validated rather than chosen by eye, with the dataviz palette checker
+     across ALL pairs, not just adjacent ones: lightness band, chroma floor, colour-vision
+     separation under deutan, protan and tritan, normal-vision separation and contrast
+     against the surface, all passing. Four is where all-pairs stops passing, which is why
+     there are four and not six: every fifth hue tried collided with one of these under
+     deuteranopia or read as its neighbour to a full-colour reader. Residual categories
+     take the neutrals, which separate on lightness instead of hue. */
+  --series-1: #1a6ba8;
+  --series-2: #b45309;
+  --series-3: #6d28d9;
+  --series-4: #a51d5c;
+  --series-neutral: #6b7280;
+  --series-neutral-soft: #8b939c;
+
+  /* Shadows are for lifting a card off white, not for depth theatre. The dark build used
+     28px blurs at 42 per cent black, which on a light ground reads as smudge. */
+  --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
+  --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -42,38 +110,27 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  color: var(--ink);
-  font-family: "Manrope", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  background:
-    radial-gradient(circle at top left, rgba(6, 182, 212, 0.14), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(6, 182, 212, 0.10), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.06), transparent 28%),
-    linear-gradient(180deg, #050812 0%, #08101c 45%, #04070d 100%);
+  /* Lining tabular figures everywhere. Tabular because every page here is a column of
+     numbers and a proportional 1 makes the column jitter line to line. Lining because
+     Source Serif 4 hands you its text figures otherwise, and asking only for tabular
+     gets you the tabular oldstyle set: a £5.77M headline came out with a descending 7. */
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-body::before {
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 100% 28px, 28px 100%;
-  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 70%);
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 70%);
-  opacity: 0.22;
-}
-
-body::after {
-  background:
-    radial-gradient(circle at center, transparent 45%, rgba(3, 6, 12, 0.42) 100%);
+h1,
+h2,
+h3,
+h4,
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 body.site-search-open {
@@ -82,7 +139,7 @@ body.site-search-open {
 
 a {
   color: inherit;
-  text-decoration-color: rgba(125, 211, 252, 0.44);
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
   transition:
     color 180ms ease,
     border-color 180ms ease,
@@ -97,7 +154,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid rgba(125, 211, 252, 0.9);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -114,9 +171,10 @@ textarea {
 }
 
 ::selection {
-  background: rgba(125, 211, 252, 0.3);
-  color: var(--ink);
+  background: var(--accent-wash);
+  color: var(--text);
 }
+
 
 .shell {
   position: relative;
@@ -132,9 +190,9 @@ textarea {
   z-index: 40;
   padding: 0.85rem 1rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  color: #041019;
-  font-weight: 800;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
   text-decoration: none;
   transform: translateY(-150%);
 }
@@ -143,22 +201,25 @@ textarea {
   transform: translateY(0);
 }
 
+/* The accent is a 4px rule along the top of the header, not a fill behind it.
+   A solid brand-coloured bar pushes a public-data site towards looking like an official
+   scheme, which is the last thing a site republishing Home Office figures should look
+   like. The rule reads as brand at a glance and claims nothing. */
 .site-header {
   position: sticky;
-  top: 1rem;
+  top: 0;
   z-index: 20;
+  border-top: 4px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.site-header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 1rem;
-  padding: 0.95rem 1.05rem;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) + 4px);
-  background: rgba(5, 10, 18, 0.72);
-  box-shadow: var(--shadow-soft);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
-  backdrop-filter: blur(22px) saturate(180%);
+  padding: 0.7rem 0;
 }
 
 .brand {
@@ -169,14 +230,8 @@ textarea {
 }
 
 .brand-mark {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
   display: grid;
   place-items: center;
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.2);
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
 }
 
 .brand-copy {
@@ -185,17 +240,18 @@ textarea {
 }
 
 .brand-copy > span {
-  font-family: "Sora", sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
 }
 
 .brand-copy small {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
+  color: var(--text-faint);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -218,31 +274,31 @@ textarea {
   padding: 0.72rem 1rem;
   border: 1px solid transparent;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .site-nav a.priority {
-  border-color: rgba(255, 139, 97, 0.16);
+  border-color: color-mix(in srgb, var(--critical) 16%, transparent);
   background:
-    linear-gradient(135deg, rgba(255, 139, 97, 0.14), rgba(125, 211, 252, 0.08)),
-    rgba(255, 255, 255, 0.05);
+    linear-gradient(135deg, color-mix(in srgb, var(--critical) 14%, transparent), color-mix(in srgb, var(--accent) 8%, transparent)),
+    var(--bg-subtle);
 }
 
 .site-nav a:hover,
 .site-nav a:focus-visible {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--bg-subtle);
 }
 
 .site-nav a[aria-current="page"] {
-  color: #041019;
-  border-color: rgba(255, 255, 255, 0.24);
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  box-shadow: 0 16px 36px rgba(78, 228, 195, 0.22);
+  color: #ffffff;
+  border-color: var(--border);
+  background: var(--accent);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--positive) 22%, transparent);
 }
 
 .search-launch {
@@ -253,25 +309,25 @@ textarea {
   padding: 0.68rem 0.9rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   cursor: pointer;
 }
 
 .search-launch:hover,
 .search-launch:focus-visible {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-subtle);
 }
 
 .search-shortcut {
   padding: 0.18rem 0.46rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--muted);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
   font-size: 0.76rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -297,7 +353,7 @@ textarea {
 .site-search-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(3, 6, 12, 0.76);
+  background: var(--bg-subtle);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -312,7 +368,7 @@ textarea {
   border: 1px solid var(--border-strong);
   border-radius: calc(var(--radius) + 6px);
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.97), rgba(7, 12, 24, 0.99));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: var(--shadow);
 }
 
@@ -327,9 +383,9 @@ textarea {
 
 .site-search-head h2 {
   margin: 0.28rem 0 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.25rem, 2vw, 1.75rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
 }
 
@@ -352,22 +408,22 @@ textarea {
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
   text-decoration: none;
 }
 
 .site-search-result strong,
 .site-search-empty strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.02rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .site-search-result p,
 .site-search-empty p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -375,8 +431,8 @@ textarea {
 .site-search-result:focus-visible {
   border-color: var(--border-strong);
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.28), transparent 52%),
-    rgba(255, 255, 255, 0.06);
+    linear-gradient(140deg, var(--bg-subtle), transparent 52%),
+    var(--bg-subtle);
 }
 
 .banner {
@@ -386,20 +442,20 @@ textarea {
   align-items: flex-start;
   margin: 1rem auto 0;
   padding: 1rem 1.15rem;
-  border: 1px solid rgba(125, 211, 252, 0.2);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: 22px;
   background:
-    linear-gradient(120deg, rgba(125, 211, 252, 0.14), transparent 42%),
-    rgba(7, 13, 24, 0.78);
-  color: var(--ink-soft);
+    linear-gradient(120deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
+    var(--bg-subtle);
+  color: var(--text);
   box-shadow: var(--shadow-soft);
 }
 
 .banner strong {
-  color: var(--ink);
-  font-family: "Sora", sans-serif;
+  color: var(--text);
+  font-family: var(--font-display);
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -415,61 +471,19 @@ main {
   align-items: stretch;
   padding-top: 0.75rem;
 }
-
-.hero.hero-single {
-  grid-template-columns: 1fr;
-}
-
-.hero-copy,
-.page-head,
-.hero-panel {
+.page-head {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) + 4px);
   box-shadow: var(--shadow);
 }
-
-.hero-copy {
-  display: grid;
-  gap: 1.15rem;
-  align-content: end;
-  min-height: 29rem;
-  padding: clamp(1.5rem, 3vw, 2.4rem);
-  background:
-    linear-gradient(145deg, rgba(17, 27, 48, 0.94), rgba(7, 12, 24, 0.98));
-}
-
-.hero-copy::before,
-.page-head::after,
-.hero-panel::before {
+.page-head::after {
   content: "";
   position: absolute;
   inset: auto;
   border-radius: 999px;
   filter: blur(12px);
-}
-
-.hero-copy::before {
-  right: -8%;
-  bottom: 55%;
-  width: 18rem;
-  height: 18rem;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.4), transparent 70%);
-  animation: drift 14s ease-in-out infinite;
-}
-
-.hero-frontdoor {
-  min-height: auto;
-}
-
-.hero-frontdoor h1 {
-  max-width: 13ch;
-  font-size: clamp(2.8rem, 5vw, 5.2rem);
-}
-
-.hero-frontdoor p {
-  max-width: 64ch;
 }
 
 .front-door-strip {
@@ -484,7 +498,7 @@ main {
   display: grid;
   gap: 1rem;
   padding: clamp(1.5rem, 3vw, 2.2rem);
-  background: var(--panel);
+  background: var(--bg-card);
 }
 
 .page-head-meta {
@@ -516,8 +530,8 @@ main {
   padding: 0.65rem 1.1rem;
   font-size: 0.88rem;
   font-weight: 600;
-  font-family: "Sora", sans-serif;
-  color: var(--muted);
+  font-family: var(--font-display);
+  color: var(--text-muted);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -525,7 +539,7 @@ main {
   white-space: nowrap;
   transition: color 180ms, border-color 180ms;
 }
-.place-tabs .tab-btn:hover { color: var(--ink-soft); }
+.place-tabs .tab-btn:hover { color: var(--text); }
 .place-tabs .tab-btn[aria-selected="true"] {
   color: var(--accent);
   border-bottom-color: var(--accent);
@@ -550,7 +564,7 @@ main {
 }
 .mp-note {
   font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--text-muted);
   margin-top: 0.5rem;
   opacity: 0.6;
 }
@@ -560,7 +574,7 @@ main {
   top: -4rem;
   width: 14rem;
   height: 14rem;
-  background: radial-gradient(circle, rgba(78, 228, 195, 0.28), transparent 72%);
+  background: none;
   animation: drift 12s ease-in-out infinite reverse;
 }
 
@@ -570,12 +584,12 @@ main {
   gap: 0.55rem;
   width: fit-content;
   padding: 0.52rem 0.84rem;
-  border: 1px solid rgba(125, 211, 252, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   border-radius: 999px;
-  background: rgba(125, 211, 252, 0.1);
-  color: #c8f1ff;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
   font-size: 0.76rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -584,9 +598,9 @@ main {
 .page-head h1 {
   margin: 0;
   max-width: 12ch;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(3rem, 6vw, 5.8rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.07em;
   line-height: 0.92;
 }
@@ -602,122 +616,15 @@ main {
 .lede {
   margin: 0;
   max-width: 70ch;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 1.02rem;
   line-height: 1.72;
 }
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.hero-actions .chip {
-  padding: 0.88rem 1.12rem;
-  font-size: 0.9rem;
-}
-
-.hero-actions .chip.accent {
-  color: #041019;
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  box-shadow: 0 16px 36px rgba(78, 228, 195, 0.18);
-}
-
-.hero-actions .chip:hover,
-.hero-actions .chip:focus-visible,
 .source-pill:hover,
 .source-pill:focus-visible,
 .chip[href]:hover,
 .chip[href]:focus-visible {
   transform: translateY(-2px);
-}
-
-.hero-panel {
-  display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
-  align-content: start;
-  background:
-    linear-gradient(180deg, rgba(11, 17, 31, 0.92), rgba(7, 11, 22, 0.96));
-}
-
-.hero-panel::before {
-  left: -5rem;
-  bottom: -5rem;
-  width: 15rem;
-  height: 15rem;
-  background: radial-gradient(circle, rgba(255, 139, 97, 0.16), transparent 72%);
-  animation: drift 16s ease-in-out infinite;
-}
-
-.hero-panel > * {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-panel-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.hero-panel-title {
-  display: block;
-  margin-top: 0.35rem;
-  font-family: "Sora", sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
-
-.hero-stat-grid {
-  display: grid;
-  gap: 0.85rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.hero-stat,
-.hero-callout {
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.hero-stat {
-  padding: 1rem;
-}
-
-.hero-stat strong {
-  display: block;
-  margin-top: 0.38rem;
-  font-family: "Sora", sans-serif;
-  font-size: clamp(1.9rem, 4vw, 2.7rem);
-  font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.06em;
-}
-
-.hero-callout {
-  padding: 1rem 1.1rem;
-}
-
-.hero-callout strong {
-  display: block;
-  margin: 0.32rem 0 0.35rem;
-  font-family: "Sora", sans-serif;
-  font-size: 1.18rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
-
-.hero-callout.accent {
-  border-color: rgba(125, 211, 252, 0.18);
-  background:
-    linear-gradient(120deg, rgba(125, 211, 252, 0.12), transparent 55%),
-    rgba(255, 255, 255, 0.05);
 }
 
 .panel,
@@ -731,7 +638,7 @@ main {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--panel);
+  background: var(--bg-card);
   box-shadow: var(--shadow-soft);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   backdrop-filter: blur(20px) saturate(160%);
@@ -800,9 +707,9 @@ main {
 .metric-value {
   display: block;
   margin-top: 0.48rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.95rem, 3vw, 2.7rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 0.95;
   letter-spacing: -0.06em;
 }
@@ -810,7 +717,7 @@ main {
 .kpi-card small,
 .note,
 .tiny {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.55;
 }
@@ -833,6 +740,14 @@ main {
 }
 
 .page-top-single {
+  grid-template-columns: 1fr;
+}
+
+/* A page-top with only a heading in it gets one column, without having to remember the
+   modifier class. Several pages carry a single child and were reserving 530px of empty
+   grid beside the title; on the old dark ground that was invisible, on white it reads as
+   a missing panel. */
+.page-top:not(:has(> * + *)) {
   grid-template-columns: 1fr;
 }
 
@@ -859,16 +774,16 @@ main {
 
 .rail-title {
   margin: 0.35rem 0 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.35rem, 2.5vw, 2rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 1.02;
 }
 
 .rail-copy {
   margin-top: 0.6rem;
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.65;
 }
 
@@ -934,7 +849,7 @@ main {
   padding: 1.2rem;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
@@ -948,7 +863,7 @@ main {
   width: 8rem;
   height: 8rem;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.12), transparent 72%);
+  background: none;
 }
 
 .guide-card > *,
@@ -964,15 +879,15 @@ main {
 .viz-card h3,
 .benchmark-card h3 {
   margin: 0.45rem 0 0.55rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .guide-card p,
 .freshness-card p {
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.65;
 }
 
@@ -984,8 +899,8 @@ main {
   border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.18), transparent 46%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(140deg, var(--bg-subtle), transparent 46%),
+    var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
@@ -1007,12 +922,12 @@ main {
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(6, 12, 22, 0.9);
-  color: var(--ink);
+  background: var(--bg-subtle);
+  color: var(--text);
 }
 
 .filter-field input::placeholder {
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .filter-actions {
@@ -1037,16 +952,16 @@ button.source-pill {
   border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(120deg, rgba(78, 228, 195, 0.1), transparent 44%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(120deg, color-mix(in srgb, var(--positive) 10%, transparent), transparent 44%),
+    var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
 .page-contents.priority {
-  border-color: rgba(255, 139, 97, 0.18);
+  border-color: color-mix(in srgb, var(--critical) 18%, transparent);
   background:
-    linear-gradient(120deg, rgba(255, 139, 97, 0.14), rgba(125, 211, 252, 0.08) 50%, transparent 78%),
-    rgba(11, 17, 31, 0.92);
+    linear-gradient(120deg, color-mix(in srgb, var(--critical) 14%, transparent), color-mix(in srgb, var(--accent) 8%, transparent) 50%, transparent 78%),
+    var(--bg-subtle);
   box-shadow: var(--shadow);
 }
 
@@ -1061,47 +976,47 @@ button.source-pill {
   align-items: center;
   gap: 0.65rem;
   padding: 0.7rem 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .page-contents-links a:hover,
 .page-contents-links a:focus-visible {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--bg-subtle);
 }
 
 .page-contents.priority .page-contents-links a:first-child {
-  color: #041019;
+  color: #ffffff;
   border-color: transparent;
-  background: linear-gradient(135deg, var(--accent-3) 0%, #ffd5c6 100%);
-  box-shadow: 0 12px 26px rgba(255, 139, 97, 0.18);
+  background: linear-gradient(135deg, var(--warning) 0%, var(--critical) 100%);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--critical) 18%, transparent);
 }
 
 .page-contents-step {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .page-contents.priority .page-contents-links a:first-child .page-contents-step {
-  color: rgba(4, 16, 25, 0.68);
+  color: var(--text);
 }
 
 .page-guide {
   padding: 1.15rem 1.2rem 1.25rem;
-  border: 1px solid rgba(125, 211, 252, 0.16);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
   border-radius: calc(var(--radius) + 4px);
   background:
-    linear-gradient(130deg, rgba(125, 211, 252, 0.1), rgba(78, 228, 195, 0.05) 45%, transparent 80%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(130deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--positive) 5%, transparent) 45%, transparent 80%),
+    var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
@@ -1119,9 +1034,9 @@ button.source-pill {
   top: 1rem;
   right: 1rem;
   color: rgba(217, 245, 255, 0.32);
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.45rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.08em;
   line-height: 1;
 }
@@ -1131,13 +1046,13 @@ button.source-pill {
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) + 4px);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(125, 211, 252, 0.04) 55%, transparent 88%),
-    rgba(255, 255, 255, 0.02);
+    linear-gradient(135deg, var(--bg-subtle), color-mix(in srgb, var(--accent) 4%, transparent) 55%, transparent 88%),
+    var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
 .data-drawer[open] {
-  border-color: rgba(125, 211, 252, 0.2);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .data-drawer-summary {
@@ -1156,12 +1071,12 @@ button.source-pill {
   content: "Open";
   justify-self: start;
   padding: 0.55rem 0.85rem;
-  border: 1px solid rgba(125, 211, 252, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   border-radius: 999px;
-  background: rgba(125, 211, 252, 0.08);
-  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--text);
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1180,11 +1095,11 @@ button.source-pill {
   position: relative;
   overflow: hidden;
   padding: 1.25rem;
-  border: 1px solid rgba(255, 139, 97, 0.16);
+  border: 1px solid color-mix(in srgb, var(--critical) 16%, transparent);
   border-radius: calc(var(--radius) + 6px);
   background:
-    linear-gradient(135deg, rgba(255, 139, 97, 0.1), rgba(125, 211, 252, 0.07) 56%, transparent 78%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(135deg, color-mix(in srgb, var(--critical) 10%, transparent), color-mix(in srgb, var(--accent) 7%, transparent) 56%, transparent 78%),
+    var(--bg-subtle);
   box-shadow: var(--shadow);
 }
 
@@ -1195,7 +1110,7 @@ button.source-pill {
   width: 12rem;
   height: 12rem;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 139, 97, 0.16), transparent 72%);
+  background: none;
   filter: blur(10px);
 }
 
@@ -1217,14 +1132,7 @@ button.source-pill {
 }
 
 .home-layout .site-header {
-  top: 0.75rem;
-  margin-top: 0.75rem;
-  padding: 0.8rem 0.95rem;
-}
-
-.home-layout .brand-mark {
-  width: 2.4rem;
-  height: 2.4rem;
+  top: 0;
 }
 
 .home-layout .brand-copy > span {
@@ -1307,12 +1215,12 @@ button.source-pill {
 .home-panel {
   padding: 1rem 1.05rem;
   background:
-    linear-gradient(145deg, rgba(16, 24, 40, 0.92), rgba(7, 12, 24, 0.97));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-panel-strong {
   background:
-    linear-gradient(145deg, rgba(17, 27, 48, 0.96), rgba(7, 12, 24, 0.98));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-panel::before,
@@ -1329,30 +1237,21 @@ button.source-pill {
   bottom: -4rem;
   width: 12rem;
   height: 12rem;
-  background: radial-gradient(circle, rgba(78, 228, 195, 0.14), transparent 70%);
+  background: none;
 }
 
 .home-map-panel {
   min-height: 0;
   padding: 0;
-  background:
-    radial-gradient(circle at 18% 18%, rgba(125, 211, 252, 0.18), transparent 20%),
-    radial-gradient(circle at 82% 14%, rgba(78, 228, 195, 0.16), transparent 20%),
-    radial-gradient(circle at 18% 82%, rgba(255, 139, 97, 0.1), transparent 18%),
-    linear-gradient(145deg, rgba(14, 22, 38, 0.96), rgba(6, 10, 20, 0.985));
+  background: linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-map-stage[data-home-map-depth="region"] {
-  background:
-    radial-gradient(circle at 12% 20%, rgba(78, 228, 195, 0.14), transparent 26%),
-    linear-gradient(160deg, rgba(8, 15, 28, 0.04), transparent 58%);
+  background: linear-gradient(160deg, var(--bg-subtle), transparent 58%);
 }
 
 .home-map-stage[data-home-map-depth="place"] {
-  background:
-    radial-gradient(circle at 16% 22%, rgba(125, 211, 252, 0.18), transparent 24%),
-    radial-gradient(circle at 74% 78%, rgba(255, 139, 97, 0.12), transparent 24%),
-    linear-gradient(165deg, rgba(7, 14, 28, 0.14), transparent 60%);
+  background: linear-gradient(165deg, var(--bg-subtle), transparent 60%);
 }
 
 .home-map-stage {
@@ -1379,7 +1278,7 @@ button.source-pill {
   top: -3rem;
   width: 12rem;
   height: 12rem;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.12), transparent 72%);
+  background: none;
 }
 
 .home-map-intro {
@@ -1439,10 +1338,10 @@ button.source-pill {
   display: grid;
   gap: 0.22rem;
   padding: 0.62rem 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
   background:
-    linear-gradient(145deg, rgba(10, 18, 34, 0.82), rgba(5, 10, 20, 0.7));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(10px);
 }
@@ -1451,17 +1350,17 @@ button.source-pill {
   gap: 0.15rem;
   padding: 0.62rem 0.7rem;
   background:
-    linear-gradient(145deg, rgba(10, 18, 34, 0.86), rgba(5, 10, 20, 0.74));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-map-stage[data-home-map-depth="region"] .home-map-copy {
-  border-color: rgba(78, 228, 195, 0.16);
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(78, 228, 195, 0.04) inset;
+  border-color: color-mix(in srgb, var(--positive) 16%, transparent);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.2), 0 0 0 1px color-mix(in srgb, var(--positive) 4%, transparent) inset;
 }
 
 .home-map-stage[data-home-map-depth="place"] .home-map-copy {
-  border-color: rgba(125, 211, 252, 0.2);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(125, 211, 252, 0.08) inset;
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.26), 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent) inset;
 }
 
 .home-map-panel.is-focused .home-map-copy .kicker {
@@ -1480,9 +1379,9 @@ button.source-pill {
 .home-map-copy h1 {
   margin: 0;
   max-width: 5.3ch;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.95rem, 3vw, 3rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.08em;
   line-height: 0.9;
 }
@@ -1495,7 +1394,7 @@ button.source-pill {
 .home-map-copy p,
 .home-next-card p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.5;
 }
 
@@ -1527,9 +1426,9 @@ button.source-pill {
 
 .home-panel-head h2 {
   margin: 0.28rem 0 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.2rem, 2vw, 1.8rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 1;
 }
@@ -1545,19 +1444,19 @@ button.source-pill {
 .home-kpi-card {
   min-height: 0;
   padding: 0.82rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.18), transparent 58%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, var(--bg-subtle), transparent 58%),
+    var(--bg-subtle);
 }
 
 .home-kpi-card strong {
   display: block;
   margin: 0.32rem 0 0.14rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.45rem, 2.1vw, 1.95rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 0.95;
 }
@@ -1578,11 +1477,11 @@ button.source-pill {
   display: grid;
   gap: 0.7rem;
   padding: 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.14), transparent 58%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, var(--bg-subtle), transparent 58%),
+    var(--bg-subtle);
 }
 
 .home-visual-head {
@@ -1594,16 +1493,16 @@ button.source-pill {
 }
 
 .home-visual-head strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .home-visual-card-comparison {
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.12), transparent 42%),
-    linear-gradient(160deg, rgba(18, 30, 52, 0.2), rgba(255, 255, 255, 0.03));
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-segment-track,
@@ -1611,7 +1510,7 @@ button.source-pill {
   width: 100%;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-subtle);
 }
 
 .home-segment-track {
@@ -1628,21 +1527,21 @@ button.source-pill {
 
 .home-segment.accent,
 .home-bar-fill.accent {
-  background: linear-gradient(90deg, rgba(125, 211, 252, 0.46), rgba(125, 211, 252, 0.94));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 46%, transparent), color-mix(in srgb, var(--accent) 94%, transparent));
 }
 
 .home-segment.teal,
 .home-bar-fill.teal {
-  background: linear-gradient(90deg, rgba(78, 228, 195, 0.4), rgba(78, 228, 195, 0.94));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--positive) 40%, transparent), color-mix(in srgb, var(--positive) 94%, transparent));
 }
 
 .home-segment.warm,
 .home-bar-fill.warm {
-  background: linear-gradient(90deg, rgba(255, 139, 97, 0.4), rgba(255, 139, 97, 0.94));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--critical) 40%, transparent), color-mix(in srgb, var(--critical) 94%, transparent));
 }
 
 .home-bar-fill.slate {
-  background: linear-gradient(90deg, rgba(145, 167, 196, 0.35), rgba(145, 167, 196, 0.82));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--text-muted) 35%, transparent), color-mix(in srgb, var(--text-muted) 82%, transparent));
 }
 
 .home-segment-list,
@@ -1681,18 +1580,18 @@ button.source-pill {
   width: 1.35rem;
   height: 1.35rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   font-size: 0.68rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .home-bar-copy strong,
 .home-segment-row strong,
 .home-next-card strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.98rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -1711,11 +1610,11 @@ button.source-pill {
 }
 
 .home-dot.teal {
-  background: var(--accent-2);
+  background: var(--positive);
 }
 
 .home-dot.warm {
-  background: var(--accent-3);
+  background: var(--warning);
 }
 
 .home-note-list {
@@ -1723,7 +1622,7 @@ button.source-pill {
   gap: 0.45rem;
   margin: 0;
   padding-left: 1rem;
-  color: var(--ink-soft);
+  color: var(--text);
 }
 
 .home-note-list li {
@@ -1741,11 +1640,11 @@ button.source-pill {
   display: grid;
   gap: 0.35rem;
   padding: 0.72rem 0.78rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.14), transparent 58%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, var(--bg-subtle), transparent 58%),
+    var(--bg-subtle);
   text-decoration: none;
 }
 
@@ -1753,8 +1652,8 @@ button.source-pill {
 .home-next-card:focus-visible {
   border-color: var(--border-strong);
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.28), transparent 48%),
-    rgba(255, 255, 255, 0.06);
+    linear-gradient(140deg, var(--bg-subtle), transparent 48%),
+    var(--bg-subtle);
 }
 
 .home-next-card-action {
@@ -1779,8 +1678,8 @@ button.source-pill {
 .home-next-actions .chip.is-current,
 .home-next-actions .chip[disabled] {
   cursor: default;
-  border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border);
+  background: var(--bg-subtle);
   box-shadow: none;
   opacity: 0.82;
 }
@@ -1796,11 +1695,11 @@ button.source-pill {
   display: grid;
   gap: 0.8rem;
   padding: 0.9rem 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 22px;
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.14), transparent 42%),
-    linear-gradient(160deg, rgba(18, 30, 52, 0.2), rgba(255, 255, 255, 0.03));
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-story-primary,
@@ -1812,9 +1711,9 @@ button.source-pill {
 .home-visual-hero-card strong {
   display: block;
   margin-top: 0.2rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.7rem, 2.5vw, 2.4rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 0.95;
 }
@@ -1823,7 +1722,7 @@ button.source-pill {
 .home-mini-stat p,
 .home-visual-hero-card p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.42;
 }
 
@@ -1837,28 +1736,28 @@ button.source-pill {
   display: grid;
   gap: 0.18rem;
   padding: 0.72rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--bg-subtle);
 }
 
 .home-mini-stat strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .home-visual-hero-card {
   background:
-    linear-gradient(135deg, rgba(78, 228, 195, 0.14), transparent 42%),
-    linear-gradient(160deg, rgba(18, 30, 52, 0.2), rgba(255, 255, 255, 0.03));
+    linear-gradient(135deg, color-mix(in srgb, var(--positive) 14%, transparent), transparent 42%),
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-visual-hero-value {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 2.6vw, 2.6rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.07em;
   line-height: 0.92;
 }
@@ -1867,7 +1766,7 @@ button.source-pill {
   overflow: hidden;
   height: 0.72rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-subtle);
 }
 
 .home-visual-hero-fill {
@@ -1877,19 +1776,19 @@ button.source-pill {
 }
 
 .home-visual-hero-fill.accent {
-  background: linear-gradient(90deg, rgba(125, 211, 252, 0.52), rgba(125, 211, 252, 0.98));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 52%, transparent), color-mix(in srgb, var(--accent) 98%, transparent));
 }
 
 .home-visual-hero-fill.teal {
-  background: linear-gradient(90deg, rgba(78, 228, 195, 0.48), rgba(78, 228, 195, 0.98));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--positive) 48%, transparent), color-mix(in srgb, var(--positive) 98%, transparent));
 }
 
 .home-visual-hero-fill.warm {
-  background: linear-gradient(90deg, rgba(255, 139, 97, 0.48), rgba(255, 139, 97, 0.98));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--critical) 48%, transparent), color-mix(in srgb, var(--critical) 98%, transparent));
 }
 
 .home-visual-hero-fill.slate {
-  background: linear-gradient(90deg, rgba(145, 167, 196, 0.4), rgba(145, 167, 196, 0.92));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--text-muted) 40%, transparent), color-mix(in srgb, var(--text-muted) 92%, transparent));
 }
 
 .home-system-panel {
@@ -1912,9 +1811,9 @@ button.source-pill {
   gap: 0.55rem;
   margin-bottom: 0.4rem;
   padding: 0.5rem 0.62rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-subtle);
 }
 
 .home-scope-path {
@@ -1929,12 +1828,12 @@ button.source-pill {
   align-items: center;
   min-height: 2rem;
   padding: 0.36rem 0.72rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -1945,19 +1844,19 @@ button.home-scope-crumb {
 button.home-scope-crumb:hover,
 button.home-scope-crumb:focus-visible {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-subtle);
 }
 
 .home-scope-crumb.is-current {
-  border-color: rgba(125, 211, 252, 0.2);
-  background: linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(78, 228, 195, 0.14));
-  color: var(--ink);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--positive) 14%, transparent));
+  color: var(--text);
 }
 
 .home-scope-separator {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .home-scope-kind-chip {
@@ -1981,15 +1880,15 @@ button.home-scope-crumb:focus-visible {
 .home-system-panel[data-home-scope-kind="region"] .home-story-card,
 .home-system-panel[data-home-scope-kind="region"] .home-scope-rail {
   background:
-    linear-gradient(135deg, rgba(78, 228, 195, 0.12), transparent 44%),
-    linear-gradient(160deg, rgba(18, 30, 52, 0.18), rgba(255, 255, 255, 0.03));
+    linear-gradient(135deg, color-mix(in srgb, var(--positive) 12%, transparent), transparent 44%),
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-system-panel[data-home-scope-kind="place"] .home-story-card,
 .home-system-panel[data-home-scope-kind="place"] .home-scope-rail {
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.16), transparent 42%),
-    linear-gradient(160deg, rgba(18, 30, 52, 0.18), rgba(255, 255, 255, 0.03));
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 42%),
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .home-system-controls {
@@ -2001,9 +1900,9 @@ button.home-scope-crumb:focus-visible {
   align-items: center;
   gap: 0.18rem;
   padding: 0.16rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-subtle);
 }
 
 .home-tab-bar .chip {
@@ -2012,15 +1911,15 @@ button.home-scope-crumb:focus-visible {
   justify-content: center;
   border-color: transparent;
   background: transparent;
-  color: var(--muted);
+  color: var(--text-muted);
   box-shadow: none;
 }
 
 .home-tab-bar .chip.is-active {
-  color: #041019;
+  color: #ffffff;
   border-color: transparent;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  box-shadow: 0 8px 18px rgba(78, 228, 195, 0.12);
+  background: var(--accent);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--positive) 12%, transparent);
 }
 
 .home-deck-viewport {
@@ -2029,13 +1928,13 @@ button.home-scope-crumb:focus-visible {
   min-height: 0;
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(125, 211, 252, 0.45) rgba(255, 255, 255, 0.04);
+  scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent) var(--border);
   padding-inline-end: 0.12rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.16), transparent 62%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(145deg, var(--bg-subtle), transparent 62%),
+    var(--bg-subtle);
 }
 
 .home-deck-viewport::-webkit-scrollbar {
@@ -2043,12 +1942,12 @@ button.home-scope-crumb:focus-visible {
 }
 
 .home-deck-viewport::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-subtle);
 }
 
 .home-deck-viewport::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(125, 211, 252, 0.6), rgba(78, 228, 195, 0.5));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 60%, transparent), color-mix(in srgb, var(--positive) 50%, transparent));
 }
 
 .home-deck-track {
@@ -2089,7 +1988,7 @@ button.home-scope-crumb:focus-visible {
 
 .home-visual-intro {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.5;
 }
 
@@ -2238,13 +2137,13 @@ button.home-scope-crumb:focus-visible {
   width: min(11.75rem, calc(100% - 1.7rem));
   padding: 0.58rem 0.68rem;
   background:
-    linear-gradient(145deg, rgba(10, 18, 34, 0.68), rgba(5, 9, 18, 0.44));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
 }
 
 .home-map-panel .region-map-base-region {
-  fill: rgba(255, 255, 255, 0.045);
-  stroke: rgba(255, 255, 255, 0.16);
+  fill: var(--text-muted);
+  stroke: var(--border);
 }
 
 .home-map-panel [data-region-map-view] {
@@ -2337,12 +2236,12 @@ button.home-scope-crumb:focus-visible {
 
 .home-authority-region:hover,
 .home-authority-region:focus-visible {
-  stroke: rgba(245, 247, 251, 0.92);
+  stroke: color-mix(in srgb, var(--text) 92%, transparent);
   stroke-width: 2.2;
 }
 
 .home-authority-region.is-selected {
-  filter: drop-shadow(0 0 10px rgba(125, 211, 252, 0.28));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 28%, transparent));
 }
 
 .home-authority-label {
@@ -2362,25 +2261,25 @@ button.home-scope-crumb:focus-visible {
   width: auto;
   margin-top: 0.75rem;
   padding: 0.85rem 0.92rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 22px;
   background:
-    linear-gradient(145deg, rgba(11, 18, 34, 0.92), rgba(5, 10, 20, 0.82));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(16px);
   pointer-events: none;
 }
 
 .home-map-focus-card strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.02rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .home-map-focus-card p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.45;
 }
 
@@ -2395,7 +2294,7 @@ button.home-scope-crumb:focus-visible {
 }
 
 .home-map-focus-kicker {
-  color: var(--muted);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -2406,34 +2305,34 @@ button.home-scope-crumb:focus-visible {
 }
 
 .home-map-focus-card[data-scope-kind="place"] {
-  border-color: rgba(125, 211, 252, 0.2);
-  box-shadow: 0 22px 54px rgba(5, 12, 24, 0.36), 0 0 0 1px rgba(125, 211, 252, 0.06) inset;
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  box-shadow: 0 22px 54px rgba(5, 12, 24, 0.36), 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent) inset;
 }
 
 .home-map-focus-card[data-scope-kind="region"] {
-  border-color: rgba(78, 228, 195, 0.18);
+  border-color: color-mix(in srgb, var(--positive) 18%, transparent);
 }
 
 [data-home-authority-metric="rate"] .home-map-focus-card,
 [data-region-authority-metric="rate"] .home-map-focus-card {
   background:
-    linear-gradient(145deg, rgba(8, 22, 28, 0.94), rgba(5, 12, 20, 0.84));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 [data-home-authority-metric="hotel"] .home-map-focus-card,
 [data-region-authority-metric="hotel"] .home-map-focus-card {
   background:
-    linear-gradient(145deg, rgba(32, 16, 12, 0.94), rgba(11, 10, 18, 0.84));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 [data-home-authority-metric="rate"] .home-authority-region.is-selected,
 [data-region-authority-metric="rate"] .home-authority-region.is-selected {
-  filter: drop-shadow(0 0 12px rgba(78, 228, 195, 0.34));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--positive) 34%, transparent));
 }
 
 [data-home-authority-metric="hotel"] .home-authority-region.is-selected,
 [data-region-authority-metric="hotel"] .home-authority-region.is-selected {
-  filter: drop-shadow(0 0 12px rgba(255, 139, 97, 0.34));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--critical) 34%, transparent));
 }
 
 .home-map-panel .region-map-label {
@@ -2458,10 +2357,10 @@ button.home-scope-crumb:focus-visible {
 
 .region-map-hud-card,
 .region-map-shortlist {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(11, 18, 34, 0.9), rgba(6, 11, 21, 0.8));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
 }
@@ -2474,16 +2373,16 @@ button.home-scope-crumb:focus-visible {
 
 .region-map-hud-card strong,
 .region-map-shortlist-link strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.02;
 }
 
 .region-map-hud-card p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.38;
 }
 
@@ -2511,11 +2410,11 @@ button.home-scope-crumb:focus-visible {
   display: grid;
   gap: 0.16rem;
   padding: 0.64rem 0.72rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 16px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.18), transparent 58%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, var(--bg-subtle), transparent 58%),
+    var(--bg-subtle);
   color: inherit;
   text-decoration: none;
 }
@@ -2528,10 +2427,10 @@ button.region-map-shortlist-link {
 .region-map-shortlist-link:hover,
 .region-map-shortlist-link:focus-visible,
 .region-map-shortlist-link.is-active {
-  border-color: rgba(125, 211, 252, 0.2);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.14), rgba(78, 228, 195, 0.12)),
-    rgba(255, 255, 255, 0.05);
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--positive) 12%, transparent)),
+    var(--bg-subtle);
 }
 
 .home-map-signal-band {
@@ -2547,10 +2446,10 @@ button.region-map-shortlist-link {
 
 .home-map-signal-card,
 .home-map-quick-panel {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(11, 18, 34, 0.9), rgba(6, 11, 21, 0.8));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
 }
@@ -2562,9 +2461,9 @@ button.region-map-shortlist-link {
 }
 
 .home-map-signal-card strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.05rem, 1.6vw, 1.35rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 0.98;
 }
@@ -2572,7 +2471,7 @@ button.region-map-shortlist-link {
 .home-map-signal-card p,
 .home-map-quick-button p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.38;
 }
 
@@ -2596,9 +2495,9 @@ button.region-map-shortlist-link {
 }
 
 .home-map-quick-head strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.1;
 }
@@ -2618,11 +2517,11 @@ button.region-map-shortlist-link {
   display: grid;
   gap: 0.18rem;
   padding: 0.72rem 0.78rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 16px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.18), transparent 58%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, var(--bg-subtle), transparent 58%),
+    var(--bg-subtle);
   color: inherit;
   text-align: left;
   cursor: pointer;
@@ -2643,25 +2542,25 @@ button.region-map-shortlist-link {
 }
 
 .home-map-quick-button strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .home-map-quick-button:hover,
 .home-map-quick-button:focus-visible {
-  border-color: rgba(125, 211, 252, 0.22);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.14), transparent 48%),
-    rgba(255, 255, 255, 0.06);
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 48%),
+    var(--bg-subtle);
 }
 
 .home-map-quick-button.is-active {
-  border-color: rgba(125, 211, 252, 0.24);
+  border-color: color-mix(in srgb, var(--accent) 24%, transparent);
   background:
-    linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(78, 228, 195, 0.14)),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--positive) 14%, transparent)),
+    var(--bg-subtle);
 }
 
 @media (min-width: 981px) {
@@ -2697,7 +2596,7 @@ button.region-map-shortlist-link {
     z-index: 2;
     padding-top: 0.1rem;
     background:
-      linear-gradient(180deg, rgba(9, 15, 26, 0.98) 0%, rgba(9, 15, 26, 0.9) 80%, rgba(9, 15, 26, 0));
+      linear-gradient(180deg, var(--bg-subtle) 0%, var(--bg-subtle) 80%, var(--bg-subtle));
   }
 
   .home-visual-stack {
@@ -2813,9 +2712,9 @@ button.region-map-shortlist-link {
 
 .map-front-copy h1 {
   margin: 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(2.15rem, 4vw, 3.8rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.07em;
   line-height: 0.92;
 }
@@ -2823,7 +2722,7 @@ button.region-map-shortlist-link {
 .map-front-copy p {
   margin: 0;
   max-width: 36rem;
-  color: var(--ink-soft);
+  color: var(--text);
   line-height: 1.55;
 }
 
@@ -2838,17 +2737,17 @@ button.region-map-shortlist-link {
   gap: 0.4rem;
   min-height: 100%;
   padding: 0.95rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 22px;
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.18), transparent 56%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(145deg, var(--bg-subtle), transparent 56%),
+    var(--bg-subtle);
 }
 
 .map-front-stat strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.2rem, 2vw, 1.7rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 0.98;
 }
@@ -2861,9 +2760,9 @@ button.region-map-shortlist-link {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.08em;
   line-height: 1;
   color: rgba(217, 245, 255, 0.34);
@@ -2871,22 +2770,22 @@ button.region-map-shortlist-link {
 
 .evidence-preview .evidence-panel {
   background:
-    linear-gradient(145deg, rgba(18, 30, 52, 0.32), transparent 44%),
-    rgba(255, 255, 255, 0.05);
+    linear-gradient(145deg, var(--bg-subtle), transparent 44%),
+    var(--bg-subtle);
 }
 
 .evidence-preview .evidence-panel-hotels {
-  border-color: rgba(255, 139, 97, 0.18);
+  border-color: color-mix(in srgb, var(--critical) 18%, transparent);
 }
 
 .evidence-preview .evidence-panel-money {
-  border-color: rgba(125, 211, 252, 0.18);
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .evidence-preview .story-card {
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.2), transparent 44%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(140deg, var(--bg-subtle), transparent 44%),
+    var(--bg-subtle);
 }
 
 .drilldown-grid {
@@ -2901,8 +2800,8 @@ button.region-map-shortlist-link {
   border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.18), transparent 46%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(140deg, var(--bg-subtle), transparent 46%),
+    var(--bg-subtle);
   box-shadow: var(--shadow-soft);
 }
 
@@ -2915,9 +2814,9 @@ button.region-map-shortlist-link {
 .drilldown-meta strong {
   display: block;
   margin-top: 0.32rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -2932,7 +2831,7 @@ button.region-map-shortlist-link {
 }
 
 .drilldown-row-link strong {
-  color: var(--ink);
+  color: var(--text);
 }
 
 .data-list-inline {
@@ -2948,12 +2847,12 @@ button.region-map-shortlist-link {
 
 .viz-card.tone-warm::before,
 .benchmark-card.tone-warm::before {
-  background: radial-gradient(circle, rgba(255, 139, 97, 0.14), transparent 72%);
+  background: none;
 }
 
 .viz-card.tone-teal::before,
 .benchmark-card.tone-teal::before {
-  background: radial-gradient(circle, rgba(78, 228, 195, 0.14), transparent 72%);
+  background: none;
 }
 
 .viz-head,
@@ -2970,9 +2869,9 @@ button.region-map-shortlist-link {
 }
 
 .benchmark-copy strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.4rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
 }
 
@@ -2997,9 +2896,9 @@ button.region-map-shortlist-link {
   display: flex;
   height: 1rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-subtle);
 }
 
 .pathway-mix-segment {
@@ -3008,22 +2907,22 @@ button.region-map-shortlist-link {
 
 .pathway-mix-segment.tone-accent,
 .pathway-mix-swatch.tone-accent {
-  background: linear-gradient(90deg, var(--accent) 0%, #d9f5ff 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
 }
 
 .pathway-mix-segment.tone-teal,
 .pathway-mix-swatch.tone-teal {
-  background: linear-gradient(90deg, var(--accent-2) 0%, #c6fff4 100%);
+  background: linear-gradient(90deg, var(--positive) 0%, #c6fff4 100%);
 }
 
 .pathway-mix-segment.tone-warm,
 .pathway-mix-swatch.tone-warm {
-  background: linear-gradient(90deg, var(--accent-3) 0%, #ffd5c6 100%);
+  background: linear-gradient(90deg, var(--warning) 0%, var(--critical) 100%);
 }
 
 .pathway-mix-segment.tone-soft,
 .pathway-mix-swatch.tone-soft {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(90deg, var(--bg-subtle) 0%, var(--bg-subtle) 100%);
 }
 
 .pathway-mix-legend {
@@ -3043,9 +2942,9 @@ button.region-map-shortlist-link {
 }
 
 .pathway-mix-row strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -3053,8 +2952,8 @@ button.region-map-shortlist-link {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  color: var(--ink-soft);
-  font-weight: 700;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .pathway-mix-swatch {
@@ -3064,7 +2963,7 @@ button.region-map-shortlist-link {
 }
 
 .pathway-mix-note {
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -3074,14 +2973,14 @@ button.region-map-shortlist-link {
 .benchmark-label,
 .region-map-label,
 .region-map-value {
-  fill: var(--muted);
-  font-family: "Manrope", sans-serif;
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
 }
 
 .trend-label,
 .benchmark-label {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -3092,14 +2991,14 @@ button.region-map-shortlist-link {
 
 .trend-annotation {
   font-size: 11px;
-  font-weight: 800;
-  fill: var(--ink-soft);
+  font-weight: 600;
+  fill: var(--text);
 }
 
 .trend-event-label {
   font-size: 8px;
-  font-weight: 700;
-  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  font-family: var(--font-display);
   letter-spacing: 0.02em;
 }
 
@@ -3165,12 +3064,12 @@ button.region-map-shortlist-link {
 
 .region-map-label {
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  fill: rgba(255, 255, 255, 0.9);
+  fill: var(--text-muted);
   paint-order: stroke fill;
-  stroke: rgba(4, 7, 13, 0.7);
+  stroke: var(--border);
   stroke-width: 4px;
   stroke-linejoin: round;
   pointer-events: none;
@@ -3195,13 +3094,13 @@ button.region-map-shortlist-link {
 }
 
 .region-map-value {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
-  fill: var(--ink);
+  fill: var(--text);
   paint-order: stroke fill;
-  stroke: rgba(4, 7, 13, 0.74);
+  stroke: var(--border);
   stroke-width: 5px;
   stroke-linejoin: round;
   pointer-events: none;
@@ -3222,13 +3121,13 @@ button.region-map-shortlist-link {
    readiness plan under presentation. */
 
 .region-map-outline {
-  fill: rgba(255, 255, 255, 0.035);
-  stroke: rgba(255, 255, 255, 0.08);
+  fill: var(--text-muted);
+  stroke: var(--border);
   stroke-width: 2;
 }
 
 .region-map-island {
-  fill: rgba(255, 255, 255, 0.02);
+  fill: var(--text-muted);
 }
 
 .region-map-hit-area {
@@ -3263,14 +3162,14 @@ button.region-map-shortlist-link {
 }
 
 .region-map-hotspot-ring {
-  fill: rgba(4, 10, 18, 0.08);
-  stroke: rgba(255, 255, 255, 0.22);
+  fill: var(--text-muted);
+  stroke: var(--border);
   stroke-width: 1.4;
 }
 
 .region-map-hotspot-core {
-  fill: rgba(125, 211, 252, 0.9);
-  stroke: rgba(4, 10, 18, 0.88);
+  fill: color-mix(in srgb, var(--accent) 90%, transparent);
+  stroke: var(--border);
   stroke-width: 2.4;
 }
 
@@ -3290,10 +3189,10 @@ button.region-map-shortlist-link {
   gap: 0.55rem;
   padding: 0.75rem;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border);
   background:
-    linear-gradient(180deg, rgba(6, 12, 21, 0.9), rgba(10, 18, 31, 0.8)),
-    rgba(6, 12, 21, 0.72);
+    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle);
   box-shadow: 0 18px 40px rgba(3, 8, 16, 0.28);
   backdrop-filter: blur(16px);
 }
@@ -3309,11 +3208,8 @@ button.region-map-shortlist-link {
   min-height: 7.75rem;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    radial-gradient(circle at 18% 22%, rgba(125, 211, 252, 0.18), transparent 42%),
-    radial-gradient(circle at 76% 70%, rgba(125, 211, 252, 0.16), transparent 44%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .region-map-inset-map::before,
@@ -3326,13 +3222,13 @@ button.region-map-shortlist-link {
 
 .region-map-inset-map::before {
   background:
-    linear-gradient(90deg, transparent 0, transparent 14%, rgba(255, 255, 255, 0.06) 14%, rgba(255, 255, 255, 0.06) 15%, transparent 15%, transparent 100%),
-    linear-gradient(180deg, transparent 0, transparent 18%, rgba(255, 255, 255, 0.06) 18%, rgba(255, 255, 255, 0.06) 19%, transparent 19%, transparent 100%);
+    linear-gradient(90deg, transparent 0, transparent 14%, var(--bg-subtle) 14%, var(--bg-subtle) 15%, transparent 15%, transparent 100%),
+    linear-gradient(180deg, transparent 0, transparent 18%, var(--bg-subtle) 18%, var(--bg-subtle) 19%, transparent 19%, transparent 100%);
   opacity: 0.55;
 }
 
 .region-map-inset-map::after {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 16px;
 }
 
@@ -3341,9 +3237,9 @@ button.region-map-shortlist-link {
   display: grid;
   gap: 0.12rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: #f5f7fb;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text);
   text-align: left;
   cursor: pointer;
   transition:
@@ -3365,8 +3261,8 @@ button.region-map-shortlist-link {
 .region-map-overlay-control:hover,
 .region-map-overlay-control:focus-visible,
 .region-map-overlay-control.is-selected {
-  border-color: rgba(125, 211, 252, 0.52);
-  background: rgba(125, 211, 252, 0.14);
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   box-shadow: 0 10px 22px rgba(3, 8, 16, 0.24);
   transform: translateY(-1px);
 }
@@ -3401,18 +3297,18 @@ button.region-map-shortlist-link {
   width: 0.52rem;
   height: 0.52rem;
   border-radius: 999px;
-  background: rgba(125, 211, 252, 0.94);
-  border: 2px solid rgba(4, 10, 18, 0.86);
+  background: color-mix(in srgb, var(--accent) 94%, transparent);
+  border: 2px solid var(--border);
   transform: translateY(-50%);
-  box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.14);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .region-map-link:hover .region-map-hotspot-ring,
 .region-map-link:focus-visible .region-map-hotspot-ring,
 .region-map-link.is-active .region-map-hotspot-ring,
 .region-map-link.is-selected .region-map-hotspot-ring {
-  fill: rgba(125, 211, 252, 0.16);
-  stroke: rgba(255, 255, 255, 0.72);
+  fill: color-mix(in srgb, var(--accent) 16%, transparent);
+  stroke: var(--border);
   transform: scale(1.06);
 }
 
@@ -3425,7 +3321,7 @@ button.region-map-shortlist-link {
 
 .region-map-callout {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.28);
+  stroke: var(--border);
   stroke-width: 1.4;
   stroke-linecap: round;
   pointer-events: none;
@@ -3434,13 +3330,13 @@ button.region-map-shortlist-link {
 .region-map-region-entry:hover .region-map-region,
 .region-map-region-entry:focus-within .region-map-region {
   filter: brightness(1.08);
-  stroke: rgba(255, 255, 255, 0.9);
+  stroke: var(--border);
 }
 
 .region-map-region-entry:hover .region-map-callout,
 .region-map-region-entry:focus-within .region-map-callout,
 .region-map-region-entry.is-active .region-map-callout {
-  stroke: rgba(255, 255, 255, 0.72);
+  stroke: var(--border);
 }
 
 .region-map-region-entry.is-active .region-map-label,
@@ -3487,7 +3383,7 @@ button.region-map-shortlist-link {
 }
 
 .region-map-controls .chip {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   opacity: 0.72;
 }
 
@@ -3520,12 +3416,9 @@ button.region-map-shortlist-link {
   position: relative;
   min-height: 0;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 24px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(125, 211, 252, 0.08), transparent 34%),
-    linear-gradient(145deg, rgba(16, 24, 40, 0.34), transparent 44%),
-    rgba(255, 255, 255, 0.03);
+  background: linear-gradient(145deg, var(--bg-subtle), transparent 44%), var(--bg-subtle);
 }
 
 .region-map-canvas.has-summary-overlay {
@@ -3546,10 +3439,10 @@ button.region-map-shortlist-link {
   max-width: 18rem;
   margin: 0;
   padding: 0.72rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
   background:
-    linear-gradient(145deg, rgba(10, 18, 34, 0.82), rgba(5, 9, 18, 0.68));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   color: rgba(221, 228, 237, 0.84);
   backdrop-filter: blur(14px);
 }
@@ -3560,11 +3453,11 @@ button.region-map-shortlist-link {
   grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
   align-items: center;
   padding: 1rem 1.05rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(135deg, rgba(18, 30, 52, 0.34), transparent 44%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(135deg, var(--bg-subtle), transparent 44%),
+    var(--bg-subtle);
 }
 
 .region-map-explorer.is-legend-overlay {
@@ -3626,10 +3519,10 @@ button.region-map-shortlist-link {
   padding: 0.95rem 1rem;
   border-radius: 18px;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(245, 247, 251, 0.9);
+  color: color-mix(in srgb, var(--text) 90%, transparent);
 }
 
 .region-map-legend-swatch span:last-child {
@@ -3637,15 +3530,15 @@ button.region-map-shortlist-link {
 }
 
 .region-map-legend-swatch[data-tone="accent"] {
-  background: linear-gradient(90deg, rgba(125, 211, 252, 0.2), rgba(125, 211, 252, 0.78));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 20%, transparent), color-mix(in srgb, var(--accent) 78%, transparent));
 }
 
 .region-map-legend-swatch[data-tone="teal"] {
-  background: linear-gradient(90deg, rgba(78, 228, 195, 0.2), rgba(78, 228, 195, 0.8));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--positive) 20%, transparent), color-mix(in srgb, var(--positive) 80%, transparent));
 }
 
 .region-map-legend-swatch[data-tone="warm"] {
-  background: linear-gradient(90deg, rgba(255, 139, 97, 0.2), rgba(255, 139, 97, 0.82));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--critical) 20%, transparent), color-mix(in srgb, var(--critical) 82%, transparent));
 }
 
 .region-map-legend-copy {
@@ -3654,9 +3547,9 @@ button.region-map-shortlist-link {
 }
 
 .region-map-legend-copy strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
 }
 
@@ -3669,11 +3562,11 @@ button.region-map-shortlist-link {
   gap: 0.9rem;
   margin-top: 0;
   padding: 1.05rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.28), transparent 46%),
-    rgba(255, 255, 255, 0.03);
+    linear-gradient(140deg, var(--bg-subtle), transparent 46%),
+    var(--bg-subtle);
 }
 
 .region-map-summary.is-overlay {
@@ -3700,9 +3593,9 @@ button.region-map-shortlist-link {
 
 .region-map-summary h4 {
   margin: 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -3714,17 +3607,17 @@ button.region-map-shortlist-link {
 
 .region-map-summary-stat {
   padding: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
 }
 
 .region-map-summary-stat strong {
   display: block;
   margin-top: 0.25rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.08rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -3734,8 +3627,8 @@ button.region-map-shortlist-link {
 }
 
 .region-map-summary-label {
-  color: var(--ink-soft);
-  font-weight: 800;
+  color: var(--text);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -3749,9 +3642,9 @@ button.region-map-shortlist-link {
   display: grid;
   gap: 0.15rem;
   padding: 0.85rem 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
   text-decoration: none;
 }
 
@@ -3771,9 +3664,9 @@ button.region-map-shortlist-link {
 }
 
 .region-map-summary-link strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.98rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -3781,8 +3674,8 @@ button.region-map-shortlist-link {
 .region-map-summary-link:focus-visible {
   border-color: var(--border-strong);
   background:
-    linear-gradient(140deg, rgba(18, 30, 52, 0.24), transparent 44%),
-    rgba(255, 255, 255, 0.06);
+    linear-gradient(140deg, var(--bg-subtle), transparent 44%),
+    var(--bg-subtle);
 }
 
 .region-map-summary-note {
@@ -3794,8 +3687,8 @@ button.region-map-shortlist-link {
 }
 
 .region-map-base-region {
-  fill: rgba(255, 255, 255, 0.035);
-  stroke: rgba(255, 255, 255, 0.12);
+  fill: var(--text-muted);
+  stroke: var(--border);
   stroke-width: 2.2;
 }
 
@@ -3840,14 +3733,14 @@ button.region-map-shortlist-link {
   padding: 1rem 1.05rem;
   border: 1px solid var(--border);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
 }
 
 .peer-card h3 {
   margin: 0.4rem 0 0.35rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -3867,7 +3760,7 @@ button.region-map-shortlist-link {
   gap: 1rem;
   align-items: flex-start;
   padding: 0.85rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .freshness-row:first-child {
@@ -3881,7 +3774,7 @@ button.region-map-shortlist-link {
 
 .freshness-row strong {
   display: block;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.98rem;
   letter-spacing: -0.03em;
 }
@@ -3899,23 +3792,23 @@ button.region-map-shortlist-link {
   display: grid;
   gap: 0.8rem;
   padding: 1.2rem;
-  border: 1px solid rgba(255, 139, 97, 0.16);
+  border: 1px solid color-mix(in srgb, var(--critical) 16%, transparent);
   border-radius: 24px;
   background:
-    linear-gradient(125deg, rgba(255, 139, 97, 0.1), transparent 45%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(125deg, color-mix(in srgb, var(--critical) 10%, transparent), transparent 45%),
+    var(--bg-subtle);
 }
 
 .editor-note h3 {
   margin: 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .editor-note p {
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.68;
 }
 
@@ -3926,7 +3819,7 @@ button.region-map-shortlist-link {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
 }
 
 .stat-tile,
@@ -3937,9 +3830,9 @@ button.region-map-shortlist-link {
 .stat-tile strong {
   display: block;
   margin-top: 0.35rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.4rem, 3vw, 2.15rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 0.98;
   letter-spacing: -0.06em;
 }
@@ -3953,29 +3846,29 @@ button.region-map-shortlist-link {
 .signal-card h3,
 .feature-card h3 {
   margin: 0.4rem 0 0.55rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .signal-card.accent,
 .feature-card.accent {
-  border-color: rgba(125, 211, 252, 0.16);
+  border-color: color-mix(in srgb, var(--accent) 16%, transparent);
   background:
-    linear-gradient(145deg, rgba(18, 29, 52, 0.98), rgba(7, 12, 24, 0.96));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .feature-card.teal {
-  border-color: rgba(78, 228, 195, 0.18);
+  border-color: color-mix(in srgb, var(--positive) 18%, transparent);
   background:
-    linear-gradient(145deg, rgba(8, 34, 34, 0.98), rgba(7, 12, 24, 0.96));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .feature-card.warm {
-  border-color: rgba(245, 158, 11, 0.18);
+  border-color: color-mix(in srgb, var(--warning) 18%, transparent);
   background:
-    linear-gradient(145deg, rgba(46, 23, 5, 0.98), rgba(7, 12, 24, 0.96));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .feature-card {
@@ -4000,19 +3893,19 @@ button.region-map-shortlist-link {
   width: 10rem;
   height: 10rem;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.16), transparent 72%);
+  background: none;
 }
 
 .feature-card.accent::before {
-  background: radial-gradient(circle, rgba(255, 139, 97, 0.14), transparent 72%);
+  background: none;
 }
 
 .feature-card.teal::before {
-  background: radial-gradient(circle, rgba(78, 228, 195, 0.16), transparent 72%);
+  background: none;
 }
 
 .feature-card.warm::before {
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.16), transparent 72%);
+  background: none;
 }
 
 .feature-card > * {
@@ -4034,7 +3927,7 @@ button.region-map-shortlist-link {
   gap: 0.85rem;
   align-items: flex-start;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .trail-step:first-child {
@@ -4048,14 +3941,14 @@ button.region-map-shortlist-link {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
 }
 
 .trail-step strong {
@@ -4066,7 +3959,7 @@ button.region-map-shortlist-link {
 
 .trail-step p {
   margin: 0 0 0.55rem;
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -4080,7 +3973,7 @@ button.region-map-shortlist-link {
   align-items: flex-start;
   gap: 1rem;
   padding: 0.85rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .data-row:first-child {
@@ -4093,7 +3986,7 @@ button.region-map-shortlist-link {
 }
 
 .data-row > span:first-child {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -4101,7 +3994,7 @@ button.region-map-shortlist-link {
 .data-row-value {
   max-width: 58%;
   text-align: right;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.96rem;
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -4122,7 +4015,7 @@ button.region-map-shortlist-link {
   position: sticky;
   left: 0;
   min-width: 16rem;
-  background: rgba(6, 10, 20, 0.98);
+  background: var(--bg-subtle);
 }
 
 .matrix-table th:first-child {
@@ -4163,7 +4056,7 @@ button.region-map-shortlist-link {
   top: 0;
   bottom: -1rem;
   width: 1px;
-  background: linear-gradient(180deg, rgba(125, 211, 252, 0.38), rgba(255, 255, 255, 0.06));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 38%, transparent), var(--bg-subtle));
 }
 
 .timeline-item:last-child::before {
@@ -4178,15 +4071,15 @@ button.region-map-shortlist-link {
   width: 0.62rem;
   height: 0.62rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 18px rgba(125, 211, 252, 0.35);
+  background: linear-gradient(135deg, var(--accent), var(--positive));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .timeline-date {
   padding-top: 0.3rem;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -4196,29 +4089,29 @@ button.region-map-shortlist-link {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
   padding: 1.15rem;
 }
 
 .timeline-card h3 {
   margin: 0.45rem 0 0.55rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .timeline-card.accent {
-  border-color: rgba(125, 211, 252, 0.18);
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
   background:
-    linear-gradient(145deg, rgba(18, 29, 52, 0.98), rgba(7, 12, 24, 0.96));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .section h2 {
   margin: 0;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 2.6vw, 2.7rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 1.02;
 }
@@ -4241,9 +4134,9 @@ button.region-map-shortlist-link {
 .metric-card h3,
 .explorer-card h3 {
   margin: 0 0 0.62rem;
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.08rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -4265,42 +4158,42 @@ button.region-map-shortlist-link {
   padding: 0.42rem 0.7rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--panel-soft);
-  color: var(--ink-soft);
+  background: var(--bg-subtle);
+  color: var(--text);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .chip.accent {
-  border-color: rgba(255, 139, 97, 0.18);
-  background: rgba(255, 139, 97, 0.14);
-  color: #ffcaaf;
+  border-color: color-mix(in srgb, var(--critical) 18%, transparent);
+  background: color-mix(in srgb, var(--critical) 14%, transparent);
+  color: var(--critical);
 }
 
 .chip.teal {
-  border-color: rgba(78, 228, 195, 0.18);
-  background: rgba(78, 228, 195, 0.12);
-  color: #b8fff0;
+  border-color: color-mix(in srgb, var(--positive) 18%, transparent);
+  background: color-mix(in srgb, var(--positive) 12%, transparent);
+  color: var(--positive);
 }
 
 .chip.warm {
-  border-color: rgba(245, 158, 11, 0.18);
-  background: rgba(245, 158, 11, 0.12);
-  color: #fbd38d;
+  border-color: color-mix(in srgb, var(--warning) 18%, transparent);
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  color: var(--warning);
 }
 
 .source-pill {
-  border-color: rgba(125, 211, 252, 0.2);
-  background: rgba(125, 211, 252, 0.12);
-  color: #d5f5ff;
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
 }
 
 .table-card {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background:
-    linear-gradient(180deg, rgba(9, 15, 28, 0.94), rgba(6, 10, 20, 0.98));
+    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle));
 }
 
 .table-card table {
@@ -4325,7 +4218,7 @@ table {
 
 caption {
   padding: 1rem 1rem 0.2rem;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.88rem;
   line-height: 1.55;
   text-align: left;
@@ -4335,31 +4228,31 @@ caption {
 th,
 td {
   padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border);
   text-align: left;
   vertical-align: top;
 }
 
 th {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-subtle);
 }
 
 tbody th[scope="row"] {
-  color: var(--ink-soft);
+  color: var(--text);
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
   background: transparent;
 }
 
 tbody tr:hover td {
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--bg-subtle);
 }
 
 tr:last-child td {
@@ -4378,16 +4271,16 @@ tr:last-child td {
   flex: 1;
   height: 0.82rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-subtle);
 }
 
 .metric-fill {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 72%, #f5fffe 140%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--positive) 72%, var(--positive) 140%);
   box-shadow: 0 0 24px var(--accent-glow);
 }
 
@@ -4399,19 +4292,19 @@ tr:last-child td {
 
 .footer {
   padding: 0 0 3rem;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.92rem;
   line-height: 1.65;
 }
 .footer-main { margin-bottom: 1rem; }
 .footer-cross-site {
   font-size: 0.82rem;
-  color: var(--muted);
+  color: var(--text-muted);
   margin-bottom: 0.75rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(6, 182, 212, 0.06);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
   border-radius: 8px;
-  border: 1px solid rgba(6, 182, 212, 0.15);
+  border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
 }
 .footer-cross-site a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .footer-cross-site a:hover { text-decoration: underline; }
@@ -4425,12 +4318,12 @@ tr:last-child td {
   border-radius: var(--radius-sm);
 }
 .ukd-cross-inner { display: flex; flex-direction: column; gap: 0.5rem; }
-.ukd-cross-label { font-family: "Sora", sans-serif; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #818cf8; }
-.ukd-cross-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+.ukd-cross-label { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #4338ca; }
+.ukd-cross-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; }
 .ukd-cross-btn {
   display: inline-block; margin-top: 0.25rem; padding: 0.5rem 1rem;
-  font-size: 0.85rem; font-weight: 700; color: #f5f7fb;
-  background: #4f46e5; border-radius: 8px; text-decoration: none;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+  background: #4338ca; border-radius: 8px; text-decoration: none;
   transition: background 180ms;
   width: fit-content;
 }
@@ -4446,15 +4339,15 @@ tr:last-child td {
 
 .footer-legal-links {
   font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--text-muted);
   opacity: 0.6;
   margin-top: 0.5rem;
 }
 .footer-legal-links a {
-  color: var(--muted);
+  color: var(--text-muted);
 }
 .footer-legal-links a:hover {
-  color: var(--ink);
+  color: var(--text);
 }
 
 .footer-imprint {
@@ -4462,7 +4355,7 @@ tr:last-child td {
   opacity: 0.4;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid var(--border);
 }
 
 @keyframes drift {
@@ -4485,10 +4378,6 @@ tr:last-child td {
 
   .hero {
     grid-template-columns: 1fr;
-  }
-
-  .hero-copy {
-    min-height: auto;
   }
 
   .page-top {
@@ -4675,16 +4564,18 @@ tr:last-child td {
 }
 
 @media (max-width: 900px) {
-  .site-header {
-    top: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
+  /* These used to stack the header into a column, because the header itself was the flex
+     row. It is now a full-width band with .site-header-inner inside it, and stacking is
+     the wrong answer anyway: brand, search and menu fit on one row at 375px and the
+     header should stay one line deep. */
+  .site-header-inner {
+    padding: 0.55rem 0;
+    gap: 0.5rem;
   }
 
   .site-tools {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
+    flex: 0 0 auto;
+    gap: 0.35rem;
   }
 
   .site-nav {
@@ -4725,8 +4616,7 @@ tr:last-child td {
   }
 
   .home-layout .site-header {
-    top: 0.5rem;
-    margin-top: 0.5rem;
+    top: 0;
   }
 
   .home-screen.priority-section {
@@ -4776,19 +4666,12 @@ tr:last-child td {
   .page-head h1 {
     max-width: none;
   }
-
-  .hero-panel,
-  .hero-copy,
-  .page-head {
+.page-head {
     padding: 1.2rem;
   }
 
   .home-layout .shell {
     width: min(1220px, calc(100% - 1rem));
-  }
-
-  .hero-stat-grid {
-    grid-template-columns: 1fr;
   }
 
   .section-head {
@@ -5158,7 +5041,7 @@ tr:last-child td {
   padding: 0.5rem 0.58rem;
   border-radius: 18px;
   background:
-    linear-gradient(145deg, rgba(10, 18, 34, 0.82), rgba(5, 10, 20, 0.68));
+    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
 }
 
@@ -5201,8 +5084,8 @@ tr:last-child td {
 }
 
 .home-authority-group-surface {
-  fill: rgba(125, 211, 252, 0.08);
-  stroke: rgba(125, 211, 252, 0.34);
+  fill: color-mix(in srgb, var(--accent) 8%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 34%, transparent);
   stroke-width: 2.2;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -5214,32 +5097,32 @@ tr:last-child td {
 }
 
 .home-authority-group-surface.tone-teal {
-  fill: rgba(78, 228, 195, 0.08);
-  stroke: rgba(78, 228, 195, 0.34);
+  fill: color-mix(in srgb, var(--positive) 8%, transparent);
+  stroke: color-mix(in srgb, var(--positive) 34%, transparent);
 }
 
 .home-authority-group-surface.tone-warm {
-  fill: rgba(255, 139, 97, 0.08);
-  stroke: rgba(255, 139, 97, 0.34);
+  fill: color-mix(in srgb, var(--critical) 8%, transparent);
+  stroke: color-mix(in srgb, var(--critical) 34%, transparent);
 }
 
 .home-authority-group-surface.is-selected,
 .home-authority-group-surface.has-selected-area {
-  fill: rgba(125, 211, 252, 0.16);
-  stroke: rgba(245, 247, 251, 0.72);
+  fill: color-mix(in srgb, var(--accent) 16%, transparent);
+  stroke: color-mix(in srgb, var(--text) 72%, transparent);
   opacity: 1;
 }
 
 .home-authority-group-surface.tone-teal.is-selected,
 .home-authority-group-surface.tone-teal.has-selected-area {
-  fill: rgba(78, 228, 195, 0.16);
-  stroke: rgba(78, 228, 195, 0.8);
+  fill: color-mix(in srgb, var(--positive) 16%, transparent);
+  stroke: color-mix(in srgb, var(--positive) 80%, transparent);
 }
 
 .home-authority-group-surface.tone-warm.is-selected,
 .home-authority-group-surface.tone-warm.has-selected-area {
-  fill: rgba(255, 139, 97, 0.16);
-  stroke: rgba(255, 139, 97, 0.82);
+  fill: color-mix(in srgb, var(--critical) 16%, transparent);
+  stroke: color-mix(in srgb, var(--critical) 82%, transparent);
 }
 
 .home-authority-group-surface.is-muted {
@@ -5257,13 +5140,13 @@ tr:last-child td {
 }
 
 .home-authority-group-text {
-  fill: var(--ink);
+  fill: var(--text);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   paint-order: stroke fill;
-  stroke: rgba(4, 10, 18, 0.96);
+  stroke: var(--border);
   stroke-width: 6px;
   stroke-linejoin: round;
 }
@@ -5280,28 +5163,28 @@ tr:last-child td {
 }
 
 .home-authority-group-link.is-selected .home-authority-group-text {
-  fill: var(--accent-2);
+  fill: var(--positive);
 }
 
 .home-map-focus-card[data-scope-kind="subregion"] {
-  border-color: rgba(78, 228, 195, 0.28);
+  border-color: color-mix(in srgb, var(--positive) 28%, transparent);
   background:
-    linear-gradient(180deg, rgba(10, 26, 34, 0.96), rgba(5, 13, 22, 0.98)),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle);
 }
 
 .home-map-quick-button[data-scope-kind="subregion"] {
   background:
-    linear-gradient(160deg, rgba(12, 28, 38, 0.92), rgba(6, 14, 24, 0.96)),
-    rgba(255, 255, 255, 0.04);
-  border-color: rgba(78, 228, 195, 0.18);
+    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle);
+  border-color: color-mix(in srgb, var(--positive) 18%, transparent);
 }
 
 .home-map-quick-button[data-scope-kind="subregion"].is-active {
-  border-color: rgba(78, 228, 195, 0.56);
+  border-color: color-mix(in srgb, var(--positive) 56%, transparent);
   box-shadow:
     0 18px 38px rgba(0, 0, 0, 0.28),
-    0 0 0 1px rgba(78, 228, 195, 0.2);
+    0 0 0 1px color-mix(in srgb, var(--positive) 20%, transparent);
 }
 
 .home-map-path {
@@ -5361,16 +5244,16 @@ tr:last-child td {
   transition: width 0.3s;
 }
 
-.bar-seg.wb { background: #7dd3fc; }
-.bar-seg.wo { background: #a5b4c8; }
-.bar-seg.asian { background: #ff8b61; }
-.bar-seg.black { background: #4ee4c3; }
+.bar-seg.wb { background: var(--accent); }
+.bar-seg.wo { background: var(--text-muted); }
+.bar-seg.asian { background: var(--critical); }
+.bar-seg.black { background: var(--positive); }
 .bar-seg.mixed { background: #c084fc; }
-.bar-seg.other { background: #facc15; }
+.bar-seg.other { background: var(--warning); }
 
 .stacked-bar-pct {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: var(--text-muted);
   text-align: right;
   white-space: nowrap;
 }
@@ -5381,7 +5264,7 @@ tr:last-child td {
   gap: 0.6rem 1rem;
   margin-top: 0.8rem;
   font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .legend-item {
@@ -5397,12 +5280,12 @@ tr:last-child td {
   border-radius: 2px;
 }
 
-.legend-swatch.wb { background: #7dd3fc; }
-.legend-swatch.wo { background: #a5b4c8; }
-.legend-swatch.asian { background: #ff8b61; }
-.legend-swatch.black { background: #4ee4c3; }
+.legend-swatch.wb { background: var(--accent); }
+.legend-swatch.wo { background: var(--text-muted); }
+.legend-swatch.asian { background: var(--critical); }
+.legend-swatch.black { background: var(--positive); }
 .legend-swatch.mixed { background: #c084fc; }
-.legend-swatch.other { background: #facc15; }
+.legend-swatch.other { background: var(--warning); }
 
 .metric-list {
   display: grid;
@@ -5423,14 +5306,14 @@ tr:last-child td {
 
 .metric-item .metric-label {
   font-size: 0.82rem;
-  color: var(--muted);
+  color: var(--text-muted);
   margin-top: 0.15rem;
 }
 
 .chip.coral {
-  border-color: rgba(255, 139, 97, 0.3);
-  background: rgba(255, 139, 97, 0.2);
-  color: #ffaa88;
+  border-color: color-mix(in srgb, var(--critical) 30%, transparent);
+  background: color-mix(in srgb, var(--critical) 20%, transparent);
+  color: var(--critical);
 }
 
 .chip.tiny {
@@ -5448,7 +5331,7 @@ tr:last-child td {
 .mobile-drawer-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: var(--bg-subtle);
   backdrop-filter: blur(4px);
 }
 .mobile-drawer-panel {
@@ -5457,7 +5340,7 @@ tr:last-child td {
   right: 0;
   bottom: 0;
   width: min(320px, 85vw);
-  background: var(--bg-soft);
+  background: var(--bg-subtle);
   border-left: 1px solid var(--border);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -5475,10 +5358,10 @@ tr:last-child td {
   border-bottom: 1px solid var(--border);
 }
 .mobile-drawer-title {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
-  font-weight: 700;
-  color: var(--ink);
+  font-weight: 600;
+  color: var(--text);
 }
 .mobile-drawer-close {
   display: flex;
@@ -5487,13 +5370,13 @@ tr:last-child td {
   width: 36px;
   height: 36px;
   border: none;
-  background: var(--panel-soft);
-  color: var(--muted);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
   border-radius: 10px;
   cursor: pointer;
   transition: color 180ms;
 }
-.mobile-drawer-close:hover { color: var(--ink); }
+.mobile-drawer-close:hover { color: var(--text); }
 .mobile-drawer-links {
   display: flex;
   flex-direction: column;
@@ -5503,18 +5386,81 @@ tr:last-child td {
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--ink-soft);
+  font-weight: 600;
+  color: var(--text);
   text-decoration: none;
   transition: background 180ms, color 180ms;
 }
 .mobile-drawer-links a:hover,
 .mobile-drawer-links a.active {
-  background: rgba(6, 182, 212, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
 }
 .mobile-drawer-links hr {
   border: none;
   border-top: 1px solid var(--border);
   margin: 0.5rem 0.85rem;
+}
+
+/* ── Region map key (mobile) ───────────────────────────────────────────────
+   Desktop reads the names off the map. On a phone it cannot: the map paints at
+   scale 0.567 there, so the 11px in-map labels render at 6.2px. This key carries
+   the names in real CSS pixels instead, so a viewBox zoom cannot shrink them.
+   See the comment in RegionTileMap.astro for the two attempts that failed. */
+.region-map-key {
+  display: none;
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+
+@media (max-width: 700px) {
+  .region-map-key {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* The names are now in the key, so the map keeps only shape and intensity.
+     Leaving both would print the same word twice, once illegibly. */
+  .region-map-key ~ * .region-map-label,
+  .region-map-canvas .region-map-label,
+  .region-map-canvas .region-map-callout {
+    display: none;
+  }
+
+  .region-map-key-item {
+    display: grid;
+    grid-template-columns: 0.85rem 1fr auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    background: var(--surface, var(--bg-subtle));
+  }
+
+  .region-map-key-item.is-selected {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .region-map-key-swatch {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .region-map-key-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .region-map-key-value {
+    font-size: 0.85rem;
+    font-variant-numeric: lining-nums tabular-nums;
+    opacity: 0.75;
+  }
 }

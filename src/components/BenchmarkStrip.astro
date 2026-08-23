@@ -25,10 +25,10 @@ function positionFor(input: number): number {
 
 const palette =
   tone === "teal"
-    ? { accent: "#4EE4C3", soft: "rgba(78, 228, 195, 0.24)" }
+    ? { accent: "#4EE4C3", soft: "color-mix(in srgb, var(--positive) 24%, transparent)" }
     : tone === "warm"
-      ? { accent: "#FF8B61", soft: "rgba(255, 139, 97, 0.24)" }
-      : { accent: "#7DD3FC", soft: "rgba(125, 211, 252, 0.24)" };
+      ? { accent: "#FF8B61", soft: "color-mix(in srgb, var(--critical) 24%, transparent)" }
+      : { accent: "#7DD3FC", soft: "color-mix(in srgb, var(--accent) 24%, transparent)" };
 ---
 
 <article class={`benchmark-card tone-${tone}`}>

@@ -38,7 +38,7 @@ const terms: Term[] = [
 ---
 
 <BaseLayout
-  title="Glossary | asylumstats"
+  title="UK asylum terms explained: a plain English glossary"
   description="Plain-English definitions of every term used on asylumstats.co.uk. Asylum seeker, refugee, dispersal, SEND, and more."
 >
   <section class="glossary-page shell">
@@ -65,13 +65,13 @@ const terms: Term[] = [
     max-width: 720px;
   }
   .glossary-page h1 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 600;
     margin: 0;
   }
   .glossary-intro {
-    color: var(--muted);
+    color: var(--text-muted);
     font-size: 0.95rem;
     margin: 0.5rem 0 2rem;
   }
@@ -86,23 +86,23 @@ const terms: Term[] = [
     scroll-margin-top: 80px;
   }
   .glossary-entry:target {
-    background: rgba(6, 182, 212, 0.06);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
     margin: 0 -1.25rem;
     border-bottom-color: transparent;
   }
   .glossary-term-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--accent);
     margin: 0 0 0.35rem;
   }
   .glossary-definition {
     font-size: 0.92rem;
     line-height: 1.65;
-    color: var(--ink-soft);
+    color: var(--text);
     margin: 0;
   }
 </style>

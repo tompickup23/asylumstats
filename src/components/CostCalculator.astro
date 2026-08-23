@@ -2,12 +2,15 @@
 /**
  * Local asylum cost calculator.
  * Estimates what asylum support costs in this area based on:
- * - National hotel spend: £5.77M/day (£2.1B/year)
+ * - National hotel spend: £5.77M/day, ie £2.1bn in 2024/25
+ *   (House of Commons Library, CDP-2025-0184, not the NAO: the NAO publishes no per-day figure)
  * - National subsistence: £49.18/week per person
  * - Local authority grant: ~£1,200/year per dispersed person
  * - Local supported asylum seekers count
  * - Area households (for per-household figure)
  */
+import { loadLocalRouteLatest } from "../lib/route-data";
+
 interface Props {
   areaName: string;
   supportedAsylum: number;
@@ -17,9 +20,29 @@ interface Props {
 
 const { areaName, supportedAsylum, totalHouseholds, hotelSites = 0 } = Astro.props;
 
-// National figures (Home Office / NAO)
-const NATIONAL_HOTEL_DAILY = 5_770_000; // £5.77M/day (2024/25 average, NAO)
-const NATIONAL_SUPPORTED_TOTAL = 107_003; // Total on support nationally
+// National figures. The per-day hotel figure comes from the House of Commons Library
+// debate pack CDP-2025-0184: "In 2024/25, the Home Office spent £4bn on asylum support.
+// This includes £2.1bn on hotel accommodation for asylum seekers, which is equivalent to
+// £5.77m per day." It is NOT an NAO figure; the NAO publishes no per-day rate, and
+// crediting it there was a real defect until 21 Aug 2026.
+const NATIONAL_HOTEL_DAILY = 5_770_000; // £5.77M/day, 2024/25 (Commons Library CDP-2025-0184)
+// Derived from the same snapshot the area's own count comes from, never written down.
+//
+// This was hardcoded at 107,003, an undated figure roughly nine months behind the data on
+// the rest of the site, which publishes 97,519 at 31 March 2026. Every place page was
+// therefore telling the reader its area was a smaller share of the country than the site's
+// own homepage implied, and because the share also scales the local hotel estimate, every
+// one of those estimates was about nine per cent low.
+//
+// Summing the areas gives exactly the published national quarter figure, so the two cannot
+// drift apart: if the snapshot moves, both move together.
+const localRouteLatest = loadLocalRouteLatest();
+const NATIONAL_SUPPORTED_TOTAL = localRouteLatest.areas.reduce(
+  (total, area) => total + (area.supportedAsylum ?? 0),
+  0
+);
+const NATIONAL_SNAPSHOT_LABEL = new Date(`${localRouteLatest.snapshotDate}T00:00:00Z`)
+  .toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 const SUBSISTENCE_WEEKLY = 49.18; // Per person per week
 const LA_GRANT_ANNUAL = 1_200; // Per dispersed person per year
 
@@ -34,9 +57,6 @@ const localPerHousehold = totalHouseholds && totalHouseholds > 0
   ? Math.round(localTotalAnnual / totalHouseholds)
   : null;
 
-// National per-taxpayer
-const TAXPAYERS = 34_100_000;
-const nationalPerTaxpayer = Math.round(NATIONAL_HOTEL_DAILY * 365 / TAXPAYERS);
 
 function fmt(n: number): string {
   if (n >= 1_000_000) return `£${(n / 1_000_000).toFixed(1)}M`;
@@ -70,19 +90,19 @@ function fmt(n: number): string {
     </div>
     <p class="cost-note tiny">
       Estimates based on {supportedAsylum.toLocaleString()} people on asylum support in {areaName}
-      ({(localSharePct * 100).toFixed(2)}% of {NATIONAL_SUPPORTED_TOTAL.toLocaleString()} nationally).
-      Hotel costs pro-rated from £5.77M/day national spend (2024/25 average, NAO).
+      ({(localSharePct * 100).toFixed(2)}% of {NATIONAL_SUPPORTED_TOTAL.toLocaleString()} nationally
+      at {NATIONAL_SNAPSHOT_LABEL}).
+      Hotel costs pro-rated from £5.77M/day national spend in 2024/25 (House of Commons Library, CDP-2025-0184).
       Subsistence: £{SUBSISTENCE_WEEKLY}/week per person.
       {hotelSites > 0 ? ` ${hotelSites} known hotel sites in this area.` : ""}
-      Nationally, the hotel bill alone costs £{nationalPerTaxpayer} per taxpayer per year.
     </p>
   </div>
 )}
 
 <style>
   .cost-calc {
-    background: rgba(245, 158, 11, 0.04);
-    border: 1px solid rgba(245, 158, 11, 0.15);
+    background: color-mix(in srgb, var(--warning) 4%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 15%, transparent);
     border-radius: 10px;
     padding: 1.25rem;
     margin-top: 1.25rem;
@@ -96,26 +116,26 @@ function fmt(n: number): string {
   .cost-item {
     text-align: center;
     padding: 0.5rem;
-    background: rgba(255,255,255,0.02);
+    background: var(--bg-subtle);
     border-radius: 6px;
   }
   .cost-value {
     display: block;
     font-size: 1.4rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    color: #f59e0b;
+    font-weight: 600;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--warning);
   }
   .cost-label {
     display: block;
     font-size: 0.72rem;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-top: 0.15rem;
   }
   .cost-highlight {
-    background: rgba(245, 158, 11, 0.08);
-    border: 1px solid rgba(245, 158, 11, 0.2);
+    background: color-mix(in srgb, var(--warning) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
   }
-  .cost-highlight .cost-value { color: #ef4444; font-size: 1.6rem; }
+  .cost-highlight .cost-value { color: var(--critical); font-size: 1.6rem; }
   .cost-note { margin-top: 0.75rem; opacity: 0.5; }
 </style>

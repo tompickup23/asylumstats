@@ -52,7 +52,7 @@ const methodSections = [
 ---
 
 <BaseLayout
-  title="Methodology | asylumstats"
+  title="How asylumstats builds its figures: sources and method"
   description="Editorial and data methodology for asylumstats, including scope rules, evidence layers, and publication limits."
 >
   <section class="page-top">
@@ -348,7 +348,7 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Uncertainty</span>
         <p class="tiny">
-          1,000 Monte Carlo simulations (Yu, Sevcikova, Raftery &amp; Curran 2023). Each simulation perturbs CCRs from Normal(observed, sigma) where sigma = 0.02 (calibrated from v7.0 Hamilton-Perry backcast MAE 1.71pp across 269 areas). Sigma scales with projection horizon: sigma_t = sigma_base x sqrt(years/10), so 2061 intervals are approximately 2x wider than 2031 intervals. James-Stein shrinkage (k=50) pulls small-population CCRs toward the national average. Reports median + 80%/95% prediction intervals per area. Spatial smoothing: projections blended 70/30 with regional averages.
+          1,000 Monte Carlo simulations (Yu, Sevcikova, Raftery &amp; Curran 2023). Each simulation perturbs CCRs from Normal(observed, sigma) where sigma = 0.02, the rule being mean absolute error over 100, rounded to two decimals. It was documented as calibrated from a backcast that has since been withdrawn; the withdrawal does not move the band, because the withdrawn 1.71pp and the recalibrated 1.56pp both round to 0.02. Sigma scales with projection horizon: sigma_t = sigma_base x sqrt(years/10), so 2061 intervals are approximately 2x wider than 2031 intervals. James-Stein shrinkage (k=50) pulls small-population CCRs toward the national average. Reports median + 80%/95% prediction intervals per area. Spatial smoothing: projections blended 70/30 with regional averages.
         </p>
       </article>
     </div>
@@ -362,7 +362,7 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Validation</span>
         <p class="tiny">
-          Hamilton-Perry v7.0 backcast validated against Census 2021 across 269 areas using the same 20-group CCR/CWR methodology as the forward projections. Our MAE: 1.71pp (RMSE 1.87pp), a 30% improvement over v6.0 (2.45pp) due to Census 2011 DC2101EW replacing proportional splitting from NEWETHPOP 12 groups. Compared against: NEWETHPOP cohort-component model (MAE 2.58pp) and national-average CCRs only (MAE 2.32pp). Our local-CCR model outperforms NEWETHPOP by 33%. Local CCRs better in 50% of individual areas. Most demographic change is driven by national-level trends. Sigma calibrated at 0.02. SNPP 2022-based envelope constraint. DfE School Census 2024/25 calibration applied (20% damped, ages 0-5). NOTE: the backcast is partially circular because CCRs were derived from the same 2011→2021 endpoints. The national-CCR baseline is a better measure of genuine predictive ability.
+          Correction, 23 August 2026. The accuracy figures this section carried are withdrawn: a backcast MAE of 1.71pp for our model, 2.58pp for NEWETHPOP, 2.45pp for our previous version, and the claims of a 30 per cent improvement and outperforming NEWETHPOP by 33 per cent. The backcast derived its ratios from the same 2011 to 2021 endpoints it was then scored against, which this section already noted made it "partially circular", so it measured the model's own guardrails rather than its predictive accuracy, and its bias ran in the opposite direction to the truth. No head-to-head should be read from those numbers. What stands on our own published validation data is NEWETHPOP's error against Census 2021: mean absolute error 3.95pp with RMSE 5.21pp across 296 areas, over-predicting the White British share in 282 of them. The model has since been recalibrated against a genuine out-of-sample test, fitting 2001 to 2011 and forecasting 2021, and those figures will be published here when that recalibration reaches this site. SNPP 2022-based envelope constraint and DfE School Census 2024/25 calibration (20% damped, ages 0-5) are unchanged.
         </p>
       </article>
     </div>
@@ -402,7 +402,7 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Grant rates: initial vs after appeals</span>
         <p class="tiny">
-          Home Office Asy_D04 outcome analysis (Dec 2025) reveals initial decision grant rates significantly understate true protection rates. 70 nationalities see rates rise after appeals, with an average uplift of +14.1pp. Largest uplifts: Sri Lanka 27%→59% (+32pp), DR Congo 33%→60% (+27pp), Iraq 31%→56% (+26pp), Iran 67%→85% (+19pp). The site displays both initial and appeal-adjusted rates.
+          Home Office Asy_D04 outcome analysis (year ending March 2026) shows initial decision grant rates understate true protection rates. Of the 105 nationalities tracked, 101 see rates rise after appeals, and the average uplift across those 101 is +14.6pp. Largest uplifts: Sri Lanka 26.9%→60.1% (+33pp), DR Congo 33%→60% (+27pp), Iraq 30.9%→57.0% (+26pp), Iran 67%→85% (+19pp). The site displays both initial and appeal-adjusted rates. An earlier version of this paragraph said 70 nationalities: that count was never right, being neither the 105 tracked nor the 101 that rise.
         </p>
       </article>
     </div>

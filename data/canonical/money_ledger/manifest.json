@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-05-25T11:50:23.945Z",
+  "generated_at": "2026-08-23T19:09:27.802Z",
   "dataset_id": "money_ledger",
   "source_files": [
     {
       "name": "contractLedger",
       "path": "data/manual/asylum-contract-ledger.csv",
-      "sha256": "b37e4407fe58183eb2aa08eb6f026a124c8a92d098eca1ea130ec28c81d612ac"
+      "sha256": "a4d8b02b25d05e2ff91a3a47f10e8df80412f3dc3829ee8a870a688f72b2494f"
     },
     {
       "name": "hotelEntityLedger",
-      "path": "src/data/live/hotel-entity-ledger.json",
-      "sha256": "3326fc3a5ab72ac9b03a5c13dad7245b48a83397150da00d351ed20ae43aeadb"
+      "path": "data/marts/hotel_entities/hotel-entity-ledger.json",
+      "sha256": "b485d550a1391e8f9d9cc8f10b9f4a1817d4e333a0381935f7279d9aa32d2ccd"
     },
     {
       "name": "followMoney",

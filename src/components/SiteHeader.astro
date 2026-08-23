@@ -2,6 +2,10 @@
 type NavItem = { href: string; label: string; desc: string };
 type NavGroup = { label: string; items: NavItem[] };
 
+// No True Cost figure here any more. This description sits on every page, and it used
+// to read "£8.1B True Cost breakdown", which was both a fifth conflicting figure and a
+// promise /spending/ does not keep: that page is an 11-row starter ledger with no True
+// Cost content. The breakdown is the finding, and the homepage tile links to it.
 const NAV_GROUPS: NavGroup[] = [
   {
     label: "Explore",
@@ -9,13 +13,17 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/places", label: "Places", desc: "Every UK local authority" },
       { href: "/national", label: "National", desc: "UK-wide totals" },
       { href: "/regional", label: "Regional", desc: "9 English regions + nations" },
-      { href: "/councils", label: "Councils", desc: "Accommodation by council" },
+      // /councils is not linked here on purpose. It is noIndex research infrastructure
+      // that describes itself as "context only", and its headline £3.6bn is Lancashire
+      // County Council's entire spend corpus rather than asylum spend. Putting it in the
+      // primary nav pointed all 478 pages at it and invited that figure to be read as an
+      // asylum number. The page still resolves at its URL for anyone working with it.
     ],
   },
   {
     label: "Money Trail",
     items: [
-      { href: "/spending", label: "Spending", desc: "£8.1B True Cost breakdown" },
+      { href: "/spending", label: "Spending", desc: "Contracts, suppliers, public money rows" },
       { href: "/entities", label: "Entities", desc: "Suppliers & contractors" },
       { href: "/routes", label: "Routes", desc: "Small-boat & resettlement" },
       { href: "/compare", label: "Compare", desc: "Side-by-side any place" },
@@ -49,23 +57,21 @@ function isActiveGroup(group: NavGroup): boolean {
 }
 ---
 
-<header class="site-header shell">
+<header class="site-header">
+  <div class="site-header-inner shell">
   <a class="brand" href="/">
+    {/*
+      Two columns, one taller. The estate mark, drawn on the same 64 unit grid as the
+      other four sites. It replaces a radar scanner whose own brand guide called it
+      "actively monitoring data points" with "orange blips = alerts": a surveillance and
+      alarm metaphor on a site publishing official statistics about people seeking
+      asylum, which is the one place that reading costs the most. Two columns say only
+      that one number is bigger than another.
+    */}
     <span class="brand-mark">
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28" aria-hidden="true">
-        <defs>
-          <linearGradient id="rs" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
-            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
-          </linearGradient>
-          <clipPath id="rc"><circle cx="16" cy="16" r="12"/></clipPath>
-        </defs>
-        <circle cx="16" cy="16" r="13" fill="none" stroke="#06b6d4" stroke-width="2"/>
-        <circle cx="16" cy="16" r="8" fill="none" stroke="#06b6d4" stroke-width="0.6" opacity="0.25"/>
-        <g clip-path="url(#rc)"><path d="M16,16 L16,3 A13,13 0 0,1 27,22 Z" fill="url(#rs)"/></g>
-        <circle cx="21" cy="11" r="1.8" fill="#f59e0b"/>
-        <circle cx="12" cy="20" r="1.5" fill="#06b6d4"/>
-        <circle cx="16" cy="16" r="1.5" fill="#06b6d4"/>
+      <svg viewBox="0 0 64 64" width="30" height="30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="17" y="14" width="13" height="36" rx="2" fill="var(--accent)"/>
+        <rect x="34" y="27" width="13" height="23" rx="2" fill="var(--accent-bright)"/>
       </svg>
     </span>
     <span class="brand-copy">
@@ -117,6 +123,7 @@ function isActiveGroup(group: NavGroup): boolean {
     <button class="mobile-menu-btn" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
+  </div>
   </div>
 </header>
 
@@ -268,7 +275,7 @@ function isActiveGroup(group: NavGroup): boolean {
     padding: 0.5rem 0.85rem;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--muted);
+    color: var(--text-muted);
     border-radius: 8px;
     cursor: pointer;
     list-style: none;
@@ -277,9 +284,9 @@ function isActiveGroup(group: NavGroup): boolean {
   }
   .mega-trigger::-webkit-details-marker { display: none; }
   .mega-trigger::marker { content: ""; }
-  .mega-trigger:hover { color: var(--ink); background: var(--panel-soft); }
-  .mega-group[open] .mega-trigger { color: var(--ink); background: var(--panel-soft); }
-  .mega-group[data-active="true"] .mega-trigger { color: var(--ink); }
+  .mega-trigger:hover { color: var(--text); background: var(--bg-subtle); }
+  .mega-group[open] .mega-trigger { color: var(--text); background: var(--bg-subtle); }
+  .mega-group[data-active="true"] .mega-trigger { color: var(--text); }
   .mega-group[data-active="true"] .mega-trigger::after {
     content: "";
     position: absolute;
@@ -303,7 +310,7 @@ function isActiveGroup(group: NavGroup): boolean {
     flex-direction: column;
     gap: 0.15rem;
     padding: 0.55rem;
-    background: var(--bg-soft);
+    background: var(--bg-subtle);
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: var(--shadow);
@@ -324,22 +331,22 @@ function isActiveGroup(group: NavGroup): boolean {
     text-decoration: none;
     transition: background 180ms;
   }
-  .mega-item:hover { background: var(--panel-soft); }
+  .mega-item:hover { background: var(--bg-subtle); }
   .mega-item[aria-current="page"] {
     background: color-mix(in srgb, var(--accent) 14%, transparent);
   }
   .mega-item-label {
     display: block;
     font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     line-height: 1.2;
   }
   .mega-item[aria-current="page"] .mega-item-label { color: var(--accent); }
   .mega-item-desc {
     display: block;
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     line-height: 1.4;
     margin-top: 0.2rem;
   }
@@ -352,12 +359,12 @@ function isActiveGroup(group: NavGroup): boolean {
     height: 40px;
     border: none;
     background: none;
-    color: var(--ink-soft);
+    color: var(--text);
     cursor: pointer;
     border-radius: 10px;
     transition: background 180ms;
   }
-  .mobile-menu-btn:hover { background: var(--panel-soft); }
+  .mobile-menu-btn:hover { background: var(--bg-subtle); }
 
   @media (max-width: 900px) {
     .desktop-nav { display: none; }
@@ -370,7 +377,7 @@ function isActiveGroup(group: NavGroup): boolean {
   .mobile-drawer-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: var(--bg-subtle);
     backdrop-filter: blur(4px);
     animation: drawerFadeIn 200ms ease-out;
   }
@@ -380,7 +387,7 @@ function isActiveGroup(group: NavGroup): boolean {
     right: 0;
     height: 100%;
     width: min(92vw, 380px);
-    background: var(--bg-soft);
+    background: var(--bg-subtle);
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -400,10 +407,10 @@ function isActiveGroup(group: NavGroup): boolean {
   }
   .mobile-drawer-title {
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--text-muted);
   }
   .mobile-drawer-close {
     display: inline-flex;
@@ -413,11 +420,11 @@ function isActiveGroup(group: NavGroup): boolean {
     height: 36px;
     border: none;
     background: none;
-    color: var(--ink-soft);
+    color: var(--text);
     cursor: pointer;
     border-radius: 8px;
   }
-  .mobile-drawer-close:hover { background: var(--panel-soft); }
+  .mobile-drawer-close:hover { background: var(--bg-subtle); }
   .mobile-drawer-body {
     display: flex;
     flex-direction: column;
@@ -426,8 +433,8 @@ function isActiveGroup(group: NavGroup): boolean {
   .mobile-drawer-home {
     padding: 0.85rem 0.25rem;
     font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     text-decoration: none;
     border-bottom: 1px solid var(--border);
   }
@@ -440,8 +447,8 @@ function isActiveGroup(group: NavGroup): boolean {
     align-items: center;
     padding: 0.85rem 0.25rem;
     font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     cursor: pointer;
     list-style: none;
   }
@@ -459,9 +466,9 @@ function isActiveGroup(group: NavGroup): boolean {
     padding: 0.6rem 0.75rem;
     border-radius: 8px;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
   }
-  .mobile-group-item:hover { background: var(--panel-soft); }
+  .mobile-group-item:hover { background: var(--bg-subtle); }
   .mobile-group-item[aria-current="page"] {
     background: color-mix(in srgb, var(--accent) 14%, transparent);
     color: var(--accent);
@@ -475,7 +482,7 @@ function isActiveGroup(group: NavGroup): boolean {
   .mobile-item-desc {
     display: block;
     font-size: 0.76rem;
-    color: var(--muted);
+    color: var(--text-muted);
     line-height: 1.35;
     margin-top: 0.15rem;
   }

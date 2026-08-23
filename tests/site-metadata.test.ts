@@ -10,6 +10,8 @@ import {
   buildPlaceStructuredData,
   buildReleaseCollectionStructuredData,
   getIndexableSitePaths,
+  regionNameInSentence,
+  getPublicPlaceRegions,
   normalisePageTitle
 } from "../src/lib/site";
 
@@ -34,8 +36,11 @@ describe("site metadata helpers", () => {
     expect(paths).toContain("/routes/");
     expect(paths).toContain("/entities/");
     expect(paths).toContain("/spending/");
-    expect(paths).toContain("/councils/");
     expect(paths).not.toContain("/hotels/");
+    // /councils/ is noIndex research infrastructure and is deliberately not listed. The
+    // hub used to be here while its own page carried noIndex, which asked search engines
+    // to index a page telling them not to.
+    expect(paths).not.toContain("/councils/");
     // Hub pages are indexable; individual noindex'd profile pages must not slip in
     expect(paths.some((path) => /^\/entities\/[^/]+/.test(path))).toBe(false);
     expect(paths.some((path) => /^\/councils\/[^/]+/.test(path))).toBe(false);
@@ -46,9 +51,17 @@ describe("site metadata helpers", () => {
     expect(DEFAULT_SOCIAL_IMAGE_PATH).toBe("/og-card.png");
   });
 
-  it("ships raster social card assets alongside the SVG", () => {
+  // One card, one format. The webp and svg variants this used to assert were referenced
+  // by nothing: og:image pointed at the PNG, and no crawler was being offered the others.
+  // The PNG is now the estate default card, generated from the brand system.
+  it("ships the default social card", () => {
     expect(existsSync(new URL("../public/og-card.png", import.meta.url))).toBe(true);
-    expect(existsSync(new URL("../public/og-card.webp", import.meta.url))).toBe(true);
+  });
+
+  it("ships the estate icons the document head asks for", () => {
+    expect(existsSync(new URL("../public/favicon.svg", import.meta.url))).toBe(true);
+    expect(existsSync(new URL("../public/apple-touch-icon.png", import.meta.url))).toBe(true);
+    expect(existsSync(new URL("../public/site.webmanifest", import.meta.url))).toBe(true);
   });
 
   it("builds place structured data with area and dataset nodes", () => {
@@ -103,5 +116,32 @@ describe("site metadata helpers", () => {
     expect(nodes).toHaveLength(3);
     expect(nodes[1]["@type"]).toBe("ProfilePage");
     expect(nodes[2]["@type"]).toBe("Organization");
+  });
+});
+
+describe("region names in a sentence", () => {
+  it("adds the definite article only where the name needs one", () => {
+    expect(regionNameInSentence("North West")).toBe("the North West");
+    expect(regionNameInSentence("East of England")).toBe("the East of England");
+    expect(regionNameInSentence("London")).toBe("London");
+    expect(regionNameInSentence("Scotland")).toBe("Scotland");
+    expect(regionNameInSentence("Wales")).toBe("Wales");
+    expect(regionNameInSentence("Northern Ireland")).toBe("Northern Ireland");
+  });
+
+  it("does not double the article on Yorkshire and The Humber", () => {
+    // The name carries its own "The". Prefixing another produced
+    // "Asylum seekers in the Yorkshire and The Humber" in a live page title.
+    expect(regionNameInSentence("Yorkshire and The Humber")).toBe("Yorkshire and The Humber");
+  });
+
+  it("covers every region the site actually builds", () => {
+    // A region added later must be considered deliberately, not silently default to no
+    // article. This asserts the helper has an opinion about each live region name.
+    for (const region of getPublicPlaceRegions()) {
+      const rendered = regionNameInSentence(region.regionName);
+      expect(rendered.endsWith(region.regionName)).toBe(true);
+      expect(rendered.startsWith("the the")).toBe(false);
+    }
   });
 });

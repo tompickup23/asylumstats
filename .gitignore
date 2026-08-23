@@ -62,3 +62,10 @@ src/data/live/hotel-entity-ledger.json
 src/data/live/hotel-area-sightings.json
 src/data/live/hotel-archive-queue.json
 src/data/live/small-boats.json
+src/data/live/border-security.json
+
+# Annual report and border security raw sources. Banked to doge:Asylum Stats with
+# hashes in data/raw/manifests/; the accounts PDF alone is 17.9 MB, and the border
+# security HTML is a provenance artefact rather than something the site reads.
+data/raw/home_office_ara/
+data/raw/border_security/

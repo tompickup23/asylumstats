@@ -3,10 +3,14 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
-import { slugifyAreaName } from "../../../lib/site";
+import { slugifyAreaName, regionNameInSentence } from "../../../lib/site";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import rawProjections from "../../../data/live/ethnic-projections.json";
+import {
+  ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
+  accommodationCostForArea
+} from "../../../lib/true-cost";
 
 const localRouteLatest = loadLocalRouteLatest();
 
@@ -23,6 +27,13 @@ const { region } = Astro.props as { region: PlaceDirectoryRegion };
 const areasSorted = [...region.areas].sort((a, b) => b.area.supportedAsylum - a.area.supportedAsylum);
 const maxAreaAsylum = areasSorted[0]?.area.supportedAsylum ?? 1;
 const totalRegional = region.supportedAsylum;
+// Per-region cost, on the accommodation and support basis. Withheld since PR #36 while
+// True Cost was stated five ways; reinstated from the single constant. Deliberately NOT
+// the system total per head, which would attribute post-decision welfare and offender
+// costs to people currently on support and overstate the region by roughly twice.
+const regionalAccommodationCostLabel = totalRegional > 0
+  ? ` Accommodation and support at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(totalRegional) / 1_000_000).toFixed(0)}M a year.`
+  : "";
 
 // Compute regional WBI
 const allAreas = (rawProjections as any).areas as Record<string, any>;
@@ -41,7 +52,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 ---
 
 <BaseLayout
-  title={`${region.regionName} | asylumstats`}
+  title={`Asylum seekers in ${regionNameInSentence(region.regionName)}: ${totalRegional.toLocaleString()} on support`}
   description={pageDescription}
 >
   <Breadcrumbs items={[
@@ -88,7 +99,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 
   <PlainEnglish
     headline={`${totalRegional.toLocaleString()} people on asylum support in ${region.regionName}`}
-    body={`${region.areas.length} local authorities in this region. Rate of ${region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000 residents.${regionWbi2021 !== null ? ` Average White British share: ${regionWbi2021.toFixed(0)}% (2021) projected to ${regionWbi2051?.toFixed(0)}% by 2051.` : ""}`}
+    body={`${region.areas.length} local authorities in this region. Rate of ${region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000 residents.${regionWbi2021 !== null ? ` Average White British share: ${regionWbi2021.toFixed(0)}% (2021) projected to ${regionWbi2051?.toFixed(0)}% by 2051.` : ""}${regionalAccommodationCostLabel}`}
     tone={totalRegional > 10000 ? "alert" : totalRegional > 3000 ? "info" : "success"}
   />
 
@@ -128,10 +139,10 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 
 <style>
   .reg-section-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 1rem;
   }
   .reg-area-list {
@@ -146,18 +157,18 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
     gap: 0.5rem;
     padding: 0.55rem 0;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
   .reg-area-row:hover {
-    background: rgba(6, 182, 212, 0.04);
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
   }
   .reg-area-rank {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--muted);
+    font-weight: 600;
+    color: var(--text-muted);
     text-align: center;
   }
   .reg-area-info {
@@ -176,38 +187,38 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
   .reg-area-bar-track {
     display: block;
     height: 8px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-subtle);
     border-radius: 4px;
     overflow: hidden;
   }
   .reg-area-bar-fill {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent));
     border-radius: 4px;
     min-width: 2px;
   }
   .reg-area-count {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.88rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
     text-align: right;
   }
   .reg-area-rate {
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-align: right;
   }
   .reg-area-wbi {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-align: right;
     white-space: nowrap;
   }
   .reg-area-caption {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.5;
     margin-top: 0.75rem;
   }

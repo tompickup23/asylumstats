@@ -1,0 +1,132 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import DataFreshness from "../../../components/DataFreshness.astro";
+import { getCounties } from "../../../lib/county-directory";
+import { loadLocalRouteLatest } from "../../../lib/route-data";
+
+const localRouteLatest = loadLocalRouteLatest();
+const counties = getCounties();
+const englandTotal = counties.reduce((total, county) => total + county.supportedAsylum, 0);
+const maxCounty = counties[0]?.supportedAsylum || 1;
+
+const pageTitle = `Asylum seekers by county: all ${counties.length} English counties`;
+const pageDescription =
+  `Asylum seekers on support in every English county, from ${counties[0]?.countyName} down. ` +
+  `${englandTotal.toLocaleString()} people across ${counties.length} counties as at 31 March 2026.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Breadcrumbs items={[{ label: "Places", href: "/places/" }, { label: "Counties" }]} />
+
+  <section class="page-top">
+    <section class="page-head">
+      <span class="kicker">England</span>
+      <h1>Asylum seekers by county</h1>
+      <DataFreshness
+        updated={localRouteLatest.snapshotDate ?? "2026-03-31"}
+        source="Home Office"
+        sourceUrl="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
+      />
+    </section>
+  </section>
+
+  <section class="section shell">
+    <p class="cty-lede">
+      Counties here are ceremonial counties, the ones people mean in ordinary speech, so
+      each includes any unitary authority sitting inside its boundary. Every figure is the
+      sum of the published local authority figures, and the {counties.length} counties
+      together account for all {englandTotal.toLocaleString()} people on asylum support in
+      England.
+    </p>
+    <div class="cty-list">
+      {counties.map((county, i) => (
+        <a href={county.countyPath} class="cty-row">
+          <span class="cty-rank">{i + 1}</span>
+          <div class="cty-info">
+            <span class="cty-name">{county.countyName}</span>
+            <span class="cty-bar-track">
+              <span
+                class="cty-bar-fill"
+                style={`width: ${(county.supportedAsylum / maxCounty) * 100}%`}
+              ></span>
+            </span>
+          </div>
+          <span class="cty-count">{county.supportedAsylum.toLocaleString()}</span>
+          <span class="cty-rate">{county.supportedAsylumRate ?? "-"}</span>
+        </a>
+      ))}
+    </div>
+    <p class="cty-caption">
+      Count is people on asylum support at 31 March 2026. Rate is per 10,000 residents.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .cty-lede {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    opacity: 0.85;
+    margin-bottom: 1rem;
+    max-width: 70ch;
+  }
+  .cty-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cty-row {
+    display: grid;
+    grid-template-columns: 2rem 1fr 5rem 3.5rem;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .cty-row:hover {
+    background: rgba(127, 127, 127, 0.12);
+  }
+  .cty-rank {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: right;
+  }
+  .cty-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .cty-name {
+    font-size: 0.85rem;
+  }
+  .cty-bar-track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(127, 127, 127, 0.2);
+    overflow: hidden;
+  }
+  .cty-bar-fill {
+    display: block;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.55;
+  }
+  .cty-count,
+  .cty-rate {
+    font-variant-numeric: lining-nums tabular-nums;
+    text-align: right;
+    font-size: 0.85rem;
+  }
+  .cty-rate {
+    opacity: 0.7;
+  }
+  .cty-caption {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    margin-top: 0.6rem;
+  }
+</style>

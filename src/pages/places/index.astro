@@ -419,11 +419,11 @@ const pageDescription =
   "Browse UK asylum pressure by region and place, with hotel visibility folded into local place pages and the national system logic kept separate.";
 ---
 
-<BaseLayout title="Places | asylumstats" description={pageDescription}>
+<BaseLayout title={`Asylum seekers by local authority: all ${placeCount} UK areas`} description={pageDescription}>
   <!-- SEARCH-FIRST: Find your area -->
   <section id="place-search" class="section section-anchor priority-section" style="padding: 2.5rem 0;">
     <div style="max-width: 700px; margin: 0 auto; text-align: center;">
-      <h1 style="font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Find your area</h1>
+      <h1 style="font-family: var(--font-display); font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem;">Find your area</h1>
       <p class="lede" style="margin-bottom: 1.5rem;">{placeCount} local authorities. Asylum support for every one; demographic, religion and socioeconomic data where the source covers it.</p>
       <div class="lookup-field">
         <input
@@ -432,7 +432,7 @@ const pageDescription =
           placeholder="Type a council name, for example Birmingham, Burnley or Glasgow"
           autocomplete="off"
           spellcheck="false"
-          style="width: 100%; padding: 0.9rem 1.2rem; font-size: 1rem; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--ink);"
+          style="width: 100%; padding: 0.9rem 1.2rem; font-size: 1rem; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);"
         />
         <div class="lookup-results" id="place-search-results"></div>
       </div>

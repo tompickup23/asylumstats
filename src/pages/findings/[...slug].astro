@@ -25,13 +25,34 @@ const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
 // Get related findings (same category)
 const allFindings = await getCollection("findings");
 const relatedFindings = allFindings
-  .filter((f) => f.data.category === finding.data.category && f.id !== finding.id)
+  .filter(
+    (f) =>
+      f.data.category === finding.data.category &&
+      f.id !== finding.id &&
+      !f.data.superseded_by
+  )
   .slice(0, 3);
 
+// A superseded article keeps its URL and declares the replacement canonical, so the two
+// stop competing for the same query.
+const supersededBy = finding.data.superseded_by;
+const replacement = supersededBy
+  ? allFindings.find((f) => f.id.replace(/\.md$/, "") === supersededBy)
+  : undefined;
+if (supersededBy && !replacement) {
+  throw new Error(
+    `Finding "${findingSlug}" is marked superseded_by "${supersededBy}", but no finding ` +
+      `has that slug. A canonical pointing at a 404 is worse than none.`
+  );
+}
+const replacementHref = replacement
+  ? `/findings/${replacement.id.replace(/\.md$/, "")}/`
+  : undefined;
+
 const verdictColor: Record<string, string> = {
-  alert: "#f59e0b",
-  critical: "#ef4444",
-  resolved: "#10b981",
+  alert: "var(--warning)",
+  critical: "var(--critical)",
+  resolved: "var(--positive)",
   info: "var(--accent)"
 };
 const verdictLabel: Record<string, string> = {
@@ -46,6 +67,7 @@ const verdictLabel: Record<string, string> = {
   title={`${finding.data.headline} | asylumstats`}
   description={finding.data.summary}
   image={ogImage}
+  canonicalOverride={replacementHref}
   structuredData={[{
     "@context": "https://schema.org",
     "@type": "Article",
@@ -64,6 +86,27 @@ const verdictLabel: Record<string, string> = {
   ]} />
 
   <article class="finding-detail shell">
+    {replacementHref && replacement && (
+      <aside class="superseded-note">
+        <strong>This article has been superseded.</strong> It analyses the same question on
+        an earlier data release. The current version, on the latest figures, is
+        <a href={replacementHref}>{replacement.data.headline}</a>. This page is kept so
+        existing links to it still work.
+      </aside>
+    )}
+
+    {finding.data.model_recalibrated && (
+      <aside class="recalibrated-note">
+        <strong>The model behind these figures has been recalibrated.</strong> The counts on
+        this page are the output of the projection version this site currently publishes.
+        The same model has since been re-fitted against an out-of-sample test, on
+        <a href="https://ukdemographics.co.uk/methodology/" rel="noopener">ukdemographics.co.uk</a>,
+        which changes them. Treat the numbers here as the earlier version until this site
+        carries the recalibrated run. Our <a href="/methodology/">methodology page</a> sets
+        out what was withdrawn and why.
+      </aside>
+    )}
+
     <div class="finding-detail-meta">
       <span
         class="finding-verdict-badge"
@@ -150,6 +193,38 @@ const verdictLabel: Record<string, string> = {
     padding-bottom: 3rem;
   }
 
+  .recalibrated-note {
+    display: block;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--warning);
+    border-radius: var(--radius-sm);
+    background: var(--bg-subtle);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .recalibrated-note strong { color: var(--text); }
+  .recalibrated-note a { color: var(--accent); font-weight: 600; }
+
+  .superseded-note {
+    display: block;
+    margin-bottom: 1.5rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--accent-3, var(--warning));
+    border-left-width: 4px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--accent-3, var(--warning)) 10%, transparent);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .superseded-note a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
   .finding-detail-meta {
     display: flex;
     align-items: center;
@@ -158,7 +233,7 @@ const verdictLabel: Record<string, string> = {
   }
   .finding-verdict-badge {
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: 0.25rem 0.75rem;
@@ -166,13 +241,13 @@ const verdictLabel: Record<string, string> = {
   }
   .finding-detail-date {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
 
   .finding-detail-headline {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1.15;
     margin: 0 0 1.5rem;
   }
@@ -183,29 +258,29 @@ const verdictLabel: Record<string, string> = {
     gap: 0.75rem;
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
   }
   .fds-value {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
   }
   .fds-label {
     font-size: 0.9rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
 
   .finding-detail-body {
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--ink-soft);
+    color: var(--text);
   }
   .finding-detail-body :global(strong) {
-    color: var(--ink);
-    font-weight: 700;
+    color: var(--text);
+    font-weight: 600;
   }
   .finding-detail-body :global(p) {
     margin: 0 0 1rem;
@@ -223,17 +298,17 @@ const verdictLabel: Record<string, string> = {
   }
   .finding-detail-source {
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--accent);
     text-decoration: none;
   }
   .finding-detail-source:hover { text-decoration: underline; }
   .finding-back {
     font-size: 0.85rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-decoration: none;
   }
-  .finding-back:hover { color: var(--ink); }
+  .finding-back:hover { color: var(--text); }
   .finding-share-card {
     margin-top: 2rem;
     padding-top: 1.5rem;
@@ -251,11 +326,11 @@ const verdictLabel: Record<string, string> = {
     border-top: 1px solid var(--border);
   }
   .finding-share-actions h3 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 600;
     margin: 0 0 0.75rem;
-    color: var(--ink);
+    color: var(--text);
   }
   .finding-related {
     margin-top: 2rem;
@@ -263,11 +338,11 @@ const verdictLabel: Record<string, string> = {
     border-top: 1px solid var(--border);
   }
   .finding-related h3 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 600;
     margin: 0 0 0.75rem;
-    color: var(--ink);
+    color: var(--text);
   }
   .finding-related-grid {
     display: grid;
@@ -275,7 +350,7 @@ const verdictLabel: Record<string, string> = {
     gap: 0.75rem;
   }
   .finding-related-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1rem;
@@ -287,14 +362,14 @@ const verdictLabel: Record<string, string> = {
   }
   .finding-related-card:hover { border-color: var(--accent); }
   .frc-stat {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
   }
   .frc-headline {
     font-size: 0.82rem;
-    color: var(--ink-soft);
+    color: var(--text);
     line-height: 1.4;
   }
 </style>

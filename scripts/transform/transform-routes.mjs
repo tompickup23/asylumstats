@@ -3,6 +3,7 @@ import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "no
 import path from "node:path";
 import xlsx from "xlsx";
 import { buildAppealsBlock, readTribunalAppeals } from "../lib/tribunal-appeals.mjs";
+import { readRoutesManifest, releaseSectionUrl, resolveSource } from "../lib/route-release.mjs";
 
 const rawDir = path.resolve("data/raw/uk_routes");
 const canonicalDir = path.resolve("data/canonical/uk_routes");
@@ -21,102 +22,65 @@ if (!tribunalAppeals) {
 
 const tribunalAppealsBlock = buildAppealsBlock(tribunalAppeals);
 
-const sourceFiles = {
-  localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-mar-2026.ods"),
-  localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-mar-2026.xlsx"),
-  illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx"),
-  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-mar-2026.ods"),
-  asylumClaims: path.join(rawDir, "asylum-claims-datasets-mar-2026.xlsx"),
-  asylumAwaitingDecision: path.join(rawDir, "asylum-claims-awaiting-decision-datasets-mar-2026.xlsx"),
-  asylumOutcomeAnalysis: path.join(rawDir, "outcome-analysis-asylum-claims-datasets-mar-2026.xlsx"),
-  asylumSupport: path.join(rawDir, "asylum-seekers-receipt-support-datasets-mar-2026.xlsx"),
-  returns: path.join(rawDir, "returns-datasets-mar-2026.xlsx")
-};
+// Which release each dataset belongs to, read from the manifest fetch-routes.mjs wrote
+// rather than written out here.
+//
+// This used to be nine hardcoded `-mar-2026` filenames and nine hardcoded media URLs. The
+// fetcher had already been taught to discover the newest file, so the pair disagreed the
+// moment a quarter landed: in CI the transform failed with ENOENT on a filename nobody had
+// downloaded (which killed the 10 August refresh), and on a machine still holding the old
+// file it would have transformed March data and labelled it June. Everything period-shaped
+// now comes from the file that was actually fetched.
+//
+// Only the section of the release that documents each dataset is named here, because that
+// is genuinely per-dataset and does not move. The two local authority files live on the
+// standing statistical data set instead of the quarterly release, so they carry an absolute
+// URL and `releaseSectionUrl` passes it through.
+const REGIONAL_LA_PAGE =
+  "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data";
 
-const sourceMeta = {
-  localImmigration: {
-    source_id: "local_immigration_groups_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
-    methodology_url: "https://www.gov.uk/government/statistics/local-authority-data-on-immigration-groups",
-    release_date: "2026-05-21"
-  },
-  localResettlement: {
-    source_id: "local_resettlement_routes_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e4ef22977ebc82cb3fb6/resettlement-local-authority-datasets-mar-2026.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistics/data-on-asylum-and-resettlement-in-local-authority-areas",
-    release_date: "2026-05-21"
-  },
-  illegalEntry: {
-    source_id: "illegal_entry_routes_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e3b7ee62840dba48a2c7/illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    release_date: "2026-05-21"
-  },
-  safeLegal: {
-    source_id: "safe_legal_routes_summary_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e568ee62840dba48a2ca/safe-legal-routes-summary-tables-mar-2026.ods",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    release_date: "2026-05-21"
-  },
-  asylumClaims: {
-    source_id: "asylum_claims_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05df9d97000cb6073e4e25/asylum-claims-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
-    release_date: "2026-05-21"
-  },
+const SOURCE_SECTIONS = {
+  localImmigration: { sourceId: "local_immigration_groups", section: REGIONAL_LA_PAGE },
+  localResettlement: { sourceId: "local_resettlement_routes", section: REGIONAL_LA_PAGE },
+  illegalEntry: { sourceId: "illegal_entry_routes", section: "summary-of-latest-statistics" },
+  safeLegal: { sourceId: "safe_legal_routes_summary", section: "summary-of-latest-statistics" },
+  asylumClaims: { sourceId: "asylum_claims", section: "how-many-people-claim-asylum-in-the-uk" },
   asylumAwaitingDecision: {
-    source_id: "asylum_awaiting_decision_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05df3d5f39105e0848a2be/asylum-claims-awaiting-decision-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-05-21"
+    sourceId: "asylum_awaiting_decision",
+    section: "how-many-people-are-in-the-uk-asylum-system"
   },
   asylumOutcomeAnalysis: {
-    source_id: "asylum_outcome_analysis_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e4abc0cc74b4523e4e49/outcome-analysis-asylum-claims-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
-    release_date: "2026-05-21"
+    sourceId: "asylum_outcome_analysis",
+    section: "how-many-people-are-granted-asylum-in-the-uk"
   },
   asylumSupport: {
-    source_id: "asylum_support_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05dfcb5f39105e0848a2c2/asylum-seekers-receipt-support-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-05-21"
+    sourceId: "asylum_support",
+    section: "how-many-people-are-in-the-uk-asylum-system"
   },
-  returns: {
-    source_id: "returns_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e53022977ebc82cb3fb7/returns-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
-    release_date: "2026-05-21"
-  }
+  returns: { sourceId: "returns", section: "how-many-people-are-returned-from-the-uk" }
 };
+
+const routesManifest = readRoutesManifest(path.resolve("data/raw/manifests/uk_routes.json"));
+
+// `source_id` no longer carries the period. It used to read `asylum_claims_mar_2026`, and
+// src/pages/routes.astro looked charts up by that exact string, so the next release would
+// have silently dropped the source line from nine public charts: the id is the dataset,
+// the period belongs to release_date and attachment_url alongside it.
+const sourceFiles = {};
+const sourceMeta = {};
+for (const [key, spec] of Object.entries(SOURCE_SECTIONS)) {
+  const resolved = resolveSource(routesManifest, spec.sourceId);
+  const sectionUrl = releaseSectionUrl(resolved.period.slug, spec.section);
+  sourceFiles[key] = path.join(rawDir, resolved.fileName);
+  sourceMeta[key] = {
+    source_id: spec.sourceId,
+    source_url: sectionUrl,
+    attachment_url: resolved.sourceUrl,
+    methodology_url: sectionUrl,
+    release_date: resolved.releaseDate,
+    period_label: resolved.period.label
+  };
+}
 
 function ensureCleanDir(directory) {
   rmSync(directory, { recursive: true, force: true });
@@ -538,6 +502,43 @@ const asylumClaimsRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D01", 1)
 const asylumInitialDecisionRows = rowObjects(sourceFiles.asylumClaims, "Data_Asy_D02", 1);
 const asylumAwaitingDecisionRows = rowObjects(sourceFiles.asylumAwaitingDecision, "Data_Asy_D03", 1);
 const asylumOutcomeAnalysisRows = rowObjects(sourceFiles.asylumOutcomeAnalysis, "Data_Asy_D04", 1);
+
+/**
+ * Extraction date of the outcome analysis, parsed from the release's own Notes sheet.
+ *
+ * Needed because a cohort's return rate keeps rising for years after its claims are
+ * decided: a refusal is settled long before the removal happens. So the honest question
+ * is not "is the outcome known" (2021 is 99.6% known and still moving) but "has this
+ * cohort had long enough". That requires knowing when the data was cut.
+ *
+ * Parsed, never written down. A hardcoded date is exactly what put a stale period label
+ * on 200 pages before, and this one moves every edition.
+ */
+function readOutcomeExtractionYear(filePath) {
+  const notes = readSheetRows(filePath, "Notes")
+    .flat()
+    .map((cell) => String(cell || ""));
+  for (const note of notes) {
+    const match = note.match(/latest case outcomes[^.]*?as at\s+(?:(\w+)\s+)?(\d{4})/i);
+    if (match) return Number(match[2]);
+  }
+  throw new Error(
+    `Could not find the "as at <date>" note in ${filePath}. The outcome analysis cannot ` +
+      `be aged without it, and guessing would silently mislabel which cohorts are settled.`
+  );
+}
+
+const outcomeExtractionYear = readOutcomeExtractionYear(sourceFiles.asylumOutcomeAnalysis);
+
+/**
+ * Years after the claim year before a cohort's return rate stops moving.
+ *
+ * Measured, not assumed: comparing the March 2026 edition against December 2025, every
+ * cohort up to 2018 moved by less than 0.3pp in the quarter, while 2019 onward moved by
+ * 0.7pp to 3.6pp. With a January 2026 extraction that puts the boundary at eight years,
+ * and 2018 sits exactly on it.
+ */
+const RETURN_COHORT_SETTLED_AFTER_YEARS = 8;
 const asylumSupportRows = rowObjects(sourceFiles.asylumSupport, "Data_Asy_D09", 1);
 const returnsRows = rowObjects(sourceFiles.returns, "Data_Ret_D01", 1);
 
@@ -1198,7 +1199,9 @@ for (const row of asylumOutcomeAnalysisRows) {
     latestRefusals: 0,
     latestWithdrawals: 0,
     latestAdministrative: 0,
-    latestNotYetKnown: 0
+    latestNotYetKnown: 0,
+    enforcedReturns: 0,
+    voluntaryReturns: 0
   };
 
   current.totalClaims += totalClaims;
@@ -1207,6 +1210,8 @@ for (const row of asylumOutcomeAnalysisRows) {
   current.initialGrantOtherLeave += safeNumber(row["Initial: Grants of Other Leave"]);
   current.initialRefusals += safeNumber(row["Initial: Refusals"]);
   current.initialWithdrawals += safeNumber(row["Initial: Withdrawals"]);
+  current.enforcedReturns += safeNumber(row["Enforced Returns"]);
+  current.voluntaryReturns += safeNumber(row["Voluntary Returns"]);
   current.initialAdministrative += safeNumber(row["Initial: Administrative Outcomes"]);
   current.initialNotYetKnown += safeNumber(row["Initial: Not yet known"]);
   current.latestGrantProtection += safeNumber(row["Latest: Grants of Protection"]);
@@ -1378,7 +1383,41 @@ const asylumOutcomeCohorts = [...asylumOutcomeByClaimYear.values()]
         : null,
       latestOutcomeKnownPct: row.totalClaims
         ? roundNumber((latestOutcomeKnownCount / row.totalClaims) * 100, 1)
-        : null
+        : null,
+
+      // Returns for this claim cohort, and the only asylum-specific return rate the
+      // Home Office publishes. The quarterly Returns tables carry no asylum dimension at
+      // all: nationality, destination, return type, sex, age and an offender flag, and
+      // nothing that says whether the person ever claimed asylum. So "refusals against
+      // returns" computed from those tables compares two different populations.
+      //
+      // DENOMINATOR. Refusals plus withdrawals, not refusals alone. A withdrawn claim
+      // still leaves someone liable to removal, and in the 2022 cohort the Albania
+      // returns were overwhelmingly people who withdrew: measured against refusals only
+      // that cohort returns 179% of the people it refused, which is impossible.
+      // Administrative outcomes are excluded because they are void, suspended and
+      // deceased cases, which are not returnable.
+      enforcedReturns: row.enforcedReturns,
+      voluntaryReturns: row.voluntaryReturns,
+      returnsCount: row.enforcedReturns + row.voluntaryReturns,
+      returnableOutcomeCount: row.latestRefusals + row.latestWithdrawals,
+      returnRatePct:
+        row.latestRefusals + row.latestWithdrawals
+          ? roundNumber(
+              ((row.enforcedReturns + row.voluntaryReturns) /
+                (row.latestRefusals + row.latestWithdrawals)) *
+                100,
+              1
+            )
+          : null,
+
+      // Whether the cohort has had long enough for its returns to complete. The Home
+      // Office warns this dataset "is not comparable over time" because recent cohorts
+      // are still progressing; this is that warning made machine-readable, so a page
+      // cannot accidentally rank a 2024 cohort against a 2010 one.
+      cohortAgeYears: outcomeExtractionYear - Number(row.claimYear),
+      returnsSettled:
+        outcomeExtractionYear - Number(row.claimYear) >= RETURN_COHORT_SETTLED_AFTER_YEARS
     };
   });
 
@@ -1601,6 +1640,34 @@ const communitySponsorshipCumulative =
     (point) => point.periodLabel === "2014 - 2025"
   )?.value ?? null;
 
+// Most of this total is not an arrival.
+//
+// Hum_01 splits its own total into "out of country grants", which are people offered a
+// route from outside the UK, and "in country grants", which the Home Office's notes
+// define as "those granted extensions within the UK: Ukraine Extension Schemes grants and
+// BN(O) Route extension grants". For the year ending March 2026 that split is 43,620
+// against 147,189: 77 per cent of the headline is an extension for someone already here.
+//
+// It is also what the apparent surge is made of. The total went 74,953 to 190,809 in a
+// year, and in-country grants went 16,494 to 147,189 over the same period as the Ukraine
+// Permission Extension Scheme opened. Read as arrivals, that is a 155 per cent rise in
+// people coming to Britain. Out of country grants actually FELL, 58,459 to 43,620.
+//
+// So the split travels with the series. A figure this easy to misread should not be
+// available without it.
+const humanitarianSplitPoint = (label) =>
+  (humSeries.get(label) || []).filter((point) => point.value !== null).at(-1) ?? null;
+
+const humanitarianOutOfCountry = humanitarianSplitPoint("Of which out of country grants");
+const humanitarianInCountry = humanitarianSplitPoint("Of which in country grants");
+
+if (!humanitarianOutOfCountry || !humanitarianInCountry) {
+  throw new Error(
+    "Hum_01 no longer carries its out of country / in country split. The safe and legal " +
+      "total is 77% in-country extensions and must not be published as arrivals without it."
+  );
+}
+
 const routeSeries = [
   {
     id: "safe_legal_total",
@@ -1609,7 +1676,20 @@ const routeSeries = [
     schemeStatus: "Mixed route family",
     localBreakdown: "No single local authority split",
     sourceUrl: sourceMeta.safeLegal.source_url,
-    note: "Includes refugee resettlement, refugee family reunion, Ukraine, and BN(O) routes. Do not present as a refugee total.",
+    note:
+      "Includes refugee resettlement, refugee family reunion, Ukraine and BN(O) routes. " +
+      "Do not present as a refugee total, and do not read it as arrivals: " +
+      `${humanitarianInCountry.value.toLocaleString()} of the ` +
+      `${((humSeries.get("Total") || []).filter((p) => p.value !== null).at(-1)?.value ?? 0).toLocaleString()} ` +
+      `in ${humanitarianInCountry.periodLabel} were granted in country, which the Home Office ` +
+      "defines as extensions for people already in the UK.",
+    split: {
+      periodLabel: humanitarianOutOfCountry.periodLabel,
+      outOfCountry: humanitarianOutOfCountry.value,
+      inCountry: humanitarianInCountry.value,
+      outOfCountryLabel: "Granted out of country",
+      inCountryLabel: "Extensions granted in country"
+    },
     series: (humSeries.get("Total") || []).filter((point) => point.value !== null)
   },
   {

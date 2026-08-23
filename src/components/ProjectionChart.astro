@@ -29,7 +29,10 @@ const { title, lines, confidenceBand, nowYear = 2021, yLabel = "%", height: char
 
 const width = 560;
 const height = chartHeight;
-const pad = { top: 14, right: 16, bottom: 34, left: 42 };
+// right is wide because each line carries a direct end label ("White British 52% by
+// 2051"). At right: 16 those labels ran off the canvas and were clipped to "Wh...", so
+// the chart showed trajectories with no readable values at all.
+const pad = { top: 14, right: 132, bottom: 34, left: 42 };
 const uw = width - pad.left - pad.right;
 const uh = height - pad.top - pad.bottom;
 
@@ -64,6 +67,40 @@ function buildBandPath(band: BandPoint[]): string {
   return `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`;
 }
 
+/**
+ * End-label positions, nudged apart so they do not overprint.
+ *
+ * Each line carries a direct label at its final point, which is the right way to label a
+ * multi-line chart. But lines that finish close together produce labels that sit on top
+ * of each other: on the national ethnic chart, Asian ends at 12.4% and White Other at
+ * 12.7%, so the two labels were unreadable on top of one another.
+ *
+ * This walks the labels in value order and pushes any that are closer than MIN_GAP apart,
+ * keeping them inside the plot. It only moves the text; the dot stays on the real data
+ * point, so nothing here misplaces a value.
+ */
+const END_LABEL_MIN_GAP = 13;
+const endLabels = lines
+  .map((line, index) => {
+    const last = line.points[line.points.length - 1];
+    return last ? { index, line, last, y: y(last.value) } : null;
+  })
+  .filter((entry): entry is { index: number; line: LineData; last: { year: number; value: number }; y: number } => entry !== null)
+  .sort((a, b) => a.y - b.y);
+
+for (let i = 1; i < endLabels.length; i += 1) {
+  const gap = endLabels[i].y - endLabels[i - 1].y;
+  if (gap < END_LABEL_MIN_GAP) {
+    endLabels[i].y = endLabels[i - 1].y + END_LABEL_MIN_GAP;
+  }
+}
+// Keep the stack inside the canvas if pushing down ran past the bottom.
+const overshoot = (endLabels.at(-1)?.y ?? 0) - (pad.top + uh);
+if (overshoot > 0) {
+  for (const entry of endLabels) entry.y -= overshoot;
+}
+const endLabelY = new Map(endLabels.map((entry) => [entry.index, entry.y]));
+
 // Year labels
 const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= maxYear && yr > nowYear))].filter((v, i, a) => a.indexOf(v) === i);
 ---
@@ -87,7 +124,7 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
 
     <!-- Confidence band (shaded area) -->
     {confidenceBand && confidenceBand.length > 0 && (
-      <path d={buildBandPath(confidenceBand)} fill="rgba(6, 182, 212, 0.12)" />
+      <path d={buildBandPath(confidenceBand)} fill="color-mix(in srgb, var(--accent) 12%, transparent)" />
     )}
 
     <!-- Now line -->
@@ -99,22 +136,22 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
     {maxYear > 2051 && (
       <>
         <line x1={x(2051)} y1={pad.top} x2={x(2051)} y2={pad.top + uh}
-              stroke="rgba(245,158,11,0.2)" stroke-width="1" stroke-dasharray="2 4" />
-        <text x={x(2051)} y={pad.top + uh + 20} text-anchor="middle" class="proj-now-label" fill="rgba(245,158,11,0.5)">Illustrative</text>
+              stroke="color-mix(in srgb, var(--warning) 20%, transparent)" stroke-width="1" stroke-dasharray="2 4" />
+        <text x={x(2051)} y={pad.top + uh + 20} text-anchor="middle" class="proj-now-label" fill="color-mix(in srgb, var(--warning) 50%, transparent)">Illustrative</text>
       </>
     )}
 
     <!-- Lines -->
-    {lines.map(line => (
+    {lines.map((line, lineIndex) => (
       <>
         <path d={buildLinePath(line.points)} fill="none" stroke={line.color}
               stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
         {/* End label */}
         {line.points.length > 0 && (
-          <text x={x(line.points[line.points.length - 1].year) + 4}
-                y={y(line.points[line.points.length - 1].value) + 4}
+          <text x={x(line.points[line.points.length - 1].year) + 8}
+                y={(endLabelY.get(lineIndex) ?? y(line.points[line.points.length - 1].value)) + 4}
                 class="proj-line-label" fill={line.color}>
-            {line.label} {line.points[line.points.length - 1].value.toFixed(0)}%
+            {line.label} {line.points[line.points.length - 1].value.toFixed(0)}% in {line.points[line.points.length - 1].year}
           </text>
         )}
         {/* End dot */}
@@ -140,22 +177,22 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
         {line.label}
       </span>
     ))}
-    {confidenceBand && <span class="proj-legend-item"><span class="proj-legend-swatch" style="background: rgba(6, 182, 212, 0.3)"></span> 80% CI</span>}
+    {confidenceBand && <span class="proj-legend-item"><span class="proj-legend-swatch" style="background: color-mix(in srgb, var(--accent) 30%, transparent)"></span> 80% CI</span>}
   </div>
   {caption && <p class="proj-caption">{caption}</p>}
 </figure>
 
 <style>
   .projection-chart svg { width: 100%; height: auto; display: block; }
-  .proj-tick { font-size: 11px; fill: rgba(255,255,255,0.45); font-family: "Sora", sans-serif; }
-  .proj-axis-label { font-size: 10px; fill: rgba(255,255,255,0.35); font-family: "Sora", sans-serif; }
-  .proj-now-label { font-size: 10px; fill: rgba(255,255,255,0.45); font-family: "Sora", sans-serif; }
-  .proj-line-label { font-size: 10px; font-family: "Sora", sans-serif; font-weight: 600; }
-  .proj-year-label { font-size: 11px; fill: rgba(255,255,255,0.55); font-family: "Sora", sans-serif; }
+  .proj-tick { font-size: 11px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-axis-label { font-size: 10px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-now-label { font-size: 10px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-line-label { font-size: 10px; font-family: var(--font-display); font-weight: 600; }
+  .proj-year-label { font-size: 11px; fill: var(--text-muted); font-family: var(--font-display); }
   .proj-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
-  .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--muted); }
+  .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--text-muted); }
   .proj-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .proj-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.4; }
+  .proj-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem; line-height: 1.4; }
 
   /* SVG text scales with the viewBox: at width:100% in a narrow card an 11px tick lands
      at 5.5 real pixels. A container query, not a viewport one, because a chart in a

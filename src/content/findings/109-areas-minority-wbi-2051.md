@@ -5,6 +5,7 @@ updated: "2026-08-13"
 category: demographics
 stat_value: "86"
 stat_label: "Areas WBI <50% by 2051"
+model_recalibrated: true
 verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v8.0 projection model"
@@ -62,10 +63,10 @@ Luton (31.8%), Slough (24.0%), Newham (14.8%), Brent (15.2%). These areas passed
 the threshold years ago.
 
 **The national picture.** England and Wales White British share: 74.4% (Census
-2021, ONS TS021). Across the 314 areas with a published projection, the
-population-weighted share is 74.3% in 2021 and **55.0% by 2051**. The
-cohort-component model, which assumes ethnic fertility rates converge partway to
-the national mean, gives 54.6% on the same weighting.
+2021, ONS TS021). Across the 318 distinct local authorities the model projects,
+weighted by their 2021 populations, the share is 74.4% in 2021 and **55.0% by
+2051**. The cohort-component model, which assumes ethnic fertility rates converge
+partway to the national mean, gives 54.6% on the same weighting.
 
 The two models agreeing to within half a point is worth noting, because they did
 not before. Under the settings replaced in August 2026 the Hamilton-Perry model

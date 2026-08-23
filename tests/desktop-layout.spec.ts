@@ -1,7 +1,33 @@
 import { expect, test } from "@playwright/test";
 import { disableMotion, limitToTopOfPage, stabilizePage, waitForFonts } from "./layout-helpers";
 
-const shouldAssertScreenshots = !process.env.CI;
+/**
+ * Screenshot assertions, and why they are off by default.
+ *
+ * This was `!process.env.CI`, which had it exactly backwards. The tracked baselines are
+ * Linux renders, so the old flag skipped them on the one platform that could check them
+ * and enforced them on macOS, where font rendering differs enough that all nine fail
+ * every run. Net effect: nine baselines enforced nowhere, and a `test:desktop` that was
+ * permanently red locally and so useless as a pre-push gate.
+ *
+ * Two conditions now. Linux, because that is what the baselines are. And an explicit
+ * opt-in, because the baselines have not been regenerated since the pages they cover
+ * changed substantially (the all-361 build, PR #32's chart work), and `national` and
+ * `regional` have no committed baseline at all. Turning assertions on before
+ * regenerating would simply move CI from silently-not-checking to loudly-broken.
+ *
+ * The sequence to finish this:
+ *   1. Run the `update-desktop-baselines` workflow, which regenerates on Linux and
+ *      commits the PNGs.
+ *   2. Set ASSERT_SCREENSHOTS=1 on the test:desktop steps in deploy.yml and
+ *      site-checks.yml.
+ *
+ * The structural assertions above this flag run everywhere and are the part worth having
+ * locally: the `.sys-card` count check is what caught a seven-card grid orphaning a row.
+ * Never commit a baseline generated on macOS.
+ */
+const shouldAssertScreenshots =
+  process.platform === "linux" && process.env.ASSERT_SCREENSHOTS === "1";
 
 const desktopPages = [
   { name: "home", path: "/", focus: "#headline-stats", hasPageContents: false },

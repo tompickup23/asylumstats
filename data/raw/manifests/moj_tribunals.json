@@ -1,44 +1,33 @@
 {
+  "generatedAt": "2026-08-23T18:10:38.555Z",
   "dataset": "moj_tribunals",
+  "datasetId": "moj_tribunals",
   "publisher": "Ministry of Justice",
+  "cadence": "quarterly",
   "release": "Tribunal Statistics Quarterly: January to March 2026",
+  "releaseTitle": "Tribunal Statistics Quarterly: January to March 2026",
+  "releasePeriodLabel": "Q4 2025/26",
+  "releasePeriodBasis": "financial_year_quarter",
   "releaseDate": "2026-06-11",
   "nextEdition": "2026-09-10",
+  "nextEditionDate": "2026-09-10",
   "landing": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-  "bank": "moj",
-  "areaTier": "national",
-  "fileCount": 5,
-  "totalBytes": 1548812,
+  "landingUrl": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
+  "fetchedFileCount": 2,
   "files": [
     {
-      "file": "CSVs.zip",
-      "sizeBytes": 80650,
-      "sha256": "a6f06a2ab70ed97f7e2b90b14e49e20fd835cff0a81f2690819b8d7393ca76f5",
-      "modified": "2026-08-13"
-    },
-    {
-      "file": "csvs/Employment National Level CSV.csv",
-      "sizeBytes": 87046,
-      "sha256": "cf522891b87002c48e61c39e4aca8c18cde2b6447547267f4143feac1a5f9296",
-      "modified": "2026-06-08"
-    },
-    {
-      "file": "csvs/First Tier Immigration Asylum Venue Level.csv",
-      "sizeBytes": 219094,
-      "sha256": "db340a02fb529d5b150abd21bee8f169059526a7c1bada65a7fe7a31e0932d0f",
-      "modified": "2026-06-08"
-    },
-    {
-      "file": "csvs/Receipts and Disposals National.csv",
-      "sizeBytes": 440559,
-      "sha256": "599f0584ffbe36e1abb787bf8e60ca59cd3a17e58fe71c3009f5be2f89d1eff6",
-      "modified": "2026-06-08"
-    },
-    {
-      "file": "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "sourceId": "moj_tribunals_main_tables",
+      "fileName": "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
       "sizeBytes": 721463,
-      "sha256": "06c4699824e6c850617c9a8f04da8382d9c72df84444d419c832703b33cfeec7",
-      "modified": "2026-08-13"
+      "fileSha256": "06c4699824e6c850617c9a8f04da8382d9c72df84444d419c832703b33cfeec7"
+    },
+    {
+      "sourceId": "moj_tribunals_csvs",
+      "fileName": "CSVs.zip",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296f79a3674dfd3eb50633/CSVs.zip",
+      "sizeBytes": 80650,
+      "fileSha256": "a6f06a2ab70ed97f7e2b90b14e49e20fd835cff0a81f2690819b8d7393ca76f5"
     }
   ]
 }

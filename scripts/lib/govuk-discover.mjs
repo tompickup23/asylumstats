@@ -40,20 +40,89 @@ export function periodKey(fileName) {
   return year * 100 + MONTHS[month];
 }
 
-/** Every .xlsx/.ods asset linked from a GOV.UK page. */
-export async function listDataFiles(pageUrl) {
+/**
+ * The full month names GOV.UK uses in a release slug.
+ *
+ * The filename says `mar-2026`; the release it came from is published at
+ * `.../immigration-system-statistics-year-ending-march-2026`. Two spellings of the same
+ * quarter, and the site has to hold both: one to find the file, one to cite it.
+ */
+const MONTH_NAMES = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+
+/**
+ * Everything a caller needs to name the release a file belongs to.
+ *
+ * Returns null for a filename with no parseable period, matching `periodKey`, so an
+ * unrecognised convention surfaces as an explicit failure rather than a wrong citation.
+ *
+ *   periodParts("asylum-claims-datasets-mar-2026.xlsx")
+ *   -> { key: 202603, year: 2026, month: 3, slug: "march-2026",
+ *        suffix: "mar_2026", label: "Year ending March 2026" }
+ */
+export function periodParts(fileName) {
+  const key = periodKey(fileName);
+  if (key === null) return null;
+  const year = Math.floor(key / 100);
+  const month = key % 100;
+  const name = MONTH_NAMES[month - 1];
+  const abbr = Object.keys(MONTHS).find((candidate) => MONTHS[candidate] === month);
+  return {
+    key,
+    year,
+    month,
+    slug: `${name}-${year}`,
+    suffix: `${abbr}_${year}`,
+    label: `Year ending ${name[0].toUpperCase()}${name.slice(1)} ${year}`
+  };
+}
+
+/**
+ * Every data asset linked from a GOV.UK page.
+ *
+ * Defaults to spreadsheets, which is what the quarterly series publish. Annual reports
+ * publish their numbers in a PDF alongside a spreadsheet of core tables, so `extensions`
+ * widens the net rather than forcing a second, near-identical scraper.
+ */
+export async function listDataFiles(pageUrl, { extensions = ["xlsx", "ods"] } = {}) {
   const response = await fetch(pageUrl, { headers: { "user-agent": "asylumstats-data-fetch" } });
   if (!response.ok) throw new Error(`${pageUrl} returned ${response.status}`);
   const html = await response.text();
-  const urls = [
-    ...html.matchAll(
-      /https:\/\/assets\.publishing\.service\.gov\.uk\/media\/[^"' ]+\.(?:xlsx|ods)/gi
-    )
-  ].map((match) => match[0]);
+  const pattern = new RegExp(
+    `https://assets\\.publishing\\.service\\.gov\\.uk/media/[^"' ]+\\.(?:${extensions.join("|")})`,
+    "gi"
+  );
+  const urls = [...html.matchAll(pattern)].map((match) => match[0]);
   return [...new Set(urls)].map((url) => ({
     url,
     fileName: decodeURIComponent(url.split("/").pop())
   }));
+}
+
+/**
+ * Files whose name matches `pattern`, for series with no period in the filename.
+ *
+ * The quarterly releases stamp a period into the filename, so `newestMatching` can sort
+ * them. Annual reports do not: the 2025-26 accounts arrive as
+ * `36.54_HO_ARA_25-26_WEB.pdf` and a core-tables workbook whose name records the date an
+ * internal draft was shared. There is nothing to sort on, so the caller names the shape
+ * it expects and gets everything that matches; an empty result throws rather than
+ * silently leaving whatever is already on disk.
+ */
+export function allMatching(files, pattern, { pageUrl } = {}) {
+  // A global regex carries lastIndex between .test() calls and would skip every other
+  // file. Strip the flag rather than trusting the caller to remember.
+  const stateless = new RegExp(pattern.source, pattern.flags.replace("g", ""));
+  const matches = files.filter((file) => stateless.test(file.fileName));
+  if (!matches.length) {
+    throw new Error(
+      `No file matching ${pattern} on ${pageUrl ?? "the publication page"}. ` +
+        `The page listed ${files.length} data files; the naming convention has probably changed.`
+    );
+  }
+  return matches;
 }
 
 /**

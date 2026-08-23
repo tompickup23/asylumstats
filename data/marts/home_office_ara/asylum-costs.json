@@ -1,0 +1,76 @@
+{
+  "_provenance": {
+    "owner": "manual, transcribed from the accounts PDF",
+    "why": "The Home Office publishes its accounts as a 370-page PDF. There is no machine-readable release of these lines, so they are transcribed by hand rather than parsed, and pinned to the exact banked file by hash. Re-transcribe when the next accounts land (July 2027).",
+    "source": "Home Office Annual Report and Accounts 2025-26, HC 440, published 14 July 2026",
+    "sourceUrl": "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026",
+    "sourceFile": "36.54_HO_ARA_25-26_WEB.pdf",
+    "sourceSha256": "c8cda7ee5f28700b4a2174b3889cb203c410503c60222e6a03102d92642c1350",
+    "bank": "doge:Asylum Stats/home-office/annual-report",
+    "financialYear": "2025-26",
+    "coverage": "1 April 2025 to 31 March 2026",
+    "units": "£ thousand, as printed in the accounts"
+  },
+
+  "directorates": {
+    "_note": "Resource DEL outturn by business group, from the Statement of Outturn against Estimate. These are audited budget segments, not expense types.",
+    "asylumSupportResettlementAccommodation": {
+      "label": "Asylum Support, Resettlement and Accommodation",
+      "resourceOutturn": 4181193,
+      "priorYearResourceOutturn": 4512567,
+      "capitalOutturn": 30000,
+      "capitalNote": "Capital DEL actual 0.03bn against a 0.11bn budget. Excluded from the annual running-cost total, which is a resource measure.",
+      "asylumAttributable": 1.0,
+      "attributionNote": "The whole segment is asylum and resettlement by definition."
+    },
+    "immigrationEnforcement": {
+      "label": "Immigration Enforcement",
+      "resourceOutturn": 769811,
+      "priorYearResourceOutturn": 819196,
+      "attributionNote": "Enforcement covers all immigration offending, not only asylum. Detention costs below sit inside this segment and must not be added to it."
+    },
+    "borderForce": {
+      "label": "Border Force",
+      "resourceOutturn": 1358931,
+      "priorYearResourceOutturn": 1375814,
+      "attributionNote": "Border Force protects all UK borders, including trade and drugs. Only a minority is asylum-attributable."
+    },
+    "borderSecurityCommand": {
+      "label": "Border Security Command",
+      "resourceOutturn": 181591,
+      "priorYearResourceOutturn": 40729,
+      "asylumAttributable": 1.0,
+      "attributionNote": "Stood up specifically to tackle small boats and organised immigration crime, so the whole segment is attributable. Plans rise to 796,553 in 2026-27."
+    }
+  },
+
+  "expenseTypes": {
+    "_note": "From the Purchase of goods and services note. These are expense TYPES across the whole department, not budget segments, so they overlap the directorates above and must never be summed with them.",
+    "asylumCostsExcludingGrants": {
+      "label": "Asylum costs (excluding grants)",
+      "value": 2962335,
+      "priorYear": 3195769,
+      "note": "The contracted accommodation and support spend. Sits inside the ASRA segment; the balance of ASRA is grants, staff and other costs."
+    },
+    "detentionCosts": {
+      "label": "Detention costs",
+      "value": 159305,
+      "priorYear": 131288,
+      "note": "Up 21.3% year on year, the one asylum cost line moving upward. Sits inside the Immigration Enforcement segment."
+    }
+  },
+
+  "context": {
+    "afghanResettlementCost": {
+      "value": 222100,
+      "priorYear": 205000,
+      "note": "Home Office costs for Afghan resettlement, stated in the Performance Report. Inside ASRA."
+    },
+    "asraForwardPlans": {
+      "_note": "ASRA is renamed Asylum Group from 2026-27.",
+      "2026-27": 4116034,
+      "2027-28": 3795700,
+      "2028-29": 3621700
+    }
+  }
+}
