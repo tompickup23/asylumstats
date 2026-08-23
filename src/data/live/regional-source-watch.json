@@ -7,12 +7,12 @@
     "regionalPartnerAssetCount": 14,
     "regionalPartnerDashboardCount": 7,
     "migrationObservatoryGuideLinkCount": 4,
-    "nwrsmpWorkbookCount": 6,
-    "nwrsmpHistoricWorkbookCount": 5,
+    "nwrsmpWorkbookCount": 7,
+    "nwrsmpHistoricWorkbookCount": 6,
     "nwrsmpAuthorityObservationCount": 4126,
     "nwrsmpLatestGroupRowCount": 2184,
     "nwrsmpSupportedSeriesAreaCount": 354,
-    "nwrsmpSupportedSeriesPointCount": 11718
+    "nwrsmpSupportedSeriesPointCount": 11810
   },
   "nwrsmp": {
     "pageTitle": "Data and insights",
@@ -22,6 +22,15 @@
     "introNote": "We have created an interactive data visualizer Tableau that lets you explore the North West migration data released by the Home Office.",
     "provenanceNote": "The data provided in this table set comes from a range of published sources and is not provided by the RSMP. The source file data information is found in the data tab on the Tableau series above and queries should be directed to the source data owners in the first instance.",
     "documents": [
+      {
+        "id": 17826,
+        "title": "North West Public Accessible May 2026 (XLS, 1397KB)",
+        "publishedAt": "2026-06-02",
+        "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/06/North-West-Public-Accessible-May-2026-XLS-1397KB.xlsx",
+        "fileSizeBytes": 1429689,
+        "format": "xlsx",
+        "localFileName": "nwrsmp-workbook-2026-06-02.xlsx"
+      },
       {
         "id": 17446,
         "title": "North West Public Accessible February 2026 (XLS, 1398KB)",
@@ -88,7 +97,7 @@
     },
     "supportedSeries": {
       "areaCount": 354,
-      "pointCount": 11718,
+      "pointCount": 11810,
       "firstPeriodEnd": "2014-03-31",
       "latestPeriodEnd": "2025-12-31",
       "firstPeriodLabel": "31 Mar 2014",
@@ -179,8 +188,8 @@
         "refugees",
         "migration"
       ],
-      "recommendedUse": "Welsh nation-level migration evidence and referral routes",
-      "notes": "Strategic migration partnership pages include migration data and research entry points."
+      "recommendedUse": "Retired. No live source. Do not cite until a successor is found.",
+      "notes": "RETIRED 23 August 2026. www.wsmp.wales stopped answering: DNS still resolves to 94.126.209.190 and nothing responds on 80 or 443, from this machine or from CI. The last Wayback capture of any page on the domain is 19 April 2026 and no page is archived at the URLs we cited. The Welsh Local Government Association, which hosts the partnership, has no replacement page: /wales-strategic-migration-partnership returns 200 but serves the WLGA homepage. Out of the automated fetch until a live successor exists. Wales is therefore the one nation with no regional partner source in this watch list."
     }
   ],
   "regionalPartnerAssets": [

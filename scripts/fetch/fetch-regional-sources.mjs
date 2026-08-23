@@ -32,10 +32,6 @@ const pageDownloads = [
     sourceUrl: "https://www.nemp.org.uk/data/"
   },
   {
-    fileName: "wsmp-dataobservatory.html",
-    sourceUrl: "https://www.wsmp.wales/dataobservatory"
-  },
-  {
     fileName: "migration-observatory-local-data-guide.html",
     sourceUrl: "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/"
   }
@@ -47,6 +43,15 @@ const pageDownloads = [
 // host that is genuinely there answers well inside that, and one that is not fails fast
 // enough to be a line in a log rather than the end of the run. `-f` so an error page is
 // never saved as though it were content; a silently stored 403 is worse than a red run.
+// Retired 23 August 2026: www.wsmp.wales. DNS still resolves to 94.126.209.190 and nothing
+// answers on 80 or 443 from this machine or from CI. The last Wayback capture of any page on
+// the domain is 19 April 2026, and the Welsh Local Government Association has no replacement
+// page: https://www.wlga.wales/wales-strategic-migration-partnership returns 200 but serves
+// the WLGA homepage, which is a soft 404. There is nothing to repoint at, so the Wales source
+// is out of the automated fetch and recorded as retired in data/manual/regional-source-watch.csv
+// rather than left to redden every run. A refresh run that is always red is a refresh run
+// nobody reads on the Thursday it matters.
+
 const CURL_LIMITS = [
   "--connect-timeout", "15",
   "--max-time", "90",
@@ -170,8 +175,18 @@ for (const document of workbookDocuments) {
   downloadFile(document.sourceUrl, path.join(rawDir, fileName));
 }
 
+// Attempt every page before failing on any of them. Previously the first dead host threw out
+// of this loop, so a single retired site hid whether the remaining sources were still alive:
+// the run was red either way and told you nothing about which one had gone. Sources that go
+// dark still fail the run, they just no longer mask each other.
+const downloadFailures = [];
 for (const page of pageDownloads) {
-  downloadFile(page.sourceUrl, path.join(rawDir, page.fileName));
+  try {
+    downloadFile(page.sourceUrl, path.join(rawDir, page.fileName));
+  } catch (error) {
+    console.error(`FAIL: ${page.sourceUrl} could not be fetched: ${error.message}`);
+    downloadFailures.push({ fileName: page.fileName, sourceUrl: page.sourceUrl });
+  }
 }
 
 const manifest = {
@@ -193,12 +208,14 @@ const manifest = {
       sizeBytes: statSync(path.join(rawDir, "nwrsmp-data-page.json")).size,
       fileSha256: fileSha256(path.join(rawDir, "nwrsmp-data-page.json"))
     },
-    ...pageDownloads.map((page) => ({
-      fileName: page.fileName,
-      sourceUrl: page.sourceUrl,
-      sizeBytes: statSync(path.join(rawDir, page.fileName)).size,
-      fileSha256: fileSha256(path.join(rawDir, page.fileName))
-    })),
+    ...pageDownloads
+      .filter((page) => !downloadFailures.some((failure) => failure.fileName === page.fileName))
+      .map((page) => ({
+        fileName: page.fileName,
+        sourceUrl: page.sourceUrl,
+        sizeBytes: statSync(path.join(rawDir, page.fileName)).size,
+        fileSha256: fileSha256(path.join(rawDir, page.fileName))
+      })),
     ...workbookDocuments.map((document) => {
       const fileName = buildWorkbookFileName(document, dateCounts);
       const filePath = path.join(rawDir, fileName);
@@ -218,5 +235,20 @@ const manifest = {
 writeFileSync(path.join(manifestDir, "regional_sources.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 
 console.log(
-  `Fetched ${workbookDocuments.length} North West RSMP workbook snapshots plus ${pageDownloads.length} regional source pages.`
+  `Fetched ${workbookDocuments.length} North West RSMP workbook snapshots plus ` +
+    `${pageDownloads.length - downloadFailures.length} of ${pageDownloads.length} regional source pages.`
 );
+
+// A source going dark is a real failure and still reddens the run. What changed is that every
+// other source was attempted first, so the log says which one went rather than only that
+// something did.
+if (downloadFailures.length) {
+  console.error(
+    `\n${downloadFailures.length} regional source page(s) could not be fetched:\n` +
+      downloadFailures.map((failure) => `  ${failure.sourceUrl}`).join("\n") +
+      `\n\nEither repoint the source or retire it in data/manual/regional-source-watch.csv ` +
+      `and remove it from pageDownloads above. Leaving it here makes every run red, which is ` +
+      `how the next real failure gets ignored.`
+  );
+  process.exit(1);
+}
