@@ -13,7 +13,9 @@ import schoolValidationData from "../data/live/school-validation.json";
 
 const routeDashboard = loadRouteDashboard();
 const moneyLedger = loadMoneyLedger();
-const findings = (await getCollection("findings")).sort(
+const findings = (await getCollection("findings"))
+  .filter((f) => !f.data.superseded_by)
+  .sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 

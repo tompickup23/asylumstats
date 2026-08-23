@@ -15,6 +15,8 @@ interface Props {
   description?: string;
   image?: string;
   noIndex?: boolean;
+  /** Absolute or root-relative URL to declare canonical instead of this page's own. */
+  canonicalOverride?: string;
   structuredData?: StructuredDataNode[];
   bodyClass?: string;
   mainClass?: string;
@@ -26,6 +28,7 @@ const {
   description = DEFAULT_DESCRIPTION,
   image = DEFAULT_SOCIAL_IMAGE_PATH,
   noIndex = false,
+  canonicalOverride,
   structuredData: pageStructuredData = [],
   bodyClass,
   mainClass,
@@ -34,7 +37,7 @@ const {
 const siteOrigin = Astro.site ?? new URL(SITE_URL);
 const pathname = Astro.url.pathname || "/";
 const pageTitle = normalisePageTitle(title);
-const canonicalUrl = new URL(pathname, siteOrigin).toString();
+const canonicalUrl = new URL(canonicalOverride ?? pathname, siteOrigin).toString();
 const socialImageUrl = /^https?:\/\//.test(image) ? image : new URL(image, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
 const socialImageMime = socialImageUrl.endsWith(".png")
