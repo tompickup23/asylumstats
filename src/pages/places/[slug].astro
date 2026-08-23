@@ -274,6 +274,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
 <BaseLayout
   title={`Asylum seekers in ${area.areaName}: ${area.supportedAsylum.toLocaleString()} on support | asylumstats`}
   description={pageDescription}
+  image={`/og/places/${slugifyAreaName(area.areaName)}.png`}
   structuredData={pageStructuredData}
 >
   <!-- HEADER -->
