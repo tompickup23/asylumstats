@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T11:50:23.673Z",
+  "generatedAt": "2026-08-23T17:47:23.261Z",
   "summary": {
     "totalNamedSites": 13,
     "currentNamedSites": 8,
@@ -31,12 +31,12 @@
     },
     {
       "label": "People in asylum hotels",
-      "value": "31,000",
-      "period": "End of Dec 2025",
+      "value": "20,885",
+      "period": "As at 31 March 2026",
       "detail": "Asylum support accommodation figure, not a refugee-scheme total.",
       "scope": "route_specific",
       "routeId": "asylum_support",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025-summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
     },
     {
       "label": "Daily hotel cost",
@@ -45,7 +45,7 @@
       "detail": "Home Office stated average daily hotel cost.",
       "scope": "route_specific",
       "routeId": "asylum_support",
-      "sourceUrl": "https://homeofficemedia.blog.gov.uk/2025/06/12/factsheet-asylum-accommodation-and-support/"
+      "sourceUrl": "https://migrationobservatory.ox.ac.uk/resources/briefings/asylum-accommodation-in-the-uk/"
     },
     {
       "label": "Hotel cost share",
@@ -203,7 +203,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-05-25T11:50:23.673Z",
+          "generatedAt": "2026-08-23T17:47:23.261Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -354,7 +354,7 @@
             "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
           ],
           "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-05-25T11:50:23.673Z",
+          "generatedAt": "2026-08-23T17:47:23.261Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -429,7 +429,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-05-25T11:50:23.673Z",
+          "generatedAt": "2026-08-23T17:47:23.261Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -594,7 +594,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-05-25T11:50:23.673Z",
+          "generatedAt": "2026-08-23T17:47:23.261Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
