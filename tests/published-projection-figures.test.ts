@@ -93,6 +93,33 @@ describe("the published counts reproduce from the projection file", () => {
     expect(nationalWhiteBritishShare(2051)!.pct).toBeLessThan(55.1);
   });
 
+  /**
+   * An observed year must reproduce as a plain sum of its own people, because that is what
+   * the homepage calls it: "2011 Census". The first version of nationalWhiteBritishShare
+   * weighted the 2011 shares by 2021 populations and shipped 80.0% under that label, where
+   * the observed share across these areas is 80.2%. It passed every check above, because
+   * those only pinned 2021 and 2051.
+   */
+  it("weights an observed year by its own population, not by 2021's", () => {
+    const areas = rawProjections.areas as Record<string, any>;
+    const sum = (year: number) => {
+      let people = 0;
+      let whiteBritish = 0;
+      for (const code of distinctAreaCodes()) {
+        const absolute =
+          year === 2011 ? areas[code].baseline?.groups_absolute : areas[code].current?.groups_absolute;
+        if (!absolute) continue;
+        whiteBritish += absolute.white_british;
+        people += Object.values(absolute).reduce((a: number, b: any) => a + Number(b), 0);
+      }
+      return (whiteBritish / people) * 100;
+    };
+
+    for (const year of [2011, 2021]) {
+      expect(nationalWhiteBritishShare(year)!.pct.toFixed(2), String(year)).toBe(sum(year).toFixed(2));
+    }
+  });
+
   it("reports a 2061 figure on a smaller area set, so never alongside the others", () => {
     expect(nationalWhiteBritishShare(2061)!.areas).toBeLessThan(
       nationalWhiteBritishShare(2051)!.areas
