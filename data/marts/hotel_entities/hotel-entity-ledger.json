@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T17:57:28.895Z",
+  "generatedAt": "2026-08-23T18:11:44.324Z",
   "summary": {
     "totalNamedSites": 13,
     "currentNamedSites": 8,
@@ -203,7 +203,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-08-23T17:57:28.895Z",
+          "generatedAt": "2026-08-23T18:11:44.324Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -354,7 +354,7 @@
             "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
           ],
           "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-08-23T17:57:28.895Z",
+          "generatedAt": "2026-08-23T18:11:44.324Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -429,7 +429,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-08-23T17:57:28.895Z",
+          "generatedAt": "2026-08-23T18:11:44.324Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -594,7 +594,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-08-23T17:57:28.895Z",
+          "generatedAt": "2026-08-23T18:11:44.324Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
