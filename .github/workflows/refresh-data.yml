@@ -15,9 +15,11 @@ on:
 
 # The job commits and pushes refreshed data back to main, so the workflow
 # token needs contents: write. Without this it defaults to read-only and
-# the final `git push` fails with 403.
+# the final `git push` fails with 403. actions: write is for the deploy
+# dispatch at the end; see the comment on that step.
 permissions:
   contents: write
+  actions: write
 
 jobs:
   refresh:
@@ -110,6 +112,21 @@ jobs:
           git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
           git commit -m "data: refresh tribunal + route + small boats + hotel + money data $(date -u +%Y-%m-%d)"
           git push
+
+      # Ask for a deploy, because the push above will not produce one.
+      #
+      # GitHub does not raise workflow events for pushes made with the default
+      # GITHUB_TOKEN, which exists to stop workflows triggering themselves forever. The
+      # side effect here is that this job could commit fresh Home Office data to main and
+      # the live site would keep serving the old data until some unrelated human push
+      # happened along. On a quarterly release day that is the whole point of the run,
+      # lost. Dispatching deploy.yml explicitly is the documented way round it.
+      # No GitHub event data is interpolated here.
+      - name: Deploy the refreshed data
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main
 
       # Last, and strict: the data above has already been committed, so this only
       # decides whether the run ends loudly. Every stale item found on 13 Aug 2026 had
