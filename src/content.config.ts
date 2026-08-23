@@ -24,6 +24,17 @@ const findings = defineCollection({
      * It also drops out of the listings, the sitemap and the search index.
      */
     superseded_by: z.string().optional(),
+    /**
+     * Set on any article whose numbers come from a model version that has since been
+     * recalibrated, where the article's own figures are still what this site publishes.
+     *
+     * It is not `superseded_by`: nothing replaces the article, and the figures are not
+     * transcription errors. They are the honest output of the model this site currently
+     * ships. The banner exists because the same model, recalibrated, is already live on
+     * ukdemographics.co.uk producing different counts, and a reader comparing the two
+     * sites deserves to know which is which rather than concluding one of them is lying.
+     */
+    model_recalibrated: z.boolean().default(false),
     // SR integration
     sr_article_id: z.string().optional(),
     sr_published: z.boolean().default(false),

@@ -109,7 +109,7 @@ Asylum seekers are entitled to free GP registration, hospital treatment, mental 
 
 **No government body publishes asylum-specific NHS costs.** This is the biggest data gap in the entire calculation.
 
-Our estimate: the average NHS cost per capita in England is £3,462 per year (House of Commons Library). The asylum population is younger and healthier on average than the general population (59% are single adult males, predominantly aged 18-40). We estimate asylum seekers use approximately 55-65% of per-capita NHS resources, reflecting lower secondary care usage but higher demand for mental health and maternity services.
+Our estimate: the average NHS cost per capita in England is £3,462 per year (House of Commons Library). The population figure below is the 107,003 on support at 31 December 2025; the mean across the whole financial year is 106,719, a difference of 0.3 per cent and far inside the range this estimate carries. The asylum population is younger and healthier on average than the general population (59% are single adult males, predominantly aged 18-40). We estimate asylum seekers use approximately 55-65% of per-capita NHS resources, reflecting lower secondary care usage but higher demand for mental health and maternity services.
 
 - Conservative estimate: 107,003 x £3,462 x 0.55 = **£204 million**
 - Central estimate: 107,003 x £3,462 x 0.60 = **£222 million**

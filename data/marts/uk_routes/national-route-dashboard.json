@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T18:11:41.064Z",
+  "generatedAt": "2026-08-23T19:29:04.148Z",
   "localSnapshotDate": "2026-03-31",
   "routeFamilies": [
     {
@@ -9,7 +9,14 @@
       "schemeStatus": "Mixed route family",
       "localBreakdown": "No single local authority split",
       "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-      "note": "Includes refugee resettlement, refugee family reunion, Ukraine, and BN(O) routes. Do not present as a refugee total.",
+      "note": "Includes refugee resettlement, refugee family reunion, Ukraine and BN(O) routes. Do not present as a refugee total, and do not read it as arrivals: 147,189 of the 190,809 in Year ending March 2026 were granted in country, which the Home Office defines as extensions for people already in the UK.",
+      "split": {
+        "periodLabel": "Year ending March 2026",
+        "outOfCountry": 43620,
+        "inCountry": 147189,
+        "outOfCountryLabel": "Granted out of country",
+        "inCountryLabel": "Extensions granted in country"
+      },
       "series": [
         {
           "periodLabel": "2010",

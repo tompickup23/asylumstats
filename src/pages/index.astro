@@ -75,6 +75,29 @@ const annualCostGbp = dailyCostGbp * 365;
 // current hotel population as its own separate, current fact.
 const HOTEL_NIGHTLY_2024_25 = 170;
 
+// Which route families this panel shows, named rather than sliced off the top six.
+//
+// Two were dropped. `small_boats` published 4,441 for "2026 (Q1 only)" a screen below the
+// hero card's 15,897 for the same measure to 20 August, from the weekly series: two
+// different 2026 small-boat totals on one page, both correct, reading as a contradiction.
+// `asylum_support` is a quarter-end stock, not a route into anywhere, and the deck above
+// already carries it.
+//
+// What is left is six genuine grant and arrival counts. The humanitarian total stays
+// because it is the biggest number here, and it carries its own out-of-country split so it
+// cannot be read as arrivals.
+const ROUTE_PANEL_IDS = [
+  "safe_legal_total",
+  "refugee_family_reunion",
+  "homes_for_ukraine",
+  "afghan_resettlement_programme",
+  "uk_resettlement_scheme",
+  "community_sponsorship"
+];
+const routePanelFamilies = ROUTE_PANEL_IDS
+  .map((id) => (routeDashboard.routeFamilies as any[]).find((family) => family.id === id))
+  .filter(Boolean);
+
 // System flow stats
 const smallBoatCard = routeDashboard.nationalCards?.[0];
 const smallBoatArrivals = smallBoatCard?.value ?? 41_472;
@@ -329,7 +352,7 @@ function findingColor(verdict: string): string {
       <article class="sys-card">
         <span class="sys-value sys-coral">{grantRatePct}%</span>
         <span class="sys-label">Initial grant rate</span>
-        <span class="sys-context">At first decision only, {grantRateWindowLabel}. After appeals the final grant rate is on average 14pp higher (Asy_D04).</span>
+        <span class="sys-context">At first decision only, {grantRateWindowLabel}. After appeals the final grant rate is on average 14.6pp higher, across the 101 of 105 nationalities whose rate rises (Asy_D04).</span>
       </article>
       <article class="sys-card">
         <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
@@ -526,11 +549,17 @@ function findingColor(verdict: string): string {
       Small boats. Visa overstayers. Resettlement schemes. The government counts them separately. So do we.
     </p>
     <div class="route-cards">
-      {routeDashboard.routeFamilies.slice(0, 6).map((route) => (
+      {routePanelFamilies.map((route: any) => (
         <div class="route-card">
           <span class="route-label">{route.label}</span>
           <span class="route-value">{fmtInt(route.latestValue)}</span>
           <span class="route-period">{route.latestPeriod}</span>
+          {route.split && (
+            <span class="route-split">
+              {fmtInt(route.split.outOfCountry)} granted out of country.
+              {" "}{fmtInt(route.split.inCountry)} are extensions for people already in the UK.
+            </span>
+          )}
         </div>
       ))}
     </div>
@@ -1218,6 +1247,14 @@ function findingColor(verdict: string): string {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--text);
+  }
+  .route-split {
+    margin-top: 0.55rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--text-faint);
   }
   .route-period { font-size: 0.78rem; color: var(--text-muted); }
 
