@@ -8,6 +8,19 @@ export const DEFAULT_DESCRIPTION =
   "Follow YOUR money. UK asylum costs, routes, and demographic impact. Every figure sourced, every claim checked.";
 export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-card.png";
 
+/**
+ * The accounts that are this site.
+ *
+ * Listed in the footer for readers and emitted as schema.org sameAs for search engines,
+ * which is how an entity gets connected to its own profiles rather than treated as
+ * unrelated things with similar names. Facebook is a numeric Page id because the Page has
+ * no vanity URL; it is stable and it resolves.
+ */
+export const SOCIAL_PROFILES = {
+  facebook: "https://www.facebook.com/1191879377352149",
+  youtube: "https://www.youtube.com/@asylumstats"
+} as const;
+
 export type StructuredDataNode = Record<string, unknown>;
 
 export interface ReleaseEntry {

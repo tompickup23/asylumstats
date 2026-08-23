@@ -6,6 +6,7 @@ import {
   DEFAULT_SOCIAL_IMAGE_PATH,
   SITE_NAME,
   SITE_URL,
+  SOCIAL_PROFILES,
   normalisePageTitle,
   type StructuredDataNode
 } from "../lib/site";
@@ -91,7 +92,8 @@ const structuredData = [
             url: new URL("/apple-touch-icon.png", siteOrigin).toString(),
             width: 180,
             height: 180
-          }
+          },
+          sameAs: Object.values(SOCIAL_PROFILES)
         }
       ]
     : []),
@@ -182,7 +184,8 @@ const structuredData = [
           <a href="/privacy/">Privacy</a> &middot;
           <a href="/terms/">Terms</a> &middot;
           <a href="/accessibility/">Accessibility</a> &middot;
-          <a href="https://www.facebook.com/1191879377352149" rel="me noopener">Facebook</a>
+          <a href={SOCIAL_PROFILES.facebook} rel="me noopener">Facebook</a> &middot;
+          <a href={SOCIAL_PROFILES.youtube} rel="me noopener">YouTube</a>
         </div>
         <div class="footer-legal">
           asylumstats.co.uk is an independent research project. It uses publicly available government data (ONS, Home Office, DfE, NHS Digital).
