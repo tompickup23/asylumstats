@@ -106,3 +106,28 @@ describe.skipIf(!built)("every bespoke OG card is actually used", () => {
     }
   });
 });
+
+describe.skipIf(!built)("the site points at its own accounts", () => {
+  const home = () => readFileSync(join(dist, "index.html"), "utf8");
+
+  it("links Facebook and YouTube from the footer", () => {
+    expect(home()).toContain("https://www.facebook.com/1191879377352149");
+    expect(home()).toContain("https://www.youtube.com/@asylumstats");
+  });
+
+  it("declares them as sameAs, not only as footer links", () => {
+    // A footer link tells a reader. sameAs is what connects the site to its profiles for
+    // a search engine, which otherwise has three things with similar names and no reason
+    // to believe they are the same publisher.
+    const sameAs = /"sameAs":\[([^\]]*)\]/.exec(home());
+    expect(sameAs, "no sameAs on the Organization node").not.toBeNull();
+    expect(sameAs![1]).toContain("facebook.com");
+    expect(sameAs![1]).toContain("youtube.com/@asylumstats");
+  });
+
+  it("carries the links on inner pages, not just the homepage", () => {
+    for (const page of ["routes/index.html", "places/burnley/index.html"]) {
+      expect(readFileSync(join(dist, page), "utf8"), page).toContain("youtube.com/@asylumstats");
+    }
+  });
+});
