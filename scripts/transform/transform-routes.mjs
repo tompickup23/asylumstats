@@ -3,6 +3,7 @@ import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "no
 import path from "node:path";
 import xlsx from "xlsx";
 import { buildAppealsBlock, readTribunalAppeals } from "../lib/tribunal-appeals.mjs";
+import { readRoutesManifest, releaseSectionUrl, resolveSource } from "../lib/route-release.mjs";
 
 const rawDir = path.resolve("data/raw/uk_routes");
 const canonicalDir = path.resolve("data/canonical/uk_routes");
@@ -21,102 +22,65 @@ if (!tribunalAppeals) {
 
 const tribunalAppealsBlock = buildAppealsBlock(tribunalAppeals);
 
-const sourceFiles = {
-  localImmigration: path.join(rawDir, "regional-and-local-authority-dataset-mar-2026.ods"),
-  localResettlement: path.join(rawDir, "resettlement-local-authority-datasets-mar-2026.xlsx"),
-  illegalEntry: path.join(rawDir, "illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx"),
-  safeLegal: path.join(rawDir, "safe-legal-routes-summary-tables-mar-2026.ods"),
-  asylumClaims: path.join(rawDir, "asylum-claims-datasets-mar-2026.xlsx"),
-  asylumAwaitingDecision: path.join(rawDir, "asylum-claims-awaiting-decision-datasets-mar-2026.xlsx"),
-  asylumOutcomeAnalysis: path.join(rawDir, "outcome-analysis-asylum-claims-datasets-mar-2026.xlsx"),
-  asylumSupport: path.join(rawDir, "asylum-seekers-receipt-support-datasets-mar-2026.xlsx"),
-  returns: path.join(rawDir, "returns-datasets-mar-2026.xlsx")
-};
+// Which release each dataset belongs to, read from the manifest fetch-routes.mjs wrote
+// rather than written out here.
+//
+// This used to be nine hardcoded `-mar-2026` filenames and nine hardcoded media URLs. The
+// fetcher had already been taught to discover the newest file, so the pair disagreed the
+// moment a quarter landed: in CI the transform failed with ENOENT on a filename nobody had
+// downloaded (which killed the 10 August refresh), and on a machine still holding the old
+// file it would have transformed March data and labelled it June. Everything period-shaped
+// now comes from the file that was actually fetched.
+//
+// Only the section of the release that documents each dataset is named here, because that
+// is genuinely per-dataset and does not move. The two local authority files live on the
+// standing statistical data set instead of the quarterly release, so they carry an absolute
+// URL and `releaseSectionUrl` passes it through.
+const REGIONAL_LA_PAGE =
+  "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data";
 
-const sourceMeta = {
-  localImmigration: {
-    source_id: "local_immigration_groups_mar_2026",
-    source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
-    methodology_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-    release_date: "2026-05-21"
-  },
-  localResettlement: {
-    source_id: "local_resettlement_routes_mar_2026",
-    source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e4ef22977ebc82cb3fb6/resettlement-local-authority-datasets-mar-2026.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-    release_date: "2026-05-21"
-  },
-  illegalEntry: {
-    source_id: "illegal_entry_routes_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e3b7ee62840dba48a2c7/illegal-entry-routes-to-the-uk-dataset-mar-2026.xlsx",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    release_date: "2026-05-21"
-  },
-  safeLegal: {
-    source_id: "safe_legal_routes_summary_mar_2026",
-    source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e568ee62840dba48a2ca/safe-legal-routes-summary-tables-mar-2026.ods",
-    methodology_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics",
-    release_date: "2026-05-21"
-  },
-  asylumClaims: {
-    source_id: "asylum_claims_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05df9d97000cb6073e4e25/asylum-claims-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-claim-asylum-in-the-uk",
-    release_date: "2026-05-21"
-  },
+const SOURCE_SECTIONS = {
+  localImmigration: { sourceId: "local_immigration_groups", section: REGIONAL_LA_PAGE },
+  localResettlement: { sourceId: "local_resettlement_routes", section: REGIONAL_LA_PAGE },
+  illegalEntry: { sourceId: "illegal_entry_routes", section: "summary-of-latest-statistics" },
+  safeLegal: { sourceId: "safe_legal_routes_summary", section: "summary-of-latest-statistics" },
+  asylumClaims: { sourceId: "asylum_claims", section: "how-many-people-claim-asylum-in-the-uk" },
   asylumAwaitingDecision: {
-    source_id: "asylum_awaiting_decision_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05df3d5f39105e0848a2be/asylum-claims-awaiting-decision-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-05-21"
+    sourceId: "asylum_awaiting_decision",
+    section: "how-many-people-are-in-the-uk-asylum-system"
   },
   asylumOutcomeAnalysis: {
-    source_id: "asylum_outcome_analysis_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e4abc0cc74b4523e4e49/outcome-analysis-asylum-claims-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-granted-asylum-in-the-uk",
-    release_date: "2026-05-21"
+    sourceId: "asylum_outcome_analysis",
+    section: "how-many-people-are-granted-asylum-in-the-uk"
   },
   asylumSupport: {
-    source_id: "asylum_support_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05dfcb5f39105e0848a2c2/asylum-seekers-receipt-support-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-in-the-uk-asylum-system",
-    release_date: "2026-05-21"
+    sourceId: "asylum_support",
+    section: "how-many-people-are-in-the-uk-asylum-system"
   },
-  returns: {
-    source_id: "returns_mar_2026",
-    source_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
-    attachment_url:
-      "https://assets.publishing.service.gov.uk/media/6a05e53022977ebc82cb3fb7/returns-datasets-mar-2026.xlsx",
-    methodology_url:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk",
-    release_date: "2026-05-21"
-  }
+  returns: { sourceId: "returns", section: "how-many-people-are-returned-from-the-uk" }
 };
+
+const routesManifest = readRoutesManifest(path.resolve("data/raw/manifests/uk_routes.json"));
+
+// `source_id` no longer carries the period. It used to read `asylum_claims_mar_2026`, and
+// src/pages/routes.astro looked charts up by that exact string, so the next release would
+// have silently dropped the source line from nine public charts: the id is the dataset,
+// the period belongs to release_date and attachment_url alongside it.
+const sourceFiles = {};
+const sourceMeta = {};
+for (const [key, spec] of Object.entries(SOURCE_SECTIONS)) {
+  const resolved = resolveSource(routesManifest, spec.sourceId);
+  const sectionUrl = releaseSectionUrl(resolved.period.slug, spec.section);
+  sourceFiles[key] = path.join(rawDir, resolved.fileName);
+  sourceMeta[key] = {
+    source_id: spec.sourceId,
+    source_url: sectionUrl,
+    attachment_url: resolved.sourceUrl,
+    methodology_url: sectionUrl,
+    release_date: resolved.releaseDate,
+    period_label: resolved.period.label
+  };
+}
 
 function ensureCleanDir(directory) {
   rmSync(directory, { recursive: true, force: true });

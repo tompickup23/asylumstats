@@ -42,14 +42,14 @@ const stockFlowReadingRules = [...supportedAsylumReadingRules, ...asylumSystemRe
 // with the March 2026 release.
 const sourceRegistry = new Map((routeDashboard.sources as any[]).map((entry) => [entry.source_id, entry]));
 const SOURCE_DATASET_NAMES: Record<string, string> = {
-  asylum_claims_mar_2026: "asylum claims",
-  asylum_awaiting_decision_mar_2026: "asylum work in progress",
-  asylum_outcome_analysis_mar_2026: "asylum outcome analysis",
-  asylum_support_mar_2026: "asylum support",
+  asylum_claims: "asylum claims",
+  asylum_awaiting_decision: "asylum work in progress",
+  asylum_outcome_analysis: "asylum outcome analysis",
+  asylum_support: "asylum support",
   asylum_appeals_mar_2023: "asylum appeals lodged (series discontinued after 2023 Q1)",
-  returns_mar_2026: "returns",
-  illegal_entry_routes_mar_2026: "irregular entry detections",
-  local_immigration_groups_mar_2026: "local authority immigration groups"
+  returns: "returns",
+  illegal_entry_routes: "irregular entry detections",
+  local_immigration_groups: "local authority immigration groups"
 };
 
 function chartSource(sourceId: string): { source?: string; sourceUrl?: string } {
@@ -395,7 +395,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Asylum claims"
         description="Quarterly inflow into the asylum system."
         tone="accent"
-        {...chartSource("asylum_claims_mar_2026")}
+        {...chartSource("asylum_claims")}
       />
       <TrendChart
         points={nationalSystemDynamics.flowSeries.initialDecisions.map((point) => ({
@@ -405,7 +405,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Initial decisions"
         description="Quarterly operational output. This is not the same thing as latest cohort outcomes."
         tone="warm"
-        {...chartSource("asylum_outcome_analysis_mar_2026")}
+        {...chartSource("asylum_outcome_analysis")}
       />
       <TrendChart
         points={nationalSystemDynamics.stockSeries.awaitingInitialDecision.map((point) => ({
@@ -415,7 +415,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Awaiting initial decision"
         description="Quarter-end stock of people waiting for an initial decision."
         tone="teal"
-        {...chartSource("asylum_awaiting_decision_mar_2026")}
+        {...chartSource("asylum_awaiting_decision")}
       />
       <TrendChart
         points={nationalSystemDynamics.stockSeries.supportedAsylum.map((point) => ({
@@ -425,7 +425,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title="Supported asylum stock"
         description={buildSupportedAsylumStockDescription(latestQuarter.stockPeriodLabel ?? routeDashboard.localSnapshotDate)}
         tone="accent"
-        {...chartSource("asylum_support_mar_2026")}
+        {...chartSource("asylum_support")}
       />
     </div>
   </section>
@@ -492,7 +492,7 @@ function formatCardValue(value: number, suffix?: string): string {
         description="Estimated grant rate at initial decision for the most recent claim-year cohorts."
         tone="warm"
         valueSuffix="%"
-      {...chartSource("asylum_outcome_analysis_mar_2026")}
+      {...chartSource("asylum_outcome_analysis")}
         />
       <TrendChart
         points={nationalSystemDynamics.outcomeRateSeries.latestGrantRate.map((point) => ({
@@ -503,7 +503,7 @@ function formatCardValue(value: number, suffix?: string): string {
         description="Estimated latest grant rate for the same claim-year cohorts after later case progression."
         tone="teal"
         valueSuffix="%"
-      {...chartSource("asylum_outcome_analysis_mar_2026")}
+      {...chartSource("asylum_outcome_analysis")}
         />
     </div>
     <div class="feature-grid" style="margin-top: 1rem;">
@@ -582,7 +582,7 @@ function formatCardValue(value: number, suffix?: string): string {
         title={postDecisionPath.returns.scopeLabel}
         description={postDecisionPath.returns.scopeNote}
         tone="accent"
-      {...chartSource("returns_mar_2026")}
+      {...chartSource("returns")}
         />
     </div>
     <div class="split section" style="margin-top: 1rem;">

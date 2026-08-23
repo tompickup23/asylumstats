@@ -41,8 +41,23 @@ const pageDownloads = [
   }
 ];
 
+// Bounded, and it has to be. On 17 August www.wsmp.wales accepted the connection and then
+// said nothing for 133 seconds before curl gave up, and that one hung request took down the
+// entire Monday data refresh. Fifteen seconds to connect, ninety in total, two retries: a
+// host that is genuinely there answers well inside that, and one that is not fails fast
+// enough to be a line in a log rather than the end of the run. `-f` so an error page is
+// never saved as though it were content; a silently stored 403 is worse than a red run.
+const CURL_LIMITS = [
+  "--connect-timeout", "15",
+  "--max-time", "90",
+  "--retry", "2",
+  "--retry-delay", "3",
+  "--retry-connrefused",
+  "-f"
+];
+
 function curlJson(url) {
-  const output = execFileSync("curl", ["-sS", "-L", "-A", "Mozilla/5.0", url], {
+  const output = execFileSync("curl", ["-sS", "-L", ...CURL_LIMITS, "-A", "Mozilla/5.0", url], {
     encoding: "utf8",
     maxBuffer: 1024 * 1024 * 64
   });
@@ -60,7 +75,7 @@ function curlJson(url) {
 }
 
 function downloadFile(url, destination) {
-  execFileSync("curl", ["-sS", "-L", "-A", "Mozilla/5.0", url, "-o", destination], {
+  execFileSync("curl", ["-sS", "-L", ...CURL_LIMITS, "-A", "Mozilla/5.0", url, "-o", destination], {
     stdio: "inherit",
     maxBuffer: 1024 * 1024 * 64
   });

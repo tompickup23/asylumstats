@@ -41,6 +41,45 @@ export function periodKey(fileName) {
 }
 
 /**
+ * The full month names GOV.UK uses in a release slug.
+ *
+ * The filename says `mar-2026`; the release it came from is published at
+ * `.../immigration-system-statistics-year-ending-march-2026`. Two spellings of the same
+ * quarter, and the site has to hold both: one to find the file, one to cite it.
+ */
+const MONTH_NAMES = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+
+/**
+ * Everything a caller needs to name the release a file belongs to.
+ *
+ * Returns null for a filename with no parseable period, matching `periodKey`, so an
+ * unrecognised convention surfaces as an explicit failure rather than a wrong citation.
+ *
+ *   periodParts("asylum-claims-datasets-mar-2026.xlsx")
+ *   -> { key: 202603, year: 2026, month: 3, slug: "march-2026",
+ *        suffix: "mar_2026", label: "Year ending March 2026" }
+ */
+export function periodParts(fileName) {
+  const key = periodKey(fileName);
+  if (key === null) return null;
+  const year = Math.floor(key / 100);
+  const month = key % 100;
+  const name = MONTH_NAMES[month - 1];
+  const abbr = Object.keys(MONTHS).find((candidate) => MONTHS[candidate] === month);
+  return {
+    key,
+    year,
+    month,
+    slug: `${name}-${year}`,
+    suffix: `${abbr}_${year}`,
+    label: `Year ending ${name[0].toUpperCase()}${name.slice(1)} ${year}`
+  };
+}
+
+/**
  * Every data asset linked from a GOV.UK page.
  *
  * Defaults to spreadsheets, which is what the quarterly series publish. Annual reports
