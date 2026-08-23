@@ -10,6 +10,8 @@ import {
   buildPlaceStructuredData,
   buildReleaseCollectionStructuredData,
   getIndexableSitePaths,
+  regionNameInSentence,
+  getPublicPlaceRegions,
   normalisePageTitle
 } from "../src/lib/site";
 
@@ -103,5 +105,32 @@ describe("site metadata helpers", () => {
     expect(nodes).toHaveLength(3);
     expect(nodes[1]["@type"]).toBe("ProfilePage");
     expect(nodes[2]["@type"]).toBe("Organization");
+  });
+});
+
+describe("region names in a sentence", () => {
+  it("adds the definite article only where the name needs one", () => {
+    expect(regionNameInSentence("North West")).toBe("the North West");
+    expect(regionNameInSentence("East of England")).toBe("the East of England");
+    expect(regionNameInSentence("London")).toBe("London");
+    expect(regionNameInSentence("Scotland")).toBe("Scotland");
+    expect(regionNameInSentence("Wales")).toBe("Wales");
+    expect(regionNameInSentence("Northern Ireland")).toBe("Northern Ireland");
+  });
+
+  it("does not double the article on Yorkshire and The Humber", () => {
+    // The name carries its own "The". Prefixing another produced
+    // "Asylum seekers in the Yorkshire and The Humber" in a live page title.
+    expect(regionNameInSentence("Yorkshire and The Humber")).toBe("Yorkshire and The Humber");
+  });
+
+  it("covers every region the site actually builds", () => {
+    // A region added later must be considered deliberately, not silently default to no
+    // article. This asserts the helper has an opinion about each live region name.
+    for (const region of getPublicPlaceRegions()) {
+      const rendered = regionNameInSentence(region.regionName);
+      expect(rendered.endsWith(region.regionName)).toBe(true);
+      expect(rendered.startsWith("the the")).toBe(false);
+    }
   });
 });
