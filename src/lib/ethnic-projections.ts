@@ -241,18 +241,23 @@ export function nationalWhiteBritishShare(
     const pop = area?.current?.total_population ?? 0;
     if (!pop) continue;
 
-    let share: number | undefined;
-    if (year === 2011) {
-      const absolute = area.baseline?.groups_absolute;
+    // An observed year is weighted by its OWN population, not by 2021's. Applying 2021
+    // weights to the 2011 Census returns 80.0% where the observed share across these areas
+    // is 80.2%, and the homepage labels that row "2011 Census". A projected year has no
+    // population of its own, so it uses 2021 weights, which is the method the findings state.
+    if (year === 2011 || year === 2021) {
+      const absolute =
+        year === 2011 ? area.baseline?.groups_absolute : area.current?.groups_absolute;
       if (!absolute) continue;
       const total = Object.values(absolute).reduce((sum, n) => sum + n, 0);
       if (!total) continue;
-      share = (absolute.white_british / total) * 100;
-    } else if (year === 2021) {
-      share = area.current?.groups?.white_british;
-    } else {
-      share = area.projections?.[String(year)]?.white_british;
+      weighted += absolute.white_british;
+      population += total;
+      areas += 1;
+      continue;
     }
+
+    const share = area.projections?.[String(year)]?.white_british;
     if (share == null) continue;
 
     weighted += share * pop;
@@ -261,7 +266,10 @@ export function nationalWhiteBritishShare(
   }
 
   if (!population) return null;
-  return { pct: weighted / population, areas };
+  // Observed years accumulate people over people and need the percentage conversion;
+  // projected years accumulate percent-points over people and are already scaled.
+  const isObserved = year === 2011 || year === 2021;
+  return { pct: isObserved ? (weighted / population) * 100 : weighted / population, areas };
 }
 
 /**

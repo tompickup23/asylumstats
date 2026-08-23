@@ -6,6 +6,13 @@ const findings = defineCollection({
   schema: z.object({
     headline: z.string(),
     date: z.string(),
+    /**
+     * When the piece was last materially revised. Present in the frontmatter of several
+     * findings and, until now, silently dropped: it was never in this schema, so Zod
+     * stripped it and the site rendered and syndicated a stale date. Feeds and the sitemap
+     * use it in preference to `date`.
+     */
+    updated: z.string().optional(),
     category: z.enum(["spending", "routes", "demographics", "backlog", "accountability", "crime", "send", "social-care", "pressure-index"]),
     stat_value: z.string(),
     stat_label: z.string(),
