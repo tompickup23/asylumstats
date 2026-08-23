@@ -37,7 +37,7 @@ const { items } = Astro.props;
     margin: 0 0 1rem;
     padding: 0;
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
   .breadcrumbs li {
     display: flex;
@@ -49,7 +49,7 @@ const { items } = Astro.props;
     font-size: 0.78rem;
   }
   .breadcrumbs a {
-    color: var(--muted);
+    color: var(--text-muted);
     text-decoration: none;
     transition: color 180ms;
   }
@@ -57,7 +57,7 @@ const { items } = Astro.props;
     color: var(--accent);
   }
   .breadcrumbs [aria-current="page"] {
-    color: var(--ink-soft);
-    font-weight: 500;
+    color: var(--text);
+    font-weight: 600;
   }
 </style>

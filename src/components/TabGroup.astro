@@ -98,8 +98,8 @@ const activeDefault = defaultTab || tabs[0]?.id;
     padding: 0.65rem 1.1rem;
     font-size: 0.88rem;
     font-weight: 600;
-    font-family: "Sora", sans-serif;
-    color: var(--muted);
+    font-family: var(--font-display);
+    color: var(--text-muted);
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
@@ -108,7 +108,7 @@ const activeDefault = defaultTab || tabs[0]?.id;
     transition: color 180ms, border-color 180ms;
   }
   .tab-btn:hover {
-    color: var(--ink-soft);
+    color: var(--text);
   }
   .tab-btn[aria-selected="true"] {
     color: var(--accent);

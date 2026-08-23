@@ -139,10 +139,10 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
 
 <style>
   .reg-section-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 1rem;
   }
   .reg-area-list {
@@ -157,18 +157,18 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
     gap: 0.5rem;
     padding: 0.55rem 0;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
   .reg-area-row:hover {
-    background: rgba(6, 182, 212, 0.04);
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
   }
   .reg-area-rank {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--muted);
+    font-weight: 600;
+    color: var(--text-muted);
     text-align: center;
   }
   .reg-area-info {
@@ -187,38 +187,38 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
   .reg-area-bar-track {
     display: block;
     height: 8px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-subtle);
     border-radius: 4px;
     overflow: hidden;
   }
   .reg-area-bar-fill {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent));
     border-radius: 4px;
     min-width: 2px;
   }
   .reg-area-count {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.88rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
     text-align: right;
   }
   .reg-area-rate {
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-align: right;
   }
   .reg-area-wbi {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-align: right;
     white-space: nowrap;
   }
   .reg-area-caption {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.5;
     margin-top: 0.75rem;
   }

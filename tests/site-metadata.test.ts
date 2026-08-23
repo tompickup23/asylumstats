@@ -51,9 +51,17 @@ describe("site metadata helpers", () => {
     expect(DEFAULT_SOCIAL_IMAGE_PATH).toBe("/og-card.png");
   });
 
-  it("ships raster social card assets alongside the SVG", () => {
+  // One card, one format. The webp and svg variants this used to assert were referenced
+  // by nothing: og:image pointed at the PNG, and no crawler was being offered the others.
+  // The PNG is now the estate default card, generated from the brand system.
+  it("ships the default social card", () => {
     expect(existsSync(new URL("../public/og-card.png", import.meta.url))).toBe(true);
-    expect(existsSync(new URL("../public/og-card.webp", import.meta.url))).toBe(true);
+  });
+
+  it("ships the estate icons the document head asks for", () => {
+    expect(existsSync(new URL("../public/favicon.svg", import.meta.url))).toBe(true);
+    expect(existsSync(new URL("../public/apple-touch-icon.png", import.meta.url))).toBe(true);
+    expect(existsSync(new URL("../public/site.webmanifest", import.meta.url))).toBe(true);
   });
 
   it("builds place structured data with area and dataset nodes", () => {

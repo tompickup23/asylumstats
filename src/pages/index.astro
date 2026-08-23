@@ -195,10 +195,10 @@ function findingLabel(verdict: string): string {
 
 function findingColor(verdict: string): string {
   const colors: Record<string, string> = {
-    critical: "var(--coral)",
-    alert: "var(--accent-3)",
+    critical: "var(--critical)",
+    alert: "var(--warning)",
     info: "var(--accent)",
-    resolved: "var(--accent-2)",
+    resolved: "var(--positive)",
   };
   return colors[verdict] ?? "var(--accent)";
 }
@@ -209,37 +209,55 @@ function findingColor(verdict: string): string {
   description={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in 2024/25, ${fmtGbp(dailyCostGbp)} a day. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
   image="/og/home.png"
 >
-  <!-- ═══ HERO ═══ -->
+  {/*
+    The fold does two jobs, so it is built as two columns rather than one centred stack:
+    the claim on the left, the thing to do about it on the right. Centred-everything read
+    as a product landing page. This reads as a masthead, which is what a site republishing
+    official statistics should look like.
+  */}
   <section class="hero-section">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">Home Office asylum accommodation</div>
-      <h1 class="hero-headline">
-        <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
-        <span class="hero-label">a day on asylum hotels.</span>
-      </h1>
-      <p class="hero-subline">
-        That is {fmtGbp(annualCostGbp)} across 2024/25, inside the £4bn the Home Office spent on asylum support altogether.
-        {fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at {snapshotDate}.
-        Every figure on this site links back to the government release it came from.
-      </p>
-      {dailyCostSource && (
-        <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
-          Source: Home Office asylum accommodation factsheet &rarr;
-        </a>
-      )}
-
-      <!-- Search in hero -->
-      <div class="hero-search">
-        <input
-          type="search"
-          id="area-search"
-          placeholder="Enter your postcode or area name..."
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Search for a local authority"
-        />
-        <div class="lookup-results" id="area-results" hidden></div>
+    <div class="hero-inner shell">
+      <div class="hero-claim">
+        <p class="hero-eyebrow">Home Office asylum accommodation</p>
+        <h1 class="hero-headline">
+          <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
+          <span class="hero-label">a day on asylum hotels</span>
+        </h1>
+        <p class="hero-deck">
+          That is {fmtGbp(annualCostGbp)} across 2024/25, inside the £4bn the Home Office spent on asylum
+          support altogether. {fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial
+          decision at {snapshotDate}.
+        </p>
+        {dailyCostSource && (
+          <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
+            Home Office asylum accommodation factsheet
+          </a>
+        )}
       </div>
+
+      <aside class="hero-lookup" aria-labelledby="hero-lookup-title">
+        <h2 class="hl-title" id="hero-lookup-title">Find your area</h2>
+        <p class="hl-sub">Asylum support, hotel use and spending for any UK local authority.</p>
+        <div class="hero-search">
+          <label class="hl-label" for="area-search">Postcode or area name</label>
+          <div class="hl-field">
+            <svg class="hl-icon" viewBox="0 0 20 20" width="18" height="18" fill="none" aria-hidden="true">
+              <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.8" />
+              <path d="M13.5 13.5 17 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+            <input
+              type="search"
+              id="area-search"
+              placeholder="BB11 or Burnley"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+          <div class="lookup-results" id="area-results" hidden></div>
+        </div>
+        <p class="hl-hint">{fmtInt(placeCount)} local authorities. Every figure links to the release it came from.</p>
+        <a class="hl-browse" href="/places/">Browse every area &rarr;</a>
+      </aside>
     </div>
   </section>
 
@@ -376,15 +394,15 @@ function findingColor(verdict: string): string {
       <!-- Key stats grid -->
       <div class="demo-key-stats">
         <div class="demo-key-stat">
-          <span class="demo-key-number" style="color: var(--coral);">{areasBelow50}</span>
+          <span class="demo-key-number" style="color: var(--critical);">{areasBelow50}</span>
           <span class="demo-key-label">areas White British under 50% by 2051</span>
         </div>
         <div class="demo-key-stat">
-          <span class="demo-key-number" style="color: var(--accent-3);">{areasBelow50by2061}</span>
+          <span class="demo-key-number" style="color: var(--warning);">{areasBelow50by2061}</span>
           <span class="demo-key-label">areas White British under 50% by 2061</span>
         </div>
         <div class="demo-key-stat">
-          <span class="demo-key-number" style="color: var(--accent-3);">{muslimMajority2051}</span>
+          <span class="demo-key-number" style="color: var(--warning);">{muslimMajority2051}</span>
           <span class="demo-key-label">areas projected Muslim majority by 2051</span>
         </div>
         <div class="demo-key-stat">
@@ -730,118 +748,204 @@ function findingColor(verdict: string): string {
 
 <style>
   /* ═══ HERO ═══ */
+  /*
+    A masthead, not a product hero. Left aligned on a real grid, one figure carrying the
+    page, and the lookup given its own block so the fold has something to do as well as
+    something to read.
+
+    The animated radar sweep that used to turn behind this section is gone, for the same
+    reason the radar mark went: a scanning-and-alarm metaphor on a site publishing
+    official statistics about people seeking asylum undercuts the credibility the numbers
+    depend on. Nothing replaces it.
+  */
   .hero-section {
-    padding: 4rem 1.5rem 3rem;
-    text-align: center;
-    background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-section::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: 50%;
-    width: 120%;
-    height: 120%;
-    transform: translateX(-50%);
-    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(6, 182, 212, 0.06) 30deg, transparent 60deg);
-    animation: radar-sweep 8s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes radar-sweep {
-    from { transform: translateX(-50%) rotate(0deg); }
-    to { transform: translateX(-50%) rotate(360deg); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-section::before { animation: none; opacity: 0; }
+    padding: 4.5rem 0 4rem;
+    border-bottom: 1px solid var(--border);
   }
   .hero-inner {
-    max-width: 800px;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
   }
+  .hero-claim {
+    position: relative;
+  }
+  /* A hairline down the gutter, so the fold reads as one grid rather than two unrelated
+     blocks. It is drawn half a gutter to the right of the claim column, and the
+     single-column layout below drops it. */
+  .hero-claim::after {
+    content: "";
+    position: absolute;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    right: calc(clamp(2.5rem, 6vw, 5rem) / -2);
+    width: 1px;
+    background: var(--border);
+  }
+
+  /* A short accent rule above the eyebrow, echoing the 4px rule on the header. It marks
+     where the page starts without putting a brand-coloured slab behind anything. */
   .hero-eyebrow {
-    font-family: "Sora", sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
+    position: relative;
+    margin: 0 0 1.35rem;
+    padding-top: 1rem;
+    font-size: 0.72rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    margin-bottom: 1rem;
+    letter-spacing: 0.16em;
+    color: var(--text-faint);
+  }
+  .hero-eyebrow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 44px;
+    height: 3px;
+    background: var(--accent);
   }
   .hero-headline {
     margin: 0;
-    line-height: 1.1;
+    line-height: 1;
   }
   .hero-stat {
     display: block;
-    font-family: "Sora", sans-serif;
-    font-size: clamp(3rem, 10vw, 5.5rem);
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 8.5vw, 6rem);
+    font-weight: 600;
     color: var(--accent);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    font-variant-numeric: lining-nums tabular-nums;
   }
   .hero-label {
     display: block;
-    font-family: "Sora", sans-serif;
-    font-size: clamp(1.1rem, 3vw, 1.5rem);
-    font-weight: 700;
-    color: var(--ink);
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3.2vw, 2.05rem);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
   }
-  .hero-subline {
-    font-size: 1.05rem;
-    color: var(--muted);
-    max-width: 600px;
-    margin: 1.25rem auto 0;
-    line-height: 1.6;
+  .hero-deck {
+    margin: 1.5rem 0 0;
+    max-width: 46ch;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-muted);
   }
+  /* The source is a citation, so it is set as one: small, underlined, and naming the
+     document rather than saying "source" and pointing at it. */
   .hero-source {
     display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.82rem;
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  .hero-source:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  /* ═══ HERO LOOKUP ═══ */
+  .hero-lookup {
+    padding: 1.75rem;
+    background: var(--accent-wash);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .hl-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .hl-sub {
+    margin: 0.4rem 0 1.25rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .hl-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+  }
+  .hl-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .hl-icon {
+    position: absolute;
+    left: 0.9rem;
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+  .hl-hint {
+    margin: 0.9rem 0 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-faint);
+  }
+  .hl-browse {
+    display: inline-block;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+    width: 100%;
+    font-size: 0.88rem;
+    font-weight: 600;
     color: var(--accent);
     text-decoration: none;
-    opacity: 0.8;
-    transition: opacity 180ms;
   }
-  .hero-source:hover { opacity: 1; }
+  .hl-browse:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
 
-  /* Search in hero */
   .hero-search {
-    max-width: 560px;
-    margin: 2rem auto 0;
     position: relative;
-    text-align: left;
   }
   .hero-search input {
     width: 100%;
-    padding: 1rem 1.25rem;
+    padding: 0.95rem 1rem 0.95rem 2.65rem;
     font-size: 1rem;
-    font-family: "Manrope", sans-serif;
-    color: var(--ink);
-    background: var(--bg-soft);
-    border: 2px solid var(--border-strong);
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     outline: none;
     transition: border-color 180ms, box-shadow 180ms;
   }
   .hero-search input::placeholder {
-    color: var(--muted);
-    opacity: 0.7;
+    color: var(--text-faint);
   }
   .hero-search input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
   }
   .hero-search .lookup-results {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: var(--bg-soft);
-    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
     max-height: 320px;
     overflow-y: auto;
     z-index: 50;
@@ -850,27 +954,36 @@ function findingColor(verdict: string): string {
   .hero-search :global(.lookup-result) {
     display: flex;
     flex-direction: column;
-    padding: 0.75rem 1.25rem;
+    padding: 0.7rem 1rem;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
+  .hero-search :global(.lookup-result:last-child) { border-bottom: 0; }
   .hero-search :global(.lookup-result:hover) {
-    background: rgba(125, 211, 252, 0.08);
+    background: var(--accent-wash);
   }
-  .hero-search :global(.lookup-result strong) { font-size: 0.95rem; }
-  .hero-search :global(.lookup-result span) { font-size: 0.82rem; color: var(--muted); }
+  .hero-search :global(.lookup-result strong) { font-size: 0.95rem; font-weight: 600; }
+  .hero-search :global(.lookup-result span) { font-size: 0.82rem; color: var(--text-muted); }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.25rem;
+    }
+    .hero-claim::after { display: none; }
+  }
 
   /* ═══ FINDINGS STRIP ═══ */
   .findings-strip {
     margin-top: 3rem;
   }
   .strip-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 1rem;
     letter-spacing: -0.02em;
   }
@@ -880,7 +993,7 @@ function findingColor(verdict: string): string {
     gap: 0.75rem;
   }
   .finding-strip-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
@@ -897,21 +1010,21 @@ function findingColor(verdict: string): string {
   }
   .fsc-verdict {
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
   .fsc-stat {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.1;
   }
   .fsc-headline {
     font-size: 0.88rem;
     font-weight: 600;
-    color: var(--ink-soft);
+    color: var(--text);
     line-height: 1.4;
   }
   .fsc-cta {
@@ -938,7 +1051,7 @@ function findingColor(verdict: string): string {
     gap: 0.75rem;
   }
   .stat-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
@@ -947,23 +1060,23 @@ function findingColor(verdict: string): string {
     gap: 0.2rem;
   }
   .stat-value {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
   }
   .stat-card--accent .stat-value { color: var(--accent); }
-  .stat-card--warn .stat-value { color: #f59e0b; }
-  .stat-card--coral .stat-value { color: var(--coral); }
-  .stat-card--teal .stat-value { color: var(--accent-2); }
+  .stat-card--warn .stat-value { color: var(--warning); }
+  .stat-card--coral .stat-value { color: var(--critical); }
+  .stat-card--teal .stat-value { color: var(--positive); }
   .stat-label {
     font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
   }
   .stat-context {
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
 
   /* ═══ EXPLAINERS ═══ */
@@ -989,14 +1102,14 @@ function findingColor(verdict: string): string {
     margin: 0 auto;
   }
   .lookup-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0;
   }
   .lookup-desc {
-    color: var(--muted);
+    color: var(--text-muted);
     font-size: 0.95rem;
     margin: 0.5rem 0 0;
   }
@@ -1006,15 +1119,15 @@ function findingColor(verdict: string): string {
     margin-top: 3rem;
   }
   .section-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 0.25rem;
     letter-spacing: -0.02em;
   }
   .section-desc {
-    color: var(--muted);
+    color: var(--text-muted);
     font-size: 0.92rem;
     margin: 0 0 1.5rem;
     max-width: 600px;
@@ -1027,7 +1140,7 @@ function findingColor(verdict: string): string {
     gap: 0.75rem;
   }
   .region-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
@@ -1041,14 +1154,14 @@ function findingColor(verdict: string): string {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-glow);
   }
-  .region-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); }
+  .region-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
   .region-stat {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
   }
-  .region-rate { font-size: 0.82rem; color: var(--muted); }
+  .region-rate { font-size: 0.82rem; color: var(--text-muted); }
 
   /* ═══ TOP AREAS TABLE ═══ */
   .area-table { max-width: 700px; }
@@ -1057,10 +1170,10 @@ function findingColor(verdict: string): string {
     grid-template-columns: 32px 1fr 80px 80px;
     padding: 0.5rem 0.75rem;
     font-size: 0.78rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--muted);
+    color: var(--text-muted);
     border-bottom: 1px solid var(--border-strong);
   }
   .area-row {
@@ -1069,20 +1182,20 @@ function findingColor(verdict: string): string {
     align-items: center;
     padding: 0.6rem 0.75rem;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     border-bottom: 1px solid var(--border);
     transition: background 120ms;
   }
-  .area-row:hover { background: rgba(125, 211, 252, 0.06); }
-  .area-rank { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .area-row:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  .area-rank { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
   .area-name { font-weight: 600; font-size: 0.92rem; }
   .area-rate {
-    font-family: "Sora", sans-serif;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--accent);
     font-size: 0.95rem;
   }
-  .area-total { font-size: 0.88rem; color: var(--muted); }
+  .area-total { font-size: 0.88rem; color: var(--text-muted); }
 
   /* ═══ ROUTES ═══ */
   .route-cards {
@@ -1091,7 +1204,7 @@ function findingColor(verdict: string): string {
     gap: 0.75rem;
   }
   .route-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
@@ -1099,21 +1212,21 @@ function findingColor(verdict: string): string {
     flex-direction: column;
     gap: 0.2rem;
   }
-  .route-label { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+  .route-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
   .route-value {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
   }
-  .route-period { font-size: 0.78rem; color: var(--muted); }
+  .route-period { font-size: 0.78rem; color: var(--text-muted); }
 
   /* ═══ CTAs ═══ */
   .cta-link {
     display: inline-block;
     margin-top: 1.25rem;
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--accent);
     text-decoration: none;
   }
@@ -1126,13 +1239,13 @@ function findingColor(verdict: string): string {
     border-top: 1px solid var(--border);
   }
   .cta-inner h2 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.8rem;
-    font-weight: 800;
+    font-weight: 600;
     margin: 0;
   }
   .cta-inner p {
-    color: var(--muted);
+    color: var(--text-muted);
     margin: 0.75rem auto 1.5rem;
     max-width: 500px;
   }
@@ -1149,7 +1262,7 @@ function findingColor(verdict: string): string {
     padding: 2rem 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--critical) 4%, transparent) 0%, transparent 100%);
   }
   .cost-strip-inner {
     display: grid;
@@ -1175,36 +1288,36 @@ function findingColor(verdict: string): string {
     background: var(--border);
   }
   .cost-number {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 800;
-    color: var(--coral);
+    font-weight: 600;
+    color: var(--critical);
     letter-spacing: -0.03em;
     line-height: 1;
   }
   .cost-label {
     font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin-top: 0.25rem;
   }
   .cost-context {
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
     line-height: 1.4;
   }
   .cost-calc {
     display: block;
     font-size: 0.72rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.5;
     margin-top: 0.25rem;
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
   }
   .cost-source {
     text-align: center;
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.5;
     margin-top: 1rem;
     line-height: 1.5;
@@ -1220,7 +1333,7 @@ function findingColor(verdict: string): string {
     gap: 0.75rem;
   }
   .sys-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
@@ -1229,24 +1342,24 @@ function findingColor(verdict: string): string {
     gap: 0.2rem;
   }
   .sys-value {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.6rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
     letter-spacing: -0.02em;
   }
   .sys-accent { color: var(--accent); }
-  .sys-warn { color: #f59e0b; }
-  .sys-coral { color: var(--coral); }
+  .sys-warn { color: var(--warning); }
+  .sys-coral { color: var(--critical); }
   .sys-label {
     font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin-top: 0.15rem;
   }
   .sys-context {
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
     line-height: 1.4;
   }
 
@@ -1269,9 +1382,9 @@ function findingColor(verdict: string): string {
     width: 100%;
     padding: 0.85rem 1rem;
     font-size: 1rem;
-    font-family: "Manrope", sans-serif;
-    color: var(--ink);
-    background: var(--bg-soft);
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--bg-subtle);
     border: 2px solid var(--border-strong);
     border-radius: var(--radius-sm);
     outline: none;
@@ -1285,7 +1398,7 @@ function findingColor(verdict: string): string {
     position: absolute;
     top: calc(100% + 4px);
     left: 0; right: 0;
-    background: var(--bg-soft);
+    background: var(--bg-subtle);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     z-index: 50;
@@ -1299,27 +1412,27 @@ function findingColor(verdict: string): string {
     padding: 0.65rem 1rem;
     text-align: left;
     font-size: 0.92rem;
-    color: var(--ink);
+    color: var(--text);
     background: none;
     border: none;
     border-bottom: 1px solid var(--border);
     cursor: pointer;
     transition: background 120ms;
   }
-  .future-result-btn:hover { background: rgba(125, 211, 252, 0.08); }
+  .future-result-btn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
   .future-preview { margin-top: 1.25rem; }
   .future-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.5rem;
     text-align: left;
   }
   .future-card h3 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 1rem;
   }
   .future-stats {
@@ -1334,13 +1447,13 @@ function findingColor(verdict: string): string {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-bottom: 0.2rem;
   }
   .future-stat-value {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.35rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
   }
   @media (max-width: 640px) {
@@ -1364,15 +1477,15 @@ function findingColor(verdict: string): string {
     padding: 1.5rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    background: var(--panel);
+    background: var(--bg-card);
   }
   .demo-traj-label {
     display: block;
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-bottom: 0.75rem;
   }
   .demo-traj-bar {
@@ -1385,36 +1498,36 @@ function findingColor(verdict: string): string {
     height: 36px;
     padding: 0 0.75rem;
     border-radius: 6px;
-    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent));
     transition: width 600ms ease;
   }
   .demo-traj-current {
-    background: linear-gradient(90deg, var(--accent-3), rgba(245, 158, 11, 0.3));
+    background: linear-gradient(90deg, var(--warning), color-mix(in srgb, var(--warning) 30%, transparent));
   }
   .demo-traj-proj {
-    background: linear-gradient(90deg, var(--coral), rgba(239, 68, 68, 0.2));
+    background: linear-gradient(90deg, var(--critical), color-mix(in srgb, var(--critical) 20%, transparent));
   }
   .demo-traj-illustrative {
     opacity: 0.6;
-    border: 1px dashed rgba(239, 68, 68, 0.4);
-    background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+    border: 1px dashed color-mix(in srgb, var(--critical) 40%, transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--critical) 30%, transparent), color-mix(in srgb, var(--critical) 10%, transparent));
   }
   .demo-traj-year {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.82rem;
-    font-weight: 700;
-    color: rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    color: var(--text);
   }
   .demo-traj-pct {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.92rem;
-    font-weight: 800;
-    color: rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+    color: var(--text);
   }
   .demo-traj-note {
     display: block;
     font-size: 0.75rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.6;
     margin-top: 0.5rem;
     line-height: 1.4;
@@ -1433,20 +1546,20 @@ function findingColor(verdict: string): string {
     padding: 1rem 0.5rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    background: var(--panel);
+    background: var(--bg-card);
   }
   .demo-key-number {
     display: block;
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
     letter-spacing: -0.03em;
   }
   .demo-key-label {
     display: block;
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-top: 0.35rem;
     line-height: 1.3;
   }
@@ -1456,10 +1569,10 @@ function findingColor(verdict: string): string {
     margin-top: 1.5rem;
   }
   .demo-bar-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--ink-soft);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 0.75rem;
   }
   .demo-bar-visual {
@@ -1473,7 +1586,7 @@ function findingColor(verdict: string): string {
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     padding: 0.3rem 0;
     transition: opacity 180ms;
   }
@@ -1488,27 +1601,27 @@ function findingColor(verdict: string): string {
   .demo-bar-track {
     display: block;
     height: 20px;
-    background: rgba(239, 68, 68, 0.15);
+    background: color-mix(in srgb, var(--critical) 15%, transparent);
     border-radius: 4px;
     overflow: hidden;
   }
   .demo-bar-fill {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.4));
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
     border-radius: 4px;
     min-width: 4px;
   }
   .demo-bar-pct {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 600;
     text-align: right;
-    color: var(--muted);
+    color: var(--text-muted);
   }
   .demo-bar-caption {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.6;
     margin-top: 0.25rem;
   }
@@ -1520,7 +1633,7 @@ function findingColor(verdict: string): string {
 
   /* ═══ MOBILE ═══ */
   @media (max-width: 640px) {
-    .hero-section { padding: 2.5rem 1rem 2rem; }
+    .hero-section { padding: 2.75rem 0 2.5rem; }
     .cost-strip-inner { grid-template-columns: 1fr; gap: 1rem; }
     .cost-item--hero::after { display: none; }
     .cost-number { font-size: 2rem; }

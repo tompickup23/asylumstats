@@ -84,20 +84,20 @@ const peakLabelHalfWidth = peak ? Math.round((`Peak ${peak.label}`.length * 12) 
 const colors =
   tone === "teal"
     ? {
-        stroke: "#4EE4C3",
-        fill: "rgba(78, 228, 195, 0.18)",
+        stroke: "var(--positive)",
+        fill: "color-mix(in srgb, var(--positive) 18%, transparent)",
         marker: "#C6FFF4"
       }
     : tone === "warm"
       ? {
-          stroke: "#FF8B61",
-          fill: "rgba(255, 139, 97, 0.18)",
-          marker: "#FFD5C6"
+          stroke: "var(--critical)",
+          fill: "color-mix(in srgb, var(--critical) 18%, transparent)",
+          marker: "var(--critical)"
         }
       : {
-          stroke: "#7DD3FC",
-          fill: "rgba(125, 211, 252, 0.18)",
-          marker: "#D9F5FF"
+          stroke: "var(--accent)",
+          fill: "color-mix(in srgb, var(--accent) 18%, transparent)",
+          marker: "var(--accent)"
         };
 ---
 
@@ -178,9 +178,9 @@ const colors =
       return (
         <>
           <line x1={ax} y1={staggerY - 2} x2={ax} y2={padding.top + usableHeight}
-                stroke={ann.color ?? "rgba(245,158,11,0.25)"} stroke-width="1" stroke-dasharray="2 4" />
+                stroke={ann.color ?? "color-mix(in srgb, var(--warning) 25%, transparent)"} stroke-width="1" stroke-dasharray="2 4" />
           <text x={ax + 3} y={staggerY} class="trend-event-label"
-                fill={ann.color ?? "rgba(245,158,11,0.6)"}>
+                fill={ann.color ?? "color-mix(in srgb, var(--warning) 60%, transparent)"}>
             {ann.label}
           </text>
         </>
@@ -219,7 +219,7 @@ const colors =
   .trend-table-toggle summary {
     cursor: pointer;
     font-size: 0.8rem;
-    color: var(--muted);
+    color: var(--text-muted);
     list-style: none;
   }
   .trend-table-toggle summary::-webkit-details-marker { display: none; }
@@ -228,8 +228,8 @@ const colors =
   .trend-table-scroll { max-height: 15rem; overflow: auto; margin-top: 0.4rem; }
   .trend-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
   .trend-table th, .trend-table td { padding: 0.2rem 0.4rem; text-align: left; font-weight: 400; }
-  .trend-table thead th { position: sticky; top: 0; background: var(--bg, #0b1220); color: var(--muted); }
-  .trend-table .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .trend-source { font-size: 0.78rem; color: var(--muted); margin-top: 0.5rem; }
+  .trend-table thead th { position: sticky; top: 0; background: var(--bg, var(--bg-subtle)); color: var(--text-muted); }
+  .trend-table .num { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+  .trend-source { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; }
   .trend-source a { color: inherit; }
 </style>
