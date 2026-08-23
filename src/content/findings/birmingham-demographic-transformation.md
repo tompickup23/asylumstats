@@ -4,7 +4,6 @@ date: "2026-04-14"
 category: demographics
 stat_value: "43% → 11%"
 stat_label: "WBI 2021→2051"
-model_recalibrated: true
 verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry projection model"

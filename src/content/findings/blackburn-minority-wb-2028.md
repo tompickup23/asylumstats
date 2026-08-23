@@ -4,7 +4,6 @@ date: "2026-04-14"
 category: demographics
 stat_value: "2027"
 stat_label: "Blackburn WBI <50% year"
-model_recalibrated: true
 verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v8.0"
@@ -15,7 +14,7 @@ summary: "Blackburn with Darwen: 56.9% White British in Census 2021. Projected b
 
 Census 2021: Blackburn with Darwen, 56.9% White British. Down from 66.6% in 2011. Nearly 10 percentage points gone in one decade.
 
-The Hamilton-Perry model projects, with a known bias toward overstating the White British share:
+The Hamilton-Perry model projects, with a mean absolute error of 1.56pp per decade on the White British share and a bias of +0.05pp, which is close to unbiased. The caveat that matters here is the horizon, not the direction: only a one-decade test has been run, so 2031 is the best-evidenced row below and 2051 the least.
 
 | Year | Blackburn WBI |
 |------|--------------|

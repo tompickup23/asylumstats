@@ -783,7 +783,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
             <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
               DfE School Census 2024/25. State-funded schools. Upper-tier LA level.
               {schoolValidation?.comparison?.white_british?.censusChildPct != null
-                ? ` Validated against Census 2021 ages 4-15: Census WBI ${schoolValidation.comparison.white_british.censusChildPct}% vs school ${schoolValidation.comparison.white_british.schoolPct}% (${schoolValidation.comparison.white_british.gapPp > 0 ? '+' : ''}${schoolValidation.comparison.white_british.gapPp}pp gap).`
+                ? ` Compared with Census 2021 ages 4-15: Census WBI ${schoolValidation.comparison.white_british.censusChildPct}% vs school ${schoolValidation.comparison.white_british.schoolPct}% (${schoolValidation.comparison.white_british.gapPp > 0 ? '+' : ''}${schoolValidation.comparison.white_british.gapPp}pp gap).`
                 : ""}
             </p>
           </details>

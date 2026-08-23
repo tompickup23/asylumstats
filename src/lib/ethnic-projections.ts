@@ -1,4 +1,5 @@
 import rawProjections from "../data/live/ethnic-projections.json";
+import { plausibleThrough } from "./projection-plausibility";
 
 export interface EthnicGroup {
   white_british: number;
@@ -195,4 +196,109 @@ export function getEthnicCompositionTimeline(areaCode: string): Array<{
   }
 
   return timeline.sort((a, b) => Number(a.year) - Number(b.year));
+}
+
+/**
+ * Barnsley and Sheffield each appear twice in the projection file, once under a
+ * retired local authority code and once under the current one, so the raw key
+ * count is 320 where the model covers 318 distinct authorities. Counting the raw
+ * keys double-counts about 801,000 people and, on the 2051 threshold, counts
+ * Sheffield twice: it is the whole of the difference between the 87 an
+ * undeduplicated count returns and the 86 this site publishes.
+ */
+export const RETIRED_AREA_CODES = new Set(["E08000016", "E08000019"]);
+
+/** The distinct authorities the model covers, retired duplicate codes removed. */
+export function distinctAreaCodes(): string[] {
+  return Object.keys(data.areas).filter((code) => !RETIRED_AREA_CODES.has(code));
+}
+
+/**
+ * White British share across the distinct authorities, weighted by their 2021
+ * populations. 2021 reads the Census observation; earlier and later years read
+ * the modelled series. Returns null when no area can supply the year.
+ *
+ * This reads the modelled series WITHOUT the plausibility guard, which is the
+ * opposite of areasBelowFiftyBy below and is deliberate. The areas the guard
+ * withholds are the fastest-diversifying ones, so dropping them from a national
+ * aggregate biases it upward: 55.06% becomes 56.21% at 2051. A count of areas
+ * must not name an area on a withheld projection; a national total needs full
+ * coverage. Say which is which wherever both appear.
+ *
+ * Note the denominator: 49 areas have no 2061 projection, and they are not a
+ * random 49, so a 2061 figure from this function is not comparable with the
+ * earlier years and should be reported with its area count or not at all.
+ */
+export function nationalWhiteBritishShare(
+  year: number
+): { pct: number; areas: number } | null {
+  let weighted = 0;
+  let population = 0;
+  let areas = 0;
+
+  for (const code of distinctAreaCodes()) {
+    const area = data.areas[code];
+    const pop = area?.current?.total_population ?? 0;
+    if (!pop) continue;
+
+    let share: number | undefined;
+    if (year === 2011) {
+      const absolute = area.baseline?.groups_absolute;
+      if (!absolute) continue;
+      const total = Object.values(absolute).reduce((sum, n) => sum + n, 0);
+      if (!total) continue;
+      share = (absolute.white_british / total) * 100;
+    } else if (year === 2021) {
+      share = area.current?.groups?.white_british;
+    } else {
+      share = area.projections?.[String(year)]?.white_british;
+    }
+    if (share == null) continue;
+
+    weighted += share * pop;
+    population += pop;
+    areas += 1;
+  }
+
+  if (!population) return null;
+  return { pct: weighted / population, areas };
+}
+
+/**
+ * Authorities the model puts below a 50% White British share at `year`, read off
+ * the decadal projection and with the plausibility guard applied.
+ *
+ * The guard is not optional here. Six London boroughs (Enfield, Barnet,
+ * Haringey, Lambeth, Islington and Hackney) have a 2051 projection that
+ * plausibleThrough withholds, and their place pages do not show it. Counting
+ * them anyway gives 92 where this site publishes 86, and would put a number on
+ * the homepage that no place page will confirm.
+ *
+ * This also deliberately does not read `thresholds[]`. That array carries an
+ * interpolated crossing year which can name a decade at which the decadal
+ * projection is still above 50%: West Northamptonshire is listed as crossing in
+ * 2051 and projected at 50.28% in 2051, and Bedford and Welwyn Hatfield do the
+ * same at 2041. Counting off the thresholds made the homepage say 60 where the
+ * finding said 59, for one area that has not actually crossed.
+ */
+export function areasBelowFiftyBy(year: number): {
+  total: number;
+  majorityToday: number;
+} {
+  let total = 0;
+  let majorityToday = 0;
+
+  for (const code of distinctAreaCodes()) {
+    const area = data.areas[code];
+    const share = area.projections?.[String(year)]?.white_british;
+    if (share == null || share >= 50) continue;
+
+    const through = plausibleThrough(area as unknown as Parameters<typeof plausibleThrough>[0]);
+    if (through === null || through < year) continue;
+
+    total += 1;
+    if ((area.current?.groups?.white_british ?? 0) >= 50) majorityToday += 1;
+  }
+
+  return { total, majorityToday };
 }

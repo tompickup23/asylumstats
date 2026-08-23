@@ -4,7 +4,6 @@ date: "2026-04-14"
 category: routes
 stat_value: "20%"
 stat_label: "In 10 councils"
-model_recalibrated: true
 verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
 source_label: "Home Office Local Authority Data, Dec 2025"

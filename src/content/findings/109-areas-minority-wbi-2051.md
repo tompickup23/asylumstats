@@ -5,7 +5,6 @@ updated: "2026-08-13"
 category: demographics
 stat_value: "86"
 stat_label: "Areas WBI <50% by 2051"
-model_recalibrated: true
 verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v8.0 projection model"

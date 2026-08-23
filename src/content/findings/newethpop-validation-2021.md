@@ -31,9 +31,9 @@ All five worst misses are in London and the Thames Gateway, areas where internat
 
 **This is not the first time.** The Leeds team themselves acknowledged that their original ETHPOP model (2001-based) had the same systematic bias when validated against Census 2011. NEWETHPOP was funded specifically to correct this. The correction was insufficient. The same directional error persisted, just smaller in magnitude.
 
-**Every projection in use today inherits this problem.**
+**The projections built on it inherit the problem.**
 
-Every ethnic demographic projection for the UK, including Goodwin's CHSS report (2025) projecting White British minority by 2063, inherits assumptions from the same academic tradition. The gold-standard model underestimated diversity growth by an average of 4 percentage points over just 10 years. Forward projections to 2050 or 2060 are likely understating the pace of demographic change.
+Ethnic projections for the UK that take their component rates from this tradition, including Goodwin's CHSS report (2025) projecting White British minority by 2063, inherit its assumptions. The gold-standard model over-predicted the White British share by an average of 4 percentage points over just 10 years, so projections resting on it are likely to be slow rather than fast. That is a statement about models built on modelled fertility, mortality and migration rates. It is not a statement about every projection in use, including ours: this site's model takes observed Census-to-Census ratios instead, and on its own out-of-sample test it is close to unbiased in either direction.
 
 Our own model addresses this by using observed Census-to-Census ratios rather than modelled component rates. Hamilton-Perry v8.0 (Census 2011 DC2101EW observed base and Census 2021 direct observations, 20 ethnic groups) was tested out of sample by fitting 2001 to 2011 and forecasting 2021, scored against the actual Census 2021 across 285 areas: **MAE 1.56pp, bias +0.05pp**. That is comparable with NEWETHPOP's 3.95pp because both are genuine forecast errors rather than fits to their own test data.
 

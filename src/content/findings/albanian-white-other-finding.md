@@ -4,7 +4,6 @@ date: "2026-04-14"
 category: demographics
 stat_value: "89.7%"
 stat_label: "Albanian → White Other"
-model_recalibrated: true
 verdict: info
 source_url: "https://www.ons.gov.uk/datasets/TS022/editions/2021/versions/3"
 source_label: "Census 2021 TS022 Detailed Ethnicity"

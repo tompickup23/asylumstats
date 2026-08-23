@@ -4,7 +4,6 @@ date: "2026-04-14"
 category: demographics
 stat_value: "319K"
 stat_label: "Arab population (Census 2021)"
-model_recalibrated: true
 verdict: info
 source_url: "https://www.ons.gov.uk/datasets/create"
 source_label: "ONS Census 2021 Custom Dataset"
