@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "07_August_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "21_August_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-08-06",
-  "latestWeekEnding": "2026-08-02",
+  "coverageEnd": "2026-08-20",
+  "latestWeekEnding": "2026-08-16",
   "yearToDate": {
-    "asAt": "2026-08-06",
+    "asAt": "2026-08-20",
     "year": 2026,
-    "arrivals": 14561,
+    "arrivals": 15897,
     "priorYear": 2025,
-    "priorYearArrivals": 25591,
-    "changePct": -43.1
+    "priorYearArrivals": 27997,
+    "changePct": -43.2
   },
   "latestWeek": {
-    "weekEnding": "2026-08-02",
-    "arrivals": 1176,
-    "boats": 15,
-    "migrantsPrevented": 472,
-    "eventsPrevented": 20
+    "weekEnding": "2026-08-16",
+    "arrivals": 405,
+    "boats": 3,
+    "migrantsPrevented": 270,
+    "eventsPrevented": 16
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3167,6 +3167,20 @@
       "boats": 15,
       "migrantsPrevented": 472,
       "eventsPrevented": 20
+    },
+    {
+      "weekEnding": "2026-08-09",
+      "arrivals": 716,
+      "boats": 10,
+      "migrantsPrevented": 379,
+      "eventsPrevented": 18
+    },
+    {
+      "weekEnding": "2026-08-16",
+      "arrivals": 405,
+      "boats": 3,
+      "migrantsPrevented": 270,
+      "eventsPrevented": 16
     }
   ],
   "daily": [
@@ -18867,6 +18881,76 @@
     },
     {
       "date": "2026-08-06",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-07",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-08",
+      "arrivals": 258,
+      "boats": 4
+    },
+    {
+      "date": "2026-08-09",
+      "arrivals": 423,
+      "boats": 5
+    },
+    {
+      "date": "2026-08-10",
+      "arrivals": 230,
+      "boats": 1
+    },
+    {
+      "date": "2026-08-11",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-12",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-13",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-14",
+      "arrivals": 93,
+      "boats": 1
+    },
+    {
+      "date": "2026-08-15",
+      "arrivals": 82,
+      "boats": 1
+    },
+    {
+      "date": "2026-08-16",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-17",
+      "arrivals": 250,
+      "boats": 3
+    },
+    {
+      "date": "2026-08-18",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-19",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-20",
       "arrivals": 0,
       "boats": 0
     }
