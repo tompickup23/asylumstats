@@ -54,7 +54,7 @@ const embedUrl = chartId ? `/embed/${chartId}/` : undefined;
       img.onload = () => {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         // Watermark
-        ctx.font = `${12 * scale}px Sora, sans-serif`;
+        ctx.font = `${12 * scale}px "Source Sans 3", sans-serif`;
         ctx.fillStyle = "rgba(255,255,255,0.25)";
         ctx.textAlign = "right";
         ctx.fillText("asylumstats.co.uk", canvas.width - 12 * scale, canvas.height - 8 * scale);
@@ -90,19 +90,19 @@ const embedUrl = chartId ? `/embed/${chartId}/` : undefined;
     gap: 0.5rem;
     margin-top: 0.5rem;
     padding-top: 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--border);
   }
   .chart-source {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.7;
   }
   .chart-source a {
     text-decoration: underline;
-    text-decoration-color: rgba(125, 211, 252, 0.3);
+    text-decoration-color: color-mix(in srgb, var(--accent) 30%, transparent);
     text-underline-offset: 2px;
   }
-  .chart-source a:hover { color: var(--ink); }
+  .chart-source a:hover { color: var(--text); }
   .chart-btns {
     display: flex;
     gap: 0.35rem;
@@ -113,16 +113,16 @@ const embedUrl = chartId ? `/embed/${chartId}/` : undefined;
     gap: 0.3rem;
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted);
-    background: var(--panel-soft);
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
     border: 1px solid var(--border);
     border-radius: 8px;
     cursor: pointer;
     transition: color 180ms, border-color 180ms;
   }
   .chart-action-btn:hover {
-    color: var(--ink);
+    color: var(--text);
     border-color: var(--accent);
   }
 </style>

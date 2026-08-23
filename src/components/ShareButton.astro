@@ -72,15 +72,15 @@ const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&
     height: 36px;
     border-radius: 10px;
     border: 1px solid var(--border);
-    background: var(--panel-soft);
-    color: var(--muted);
+    background: var(--bg-subtle);
+    color: var(--text-muted);
     cursor: pointer;
     transition: color 180ms, border-color 180ms, background 180ms;
     text-decoration: none;
   }
   .share-icon-btn:hover {
-    color: var(--ink);
+    color: var(--text);
     border-color: var(--accent);
-    background: rgba(6, 182, 212, 0.08);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
   }
 </style>

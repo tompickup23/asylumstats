@@ -157,16 +157,16 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
             <line x1="${pad.left}" y1="${sy(t).toFixed(1)}" x2="${W - pad.right}" y2="${sy(t).toFixed(1)}"
                   stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 6" />
             <text x="${pad.left - 6}" y="${(sy(t) + 4).toFixed(1)}" text-anchor="end"
-                  style="font-size:10px;fill:rgba(255,255,255,0.4);font-family:Sora,sans-serif">${t}</text>
+                  style="font-size:10px;fill:var(--text-muted);font-family:var(--font-sans)">${t}</text>
           `).join('')}
           ${centralPath ? `<path d="${centralPath}" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="4 4" />` : ''}
-          <path d="${linePath}" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linejoin="round" />
-          <circle cx="${sx(endYr).toFixed(1)}" cy="${sy(endVal).toFixed(1)}" r="4" fill="#06b6d4" />
+          <path d="${linePath}" fill="none" stroke="#1a6ba8" stroke-width="2.5" stroke-linejoin="round" />
+          <circle cx="${sx(endYr).toFixed(1)}" cy="${sy(endVal).toFixed(1)}" r="4" fill="#1a6ba8" />
           <text x="${(sx(endYr) + 8).toFixed(1)}" y="${(sy(endVal) + 4).toFixed(1)}"
-                style="font-size:12px;fill:#06b6d4;font-weight:600;font-family:Sora,sans-serif">${endVal.toFixed(1)}%</text>
+                style="font-size:12px;fill:var(--accent);font-weight:600;font-family:var(--font-sans)">${endVal.toFixed(1)}%</text>
           ${years.map(yr => `
             <text x="${sx(yr).toFixed(1)}" y="${H - 6}" text-anchor="middle"
-                  style="font-size:10px;fill:rgba(255,255,255,0.5);font-family:Sora,sans-serif">${yr}</text>
+                  style="font-size:10px;fill:var(--text-muted);font-family:var(--font-sans)">${yr}</text>
           `).join('')}
         `;
 
@@ -202,7 +202,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
 <style>
   .scenario-section { margin-top: 2rem; }
   .scenario-section h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
-  .scenario-range-text { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+  .scenario-range-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
   .scenario-range-text strong { color: var(--text); }
 
   .scenario-grid-wrapper {
@@ -216,7 +216,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
     top: 50%;
     transform: rotate(-90deg) translateX(-50%);
     font-size: 0.72rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -224,7 +224,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
   .scenario-grid-label-x {
     text-align: center;
     font-size: 0.72rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-top: 0.3rem;
@@ -249,7 +249,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
   }
 
   .sg-header-label { font-weight: 600; color: var(--text); }
-  .sg-header-desc { font-size: 0.68rem; color: var(--muted); }
+  .sg-header-desc { font-size: 0.68rem; color: var(--text-muted); }
 
   .sg-row-header {
     text-align: right;
@@ -260,9 +260,9 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
   .sg-cell {
     position: relative;
     padding: 0.5rem 0.3rem;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
     border-radius: 6px;
-    background: rgba(255,255,255,0.02);
+    background: var(--bg-subtle);
     cursor: pointer;
     text-align: center;
     transition: all 0.15s;
@@ -271,25 +271,25 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
   }
 
   .sg-cell:hover {
-    background: rgba(6, 182, 212, 0.08);
-    border-color: rgba(6, 182, 212, 0.3);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   }
 
   .sg-cell-active, .sg-cell-active:hover {
-    background: rgba(6, 182, 212, 0.15);
-    border-color: #06b6d4;
-    box-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border-color: var(--accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 20%, transparent);
   }
 
   .sg-cell-central {
-    border-color: rgba(245, 158, 11, 0.3);
+    border-color: color-mix(in srgb, var(--warning) 30%, transparent);
   }
 
   .sg-cell-value {
     display: block;
     font-size: 1rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-variant-numeric: lining-nums tabular-nums;
   }
 
   .sg-cell-badge {
@@ -297,7 +297,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
     top: -6px;
     right: -4px;
     font-size: 0.6rem;
-    background: rgba(245, 158, 11, 0.8);
+    background: color-mix(in srgb, var(--warning) 80%, transparent);
     color: #000;
     padding: 1px 4px;
     border-radius: 3px;
@@ -307,7 +307,7 @@ const years = ["2031", "2041", "2051", "2061"].filter(y => centralData?.[y]);
   .scenario-chart-area { margin-top: 0.75rem; }
   .scenario-chart-label {
     font-size: 0.85rem;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-bottom: 0.3rem;
     min-height: 1.2em;
   }

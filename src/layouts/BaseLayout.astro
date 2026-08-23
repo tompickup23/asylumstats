@@ -101,10 +101,10 @@ const structuredData = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="robots" content={robotsContent} />
-    <meta name="theme-color" content="#050812" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#2f5773" />
+    <meta name="color-scheme" content="light" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:type" content="website" />
@@ -124,8 +124,12 @@ const structuredData = [
     <meta name="twitter:image:alt" content={`${pageTitle} - asylumstats.co.uk`} />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.postcodes.io https://cloudflareinsights.com; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" />
-    <!-- Fonts self-hosted via Fontsource (imported in global.css) -->
+    <!-- Source Serif 4 and Source Sans 3, self-hosted via Fontsource and imported in
+         global.css. The CSP below allows no font host, so a Google Fonts link would be
+         blocked at the browser; self-hosting is also the right answer for privacy. -->
     <meta name="google-site-verification" content="adrI-dNLQZ4U-yrUhxHTknbuCZENyMXfgz7M6r7H6aE" />
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "2dc3cef6e76e40b6a1555008f9774191"}'></script><!-- End Cloudflare Web Analytics -->
     {structuredData.map((item) => (
@@ -189,10 +193,10 @@ const structuredData = [
       }
       .footer-sisters-eyebrow {
         font-size: 0.72rem;
-        font-weight: 700;
+        font-weight: 600;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--muted);
+        color: var(--text-muted);
         margin: 0 0 0.65rem;
       }
       .footer-sisters-grid {
@@ -209,7 +213,7 @@ const structuredData = [
         border-radius: 14px;
         text-decoration: none;
         border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--bg-subtle);
         transition: transform 180ms, border-color 180ms, box-shadow 180ms, background 180ms;
       }
       .footer-sister-card:hover {
@@ -223,7 +227,7 @@ const structuredData = [
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-weight: 800;
+        font-weight: 600;
         font-size: 0.78rem;
         letter-spacing: 0.04em;
         color: #ffffff;
@@ -235,35 +239,35 @@ const structuredData = [
         min-width: 0;
       }
       .footer-sister-name {
-        font-weight: 700;
+        font-weight: 600;
         font-size: 0.92rem;
-        color: var(--ink);
+        color: var(--text);
         line-height: 1.2;
       }
       .footer-sister-tagline {
         font-size: 0.78rem;
-        color: var(--muted);
+        color: var(--text-muted);
         line-height: 1.3;
       }
       .footer-sister-arrow {
         font-size: 1rem;
-        color: var(--muted);
+        color: var(--text-muted);
         align-self: start;
         margin-top: 2px;
       }
       .footer-sister-card--ukd .footer-sister-tile {
-        background: #4f46e5;
+        background: #4338ca;
         box-shadow: 0 6px 14px rgba(79, 70, 229, 0.32);
       }
       .footer-sister-card--ukd:hover {
         border-color: rgba(79, 70, 229, 0.55);
       }
       .footer-sister-card--uke .footer-sister-tile {
-        background: #38bdf8;
-        box-shadow: 0 6px 14px rgba(56, 189, 248, 0.32);
+        background: var(--accent);
+        box-shadow: 0 6px 14px color-mix(in srgb, var(--accent) 32%, transparent);
       }
       .footer-sister-card--uke:hover {
-        border-color: rgba(56, 189, 248, 0.55);
+        border-color: color-mix(in srgb, var(--accent) 55%, transparent);
       }
       @media (max-width: 640px) {
         .footer-sisters-grid {

@@ -29,7 +29,7 @@ const icons = {
     padding: 1rem 1.25rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    background: var(--panel);
+    background: var(--bg-card);
     margin-bottom: 1.5rem;
   }
   .pe-icon {
@@ -37,20 +37,20 @@ const icons = {
     margin-top: 2px;
   }
   .pe-info .pe-icon { color: var(--accent); }
-  .pe-alert .pe-icon { color: var(--accent-3); }
-  .pe-success .pe-icon { color: var(--accent-2); }
+  .pe-alert .pe-icon { color: var(--warning); }
+  .pe-success .pe-icon { color: var(--positive); }
   .pe-headline {
     display: block;
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin-bottom: 0.25rem;
   }
   .pe-text {
     font-size: 0.9rem;
     line-height: 1.6;
-    color: var(--ink-soft);
+    color: var(--text);
     margin: 0;
   }
   @media (max-width: 640px) {

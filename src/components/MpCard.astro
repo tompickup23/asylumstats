@@ -81,7 +81,7 @@ function voteClass(vote: string): string {
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     border-left: 3px solid var(--party-color);
-    background: var(--panel);
+    background: var(--bg-card);
   }
   .mp-top {
     display: flex;
@@ -99,8 +99,8 @@ function voteClass(vote: string): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--panel-soft);
-    color: var(--muted);
+    background: var(--bg-subtle);
+    color: var(--text-muted);
   }
   .mp-info {
     display: flex;
@@ -109,10 +109,10 @@ function voteClass(vote: string): string {
     min-width: 0;
   }
   .mp-name {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1rem;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -122,7 +122,7 @@ function voteClass(vote: string): string {
     align-items: center;
     gap: 0.35rem;
     font-size: 0.82rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
   .mp-party-dot {
     width: 8px;
@@ -132,20 +132,20 @@ function voteClass(vote: string): string {
   }
   .mp-majority {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.7;
   }
   .mp-votes {
     margin-top: 0.75rem;
     padding-top: 0.65rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--border);
   }
   .mp-votes-label {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.6;
     margin-bottom: 0.4rem;
     display: block;
@@ -165,11 +165,11 @@ function voteClass(vote: string): string {
     border: 1px solid var(--border);
   }
   .mp-vote-bill {
-    color: var(--ink-soft);
-    font-weight: 500;
+    color: var(--text);
+    font-weight: 600;
   }
-  .mp-vote-result { font-weight: 700; }
-  .vote-aye .mp-vote-result { color: var(--accent-2); }
-  .vote-no .mp-vote-result { color: var(--coral); }
-  .vote-absent .mp-vote-result { color: var(--muted); opacity: 0.5; }
+  .mp-vote-result { font-weight: 600; }
+  .vote-aye .mp-vote-result { color: var(--positive); }
+  .vote-no .mp-vote-result { color: var(--critical); }
+  .vote-absent .mp-vote-result { color: var(--text-muted); opacity: 0.5; }
 </style>

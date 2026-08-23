@@ -130,7 +130,7 @@ const socioData = getSocioeconomicData(area.areaCode);
 // Build ProjectionChart line data
 const ethChartLines = ethnicTimeline ? (() => {
   const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
-  const colors: Record<string, string> = { white_british: "#06b6d4", white_other: "#8b9cb3", asian: "#f59e0b", black: "#a78bfa", mixed: "#10b981", other: "#6b7280" };
+  const colors: Record<string, string> = { white_british: "#1a6ba8", white_other: "#8b939c", asian: "#b45309", black: "#6d28d9", mixed: "#a51d5c", other: "#6b7280" };
   const labels: Record<string, string> = { white_british: "White British", white_other: "White Other", asian: "Asian", black: "Black", mixed: "Mixed", other: "Other" };
   return groups.filter(g => Math.max(...ethnicTimeline.map(t => t.groups[g])) > 3).map(g => ({
     label: labels[g], color: colors[g],
@@ -161,11 +161,11 @@ const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null)
 
 const relChartLines = religionData ? (() => {
   const relGroups = [
-    { key: "Christian", color: "#7dd3fc", label: "Christian" },
+    { key: "Christian", color: "#1a6ba8", label: "Christian" },
     { key: "No religion", color: "#6b7280", label: "No religion" },
-    { key: "Muslim", color: "#f59e0b", label: "Muslim" },
-    { key: "Hindu", color: "#a78bfa", label: "Hindu" },
-    { key: "Sikh", color: "#10b981", label: "Sikh" }
+    { key: "Muslim", color: "#b45309", label: "Muslim" },
+    { key: "Hindu", color: "#6d28d9", label: "Hindu" },
+    { key: "Sikh", color: "#a51d5c", label: "Sikh" }
   ];
   const years = [2021, 2031, 2041, 2051].filter(y => religionData[y]);
   return relGroups
@@ -176,8 +176,8 @@ const relChartLines = religionData ? (() => {
 const natChartLines = nativityData ? (() => {
   const years = [2021, 2031, 2041, 2051].filter(y => nativityData[y]);
   return [
-    { label: "UK-born", color: "#06b6d4", points: years.map(y => ({ year: y, value: nativityData[y].ukBornPct })) },
-    { label: "Foreign-born", color: "#f59e0b", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
+    { label: "UK-born", color: "#1a6ba8", points: years.map(y => ({ year: y, value: nativityData[y].ukBornPct })) },
+    { label: "Foreign-born", color: "#b45309", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
   ];
 })() : [];
 const crimeProfile = getCrimeProfile(area.areaCode);
@@ -304,9 +304,9 @@ const areaCountyName = countyForAreaCode(area.areaCode);
             <strong>{area.contingencyAccommodation.toLocaleString()}</strong>
           </article>
           {wbThreshold && (
-            <article class="stat-tile" style="border-left: 2px solid var(--coral);">
+            <article class="stat-tile" style="border-left: 2px solid var(--critical);">
               <span class="tiny">WB minority by</span>
-              <strong style="color: var(--coral);">~{wbThreshold.year}</strong>
+              <strong style="color: var(--critical);">~{wbThreshold.year}</strong>
             </article>
           )}
         </div>
@@ -356,8 +356,8 @@ const areaCountyName = countyForAreaCode(area.areaCode);
         annotations={[
           { label: "Rwanda scheme", pointLabel: "Jun 2022" },
           { label: "Albania deal", pointLabel: "Dec 2022" },
-          { label: "Bibby Stockholm", pointLabel: "Sept 2023", color: "rgba(239,68,68,0.4)" },
-          { label: "Rwanda scrapped", pointLabel: "Sept 2024", color: "rgba(239,68,68,0.5)" },
+          { label: "Bibby Stockholm", pointLabel: "Sept 2023", color: "color-mix(in srgb, var(--critical) 40%, transparent)" },
+          { label: "Rwanda scrapped", pointLabel: "Sept 2024", color: "color-mix(in srgb, var(--critical) 50%, transparent)" },
         ]}
       />
       <article class="panel panel-pad">
@@ -741,7 +741,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
           {(schoolFertilityProxy as any)?.areas?.[area.areaCode] && (() => {
             const sfp = (schoolFertilityProxy as any).areas[area.areaCode];
             return sfp.annualWbiChangePp !== 0 ? (
-              <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: rgba(6,182,212,0.04); border-radius: 6px; border: 1px solid rgba(6,182,212,0.1);">
+              <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: color-mix(in srgb, var(--accent) 4%, transparent); border-radius: 6px; border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);">
                 <p class="tiny" style="margin: 0;">
                   <strong>Fertility proxy (10-year school trend):</strong> WBI share in primary schools changing at {sfp.annualWbiChangePp > 0 ? "+" : ""}{sfp.annualWbiChangePp}pp/year.
                   {sfp.annualWbiChangePp < -1 ? " Rapid diversification in young cohorts. The demographic wave is accelerating." :
@@ -833,7 +833,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
                   <div class="stacked-bar-label" style="min-width: 8rem;">
                     <span style="font-size: 0.78rem;">{item.type}</span>
                   </div>
-                  <div class="stacked-bar" style="background: var(--panel-soft);">
+                  <div class="stacked-bar" style="background: var(--bg-subtle);">
                     <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
                   </div>
                   <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
@@ -892,7 +892,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
                 <div class="stacked-bar-label" style="min-width: 8rem;">
                   <span style="font-size: 0.78rem;">{need.need}</span>
                 </div>
-                <div class="stacked-bar" style="background: var(--panel-soft);">
+                <div class="stacked-bar" style="background: var(--bg-subtle);">
                   <div class="bar-seg mixed" style={`width: ${need.pct}%`}></div>
                 </div>
                 <div class="stacked-bar-pct">{need.pct.toFixed(1)}%</div>

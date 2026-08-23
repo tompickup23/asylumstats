@@ -1,33 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
-  <!-- Asylum Stats: Icon (radar scanner, standalone) -->
-  <defs>
-    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.7"/>
-      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
-    </linearGradient>
-    <clipPath id="rc"><circle cx="40" cy="40" r="30"/></clipPath>
-  </defs>
-
-  <!-- Rings -->
-  <circle cx="40" cy="40" r="32" fill="none" stroke="#06b6d4" stroke-width="3"/>
-  <circle cx="40" cy="40" r="22" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.25"/>
-  <circle cx="40" cy="40" r="12" fill="none" stroke="#06b6d4" stroke-width="0.8" opacity="0.15"/>
-
-  <!-- Sweep -->
-  <g clip-path="url(#rc)">
-    <path d="M40,40 L40,8 A32,32 0 0,1 68,56 Z" fill="url(#sw)"/>
-  </g>
-
-  <!-- Crosshairs -->
-  <line x1="40" y1="6" x2="40" y2="74" stroke="#06b6d4" stroke-width="0.7" opacity="0.2"/>
-  <line x1="6" y1="40" x2="74" y2="40" stroke="#06b6d4" stroke-width="0.7" opacity="0.2"/>
-
-  <!-- Data blips -->
-  <circle cx="54" cy="26" r="3" fill="#f59e0b"/>
-  <circle cx="30" cy="50" r="2.5" fill="#06b6d4"/>
-  <circle cx="50" cy="48" r="2" fill="#06b6d4" opacity="0.6"/>
-  <circle cx="26" cy="30" r="2" fill="#10b981"/>
-
-  <!-- Centre -->
-  <circle cx="40" cy="40" r="2.5" fill="#06b6d4"/>
+<!-- Asylum Stats mark, for light grounds.
+     Two columns, one taller: a plain comparison of two quantities. Estate brand system,
+     23 August 2026. Drawn on the same 64 unit grid as the other four network sites. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect x="17" y="14" width="13" height="36" rx="2" fill="#2f5773"/>
+  <rect x="34" y="27" width="13" height="23" rx="2" fill="#82abcb"/>
 </svg>

@@ -1,19 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <!-- Asylum Stats: Favicon (radar at 32px) -->
-  <defs>
-    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
-    </linearGradient>
-    <clipPath id="c"><circle cx="16" cy="16" r="12"/></clipPath>
-  </defs>
-  <rect width="32" height="32" rx="6" fill="#04070d"/>
-  <circle cx="16" cy="16" r="13" fill="none" stroke="#06b6d4" stroke-width="2"/>
-  <circle cx="16" cy="16" r="8" fill="none" stroke="#06b6d4" stroke-width="0.6" opacity="0.25"/>
-  <g clip-path="url(#c)">
-    <path d="M16,16 L16,3 A13,13 0 0,1 27,22 Z" fill="url(#s)"/>
-  </g>
-  <circle cx="21" cy="11" r="1.8" fill="#f59e0b"/>
-  <circle cx="12" cy="20" r="1.5" fill="#06b6d4"/>
-  <circle cx="16" cy="16" r="1.5" fill="#06b6d4"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#0f1317"/><rect x="17" y="14" width="13" height="36" rx="2" fill="#82abcb"/>
+  <rect x="34" y="27" width="13" height="23" rx="2" fill="#5b86a6"/></svg>

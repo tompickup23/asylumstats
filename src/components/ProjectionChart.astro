@@ -124,7 +124,7 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
 
     <!-- Confidence band (shaded area) -->
     {confidenceBand && confidenceBand.length > 0 && (
-      <path d={buildBandPath(confidenceBand)} fill="rgba(6, 182, 212, 0.12)" />
+      <path d={buildBandPath(confidenceBand)} fill="color-mix(in srgb, var(--accent) 12%, transparent)" />
     )}
 
     <!-- Now line -->
@@ -136,8 +136,8 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
     {maxYear > 2051 && (
       <>
         <line x1={x(2051)} y1={pad.top} x2={x(2051)} y2={pad.top + uh}
-              stroke="rgba(245,158,11,0.2)" stroke-width="1" stroke-dasharray="2 4" />
-        <text x={x(2051)} y={pad.top + uh + 20} text-anchor="middle" class="proj-now-label" fill="rgba(245,158,11,0.5)">Illustrative</text>
+              stroke="color-mix(in srgb, var(--warning) 20%, transparent)" stroke-width="1" stroke-dasharray="2 4" />
+        <text x={x(2051)} y={pad.top + uh + 20} text-anchor="middle" class="proj-now-label" fill="color-mix(in srgb, var(--warning) 50%, transparent)">Illustrative</text>
       </>
     )}
 
@@ -177,22 +177,22 @@ const labelYears = [minYear, nowYear, ...([2031, 2041, 2051].filter(yr => yr <= 
         {line.label}
       </span>
     ))}
-    {confidenceBand && <span class="proj-legend-item"><span class="proj-legend-swatch" style="background: rgba(6, 182, 212, 0.3)"></span> 80% CI</span>}
+    {confidenceBand && <span class="proj-legend-item"><span class="proj-legend-swatch" style="background: color-mix(in srgb, var(--accent) 30%, transparent)"></span> 80% CI</span>}
   </div>
   {caption && <p class="proj-caption">{caption}</p>}
 </figure>
 
 <style>
   .projection-chart svg { width: 100%; height: auto; display: block; }
-  .proj-tick { font-size: 11px; fill: rgba(255,255,255,0.45); font-family: "Sora", sans-serif; }
-  .proj-axis-label { font-size: 10px; fill: rgba(255,255,255,0.35); font-family: "Sora", sans-serif; }
-  .proj-now-label { font-size: 10px; fill: rgba(255,255,255,0.45); font-family: "Sora", sans-serif; }
-  .proj-line-label { font-size: 10px; font-family: "Sora", sans-serif; font-weight: 600; }
-  .proj-year-label { font-size: 11px; fill: rgba(255,255,255,0.55); font-family: "Sora", sans-serif; }
+  .proj-tick { font-size: 11px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-axis-label { font-size: 10px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-now-label { font-size: 10px; fill: var(--text-muted); font-family: var(--font-display); }
+  .proj-line-label { font-size: 10px; font-family: var(--font-display); font-weight: 600; }
+  .proj-year-label { font-size: 11px; fill: var(--text-muted); font-family: var(--font-display); }
   .proj-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
-  .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--muted); }
+  .proj-legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--text-muted); }
   .proj-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .proj-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.4; }
+  .proj-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem; line-height: 1.4; }
 
   /* SVG text scales with the viewBox: at width:100% in a narrow card an 11px tick lands
      at 5.5 real pixels. A container query, not a viewport one, because a chart in a

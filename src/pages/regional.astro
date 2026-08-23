@@ -137,10 +137,10 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
 <style>
   /* RANKING BARS */
   .reg-section-title {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--text);
     margin: 0 0 1rem;
     letter-spacing: -0.02em;
   }
@@ -156,15 +156,15 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
     gap: 0.5rem;
     padding: 0.45rem 0;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     transition: opacity 180ms;
   }
   .reg-bar-row:hover { opacity: 0.8; }
   .reg-rank {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--muted);
+    font-weight: 600;
+    color: var(--text-muted);
     text-align: center;
   }
   .reg-name {
@@ -177,33 +177,33 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
   .reg-bar-track {
     display: block;
     height: 24px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-subtle);
     border-radius: 4px;
     overflow: hidden;
   }
   .reg-bar-fill {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), rgba(6, 182, 212, 0.3));
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent));
     border-radius: 4px;
     min-width: 4px;
     transition: width 400ms ease;
   }
   .reg-count {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.92rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
     text-align: right;
   }
   .reg-share {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     text-align: right;
   }
   .reg-caption {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
     opacity: 0.5;
     margin-top: 0.5rem;
   }
@@ -216,12 +216,12 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
     padding-bottom: 3rem;
   }
   .region-card {
-    background: var(--panel);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 1.25rem;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -237,9 +237,9 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
     align-items: center;
   }
   .region-card-head h3 {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
     margin: 0;
   }
   .region-stats {
@@ -253,14 +253,14 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
     gap: 0.1rem;
   }
   .region-stat strong {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 1.15rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
   }
   .region-stat span {
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-muted);
   }
 
   /* WBI BARS */
@@ -280,12 +280,12 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
   .region-wbi-label {
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--muted);
+    color: var(--text-muted);
   }
   .region-wbi-track {
     display: block;
     height: 14px;
-    background: rgba(239, 68, 68, 0.1);
+    background: color-mix(in srgb, var(--critical) 10%, transparent);
     border-radius: 3px;
     overflow: hidden;
   }
@@ -296,15 +296,15 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
     border-radius: 3px;
   }
   .region-wbi-projected {
-    background: var(--accent-3);
+    background: var(--warning);
     opacity: 0.7;
   }
   .region-wbi-pct {
-    font-family: "Sora", sans-serif;
+    font-family: var(--font-display);
     font-size: 0.78rem;
-    font-weight: 700;
+    font-weight: 600;
     text-align: right;
-    color: var(--muted);
+    color: var(--text-muted);
   }
 
   .region-lead {

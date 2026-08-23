@@ -82,8 +82,8 @@ function fmt(n: number): string {
 
 <style>
   .cost-calc {
-    background: rgba(245, 158, 11, 0.04);
-    border: 1px solid rgba(245, 158, 11, 0.15);
+    background: color-mix(in srgb, var(--warning) 4%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 15%, transparent);
     border-radius: 10px;
     padding: 1.25rem;
     margin-top: 1.25rem;
@@ -97,26 +97,26 @@ function fmt(n: number): string {
   .cost-item {
     text-align: center;
     padding: 0.5rem;
-    background: rgba(255,255,255,0.02);
+    background: var(--bg-subtle);
     border-radius: 6px;
   }
   .cost-value {
     display: block;
     font-size: 1.4rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    color: #f59e0b;
+    font-weight: 600;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--warning);
   }
   .cost-label {
     display: block;
     font-size: 0.72rem;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-top: 0.15rem;
   }
   .cost-highlight {
-    background: rgba(245, 158, 11, 0.08);
-    border: 1px solid rgba(245, 158, 11, 0.2);
+    background: color-mix(in srgb, var(--warning) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
   }
-  .cost-highlight .cost-value { color: #ef4444; font-size: 1.6rem; }
+  .cost-highlight .cost-value { color: var(--critical); font-size: 1.6rem; }
   .cost-note { margin-top: 0.75rem; opacity: 0.5; }
 </style>
