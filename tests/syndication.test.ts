@@ -72,3 +72,37 @@ describe.skipIf(!built)("syndication surfaces", () => {
     expect(readFileSync(join(dist, "index.html"), "utf8")).toContain('type="application/rss+xml"');
   });
 });
+
+describe.skipIf(!built)("every bespoke OG card is actually used", () => {
+  /**
+   * BUILD_OG=1 generates a card for every finding, every place, home and routes. Two of
+   * those were being built and never linked to: /routes/ and all 361 place pages declared
+   * og-card.png, the generic site card, while /og/routes.png and /og/places/<slug>.png sat
+   * on disk unused. The og:image a page declares and the card the generator built for it
+   * had simply never been connected on those two page types.
+   *
+   * This only runs when dist/og exists, i.e. after a BUILD_OG=1 build. It is not part of
+   * the default `npm test` build, which does not set BUILD_OG.
+   */
+  const ogDir = join(dist, "og");
+  const hasOg = existsSync(ogDir);
+
+  it.skipIf(!hasOg)("links /routes/ to its generated card, not the generic one", () => {
+    const routes = readFileSync(join(dist, "routes", "index.html"), "utf8");
+    expect(routes).toContain("/og/routes.png");
+    expect(routes).not.toMatch(/og:image" content="[^"]*\/og-card\.png"/);
+  });
+
+  it.skipIf(!hasOg)("links a sample of place pages to their generated card", () => {
+    const { readdirSync } = require("node:fs") as typeof import("node:fs");
+    const placeDirs = readdirSync(join(dist, "places")).filter(
+      (name) => name !== "index.html" && name !== "regions" && name !== "counties"
+    );
+    expect(placeDirs.length).toBeGreaterThan(50);
+    for (const slug of placeDirs.slice(0, 10)) {
+      const page = readFileSync(join(dist, "places", slug, "index.html"), "utf8");
+      expect(page, slug).toContain(`/og/places/${slug}.png`);
+      expect(page, slug).not.toMatch(/og:image" content="[^"]*\/og-card\.png"/);
+    }
+  });
+});
