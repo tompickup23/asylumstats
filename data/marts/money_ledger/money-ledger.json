@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T19:09:27.802Z",
+  "generatedAt": "2026-08-23T21:07:42.655Z",
   "summary": {
     "totalRecords": 11,
     "primeContractRows": 3,
@@ -213,7 +213,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "Homes for Ukraine Funding Arrangements 2025 to 2026 for tariffs 1 July 2025 to 30 September 2025",
-      "sourceUrl": "https://www.gov.uk/government/publications/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025",
+      "sourceUrl": "https://www.gov.uk/guidance/role-of-sponsors-voluntary-and-community-sector-councils-and-where-to-focus-tariff-funding-homes-for-ukraine",
       "confidence": "high",
       "notes": "Current guidance says the standard tariff is GBP 5,900 for arrivals on or after 1 January 2023. Legacy cohorts and minors can attract different amounts."
     },
@@ -241,7 +241,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "UK resettlement programmes: funding instructions 2025 to 2026",
-      "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instructions-2025-to-2026/uk-resettlement-programmes-funding-instructions-2025-to-2026",
+      "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instruction-2025-to-2026/funding-instruction-for-local-authorities-in-the-support-of-the-united-kingdoms-resettlement-schemes-2025-to-2026-accessible",
       "confidence": "high",
       "notes": "The starter ledger records the live official funding instruction but does not yet normalize the component tariff table into separate machine-readable rows."
     },
@@ -269,7 +269,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "Funding Instruction for Local Authorities: Asylum Grant 2025 to 2026",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-to-2026-accessible-html",
+      "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-2026",
       "confidence": "high",
       "notes": "Accessible guidance says local authorities receive GBP 1,200 per accommodated asylum seeker present on 30 March 2025."
     },
@@ -297,7 +297,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "Funding Instruction for Local Authorities: Asylum Grant 2025 to 2026",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-to-2026-accessible-html",
+      "sourceUrl": "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-2026",
       "confidence": "high",
       "notes": "Accessible guidance says local authorities receive GBP 100 per additional occupied bedspace per month above the 31 March 2025 baseline."
     },
@@ -325,7 +325,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "Afghan schemes: funding instructions 2024 to 2025",
-      "sourceUrl": "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/afghan-schemes-funding-instructions-2024-to-2025",
+      "sourceUrl": "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/funding-instruction-for-afghan-schemes-integration-support-2024-to-2025-accessible",
       "confidence": "medium",
       "notes": "Current official page for Afghan pathway local-authority funding. The starter ledger has not yet normalized scheme-specific tariff components."
     },
@@ -353,7 +353,7 @@
       "siteIds": [],
       "linkedSites": [],
       "sourceTitle": "Homes for Ukraine: Councillor guidance",
-      "sourceUrl": "https://www.gov.uk/guidance/homes-for-ukraine-councillor-guidance",
+      "sourceUrl": "https://www.gov.uk/guidance/first-payment-to-guests-homes-for-ukraine",
       "confidence": "high",
       "notes": "Councils provide a one-off GBP 200 welcome payment to each guest on arrival. The guidance page used here was last updated on 2025-09-15."
     }
@@ -470,10 +470,10 @@
       "notes": "Current regional responsibility in the public contract structure. The starter ledger uses this to map visible current hotel sites to a prime provider."
     },
     {
-      "supplierId": "supplier_01265742",
+      "supplierId": "supplier_03004377",
       "entityName": "Millennium & Copthorne Hotels Limited",
       "entityRole": "brand_operator",
-      "companyNumber": "01265742",
+      "companyNumber": "03004377",
       "routeFamilies": [
         "asylum_support"
       ],
@@ -483,7 +483,7 @@
       "riskLevel": "elevated",
       "integritySignalCount": 1,
       "sourceUrls": [
-        "https://find-and-update.company-information.service.gov.uk/company/01265742"
+        "https://find-and-update.company-information.service.gov.uk/company/03004377"
       ],
       "siteIds": [
         "copthorne-gatwick"
@@ -551,11 +551,11 @@
       "riskLevel": "low",
       "integritySignalCount": 0,
       "sourceUrls": [
-        "https://www.gov.uk/government/publications/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025/homes-for-ukraine-funding-arrangements-2025-to-2026-for-tariffs-1-july-2025-to-30-september-2025",
-        "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instructions-2025-to-2026/uk-resettlement-programmes-funding-instructions-2025-to-2026",
-        "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-to-2026-accessible-html",
-        "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/afghan-schemes-funding-instructions-2024-to-2025",
-        "https://www.gov.uk/guidance/homes-for-ukraine-councillor-guidance"
+        "https://www.gov.uk/guidance/role-of-sponsors-voluntary-and-community-sector-councils-and-where-to-focus-tariff-funding-homes-for-ukraine",
+        "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instruction-2025-to-2026/funding-instruction-for-local-authorities-in-the-support-of-the-united-kingdoms-resettlement-schemes-2025-to-2026-accessible",
+        "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-2026",
+        "https://www.gov.uk/government/publications/afghan-schemes-funding-instructions-2024-to-2025/funding-instruction-for-afghan-schemes-integration-support-2024-to-2025-accessible",
+        "https://www.gov.uk/guidance/first-payment-to-guests-homes-for-ukraine"
       ],
       "siteIds": [],
       "notes": "Current guidance says the standard tariff is GBP 5,900 for arrivals on or after 1 January 2023. Legacy cohorts and minors can attract different amounts. | The starter ledger records the live official funding instruction but does not yet normalize the component tariff table into separate machine-readable rows. | Accessible guidance says local authorities receive GBP 1,200 per accommodated asylum seeker present on 30 March 2025. | Accessible guidance says local authorities receive GBP 100 per additional occupied bedspace per month above the 31 March 2025 baseline. | Current official page for Afghan pathway local-authority funding. The starter ledger has not yet normalized scheme-specific tariff components. | Councils provide a one-off GBP 200 welcome payment to each guest on arrival. The guidance page used here was last updated on 2025-09-15."
@@ -613,7 +613,7 @@
       "id": "funding-rows-still-opaque",
       "title": "Official funding instructions exist, but several tariff tables still need normalization",
       "detail": "2 funding-instruction rows are in scope but still need machine-readable component tables before place-level funding comparisons are safe to publish.",
-      "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instructions-2025-to-2026/uk-resettlement-programmes-funding-instructions-2025-to-2026",
+      "sourceUrl": "https://www.gov.uk/government/publications/uk-resettlement-programmes-funding-instruction-2025-to-2026/funding-instruction-for-local-authorities-in-the-support-of-the-united-kingdoms-resettlement-schemes-2025-to-2026-accessible",
       "severity": "info"
     },
     {
