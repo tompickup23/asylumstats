@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T18:11:44.606Z",
+  "generatedAt": "2026-08-23T19:09:27.802Z",
   "summary": {
     "totalRecords": 11,
     "primeContractRows": 3,
@@ -184,10 +184,10 @@
       "geographyScope": "UK",
       "siteIds": [],
       "linkedSites": [],
-      "sourceTitle": "Asylum accommodation in the UK (Migration Observatory)",
-      "sourceUrl": "citing Home Office 2024/25",
-      "confidence": "https://migrationobservatory.ox.ac.uk/resources/briefings/asylum-accommodation-in-the-uk/",
-      "notes": "high"
+      "sourceTitle": "House of Commons Library, CDP-2025-0184",
+      "sourceUrl": "https://commonslibrary.parliament.uk/research-briefings/cdp-2025-0184/",
+      "confidence": "high",
+      "notes": "Commons Library debate pack CDP-2025-0184, verbatim: \"In 2024/25, the Home Office spent GBP 4bn on asylum support. This includes GBP 2.1bn on hotel accommodation for asylum seekers, which is equivalent to GBP 5.77m per day.\" The original Home Office media factsheet URL returns 404 and the Migration Observatory briefing that replaced it is a secondary carrying the same number; this is the source that states it. Every other page on the site already cited CDP-2025-0184, so the homepage was the odd one out."
     },
     {
       "recordId": "money_homes-for-ukraine-tariff-2025-26",

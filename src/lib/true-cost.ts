@@ -345,7 +345,14 @@ export const PER_TAXPAYER_GBP = {
  * THE ONLY per-person figure a place or region page may use. It is the audited ASRA
  * outturn over the mean supported population of the SAME financial year, so numerator
  * and denominator describe the same people over the same period. Roughly £107, which
- * sits sensibly against the £119 a night the Home Office publishes for hotels.
+ * sits sensibly against the roughly £170 a night the Migration Observatory publishes
+ * for hotels in the same year: hotels are the expensive end of a mix that is mostly
+ * dispersal housing.
+ *
+ * This comment used to compare it to "the £119 a night the Home Office publishes".
+ * That figure was withdrawn from the True Cost article, which now says in as many words
+ * that it can no longer be sourced. A withdrawn number left standing in a comment is how
+ * it finds its way back into copy.
  *
  * Two substitutions are banned here, both of which have been live on this site:
  *   - a system-total numerator, which produced £150 a day and silently attributes
