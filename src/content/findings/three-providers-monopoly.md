@@ -5,8 +5,8 @@ category: accountability
 stat_value: "3"
 stat_label: "Prime providers"
 verdict: critical
-source_url: "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
-source_label: "Home Office AASC Contracts"
+source_url: "https://www.nao.org.uk/reports/the-home-offices-asylum-accommodation-contracts/"
+source_label: "National Audit Office, HC 874 as corrected 1 July 2025"
 summary: "Serco, Mears Group, and Clearsprings Ready Homes operate regional monopolies over asylum accommodation under the AASC. Each controls a geographic region. All hotel procurement, dispersal housing, and support services flow through three companies. The 10-year contract: £15.3 billion."
 ---
 
