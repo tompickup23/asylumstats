@@ -5,7 +5,7 @@ category: spending
 stat_value: "76%"
 stat_label: "Hotel share of accommodation contract cost, first seven months of 2024-25"
 verdict: critical
-source_url: "https://www.nao.org.uk/reports/asylum-accommodation-and-support/"
+source_url: "https://www.nao.org.uk/reports/the-home-offices-asylum-accommodation-contracts/"
 source_label: "National Audit Office, HC 874 as corrected 1 July 2025"
 summary: "197 asylum hotels house approximately 31,000 people, 29% of the 107,003 on the supported asylum population at 31 December 2025. Hotels took around 76% of the cost of the accommodation contracts in the first seven months of 2024-25, £1.3 billion of an estimated £1.7 billion. Dispersal housing is roughly 10x cheaper per person per night. The hotel-heavy model is a policy choice, not a necessity."
 ---
