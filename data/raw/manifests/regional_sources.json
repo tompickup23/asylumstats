@@ -1,104 +1,120 @@
 {
-  "dataset": "regional_sources",
-  "publisher": "North West RSMP",
-  "release": "Regional strategic migration partnership data",
-  "releaseDate": null,
-  "nextEdition": null,
-  "landing": "https://northwestrsmp.org.uk",
-  "bank": "home-office/transparency",
-  "areaTier": "local",
-  "fileCount": 15,
-  "totalBytes": 18411715,
+  "generatedAt": "2026-08-24T08:56:00.147Z",
+  "datasetId": "regional_sources",
+  "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
+  "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
+  "workbookCount": 7,
   "files": [
     {
-      "file": "migration-observatory-local-data-guide.html",
-      "sizeBytes": 139293,
-      "sha256": "8d42c7bcd6b1eaa986eea783e8e3035ae184a8ee8ddc240aa42774ce2309ba4c",
-      "modified": "2026-05-13"
+      "fileName": "nwrsmp-media.json",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
+      "sizeBytes": 4457,
+      "fileSha256": "4fb23c79e27726894635473986537bd9c32cd9e2887a5bfb1f6be0fc9c36a46b"
     },
     {
-      "file": "migration-yorkshire-euss-dashboard.html",
-      "sizeBytes": 97470,
-      "sha256": "592f703ff552a9abb3beb2a0a3abd116da0481a896360365d7904d51b445f65c",
-      "modified": "2026-05-13"
+      "fileName": "nwrsmp-data-page.json",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
+      "sizeBytes": 10938,
+      "fileSha256": "86ab74ed662c968d4d6ccab260648824cd05b2b280367182ebd9aea4a5eb4175"
     },
     {
-      "file": "migration-yorkshire-refugee-dashboard.html",
-      "sizeBytes": 98741,
-      "sha256": "e641e81a6df40de351669d8c58362d2d6c85bae8cb37169b19b619b18dde8e90",
-      "modified": "2026-05-13"
+      "fileName": "migration-yorkshire-statistics.html",
+      "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics",
+      "sizeBytes": 100897,
+      "fileSha256": "3d93397b9d59c3c200156d261702bd75cbba04db73075e3327d3e3d2a5413a06"
     },
     {
-      "file": "migration-yorkshire-statistics.html",
-      "sizeBytes": 101893,
-      "sha256": "7da051a9a50905f5dd39383c2d5848b9a24f84f62fa09644272ea3c87154e887",
-      "modified": "2026-05-13"
+      "fileName": "migration-yorkshire-refugee-dashboard.html",
+      "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/refugee-and-asylum-seeker-dashboard",
+      "sizeBytes": 97745,
+      "fileSha256": "b439fa4c85cabd7186f09cae27f039ae3256eb40bb779bd476b24c89006e46ad"
     },
     {
-      "file": "migration-yorkshire-ukraine-dashboard.html",
-      "sizeBytes": 100954,
-      "sha256": "11c4eab39b357fda2d82a727a982c1cb6a7a836f4065a7bafc2de58d95a91c71",
-      "modified": "2026-05-13"
+      "fileName": "migration-yorkshire-ukraine-dashboard.html",
+      "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/ukraine-data-dashboard",
+      "sizeBytes": 99958,
+      "fileSha256": "ea3590cca56246f23e0d84bd8022eb30ef3a377622fa38b0f29dd224d4e5fa53"
     },
     {
-      "file": "nemp-data-page.html",
-      "sizeBytes": 59480,
-      "sha256": "636aea36d2abdfb914240192b0117c1cc390893da4608ec4f9ca62124026d144",
-      "modified": "2026-05-13"
+      "fileName": "migration-yorkshire-euss-dashboard.html",
+      "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/european-union-settlement-scheme-dashboard",
+      "sizeBytes": 96474,
+      "fileSha256": "e3951664bda063d2cdc4db51c4b9ea8d405e503f9ed74d512efbd08793013131"
     },
     {
-      "file": "nwrsmp-data-page.json",
-      "sizeBytes": 10949,
-      "sha256": "a6474d82a3845486bf727d1548764b2e7569c24a93989cb30af029ed02be4d7e",
-      "modified": "2026-05-13"
+      "fileName": "nemp-data-page.html",
+      "sourceUrl": "https://www.nemp.org.uk/data/",
+      "sizeBytes": 65424,
+      "fileSha256": "6ac8ba27fc8f12ad0849aad61979c9fbbb38b2cdc86ce588a85ab2404d79be56"
     },
     {
-      "file": "nwrsmp-media.json",
-      "sizeBytes": 3972,
-      "sha256": "168b2241cb81258cb23204d38b516ccb45048a334fff8dba0f03d0482f1a931e",
-      "modified": "2026-05-13"
+      "fileName": "migration-observatory-local-data-guide.html",
+      "sourceUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
+      "sizeBytes": 139395,
+      "fileSha256": "c09b6ddab533123a7e441e7255ada7089797fe5e803ce8267395cf5cfd40814e"
     },
     {
-      "file": "nwrsmp-workbook-2024-11-01.xlsx",
-      "sizeBytes": 5995153,
-      "sha256": "6b279315d95ba96887959a839fadefb2c821e6e427381c9dd540834cc1c4fc25",
-      "modified": "2026-05-13"
+      "fileName": "nwrsmp-workbook-2026-06-02.xlsx",
+      "publishedAt": "2026-06-02",
+      "title": "North West Public Accessible May 2026 (XLS, 1397KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/06/North-West-Public-Accessible-May-2026-XLS-1397KB.xlsx",
+      "fileSizeBytes": 1429689,
+      "sizeBytes": 1429689,
+      "fileSha256": "c56f7c0f46edc80c96f9fb158b9a2f1a4e55fad882e1c10d35966241287db0b3"
     },
     {
-      "file": "nwrsmp-workbook-2025-01-31.xlsx",
-      "sizeBytes": 1239474,
-      "sha256": "15d97d02f9237c74daa30c4b5a5fe1aac3d9079b3acd4550807611576a8f1bc6",
-      "modified": "2026-05-13"
-    },
-    {
-      "file": "nwrsmp-workbook-2025-05-23.xlsx",
-      "sizeBytes": 3932436,
-      "sha256": "fa467794aaa51f6d4f44047b6f821c47bedde1aa046f54c1b34472b925aa3874",
-      "modified": "2026-05-13"
-    },
-    {
-      "file": "nwrsmp-workbook-2025-08-22.xlsx",
-      "sizeBytes": 3879894,
-      "sha256": "bd909af55bdbb1ed5212e7e65c1855aa3db9db885534d3f7121d65aa38f5e24a",
-      "modified": "2026-05-13"
-    },
-    {
-      "file": "nwrsmp-workbook-2025-12-05.xlsx",
-      "sizeBytes": 1301569,
-      "sha256": "d9ef53a0d6d9ad61957123b34dc6254d08f04b5dccd7b8c07acbed215176ab38",
-      "modified": "2026-05-13"
-    },
-    {
-      "file": "nwrsmp-workbook-2026-02-27.xlsx",
+      "fileName": "nwrsmp-workbook-2026-02-27.xlsx",
+      "publishedAt": "2026-02-27",
+      "title": "North West Public Accessible February 2026 (XLS, 1398KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/02/North-West-Public-Accessible-February-2026-XLS-1398KB.xlsx",
+      "fileSizeBytes": 1430831,
       "sizeBytes": 1430831,
-      "sha256": "ed9d0e479d3a48ca0ae4c673f5dcde6160f478b48718200851cce1b07d1a0817",
-      "modified": "2026-05-13"
+      "fileSha256": "ed9d0e479d3a48ca0ae4c673f5dcde6160f478b48718200851cce1b07d1a0817"
     },
     {
-      "file": "wsmp-dataobservatory.html",
-      "sizeBytes": 19606,
-      "sha256": "42a327c742f8dc6e9ab77b91c83092dcf295f9b95326e1481badb7294fbce61a",
-      "modified": "2026-05-13"
+      "fileName": "nwrsmp-workbook-2025-12-05.xlsx",
+      "publishedAt": "2025-12-05",
+      "title": "North West Public Accessible November 2025 (xls, 1,272KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/12/North-West-Public-Accessible-November-2025-xls-1272KB.xlsx",
+      "fileSizeBytes": 1301569,
+      "sizeBytes": 1301569,
+      "fileSha256": "d9ef53a0d6d9ad61957123b34dc6254d08f04b5dccd7b8c07acbed215176ab38"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-08-22.xlsx",
+      "publishedAt": "2025-08-22",
+      "title": "North West Public Accessible Data August 2025 (xls, 3,789KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/08/North-West-Public-Accessible-Data-August-2025-xls-3789KB.xlsx",
+      "fileSizeBytes": 3879894,
+      "sizeBytes": 3879894,
+      "fileSha256": "bd909af55bdbb1ed5212e7e65c1855aa3db9db885534d3f7121d65aa38f5e24a"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-05-23.xlsx",
+      "publishedAt": "2025-05-23",
+      "title": "North West Public Accessible Data May 2025 (XLS, 3,841KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/05/North-West-Public-Accessible-Data-May-2025-XLS-3841KB.xlsx",
+      "fileSizeBytes": 3932436,
+      "sizeBytes": 3932436,
+      "fileSha256": "fa467794aaa51f6d4f44047b6f821c47bedde1aa046f54c1b34472b925aa3874"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2025-01-31.xlsx",
+      "publishedAt": "2025-01-31",
+      "title": "North West Public accessible data November 2024 (xls, 1,211KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2025/01/North-West-Public-accessible-data-November-2024-xls-1211KB-1.xlsx",
+      "fileSizeBytes": 1239474,
+      "sizeBytes": 1239474,
+      "fileSha256": "15d97d02f9237c74daa30c4b5a5fe1aac3d9079b3acd4550807611576a8f1bc6"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2024-11-01.xlsx",
+      "publishedAt": "2024-11-01",
+      "title": "North West Public Accessible Data August 2024 (PDF, 6MB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2024/11/North-West-Public-Accessible-Data-August-2024-PDF-6MB.xlsx",
+      "fileSizeBytes": 5995153,
+      "sizeBytes": 5995153,
+      "fileSha256": "6b279315d95ba96887959a839fadefb2c821e6e427381c9dd540834cc1c4fc25"
     }
   ]
 }
