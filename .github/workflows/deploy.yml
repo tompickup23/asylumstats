@@ -29,6 +29,15 @@ jobs:
       - env:
           BUILD_OG: "1"
         run: npm run build
+      # The support-vs-accommodation guards read dist/places, so they are skipIf(!built)
+      # and `npm test` above runs before the build. That means both of them, the two
+      # checks written because a place page and a Facebook post had each called people
+      # on asylum support "housed" when the number accommodated was zero, had never once
+      # run in CI. They only ever fired for whoever happened to have a local dist, and a
+      # stale one at that. Running them here is the whole point of having them.
+      # No GitHub event data is interpolated here.
+      - name: Guards that need the built site
+        run: npx vitest run tests/support-vs-accommodation.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop

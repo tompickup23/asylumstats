@@ -70,11 +70,30 @@ export interface County {
 
 const ONS_LOOKUP = (ladToCounty as { lookup: Record<string, string> }).lookup;
 
+/**
+ * ONS codes the Home Office and the ONS lookup disagree about.
+ *
+ * Barnsley and Sheffield carry E08000016 and E08000019 in ONS LAD24_CTY24_EN_LU, and
+ * the Home Office published them as E08000038 and E08000039 in the year ending June
+ * 2026 release. They have flipped between the two before and will again, so this
+ * translates at lookup time rather than editing either registry: correcting the code
+ * in the source data is how the next flip becomes a silent wrong answer instead of a
+ * loud missing one.
+ *
+ * Left unmapped, both authorities fall out of every county total. That cost South
+ * Yorkshire 5,525 people on asylum support, and the county page said nothing was wrong.
+ */
+const AREA_CODE_ALIASES: Readonly<Record<string, string>> = {
+  E08000038: "E08000016", // Barnsley
+  E08000039: "E08000019"  // Sheffield
+};
+
 /** The ceremonial county an English authority belongs to, or null if not England. */
 export function countyForAreaCode(areaCode: string): string | null {
-  const fromOns = ONS_LOOKUP[areaCode];
+  const code = AREA_CODE_ALIASES[areaCode] ?? areaCode;
+  const fromOns = ONS_LOOKUP[code];
   if (fromOns) return normaliseCountyName(fromOns);
-  const fromUnitary = UNITARY_TO_CEREMONIAL_COUNTY[areaCode];
+  const fromUnitary = UNITARY_TO_CEREMONIAL_COUNTY[code];
   return fromUnitary ?? null;
 }
 
