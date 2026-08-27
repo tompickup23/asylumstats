@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T12:45:31.680Z",
+  "generatedAt": "2026-08-27T14:47:50.044Z",
   "datasetId": "regional_sources",
   "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
   "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
@@ -21,7 +21,7 @@
       "fileName": "migration-yorkshire-statistics.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics",
       "sizeBytes": 100897,
-      "fileSha256": "8e0a5fc8f4a0e4d68f07304be3f9832d78ed41e34881b7e920aa6c5793ec6fcb"
+      "fileSha256": "6a5709dedee57e88b727665aeb4e7479f63895ea0a7784560511172a758b5d1a"
     },
     {
       "fileName": "migration-yorkshire-refugee-dashboard.html",
