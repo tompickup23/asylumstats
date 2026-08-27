@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const rawDir = path.resolve("data/raw/hotel_entities");
@@ -19,8 +19,8 @@ const archiveSnapshotUrl =
 function curlJson(url) {
   const output = execFileSync(
     "curl",
-    ["-sS", "-L", "-f", "--connect-timeout", "15", "--max-time", "90",
-     "-A", "Mozilla/5.0", url],
+    ["-sS", "-L", "-f", "--connect-timeout", "60", "--max-time", "300",
+     "--retry", "3", "--retry-delay", "5", "-A", "Mozilla/5.0", url],
     { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 }
   );
 
@@ -34,7 +34,24 @@ function hashId(parts) {
 mkdirSync(rawDir, { recursive: true });
 mkdirSync(manifestDir, { recursive: true });
 
-const rawLeads = curlJson(archiveSnapshotUrl);
+// The upstream page 404s: howfarfrommydoorstep.github.io/clive/hotels.json is gone, so
+// this Wayback capture of 26 August 2025 is the only copy and its content can never
+// change. Re-fetching it every week bought nothing and cost the entire refresh on
+// 27 August 2026, when web.archive.org would not answer inside the timeout.
+//
+// The snapshot is committed alongside this script. The network is touched only when it
+// is missing, which is a cold clone, and then with bounds generous enough for Wayback
+// rather than the ones tuned for a live host.
+const snapshotPath = path.join(rawDir, "archive-snapshot.json");
+let rawLeads;
+if (existsSync(snapshotPath)) {
+  rawLeads = JSON.parse(readFileSync(snapshotPath, "utf8"));
+  process.stdout.write(`Using the committed archive snapshot (${rawLeads.length} records).\n`);
+} else {
+  rawLeads = curlJson(archiveSnapshotUrl);
+  writeFileSync(snapshotPath, `${JSON.stringify(rawLeads, null, 2)}\n`);
+  process.stdout.write(`Fetched and stored the archive snapshot (${rawLeads.length} records).\n`);
+}
 const leads = rawLeads
   .map((lead) => ({
     leadId: `archive_lead_${hashId([lead.Name, String(lead.Latitude), String(lead.Longitude)])}`,

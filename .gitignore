@@ -24,6 +24,10 @@ data/raw/regional_sources/*.json
 data/raw/regional_sources/*.xlsx
 data/raw/regional_sources/*.html
 data/raw/hotel_entities/*.json
+# ...except the upstream snapshot itself. It is a Wayback capture of a page that
+# now 404s, so its content can never change, and committing it takes web.archive.org
+# out of the weekly refresh entirely.
+!data/raw/hotel_entities/archive-snapshot.json
 data/raw/census_ethnicity/
 data/raw/crime/
 data/raw/supplementary/

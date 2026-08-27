@@ -19,7 +19,6 @@ const inputPaths = {
     "data/raw/regional_sources/migration-yorkshire-euss-dashboard.html"
   ),
   nempDataPage: path.resolve("data/raw/regional_sources/nemp-data-page.html"),
-  wsmpDataObservatory: path.resolve("data/raw/regional_sources/wsmp-dataobservatory.html"),
   migrationObservatoryLocalGuide: path.resolve(
     "data/raw/regional_sources/migration-observatory-local-data-guide.html"
   )
@@ -541,7 +540,6 @@ const migrationYorkshireRefugeeDashboardHtml = readText(inputPaths.migrationYork
 const migrationYorkshireUkraineDashboardHtml = readText(inputPaths.migrationYorkshireUkraineDashboard);
 const migrationYorkshireEussDashboardHtml = readText(inputPaths.migrationYorkshireEussDashboard);
 const nempDataPageHtml = readText(inputPaths.nempDataPage);
-const wsmpDataObservatoryHtml = readText(inputPaths.wsmpDataObservatory);
 const migrationObservatoryLocalGuideHtml = readText(inputPaths.migrationObservatoryLocalGuide);
 
 const migrationYorkshireStatisticsUrl = "https://www.migrationyorkshire.org.uk/statistics";
@@ -552,12 +550,10 @@ const migrationYorkshireUkraineDashboardUrl =
 const migrationYorkshireEussDashboardUrl =
   "https://www.migrationyorkshire.org.uk/statistics/european-union-settlement-scheme-dashboard";
 const nempDataPageUrl = "https://www.nemp.org.uk/data/";
-const wsmpDataObservatoryUrl = "https://www.wsmp.wales/dataobservatory";
 const migrationObservatoryLocalGuideUrl =
   "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/";
 
 const nempDataPageLinks = extractAnchorLinks(nempDataPageHtml, nempDataPageUrl);
-const wsmpDataObservatoryLinks = extractAnchorLinks(wsmpDataObservatoryHtml, wsmpDataObservatoryUrl);
 const migrationObservatoryGuideLinksRaw = extractAnchorLinks(
   migrationObservatoryLocalGuideHtml,
   migrationObservatoryLocalGuideUrl
@@ -706,34 +702,14 @@ const regionalPartnerAssets = dedupeBy(
           notes: "Official dataset or publication link exposed directly from the NEMP regional data page."
         })
       ),
-    buildAssetRow({
-      organisation: "Wales Strategic Migration Partnership",
-      regionName: "Wales",
-      pageTitle: extractTitle(wsmpDataObservatoryHtml) ?? "Data observatory",
-      pageUrl: wsmpDataObservatoryUrl,
-      assetTitle: "WSMP data observatory",
-      assetUrl: wsmpDataObservatoryUrl,
-      assetType: "hub_page",
-      routeFocus: ["asylum", "refugees", "ukraine", "migration"],
-      notes: "Welsh strategic migration partnership data-observatory landing page."
-    }),
-    ...[
-      pickLink(wsmpDataObservatoryLinks, (_label, url) => url === "https://www.data.cymru/eng/")
-    ]
-      .filter((link) => link !== null)
-      .map((link) =>
-        buildAssetRow({
-          organisation: "Wales Strategic Migration Partnership",
-          regionName: "Wales",
-          pageTitle: extractTitle(wsmpDataObservatoryHtml) ?? "Data observatory",
-          pageUrl: wsmpDataObservatoryUrl,
-          assetTitle: "Data Cymru",
-          assetUrl: link.url,
-          assetType: "data_partner",
-          routeFocus: ["migration"],
-          notes: "Linked Welsh data partner surfaced from the WSMP observatory page."
-        })
-      )
+    // Wales Strategic Migration Partnership was retired on 23 August 2026 and its two
+    // rows went with it. www.wsmp.wales resolves and answers on nothing; the last
+    // Wayback capture of any page on the domain is 19 April 2026; the WLGA serves its
+    // own homepage at the successor URL, which is a soft 404. The retirement is
+    // recorded in data/manual/regional-source-watch.csv. It was taken out of the
+    // fetcher that day but left in this transform, which then died on ENOENT opening a
+    // file the fetcher no longer wrote, and took the regional ingest down with it on
+    // every run since. Wales is the one nation with no regional partner source.
   ],
   (row) => `${row.organisation}|${row.assetTitle}|${row.assetUrl}`
 ).sort((left, right) => left.organisation.localeCompare(right.organisation) || left.assetTitle.localeCompare(right.assetTitle));
@@ -1039,10 +1015,6 @@ writeJson(path.join(canonicalDir, "manifest.json"), {
     {
       path: inputPaths.nempDataPage,
       fileSha256: fileSha256(inputPaths.nempDataPage)
-    },
-    {
-      path: inputPaths.wsmpDataObservatory,
-      fileSha256: fileSha256(inputPaths.wsmpDataObservatory)
     },
     {
       path: inputPaths.migrationObservatoryLocalGuide,
