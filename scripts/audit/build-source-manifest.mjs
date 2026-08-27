@@ -42,11 +42,11 @@ const MANIFESTS = resolve(ROOT, "data/raw/manifests");
 const SOURCES = {
   uk_routes: {
     publisher: "Home Office",
-    release: "Immigration system statistics, year ending March 2026",
-    releaseDate: "2026-05-21",
-    nextEdition: "2026-08-27",
+    release: "Immigration system statistics, year ending June 2026",
+    releaseDate: "2026-08-27",
+    nextEdition: "2026-11-30",
     landing:
-      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026",
+      "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026",
     bank: "home-office/quarterly",
     areaTier: "spine"
   },
