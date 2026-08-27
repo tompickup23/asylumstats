@@ -120,6 +120,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
+
+          # A refresh adds and updates. It does not delete.
+          #
+          # On 24 August 2026 this step committed the deletion of 11 files and 18,643
+          # lines from data/canonical/regional_sources/, including a 12,216-line supported
+          # area series. Nothing was wrong with the data: www.wsmp.wales was unreachable,
+          # the regional ingest is continue-on-error so the run went on, and `git add`
+          # dutifully staged the absence of everything that ingest had not written. The
+          # commit read as a routine data refresh and the files were gone from main for
+          # three days before anyone looked.
+          #
+          # Deleting canonical data is a deliberate act and belongs in a human commit.
+          # No GitHub event data is interpolated here.
+          deleted="$(git diff --cached --diff-filter=D --name-only -- data/canonical/ src/data/live/ data/marts/)"
+          if [ -n "$deleted" ]; then
+            echo "Refusing to commit: this refresh would DELETE committed data."
+            echo "$deleted"
+            echo "A failed or partial ingest cannot be allowed to remove files."
+            exit 1
+          fi
+
           git commit -m "data: refresh tribunal + route + small boats + hotel + money data $(date -u +%Y-%m-%d)"
           git push
 
