@@ -4,7 +4,7 @@
     "similarOrganisationCount": 2,
     "archiveToolCount": 2,
     "archivedResearchInputCount": 1,
-    "regionalPartnerAssetCount": 14,
+    "regionalPartnerAssetCount": 12,
     "regionalPartnerDashboardCount": 7,
     "migrationObservatoryGuideLinkCount": 4,
     "nwrsmpWorkbookCount": 7,
@@ -12,7 +12,7 @@
     "nwrsmpAuthorityObservationCount": 4126,
     "nwrsmpLatestGroupRowCount": 2184,
     "nwrsmpSupportedSeriesAreaCount": 354,
-    "nwrsmpSupportedSeriesPointCount": 11810
+    "nwrsmpSupportedSeriesPointCount": 11718
   },
   "nwrsmp": {
     "pageTitle": "Data and insights",
@@ -97,7 +97,7 @@
     },
     "supportedSeries": {
       "areaCount": 354,
-      "pointCount": 11810,
+      "pointCount": 11718,
       "firstPeriodEnd": "2014-03-31",
       "latestPeriodEnd": "2025-12-31",
       "firstPeriodLabel": "31 Mar 2014",
@@ -379,37 +379,6 @@
         "migration"
       ],
       "notes": "Official dataset or publication link exposed directly from the NEMP regional data page."
-    },
-    {
-      "assetId": "regional_asset_wales_strategic_migration_partnership_data_cymru_data_partner",
-      "organisation": "Wales Strategic Migration Partnership",
-      "regionName": "Wales",
-      "pageTitle": "Partneriaeth Mewnfudo Strategol Cymru | Wales Strategic Migration Partnership",
-      "pageUrl": "https://www.wsmp.wales/dataobservatory",
-      "assetTitle": "Data Cymru",
-      "assetUrl": "https://www.data.cymru/eng/",
-      "assetType": "data_partner",
-      "routeFocus": [
-        "migration"
-      ],
-      "notes": "Linked Welsh data partner surfaced from the WSMP observatory page."
-    },
-    {
-      "assetId": "regional_asset_wales_strategic_migration_partnership_wsmp_data_observatory_hub_page",
-      "organisation": "Wales Strategic Migration Partnership",
-      "regionName": "Wales",
-      "pageTitle": "Partneriaeth Mewnfudo Strategol Cymru | Wales Strategic Migration Partnership",
-      "pageUrl": "https://www.wsmp.wales/dataobservatory",
-      "assetTitle": "WSMP data observatory",
-      "assetUrl": "https://www.wsmp.wales/dataobservatory",
-      "assetType": "hub_page",
-      "routeFocus": [
-        "asylum",
-        "refugees",
-        "ukraine",
-        "migration"
-      ],
-      "notes": "Welsh strategic migration partnership data-observatory landing page."
     }
   ],
   "migrationObservatoryGuideLinks": [
