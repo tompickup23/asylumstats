@@ -11,6 +11,15 @@ on:
     # publication with hours to spare, and on the other fifty weeks of the year the run
     # finds nothing new and commits nothing.
     - cron: "0 12 * * 4"
+    # And again at 16:00 UTC, because GitHub schedules are best effort and this repo's
+    # are routinely late: 54 minutes on 24 August, 72 on 10 August, 195 on 3 August.
+    # On 27 August, the morning of a Home Office quarterly, the 12:00 run had still not
+    # started three hours later and the refresh had to be dispatched by hand.
+    #
+    # A duplicate run is harmless. "Check for data changes" already compares substantive
+    # content and skips the commit when only run timestamps moved, so if the earlier run
+    # did land this one costs a few minutes of runner time and commits nothing.
+    - cron: "0 16 * * 4"
   workflow_dispatch:
 
 # The job commits and pushes refreshed data back to main, so the workflow
