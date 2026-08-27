@@ -35,7 +35,19 @@ const sourceStems = [
   // Appeal-stage figures come from scripts/fetch/fetch-tribunals.mjs (MOJ tribunal statistics).
   { stem: "asylum-seekers-receipt-support-datasets", sourceId: "asylum_support", page: DATA_TABLES },
   { stem: "returns-datasets", sourceId: "returns", page: DATA_TABLES },
-  { stem: "safe-legal-routes-summary-tables", sourceId: "safe_legal_routes_summary", page: DATA_TABLES }
+  { stem: "safe-legal-routes-summary-tables", sourceId: "safe_legal_routes_summary", page: DATA_TABLES },
+  // Added 28 Aug 2026. The year ending June 2026 release publishes 32 datasets and this
+  // script was taking nine of them, so four asylum-side series the site has never held
+  // were being left on the page every quarter. Detention is the largest gap: there is no
+  // detention series anywhere in the repo, and it is the other half of the returns story.
+  { stem: "immigration-detention-datasets", sourceId: "detention", page: DATA_TABLES },
+  { stem: "resettlement-scheme-datasets", sourceId: "resettlement_scheme", page: DATA_TABLES },
+  { stem: "age-assessments-detailed-datasets", sourceId: "age_assessments", page: DATA_TABLES },
+  {
+    stem: "organised-immigration-crime-summary-tables",
+    sourceId: "organised_immigration_crime",
+    page: DATA_TABLES
+  }
 ];
 
 // Resolve each stem to the newest published file. Pages are fetched once and reused.

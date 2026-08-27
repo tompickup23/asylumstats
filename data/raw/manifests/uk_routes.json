@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T21:47:27.136Z",
+  "generatedAt": "2026-08-27T23:39:50.948Z",
   "dataset": "uk_routes",
   "datasetId": "uk_routes",
   "publisher": "Home Office",
@@ -10,7 +10,7 @@
   "periodSlug": "june-2026",
   "nextEdition": "2026-11-30",
   "landing": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables",
-  "fetchedFileCount": 9,
+  "fetchedFileCount": 13,
   "files": [
     {
       "sourceId": "local_immigration_groups",
@@ -101,6 +101,46 @@
       "releaseDate": "2026-08-27",
       "sizeBytes": 61507,
       "fileSha256": "087938fe4954166d39d9c46e04fb3a353fc557448e06c9929db92029261e11af"
+    },
+    {
+      "sourceId": "detention",
+      "fileName": "immigration-detention-datasets-jun-2026.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a85c4491b45e4e555421edc/immigration-detention-datasets-jun-2026.xlsx",
+      "periodSlug": "june-2026",
+      "periodLabel": "Year ending June 2026",
+      "releaseDate": "2026-08-27",
+      "sizeBytes": 12094459,
+      "fileSha256": "51b4d9100ad36864bec21ce0eb9467839518ebaedfa0da128b52f8a7603634bd"
+    },
+    {
+      "sourceId": "resettlement_scheme",
+      "fileName": "resettlement-scheme-datasets-jun-2026.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a85c4ddc9205b515d421eef/resettlement-scheme-datasets-jun-2026.xlsx",
+      "periodSlug": "june-2026",
+      "periodLabel": "Year ending June 2026",
+      "releaseDate": "2026-08-27",
+      "sizeBytes": 5029295,
+      "fileSha256": "84b9a4c8d0d52ed418491b33186247fdec37a5067a3ad2508100b82aa6be2790"
+    },
+    {
+      "sourceId": "age_assessments",
+      "fileName": "age-assessments-detailed-datasets-jun-2026.xlsx",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a85c25fb0504df9f2c897fe/age-assessments-detailed-datasets-jun-2026.xlsx",
+      "periodSlug": "june-2026",
+      "periodLabel": "Year ending June 2026",
+      "releaseDate": "2026-08-27",
+      "sizeBytes": 270910,
+      "fileSha256": "edf804ea1fac4609d4faab9288baa9d34e0bf9dfc39119bb3280d0411a6b9f79"
+    },
+    {
+      "sourceId": "organised_immigration_crime",
+      "fileName": "organised-immigration-crime-summary-tables-jun-2026.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a85c4888d785493a9c89813/organised-immigration-crime-summary-tables-jun-2026.ods",
+      "periodSlug": "june-2026",
+      "periodLabel": "Year ending June 2026",
+      "releaseDate": "2026-08-27",
+      "sizeBytes": 20548,
+      "fileSha256": "4e086b2cbda3b7d7c500460c3ae59ab386b7de2a94b604bd11c6bdba3434ba02"
     }
   ]
 }
