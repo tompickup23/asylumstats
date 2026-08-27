@@ -18,8 +18,29 @@ describe("trend claims compare like with like", () => {
     const card = routeDashboard.nationalCards.find((entry) => entry.id === "small_boat_arrivals");
     expect(card).toBeDefined();
 
-    const comparison = getLikeForLikeQuarter(seriesFor("small_boats"), card!.value, card!.period);
-    expect(comparison, "small boats must support a like-for-like quarter comparison").not.toBeNull();
+    const series = seriesFor("small_boats");
+    const comparison = getLikeForLikeQuarter(series, card!.value, card!.period);
+
+    // Refusing is a valid answer, and it is the answer whenever the series cannot
+    // support the comparison. The small boats series is calendar years with one
+    // partial year on the end; while that partial year was "2026 (Q1 only)" a quarter
+    // could be recovered from it, and once the June 2026 release made it "Q1 to Q2"
+    // it could not. This test used to demand a non-null result, which quietly encoded
+    // "the partial year is exactly one quarter" and broke the deploy the first time
+    // that stopped being true.
+    //
+    // What must never happen is a comparison drawn across unlike periods, so that is
+    // what is asserted: if the helper returns something, every property below has to
+    // hold. If it returns null, the series must genuinely lack a single-quarter tail,
+    // which is checked rather than assumed so this branch cannot become a free pass.
+    const partial = series.filter((point) => point.isPartialYear);
+    if (comparison === null) {
+      expect(
+        partial.some((point) => /Q1 only/.test(point.periodLabel ?? "")),
+        "null is only acceptable when no single-quarter tail exists to compare"
+      ).toBe(false);
+      return;
+    }
 
     // The recovered quarter has to be a plausible quarter, not a residual: within the
     // same order of magnitude as the quarter it is compared against, and well below the

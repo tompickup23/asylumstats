@@ -9,22 +9,23 @@ import { loadLocalRouteLatest } from "../src/lib/route-data";
 
 /**
  * These figures are the Home Office's own England totals, read from Reg_01 of
- * regional-and-local-authority-dataset-mar-2026.ods (Immigration system statistics,
- * regional and local authority data, released 21 May 2026, as at 31 March 2026).
+ * regional-and-local-authority-dataset-jun-2026.ods (Immigration system statistics,
+ * regional and local authority data, released 27 August 2026, as at 30 June 2026).
  *
  * They are hardcoded on purpose. If a data refresh changes the underlying file, these
  * tests must fail loudly and be updated deliberately against the new publication,
  * rather than quietly tracking whatever the site happens to compute.
  */
-const ENGLAND_SUPPORTED_ASYLUM = 85_162;
-const ENGLAND_AFGHAN_POPULATION = 28_592;
+const ENGLAND_SUPPORTED_ASYLUM = 80_947;
+const ENGLAND_AFGHAN_POPULATION = 28_588;
 /**
- * 137,386 is published for England. The local authority table cannot account for 40 of
+ * 140,614 is published for England. The local authority table cannot account for 40 of
  * them: it carries an "Unknown" row whose Ukraine figure is suppressed. Summing the
- * authorities therefore gives 137,346, and any page quoting this must say it excludes
- * unallocated arrivals.
+ * authorities therefore gives 140,574, and any page quoting this must say it excludes
+ * unallocated arrivals. The shortfall was also exactly 40 at the March 2026 release,
+ * which is the tell that it is the suppressed Unknown row and not drift.
  */
-const ENGLAND_UKRAINE_ARRIVALS_ALLOCATED = 137_346;
+const ENGLAND_UKRAINE_ARRIVALS_ALLOCATED = 140_574;
 
 const englishAreas = loadLocalRouteLatest().areas.filter((area) =>
   area.areaCode.startsWith("E")
