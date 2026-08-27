@@ -48,7 +48,17 @@ jobs:
       # ledger it produces. That dependency was undeclared and only surfaced when this
       # workflow was reordered, because until then the job always died at regional sources
       # before either of them ran.
+      # Hotels is a Wayback snapshot of a third-party site, so it is secondary in exactly
+      # the way regional sources is: colour around the Home Office figures, not the figures.
+      # On 27 August 2026 web.archive.org was unreachable and this step aborted the run
+      # after routes, tribunals and small boats had already succeeded, so the commit, push
+      # and deploy below were all skipped and the site kept serving the previous quarter on
+      # the morning of a Home Office release. Money reads the committed hotel mart rather
+      # than this fetch, so it still runs when this is skipped.
+      # No GitHub event data is interpolated here.
       - name: Fetch and transform hotels
+        id: hotels
+        continue-on-error: true
         run: npm run ingest:hotels
       - name: Transform money ledger
         run: npm run ingest:money
@@ -143,10 +153,14 @@ jobs:
         if: always()
         env:
           REGIONAL_OUTCOME: ${{ steps.regional.outcome }}
+          HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
         run: |
           skipped=""
           if [ "$REGIONAL_OUTCOME" = "failure" ]; then
             skipped="$skipped regional-sources"
+          fi
+          if [ "$HOTELS_OUTCOME" = "failure" ]; then
+            skipped="$skipped hotels"
           fi
           if [ -n "$skipped" ]; then
             echo "Secondary ingest failed:$skipped"

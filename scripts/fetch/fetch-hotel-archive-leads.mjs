@@ -9,11 +9,20 @@ const manifestDir = path.resolve("data/raw/manifests");
 const archiveSnapshotUrl =
   "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json";
 
+// Bounded, and allowed to fail loudly but quickly. This reads a Wayback snapshot of a
+// third-party GitHub Pages site, so it is two hops of someone else's uptime away from us.
+// On 27 August 2026 web.archive.org refused connections and this fetch took the whole
+// refresh down with it: routes, tribunals and small boats had all already succeeded and
+// none of them reached the commit step. Same shape as the www.wsmp.wales failure of
+// 17 August. The step is now continue-on-error in the workflow; these bounds stop it
+// hanging first.
 function curlJson(url) {
-  const output = execFileSync("curl", ["-sS", "-L", "-A", "Mozilla/5.0", url], {
-    encoding: "utf8",
-    maxBuffer: 1024 * 1024 * 64
-  });
+  const output = execFileSync(
+    "curl",
+    ["-sS", "-L", "-f", "--connect-timeout", "15", "--max-time", "90",
+     "-A", "Mozilla/5.0", url],
+    { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 }
+  );
 
   return JSON.parse(output);
 }
