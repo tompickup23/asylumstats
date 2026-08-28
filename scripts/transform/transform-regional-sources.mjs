@@ -49,6 +49,24 @@ function readText(filePath) {
   return readFileSync(filePath, "utf8");
 }
 
+// A partner-page snapshot that fetched as empty or truncated must fail the run here,
+// not flow onward: on 28 Aug 2026 a zero-byte nemp-data-page.html parsed to zero
+// links, shipped an 8-asset watch file as if NEMP had removed its data, and only the
+// downstream test floor caught it. 5000 bytes is well under any real render of these
+// WordPress/CMS pages (the smallest genuine snapshot on record is ~65KB) and well
+// over any error stub.
+function readSnapshotHtml(filePath) {
+  const html = readFileSync(filePath, "utf8");
+  if (html.length < 5000) {
+    throw new Error(
+      `Snapshot ${path.basename(filePath)} is ${html.length} bytes; a real page render ` +
+        `is tens of KB. Refusing to transform a truncated or empty fetch into a ` +
+        `confident zero. Re-run the fetcher.`
+    );
+  }
+  return html;
+}
+
 function decodeEntities(value) {
   return String(value ?? "")
     .replaceAll("&nbsp;", " ")
@@ -535,12 +553,12 @@ const similarOrganisations = buildWatchEntries(watchlistRows, "similar_organisat
 const archiveTools = buildWatchEntries(watchlistRows, "archive_tool", "high");
 const archivedResearchInputs = buildWatchEntries(watchlistRows, "archived_research_input", "high");
 
-const migrationYorkshireStatisticsHtml = readText(inputPaths.migrationYorkshireStatistics);
-const migrationYorkshireRefugeeDashboardHtml = readText(inputPaths.migrationYorkshireRefugeeDashboard);
-const migrationYorkshireUkraineDashboardHtml = readText(inputPaths.migrationYorkshireUkraineDashboard);
-const migrationYorkshireEussDashboardHtml = readText(inputPaths.migrationYorkshireEussDashboard);
-const nempDataPageHtml = readText(inputPaths.nempDataPage);
-const migrationObservatoryLocalGuideHtml = readText(inputPaths.migrationObservatoryLocalGuide);
+const migrationYorkshireStatisticsHtml = readSnapshotHtml(inputPaths.migrationYorkshireStatistics);
+const migrationYorkshireRefugeeDashboardHtml = readSnapshotHtml(inputPaths.migrationYorkshireRefugeeDashboard);
+const migrationYorkshireUkraineDashboardHtml = readSnapshotHtml(inputPaths.migrationYorkshireUkraineDashboard);
+const migrationYorkshireEussDashboardHtml = readSnapshotHtml(inputPaths.migrationYorkshireEussDashboard);
+const nempDataPageHtml = readSnapshotHtml(inputPaths.nempDataPage);
+const migrationObservatoryLocalGuideHtml = readSnapshotHtml(inputPaths.migrationObservatoryLocalGuide);
 
 const migrationYorkshireStatisticsUrl = "https://www.migrationyorkshire.org.uk/statistics";
 const migrationYorkshireRefugeeDashboardUrl =
