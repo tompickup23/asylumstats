@@ -62,16 +62,17 @@ function visibleText(html: string): string {
 }
 
 describe.skipIf(!built)("built pages have no sentence run-ons", () => {
-  const pages = htmlFiles(DIST);
-
+  // Read lazily, inside the tests. `describe.skipIf` skips the test BODIES, but the
+  // describe callback itself still runs during collection, so scanning dist out here
+  // threw ENOENT in CI on the pre-build `npm test` and failed the whole suite.
   it("has a built site to read, so this guard is actually running", () => {
-    expect(pages.length).toBeGreaterThan(100);
+    expect(htmlFiles(DIST).length).toBeGreaterThan(100);
   });
 
   it("finds no run-on anywhere in the rendered text", () => {
     const offences: string[] = [];
 
-    for (const page of pages) {
+    for (const page of htmlFiles(DIST)) {
       const text = visibleText(readFileSync(page, "utf8"));
       for (const match of text.matchAll(RUN_ON)) {
         const index = match.index ?? 0;
