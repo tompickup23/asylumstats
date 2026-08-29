@@ -128,7 +128,7 @@ describe("the published counts reproduce from the projection file", () => {
 });
 
 describe("the same metric reads the same on every page that prints it", () => {
-  const finding = read("src/content/findings/109-areas-minority-wbi-2051.md");
+  const finding = read("src/content/findings/86-areas-minority-wbi-2051.md");
   const teaser = read("src/components/SisterSiteTeaser.astro");
   const methodology = read("src/pages/methodology.astro");
 
@@ -193,7 +193,7 @@ describe("the withdrawn claim cannot come back", () => {
     "src/pages/methodology.astro",
     "src/content/findings/newethpop-validation-2021.md",
     // Its own correction notice has to be able to say it used to read 109.
-    "src/content/findings/109-areas-minority-wbi-2051.md",
+    "src/content/findings/86-areas-minority-wbi-2051.md",
     "src/data/site/releases.json",
     "src/pages/releases.astro",
   ];

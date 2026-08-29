@@ -183,7 +183,7 @@
         "East of England"
       ],
       "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     },
     {
       "provider": "Mears",
@@ -196,7 +196,7 @@
         "Northern Ireland"
       ],
       "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     },
     {
       "provider": "Clearsprings",
@@ -207,7 +207,7 @@
         "Wales"
       ],
       "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     }
   ],
   "contractSignals": [
@@ -231,7 +231,7 @@
       "type": "council statement",
       "title": "Bell Hotel and Phoenix Hotel publicly named",
       "detail": "Strong named current-site evidence for the asylum accommodation estate.",
-      "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
+      "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/"
     },
     {
       "area": "Wakefield",
@@ -239,7 +239,7 @@
       "type": "council statement",
       "title": "Cedar Court Hotel confirmed for contingency asylum accommodation",
       "detail": "Direct local evidence of a current asylum hotel and local political response.",
-      "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/"
+      "sourceUrl": "https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel"
     },
     {
       "area": "Cornwall",
@@ -247,7 +247,7 @@
       "type": "council housing statement",
       "title": "Local housing fund linked to Afghan and Ukraine arrivals",
       "detail": "Useful example of a local public source explicitly tying housing activity to refugee and humanitarian schemes.",
-      "sourceUrl": "https://www.cornwall.gov.uk/housing/homelessness/local-authority-housing-fund/"
+      "sourceUrl": "https://www.cornwall.gov.uk/people-and-communities/refugee-resettlement/supporting-refugees-in-cornwall/"
     },
     {
       "area": "West Northamptonshire",
@@ -255,7 +255,7 @@
       "type": "council statement",
       "title": "Three asylum hotels confirmed but unnamed",
       "detail": "Useful secrecy-gap evidence because hotel presence is acknowledged without a public site list.",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-use-hotels-house-asylum-seekers"
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels"
     }
   ],
   "excludedContext": [

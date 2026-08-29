@@ -116,6 +116,7 @@
       "coverage": "England region and local authority",
       "currentUrl": "https://www.migrationyorkshire.org.uk/statistics",
       "historicUrl": "https://www.migrationyorkshire.org.uk/statistics",
+      "retired": null,
       "historicPriority": "high",
       "formats": [
         "html",
@@ -137,6 +138,7 @@
       "coverage": "England region and local authority",
       "currentUrl": "https://www.nemp.org.uk/data/",
       "historicUrl": "https://www.nemp.org.uk/data/",
+      "retired": null,
       "historicPriority": "high",
       "formats": [
         "html",
@@ -158,6 +160,7 @@
       "coverage": "London borough and city region",
       "currentUrl": "https://www.londoncouncils.gov.uk/news-and-press-releases/2024/asylum-and-resettlement-london-councils-survey",
       "historicUrl": "https://www.londoncouncils.gov.uk/news-and-press-releases/2024/asylum-and-resettlement-london-councils-survey",
+      "retired": null,
       "historicPriority": "medium",
       "formats": [
         "html",
@@ -177,6 +180,7 @@
       "coverage": "Wales nation and local authority",
       "currentUrl": "https://www.wsmp.wales/home",
       "historicUrl": "https://www.wsmp.wales/home",
+      "retired": "2026-08-23",
       "historicPriority": "medium",
       "formats": [
         "html",
@@ -449,6 +453,7 @@
       "coverage": "UK asylum reception system and accommodation evidence",
       "currentUrl": "https://asylumineurope.org/reports/country/united-kingdom/reception-conditions/housing/types-accommodation/",
       "historicUrl": "https://asylumineurope.org/reports/country/united-kingdom/reception-conditions/housing/types-accommodation/",
+      "retired": null,
       "historicPriority": "medium",
       "formats": [
         "html",
@@ -470,6 +475,7 @@
       "coverage": "UK local authority and national synthesis",
       "currentUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
       "historicUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
+      "retired": null,
       "historicPriority": "medium",
       "formats": [
         "html",
@@ -494,6 +500,7 @@
       "coverage": "All web geographies",
       "currentUrl": "https://web.archive.org/",
       "historicUrl": "https://web.archive.org/",
+      "retired": null,
       "historicPriority": "high",
       "formats": [
         "html",
@@ -514,6 +521,7 @@
       "coverage": "All public-sector geographies",
       "currentUrl": "https://webarchive.nationalarchives.gov.uk/",
       "historicUrl": "https://webarchive.nationalarchives.gov.uk/",
+      "retired": null,
       "historicPriority": "high",
       "formats": [
         "html",
@@ -536,6 +544,7 @@
       "coverage": "Named hotel-site discovery map and archived list",
       "currentUrl": "https://web.archive.org/web/20250826101522/https://migranthotels.net/",
       "historicUrl": "https://web.archive.org/web/*/https://migranthotels.net/",
+      "retired": null,
       "historicPriority": "high",
       "formats": [
         "html",

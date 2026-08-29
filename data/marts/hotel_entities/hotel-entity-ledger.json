@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T00:44:38.151Z",
+  "generatedAt": "2026-08-29T12:46:06.808Z",
   "summary": {
     "totalNamedSites": 13,
     "currentNamedSites": 8,
@@ -89,7 +89,7 @@
           "Northern Ireland"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -105,8 +105,8 @@
       "peopleHousedReported": null,
       "firstPublicDate": "2025-07-30",
       "lastPublicDate": "2025-07-30",
-      "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-      "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      "sourceTitle": "Open joint letter to the Home Secretary",
+      "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       "notes": "Publicly named by council in legal and public statements",
       "ownerName": "Somani Hotels Limited",
       "operatorName": null,
@@ -120,13 +120,13 @@
           "confidence": "high",
           "evidenceCount": 2,
           "sourceUrls": [
-            "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+            "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
             "https://find-and-update.company-information.service.gov.uk/company/03929881"
           ],
           "sources": [
             {
-              "title": "Joint open letter on Bell Hotel and Phoenix Hotel",
-              "url": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
+              "title": "Open joint letter to the Home Secretary",
+              "url": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/"
             },
             {
               "title": "Companies House overview for Somani Hotels Limited",
@@ -146,7 +146,7 @@
           "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -160,10 +160,10 @@
       "evidenceClass": "named_current",
       "confidence": "high",
       "peopleHousedReported": null,
-      "firstPublicDate": "2025-08-20",
-      "lastPublicDate": "2025-08-20",
-      "sourceTitle": "Wakefield statement on contingency asylum accommodation",
-      "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
+      "firstPublicDate": "2026-05-22",
+      "lastPublicDate": "2026-05-22",
+      "sourceTitle": "Wakefield Council statement on future of Cedar Court Hotel",
+      "sourceUrl": "https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel",
       "notes": "Home Office use confirmed in council statement",
       "ownerName": null,
       "operatorName": "Cedar Court Hotels",
@@ -203,7 +203,7 @@
             "https://www.cedarcourthotels.co.uk/hotels/wakefield/"
           ],
           "sourceTitle": "Official Cedar Court Hotels Wakefield page",
-          "generatedAt": "2026-08-28T00:44:38.151Z",
+          "generatedAt": "2026-08-29T12:46:06.808Z",
           "notes": "Keep the public page explicit about brand versus legal entity."
         }
       ],
@@ -217,7 +217,7 @@
           "Northern Ireland"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -233,8 +233,8 @@
       "peopleHousedReported": null,
       "firstPublicDate": "2025-11-17",
       "lastPublicDate": "2025-11-17",
-      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
       "notes": "Official council statement names Holiday Inn in Flore as one of the current hotels used for asylum accommodation in West Northamptonshire",
       "ownerName": null,
       "operatorName": null,
@@ -250,7 +250,7 @@
           "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -266,8 +266,8 @@
       "peopleHousedReported": null,
       "firstPublicDate": "2025-11-17",
       "lastPublicDate": "2025-11-17",
-      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
       "notes": "Official council statement refers to the Crick site as Ibis Hotel while the archived lead identifies the same property as ibis Rugby East",
       "ownerName": null,
       "operatorName": null,
@@ -283,7 +283,7 @@
           "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -299,8 +299,8 @@
       "peopleHousedReported": null,
       "firstPublicDate": "2025-11-17",
       "lastPublicDate": "2025-11-17",
-      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+      "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
       "notes": "Official council statement names M K Hotel in Deanshanger as one of the current hotels used for asylum accommodation in West Northamptonshire",
       "ownerName": null,
       "operatorName": null,
@@ -316,7 +316,7 @@
           "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -332,8 +332,8 @@
       "peopleHousedReported": null,
       "firstPublicDate": "2025-07-30",
       "lastPublicDate": "2025-07-30",
-      "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-      "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      "sourceTitle": "Open joint letter to the Home Secretary",
+      "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       "notes": "Publicly named by council in legal and public statements",
       "ownerName": null,
       "operatorName": null,
@@ -351,10 +351,10 @@
           "routeFamily": "asylum_support",
           "confidence": "high",
           "sourceUrls": [
-            "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/"
+            "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/"
           ],
-          "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-          "generatedAt": "2026-08-28T00:44:38.151Z",
+          "sourceTitle": "Open joint letter to the Home Secretary",
+          "generatedAt": "2026-08-29T12:46:06.808Z",
           "notes": "This is a publishable transparency gap rather than an allegation."
         }
       ],
@@ -367,7 +367,7 @@
           "East of England"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -381,10 +381,10 @@
       "evidenceClass": "named_current",
       "confidence": "high",
       "peopleHousedReported": null,
-      "firstPublicDate": "2025-10-30",
-      "lastPublicDate": "2025-10-30",
-      "sourceTitle": "Spelthorne statement on Stanwell asylum hotel",
-      "sourceUrl": "https://www.spelthorne.gov.uk/article/39191/Spelthorne-calls-for-constructive-action-not-politics-to-support-Stanwell-asylum-hotel",
+      "firstPublicDate": "2025-08-13",
+      "lastPublicDate": "2025-08-13",
+      "sourceTitle": "Spelthorne Borough Council calls for constructive action on Stanwell Hotel use",
+      "sourceUrl": "https://www.spelthorne.gov.uk/news/2025/spelthorne-borough-council-calls-constructive-action-stanwell-hotel-use",
       "notes": "Publicly named current site",
       "ownerName": "Splendid Hospitality Group LLP",
       "operatorName": null,
@@ -429,7 +429,7 @@
             "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/"
           ],
           "sourceTitle": "Splendid Hospitality Group acquires the Stanwell Hotel near Heathrow",
-          "generatedAt": "2026-08-28T00:44:38.151Z",
+          "generatedAt": "2026-08-29T12:46:06.808Z",
           "notes": "This is common in hotel ownership structures and should be tracked rather than guessed."
         }
       ],
@@ -441,7 +441,7 @@
           "Wales"
         ],
         "note": "Regional asylum accommodation provider under the current Home Office contract structure.",
-        "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+        "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
       }
     },
     {
@@ -594,7 +594,7 @@
             "https://questions-statements.parliament.uk/written-questions/detail/2026-02-05/28968"
           ],
           "sourceTitle": "Written Parliamentary Question referencing Copthorne Hotel",
-          "generatedAt": "2026-08-28T00:44:38.151Z",
+          "generatedAt": "2026-08-29T12:46:06.808Z",
           "notes": "Lower-confidence row kept to make the visibility gap explicit."
         }
       ],
@@ -613,10 +613,10 @@
       "parliamentaryReferenceCount": 0,
       "unnamedSiteCount": 2,
       "peopleHousedReported": 191,
-      "lastPublicDate": "2025-08-14",
-      "sourceTitle": "Public reporting on Perth and Kinross hotels and asylum seekers",
-      "sourceUrl": "https://www.dailyrecord.co.uk/news/scottish-news/almost-200-asylum-seekers-being-35656075",
-      "notes": "Public count and occupancy report without named sites.",
+      "lastPublicDate": "2026-08-03",
+      "sourceTitle": "Perth and Kinross Council statement on people seeking asylum",
+      "sourceUrl": "https://www.pkc.gov.uk/article/24758/Asylum-seekers",
+      "notes": "Two hotels confirmed by the council without names. The reported headcount is NOT from this source and is pending verification.",
       "visibilityClass": "all_unnamed",
       "visibilityPct": 0
     },
@@ -665,8 +665,8 @@
       "unnamedSiteCount": 0,
       "peopleHousedReported": null,
       "lastPublicDate": "2025-07-30",
-      "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-      "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      "sourceTitle": "Open joint letter to the Home Secretary",
+      "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       "notes": "Current named-site evidence.",
       "visibilityClass": "named_only",
       "visibilityPct": 100
@@ -732,9 +732,9 @@
       "parliamentaryReferenceCount": 0,
       "unnamedSiteCount": 0,
       "peopleHousedReported": null,
-      "lastPublicDate": "2025-10-30",
-      "sourceTitle": "Spelthorne statement on Stanwell asylum hotel",
-      "sourceUrl": "https://www.spelthorne.gov.uk/article/39191/Spelthorne-calls-for-constructive-action-not-politics-to-support-Stanwell-asylum-hotel",
+      "lastPublicDate": "2025-08-13",
+      "sourceTitle": "Spelthorne Borough Council calls for constructive action on Stanwell Hotel use",
+      "sourceUrl": "https://www.spelthorne.gov.uk/news/2025/spelthorne-borough-council-calls-constructive-action-stanwell-hotel-use",
       "notes": "Named site publicly confirmed.",
       "visibilityClass": "named_only",
       "visibilityPct": 100
@@ -749,9 +749,9 @@
       "parliamentaryReferenceCount": 0,
       "unnamedSiteCount": 0,
       "peopleHousedReported": null,
-      "lastPublicDate": "2025-08-20",
-      "sourceTitle": "Wakefield statement on contingency asylum accommodation",
-      "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
+      "lastPublicDate": "2026-05-22",
+      "sourceTitle": "Wakefield Council statement on future of Cedar Court Hotel",
+      "sourceUrl": "https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel",
       "notes": "Named site publicly confirmed.",
       "visibilityClass": "named_only",
       "visibilityPct": 100
@@ -767,17 +767,17 @@
       "unnamedSiteCount": 0,
       "peopleHousedReported": null,
       "lastPublicDate": "2025-11-17",
-      "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-      "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
-      "notes": "Official council statement names ibis Rugby East in Crick, Holiday Inn in Flore, and M K Hotel in Deanshanger.",
+      "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+      "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
+      "notes": "Council statement confirms three hotels in use and does not name them. The three names come from press reporting, not from this source.",
       "visibilityClass": "named_only",
       "visibilityPct": 100
     }
   ],
   "archiveVerification": {
     "sourceName": "migranthotels.net archive snapshot",
-    "archiveSnapshotUrl": "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json",
-    "archiveSnapshotDate": "2025-08-26",
+    "archiveSnapshotUrl": "https://web.archive.org/web/20241213115031/https://howfarfrommydoorstep.github.io/clive/hotels.json",
+    "archiveSnapshotDate": "2024-12-13",
     "totalLeadCount": 219,
     "linkedExistingCount": 4,
     "promotedNewCount": 4,
@@ -807,8 +807,8 @@
         "areaCode": "E08000036",
         "regionName": "Yorkshire and The Humber",
         "status": "current",
-        "sourceTitle": "Wakefield statement on contingency asylum accommodation",
-        "sourceUrl": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
+        "sourceTitle": "Wakefield Council statement on future of Cedar Court Hotel",
+        "sourceUrl": "https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel",
         "notes": "Archived lead confirmed against the council statement already used in the public ledger"
       },
       {
@@ -820,8 +820,8 @@
         "areaCode": "E07000072",
         "regionName": "East of England",
         "status": "current",
-        "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-        "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+        "sourceTitle": "Open joint letter to the Home Secretary",
+        "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
         "notes": "Archived map lead aligns with a site already publicly named by Epping Forest District Council"
       },
       {
@@ -833,8 +833,8 @@
         "areaCode": "E07000072",
         "regionName": "East of England",
         "status": "current",
-        "sourceTitle": "Joint open letter on Bell Hotel and Phoenix Hotel",
-        "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+        "sourceTitle": "Open joint letter to the Home Secretary",
+        "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
         "notes": "Archived lead title uses a longer public-facing name than the council ledger row"
       },
       {
@@ -859,8 +859,8 @@
         "areaCode": "E06000062",
         "regionName": "East Midlands",
         "status": "current",
-        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
         "notes": "Official council statement names Holiday Inn in Flore as one of the current hotels used for asylum accommodation in West Northamptonshire"
       },
       {
@@ -872,8 +872,8 @@
         "areaCode": "E06000062",
         "regionName": "East Midlands",
         "status": "current",
-        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
         "notes": "Official council statement refers to the Crick site as Ibis Hotel while the archived lead identifies the same property as ibis Rugby East"
       },
       {
@@ -885,8 +885,8 @@
         "areaCode": "E06000062",
         "regionName": "East Midlands",
         "status": "current",
-        "sourceTitle": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-        "sourceUrl": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+        "sourceTitle": "Council takes first steps towards planning action over asylum hotels",
+        "sourceUrl": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
         "notes": "Official council statement names M K Hotel in Deanshanger as one of the current hotels used for asylum accommodation in West Northamptonshire"
       }
     ]
@@ -900,7 +900,7 @@
         "Midlands",
         "East of England"
       ],
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     },
     {
       "provider": "Mears",
@@ -911,7 +911,7 @@
         "Scotland",
         "Northern Ireland"
       ],
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     },
     {
       "provider": "Clearsprings",
@@ -920,7 +920,7 @@
         "South of England",
         "Wales"
       ],
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts"
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded"
     }
   ],
   "limitations": [
@@ -933,7 +933,7 @@
   "sources": [
     {
       "name": "Hotel site ledger",
-      "sourceUrl": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      "sourceUrl": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       "type": "local public evidence"
     },
     {
@@ -943,12 +943,12 @@
     },
     {
       "name": "Asylum accommodation provider regions",
-      "sourceUrl": "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
+      "sourceUrl": "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded",
       "type": "official contract"
     },
     {
       "name": "migranthotels.net archive snapshot",
-      "sourceUrl": "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json",
+      "sourceUrl": "https://web.archive.org/web/20241213115031/https://howfarfrommydoorstep.github.io/clive/hotels.json",
       "type": "archive discovery"
     }
   ]
