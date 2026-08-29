@@ -3,6 +3,17 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://asylumstats.co.uk",
+  // The slug said 109 while the page said 86.
+  //
+  // That count was withdrawn on 13 August 2026 and the page carries the correction, but
+  // the URL kept publishing the retracted number to anyone reading a link rather than a
+  // page. It is renamed to match what the page says. The old path is cited, so it is not
+  // being deleted: in a static build Astro emits an HTML page at the old URL that
+  // redirects and sets a canonical, which is what a static host can honour.
+  redirects: {
+    "/findings/109-areas-minority-wbi-2051": "/findings/86-areas-minority-wbi-2051",
+    "/findings/109-areas-minority-wbi-2051/": "/findings/86-areas-minority-wbi-2051/"
+  },
   vite: {
     plugins: [tailwindcss()],
     build: {
