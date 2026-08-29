@@ -36,8 +36,11 @@ jobs:
       # run in CI. They only ever fired for whoever happened to have a local dist, and a
       # stale one at that. Running them here is the whole point of having them.
       # No GitHub event data is interpolated here.
+      # The run-on guard belongs here for the same reason: it reads dist and the defect
+      # it looks for is created by the compiler, so it cannot be seen before the build.
+      # No GitHub event data is interpolated here.
       - name: Guards that need the built site
-        run: npx vitest run tests/support-vs-accommodation.test.ts
+        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop
