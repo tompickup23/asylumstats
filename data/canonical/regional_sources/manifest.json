@@ -1,10 +1,10 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-08-28T15:16:01.044Z",
+  "generatedAt": "2026-08-29T12:45:13.409Z",
   "inputs": [
     {
       "path": "/Users/tompickup/asylumstats/data/manual/regional-source-watch.csv",
-      "fileSha256": "e7947b7aa3311b48cbe4d4b691709846f1b96dfe7b3bb058af8ff01fa31fbea2"
+      "fileSha256": "34f97b403e973f3760eab75bda3d4333283f2da91870231619511b372eb7de74"
     },
     {
       "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/nwrsmp-media.json",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/Users/tompickup/asylumstats/src/data/live/local-route-latest.json",
-      "fileSha256": "aec2fd19754d8195f9316074ec50dde87d4a01395327d78e673590fb3bf95c07"
+      "fileSha256": "2479072ebccb98c6c48bd58b0f0adddb2d4a3d4f01d68058271c07c3f75f1e52"
     },
     {
       "path": "/Users/tompickup/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",

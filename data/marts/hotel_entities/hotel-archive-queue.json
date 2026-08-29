@@ -52,8 +52,8 @@
     "site_status": "current",
     "candidate_site_id": null,
     "candidate_site_name": null,
-    "source_title": "Wakefield statement on contingency asylum accommodation",
-    "source_url": "https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/",
+    "source_title": "Wakefield Council statement on future of Cedar Court Hotel",
+    "source_url": "https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel",
     "notes": "Archived lead confirmed against the council statement already used in the public ledger"
   },
   {
@@ -71,8 +71,8 @@
     "site_status": "current",
     "candidate_site_id": "phoenix-hotel-north-weald",
     "candidate_site_name": "Phoenix Hotel",
-    "source_title": "Joint open letter on Bell Hotel and Phoenix Hotel",
-    "source_url": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+    "source_title": "Open joint letter to the Home Secretary",
+    "source_url": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
     "notes": "Archived map lead aligns with a site already publicly named by Epping Forest District Council"
   },
   {
@@ -90,8 +90,8 @@
     "site_status": "current",
     "candidate_site_id": null,
     "candidate_site_name": null,
-    "source_title": "Joint open letter on Bell Hotel and Phoenix Hotel",
-    "source_url": "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+    "source_title": "Open joint letter to the Home Secretary",
+    "source_url": "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
     "notes": "Archived lead title uses a longer public-facing name than the council ledger row"
   },
   {
@@ -4118,8 +4118,8 @@
     "site_status": "current",
     "candidate_site_id": "holiday-inn-flore-west-northamptonshire",
     "candidate_site_name": "Holiday Inn, Flore",
-    "source_title": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-    "source_url": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+    "source_title": "Council takes first steps towards planning action over asylum hotels",
+    "source_url": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
     "notes": "Official council statement names Holiday Inn in Flore as one of the current hotels used for asylum accommodation in West Northamptonshire"
   },
   {
@@ -4137,8 +4137,8 @@
     "site_status": "current",
     "candidate_site_id": "ibis-rugby-east-crick",
     "candidate_site_name": "ibis Rugby East",
-    "source_title": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-    "source_url": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+    "source_title": "Council takes first steps towards planning action over asylum hotels",
+    "source_url": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
     "notes": "Official council statement refers to the Crick site as Ibis Hotel while the archived lead identifies the same property as ibis Rugby East"
   },
   {
@@ -4156,8 +4156,8 @@
     "site_status": "current",
     "candidate_site_id": "mk-hotel-deanshanger",
     "candidate_site_name": "M K Hotel",
-    "source_title": "West Northamptonshire Council comments on the use of hotels to house asylum seekers",
-    "source_url": "https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-on-the-use-of-hotels-to-house-asylum-seekers",
+    "source_title": "Council takes first steps towards planning action over asylum hotels",
+    "source_url": "https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels",
     "notes": "Official council statement names M K Hotel in Deanshanger as one of the current hotels used for asylum accommodation in West Northamptonshire"
   }
 ]

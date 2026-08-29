@@ -11,6 +11,7 @@ type WatchRow = {
   coverage: string;
   currentUrl: string;
   historicUrl: string;
+  retired: string | null;
   historicPriority: string;
   formats: string[];
   routeFocus: string[];
@@ -404,8 +405,14 @@ function formatLabelList(values: string[]) {
                   <span class="chip">{formatLabelList(row.formats)}</span>
                 </div>
                 <div class="chip-row">
-                  <a class="source-pill" href={row.currentUrl}>Open current page</a>
-                  <a class="source-pill" href={row.historicUrl}>Historic route</a>
+                  {row.retired ? (
+                    <span class="source-pill">Retired {row.retired}, no live source</span>
+                  ) : (
+                    <>
+                      <a class="source-pill" href={row.currentUrl}>Open current page</a>
+                      <a class="source-pill" href={row.historicUrl}>Historic route</a>
+                    </>
+                  )}
                 </div>
               </article>
             ))}

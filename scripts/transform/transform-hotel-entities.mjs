@@ -798,7 +798,7 @@ const hotelEntityLedger = {
   sources: [
     {
       name: "Hotel site ledger",
-      sourceUrl: "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      sourceUrl: "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       type: "local public evidence"
     },
     {
@@ -808,7 +808,7 @@ const hotelEntityLedger = {
     },
     {
       name: "Asylum accommodation provider regions",
-      sourceUrl: "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
+      sourceUrl: "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded",
       type: "official contract"
     },
     {

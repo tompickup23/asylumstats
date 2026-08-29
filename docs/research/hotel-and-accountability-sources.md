@@ -33,7 +33,7 @@ The evidence split is:
 
 | Fact | Date | Why it matters | Source |
 | --- | --- | --- | --- |
-| Mears, Serco, and Clearsprings are the regional providers under the current asylum accommodation contracts | current contract structure | Lets the site map provider geography and accountability | https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts |
+| Mears, Serco, and Clearsprings are the regional providers under the current asylum accommodation contracts | current contract structure | Lets the site map provider geography and accountability | https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded |
 
 ## Local authority and regional counts
 
@@ -49,11 +49,11 @@ This is not a comprehensive list. It is a starter ledger showing the types of pu
 
 | Area | Site or count | Evidence type | Date | Notes | Source |
 | --- | --- | --- | --- | --- | --- |
-| Epping Forest | Bell Hotel and Phoenix Hotel named publicly | local authority legal and public statements | 2025-07-30 | Strong example of current named-site evidence | https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/ |
-| Wakefield | Cedar Court Hotel named publicly | council leader statement | 2025-08-20 | Example of named current site with council dispute context | https://www.wakefield.gov.uk/council-information/news/the-home-office-has-confirmed-that-it-will-be-using-a-hotel-in-wakefield-district-as-contingency-asylum-accommodation/ |
-| Spelthorne | Stanwell Hotel named publicly | council statement | 2025-10-30 | Named site with strong local policy response | https://www.spelthorne.gov.uk/article/39191/Spelthorne-calls-for-constructive-action-not-politics-to-support-Stanwell-asylum-hotel |
-| Perth and Kinross | `2` hotels, `191` people, names not given | public reporting on council position | 2025-08-14 | Good example of public count without site names | https://www.dailyrecord.co.uk/news/scottish-news/almost-200-asylum-seekers-being-35656075 |
-| West Northamptonshire | `3` hotels, names not given | local authority public statement | 2025-08-21 | Useful secrecy-gap example | https://www.westnorthants.gov.uk/news/west-northamptonshire-council-comments-use-hotels-house-asylum-seekers |
+| Epping Forest | Bell Hotel and Phoenix Hotel named publicly | local authority legal and public statements | 2025-07-30 | Strong example of current named-site evidence | https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/ |
+| Wakefield | Cedar Court Hotel named publicly | council leader statement | 2025-08-20 | Example of named current site with council dispute context | https://www.wakefield.gov.uk/your-district/wakefield-council-statement-on-future-of-cedar-court-hotel |
+| Spelthorne | Stanwell Hotel named publicly | council statement | 2025-10-30 | Named site with strong local policy response | https://www.spelthorne.gov.uk/news/2025/spelthorne-borough-council-calls-constructive-action-stanwell-hotel-use |
+| Perth and Kinross | `2` hotels, `191` people, names not given | public reporting on council position | 2025-08-14 | Good example of public count without site names | https://www.pkc.gov.uk/article/24758/Asylum-seekers |
+| West Northamptonshire | `3` hotels, names not given | local authority public statement | 2025-08-21 | Useful secrecy-gap example | https://www.westnorthants.gov.uk/news/council-takes-first-steps-towards-planning-action-over-asylum-hotels |
 | East Lindsey | `1` hotel, name not given | local authority public statement | 2025-08-20 | Another place with count but limited detail | https://www.e-lindsey.gov.uk/article/27439/Response-to-Home-Office-announcement-that-it-will-use-a-hotel-in-the-district-for-asylum-contingency-accommodation |
 | Rushcliffe | Belvoir Hotel named | FOI publication | 2023-04-05 | Historic named-site evidence | https://www.whatdotheyknow.com/request/asylum_seekers_housed_in_rushcli_2 |
 | Coventry | Quality Hotel, Allesley Hotel, Novotel named historically | FOI publication | 2024-06-03 | Good historic sample of closed sites | https://www.whatdotheyknow.com/request/asylum_seekers_hotels_2#incoming-2663596 |
@@ -75,3 +75,30 @@ That makes the secrecy gap visible instead of letting it disappear into methodol
 - Use `named_current`, `named_historical`, `unnamed_count_only`, and `parliamentary_reference` as evidence classes.
 - Prefer council statements, planning papers, FOI responses, parliamentary material, and public inquiry documents over newspaper-only sourcing.
 - If only media coverage exists, mark the row as provisional until stronger evidence is found.
+
+## Correction, 29 August 2026
+
+Seven of the local and contract source URLs in this file were wrong, and wrong in a
+specific way: they did not point at pages that had been withdrawn, they pointed at pages
+that never existed. Each had zero captures in the Internet Archive on exact match, on an
+index that holds the neighbouring URL space on the same hosts densely, and none was in
+the UK Government Web Archive either. Two were structurally impossible: Wakefield has
+never used a `/council-information/news/` path and Cornwall has no `/housing/homelessness/`
+path.
+
+The underlying stories were all real. The URLs have been repointed to the genuine pages,
+each verified as HTTP 200 and read to confirm it supports the claim made against it. The
+dates and source titles that travelled with the fabricated URLs moved with them, because
+they described the page that did not exist.
+
+Three claims are NOT settled by that repointing and are still open:
+
+- The Perth and Kinross headcount of `191`. The council page confirms two hotels and
+  gives no number. The figure is not from this source.
+- The Wakefield sighting was described as "contingency" accommodation. Cedar Court is an
+  asylum hotel; the contingency hotel in that district was Hotel St Pierre, Newmillerdam.
+- West Northamptonshire's three sites are named in press reporting, not in the council
+  statement now cited, which confirms three hotels without naming them.
+
+Anything sourced out of this file before 29 August 2026 should be re-checked against the
+page it actually cites.

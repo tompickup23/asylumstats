@@ -151,6 +151,11 @@ function buildWatchEntries(rows, group, defaultPriority = "medium") {
       coverage: row.coverage,
       currentUrl: row.current_url,
       historicUrl: row.historic_url,
+      // Set to the retirement date when the publisher took the source down and no
+      // successor exists. The site must not offer a reader an "Open current page" link
+      // to a host that does not answer, and the link checker must not relitigate a
+      // retirement that has already been decided in this file.
+      retired: row.retired || null,
       historicPriority: row.historic_priority || defaultPriority,
       formats: splitPipeList(row.formats),
       routeFocus: splitPipeList(row.route_focus),

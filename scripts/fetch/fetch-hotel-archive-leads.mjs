@@ -7,7 +7,7 @@ const rawDir = path.resolve("data/raw/hotel_entities");
 const manifestDir = path.resolve("data/raw/manifests");
 
 const archiveSnapshotUrl =
-  "https://web.archive.org/web/20250826101522/https://howfarfrommydoorstep.github.io/clive/hotels.json";
+  "https://web.archive.org/web/20241213115031/https://howfarfrommydoorstep.github.io/clive/hotels.json";
 
 // Bounded, and allowed to fail loudly but quickly. This reads a Wayback snapshot of a
 // third-party GitHub Pages site, so it is two hops of someone else's uptime away from us.
@@ -68,7 +68,11 @@ const output = {
   source: {
     name: "migranthotels.net archive snapshot",
     archiveSnapshotUrl,
-    archiveSnapshotDate: "2025-08-26",
+    // 26 Aug 2025 was the capture date of migranthotels.net, copied onto this file by
+    // mistake. The Wayback index holds exactly one capture of clive/hotels.json and it
+    // is 13 Dec 2024. Replay of it 404s, so the index is the only evidence it exists,
+    // which is why the link checker verifies captures through CDX rather than replay.
+    archiveSnapshotDate: "2024-12-13",
     originalUrl: "https://howfarfrommydoorstep.github.io/clive/hotels.json"
   },
   leadCount: leads.length,

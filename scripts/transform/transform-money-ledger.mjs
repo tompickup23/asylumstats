@@ -398,7 +398,7 @@ const investigativeLeads = [
     id: "prime-values-undisclosed",
     title: "Prime regional contracts are mapped, but values are still not normalized in the starter public ledger",
     detail: `${primeRecordsMissingValue.length} current prime-provider rows are linked to visible hotel geography without a disclosed contract value in this starter ledger.`,
-    sourceUrl: "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
+    sourceUrl: "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded",
     severity: "warning"
   },
   {
@@ -412,7 +412,7 @@ const investigativeLeads = [
     id: "current-hotel-resolution-gap",
     title: "Current named hotels still outpace documented operator and owner chains",
     detail: `${unresolvedCurrentSites.length} current named hotel sites are visible in the live ledger but still sit in partial or unresolved entity coverage.`,
-    sourceUrl: "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+    sourceUrl: "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
     severity: "warning"
   },
   {
@@ -467,12 +467,12 @@ const moneyLedger = {
   sources: [
     {
       name: "Starter asylum contract and funding ledger",
-      sourceUrl: "https://www.gov.uk/government/publications/asylum-accommodation-and-support-contracts",
+      sourceUrl: "https://www.gov.uk/government/news/new-asylum-accommodation-contracts-awarded",
       type: "manual ledger"
     },
     {
       name: "Hotel entity ledger",
-      sourceUrl: "https://www.eppingforestdc.gov.uk/news/joint-open-letter-bell-hotel-and-phoenix-hotel/",
+      sourceUrl: "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
       type: "linked site evidence"
     }
   ]
