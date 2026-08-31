@@ -1,0 +1,14 @@
+{
+  "headline": "The most cited academic model of UK ethnic change got it wrong in one direction.",
+  "stats": [
+    { "value": "282 of 296", "label": "Local authorities where NEWETHPOP over-predicted the White British share", "color": "warning" },
+    { "value": "3.95pp", "label": "Mean absolute error against the Census 2021 actuals", "color": "coral" },
+    { "value": "1.56pp", "label": "Our own model on a genuine out-of-sample test, fitting 2001-2011 and forecasting 2021", "color": "success" },
+    { "value": "0", "label": "Published validations of UK ethnic projections before this one", "color": "accent" }
+  ],
+  "verdict": "The error runs one way: the UK diversified faster than the model expected.",
+  "source": "asylumstats.co.uk | NEWETHPOP (University of Leeds), ONS Census 2021",
+  "output_path": "public/videos/newethpop_validation_reel.mp4",
+  "format": "portrait",
+  "watermark": "asylumstats.co.uk"
+}
