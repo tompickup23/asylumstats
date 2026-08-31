@@ -47,3 +47,8 @@ export function getCrimeRatePercentile(areaCode: string): number | null {
   const below = rates.filter((r) => r < area.totalCrimeRate).length;
   return Math.round((below / rates.length) * 100);
 }
+
+/** Every tracked area's crime rate, for a percentile computed against the real spread. */
+export function allCrimeRates(): number[] {
+  return Object.values(data.areas).map((a) => a.totalCrimeRate);
+}

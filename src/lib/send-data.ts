@@ -44,3 +44,8 @@ export function getSendGrowthPercentile(areaCode: string): number | null {
   const below = rates.filter((r) => r < area.fiveYearGrowthPct).length;
   return Math.round((below / rates.length) * 100);
 }
+
+/** Every tracked area's five-year EHCP growth, for percentile comparisons. */
+export function allSendGrowth(): number[] {
+  return Object.values(data.areas).map((a) => a.fiveYearGrowthPct);
+}

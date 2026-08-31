@@ -1,36 +1,33 @@
 ---
-headline: "107,003 on asylum support at end-2025. 20% are in just 10 councils."
+headline: "93,293 on asylum support. One in five is in ten councils."
 date: "2026-04-14"
+updated: "2026-08-31"
 category: routes
-stat_value: "20%"
-stat_label: "In 10 councils"
+stat_value: "19.6%"
+stat_label: "Share of the supported population in 10 councils, 30 June 2026"
 verdict: alert
-source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
-source_label: "Home Office Local Authority Data, Dec 2025"
-summary: "21,205 of the 107,003 people on asylum support at 31 December 2025 are concentrated in just 10 local authorities. Glasgow leads with 3,835 (rate 59 per 10,000). Birmingham: 2,637. Liverpool: 2,189. Meanwhile dozens of councils take zero. The dispersal system is not dispersing."
+source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
+source_label: "Home Office local authority data, 30 June 2026"
+summary: "18,301 of the 93,293 people on asylum support at 30 June 2026 were in ten local authorities, 19.6% of the national total. Glasgow City carries 3,938, more than twice the next area. Dozens of councils carry nobody. The supported population has fallen from 107,003 at the end of 2025, but the concentration has barely moved."
 ---
 
-**Ten councils carry a fifth of the national asylum caseload. Dozens carry nothing.**
+**18,301 of the 93,293 people on asylum support** at 30 June 2026 were in ten local authorities. That is **19.6%** of the national total in ten places out of 361.
 
-| Council | Supported | Rate per 10K |
-|---------|-----------|-------------|
-| Glasgow City | 3,835 | 59.0 |
-| Birmingham | 2,637 | 22.3 |
-| Liverpool | 2,189 | 43.0 |
-| Hillingdon | 2,133 | 64.8 |
-| Manchester | 1,846 | 31.3 |
-| Leeds | 1,772 | 21.0 |
-| Belfast | 1,749 | 49.6 |
-| Hounslow | 1,720 | 57.4 |
-| Coventry | 1,719 | 46.6 |
-| Nottingham | 1,605 | 48.5 |
+| Council | On asylum support |
+|---|---|
+| Glasgow City | 3,938 |
+| Birmingham | 2,136 |
+| Liverpool | 1,961 |
+| Coventry | 1,700 |
+| Belfast | 1,540 |
+| Manchester | 1,509 |
+| Sandwell | 1,467 |
+| Leeds | 1,365 |
+| Nottingham | 1,352 |
+| Leicester | 1,333 |
 
-**21,205 people.** 19.8% of the 107,003 on support at 31 December 2025. In 10 councils out of 400+.
+**The total is falling. The concentration is not.** The supported population has come down from 107,003 at 31 December 2025 and a peak of 123,758 in September 2023. The share sitting in the top ten councils has moved by less than a point across the same period.
 
-Hillingdon: 64.8 per 10,000 residents. The national average is approximately 18. Hillingdon carries 3.6 times the average load. It is also the borough containing Heathrow Airport.
+That is the finding. Dispersal policy has reduced the number of people in the system faster than it has spread them out, so the places carrying the most are carrying a smaller number of a smaller total, in the same order as before.
 
-The "dispersal" system was supposed to spread asylum seekers across the country. It has not. The Asylum Accommodation and Support Contract gives three prime providers the job. They place people where housing is cheap and available. That means the same deprived councils, over and over.
-
-The councils at the top of this table are also the councils with the highest deprivation, the highest crime rates, the fastest demographic change, and the most stretched public services. The pressure compounds.
-
-**Source:** Home Office Immigration Statistics, local authority asylum support data, year ending December 2025.
+Counted per head of population rather than in absolute numbers, the table looks different again, and none of the ten largest is at the top of it. That list is in [Four Lancashire authorities are in the national top nine](/findings/lancashire-rate-table-top-nine/).

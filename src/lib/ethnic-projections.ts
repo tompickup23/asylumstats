@@ -310,3 +310,17 @@ export function areasBelowFiftyBy(year: number): {
 
   return { total, majorityToday };
 }
+
+/**
+ * Every area's absolute annual White British percentage-point change.
+ *
+ * The pressure index compares one area's rate of demographic change against the others,
+ * and it used a hand-transcribed list of 25 values to do it. This derives the same
+ * comparison from the projection file, over every area the file holds rather than the
+ * subset that happened to be typed out.
+ */
+export function allWhiteBritishChangeRates(): number[] {
+  return Object.values(data.areas)
+    .map((a) => Math.abs(a.annualChangePp?.white_british ?? NaN))
+    .filter((v) => Number.isFinite(v));
+}
