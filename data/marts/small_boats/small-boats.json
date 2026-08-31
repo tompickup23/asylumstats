@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "21_August_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "28_August_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-08-20",
-  "latestWeekEnding": "2026-08-16",
+  "coverageEnd": "2026-08-27",
+  "latestWeekEnding": "2026-08-23",
   "yearToDate": {
-    "asAt": "2026-08-20",
+    "asAt": "2026-08-27",
     "year": 2026,
-    "arrivals": 15897,
+    "arrivals": 16391,
     "priorYear": 2025,
-    "priorYearArrivals": 27997,
-    "changePct": -43.2
+    "priorYearArrivals": 29003,
+    "changePct": -43.5
   },
   "latestWeek": {
-    "weekEnding": "2026-08-16",
-    "arrivals": 405,
+    "weekEnding": "2026-08-23",
+    "arrivals": 250,
     "boats": 3,
-    "migrantsPrevented": 270,
-    "eventsPrevented": 16
+    "migrantsPrevented": 136,
+    "eventsPrevented": 3
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3181,6 +3181,13 @@
       "boats": 3,
       "migrantsPrevented": 270,
       "eventsPrevented": 16
+    },
+    {
+      "weekEnding": "2026-08-23",
+      "arrivals": 250,
+      "boats": 3,
+      "migrantsPrevented": 136,
+      "eventsPrevented": 3
     }
   ],
   "daily": [
@@ -18953,6 +18960,41 @@
       "date": "2026-08-20",
       "arrivals": 0,
       "boats": 0
+    },
+    {
+      "date": "2026-08-21",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-22",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-23",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-24",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-25",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-26",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-08-27",
+      "arrivals": 494,
+      "boats": 7
     }
   ]
 }
