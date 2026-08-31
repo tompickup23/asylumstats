@@ -32,7 +32,8 @@ const BUILD_OG = process.env.BUILD_OG === "1";
  */
 const SIZES = {
   og:     { width: 1200, height: 630,  pad: "60px 70px", mark: 40, brand: 18, tag: 11, stat: 96,  label: 14, title: 36, titleMax: "900px", url: 14, note: 12 },
-  square: { width: 1080, height: 1080, pad: "80px",      mark: 52, brand: 24, tag: 14, stat: 150, label: 18, title: 52, titleMax: "920px", url: 18, note: 15 }
+  square: { width: 1080, height: 1080, pad: "80px",      mark: 52, brand: 24, tag: 14, stat: 150, label: 18, title: 52, titleMax: "920px", url: 18, note: 15 },
+  story:  { width: 1080, height: 1920, pad: "110px 80px", mark: 56, brand: 26, tag: 15, stat: 168, label: 20, title: 58, titleMax: "920px", url: 19, note: 16 }
 } as const;
 
 type SizeName = keyof typeof SIZES;
@@ -100,7 +101,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const slug = f.id.replace(/\.md$/, "");
     return [
       { params: { slug: `findings/${slug}` }, props: { ...findingProps(f), size: "og" } },
-      { params: { slug: `square/findings/${slug}` }, props: { ...findingProps(f), size: "square" } }
+      { params: { slug: `square/findings/${slug}` }, props: { ...findingProps(f), size: "square" } },
+      { params: { slug: `story/findings/${slug}` }, props: { ...findingProps(f), size: "story" } }
     ];
   });
 
@@ -123,7 +125,72 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
   }));
 
+  const supported = latestQuarter.supportedAsylum;
+  const areaCount = localRouteLatest.areas.length;
+  const regionShares = new Map<string, number>();
+  for (const a of localRouteLatest.areas) {
+    if (!a.regionName) continue;
+    regionShares.set(a.regionName, (regionShares.get(a.regionName) ?? 0) + a.supportedAsylum);
+  }
+  const topRegion = [...regionShares.entries()].sort((x, y) => y[1] - x[1])[0];
+
+  const sectionPaths = [
+    {
+      slug: "national",
+      title: "The national picture, quarter by quarter",
+      stat: latestQuarter.awaitingInitialDecision.toLocaleString(),
+      statLabel: `Awaiting an initial decision, ${latestQuarter.stockPeriodLabel}`,
+      verdict: "alert"
+    },
+    {
+      slug: "regional",
+      title: `The ${topRegion[0]} carries more than any other region`,
+      stat: `${((topRegion[1] / supported) * 100).toFixed(1)}%`,
+      statLabel: `${topRegion[0]} share of the supported population`,
+      verdict: "alert"
+    },
+    {
+      slug: "places",
+      title: "Every UK local authority, on one page",
+      stat: areaCount.toLocaleString(),
+      statLabel: "Local authorities with asylum support data",
+      verdict: "info"
+    },
+    {
+      slug: "compare",
+      title: "Put two places side by side",
+      stat: areaCount.toLocaleString(),
+      statLabel: "Areas you can compare, on the same measures",
+      verdict: "info"
+    },
+    {
+      slug: "spending",
+      title: "Follow the asylum money",
+      stat: supported.toLocaleString(),
+      statLabel: "People on asylum support, and what they cost",
+      verdict: "critical"
+    },
+    {
+      slug: "entities",
+      title: "Three companies hold every prime accommodation contract",
+      stat: "3",
+      statLabel: "Prime providers: Serco, Mears, Clearsprings",
+      verdict: "critical"
+    },
+    {
+      slug: "findings",
+      title: "Findings, each one checked against source",
+      stat: findings.filter((f) => !f.data.superseded_by).length.toLocaleString(),
+      statLabel: "Published findings and articles",
+      verdict: "info"
+    }
+  ].map((p) => ({
+    params: { slug: p.slug },
+    props: { title: p.title, stat: p.stat, statLabel: p.statLabel, verdict: p.verdict }
+  }));
+
   return [
+    ...sectionPaths,
     {
       params: { slug: "home" },
       props: {
