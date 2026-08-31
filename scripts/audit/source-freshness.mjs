@@ -73,7 +73,8 @@ for (const file of readdirSync(MANIFESTS).filter((name) => name.endsWith(".json"
         detail: manifest.cadence ?? manifest.release ?? "",
         nextEdition: `data to ${manifest.coverageEnd}`,
         overdueDays: ageDays - manifest.maxAgeDays,
-        ageDays
+        ageDays,
+        blockedOn: manifest.blockedOn
       });
       continue;
     }
@@ -88,7 +89,8 @@ for (const file of readdirSync(MANIFESTS).filter((name) => name.endsWith(".json"
     state: overdueDays > 0 ? "OVERDUE" : "current",
     detail: manifest.release ?? "",
     nextEdition: manifest.nextEdition,
-    overdueDays
+    overdueDays,
+    blockedOn: manifest.blockedOn
   });
 }
 
@@ -115,7 +117,19 @@ for (const row of rows) {
   }
 }
 
+/**
+ * A source that is overdue because nobody has built its ingest yet is a backlog item,
+ * not a regression, and failing the weekly refresh on it every week until someone does
+ * teaches people to ignore the gate. A manifest may declare `blockedOn` to say so. Those
+ * rows still print, still count as overdue in the summary, and are named in their own
+ * line so they cannot quietly disappear; they just do not fail --strict.
+ *
+ * Anything without `blockedOn` fails --strict as before. Adding the field is a deliberate
+ * act with a stated reason, which is the difference between a known gap and a silent one.
+ */
 const overdue = rows.filter((row) => row.state === "OVERDUE");
+const blocked = overdue.filter((row) => row.blockedOn);
+const regressions = overdue.filter((row) => !row.blockedOn);
 const unknown = rows.filter((row) => row.state === "undeclared" || row.state === "unreadable");
 
 console.log();
@@ -124,8 +138,14 @@ if (overdue.length) {
 } else {
   console.log("No source is past its next-edition date.");
 }
+if (blocked.length) {
+  console.log(
+    `${blocked.length} of those are known gaps and do not fail --strict:\n` +
+      blocked.map((r) => `  ${r.dataset}: ${r.blockedOn}`).join("\n")
+  );
+}
 if (unknown.length) {
   console.log(`${unknown.length} source(s) without declared provenance: ${unknown.map((r) => r.dataset).join(", ")}`);
 }
 
-if (strict && overdue.length) process.exit(1);
+if (strict && regressions.length) process.exit(1);

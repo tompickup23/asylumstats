@@ -1,0 +1,23 @@
+{
+  "dataset": "dfe_send",
+  "publisher": "Department for Education",
+  "release": "Special educational needs in England, and the SEN2 education health and care plans return",
+  "cadence": "annual, academic year",
+  "landing": "https://explore-education-statistics.service.gov.uk/find-statistics/special-educational-needs-in-england",
+  "bank": "none, this dataset has no fetch or transform script",
+  "areaTier": "local authority, 25 areas only",
+  "provenance": "Hand-authored and committed in a7bbed2. The 25 rows were transcribed from the 2023/24 academic year, with five-year growth measured from 2019/20. DfE publishes this through the explore-education-statistics API, so of the three place-profile datasets this is the one with a real machine-readable source to build against first.",
+  "manualFields": [
+    "every row: no generator exists, so nothing regenerates when DfE publishes"
+  ],
+  "coverageEnd": "2024-07-31",
+  "maxAgeDays": 550,
+  "nextEdition": "2026-06-01",
+  "fileCount": 1,
+  "files": [
+    {
+      "file": "src/data/live/send-dashboard.json"
+    }
+  ],
+  "blockedOn": "no fetch or transform script exists for this dataset, so there is nothing to run. Building one widens coverage past the 25 hand-picked areas, which changes the comparison set behind every pressure-index percentile the site publishes."
+}
