@@ -144,7 +144,7 @@ const sections = [
         <span class="stat-value">{latestQuarter.awaitingInitialDecision.toLocaleString()}</span>
         <span class="stat-label">Awaiting decision</span>
       </article>
-      <article class="stat-card stat-card--coral">
+      <article class="stat-card stat-card--critical">
         <span class="stat-value">{latestQuarter.hotelAccommodation.toLocaleString()}</span>
         <span class="stat-label">In hotels</span>
       </article>
@@ -311,7 +311,7 @@ const sections = [
           {bottomGrantRates.map((row: any) => (
             <div class="data-row">
               <span style="font-size: 0.85rem;">{row.nationality}</span>
-              <span class="data-row-value" style="color: var(--coral, #a51d5c);">{row.grantRatePct}%</span>
+              <span class="data-row-value" style="color: var(--critical);">{row.grantRatePct}%</span>
             </div>
           ))}
         </div>
@@ -511,7 +511,7 @@ const sections = [
   }
   .stat-card--accent { border-left: 3px solid var(--accent); }
   .stat-card--warn { border-left: 3px solid var(--warning); }
-  .stat-card--coral { border-left: 3px solid var(--critical); }
+  .stat-card--critical { border-left: 3px solid var(--critical); }
 
   .findings-grid {
     display: grid;
