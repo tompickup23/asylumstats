@@ -22,8 +22,20 @@ import { getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 
 const BUILD_OG = process.env.BUILD_OG === "1";
 
-const OG_WIDTH = 1200;
-const OG_HEIGHT = 630;
+/**
+ * Two surfaces, one layout. The landscape card is what a link preview shows on X,
+ * Facebook, LinkedIn and Slack. The square is what a person posts as an image, and it is
+ * also the card offered on the finding page itself for right-click-and-save. They are
+ * generated from the same tree so the two can never drift apart: only the type scale and
+ * the padding differ, because a 96px numeral that anchors a 1200x630 looks lost in a
+ * 1080 square.
+ */
+const SIZES = {
+  og:     { width: 1200, height: 630,  pad: "60px 70px", mark: 40, brand: 18, tag: 11, stat: 96,  label: 14, title: 36, titleMax: "900px", url: 14, note: 12 },
+  square: { width: 1080, height: 1080, pad: "80px",      mark: 52, brand: 24, tag: 14, stat: 150, label: 18, title: 52, titleMax: "920px", url: 18, note: 15 }
+} as const;
+
+type SizeName = keyof typeof SIZES;
 
 // The estate ground. Every social and Open Graph surface across the five sites uses the
 // same dark ground and the site's own accent-bright on top of it; only the accent varies.
@@ -77,15 +89,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const findings = await getCollection("findings");
   const routeDashboard = loadRouteDashboard();
 
-  const findingPaths = findings.map((f) => ({
-    params: { slug: `findings/${f.id.replace(/\.md$/, "")}` },
-    props: {
-      title: f.data.headline,
-      stat: f.data.stat_value,
-      statLabel: f.data.stat_label,
-      verdict: f.data.verdict
-    }
-  }));
+  const findingProps = (f: (typeof findings)[number]) => ({
+    title: f.data.headline,
+    stat: f.data.stat_value,
+    statLabel: f.data.stat_label,
+    verdict: f.data.verdict
+  });
+
+  const findingPaths = findings.flatMap((f) => {
+    const slug = f.id.replace(/\.md$/, "");
+    return [
+      { params: { slug: `findings/${slug}` }, props: { ...findingProps(f), size: "og" } },
+      { params: { slug: `square/findings/${slug}` }, props: { ...findingProps(f), size: "square" } }
+    ];
+  });
 
   const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
   const localRouteLatest = loadLocalRouteLatest();
@@ -133,12 +150,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const GET: APIRoute = async ({ props }) => {
   ensureFonts();
 
-  const { title, stat, statLabel, verdict } = props as {
+  const { title, stat, statLabel, verdict, size } = props as {
     title: string;
     stat: string;
     statLabel: string;
     verdict: string;
+    size?: SizeName;
   };
+
+  const S = SIZES[size ?? "og"];
 
   const statColor = verdictColor[verdict] ?? COLORS.accent;
 
@@ -147,12 +167,12 @@ export const GET: APIRoute = async ({ props }) => {
       type: "div",
       props: {
         style: {
-          width: `${OG_WIDTH}px`,
-          height: `${OG_HEIGHT}px`,
+          width: `${S.width}px`,
+          height: `${S.height}px`,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "60px 70px",
+          padding: S.pad,
           background: COLORS.ground,
           fontFamily: "Source Sans 3"
         },
@@ -169,7 +189,7 @@ export const GET: APIRoute = async ({ props }) => {
               children: [
                 {
                   type: "img",
-                  props: { src: MARK_URI, width: 40, height: 40 }
+                  props: { src: MARK_URI, width: S.mark, height: S.mark }
                 },
                 {
                   type: "div",
@@ -185,7 +205,7 @@ export const GET: APIRoute = async ({ props }) => {
                           style: {
                             fontFamily: "Source Serif 4",
                             fontWeight: 600,
-                            fontSize: "18px",
+                            fontSize: `${S.brand}px`,
                             color: COLORS.text
                           },
                           children: "asylumstats"
@@ -195,7 +215,7 @@ export const GET: APIRoute = async ({ props }) => {
                         type: "span",
                         props: {
                           style: {
-                            fontSize: "11px",
+                            fontSize: `${S.tag}px`,
                             color: COLORS.muted,
                             letterSpacing: "0.05em"
                           },
@@ -225,7 +245,7 @@ export const GET: APIRoute = async ({ props }) => {
                   props: {
                     style: {
                       fontFamily: "Source Serif 4",
-                      fontSize: "96px",
+                      fontSize: `${S.stat}px`,
                       fontWeight: 600,
                       color: statColor,
                       lineHeight: 1,
@@ -238,7 +258,7 @@ export const GET: APIRoute = async ({ props }) => {
                   type: "div",
                   props: {
                     style: {
-                      fontSize: "14px",
+                      fontSize: `${S.label}px`,
                       color: COLORS.muted,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em"
@@ -251,11 +271,11 @@ export const GET: APIRoute = async ({ props }) => {
                   props: {
                     style: {
                       fontFamily: "Source Serif 4",
-                      fontSize: "36px",
+                      fontSize: `${S.title}px`,
                       fontWeight: 600,
                       color: COLORS.text,
                       lineHeight: 1.15,
-                      maxWidth: "900px"
+                      maxWidth: S.titleMax
                     },
                     children: title
                   }
@@ -279,7 +299,7 @@ export const GET: APIRoute = async ({ props }) => {
                   type: "span",
                   props: {
                     style: {
-                      fontSize: "14px",
+                      fontSize: `${S.url}px`,
                       color: COLORS.accent,
                       fontWeight: 600
                     },
@@ -290,7 +310,7 @@ export const GET: APIRoute = async ({ props }) => {
                   type: "span",
                   props: {
                     style: {
-                      fontSize: "12px",
+                      fontSize: `${S.note}px`,
                       color: COLORS.muted
                     },
                     children: "Every number sourced."
@@ -303,8 +323,8 @@ export const GET: APIRoute = async ({ props }) => {
       }
     },
     {
-      width: OG_WIDTH,
-      height: OG_HEIGHT,
+      width: S.width,
+      height: S.height,
       fonts: [
         { name: "Source Sans 3", data: sansRegular!, weight: 400, style: "normal" },
         { name: "Source Sans 3", data: sansSemiBold!, weight: 600, style: "normal" },
@@ -313,7 +333,7 @@ export const GET: APIRoute = async ({ props }) => {
     }
   );
 
-  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: OG_WIDTH } });
+  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: S.width } });
   const png = Buffer.from(resvg.render().asPng());
 
   return new Response(new Uint8Array(png), {
