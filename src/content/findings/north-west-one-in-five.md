@@ -1,31 +1,31 @@
 ---
-headline: "The North West carries 1 in 5 UK asylum seekers. More than London."
+headline: "The North West carries 1 in 5 people on asylum support. More than London."
 date: "2026-04-14"
+updated: "2026-08-31"
 category: routes
-stat_value: "19.5%"
-stat_label: "NW share of national caseload"
+stat_value: "20.3%"
+stat_label: "North West share of the supported population, 30 June 2026"
 verdict: alert
-source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
-source_label: "Home Office Local Authority Data, Dec 2025"
-summary: "20,864 people on asylum support in the North West. 19.5% of the 107,003 national total at 31 December 2025. Liverpool (2,189), Manchester (1,846), Rochdale (1,359), Bolton (1,281), Oldham (1,111). Lancashire carries its share too: Blackburn (649), Preston (554), Burnley (461). The region that voted most heavily for change carries the heaviest load."
+source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
+source_label: "Home Office local authority data, 30 June 2026"
+summary: "18,962 people on asylum support in the North West at 30 June 2026, 20.3% of the 93,293 national total. London carries 12,140, or 13.0%. The North West has held the largest regional share through every quarter of the current decline, and its share has risen slightly as the national total has fallen."
 ---
 
-**20,864 asylum seekers supported in the North West. One in five nationally.**
+**18,962 people on asylum support in the North West at 30 June 2026. One in five nationally.**
 
-The North West of England carries 19.5% of the entire UK asylum caseload. More than London. More than the South East. More than any other region.
+The region carries **20.3%** of the UK supported population. London carries 12,140, or **13.0%**. The West Midlands is third on 11,756.
 
-Liverpool: 2,189. Rate 43.0 per 10,000.
-Manchester: 1,846. Rate 31.3.
-Rochdale: 1,359. Rate 60.6.
-Bolton: 1,281. Rate 43.2.
-Oldham: 1,111. Rate 46.4.
+| Region | On asylum support | Share |
+|---|---|---|
+| North West | 18,962 | 20.3% |
+| London | 12,140 | 13.0% |
+| West Midlands | 11,756 | 12.6% |
+| Yorkshire and The Humber | 8,164 | 8.8% |
+| East Midlands | 7,710 | 8.3% |
+| North East | 7,049 | 7.6% |
 
-Lancashire is no different. Blackburn: 649. Preston: 554. Burnley: 461.
+The national total has fallen from 107,003 at the end of 2025 to 93,293. The North West share has not fallen with it. When the system contracts, it contracts fastest where placements were most recent, and the North West's are not recent.
 
-The prime provider for the North West is Serco. One company controls all asylum accommodation placement across the entire region. No competition. No alternative. The Home Office contract decides where people go. Councils get £1,200 per person per year and a letter saying it is happening.
+**Why here.** The prime accommodation provider for the North West is Serco, on a contract that runs to 2029. One company handles placement across the whole region. The Home Office contract decides where people go, and the council is told rather than asked.
 
-This is the region that voted most heavily for Brexit. The region where Reform UK polls highest outside London. The region where demographic change is fastest in towns like Burnley, Pendle, and Blackburn.
-
-The dispersal system puts the greatest load on the communities least able to absorb it.
-
-**Source:** Home Office Immigration Statistics, local authority asylum support data, year ending December 2025.
+Within the region the load is not spread evenly either. Four Lancashire authorities are among the nine highest in the country once you count per head of population, and none of them is Manchester or Liverpool. That list is in [Four Lancashire authorities are in the national top nine](/findings/lancashire-rate-table-top-nine/).

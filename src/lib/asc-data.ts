@@ -38,3 +38,8 @@ export function getAscSpendPercentile(areaCode: string): number | null {
   const below = spends.filter((s) => s < area.grossSpendPerCapita).length;
   return Math.round((below / spends.length) * 100);
 }
+
+/** Every tracked area's adult social care spend per head, for percentile comparisons. */
+export function allAscSpend(): number[] {
+  return Object.values(data.areas).map((a) => a.grossSpendPerCapita);
+}

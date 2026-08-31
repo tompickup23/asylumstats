@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { formatFindingDate, findingDisplayDate, findingIsRevised } from "../../lib/finding-dates";
 
 const allContent = (await getCollection("findings"))
   .filter((f) => !f.data.superseded_by)
   .sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  (a, b) =>
+    new Date(findingDisplayDate(b.data)).getTime() -
+    new Date(findingDisplayDate(a.data)).getTime()
 );
 
 const articles = allContent.filter((f) => f.data.content_type === "article");
@@ -39,6 +42,7 @@ const categoryLabel: Record<string, string> = {
 ---
 
 <BaseLayout
+  image="/og/findings.png"
   title="Asylum research and findings: cost, grant rates and dispersal"
   description="Articles and findings on UK asylum costs, demographic change, and the system. Every number sourced. No spin."
 >
@@ -60,7 +64,9 @@ const categoryLabel: Record<string, string> = {
             <div class="article-hero-meta">
               <span class="article-type-badge">Article</span>
               <span class="article-category">{categoryLabel[article.data.category] ?? article.data.category}</span>
-              <span class="article-date">{article.data.date}</span>
+              <span class="article-date">
+                {findingIsRevised(article.data) ? "Updated " : ""}{formatFindingDate(findingDisplayDate(article.data))}
+              </span>
             </div>
             <h2 class="article-hero-headline">{article.data.headline}</h2>
             <div class="article-hero-stat">
@@ -85,7 +91,9 @@ const categoryLabel: Record<string, string> = {
         <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-card">
           <div class="finding-meta">
             <span class="finding-category">{categoryLabel[finding.data.category] ?? finding.data.category}</span>
-            <span class="finding-date">{finding.data.date}</span>
+            <span class="finding-date">
+              {findingIsRevised(finding.data) ? "Updated " : ""}{formatFindingDate(findingDisplayDate(finding.data))}
+            </span>
           </div>
           <h3 class="finding-headline">{finding.data.headline}</h3>
           <div class="finding-stat-row">

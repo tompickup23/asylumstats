@@ -10,9 +10,22 @@ export default defineConfig({
   // page. It is renamed to match what the page says. The old path is cited, so it is not
   // being deleted: in a static build Astro emits an HTML page at the old URL that
   // redirects and sets a canonical, which is what a static host can honour.
+  // Four more slugs renamed on 31 August 2026, for the same reason as the 109 above:
+  // each one had a figure baked into the URL, and every one of those figures has since
+  // moved. A slug that states a number will always rot, so the replacements state the
+  // subject instead. Blackburn is the exception: its slug said 2028 while every line of
+  // the page said 2027, so it was wrong on the day it was published.
   redirects: {
     "/findings/109-areas-minority-wbi-2051": "/findings/86-areas-minority-wbi-2051",
-    "/findings/109-areas-minority-wbi-2051/": "/findings/86-areas-minority-wbi-2051/"
+    "/findings/109-areas-minority-wbi-2051/": "/findings/86-areas-minority-wbi-2051/",
+    "/findings/blackburn-minority-wb-2028": "/findings/blackburn-minority-wb-2027",
+    "/findings/blackburn-minority-wb-2028/": "/findings/blackburn-minority-wb-2027/",
+    "/findings/backlog-64k-awaiting-decision": "/findings/backlog-awaiting-decision",
+    "/findings/backlog-64k-awaiting-decision/": "/findings/backlog-awaiting-decision/",
+    "/findings/small-boats-41k-2025": "/findings/small-boats-arrivals",
+    "/findings/small-boats-41k-2025/": "/findings/small-boats-arrivals/",
+    "/findings/daily-hotel-cost-5-77m": "/findings/daily-hotel-cost",
+    "/findings/daily-hotel-cost-5-77m/": "/findings/daily-hotel-cost/"
   },
   vite: {
     plugins: [tailwindcss()],

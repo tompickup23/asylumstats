@@ -346,6 +346,7 @@ const compareSections = [
 ---
 
 <BaseLayout
+  image="/og/compare.png"
   title="Compare asylum numbers between UK local authorities"
   description="Compare local asylum support, contingency accommodation, Ukraine arrivals, Afghan pathways, and place-level route pressure."
 >
@@ -553,7 +554,7 @@ const compareSections = [
                   {wbi2051 != null && (
                     <div class="data-row">
                       <span>WBI projected 2051</span>
-                      <span class="data-row-value" style={wbi2051 < 50 ? "color: var(--coral, #EF4444);" : ""}>{wbi2051.toFixed(1)}%</span>
+                      <span class="data-row-value" style={wbi2051 < 50 ? "color: var(--critical);" : ""}>{wbi2051.toFixed(1)}%</span>
                     </div>
                   )}
                 </>

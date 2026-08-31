@@ -1,30 +1,14 @@
 {
-  "headline": "The asylum backlog is growing",
+  "headline": "The asylum backlog is falling. The bill is not the same thing.",
   "stats": [
-    {
-      "value": "127,834",
-      "label": "People waiting for an initial asylum decision",
-      "color": "coral"
-    },
-    {
-      "value": "4.5",
-      "label": "Average years waiting for a decision",
-      "color": "warning"
-    },
-    {
-      "value": "68%",
-      "label": "Of initial decisions are grants of protection",
-      "color": "accent"
-    },
-    {
-      "value": "£580M",
-      "label": "Annual cost of the asylum backlog",
-      "color": "coral"
-    }
+    { "value": "40,168", "label": "Waiting for an initial decision at 30 June 2026", "color": "warning" },
+    { "value": "175,457", "label": "The peak, in June 2023", "color": "coral" },
+    { "value": "22,176", "label": "Initial decisions in the quarter, against 17,233 new claims", "color": "success" },
+    { "value": "93,293", "label": "Still on asylum support, because a decision does not end support", "color": "accent" }
   ],
-  "verdict": "Decisions delayed. Costs escalate.",
-  "source": "Home Office quarterly statistics",
-  "output_path": "reels/backlog.mp4",
+  "verdict": "A shorter queue is not a smaller system.",
+  "source": "asylumstats.co.uk | Home Office immigration statistics, year ending June 2026",
+  "output_path": "assets/output/backlog_reel.mp4",
   "format": "portrait",
   "watermark": "asylumstats.co.uk"
 }

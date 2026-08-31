@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
-/* Estate brand system, 23 August 2026.
-   briefings/uk-network-brand/BRAND-SYSTEM-2026-08-23.md in the clawd repo is the
-   source of truth; the tokens below are that file's asylumstats block verbatim.
+/* estate-tokens:start
+   Generated from briefings/uk-network-design-system/shared/tokens.css.tmpl in the
+   clawd repo. Do not hand edit: run shared/apply.py to regenerate.
 
-   Source Serif 4 for display, Source Sans 3 for UI. Both are a designed superfamily,
-   both carry real tabular figures, which matters on a site that is almost entirely
-   league tables and stat tiles. Latin and latin-ext only: latin-ext costs 18.4KB and
-   only downloads when a page actually needs one of its glyphs. Self-hosted, because
-   every site in this estate runs a CSP with no font host, so a Google Fonts link would
-   be blocked at the browser.
+   The estate brand system, BRAND-SYSTEM-2026-08-23.md, is the source of truth for
+   every value above the accent block. Only the accent triple varies between the five
+   sites; everything else is byte identical on all of them.
 
-   Display is loaded at 600 only, UI at 400 and 600. Nothing else is used, so nothing
-   else is shipped. */
+   Site: asylumstats
+   Applied: 2026-08-31 */
+
+/* Source Serif 4 for display, Source Sans 3 for UI. A designed superfamily, so display
+   and UI harmonise by construction, and both carry real tabular figures, which is what
+   stops a column of percentages jittering line to line. Self hosted: every site in this
+   estate runs a CSP with no font host, so a Google Fonts link would be blocked at the
+   browser. Display at 600 only, UI at 400 and 600. Nothing else is used or shipped. */
 @import "@fontsource/source-serif-4/latin-600.css";
 @import "@fontsource/source-serif-4/latin-ext-600.css";
 @import "@fontsource/source-sans-3/latin-400.css";
@@ -21,61 +24,42 @@
 @import "@fontsource/source-sans-3/latin-ext-600.css";
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 
-  /* Shared across the five estate sites. Identical everywhere; only the accent varies. */
+  /* === Shared neutrals. Identical on all five sites. === */
   --bg: #ffffff;
   --bg-subtle: #f5f6f7;
   --bg-card: #ffffff;
   --border: #dbdfe3;
   --border-strong: #c2c8ce;
-  --text: #171b1f;
-  --text-muted: #545c63;
-  --text-faint: #616970;
+  --text: #171b1f;        /* 17.31 on white, 16.00 on subtle */
+  --text-muted: #545c63;  /*  6.80 on white,  6.28 on subtle */
+  --text-faint: #616970;  /*  5.58 on white,  5.16 on subtle */
 
-  /* The Asylum Stats accent triple. Slate blue at hue 205, deliberately spaced from the
-     other four sites, and deliberately not the #06b6d4 cyan this site used before: that
-     sat 27 degrees from the food hygiene green, and hue is the only thing separating
-     one site in this family from another.
-
-     deep is links, headings and rules. bright is the mark on the dark ground. wash is
-     stat tiles and hovers. */
-  --accent: #2f5773;
-  --accent-bright: #82abcb;
-  --accent-wash: #eef3f7;
-
-  /* The dark ground. Social and Open Graph surfaces only, plus the footer, which is the
-     one place on the page that plays the same role: a closing band, not content. */
+  /* The dark ground. Social and Open Graph surfaces, plus the footer, which plays the
+     same role on the page: a closing band, not content. */
   --ground: #0f1317;
   --ground-ink: #f4f6f7;
   --ground-muted: #98a3ac;
 
-  /* Semantic colours. The estate spec does not define these, because it covers identity
-     rather than data. They are the site's own, chosen the way the spec chooses its
-     tokens: computed against all three backgrounds rather than eyeballed, and asserted
-     in tests/brand-contrast.test.mjs.
+  /* === The only per site block. === */
+  --accent: #2f5773;        /* links, headings and rules on white */
+  --accent-bright: #82abcb; /* the mark and the URL on the dark ground */
+  --accent-wash: #eef3f7;   /* stat tiles and card hovers */
+  /* What prints ON the accent: the skip link, a solid button, the white shape inside
+     the site mark. It is a token rather than a hard coded #ffffff because the accent
+     flips to its bright value in dark mode, where white lands at 2.58:1 on it. Anything
+     that hard codes white over var(--accent) is legible in light and broken in dark. */
+  --accent-ink: #ffffff;
 
-       positive  6.10 on white, 5.63 on subtle, 5.46 on wash
-       warning   5.91 / 5.47 / 5.29
-       critical  6.57 / 6.08 / 5.89 */
+  /* === Semantic. Computed against white, subtle and the wash, never eyeballed. === */
   --positive: #1f6f4f;
   --warning: #8a5a10;
   --critical: #b42318;
 
-  /* Chart series. Four identity hues in a fixed order, then two neutrals for residual
-     buckets. Assigned in order and never cycled.
-
-     The old set was the dark build's: cyan, amber, violet, mint, on near-black. Two of
-     those measured 2.34 and 2.98 against white and the mint and cyan were barely
-     separable once moved onto a light ground.
-
-     This set was validated rather than chosen by eye, with the dataviz palette checker
-     across ALL pairs, not just adjacent ones: lightness band, chroma floor, colour-vision
-     separation under deutan, protan and tritan, normal-vision separation and contrast
-     against the surface, all passing. Four is where all-pairs stops passing, which is why
-     there are four and not six: every fifth hue tried collided with one of these under
-     deuteranopia or read as its neighbour to a full-colour reader. Residual categories
-     take the neutrals, which separate on lightness instead of hue. */
+  /* === Chart series. Four identity hues assigned in order and never cycled, then two
+     neutrals for residual buckets. Four is where all pairs separation stops passing
+     under deuteranopia, which is why there are four rather than six. === */
   --series-1: #1a6ba8;
   --series-2: #b45309;
   --series-3: #6d28d9;
@@ -83,17 +67,100 @@
   --series-neutral: #6b7280;
   --series-neutral-soft: #8b939c;
 
-  /* Shadows are for lifting a card off white, not for depth theatre. The dark build used
-     28px blurs at 42 per cent black, which on a light ground reads as smudge. */
-  --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
+  /* === Geometry and elevation. Shadow lifts a card off white; it is not depth
+     theatre. The dark build used 28px blurs at 42 per cent black, which on a light
+     ground reads as smudge. === */
+  --radius: 10px;
+  --radius-sm: 6px;
   --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
-
-  --radius: 14px;
-  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
 
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
 }
+
+/* === Dark. The same tokens, inverted, so no component needs a second rule. The accent
+   lifts to its bright value because the deep one does not clear 4.5:1 on the ground,
+   and the wash becomes a deep tint rather than a pale one.
+
+   Three states, not two. An explicit choice on the root element wins over the operating
+   system preference in BOTH directions, which a bare media query cannot do: with only
+   `@media (prefers-color-scheme: dark) { :root { ... } }` there is no rule for a reader
+   who has asked for light on a dark set machine, so the media query paints them dark
+   anyway. The declarations below are written ONCE, here, and apply.py re-wraps this same
+   block into the guarded media query underneath. They cannot drift because only one of
+   them is authored. === */
+:root[data-theme="dark"] {
+  --bg: #0f1317;
+  --bg-subtle: #171c21;
+  --bg-card: #141a1f;
+  --border: #2a3138;
+  --border-strong: #3d464e;
+  --text: #f4f6f7;
+  --text-muted: #b6c0c8;
+  --text-faint: #98a3ac;
+  --ground: #05080a;
+
+  --accent: #82abcb;
+  --accent-bright: #82abcb;
+  --accent-wash: #122430;
+  --accent-ink: #0f1317;
+
+  --positive: #6fcf9a;
+  --warning: #f0b03e;
+  --critical: #f2857a;
+
+  --series-1: #6aa9de;
+  --series-2: #e0a35c;
+  --series-3: #b49cf0;
+  --series-4: #e888b0;
+  --series-neutral: #9aa2ab;
+  --series-neutral-soft: #7b838c;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+
+  --tooltip-bg: #e6edf3;
+  --tooltip-fg: #0d1117;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1317;
+    --bg-subtle: #171c21;
+    --bg-card: #141a1f;
+    --border: #2a3138;
+    --border-strong: #3d464e;
+    --text: #f4f6f7;
+    --text-muted: #b6c0c8;
+    --text-faint: #98a3ac;
+    --ground: #05080a;
+
+    --accent: #82abcb;
+    --accent-bright: #82abcb;
+    --accent-wash: #122430;
+    --accent-ink: #0f1317;
+
+    --positive: #6fcf9a;
+    --warning: #f0b03e;
+    --critical: #f2857a;
+
+    --series-1: #6aa9de;
+    --series-2: #e0a35c;
+    --series-3: #b49cf0;
+    --series-4: #e888b0;
+    --series-neutral: #9aa2ab;
+    --series-neutral-soft: #7b838c;
+
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+
+    --tooltip-bg: #e6edf3;
+    --tooltip-fg: #0d1117;
+  }
+}
+/* estate-tokens:end */
 
 * {
   box-sizing: border-box;
@@ -191,7 +258,7 @@ textarea {
   padding: 0.85rem 1rem;
   border-radius: 999px;
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-ink);
   font-weight: 600;
   text-decoration: none;
   transform: translateY(-150%);
@@ -295,7 +362,7 @@ textarea {
 }
 
 .site-nav a[aria-current="page"] {
-  color: #ffffff;
+  color: var(--accent-ink);
   border-color: var(--border);
   background: var(--accent);
   box-shadow: 0 16px 36px color-mix(in srgb, var(--positive) 22%, transparent);
@@ -368,7 +435,7 @@ textarea {
   border: 1px solid var(--border-strong);
   border-radius: calc(var(--radius) + 6px);
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
   box-shadow: var(--shadow);
 }
 
@@ -992,7 +1059,7 @@ button.source-pill {
 }
 
 .page-contents.priority .page-contents-links a:first-child {
-  color: #ffffff;
+  color: var(--accent-ink);
   border-color: transparent;
   background: linear-gradient(135deg, var(--warning) 0%, var(--critical) 100%);
   box-shadow: 0 12px 26px color-mix(in srgb, var(--critical) 18%, transparent);
@@ -1033,7 +1100,7 @@ button.source-pill {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: rgba(217, 245, 255, 0.32);
+  color: color-mix(in srgb, var(--accent) 45%, transparent);
   font-family: var(--font-display);
   font-size: 1.45rem;
   font-weight: 600;
@@ -1215,12 +1282,12 @@ button.source-pill {
 .home-panel {
   padding: 1rem 1.05rem;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-panel-strong {
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-panel::before,
@@ -1243,7 +1310,7 @@ button.source-pill {
 .home-map-panel {
   min-height: 0;
   padding: 0;
-  background: linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+  background: var(--bg-subtle);
 }
 
 .home-map-stage[data-home-map-depth="region"] {
@@ -1341,8 +1408,8 @@ button.source-pill {
   border: 1px solid var(--border);
   border-radius: 18px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
 }
 
@@ -1350,17 +1417,17 @@ button.source-pill {
   gap: 0.15rem;
   padding: 0.62rem 0.7rem;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-map-stage[data-home-map-depth="region"] .home-map-copy {
   border-color: color-mix(in srgb, var(--positive) 16%, transparent);
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.2), 0 0 0 1px color-mix(in srgb, var(--positive) 4%, transparent) inset;
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--positive) 4%, transparent) inset;
 }
 
 .home-map-stage[data-home-map-depth="place"] .home-map-copy {
   border-color: color-mix(in srgb, var(--accent) 20%, transparent);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.26), 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent) inset;
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent) inset;
 }
 
 .home-map-panel.is-focused .home-map-copy .kicker {
@@ -1502,7 +1569,7 @@ button.source-pill {
 .home-visual-card-comparison {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-segment-track,
@@ -1699,7 +1766,7 @@ button.source-pill {
   border-radius: 22px;
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-story-primary,
@@ -1751,7 +1818,7 @@ button.source-pill {
 .home-visual-hero-card {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--positive) 14%, transparent), transparent 42%),
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-visual-hero-value {
@@ -1881,14 +1948,14 @@ button.home-scope-crumb:focus-visible {
 .home-system-panel[data-home-scope-kind="region"] .home-scope-rail {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--positive) 12%, transparent), transparent 44%),
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-system-panel[data-home-scope-kind="place"] .home-story-card,
 .home-system-panel[data-home-scope-kind="place"] .home-scope-rail {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 42%),
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .home-system-controls {
@@ -1916,7 +1983,7 @@ button.home-scope-crumb:focus-visible {
 }
 
 .home-tab-bar .chip.is-active {
-  color: #ffffff;
+  color: var(--accent-ink);
   border-color: transparent;
   background: var(--accent);
   box-shadow: 0 8px 18px color-mix(in srgb, var(--positive) 12%, transparent);
@@ -2137,8 +2204,8 @@ button.home-scope-crumb:focus-visible {
   width: min(11.75rem, calc(100% - 1.7rem));
   padding: 0.58rem 0.68rem;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
 }
 
 .home-map-panel .region-map-base-region {
@@ -2264,8 +2331,8 @@ button.home-scope-crumb:focus-visible {
   border: 1px solid var(--border);
   border-radius: 22px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.3);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
   pointer-events: none;
 }
@@ -2306,7 +2373,7 @@ button.home-scope-crumb:focus-visible {
 
 .home-map-focus-card[data-scope-kind="place"] {
   border-color: color-mix(in srgb, var(--accent) 20%, transparent);
-  box-shadow: 0 22px 54px rgba(5, 12, 24, 0.36), 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent) inset;
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent) inset;
 }
 
 .home-map-focus-card[data-scope-kind="region"] {
@@ -2316,13 +2383,13 @@ button.home-scope-crumb:focus-visible {
 [data-home-authority-metric="rate"] .home-map-focus-card,
 [data-region-authority-metric="rate"] .home-map-focus-card {
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 [data-home-authority-metric="hotel"] .home-map-focus-card,
 [data-region-authority-metric="hotel"] .home-map-focus-card {
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 [data-home-authority-metric="rate"] .home-authority-region.is-selected,
@@ -2360,8 +2427,8 @@ button.home-scope-crumb:focus-visible {
   border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -2449,8 +2516,8 @@ button.region-map-shortlist-link {
   border: 1px solid var(--border);
   border-radius: 20px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -2765,7 +2832,7 @@ button.region-map-shortlist-link {
   font-weight: 600;
   letter-spacing: -0.08em;
   line-height: 1;
-  color: rgba(217, 245, 255, 0.34);
+  color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .evidence-preview .evidence-panel {
@@ -2912,7 +2979,7 @@ button.region-map-shortlist-link {
 
 .pathway-mix-segment.tone-teal,
 .pathway-mix-swatch.tone-teal {
-  background: linear-gradient(90deg, var(--positive) 0%, #c6fff4 100%);
+  background: linear-gradient(90deg, var(--positive) 0%, color-mix(in srgb, var(--positive) 45%, var(--bg)) 100%);
 }
 
 .pathway-mix-segment.tone-warm,
@@ -3191,9 +3258,9 @@ button.region-map-shortlist-link {
   border-radius: 18px;
   border: 1px solid var(--border);
   background:
-    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle),
     var(--bg-subtle);
-  box-shadow: 0 18px 40px rgba(3, 8, 16, 0.28);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -3209,7 +3276,7 @@ button.region-map-shortlist-link {
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle));
+  background: var(--bg-subtle);
 }
 
 .region-map-inset-map::before,
@@ -3255,7 +3322,7 @@ button.region-map-shortlist-link {
 }
 
 .region-map-overlay-control .tiny {
-  color: rgba(225, 232, 240, 0.76);
+  color: var(--text-muted);
 }
 
 .region-map-overlay-control:hover,
@@ -3263,7 +3330,7 @@ button.region-map-shortlist-link {
 .region-map-overlay-control.is-selected {
   border-color: color-mix(in srgb, var(--accent) 52%, transparent);
   background: color-mix(in srgb, var(--accent) 14%, transparent);
-  box-shadow: 0 10px 22px rgba(3, 8, 16, 0.24);
+  box-shadow: var(--shadow);
   transform: translateY(-1px);
 }
 
@@ -3276,7 +3343,7 @@ button.region-map-shortlist-link {
   min-width: 4.3rem;
   max-width: 5.2rem;
   padding: 0.42rem 0.5rem 0.42rem 0.82rem;
-  box-shadow: 0 8px 18px rgba(3, 8, 16, 0.2);
+  box-shadow: var(--shadow-soft);
   transform: translate(-50%, -50%);
 }
 
@@ -3316,7 +3383,7 @@ button.region-map-shortlist-link {
 .region-map-link:focus-visible .region-map-hotspot-core,
 .region-map-link.is-active .region-map-hotspot-core,
 .region-map-link.is-selected .region-map-hotspot-core {
-  fill: #ffffff;
+  fill: var(--accent-ink);
 }
 
 .region-map-callout {
@@ -3342,7 +3409,7 @@ button.region-map-shortlist-link {
 .region-map-region-entry.is-active .region-map-label,
 .region-map-region-entry.is-selected .region-map-label,
 .region-map-region-entry.is-active .region-map-value {
-  fill: #ffffff;
+  fill: var(--accent-ink);
 }
 
 .region-map-link:focus-visible {
@@ -3389,7 +3456,7 @@ button.region-map-shortlist-link {
 
 .region-map-controls .chip.is-active {
   opacity: 1;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 12px 28px rgba(4, 7, 13, 0.28);
+  box-shadow: 0 0 0 1px var(--border), var(--shadow);
 }
 
 .region-map-explorer.is-compact {
@@ -3442,8 +3509,8 @@ button.region-map-shortlist-link {
   border: 1px solid var(--border);
   border-radius: 18px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  color: rgba(221, 228, 237, 0.84);
+    var(--bg-subtle);
+  color: var(--text-muted);
   backdrop-filter: blur(14px);
 }
 
@@ -3474,7 +3541,7 @@ button.region-map-shortlist-link {
   gap: 0.7rem;
   padding: 0.85rem 0.95rem;
   backdrop-filter: blur(18px);
-  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
   pointer-events: none;
 }
 
@@ -3578,7 +3645,7 @@ button.region-map-shortlist-link {
   max-height: calc(100% - 7rem);
   overflow: auto;
   backdrop-filter: blur(18px);
-  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.26);
+  box-shadow: var(--shadow);
   pointer-events: none;
 }
 
@@ -3856,19 +3923,19 @@ button.region-map-shortlist-link {
 .feature-card.accent {
   border-color: color-mix(in srgb, var(--accent) 16%, transparent);
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .feature-card.teal {
   border-color: color-mix(in srgb, var(--positive) 18%, transparent);
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .feature-card.warm {
   border-color: color-mix(in srgb, var(--warning) 18%, transparent);
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .feature-card {
@@ -4104,7 +4171,7 @@ button.region-map-shortlist-link {
 .timeline-card.accent {
   border-color: color-mix(in srgb, var(--accent) 18%, transparent);
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .section h2 {
@@ -4193,7 +4260,7 @@ button.region-map-shortlist-link {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background:
-    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle));
+    var(--bg-subtle);
 }
 
 .table-card table {
@@ -4281,7 +4348,7 @@ tr:last-child td {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--accent) 0%, var(--positive) 72%, var(--positive) 140%);
-  box-shadow: 0 0 24px var(--accent-glow);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .split {
@@ -4311,23 +4378,29 @@ tr:last-child td {
 
 /* UKD cross-link banner on place pages */
 .ukd-cross-link {
+  --ukd: #4338ca;      /* UK Demographics' own accent, deep */
+  --ukd-bright: #7b74f2;
   margin-top: 2rem;
   padding: 1.25rem;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0.03) 100%);
-  border: 1px solid rgba(79, 70, 229, 0.2);
+  background: color-mix(in srgb, var(--ukd) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ukd) 22%, transparent);
   border-radius: var(--radius-sm);
 }
+:root[data-theme="dark"] .ukd-cross-link { --ukd: var(--ukd-bright); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ukd-cross-link { --ukd: var(--ukd-bright); }
+}
 .ukd-cross-inner { display: flex; flex-direction: column; gap: 0.5rem; }
-.ukd-cross-label { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #4338ca; }
+.ukd-cross-label { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ukd); }
 .ukd-cross-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; }
 .ukd-cross-btn {
   display: inline-block; margin-top: 0.25rem; padding: 0.5rem 1rem;
-  font-size: 0.85rem; font-weight: 600; color: var(--text);
-  background: #4338ca; border-radius: 8px; text-decoration: none;
+  font-size: 0.85rem; font-weight: 600; color: #ffffff;
+  background: var(--ukd); border-radius: var(--radius-sm); text-decoration: none;
   transition: background 180ms;
   width: fit-content;
 }
-.ukd-cross-btn:hover { background: #4338ca; }
+.ukd-cross-btn:hover { background: color-mix(in srgb, var(--ukd) 84%, #000000); }
 
 .footer-legal {
   font-size: 0.78rem;
@@ -5041,8 +5114,8 @@ tr:last-child td {
   padding: 0.5rem 0.58rem;
   border-radius: 18px;
   background:
-    linear-gradient(145deg, var(--bg-subtle), var(--bg-subtle));
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    var(--bg-subtle);
+  box-shadow: var(--shadow);
 }
 
 .home-map-panel .region-map-legend.is-overlay .region-map-legend-copy p,
@@ -5159,7 +5232,7 @@ tr:last-child td {
 .home-authority-group-link:hover .home-authority-group-text,
 .home-authority-group-link:focus-visible .home-authority-group-text,
 .home-authority-group-link.has-selected-area .home-authority-group-text {
-  fill: #ffffff;
+  fill: var(--accent-ink);
 }
 
 .home-authority-group-link.is-selected .home-authority-group-text {
@@ -5169,13 +5242,13 @@ tr:last-child td {
 .home-map-focus-card[data-scope-kind="subregion"] {
   border-color: color-mix(in srgb, var(--positive) 28%, transparent);
   background:
-    linear-gradient(180deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle),
     var(--bg-subtle);
 }
 
 .home-map-quick-button[data-scope-kind="subregion"] {
   background:
-    linear-gradient(160deg, var(--bg-subtle), var(--bg-subtle)),
+    var(--bg-subtle),
     var(--bg-subtle);
   border-color: color-mix(in srgb, var(--positive) 18%, transparent);
 }
@@ -5183,7 +5256,7 @@ tr:last-child td {
 .home-map-quick-button[data-scope-kind="subregion"].is-active {
   border-color: color-mix(in srgb, var(--positive) 56%, transparent);
   box-shadow:
-    0 18px 38px rgba(0, 0, 0, 0.28),
+    var(--shadow),
     0 0 0 1px color-mix(in srgb, var(--positive) 20%, transparent);
 }
 
@@ -5244,12 +5317,12 @@ tr:last-child td {
   transition: width 0.3s;
 }
 
-.bar-seg.wb { background: var(--accent); }
-.bar-seg.wo { background: var(--text-muted); }
-.bar-seg.asian { background: var(--critical); }
-.bar-seg.black { background: var(--positive); }
-.bar-seg.mixed { background: #c084fc; }
-.bar-seg.other { background: var(--warning); }
+.bar-seg.wb { background: var(--series-1); }
+.bar-seg.wo { background: var(--series-2); }
+.bar-seg.asian { background: var(--series-3); }
+.bar-seg.black { background: var(--series-4); }
+.bar-seg.mixed { background: var(--series-neutral); }
+.bar-seg.other { background: var(--series-neutral-soft); }
 
 .stacked-bar-pct {
   font-size: 0.8rem;
@@ -5280,12 +5353,12 @@ tr:last-child td {
   border-radius: 2px;
 }
 
-.legend-swatch.wb { background: var(--accent); }
-.legend-swatch.wo { background: var(--text-muted); }
-.legend-swatch.asian { background: var(--critical); }
-.legend-swatch.black { background: var(--positive); }
-.legend-swatch.mixed { background: #c084fc; }
-.legend-swatch.other { background: var(--warning); }
+.legend-swatch.wb { background: var(--series-1); }
+.legend-swatch.wo { background: var(--series-2); }
+.legend-swatch.asian { background: var(--series-3); }
+.legend-swatch.black { background: var(--series-4); }
+.legend-swatch.mixed { background: var(--series-neutral); }
+.legend-swatch.other { background: var(--series-neutral-soft); }
 
 .metric-list {
   display: grid;
@@ -5438,7 +5511,7 @@ tr:last-child td {
     align-items: center;
     gap: 0.6rem;
     padding: 0.55rem 0.7rem;
-    background: var(--surface, var(--bg-subtle));
+    background: var(--bg-subtle);
   }
 
   .region-map-key-item.is-selected {

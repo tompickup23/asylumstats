@@ -1,12 +1,35 @@
 {
-  "headline": "The True Cost of Asylum. Nobody published it. We did.",
+  "headline": "Nobody adds up the cost of asylum. We did.",
   "stats": [
-    { "value": "£5.8B+", "label": "Total annual cost to UK taxpayers", "color": "coral" },
-    { "value": "£155+", "label": "Minimum cost per taxpayer per year", "color": "coral" },
-    { "value": "£2.1B", "label": "Hotels alone. 29% of people. 76% of budget.", "color": "amber" },
-    { "value": "£1B+", "label": "Local authority costs. Councils carry the load.", "color": "amber" },
-    { "value": "£500M", "label": "Border and Channel operations per year", "color": "cyan" }
+    {
+      "value": "£8.0B",
+      "label": "Total annual cost of the UK asylum system, central estimate",
+      "color": "coral"
+    },
+    {
+      "value": "£234",
+      "label": "Per income taxpayer, per year",
+      "color": "coral"
+    },
+    {
+      "value": "£4,181M",
+      "label": "Home Office support and accommodation, audited outturn 2025-26",
+      "color": "warning"
+    },
+    {
+      "value": "60%",
+      "label": "Of the total is audited. Nobody publishes the rest",
+      "color": "accent"
+    },
+    {
+      "value": "£7.2B",
+      "label": "The low end of the defensible range. The high end is £8.8B, and that width is the finding",
+      "color": "muted"
+    }
   ],
-  "verdict": "Over £155 per taxpayer. Every year. Hotels are only 36% of the bill.",
-  "source": "asylumstats.co.uk | NAO, Home Office, MoJ, HMCTS"
+  "verdict": "Third edition, built on the Home Office accounts rather than our estimates.",
+  "source": "asylumstats.co.uk | Home Office ARA 2025-26 (HC 440), NAO, MoJ, HMCTS, DfE",
+  "output_path": "public/videos/true_cost_reel.mp4",
+  "format": "portrait",
+  "watermark": "asylumstats.co.uk"
 }

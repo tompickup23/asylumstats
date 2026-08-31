@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatFindingDate, findingIsRevised } from "../../lib/finding-dates";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ShareButton from "../../components/ShareButton.astro";
 import { getCollection, render } from "astro:content";
@@ -76,6 +77,7 @@ const verdictLabel: Record<string, string> = {
     "url": pageUrl,
     "image": `https://asylumstats.co.uk${ogImage}`,
     "datePublished": finding.data.date,
+    ...(finding.data.updated ? { "dateModified": finding.data.updated } : {}),
     "author": { "@type": "Organization", "name": "asylumstats", "url": "https://asylumstats.co.uk" },
     "publisher": { "@type": "Organization", "name": "asylumstats", "url": "https://asylumstats.co.uk" }
   }]}
@@ -103,11 +105,15 @@ const verdictLabel: Record<string, string> = {
       >
         {verdictLabel[finding.data.verdict]}
       </span>
-      <span class="finding-detail-date">{finding.data.date}</span>
+      <span class="finding-detail-date">
+        {findingIsRevised(finding.data)
+          ? `Updated ${formatFindingDate(finding.data.updated!)}, first published ${formatFindingDate(finding.data.date)}`
+          : formatFindingDate(finding.data.date)}
+      </span>
       <ShareButton
         url={pageUrl}
         title={finding.data.headline}
-        text={`${finding.data.stat_value} - ${finding.data.headline}. Source: ${finding.data.source_label}. ${pageUrl}`}
+        text={`${finding.data.stat_value}. ${finding.data.headline}. Source: ${finding.data.source_label}. ${pageUrl}`}
         compact
       />
     </div>
@@ -128,17 +134,17 @@ const verdictLabel: Record<string, string> = {
     <!-- VIDEO (if exists) -->
     {finding.data.video_url && (
       <div class="finding-video">
-        <video controls preload="metadata" poster={finding.data.video_poster ?? `/cards/${findingSlug}_og.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
+        <video controls preload="metadata" poster={finding.data.video_poster ?? `/og/findings/${findingSlug}.png`} style="width: 100%; max-width: 400px; border-radius: var(--radius-sm);">
           <source src={finding.data.video_url} type="video/mp4" />
         </video>
-        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Short video summary - share on social media.</p>
+        <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Short video summary. Share it on social media.</p>
       </div>
     )}
 
     <!-- SHARE CARD -->
     <div class="finding-share-card">
-      <img src={`/cards/${findingSlug}_square.png`} alt={finding.data.headline} width="540" height="540" loading="lazy" />
-      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding - right-click to save the image.</p>
+      <img src={`/og/square/findings/${findingSlug}.png`} alt={finding.data.headline} width="1080" height="1080" loading="lazy" />
+      <p class="tiny" style="opacity: 0.5; margin-top: 0.5rem;">Share this finding. Right-click to save the image.</p>
     </div>
 
     <!-- SHARE -->
@@ -147,13 +153,13 @@ const verdictLabel: Record<string, string> = {
       <ShareButton
         url={pageUrl}
         title={finding.data.headline}
-        text={`${finding.data.stat_value} - ${finding.data.headline}. See the data: ${pageUrl}`}
+        text={`${finding.data.stat_value}. ${finding.data.headline}. See the data: ${pageUrl}`}
       />
     </div>
 
     <footer class="finding-detail-footer">
       <a href={finding.data.source_url} target="_blank" rel="noopener" class="finding-detail-source">
-        {finding.data.source_label} - verify this yourself &rarr;
+        {finding.data.source_label}. Verify this yourself &rarr;
       </a>
       <a href="/findings/" class="finding-back">&larr; All findings</a>
     </footer>
@@ -290,6 +296,7 @@ const verdictLabel: Record<string, string> = {
   }
   .finding-share-card img {
     width: 100%;
+    height: auto;
     max-width: 540px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);

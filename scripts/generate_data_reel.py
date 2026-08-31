@@ -44,18 +44,25 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 FONT_DIR = PROJECT_ROOT / "src" / "assets" / "fonts"
 
-# Brand palette
+# Brand palette.
+#
+# These are the estate's social and Open Graph surface values, the same ones
+# src/pages/og/[...slug].png.ts renders its cards on, so a reel and a link preview for
+# the same finding are the same object. Social keeps the dark ground when the site
+# itself is light: it is the one surface where the brand is the background rather than
+# the page. The previous set was the pre-August cyan build, and a reel generated on it
+# no longer matched anything the site published.
 BRAND = {
-    "bg":        (4,   7,  13),       # #04070d
-    "bg_soft":   (11,  18, 32),       # #0b1220
-    "ink":       (245, 247, 251),     # #f5f7fb
-    "ink_soft":  (219, 231, 247),     # #dbe7f7
-    "muted":     (145, 167, 196),     # #91a7c4
-    "accent":    (6,   182, 212),     # #06b6d4 cyan
-    "coral":     (239, 68,  68),      # #ef4444
-    "success":   (16,  185, 129),     # #10b981
-    "warning":   (245, 158, 11),      # #f59e0b
-    "border":    (30,  41,  59),      # #1e293b
+    "bg":        (15,  19,  23),      # #0f1317  --ground
+    "bg_soft":   (23,  28,  33),      # #171c21
+    "ink":       (244, 246, 247),     # #f4f6f7  --ground-ink
+    "ink_soft":  (214, 222, 230),     # #d6dee6
+    "muted":     (152, 163, 172),     # #98a3ac  --ground-muted
+    "accent":    (130, 171, 203),     # #82abcb  --accent-bright
+    "coral":     (232, 137, 124),     # #e8897c  critical, on the ground
+    "success":   (127, 201, 168),     # #7fc9a8  positive, on the ground
+    "warning":   (232, 182, 97),      # #e8b661  alert, on the ground
+    "border":    (42,  49,  56),      # #2a3138
 }
 
 FPS = 30
@@ -101,6 +108,7 @@ def get_font(name: str, size: int) -> ImageFont.FreeTypeFont:
         return _font_cache[key]
 
     paths_to_try = [
+        FONT_DIR / f"{name}.woff",
         FONT_DIR / f"{name}.ttf",
         Path(f"/usr/share/fonts/truetype/{name}.ttf"),
         Path(f"/System/Library/Fonts/{name}.ttf"),
@@ -121,12 +129,28 @@ def get_font(name: str, size: int) -> ImageFont.FreeTypeFont:
     return font
 
 
+def resolve_colour(name: str):
+    """Look up a brand colour, refusing an unknown name rather than substituting one.
+
+    This used to be BRAND.get(name, BRAND["accent"]). Both shipped reel configs asked for
+    "amber" and "cyan", neither of which is a key, so both silently rendered in the accent
+    and nobody could see that the config was being ignored.
+    """
+    try:
+        return BRAND[name]
+    except KeyError:
+        raise SystemExit(
+            "unknown brand colour %r in reel config. Valid keys: %s"
+            % (name, ", ".join(sorted(BRAND)))
+        )
+
+
 def font_headline(size: int = 72) -> ImageFont.FreeTypeFont:
-    return get_font("Sora-ExtraBold", size)
+    return get_font("SourceSerif4-SemiBold", size)
 
 
 def font_body(size: int = 42) -> ImageFont.FreeTypeFont:
-    return get_font("Manrope-Bold", size)
+    return get_font("SourceSans3-SemiBold", size)
 
 
 # ---------------------------------------------------------------------------
@@ -206,59 +230,21 @@ def get_text_size(draw: ImageDraw.Draw, text: str,
 # ---------------------------------------------------------------------------
 
 def make_gradient_bg(size: tuple, t: float = 0) -> Image.Image:
-    """Generate an animated dark gradient background with subtle movement."""
+    """The estate social ground: flat, with one slow accent glow and nothing else.
+
+    This used to paint two hard-coded glows, cyan and coral from the pre-August build,
+    over a 28px grid lifted from the old dark stylesheet. The estate retired both when the
+    site went light: the grid and the radial washes were decoration for a near-black page
+    and were not recoloured, they were removed. The social surface keeps the dark ground
+    but not the furniture, so a reel and an Open Graph card for the same finding sit on
+    the same flat colour.
+    """
     w, h = size
     img = Image.new("RGBA", size, BRAND["bg"])
-    draw = ImageDraw.Draw(img)
 
-    # Animated radial glow (cyan accent, moves slowly)
-    glow_x = int(w * 0.3 + math.sin(t * 0.5) * w * 0.15)
-    glow_y = int(h * 0.2 + math.cos(t * 0.3) * h * 0.1)
-    glow_radius = int(min(w, h) * 0.6)
-
-    glow = Image.new("RGBA", size, (0, 0, 0, 0))
-    glow_draw = ImageDraw.Draw(glow)
-    for r in range(glow_radius, 0, -4):
-        alpha = int(18 * (r / glow_radius))
-        glow_draw.ellipse(
-            [glow_x - r, glow_y - r, glow_x + r, glow_y + r],
-            fill=(6, 182, 212, alpha)
-        )
-    img = Image.alpha_composite(img, glow)
-
-    # Second glow (coral, bottom right)
-    glow2_x = int(w * 0.7 + math.cos(t * 0.4) * w * 0.1)
-    glow2_y = int(h * 0.75 + math.sin(t * 0.6) * h * 0.08)
-    glow2 = Image.new("RGBA", size, (0, 0, 0, 0))
-    glow2_draw = ImageDraw.Draw(glow2)
-    for r in range(int(glow_radius * 0.5), 0, -4):
-        alpha = int(12 * (r / (glow_radius * 0.5)))
-        glow2_draw.ellipse(
-            [glow2_x - r, glow2_y - r, glow2_x + r, glow2_y + r],
-            fill=(239, 68, 68, alpha)
-        )
-    img = Image.alpha_composite(img, glow2)
-
-    # Grid overlay (subtle, matches website)
-    grid = Image.new("RGBA", size, (0, 0, 0, 0))
-    grid_draw = ImageDraw.Draw(grid)
-    grid_spacing = 56  # Matches the 28px * 2 from CSS
-    grid_alpha = 8
-    for y_pos in range(0, h, grid_spacing):
-        grid_draw.line([(0, y_pos), (w, y_pos)],
-                       fill=(255, 255, 255, grid_alpha), width=1)
-    for x_pos in range(0, w, grid_spacing):
-        grid_draw.line([(x_pos, 0), (x_pos, h)],
-                       fill=(255, 255, 255, grid_alpha), width=1)
-    # Fade grid at bottom
-    mask = Image.new("L", size, 0)
-    mask_draw = ImageDraw.Draw(mask)
-    for y_pos in range(h):
-        alpha = int(255 * max(0, 1 - y_pos / (h * 0.7)))
-        mask_draw.line([(0, y_pos), (w, y_pos)], fill=alpha)
-    grid.putalpha(mask)
-    img = Image.alpha_composite(img, grid)
-
+    # No glow, no grid, no vignette. Stepping an ellipse in 4px rings to fake a radial
+    # gradient produced visible banding on a flat dark ground, which is worse than the
+    # flat ground it was decorating. The Open Graph cards are flat. So is this.
     return img.convert("RGB")
 
 
@@ -566,15 +552,19 @@ class ReelTimeline:
         draw_rounded_rect(
             panel_draw,
             [panel_margin, panel_y, panel_margin + panel_w, panel_y + panel_h],
-            radius=28,
-            fill=(11, 18, 32, panel_alpha),
+            # 28px and a hard-coded navy were the pre-August build. The estate settled
+            # its card radius at 10px on the page; at 1080 frame width the panel is about
+            # the same proportion of the surface, so it takes a value in that spirit
+            # rather than the old one, and the fill comes from the palette.
+            radius=14,
+            fill=(*BRAND["bg_soft"], panel_alpha),
             outline=(*BRAND["border"], min(255, panel_alpha + 30)),
             width=2,
         )
 
         # Accent stripe on left
         stripe_h = int(panel_h * 0.6 * ease_out_cubic(min(1, local_t / 0.5)))
-        color = BRAND.get(stat.color, BRAND["accent"])
+        color = resolve_colour(stat.color)
         stripe_y = panel_y + (panel_h - stripe_h) // 2
         panel_draw.rounded_rectangle(
             [panel_margin, stripe_y,
@@ -592,7 +582,7 @@ class ReelTimeline:
         txt_draw = ImageDraw.Draw(txt_layer)
 
         count_progress = min(1, local_t / seg["count_up_duration"])
-        color = BRAND.get(stat.color, BRAND["accent"])
+        color = resolve_colour(stat.color)
 
         if stat.numeric > 0:
             display_value = format_counting_number(

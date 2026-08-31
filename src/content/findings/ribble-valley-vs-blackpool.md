@@ -1,31 +1,31 @@
 ---
-headline: "Ribble Valley vs Blackpool: 15 miles apart, different planets"
+headline: "Ribble Valley and Hyndburn: nine miles apart, thirteen times the load"
 date: "2026-04-14"
+updated: "2026-08-31"
 category: pressure-index
-stat_value: "15 miles"
-stat_label: "Distance apart"
+stat_value: "13.7x"
+stat_label: "Hyndburn's asylum support rate against Ribble Valley's, 30 June 2026"
 verdict: info
-source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
-source_label: "Multiple official sources"
-summary: "Ribble Valley: 31 asylum seekers, rate 4.7 per 10,000, crime 32.4 per 1,000, ASC spend £442/capita. Blackpool: 577 asylum seekers, rate 40.0 per 10,000, crime 142.8, ASC spend £724. Same county. Same region. Same prime provider. Different universe."
+source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
+source_label: "Home Office local authority data, 30 June 2026"
+summary: "Ribble Valley has 24 people on asylum support, 3.6 per 10,000, ranking 230th of 361. Hyndburn, which it borders, has 426 at 49.0 per 10,000 and ranks 2nd in the UK. Same county, same region, same prime provider, thirteen times the rate across a boundary you can walk over."
 ---
 
-**Fifteen miles. Two realities.**
+**Nine miles. Two different countries, on paper.**
 
-| Metric | Ribble Valley | Blackpool |
-|--------|-------------|-----------|
-| Asylum support | 31 | 577 |
-| Rate per 10K | 4.7 | 40.0 |
-| Crime per 1,000 | 32.4 | 142.8 |
-| ASC spend/capita | £442 | £724 |
-| WBI (Census 2021) | 94.1% | 90.4% |
+| Council | On asylum support | Per 10,000 | Rank of 361 |
+|---|---|---|---|
+| Hyndburn | 426 | 49.0 | 2nd |
+| Burnley | 471 | 46.7 | 4th |
+| Pendle | 441 | 44.0 | 9th |
+| Preston | 407 | 24.7 | 47th |
+| Blackpool | 236 | 16.5 | 94th |
+| **Ribble Valley** | **24** | **3.6** | **230th** |
 
-Ribble Valley. Rural Lancashire. 61,000 people. Affluent. Low crime. Low deprivation. 31 people on asylum support. Rate of 4.7 per 10,000.
+Ribble Valley borders Hyndburn, Burnley and Pendle. All four are Lancashire districts, all four fall under the same Serco prime accommodation contract for the North West, and the same company decides placement across all of them. Three are in the national top nine per head of population. The fourth is in the bottom half.
 
-Blackpool. Coastal Lancashire. 141,000 people. Most deprived LA in England. Highest crime rate in our tracking set. 577 on asylum support. Rate of 40.0.
+**Why the split is this sharp.** Dispersal accommodation is procured from the private rented sector, so it follows cheap housing rather than population. Ribble Valley has the most expensive housing in Lancashire and almost no dispersal stock. Hyndburn has the cheapest, and 426 people on support in a district of 87,000.
 
-Both are in Lancashire. Both fall under the Serco prime provider contract for the North West. The same company decides placement for both areas. It chooses Blackpool.
+**What changed since this page was written.** It originally compared Ribble Valley with Blackpool, on the position at 31 December 2025, and put the gap at 8.5 times. Blackpool's supported population has since fallen from 577 to 236, so it is no longer the Lancashire outlier and the comparison has moved to the authorities that are: Hyndburn, Burnley and Pendle. The gap is wider now than the one this page originally reported.
 
-The dispersal system is supposed to share the load. It does the opposite. It concentrates asylum seekers in cheap-housing areas and leaves affluent areas untouched. Ribble Valley carries 8.5 times less load per head than Blackpool.
-
-**Source:** Home Office local authority asylum data (Dec 2025). ONS crime statistics. NHS Digital ASC data.
+The dispersal system is meant to share the load. Across one district boundary in East Lancashire it varies by a factor of thirteen.

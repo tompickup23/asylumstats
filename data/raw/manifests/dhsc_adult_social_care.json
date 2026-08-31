@@ -1,0 +1,23 @@
+{
+  "dataset": "dhsc_adult_social_care",
+  "publisher": "NHS England, now Department of Health and Social Care",
+  "release": "Adult Social Care Activity and Finance Report, England",
+  "cadence": "annual, financial year",
+  "landing": "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-activity-and-finance-report",
+  "bank": "none, this dataset has no fetch or transform script",
+  "areaTier": "local authority, 25 areas only",
+  "provenance": "Hand-authored and committed in a7bbed2. The 25 rows were transcribed from the 2023/24 edition. The 2024/25 edition is published, and the series has moved publisher from NHS England to DHSC, so a rebuild has to follow the move as well as the year.",
+  "manualFields": [
+    "every row: no generator exists, so nothing regenerates when the report publishes"
+  ],
+  "coverageEnd": "2024-03-31",
+  "maxAgeDays": 550,
+  "nextEdition": "2025-10-01",
+  "fileCount": 1,
+  "files": [
+    {
+      "file": "src/data/live/asc-dashboard.json"
+    }
+  ],
+  "blockedOn": "no fetch or transform script exists for this dataset, so there is nothing to run. Building one widens coverage past the 25 hand-picked areas, which changes the comparison set behind every pressure-index percentile the site publishes."
+}

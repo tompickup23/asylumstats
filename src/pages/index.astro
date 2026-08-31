@@ -1034,7 +1034,7 @@ function findingColor(verdict: string): string {
   }
   .finding-strip-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-glow);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent);
     transform: translateY(-2px);
   }
   .fsc-verdict {
@@ -1096,7 +1096,7 @@ function findingColor(verdict: string): string {
   }
   .stat-card--accent .stat-value { color: var(--accent); }
   .stat-card--warn .stat-value { color: var(--warning); }
-  .stat-card--coral .stat-value { color: var(--critical); }
+  .stat-card--critical .stat-value { color: var(--critical); }
   .stat-card--teal .stat-value { color: var(--positive); }
   .stat-label {
     font-size: 0.92rem;
@@ -1181,7 +1181,7 @@ function findingColor(verdict: string): string {
   }
   .region-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-glow);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent);
   }
   .region-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
   .region-stat {
@@ -1429,7 +1429,7 @@ function findingColor(verdict: string): string {
   }
   .future-search input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
   }
   .future-results {
     position: absolute;
