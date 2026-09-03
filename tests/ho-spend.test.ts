@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   loadHoAsylumEntities,
   loadHoAsylumByYear,
@@ -7,6 +10,8 @@ import {
   formatGbpShort,
   perPersonInUk
 } from "../src/lib/ho-spend";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const entities = loadHoAsylumEntities();
 const byYear = loadHoAsylumByYear();
@@ -164,6 +169,19 @@ describe("what this dataset is not", () => {
   it("says so on the mart, where a page author will meet it", () => {
     expect(entities.whatThisIsNot).toMatch(/not total asylum spending/i);
     expect(reconciliation.whatThisIsNot).toMatch(/not missing, wasted or hidden/i);
+  });
+});
+
+describe("the advertised download", () => {
+  it("exists, and is the same bytes as the mart", () => {
+    // /what-the-home-office-publishes emits Dataset structured data pointing at
+    // /data/ho-asylum-entities.json. Nothing else would notice if that file stopped being
+    // written: the page still renders, the build still passes, and only someone following
+    // the schema.org link hits a 404. sync-live writes it from the mart; this checks it.
+    const published = resolve(ROOT, "public/data/ho-asylum-entities.json");
+    const mart = resolve(ROOT, "data/marts/ho_spend/ho-asylum-entities.json");
+    expect(existsSync(published), "public/data/ho-asylum-entities.json missing — run npm run sync:live").toBe(true);
+    expect(readFileSync(published).equals(readFileSync(mart))).toBe(true);
   });
 });
 

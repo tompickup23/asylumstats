@@ -607,10 +607,6 @@ function build() {
 const marts = build();
 mkdirSync(OUT, { recursive: true });
 
-// The page's Dataset structured data promises a download at /data/ho-asylum-entities.json.
-// Write it here so the promise cannot drift from the mart.
-const PUBLIC_DATA = resolve(ROOT, "public/data");
-
 const files = {
   "ho-asylum-entities.json": marts.entities,
   "ho-asylum-by-year.json": marts.byYear,
@@ -649,14 +645,6 @@ if (d.fileReport.length) {
   for (const [file, , why] of d.fileReport) console.error(`  ${file}: ${why}`);
   process.exitCode = 1;
 }
-if (!checkOnly) {
-  mkdirSync(PUBLIC_DATA, { recursive: true });
-  writeFileSync(
-    resolve(PUBLIC_DATA, "ho-asylum-entities.json"),
-    `${JSON.stringify(marts.entities, null, 1)}\n`
-  );
-}
-
 if (checkOnly && drift) {
   console.error(`\n${drift} mart(s) out of date. Run: npm run transform:hospend`);
   process.exitCode = 1;
