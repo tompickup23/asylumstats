@@ -18,4 +18,4 @@ summary: "The Home Office paid councils about £883 million in 2024/25 for dispe
 
 **One trap worth naming.** A search for "council" in the supplier field returns £3.59m, not £1.6m, because it catches **Refugee Council** — a charity, not a local authority, paid £2.0m that year. Counting it more than doubles the answer and is wrong.
 
-Spending figures reproduced from *An analysis of the asylum system*, National Audit Office, December 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.
+Spending figures cited from *An analysis of the asylum system*, National Audit Office, December 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.

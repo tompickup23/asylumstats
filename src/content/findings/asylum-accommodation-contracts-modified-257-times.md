@@ -22,4 +22,4 @@ summary: "Seven regional contracts, modified 257 times in under six years. The t
 
 **Hotels drive the cost.** People accommodated in hotels accounted for 76% of the cost of the contracts — £1.3 billion of an estimated £1.7 billion in the first seven months of 2024-25 — despite being a minority of the people housed.
 
-Reproduced from *The Home Office's asylum accommodation contracts*, National Audit Office, May 2025.
+Figures cited from *The Home Office's asylum accommodation contracts*, National Audit Office, May 2025.

@@ -18,4 +18,4 @@ summary: "Supplier profit on the asylum accommodation contracts has averaged 7%.
 
 These are the suppliers' own reported figures, audited by the department rather than by us.
 
-Reproduced from *The Home Office's asylum accommodation contracts*, National Audit Office, May 2025.
+Figures cited from *The Home Office's asylum accommodation contracts*, National Audit Office, May 2025.

@@ -24,4 +24,4 @@ summary: "The Home Office spent about £4.9 billion on asylum in 2024/25. Its ow
 
 **A caution on the underlying data.** The Home Office tags asylum in two separate fields, and has used at least eleven different labels since 2010 — with none at all between 2017 and 2020. A rise or fall between two years in this series can be a reclassification rather than a change in spending.
 
-Spending figures reproduced from *An analysis of the asylum system*, National Audit Office, December 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.
+Spending figures cited from *An analysis of the asylum system*, National Audit Office, December 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.
