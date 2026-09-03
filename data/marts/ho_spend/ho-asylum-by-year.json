@@ -1,0 +1,136 @@
+{
+ "generatedAt": "2026-09-03T02:19:46.258Z",
+ "basis": "published_transaction",
+ "noTrendLineRule": "Year-on-year comparison of this series is unsafe on its own. The Home Office has used at least eleven expense-area labels for asylum since 2010 and none at all between 2017 and 2020. A change between two years can be a reclassification. areaLabels records which labels were in use each year.",
+ "years": [
+  {
+   "fy": "2010/11",
+   "amountGbp": 61662682.14,
+   "transactions": 434,
+   "areaLabels": []
+  },
+  {
+   "fy": "2011/12",
+   "amountGbp": 185664512.8,
+   "transactions": 864,
+   "areaLabels": []
+  },
+  {
+   "fy": "2012/13",
+   "amountGbp": 203367560.87,
+   "transactions": 960,
+   "areaLabels": []
+  },
+  {
+   "fy": "2013/14",
+   "amountGbp": 185272456.72,
+   "transactions": 945,
+   "areaLabels": [
+    "Asylum Support",
+    "UKBA Asylum Support"
+   ]
+  },
+  {
+   "fy": "2014/15",
+   "amountGbp": 376157206.11,
+   "transactions": 1945,
+   "areaLabels": [
+    "Asylum Support",
+    "UK V&I Asylum Support",
+    "UKV&I Asylum Support",
+    "UKVI Asylum Support"
+   ]
+  },
+  {
+   "fy": "2015/16",
+   "amountGbp": 204815842.07,
+   "transactions": 703,
+   "areaLabels": []
+  },
+  {
+   "fy": "2016/17",
+   "amountGbp": 270395315.22,
+   "transactions": 712,
+   "areaLabels": [
+    "Asylum Services",
+    "UK V&I Asylum Support"
+   ]
+  },
+  {
+   "fy": "2017/18",
+   "amountGbp": 9730497.86,
+   "transactions": 93,
+   "areaLabels": []
+  },
+  {
+   "fy": "2018/19",
+   "amountGbp": 100323996.99,
+   "transactions": 363,
+   "areaLabels": []
+  },
+  {
+   "fy": "2019/20",
+   "amountGbp": 20071594.82,
+   "transactions": 159,
+   "areaLabels": []
+  },
+  {
+   "fy": "2020/21",
+   "amountGbp": 12957832.55,
+   "transactions": 88,
+   "areaLabels": []
+  },
+  {
+   "fy": "2021/22",
+   "amountGbp": 501286777.79,
+   "transactions": 1726,
+   "areaLabels": [
+    "UKAP - Asylum & Protection"
+   ]
+  },
+  {
+   "fy": "2022/23",
+   "amountGbp": 724011894.53,
+   "transactions": 3458,
+   "areaLabels": [
+    "UKAP - Asylum & Protection"
+   ]
+  },
+  {
+   "fy": "2023/24",
+   "amountGbp": 430437120.03,
+   "transactions": 1696,
+   "areaLabels": [
+    "ASRA - Asylum Support, Resettlment & Accommodation",
+    "UKAP - Asylum & Protection",
+    "UKASRA - Asylum Support, Resettlement & Accommodation."
+   ]
+  },
+  {
+   "fy": "2024/25",
+   "amountGbp": 539725047.67,
+   "transactions": 937,
+   "areaLabels": [
+    "UKASRA - Asylum Support, Resettlement & Accommodation."
+   ]
+  },
+  {
+   "fy": "2025/26",
+   "amountGbp": 467727814.51,
+   "transactions": 1448,
+   "areaLabels": [
+    "UKASRA - Asylum Support, Resettlement & Accommodation."
+   ]
+  },
+  {
+   "fy": "2026/27",
+   "amountGbp": 35653558.28,
+   "transactions": 409,
+   "areaLabels": [
+    "UKAG - Asylum Group",
+    "UKAP - Asylum & Protection",
+    "VPCR - Visa, Passport, Citizenship & Resettlement"
+   ]
+  }
+ ]
+}

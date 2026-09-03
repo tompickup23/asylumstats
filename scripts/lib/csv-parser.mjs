@@ -3,9 +3,13 @@ import { readFileSync } from "node:fs";
 
 /**
  * RFC 4180 CSV parser — handles quoted fields, escaped quotes, and multi-line values.
- * Returns an array of objects keyed by header names.
+ * Returns the raw grid: an array of rows, each an array of cell strings.
+ *
+ * Use this rather than `parseCsv` when the header is not necessarily the first row.
+ * Several government publications put a title on line 1 and the header below it, so a
+ * parser that assumes row 0 is the header mis-reads them.
  */
-export function parseCsv(text) {
+export function parseCsvGrid(text) {
   const rows = [];
   let row = [];
   let field = "";
@@ -59,7 +63,14 @@ export function parseCsv(text) {
     rows.push(row);
   }
 
-  const [headerRow = [], ...dataRows] = rows;
+  return rows;
+}
+
+/**
+ * Parse CSV text into an array of objects keyed by the header names on the first row.
+ */
+export function parseCsv(text) {
+  const [headerRow = [], ...dataRows] = parseCsvGrid(text);
   const headers = headerRow.map((header) => header.trim());
 
   return dataRows

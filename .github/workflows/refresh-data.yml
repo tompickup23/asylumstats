@@ -72,6 +72,26 @@ jobs:
       - name: Transform money ledger
         run: npm run ingest:money
 
+      # Home Office spend over £25,000, which is the ledger behind
+      # /what-the-home-office-publishes. The department publishes monthly, so a weekly
+      # run catches every release with room to spare.
+      #
+      # This one re-downloads the whole corpus every run, because data/raw/ho_spend is
+      # gitignored and a CI checkout starts empty. That makes a PARTIAL download the
+      # failure mode to worry about: the transform would parse whatever arrived, report
+      # a tidy "180/180 files parsed" and commit a mart missing a third of the money,
+      # and nothing downstream would look broken because the smaller number is
+      # internally consistent. transform-ho-spend refuses to write a mart smaller than
+      # the one already committed and exits 1, so a truncated fetch fails the step
+      # instead of quietly rewriting the site's headline figure.
+      #
+      # Not continue-on-error: this is Home Office core data, not colour. If GOV.UK is
+      # down the step fails, nothing is committed, and the site keeps serving the last
+      # good mart.
+      # No GitHub event data is interpolated here.
+      - name: Fetch and transform Home Office spend
+        run: npm run ingest:hospend
+
       # Regional partner pages, and the one ingest allowed to fail without taking the Home
       # Office data with it. On 17 August a single unreachable host, www.wsmp.wales, hung
       # for 133 seconds and then aborted the whole job, so tribunals, routes and money never
