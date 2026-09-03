@@ -602,9 +602,70 @@ function build() {
   };
 }
 
+
+/* ------------------------------------------------------- regression guard */
+
+/**
+ * Refuse to overwrite a good mart with a smaller one.
+ *
+ * data/raw/ho_spend is gitignored, so CI re-downloads all 402 files on every run. A
+ * partial download is the dangerous failure here: the transform would parse what it
+ * found, report "180/180 files parsed" and commit a mart missing a third of the money,
+ * and every check downstream would pass because the smaller number is internally
+ * consistent. Nothing about it looks broken.
+ *
+ * So compare against the mart already on disk. A real Home Office release only ever adds
+ * months, so the total should never fall. Anything below the floor is a fetch problem,
+ * not a data story.
+ */
+const REGRESSION_FLOOR = 0.95;
+
+function assertNoRegression(next) {
+  const path = resolve(OUT, "ho-asylum-entities.json");
+  if (!existsSync(path)) return null;
+
+  let previous;
+  try {
+    previous = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+  const before = previous?.summary;
+  if (!before?.totalGbp || !before?.filesInCorpus) return null;
+
+  const after = next.summary;
+  const problems = [];
+  if (after.filesInCorpus < before.filesInCorpus) {
+    problems.push(
+      `corpus shrank: ${before.filesInCorpus} files -> ${after.filesInCorpus}`
+    );
+  }
+  if (after.totalGbp < before.totalGbp * REGRESSION_FLOOR) {
+    problems.push(
+      `total fell more than ${Math.round((1 - REGRESSION_FLOOR) * 100)}%: ` +
+        `£${Math.round(before.totalGbp).toLocaleString()} -> £${Math.round(after.totalGbp).toLocaleString()}`
+    );
+  }
+  return problems.length ? problems : null;
+}
+
 /* ------------------------------------------------------------------- main */
 
 const marts = build();
+
+const regression = assertNoRegression(marts.entities);
+if (regression && !process.argv.includes("--allow-regression")) {
+  console.error("\ntransform-ho-spend: REFUSING to write a smaller mart.");
+  for (const problem of regression) console.error(`  ${problem}`);
+  console.error(
+    "\nThis is almost always an incomplete fetch, not a change in the data. Re-run\n" +
+      "  npm run fetch:hospend\n" +
+      "and check it reports the full file count. If the drop is genuine, re-run with\n" +
+      "  npm run transform:hospend -- --allow-regression"
+  );
+  process.exit(1);
+}
+
 mkdirSync(OUT, { recursive: true });
 
 const files = {

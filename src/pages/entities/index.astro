@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import AsylumSpendLedger from "../../components/AsylumSpendLedger.astro";
 import DataDrawer from "../../components/DataDrawer.astro";
 import PageContents from "../../components/PageContents.astro";
 import PageGuide from "../../components/PageGuide.astro";
@@ -270,6 +271,8 @@ function formatEvidenceDate(value: string | null | undefined): string {
   </section>
 
   <PageContents title="Start here" sections={entitySections} variant="priority" />
+
+  <AsylumSpendLedger />
 
   <section id="entity-findings" class="section section-anchor priority-section">
     <div class="section-head">

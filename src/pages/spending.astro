@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import AsylumSpendLedger from "../components/AsylumSpendLedger.astro";
 import BacklogClock from "../components/BacklogClock.astro";
 import DataDrawer from "../components/DataDrawer.astro";
 import InvestigationTrail from "../components/InvestigationTrail.astro";
@@ -307,6 +308,8 @@ const spendingSections = [
   </section>
 
   <PageContents title="Start here" sections={spendingSections} variant="priority" />
+
+  <AsylumSpendLedger />
 
   <section id="money-findings" class="section section-anchor priority-section">
     <div class="section-head">

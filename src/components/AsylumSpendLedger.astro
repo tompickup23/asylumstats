@@ -1,0 +1,152 @@
+---
+import {
+  loadHoAsylumEntities,
+  loadAsylumCostReconciliation,
+  getPageworthyEntities,
+  formatGbpShort
+} from "../lib/ho-spend";
+
+/**
+ * The Home Office asylum payment ledger, as a section for /spending and /entities.
+ *
+ * Both pages were built around a hand-curated starter ledger of eleven contract records
+ * and nine supplier profiles, wrapped in explorers, preset views and profile grids. The
+ * furniture was fine; there was almost nothing behind it, and a reader who set three
+ * filters and landed on two rows learned something about the site nobody intended to
+ * tell them.
+ *
+ * This is the ledger those pages were always describing: every payment over £25,000 the
+ * Home Office recorded against an asylum classification, 2010 to 2026. It goes FIRST on
+ * both pages, above the curated ledger, because it is the larger and more complete of
+ * the two and the reader should meet it first.
+ *
+ * The capture line is not decoration. Without it a reader takes £4.33bn for the cost of
+ * asylum, which it is not, and the page becomes the thing it exists to correct.
+ */
+interface Props {
+  /** How many suppliers to list. */
+  limit?: number;
+  headingLevel?: "h2" | "h3";
+}
+
+const { limit = 12, headingLevel = "h2" } = Astro.props;
+const Heading = headingLevel;
+
+const ledger = loadHoAsylumEntities();
+const recon = loadAsylumCostReconciliation();
+const capture = recon.headline.capture!;
+const top = getPageworthyEntities(ledger.entities).slice(0, limit);
+const maxAmount = Math.max(...top.map((entity) => entity.amountGbp), 1);
+---
+
+<section id="ho-spend-ledger" class="section section-anchor priority-section">
+  <div class="section-head">
+    <div>
+      <span class="tiny">Home Office payments</span>
+      <Heading>Every asylum payment over £25,000, 2010 to 2026</Heading>
+    </div>
+  </div>
+
+  <div class="ledger-stats">
+    <article class="stat-tile">
+      <span class="tiny">Paid to suppliers</span>
+      <strong>{formatGbpShort(ledger.summary.totalGbp)}</strong>
+      <p class="tiny">{ledger.summary.transactions.toLocaleString("en-GB")} payments the department coded as asylum.</p>
+    </article>
+    <article class="stat-tile">
+      <span class="tiny">Named suppliers</span>
+      <strong>{ledger.summary.entities.toLocaleString("en-GB")}</strong>
+      <p class="tiny">From {ledger.summary.filesParsed} published files, all of which parse.</p>
+    </article>
+    <article class="stat-tile">
+      <span class="tiny">Share of spending itemised</span>
+      <strong>£{capture.perHundredPounds} in £100</strong>
+      <p class="tiny">Most asylum spending is never published payment by payment.</p>
+    </article>
+  </div>
+
+  <p class="ledger-caveat">
+    <strong>This is not the cost of asylum.</strong> It is only what the Home Office itemises:
+    payments over £25,000 to a named supplier. The National Audit Office puts actual
+    {recon.fy} spending at {formatGbpShort(recon.headline.estimatedGbp)}.
+    <a href="/what-the-home-office-publishes">See what is published and what is not</a>.
+  </p>
+
+  <ol class="ledger-list">
+    {top.map((entity) => (
+      <li>
+        <span class="l-name">{entity.name}</span>
+        <span class="l-bar" aria-hidden="true">
+          <span class="l-fill" style={`width: ${Math.max((entity.amountGbp / maxAmount) * 100, 2)}%`} />
+        </span>
+        <span class="l-amount">{formatGbpShort(entity.amountGbp)}</span>
+      </li>
+    ))}
+  </ol>
+
+  <p class="tiny ledger-foot">
+    Supplier names are as the Home Office published them. Group companies are kept separate
+    unless a merge is documented, so Clearsprings Ready Homes, Clearsprings Management and
+    Clearel appear as three entries.
+    <a href="/data/ho-asylum-entities.json">Download all {ledger.summary.entities} suppliers (JSON)</a>.
+    Source: Home Office spending over £25,000, Open Government Licence v3.0.
+  </p>
+</section>
+
+<style>
+  .ledger-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .ledger-caveat {
+    border-left: 3px solid var(--warning);
+    background: var(--bg-subtle);
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+  .ledger-list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+  .ledger-list li {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1.4fr) minmax(0, 2fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .ledger-list li:last-child { border-bottom: none; }
+  .l-name { font-size: 0.92rem; font-weight: 600; }
+  .l-bar {
+    height: 8px;
+    background: var(--bg-subtle);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .l-fill {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+  }
+  .l-amount {
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .ledger-foot { line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    .ledger-list li { grid-template-columns: 1fr auto; }
+    .l-bar { display: none; }
+  }
+</style>
