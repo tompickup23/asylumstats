@@ -85,11 +85,19 @@ jobs:
       # the one already committed and exits 1, so a truncated fetch fails the step
       # instead of quietly rewriting the site's headline figure.
       #
-      # Not continue-on-error: this is Home Office core data, not colour. If GOV.UK is
-      # down the step fails, nothing is committed, and the site keeps serving the last
-      # good mart.
+      # continue-on-error, despite being Home Office data rather than colour, and the
+      # reason is the ordering rather than the importance. This step sits BEFORE the
+      # commit, so aborting here would take tribunals, routes, small boats and money
+      # down with it and nothing would refresh at all — the exact failure this workflow
+      # already learned twice, from hotels on 27 August and regional sources on 17
+      # August. GOV.UK being unreachable must not cost the datasets that did fetch.
+      #
+      # The run still ends red: the outcome is checked in the secondary gate at the
+      # bottom, after the good data is safely committed and deployed.
       # No GitHub event data is interpolated here.
       - name: Fetch and transform Home Office spend
+        id: hospend
+        continue-on-error: true
         run: npm run ingest:hospend
 
       # Regional partner pages, and the one ingest allowed to fail without taking the Home
@@ -204,6 +212,7 @@ jobs:
         env:
           REGIONAL_OUTCOME: ${{ steps.regional.outcome }}
           HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
+          HOSPEND_OUTCOME: ${{ steps.hospend.outcome }}
         run: |
           skipped=""
           if [ "$REGIONAL_OUTCOME" = "failure" ]; then
@@ -212,9 +221,20 @@ jobs:
           if [ "$HOTELS_OUTCOME" = "failure" ]; then
             skipped="$skipped hotels"
           fi
+          if [ "$HOSPEND_OUTCOME" = "failure" ]; then
+            skipped="$skipped home-office-spend"
+          fi
           if [ -n "$skipped" ]; then
-            echo "Secondary ingest failed:$skipped"
-            echo "The Home Office data still refreshed and was committed."
+            echo "Ingest failed:$skipped"
+            # Do not claim the Home Office data refreshed when it may be the thing that
+            # failed. Say which datasets are stale and which are not.
+            if [ "$HOSPEND_OUTCOME" = "failure" ]; then
+              echo "Home Office spend did NOT refresh. /what-the-home-office-publishes"
+              echo "and the ledger on /spending are serving the previously committed mart,"
+              echo "which is correct but now older than the date the page advertises."
+            else
+              echo "The Home Office data refreshed and was committed."
+            fi
             exit 1
           fi
-          echo "Secondary ingests completed."
+          echo "All ingests completed."
