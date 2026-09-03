@@ -145,19 +145,38 @@ function decode(buf) {
   return utf8.includes("�") ? buf.toString("latin1") : utf8.replace(/^﻿/, "");
 }
 
+/**
+ * Returns { values, labels }: the same sheet twice.
+ *
+ * `values` keeps native types, so an amount stays a number at full precision.
+ * `labels` is what the cell DISPLAYS, and the header row is read from it.
+ *
+ * The reason is a genuine trap. In the 2013 ODS files the header cell containing the
+ * word "Date" is typed as a date by the spreadsheet, and SheetJS coerces it to the
+ * string "Invalid Date". The date column then matches no header alias, every row in
+ * the file loses its date, and because the dedupe key falls back to the raw string
+ * those rows stop deduplicating — which silently moved the asylum total by £33m when
+ * the library was upgraded. The data cells were fine throughout; only the header was
+ * mangled. Reading labels for the header and values for the data fixes it without
+ * costing numeric precision.
+ */
 function gridFromBuffer(buf) {
   const kind = sniff(buf);
   if (kind === "text") {
-    return parseCsvGrid(decode(buf));
+    const grid = parseCsvGrid(decode(buf));
+    return { values: grid, labels: grid };
   }
   const wb = XLSX.read(buf, { type: "buffer", cellDates: true });
   const sheet = wb.Sheets[wb.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: "" });
+  return {
+    values: XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: "" }),
+    labels: XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: "" })
+  };
 }
 
-function findHeader(grid) {
-  for (let i = 0; i < Math.min(grid.length, 40); i += 1) {
-    const roles = (grid[i] ?? []).map(roleOf);
+function findHeader(labels) {
+  for (let i = 0; i < Math.min(labels.length, 40); i += 1) {
+    const roles = (labels[i] ?? []).map(roleOf);
     const present = new Set(roles.filter(Boolean));
     if (REQUIRED_ROLES.every((r) => present.has(r))) return { index: i, roles };
   }
@@ -202,12 +221,12 @@ function loadRows() {
         report.push([entry.file, 0, `unreadable: ${err.message}`]);
         continue;
       }
-      const header = findHeader(grid);
+      const header = findHeader(grid.labels);
       if (!header) { report.push([entry.file, 0, "no header row found"]); continue; }
 
       let kept = 0;
-      for (let r = header.index + 1; r < grid.length; r += 1) {
-        const cells = grid[r] ?? [];
+      for (let r = header.index + 1; r < grid.values.length; r += 1) {
+        const cells = grid.values[r] ?? [];
         if (!cells.some((c) => String(c ?? "").trim())) continue;
         const rec = {};
         header.roles.forEach((role, col) => {

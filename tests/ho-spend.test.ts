@@ -59,6 +59,20 @@ describe("Home Office asylum spend corpus", () => {
     }
   });
 
+  it("assigns a financial year to essentially every pound", () => {
+    // Guards a trap that cost £33m the first time. In the 2013 ODS files the header
+    // cell containing the word "Date" is typed as a date by the spreadsheet, and one
+    // SheetJS version coerced it to the string "Invalid Date". The column then matched
+    // no header alias, 3,705 rows silently lost their date, and because the dedupe key
+    // falls back to the raw string those rows stopped deduplicating and the asylum
+    // total rose. Every check still passed: the smaller, dateless rows looked fine.
+    //
+    // Dated totals summing to the overall total is the cheapest way to catch it, and it
+    // catches any future date regression rather than only this one.
+    const dated = byYear.years.reduce((sum, year) => sum + year.amountGbp, 0);
+    expect(dated / entities.summary.totalGbp).toBeGreaterThan(0.999);
+  });
+
   it("records which expense-area labels were in use, so no one draws a trend line", () => {
     expect(byYear.noTrendLineRule).toMatch(/reclassification/i);
     const labelled = byYear.years.filter((y) => y.areaLabels.length > 0);
