@@ -19,6 +19,7 @@ import { join } from "node:path";
 import { getCollection } from "astro:content";
 import { loadRouteDashboard, loadLocalRouteLatest } from "../../lib/route-data";
 import { getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
+import { loadAsylumCostReconciliation } from "../../lib/ho-spend";
 
 const BUILD_OG = process.env.BUILD_OG === "1";
 
@@ -134,7 +135,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
   const topRegion = [...regionShares.entries()].sort((x, y) => y[1] - x[1])[0];
 
+  // The figures come from the mart rather than being typed in, so the card cannot drift
+  // from the page it advertises when the monthly refresh moves the numbers.
+  const recon = loadAsylumCostReconciliation();
+  const capture = recon.headline.capture;
+
   const sectionPaths = [
+    {
+      slug: "what-the-home-office-publishes",
+      title: "The Home Office publishes a fraction of what it spends on asylum",
+      stat: capture ? `£${capture.perHundredPounds} in £100` : "11 in 100",
+      statLabel: `Asylum spending itemised, ${recon.fy}`,
+      verdict: "alert"
+    },
     {
       slug: "national",
       title: "The national picture, quarter by quarter",
