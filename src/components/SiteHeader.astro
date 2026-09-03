@@ -23,6 +23,10 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Money Trail",
     items: [
+      // First in the group on purpose. It is the only page that states the whole cost and
+      // how little of it is itemised, so a reader who lands on /spending or /entities
+      // without it can mistake a starter ledger for the total.
+      { href: "/what-the-home-office-publishes", label: "What gets published", desc: "£4.9bn spent, £540m itemised" },
       { href: "/spending", label: "Spending", desc: "Contracts, suppliers, public money rows" },
       { href: "/entities", label: "Entities", desc: "Suppliers & contractors" },
       { href: "/routes", label: "Routes", desc: "Small-boat & resettlement" },

@@ -30,6 +30,7 @@ src/data/mock/      → editorial content  → overview.json (official KPIs), re
 | Routes | `fetch-routes.mjs` (GOV.UK xlsx) | `transform-routes.mjs` | `route-dashboard.json`, `local-route-latest.json` |
 | Hotels | Manual CSVs | `transform-hotel-entities.mjs` | `hotel-entity-ledger.json`, `hotel-area-sightings.json` |
 | Money | Manual CSV + live hotel data | `transform-money-ledger.mjs` | `money-ledger.json` |
+| HO spend | `fetch-ho-spend.mjs` (GOV.UK Content API) | `transform-ho-spend.mjs` | `ho-asylum-entities.json`, `ho-asylum-by-year.json`, `asylum-cost-reconciliation.json` |
 | LCC | `fetch-lancashire-cc.mjs` | `transform-lancashire-cc.mjs` | Council marts (context only, not public) |
 
 ### Shared Utilities
@@ -151,3 +152,41 @@ The site is an accountability product aimed at:
 - Opaque contractor performance and public spending
 
 It is NOT anti-migrant. The "scandalous" energy goes toward waste, opacity, and system failure — not toward asylum seekers.
+
+
+## Home Office asylum spend (added 3 Sep 2026)
+
+`npm run ingest:hospend` fetches all 402 Home Office "spending over £25,000" transparency
+files from GOV.UK (2010-2026) into `data/raw/ho_spend/` and builds three marts. The raw
+files are gitignored; `_manifest.json` is tracked, because it is the provenance chain from
+every published figure back to the file it came from.
+
+**Four traps, all of which were live during the build:**
+
+1. **Asylum is tagged in TWO fields, not one.** `Expense Area` (the directorate: UKASRA,
+   UKAP and nine other labels since 2010) and `Expense Type` (the product: INITIAL
+   ACCOMMODATION, CASH SUPPORT and about forty more). Filtering on Area alone gives
+   £2.85bn and misses £1.47bn. The Area label vanished entirely between 2017 and 2020;
+   the Type codes did not, which is the only reason the series has no empty years.
+2. **Extensions lie.** `April_2011.xls` is a CSV, `November_2012.xls` is a ZIP. Files are
+   sniffed by magic bytes.
+3. **Two header spellings appear once each** — `Total Line Spend` and `Transaction_ID` —
+   and those two files are the ONLY main-department returns for December 2018 and
+   September 2019.
+4. **Dedupe on the PARSED date, never the raw string.** Eighteen months appear in more
+   than one publication. Keying on raw text made the answer swing by £2.2bn depending on
+   which of two valid parsers read an ODS file first.
+
+**The `basis` rule.** Every figure carries a basis: `published_transaction`,
+`audited_account`, `nao_estimate` or `derived`. Two different bases may be COMPARED side
+by side with both named — that comparison is the point of `/what-the-home-office-publishes`.
+They may never be summed, subtracted into one total, or drawn as one chart series. A
+cross-basis ratio is itself `derived` and must name its inputs. `tests/ho-spend.test.ts`
+enforces this; it exists because the repo's own history records a page carrying five
+conflicting "true cost" figures, every one of them two bases treated as one measure.
+
+**Licensing.** The Home Office data is Crown copyright under the Open Government Licence
+v3.0. The NAO figures in `data/manual/asylum-cost-components.csv` are **not** OGL: they
+are National Audit Office copyright, non-commercial reuse with a prescribed
+acknowledgement. The licence travels on each row and must stay there. Do not reproduce
+NAO tables or substantial text; cite the figures and link the report.

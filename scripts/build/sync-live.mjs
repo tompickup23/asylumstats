@@ -34,7 +34,10 @@ const SYNCED = {
   "hotel_entities/hotel-area-sightings.json": "hotel-area-sightings.json",
   "hotel_entities/hotel-archive-queue.json": "hotel-archive-queue.json",
   "small_boats/small-boats.json": "small-boats.json",
-  "border_security/border-security.json": "border-security.json"
+  "border_security/border-security.json": "border-security.json",
+  "ho_spend/ho-asylum-entities.json": "ho-asylum-entities.json",
+  "ho_spend/ho-asylum-by-year.json": "ho-asylum-by-year.json",
+  "ho_spend/asylum-cost-reconciliation.json": "asylum-cost-reconciliation.json"
 };
 
 const checkOnly = process.argv.includes("--check");

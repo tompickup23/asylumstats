@@ -1,0 +1,86 @@
+---
+/**
+ * A hundred squares, some filled. For a single part-to-whole proportion where the job is
+ * comprehension rather than comparison.
+ *
+ * Why not a pie or a bar. This is the first thing a reader meets on a page about £4.9
+ * billion, and billions are not a scale anyone reasons about. A hundred squares can be
+ * COUNTED: a reader who distrusts the number can check it by eye, with no numeracy and
+ * no axis. A pie slice of 11% is unreadable, and a bar needs an axis to mean anything.
+ *
+ * Identity is never carried by colour alone: the filled squares have a key, the grid has
+ * an aria-label, and the figures repeat as text underneath.
+ */
+interface Props {
+  /** Whole number of squares to fill, 0-100. */
+  filled: number;
+  filledLabel: string;
+  emptyLabel: string;
+  /** Screen-reader description of what the grid shows. */
+  alt: string;
+}
+
+const { filled, filledLabel, emptyLabel, alt } = Astro.props;
+const on = Math.max(0, Math.min(100, Math.round(filled)));
+const squares = Array.from({ length: 100 }, (_, i) => i < on);
+---
+
+<figure class="proportion">
+  <div class="grid" role="img" aria-label={alt}>
+    {squares.map((isOn) => <span class={isOn ? "sq on" : "sq"} />)}
+  </div>
+  <figcaption class="key">
+    <span><i class="swatch sw-on" aria-hidden="true"></i>{filledLabel}</span>
+    <span><i class="swatch sw-off" aria-hidden="true"></i>{emptyLabel}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .proportion {
+    margin: 0 0 1.5rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+    max-width: 340px;
+    margin-bottom: 0.9rem;
+  }
+  .sq {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    display: block;
+  }
+  .sq.on {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .key {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .key span {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    transform: translateY(1px);
+  }
+  .sw-on { background: var(--accent); }
+  .sw-off { background: var(--bg-subtle); border: 1px solid var(--border); }
+
+  @media (min-width: 640px) {
+    .key { flex-direction: row; gap: 1.5rem; }
+  }
+</style>

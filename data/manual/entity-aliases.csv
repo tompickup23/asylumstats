@@ -1,0 +1,27 @@
+entity_id,raw_supplier,canonical_name,company_number,role,merge_basis
+sodexo-pass,SODEXO PASS LTD,Sodexo Pass,,support_voucher,Same legal entity. Sodexho was renamed Sodexo in the 2008 group rebrand; both spellings appear in the source data.
+sodexo-pass,SODEXHO PASS LTD,Sodexo Pass,,support_voucher,Same legal entity. Sodexho was renamed Sodexo in the 2008 group rebrand; both spellings appear in the source data.
+cwt,CARLSON WAGONLIT TRAVEL,CWT (formerly Carlson Wagonlit Travel),,travel,Same business under its old and new trading names. Carlson Wagonlit Travel rebranded to CWT in 2019.
+cwt,CWT UK GROUP LTD,CWT (formerly Carlson Wagonlit Travel),,travel,Same business under its old and new trading names. Carlson Wagonlit Travel rebranded to CWT in 2019.
+alexander-mann-solutions,ALEXANDER MANN SOLUTIONS LTD,Alexander Mann Solutions,,staffing,LTD and LIMITED spellings of one company name.
+alexander-mann-solutions,ALEXANDER MANN SOLUTIONS LIMITED,Alexander Mann Solutions,,staffing,LTD and LIMITED spellings of one company name.
+bloom-procurement-services,BLOOM PROCUREMENT SERVICES LTD,Bloom Procurement Services,,staffing,LTD and LIMITED spellings of one company name.
+bloom-procurement-services,BLOOM PROCUREMENT SERVICES LIMITED,Bloom Procurement Services,,staffing,LTD and LIMITED spellings of one company name.
+migrant-help,MIGRANT HELPLINE LTD T/A MIGRANT HELPLINE,Migrant Help,,charity,Trading name recorded in the supplier field; one organisation.
+migrant-help,MIGRANT HELPLINE LTD,Migrant Help,,charity,Trading name recorded in the supplier field; one organisation.
+clearsprings-ready-homes,CLEARSPRINGS READY HOMES LTD,Clearsprings Ready Homes,,accommodation_prime,Not merged with other Clearsprings-named companies. They are separate legal entities and merging them would assert a corporate structure this dataset does not evidence.
+clearsprings-management,CLEARSPRINGS MANAGEMENT LTD,Clearsprings Management,,accommodation_other,Kept separate from Clearsprings Ready Homes. Same name root does not establish the same legal entity.
+clearel,CLEAREL LTD,Clearel,,accommodation_other,Kept separate from the Clearsprings companies. Related in the market but a distinct registered company.
+serco,SERCO LTD,Serco,,accommodation_prime,
+mears,MEARS LTD,Mears,,accommodation_prime,
+mitie-fm,MITIE FM LTD,Mitie FM,,facilities,"Mitie group companies are kept separate. Mitie FM, Mitie Ltd and Mitie Care & Custody are distinct registered companies doing different work."
+mitie,MITIE LTD,Mitie,,facilities,"Mitie group companies are kept separate. Mitie FM, Mitie Ltd and Mitie Care & Custody are distinct registered companies doing different work."
+mitie-care-and-custody,MITIE CARE & CUSTODY LTD,Mitie Care & Custody,,custodial,"Mitie group companies are kept separate. Mitie FM, Mitie Ltd and Mitie Care & Custody are distinct registered companies doing different work."
+prepaid-financial-services,PREPAID FINANCIAL SERVICES,Prepaid Financial Services,,support_card,
+calder-conferences,CALDER CONFERENCES LTD,Calder Conferences,,accommodation_booking,
+corporate-travel-management-north,CORPORATE TRAVEL MANAGEMENT (NORTH),Corporate Travel Management (North),,travel,
+g4s-care-and-justice,G4S CARE & JUSTICE SERVICES (UK) LTD,G4S Care & Justice Services (UK),,custodial,
+refugee-council,REFUGEE COUNCIL,Refugee Council,,charity,"A charity, not a local authority. Named here because the string is easily mistaken for a council in any name-based search."
+treasury-solicitors-office,TREASURY SOLICITORS OFFICE,Treasury Solicitor's Office,,public_body,
+government-legal-department,GOVERNMENT LEGAL DEPARTMENT,Government Legal Department,,public_body,
+brook-street,BROOK STREET (UK) LTD,Brook Street (UK),,staffing,

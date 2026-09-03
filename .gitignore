@@ -9,6 +9,10 @@ test-results
 # Large regenerable data files (run npm run ingest:* to regenerate)
 data/raw/lancashire_cc/spending-*.json
 data/raw/lancashire_cc/spending-index.json
+data/raw/ho_spend/*.csv
+data/raw/ho_spend/*.ods
+data/raw/ho_spend/*.xlsx
+data/raw/ho_spend/*.xls
 data/raw/uk_routes/*.xlsx
 data/raw/uk_routes/*.ods
 data/raw/moj_tribunals/*.ods
@@ -67,6 +71,9 @@ src/data/live/hotel-area-sightings.json
 src/data/live/hotel-archive-queue.json
 src/data/live/small-boats.json
 src/data/live/border-security.json
+src/data/live/ho-asylum-entities.json
+src/data/live/ho-asylum-by-year.json
+src/data/live/asylum-cost-reconciliation.json
 
 # Annual report and border security raw sources. Banked to doge:Asylum Stats with
 # hashes in data/raw/manifests/; the accounts PDF alone is 17.9 MB, and the border
