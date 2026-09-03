@@ -33,10 +33,11 @@ const desktopPages = [
   { name: "home", path: "/", focus: "#headline-stats", hasPageContents: false },
   { name: "places", path: "/places/", focus: "#place-search", hasPageContents: true },
   // north-west-region removed — page completely rewritten without priority-section pattern
-  { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
+  // Leads with the Home Office payment ledger now, not the curated findings block.
+  { name: "spending", path: "/spending/", focus: "#ho-spend-ledger", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
-  { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
+  { name: "entities", path: "/entities/", focus: "#ho-spend-ledger", hasPageContents: true },
   { name: "national", path: "/national/", focus: "#national-overview", hasPageContents: true },
   { name: "regional", path: "/regional/", focus: ".region-grid", hasPageContents: false },
   { name: "birmingham-place", path: "/places/birmingham/", focus: "#place-summary", hasPageContents: true }

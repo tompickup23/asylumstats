@@ -6,8 +6,11 @@ const pages = [
   { name: "places", path: "/places/", focus: "#place-search", hasPageContents: true },
   // north-west-region removed — page completely rewritten without priority-section pattern
   // hotels page disabled (renamed to _hotels.astro.disabled) — data pipeline intact
-  { name: "spending", path: "/spending/", focus: "#money-findings", hasPageContents: true },
-  { name: "entities", path: "/entities/", focus: "#entity-findings", hasPageContents: true },
+  // Both pages now lead with the Home Office payment ledger rather than the curated
+  // findings block: it is the larger and more complete of the two datasets, so it is
+  // the evidence a mobile reader should meet first.
+  { name: "spending", path: "/spending/", focus: "#ho-spend-ledger", hasPageContents: true },
+  { name: "entities", path: "/entities/", focus: "#ho-spend-ledger", hasPageContents: true },
   { name: "entity-serco", path: "/entities/supplier_serco/", focus: "#entity-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
