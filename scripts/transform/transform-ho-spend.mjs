@@ -40,7 +40,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import * as XLSX from "xlsx";
+import XLSX from "../lib/xlsx.mjs";
 import { parseCsvGrid, readCsv } from "../lib/csv-parser.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));

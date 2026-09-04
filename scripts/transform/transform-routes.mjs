@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import xlsx from "xlsx";
+import xlsx from "../lib/xlsx.mjs";
 import { buildAppealsBlock, readTribunalAppeals } from "../lib/tribunal-appeals.mjs";
 import { readRoutesManifest, releaseSectionUrl, resolveSource } from "../lib/route-release.mjs";
 

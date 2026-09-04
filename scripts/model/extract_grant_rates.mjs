@@ -15,7 +15,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import xlsx from "xlsx";
+import xlsx from "../lib/xlsx.mjs";
 
 const SOURCE = path.resolve("data/raw/uk_routes/asylum-claims-datasets-mar-2026.xlsx");
 const OUTPUT = path.resolve("src/data/live/grant-rates-nationality.json");
