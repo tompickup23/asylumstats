@@ -574,6 +574,23 @@ function build() {
     }));
 
   const reconciliation = buildReconciliation(rows, tagged, "2024/25");
+  // What the data COVERS, which is not the same thing as when the transform ran. A page
+  // that prints its own build date next to a spending figure invites the reader to think
+  // the figures are current to that date; they are current to the last month the Home
+  // Office has published, which is typically months earlier.
+  const transactionDates = tagged
+    .map((r) => parseDate(r.date))
+    .filter((d) => d && d.getUTCFullYear() > 2005 && d.getUTCFullYear() < 2100)
+    .sort((a, b) => a - b);
+  const monthLabel = (d) =>
+    d ? d.toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }) : null;
+  const coverage = {
+    earliest: transactionDates[0]?.toISOString().slice(0, 10) ?? null,
+    latest: transactionDates[transactionDates.length - 1]?.toISOString().slice(0, 10) ?? null,
+    earliestLabel: monthLabel(transactionDates[0]),
+    latestLabel: monthLabel(transactionDates[transactionDates.length - 1])
+  };
+
   const totalGbp = tagged.reduce((sum, r) => sum + r.amount, 0);
   const parsedOk = report.filter((r) => r[2] === "ok").length;
 
@@ -588,6 +605,7 @@ function build() {
         "Office against an asylum classification. The NAO puts actual 2024-25 Home Office " +
         "and MoJ asylum spend at around £4.9 billion. The difference is reported in " +
         "aggregate elsewhere, not missing.",
+      coverage,
       summary: {
         transactions: tagged.length,
         totalGbp: Math.round(totalGbp * 100) / 100,

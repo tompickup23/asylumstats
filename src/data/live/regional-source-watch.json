@@ -4,8 +4,8 @@
     "similarOrganisationCount": 2,
     "archiveToolCount": 2,
     "archivedResearchInputCount": 1,
-    "regionalPartnerAssetCount": 8,
-    "regionalPartnerDashboardCount": 6,
+    "regionalPartnerAssetCount": 12,
+    "regionalPartnerDashboardCount": 7,
     "migrationObservatoryGuideLinkCount": 4,
     "nwrsmpWorkbookCount": 7,
     "nwrsmpHistoricWorkbookCount": 6,
@@ -303,10 +303,25 @@
       "notes": "Direct Power BI view extracted from the Migration Yorkshire Ukraine dashboard page."
     },
     {
+      "assetId": "regional_asset_north_east_migration_partnership_asylum_data_local_council_data_official_source_link",
+      "organisation": "North East Migration Partnership",
+      "regionName": "North East England",
+      "pageTitle": "Data - North East Migration Partnership",
+      "pageUrl": "https://www.nemp.org.uk/data/",
+      "assetTitle": "Asylum data - local council data",
+      "assetUrl": "https://www.gov.uk/government/statistical-data-sets/asylum-and-resettlement-datasets#local-authority-data",
+      "assetType": "official_source_link",
+      "routeFocus": [
+        "asylum",
+        "refugees"
+      ],
+      "notes": "Official dataset or publication link exposed directly from the NEMP regional data page."
+    },
+    {
       "assetId": "regional_asset_north_east_migration_partnership_nemp_data_page_hub_page",
       "organisation": "North East Migration Partnership",
       "regionName": "North East England",
-      "pageTitle": "One moment, please...",
+      "pageTitle": "Data - North East Migration Partnership",
       "pageUrl": "https://www.nemp.org.uk/data/",
       "assetTitle": "NEMP data page",
       "assetUrl": "https://www.nemp.org.uk/data/",
@@ -318,6 +333,56 @@
         "migration"
       ],
       "notes": "Regional data landing page for the North East partnership."
+    },
+    {
+      "assetId": "regional_asset_north_east_migration_partnership_north_east_regional_power_bi_dashboard_dashboard_embed",
+      "organisation": "North East Migration Partnership",
+      "regionName": "North East England",
+      "pageTitle": "Data - North East Migration Partnership",
+      "pageUrl": "https://www.nemp.org.uk/data/",
+      "assetTitle": "North East regional Power BI dashboard",
+      "assetUrl": "https://app.powerbi.com/view?r=eyJrIjoiNGVhMWRjMmYtMDdlMS00MjFmLWEyZGYtZWEzMWM5YzM2NTkyIiwidCI6IjE2ODY0ZmFlLTI4NmUtNDcwNy1hNzhiLWQ3MTg4ZDYxNDlhNyJ9",
+      "assetType": "dashboard_embed",
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "ukraine",
+        "migration"
+      ],
+      "notes": "Direct Power BI dashboard extracted from the NEMP data page."
+    },
+    {
+      "assetId": "regional_asset_north_east_migration_partnership_rasi_resettlement_asylum_support_and_integration_data_q2_2023_official_source_link",
+      "organisation": "North East Migration Partnership",
+      "regionName": "North East England",
+      "pageTitle": "Data - North East Migration Partnership",
+      "pageUrl": "https://www.nemp.org.uk/data/",
+      "assetTitle": "RASI (resettlement, asylum support, and integration) data, Q2 2023",
+      "assetUrl": "https://www.gov.uk/government/publications/rasi-resettlement-asylum-support-and-integration-data-q2-2023",
+      "assetType": "official_source_link",
+      "routeFocus": [
+        "asylum",
+        "refugees",
+        "integration"
+      ],
+      "notes": "Official dataset or publication link exposed directly from the NEMP regional data page."
+    },
+    {
+      "assetId": "regional_asset_north_east_migration_partnership_regional_and_local_authority_data_on_immigration_groups_official_source_link",
+      "organisation": "North East Migration Partnership",
+      "regionName": "North East England",
+      "pageTitle": "Data - North East Migration Partnership",
+      "pageUrl": "https://www.nemp.org.uk/data/",
+      "assetTitle": "Regional and local authority data on immigration groups",
+      "assetUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
+      "assetType": "official_source_link",
+      "routeFocus": [
+        "asylum",
+        "ukraine",
+        "refugees",
+        "migration"
+      ],
+      "notes": "Official dataset or publication link exposed directly from the NEMP regional data page."
     }
   ],
   "migrationObservatoryGuideLinks": [

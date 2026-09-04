@@ -113,6 +113,26 @@ describe("Home Office asylum spend corpus", () => {
   });
 });
 
+describe("data currency", () => {
+  it("reports what the data covers, not just when the transform ran", () => {
+    // The page printed its own build date beside a spending figure, which reads as "the
+    // money is current to this date". It never is: the newest Home Office month is
+    // typically months behind. Coverage is the honest number and has to exist.
+    expect(entities.coverage.latest).toBeTruthy();
+    expect(entities.coverage.latestLabel).toBeTruthy();
+    expect(entities.coverage.earliest).toBeTruthy();
+  });
+
+  it("keeps coverage behind the run date, which is what makes them different", () => {
+    const latest = new Date(entities.coverage.latest!);
+    const ran = new Date(entities.generatedAt);
+    expect(latest.getTime()).toBeLessThan(ran.getTime());
+    // If these ever converge the distinction has quietly collapsed and the page is
+    // implying a currency it does not have.
+    expect(ran.getTime() - latest.getTime()).toBeGreaterThan(24 * 60 * 60 * 1000);
+  });
+});
+
 describe("the basis rule", () => {
   it("states the rule on the mart itself, not only in documentation", () => {
     expect(reconciliation.basisRule).toMatch(/never be summed/i);

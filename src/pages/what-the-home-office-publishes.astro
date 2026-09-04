@@ -97,10 +97,19 @@ const structuredData = [
         detailed record of <strong>{formatGbpShort(recon.headline.publishedGbp)}</strong> of it.
         That is about <strong>£{capture.perHundredPounds} in every £100</strong>.
       </p>
+      {/*
+        Two different dates, and conflating them is the trap. What the figures COVER is
+        the last month the Home Office has published. When we last CHECKED is a freshness
+        signal about us. Printing only the second next to a spending figure tells the
+        reader the money is current to that date, which it never is.
+      */}
       <p class="updated">
-        Last updated <time datetime={recon.generatedAt.slice(0, 10)}>
+        Home Office payment data covers {entities.coverage.earliestLabel} to{" "}
+        <strong>{entities.coverage.latestLabel}</strong>. Spending totals are for {recon.fy}.
+        <br />
+        Last checked <time datetime={recon.generatedAt.slice(0, 10)}>
           {new Date(recon.generatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
-        </time>
+        </time>.
       </p>
     </header>
 
