@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-03T02:19:46.257Z",
+ "generatedAt": "2026-09-04T12:04:18.817Z",
  "fy": "2024/25",
  "basisRule": "Two figures with different `basis` values may be COMPARED side by side, with both bases named. They may never be summed, subtracted into a single total, or drawn as one chart series. A ratio between two bases is itself `derived` and must name both inputs, which is what `capture` below does.",
  "headline": {

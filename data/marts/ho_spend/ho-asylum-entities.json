@@ -1,12 +1,12 @@
 {
- "generatedAt": "2026-09-03T02:19:46.258Z",
+ "generatedAt": "2026-09-04T12:04:18.818Z",
  "basis": "published_transaction",
  "licence": "Open Government Licence v3.0 (Crown copyright)",
  "sourceCollection": "https://www.gov.uk/government/collections/home-office-spending",
  "whatThisIsNot": "Not total asylum spending. Only transactions over £25,000 recorded by the Home Office against an asylum classification. The NAO puts actual 2024-25 Home Office and MoJ asylum spend at around £4.9 billion. The difference is reported in aggregate elsewhere, not missing.",
  "summary": {
-  "transactions": 16940,
-  "totalGbp": 4329261710.96,
+  "transactions": 16872,
+  "totalGbp": 4312728883.43,
   "entities": 366,
   "filesInCorpus": 255,
   "filesParsed": 255
@@ -127,13 +127,13 @@
     "CARLSON WAGONLIT TRAVEL",
     "CWT UK GROUP LTD"
    ],
-   "amountGbp": 367892395.36,
-   "transactions": 3456,
+   "amountGbp": 365859218.74,
+   "transactions": 3437,
    "byFy": {
     "2010/11": 27849758.15,
     "2011/12": 28007730.51,
     "2012/13": 31023375.11,
-    "2013/14": 31532067.91,
+    "2013/14": 29498891.29,
     "2014/15": 26983262.79,
     "2015/16": 19515866.67,
     "2016/17": 16499270.49,
@@ -155,7 +155,7 @@
     },
     {
      "label": "ASYLUM SERVICES.PUBLIC EXPENSE REMOVALS",
-     "amountGbp": 105823683.79
+     "amountGbp": 103790507.17
     },
     {
      "label": "ASYLUM SERVICES",
@@ -180,12 +180,12 @@
    "rawSuppliers": [
     "SERCO LTD"
    ],
-   "amountGbp": 352731715.16,
-   "transactions": 556,
+   "amountGbp": 352302925.83,
+   "transactions": 552,
    "byFy": {
     "2010/11": 272623.14,
     "2012/13": 15432998.02,
-    "2013/14": 22035460.52,
+    "2013/14": 21606671.19,
     "2014/15": 40846446.1,
     "2015/16": 42428930.13,
     "2016/17": 72731484.54,
@@ -200,7 +200,7 @@
     },
     {
      "label": "ASYLUM PROVISION",
-     "amountGbp": 73017572.48
+     "amountGbp": 72588783.15
     },
     {
      "label": "ASYLUM SERVICES & PROVISION",
@@ -268,12 +268,12 @@
    "rawSuppliers": [
     "G4S CARE & JUSTICE SERVICES (UK) LTD"
    ],
-   "amountGbp": 218654640.88,
-   "transactions": 534,
+   "amountGbp": 215520295.74,
+   "transactions": 521,
    "byFy": {
     "2011/12": 2220519.26,
     "2012/13": 14277558.22,
-    "2013/14": 30710871.07,
+    "2013/14": 27576525.93,
     "2014/15": 33887725.14,
     "2015/16": 41623705.37,
     "2016/17": 75986543.52,
@@ -282,7 +282,7 @@
    "topExpenseTypes": [
     {
      "label": "ASYLUM PROVISION",
-     "amountGbp": 82072289.27
+     "amountGbp": 78937944.13
     },
     {
      "label": "ASYLUM SERVICES & PROVISION",
@@ -299,43 +299,6 @@
     {
      "label": "ASYLUM PROVISION.ASYLUM ACCOMODATION",
      "amountGbp": 18446419.47
-    }
-   ]
-  },
-  {
-   "entityId": "sodexo-pass",
-   "name": "Sodexo Pass",
-   "companyNumber": null,
-   "role": "support_voucher",
-   "mergeBasis": "Same legal entity. Sodexho was renamed Sodexo in the 2008 group rebrand; both spellings appear in the source data.",
-   "rawSuppliers": [
-    "SODEXHO PASS LTD",
-    "SODEXO PASS LTD"
-   ],
-   "amountGbp": 141800207.24,
-   "transactions": 336,
-   "byFy": {
-    "2010/11": 10931735.91,
-    "2011/12": 55598570.55,
-    "2012/13": 59684475.96,
-    "2013/14": 15585424.82
-   },
-   "topExpenseTypes": [
-    {
-     "label": "ASYLUM PROVISION.ASYLUM SERV CASH SUPP",
-     "amountGbp": 54329970.02
-    },
-    {
-     "label": "ASYLUM PROVISION.ASYLUM SERVICES",
-     "amountGbp": 45862890.3
-    },
-    {
-     "label": "ASYLUM PROVISION.ASYLUM SERV SECT4VOUCHERS",
-     "amountGbp": 26021922.1
-    },
-    {
-     "label": "ASYLUM PROVISION",
-     "amountGbp": 15585424.82
     }
    ]
   },
@@ -367,6 +330,43 @@
     {
      "label": "PROJECT",
      "amountGbp": 55598.54
+    }
+   ]
+  },
+  {
+   "entityId": "sodexo-pass",
+   "name": "Sodexo Pass",
+   "companyNumber": null,
+   "role": "support_voucher",
+   "mergeBasis": "Same legal entity. Sodexho was renamed Sodexo in the 2008 group rebrand; both spellings appear in the source data.",
+   "rawSuppliers": [
+    "SODEXHO PASS LTD",
+    "SODEXO PASS LTD"
+   ],
+   "amountGbp": 134007494.83,
+   "transactions": 320,
+   "byFy": {
+    "2010/11": 10931735.91,
+    "2011/12": 55598570.55,
+    "2012/13": 59684475.96,
+    "2013/14": 7792712.41
+   },
+   "topExpenseTypes": [
+    {
+     "label": "ASYLUM PROVISION.ASYLUM SERV CASH SUPP",
+     "amountGbp": 54329970.02
+    },
+    {
+     "label": "ASYLUM PROVISION.ASYLUM SERVICES",
+     "amountGbp": 45862890.3
+    },
+    {
+     "label": "ASYLUM PROVISION.ASYLUM SERV SECT4VOUCHERS",
+     "amountGbp": 26021922.1
+    },
+    {
+     "label": "ASYLUM PROVISION",
+     "amountGbp": 7792712.41
     }
    ]
   },
@@ -450,10 +450,10 @@
    "rawSuppliers": [
     "TREASURY SOLICITORS OFFICE"
    ],
-   "amountGbp": 66601222.92,
-   "transactions": 273,
+   "amountGbp": 65999423.77,
+   "transactions": 271,
    "byFy": {
-    "2013/14": 9683110.59,
+    "2013/14": 9081311.44,
     "2014/15": 56918112.33
    },
    "topExpenseTypes": [
@@ -471,47 +471,7 @@
     },
     {
      "label": "ASYLUM PROVISION",
-     "amountGbp": 1203598.3
-    }
-   ]
-  },
-  {
-   "entityId": "clearel",
-   "name": "Clearel",
-   "companyNumber": null,
-   "role": "accommodation_other",
-   "mergeBasis": "Kept separate from the Clearsprings companies. Related in the market but a distinct registered company.",
-   "rawSuppliers": [
-    "CLEAREL LTD"
-   ],
-   "amountGbp": 62649137.83,
-   "transactions": 227,
-   "byFy": {
-    "2012/13": 14517091.76,
-    "2013/14": 17873574.28,
-    "2014/15": 27836307.88,
-    "2015/16": 2422163.91
-   },
-   "topExpenseTypes": [
-    {
-     "label": "ASYLUM PROVISION",
-     "amountGbp": 37472836.58
-    },
-    {
-     "label": "ASYLUM PROVISION.ASYLUM ACCOMODATION",
-     "amountGbp": 15494112.05
-    },
-    {
-     "label": "ASYLUM SERVICES",
-     "amountGbp": 4892484.5
-    },
-    {
-     "label": "ASYLUM PROVISION.ASYLUM ACOMMODATION",
-     "amountGbp": 1788544.45
-    },
-    {
-     "label": "ASYLUM PROVISION. ASYLUM ACCOMODATION",
-     "amountGbp": 1227351.56
+     "amountGbp": 601799.15
     }
    ]
   },
@@ -551,6 +511,46 @@
     {
      "label": "IT",
      "amountGbp": 970906.1
+    }
+   ]
+  },
+  {
+   "entityId": "clearel",
+   "name": "Clearel",
+   "companyNumber": null,
+   "role": "accommodation_other",
+   "mergeBasis": "Kept separate from the Clearsprings companies. Related in the market but a distinct registered company.",
+   "rawSuppliers": [
+    "CLEAREL LTD"
+   ],
+   "amountGbp": 60632924.85,
+   "transactions": 218,
+   "byFy": {
+    "2012/13": 14517091.76,
+    "2013/14": 15857361.3,
+    "2014/15": 27836307.88,
+    "2015/16": 2422163.91
+   },
+   "topExpenseTypes": [
+    {
+     "label": "ASYLUM PROVISION",
+     "amountGbp": 35456623.6
+    },
+    {
+     "label": "ASYLUM PROVISION.ASYLUM ACCOMODATION",
+     "amountGbp": 15494112.05
+    },
+    {
+     "label": "ASYLUM SERVICES",
+     "amountGbp": 4892484.5
+    },
+    {
+     "label": "ASYLUM PROVISION.ASYLUM ACOMMODATION",
+     "amountGbp": 1788544.45
+    },
+    {
+     "label": "ASYLUM PROVISION. ASYLUM ACCOMODATION",
+     "amountGbp": 1227351.56
     }
    ]
   },
@@ -1232,11 +1232,11 @@
    "rawSuppliers": [
     "DEPARTMENT FOR WORK & PENSIONS (DWP)"
    ],
-   "amountGbp": 11930549.98,
-   "transactions": 86,
+   "amountGbp": 11842344.98,
+   "transactions": 84,
    "byFy": {
     "2012/13": 1035740,
-    "2013/14": 728600,
+    "2013/14": 640395,
     "2014/15": 239530,
     "2015/16": 212532,
     "2016/17": 271710,
@@ -1254,7 +1254,7 @@
     },
     {
      "label": "INTEGRATION LOAN SCHEME",
-     "amountGbp": 1402992
+     "amountGbp": 1314787
     },
     {
      "label": "MISCELLANEOUS EXPENDITURE",
@@ -1357,10 +1357,10 @@
    "rawSuppliers": [
     "IBM DIRECT UNITED KINGDOM LTD"
    ],
-   "amountGbp": 8547592.49,
-   "transactions": 51,
+   "amountGbp": 8310765.61,
+   "transactions": 50,
    "byFy": {
-    "2013/14": 604216.16,
+    "2013/14": 367389.28,
     "2014/15": 7273094.22,
     "2016/17": 670282.11
    },
@@ -1375,7 +1375,7 @@
     },
     {
      "label": "ASYLUM PROVISION",
-     "amountGbp": 473653.76
+     "amountGbp": 236826.88
     }
    ]
   },
@@ -5147,27 +5147,6 @@
    ]
   },
   {
-   "entityId": "detica-ltd",
-   "name": "Detica Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "DETICA LTD"
-   ],
-   "amountGbp": 348000,
-   "transactions": 2,
-   "byFy": {
-    "2013/14": 348000
-   },
-   "topExpenseTypes": [
-    {
-     "label": "ASYLUM PROVISION",
-     "amountGbp": 348000
-    }
-   ]
-  },
-  {
    "entityId": "we-are-snook-ltd",
    "name": "We Are Snook Ltd",
    "companyNumber": null,
@@ -6215,6 +6194,27 @@
     {
      "label": "GRANTS",
      "amountGbp": 44801
+    }
+   ]
+  },
+  {
+   "entityId": "detica-ltd",
+   "name": "Detica Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "DETICA LTD"
+   ],
+   "amountGbp": 174000,
+   "transactions": 1,
+   "byFy": {
+    "2013/14": 174000
+   },
+   "topExpenseTypes": [
+    {
+     "label": "ASYLUM PROVISION",
+     "amountGbp": 174000
     }
    ]
   },
@@ -7836,27 +7836,6 @@
    ]
   },
   {
-   "entityId": "eamus-cork-solutions",
-   "name": "Eamus Cork Solutions",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "EAMUS CORK SOLUTIONS"
-   ],
-   "amountGbp": 53520.04,
-   "transactions": 2,
-   "byFy": {
-    "2013/14": 53520.04
-   },
-   "topExpenseTypes": [
-    {
-     "label": "ASYLUM PROVISION",
-     "amountGbp": 53520.04
-    }
-   ]
-  },
-  {
    "entityId": "manchester-pct",
    "name": "Manchester Pct",
    "companyNumber": null,
@@ -8644,27 +8623,6 @@
    ]
   },
   {
-   "entityId": "nhs-tameside-and-glossop-clinical-commissioning-group-g",
-   "name": "NHS Tameside & Glossop Clinical Commissioning Group (g)",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "NHS TAMESIDE & GLOSSOP CLINICAL COMMISSIONING GROUP (G)"
-   ],
-   "amountGbp": 30600,
-   "transactions": 1,
-   "byFy": {
-    "2014/15": 30600
-   },
-   "topExpenseTypes": [
-    {
-     "label": "GRANTS",
-     "amountGbp": 30600
-    }
-   ]
-  },
-  {
    "entityId": "canford-audio-plc",
    "name": "Canford Audio PLC",
    "companyNumber": null,
@@ -8681,6 +8639,27 @@
    "topExpenseTypes": [
     {
      "label": "PRESENTATION EQUIPMENT & SUPPLIES",
+     "amountGbp": 30600
+    }
+   ]
+  },
+  {
+   "entityId": "nhs-tameside-and-glossop-clinical-commissioning-group-g",
+   "name": "NHS Tameside & Glossop Clinical Commissioning Group (g)",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "NHS TAMESIDE & GLOSSOP CLINICAL COMMISSIONING GROUP (G)"
+   ],
+   "amountGbp": 30600,
+   "transactions": 1,
+   "byFy": {
+    "2014/15": 30600
+   },
+   "topExpenseTypes": [
+    {
+     "label": "GRANTS",
      "amountGbp": 30600
     }
    ]
@@ -8997,6 +8976,27 @@
     {
      "label": "GRANT",
      "amountGbp": 26765
+    }
+   ]
+  },
+  {
+   "entityId": "eamus-cork-solutions",
+   "name": "Eamus Cork Solutions",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "EAMUS CORK SOLUTIONS"
+   ],
+   "amountGbp": 26760.02,
+   "transactions": 1,
+   "byFy": {
+    "2013/14": 26760.02
+   },
+   "topExpenseTypes": [
+    {
+     "label": "ASYLUM PROVISION",
+     "amountGbp": 26760.02
     }
    ]
   },
