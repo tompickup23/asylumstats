@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import xlsx from "xlsx";
+import xlsx from "../lib/xlsx.mjs";
 import { fileSha256, readCsv } from "../lib/csv-parser.mjs";
 
 const inputPaths = {

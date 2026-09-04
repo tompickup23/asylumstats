@@ -20,7 +20,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import xlsx from "xlsx";
+import xlsx from "../lib/xlsx.mjs";
 
 const BIRTHS_2024 = path.resolve("data/raw/ons_births/2024birthslinked.xlsx");
 const BASE_POP = path.resolve("data/model/base_single_year_2021.json");

@@ -18,7 +18,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import xlsx from "xlsx";
+import xlsx from "../lib/xlsx.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const RAW_DIR = resolve(ROOT, "data/raw/small_boats");
