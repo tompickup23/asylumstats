@@ -31,6 +31,11 @@ const dailyCostRecord = moneyLedger.records.find(
 );
 const dailyCostGbp = dailyCostRecord?.valueGbp ?? 5_770_000;
 const dailyCostSource = dailyCostRecord?.sourceUrl ?? "";
+// The period the hotel figure covers, read off the record rather than typed in.
+// It has to travel with the number into the headline: this is a 2024/25 average
+// sitting at the top of a page whose other figures are the latest quarter, and
+// hotel occupancy has fallen sharply since. Undated in an h1, it reads as today.
+const dailyCostPeriod = (dailyCostRecord?.periodLabel ?? "2024/25 average").replace(/\s*average$/, "");
 
 const tenYearRecord = moneyLedger.records.find(
   (r: any) => r.valueKind === "forecast_total" && r.valueGbp > 0
@@ -235,7 +240,7 @@ function findingColor(verdict: string): string {
 
 <BaseLayout
   title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-  description={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in 2024/25, ${fmtGbp(dailyCostGbp)} a day. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
+  description={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in ${dailyCostPeriod}, ${fmtGbp(dailyCostGbp)} a day. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
   image="/og/home.png"
 >
   {/*
@@ -250,10 +255,10 @@ function findingColor(verdict: string): string {
         <p class="hero-eyebrow">Home Office asylum accommodation</p>
         <h1 class="hero-headline">
           <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
-          <span class="hero-label">a day on asylum hotels</span>
+          <span class="hero-label">a day on asylum hotels in {dailyCostPeriod}</span>
         </h1>
         <p class="hero-deck">
-          That is {fmtGbp(annualCostGbp)} across 2024/25, inside the £4bn the Home Office spent on asylum
+          That is {fmtGbp(annualCostGbp)} across {dailyCostPeriod}, inside the £4bn the Home Office spent on asylum
           support altogether. {fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial
           decision at {snapshotDate}.
         </p>
@@ -318,7 +323,7 @@ function findingColor(verdict: string): string {
       <div class="cost-item">
         <span class="cost-number">£{HOTEL_NIGHTLY_2024_25}</span>
         <span class="cost-label">per person per night in a hotel</span>
-        <span class="cost-context">2024/25 average, the year the £{(dailyCostGbp / 1_000_000).toFixed(2)}M daily figure covers. {fmtInt(latestQuarter.hotelAccommodation)} people were in asylum hotels at {snapshotDate}, down from 30,657 at the end of 2025.</span>
+        <span class="cost-context">{dailyCostPeriod} average, the year the £{(dailyCostGbp / 1_000_000).toFixed(2)}M daily figure covers. {fmtInt(latestQuarter.hotelAccommodation)} people were in asylum hotels at {snapshotDate}, down from 30,657 at the end of 2025.</span>
       </div>
       <div class="cost-item">
         <span class="cost-number">{fmtGbp(tenYearGbp)}</span>
@@ -583,7 +588,7 @@ function findingColor(verdict: string): string {
         <ShareButton
           url={SITE_URL}
           title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-          text={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in 2024/25, ${fmtGbp(dailyCostGbp)} a day. Sourced data by local authority: ${SITE_URL}`}
+          text={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in ${dailyCostPeriod}, ${fmtGbp(dailyCostGbp)} a day. Sourced data by local authority: ${SITE_URL}`}
           compact
         />
       </div>

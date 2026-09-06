@@ -1,4 +1,5 @@
 import rawProjections from "../data/live/ethnic-projections.json";
+import validation from "../data/live/out-of-sample-validation.json";
 import { plausibleThrough } from "./projection-plausibility";
 
 export interface EthnicGroup {
@@ -309,6 +310,78 @@ export function areasBelowFiftyBy(year: number): {
   }
 
   return { total, majorityToday };
+}
+
+
+/**
+ * The range of years within which an area's White British share crosses 50%.
+ *
+ * A crossing year is not measured. It is interpolated between two decadal
+ * projections, so it inherits their error and then divides by a slope, which
+ * makes it more fragile than either endpoint. The site published bare years
+ * ("approximately 2027", "around 2050") while the methodology told readers to
+ * carry the model's error with every figure, and a year with no interval reads
+ * as a date rather than a projection.
+ *
+ * The band re-runs the same interpolation with the model's measured out-of-sample
+ * error applied to the projected endpoint, widened by sqrt(decades) on the same
+ * rule the Monte Carlo run uses. It is a sensitivity band and not a confidence
+ * interval: it propagates the one-decade error that was actually measured and
+ * nothing else, so it understates the true uncertainty at long horizons rather
+ * than bounding it. That is why a further-out crossing comes back wider, and why
+ * a crossing beyond the tested horizon should be read as a scenario.
+ */
+export const WHITE_BRITISH_MAE_PP = validation.summary.white_british.mae;
+
+export interface CrossingYearRange {
+  central: number;
+  earliest: number;
+  latest: number;
+}
+
+export function whiteBritishCrossingRange(code: string): CrossingYearRange | null {
+  const area = data.areas[code];
+  if (!area) return null;
+
+  const observedYear = area.current?.year ?? 2021;
+  const observed = area.current?.groups?.white_british;
+  if (observed == null || observed < 50) return null;
+
+  const years = Object.keys(area.projections ?? {})
+    .map(Number)
+    .filter((y) => Number.isFinite(y))
+    .sort((a, b) => a - b);
+
+  // `shift` moves the projected endpoint by that many MAEs. A positive shift
+  // holds the share up and pushes the crossing later.
+  const crossing = (shift: number): number | null => {
+    let priorYear = observedYear;
+    let priorShare = observed;
+    for (const year of years) {
+      const projected = area.projections?.[String(year)]?.white_british;
+      if (projected == null) continue;
+      const decades = (year - observedYear) / 10;
+      const share = projected + shift * WHITE_BRITISH_MAE_PP * Math.sqrt(Math.max(decades, 0));
+      if (share < 50) {
+        return priorYear + ((priorShare - 50) / (priorShare - share)) * (year - priorYear);
+      }
+      priorYear = year;
+      priorShare = share;
+    }
+    return null;
+  };
+
+  const central = crossing(0);
+  if (central == null) return null;
+  const latest = crossing(1);
+  const earliest = crossing(-1);
+  if (latest == null || earliest == null) return null;
+
+  return {
+    central: Math.round(central),
+    earliest: Math.round(earliest),
+    latest: Math.round(latest),
+  };
 }
 
 /**

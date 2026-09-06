@@ -333,6 +333,30 @@ export const TOTAL_GBP_M = {
   upper: sum(COST_CATEGORIES, "upper")
 };
 
+/**
+ * The central total split by basis, in £m and as a share of the whole.
+ *
+ * This exists because the finding described the audited portion as "about 60%"
+ * while its own table put £4,363M of £7,973M on an audited basis, which is 55%.
+ * 60% was neither the audited share nor the audited-plus-attributed share (63%),
+ * so a reader checking the claim against the table could not reproduce it either
+ * way. Derive the shares here and assert the prose against them, rather than
+ * re-deriving a percentage by hand each edition.
+ */
+export const BY_BASIS: Record<CostBasis, { gbpM: number; sharePct: number }> = (() => {
+  const bases: CostBasis[] = ["audited", "attributed", "published", "estimated"];
+  const out = {} as Record<CostBasis, { gbpM: number; sharePct: number }>;
+  for (const basis of bases) {
+    const gbpM = sum(COST_CATEGORIES.filter((c) => c.basis === basis), "central");
+    out[basis] = { gbpM, sharePct: (gbpM / TOTAL_GBP_M.central) * 100 };
+  }
+  return out;
+})();
+
+/** Audited plus attributed: the portion traceable to a page of the accounts. */
+export const TRACEABLE_TO_ACCOUNTS_PCT =
+  BY_BASIS.audited.sharePct + BY_BASIS.attributed.sharePct;
+
 export const PER_TAXPAYER_GBP = {
   conservative: Math.round((TOTAL_GBP_M.conservative * 1_000_000) / UK_TAXPAYERS),
   central: Math.round((TOTAL_GBP_M.central * 1_000_000) / UK_TAXPAYERS),

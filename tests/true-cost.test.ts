@@ -11,6 +11,8 @@ import {
   ASRA_FY_CLOSES,
   SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA,
   TOTAL_GBP_M,
+  BY_BASIS,
+  TRACEABLE_TO_ACCOUNTS_PCT,
   UK_TAXPAYERS,
   assertNoDoubleCount
 } from "../src/lib/true-cost";
@@ -215,5 +217,40 @@ describe("arithmetic", () => {
       "c8cda7ee5f28700b4a2174b3889cb203c410503c60222e6a03102d92642c1350"
     );
     expect(araCosts._provenance.financialYear).toBe("2025-26");
+  });
+});
+
+/**
+ * The audited share went out as "about 60%" in two places while the article's own
+ * basis table put £4,363M of £7,973M on an audited basis. That is 55%, and 60% was
+ * not the audited-plus-attributed figure either, which is 63%. A reader checking the
+ * headline against the table below it could not reproduce the claim on either
+ * reading, which is the specific failure this describes.
+ */
+describe("the basis shares in the prose reproduce from the categories", () => {
+  it("splits the central total across exactly the four bases", () => {
+    const summed =
+      BY_BASIS.audited.gbpM +
+      BY_BASIS.attributed.gbpM +
+      BY_BASIS.published.gbpM +
+      BY_BASIS.estimated.gbpM;
+    expect(summed).toBe(TOTAL_GBP_M.central);
+  });
+
+  it("puts the audited share at 55%, not 60%", () => {
+    expect(Math.round(BY_BASIS.audited.sharePct)).toBe(55);
+    expect(Math.round(TRACEABLE_TO_ACCOUNTS_PCT)).toBe(63);
+  });
+
+  it("states those shares in the article and nowhere states a 60% audited share", () => {
+    expect(finding).toContain(`${Math.round(BY_BASIS.audited.sharePct)}% of the total is an audited outturn`);
+    expect(finding).toContain(`${Math.round(TRACEABLE_TO_ACCOUNTS_PCT)}% is either audited or attributed`);
+    expect(finding).not.toMatch(/(about|around) 60% of (the total|that) is now audited/i);
+  });
+
+  it("prints each basis share in the table beside its money", () => {
+    for (const [basis, { gbpM, sharePct }] of Object.entries(BY_BASIS)) {
+      expect(finding, basis).toContain(`£${gbpM.toLocaleString("en-GB")}M | ${Math.round(sharePct)}%`);
+    }
   });
 });

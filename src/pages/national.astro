@@ -6,7 +6,7 @@ import { loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getSeriesDelta } from "../lib/route-analytics";
 import { getCollection } from "astro:content";
-import { getSignificantDemographicShifts } from "../lib/ethnic-projections";
+import { getSignificantDemographicShifts, areasBelowFiftyBy } from "../lib/ethnic-projections";
 import rawProjections from "../data/live/ethnic-projections.json";
 import grantRateData from "../data/live/grant-rates-nationality.json";
 import schoolValidationData from "../data/live/school-validation.json";
@@ -84,9 +84,12 @@ const nationalEthLines = (() => {
   }));
 })();
 
-const wbBelow50Count = Object.values(allAreas).filter((a: any) =>
-  a.projections?.["2051"]?.white_british < 50
-).length;
+// Read off the shared helper, never recomputed here. This filtered on the raw
+// projection alone and published 93 where the homepage and the finding said 86:
+// it counted Sheffield twice, under a retired code and a current one, and it
+// counted the six London boroughs whose 2051 projection the plausibility guard
+// withholds and whose place pages therefore do not show it.
+const wbBelow50Count = areasBelowFiftyBy(2051).total;
 
 const significantShifts = getSignificantDemographicShifts(2060);
 
