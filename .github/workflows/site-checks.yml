@@ -2,6 +2,15 @@ name: Site checks
 
 on:
   pull_request:
+  # Also on pushes to main, because the refresh workflow commits data straight to main
+  # and deploys it without any of these checks running. main failed regional-source-watch
+  # from 4 September and no run existed to say so; an xlsx upgrade broke six transforms
+  # the day before and the only red was a workflow nobody was watching. A PR-only trigger
+  # validates the code and never the thing that actually changes most often, which is the
+  # data. This does not block the deploy — deploy.yml is a separate workflow — it just
+  # means main going red is visible instead of silent.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:

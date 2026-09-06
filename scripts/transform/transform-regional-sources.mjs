@@ -1060,7 +1060,37 @@ writeJson(path.join(canonicalDir, "manifest.json"), {
   }
 });
 
-writeJson(path.join(liveDir, "regional-source-watch.json"), liveOutput);
+/**
+ * Refuse to publish a shorter partner list than the one already committed.
+ *
+ * These assets are scraped from partner websites, so a partner being briefly unreachable
+ * makes the transform succeed with less. On 4 September that wrote 8 assets where there
+ * are 12, and because the ingest is continue-on-error the run went on, committed the
+ * short list and deployed it — the live site served a degraded partner list and the only
+ * signal was a test failing on a branch nobody was checking.
+ *
+ * A partner genuinely removing material is real and should be publishable, but it is
+ * rare and deliberate; a transient outage is neither. So the default is to keep what we
+ * had, and a real reduction is recorded by re-running with the flag.
+ */
+const watchPath = path.join(liveDir, "regional-source-watch.json");
+if (existsSync(watchPath) && !process.argv.includes("--allow-fewer-assets")) {
+  const previous = JSON.parse(readFileSync(watchPath, "utf8"));
+  const before = previous?.summary?.regionalPartnerAssetCount ?? 0;
+  const after = liveOutput.summary.regionalPartnerAssetCount;
+  if (after < before) {
+    console.error(
+      `transform-regional-sources: REFUSING to write a shorter partner list ` +
+        `(${before} assets -> ${after}).\n` +
+        `  This is almost always a partner site being briefly unreachable, not a removal.\n` +
+        `  Re-run: npm run ingest:regionalsources\n` +
+        `  If the reduction is real: npm run transform:regionalsources -- --allow-fewer-assets`
+    );
+    process.exit(1);
+  }
+}
+
+writeJson(watchPath, liveOutput);
 writeJson(path.join(liveDir, "area-series.json"), liveAreaSeries);
 
 console.log(

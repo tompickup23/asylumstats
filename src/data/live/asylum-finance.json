@@ -81,17 +81,17 @@
   "facts": [
     {
       "label": "Small boat arrivals",
-      "value": "39,271",
-      "period": "Year ending March 2026",
+      "value": "33,374",
+      "period": "Year ending June 2026",
       "detail": "Official count of people detected arriving by small boat.",
       "scope": "route_specific",
       "routeId": "small_boats",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
     },
     {
       "label": "People in asylum hotels",
-      "value": "20,885",
-      "period": "As at 31 March 2026",
+      "value": "16,021",
+      "period": "As at 30 June 2026",
       "detail": "Asylum support accommodation figure, not a refugee-scheme total.",
       "scope": "route_specific",
       "routeId": "asylum_support",
@@ -99,39 +99,39 @@
     },
     {
       "label": "Resettled refugees",
-      "value": "4,894",
-      "period": "Year ending March 2026",
+      "value": "3,840",
+      "period": "Year ending June 2026",
       "detail": "Official resettlement total. Most were through the Afghan Resettlement Programme.",
       "scope": "route_specific",
       "routeId": "afghan_resettlement_programme",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
     },
     {
       "label": "Afghan share of resettlement",
-      "value": "90%",
-      "period": "Year ending March 2026",
+      "value": "87%",
+      "period": "Year ending June 2026",
       "detail": "The Afghan programme dominated current refugee resettlement volumes.",
       "scope": "route_specific",
       "routeId": "afghan_resettlement_programme",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
     },
     {
       "label": "Refugee Family Reunion visas",
-      "value": "16,787",
-      "period": "Year ending March 2026",
+      "value": "12,888",
+      "period": "Year ending June 2026",
       "detail": "Rounded official out-of-country grants for the refugee family reunion route.",
       "scope": "route_specific",
       "routeId": "refugee_family_reunion",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
     },
     {
       "label": "Safe and legal humanitarian grants",
-      "value": "190,809",
-      "period": "Year ending March 2026",
+      "value": "124,930",
+      "period": "Year ending June 2026",
       "detail": "Mainly driven by the Ukraine Permission Extension route, so keep humanitarian routes separate from refugee resettlement.",
       "scope": "route_specific",
       "routeId": "homes_for_ukraine",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
     }
   ],
   "hotelFacts": [
@@ -146,8 +146,8 @@
     },
     {
       "label": "People in asylum hotels",
-      "value": "20,885",
-      "period": "As at 31 March 2026",
+      "value": "16,021",
+      "period": "As at 30 June 2026",
       "detail": "Asylum support accommodation figure, not a refugee-scheme total.",
       "scope": "route_specific",
       "routeId": "asylum_support",

@@ -53,6 +53,20 @@ jobs:
       # No GitHub event data is interpolated here.
       - name: Fetch and transform small boats
         run: npm run ingest:smallboats
+
+      # asylum-finance derives its numeric facts from the routes mart, so it runs after
+      # routes and needs no network of its own. It was overdue for four days for the
+      # same reason ingest:hospend nearly was: the script existed, package.json knew
+      # about it, and no workflow ever called it. A generator nothing runs is a stale
+      # dataset with extra steps.
+      #
+      # continue-on-error for the same reason as the others: it sits before the commit,
+      # and a failure here must not cost the datasets that already fetched cleanly.
+      # No GitHub event data is interpolated here.
+      - name: Refresh asylum finance facts
+        id: asylumfinance
+        continue-on-error: true
+        run: npm run transform:asylumfinance
       # Hotels must run before money: the money ledger is built on top of the hotel entity
       # ledger it produces. That dependency was undeclared and only surfaced when this
       # workflow was reordered, because until then the job always died at regional sources
@@ -213,6 +227,7 @@ jobs:
           REGIONAL_OUTCOME: ${{ steps.regional.outcome }}
           HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
           HOSPEND_OUTCOME: ${{ steps.hospend.outcome }}
+          ASYLUMFINANCE_OUTCOME: ${{ steps.asylumfinance.outcome }}
         run: |
           skipped=""
           if [ "$REGIONAL_OUTCOME" = "failure" ]; then
@@ -223,6 +238,9 @@ jobs:
           fi
           if [ "$HOSPEND_OUTCOME" = "failure" ]; then
             skipped="$skipped home-office-spend"
+          fi
+          if [ "$ASYLUMFINANCE_OUTCOME" = "failure" ]; then
+            skipped="$skipped asylum-finance"
           fi
           if [ -n "$skipped" ]; then
             echo "Ingest failed:$skipped"
