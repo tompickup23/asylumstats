@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-04T12:04:18.818Z",
+ "generatedAt": "2026-09-04T12:16:06.318Z",
  "basis": "published_transaction",
  "noTrendLineRule": "Year-on-year comparison of this series is unsafe on its own. The Home Office has used at least eleven expense-area labels for asylum since 2010 and none at all between 2017 and 2020. A change between two years can be a reclassification. areaLabels records which labels were in use each year.",
  "years": [
@@ -23,8 +23,8 @@
   },
   {
    "fy": "2013/14",
-   "amountGbp": 168739629.19,
-   "transactions": 877,
+   "amountGbp": 185272456.72,
+   "transactions": 945,
    "areaLabels": [
     "Asylum Support",
     "UKBA Asylum Support"

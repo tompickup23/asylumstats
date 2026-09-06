@@ -46,8 +46,23 @@ export interface HoAsylumEntity {
   topExpenseTypes: Array<{ label: string; amountGbp: number }>;
 }
 
+export interface HoAsylumCoverage {
+  /** Earliest and latest transaction date in the source data, ISO. */
+  earliest: string | null;
+  latest: string | null;
+  /** "April 2010", "May 2026" — for display. */
+  earliestLabel: string | null;
+  latestLabel: string | null;
+}
+
 export interface HoAsylumEntities {
+  /**
+   * When the transform last ran. This is NOT the currency of the data — see `coverage`.
+   * Never print this next to a spending figure: a reader takes a date beside a number
+   * as the date the number is true of.
+   */
   generatedAt: string;
+  coverage: HoAsylumCoverage;
   basis: SpendBasis;
   licence: string;
   sourceCollection: string;
