@@ -1,7 +1,7 @@
 # Audit corrections, September 2026 — resume plan
 
 State at archive: **7 September 2026**. Branch `fix/audit-corrections-2026-09-07`,
-three commits, working tree clean, [PR #95](https://github.com/tompickup23/asylumstats/pull/95)
+five commits plus the second round, working tree clean, [PR #95](https://github.com/tompickup23/asylumstats/pull/95)
 **open and unmerged**, `validate` CI green.
 
 Merging deploys to production, so the nine fixes below are not live yet.
@@ -24,9 +24,27 @@ Each has a test. The two that mattered most — #1 and #6 — are guarded by rul
 rather than by pinned numbers, so a new page that derives either metric itself
 will fail rather than drift.
 
+## Second round, 7 September 2026
+
+Done on the same branch after a second audit pass (points 11 to 17 of the external
+audit, checked against the built HTML):
+
+| # | Defect | Where |
+|---|---|---|
+| 10 | Privacy policy said no analytics and no third-party scripts; every page loads the Cloudflare Web Analytics beacon | `privacy.astro` discloses it; `tests/privacy-disclosure.test.ts` ties the policy to the layout |
+| 11 | Footer "No personal data collected" while hosts process IP addresses; "Every number links to its source" wider than the pages deliver | `BaseLayout.astro` footer reworded; homepage claims tightened |
+| 12 | No retention statement | section added |
+| 13 | Accessibility statement cited WCAG 2.1; no target stated | WCAG 2.2 AA named as target, target-size and reflow checks listed as not done |
+| 14 | Birmingham finding: TFR gap credited as the model's driver, "truth sits between" two models | corrected, dated correction block, `updated` set |
+| 15 | No corrections page | `/corrections/` generated from every dated correction lead; `tests/corrections.test.ts` |
+| 16 | Ten redirect route collisions per build | one entry per path in `astro.config.mjs` |
+
+Still open from the audit: controller identity on the privacy page (needs the legal
+name), Dataset structured data, a professional accessibility audit.
+
 ## Pick up here
 
-**Two live defects, agreed real, both in `src/content/findings/birmingham-demographic-transformation.md`:**
+**Two live defects, both in `src/content/findings/birmingham-demographic-transformation.md` — fixed in the second round above, kept here for the reasoning:**
 
 1. The summary credits TFR differentials (Pakistani 2.52 vs White British 1.31)
    with driving the projection. The model does not use TFRs — it runs on

@@ -47,6 +47,7 @@ const INDEXABLE_STATIC_PATHS = [
   "/routes/",
   "/findings/",
   "/releases/",
+  "/corrections/",
   "/sources/",
   "/methodology/",
   "/glossary/"

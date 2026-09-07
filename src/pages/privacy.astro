@@ -4,11 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Privacy Policy | asylumstats"
-  description="How asylumstats.co.uk handles your data. No cookies. No tracking. No personal data collected."
+  description="How asylumstats.co.uk handles your data. No cookies. No advertising or behavioural tracking. Cookieless page counts only."
 >
   <article class="legal-page shell">
     <h1>Privacy Policy</h1>
-    <p class="legal-updated">Last updated: 11 April 2026</p>
+    <p class="legal-updated">Last updated: 7 September 2026</p>
 
     <p class="legal-intro">
       asylumstats.co.uk is an independent research project.
@@ -18,9 +18,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <section class="legal-section">
       <h2>The short version</h2>
       <p>
-        This site does not use cookies. It does not use analytics. It does not collect
-        your email address. It does not require you to create an account. I do not
-        know who you are when you visit.
+        This site does not use cookies. It counts page views with Cloudflare Web
+        Analytics, which sets no cookies and does not identify or profile you. It does
+        not collect your email address. It does not require you to create an account.
+        I do not know who you are when you visit.
       </p>
     </section>
 
@@ -52,9 +53,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <section class="legal-section">
       <h2>Cookies and tracking</h2>
       <p>
-        This site sets no cookies. It uses no analytics scripts, no tracking pixels,
-        no fingerprinting, and no advertising technology. There are no third-party
-        scripts loaded. There is no cookie banner because there are no cookies to consent to.
+        This site sets no cookies. It uses no tracking pixels, no fingerprinting,
+        and no advertising technology. There is no cookie banner because there are
+        no cookies to consent to.
+      </p>
+      <p>
+        One third-party script is loaded on every page: the Cloudflare Web Analytics
+        beacon. It reports page views to Cloudflare in aggregate so I can see which
+        pages are read. It sets no cookies, does not use localStorage, does not
+        fingerprint your device, and does not follow you across other sites. Cloudflare
+        describes it as privacy-first analytics; I see counts, not visitors.
+        Details: <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">cloudflare.com/web-analytics</a>.
+      </p>
+      <p>
+        The area lookup on the homepage sends the postcode you type to
+        <a href="https://postcodes.io" target="_blank" rel="noopener">postcodes.io</a>,
+        an open service, to resolve it to a local authority. Nothing else you type is
+        sent anywhere. A correction to this page was made on 7 September 2026: earlier
+        versions denied using any analytics or loading any script from a third party,
+        which was not true while the Cloudflare beacon was in place.
       </p>
       <p>
         This site does not use localStorage, sessionStorage, or any other browser
@@ -86,8 +103,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         The limited data processing described above (serving web pages via hosting
         infrastructure) is carried out under UK GDPR Article 6(1)(f), legitimate
         interests. The legitimate interest is operating a publicly accessible website.
-        Given the minimal data involved and the complete absence of tracking, this
-        processing does not override your rights and freedoms.
+        Given the minimal data involved and the absence of cookies, profiling and
+        cross-site tracking, this processing does not override your rights and freedoms.
       </p>
     </section>
 
@@ -103,6 +120,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <p>
         In practice, I hold no personal data about visitors. If you contact me
         with a request, I will confirm this within one calendar month.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Retention</h2>
+      <p>
+        This site keeps nothing about your visit. Hosting logs are held by GitHub and
+        Cloudflare under their own retention policies, linked above, and I cannot
+        access them. Aggregate page counts are kept by Cloudflare Web Analytics and
+        contain no personal data. If you email me, I keep the correspondence only as
+        long as it takes to deal with your request, then delete it.
       </p>
     </section>
 

@@ -11,7 +11,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <p class="legal-updated">Last reviewed: 11 April 2026</p>
 
     <p class="legal-intro">
-      I want this site to be usable by as many people as possible.
+      I want this site to be usable by as many people as possible. The standard
+      I am working towards is WCAG 2.2 Level AA.
     </p>
 
     <section class="legal-section">
@@ -19,7 +20,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <ul>
         <li>The site uses semantic HTML with proper heading hierarchy</li>
         <li>All charts include text descriptions of key findings</li>
-        <li>Colour contrast meets WCAG 2.1 Level AA for body text</li>
+        <li>Colour contrast meets WCAG 2.2 Level AA for body text (the contrast criteria are unchanged from WCAG 2.1)</li>
         <li>The site works without JavaScript for core content</li>
         <li>A "skip to main content" link is provided on every page</li>
         <li>Font sizes use relative units and the site works at 200% zoom</li>
@@ -35,6 +36,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <li>Some complex data tables may be difficult to navigate with screen readers. I am working to improve table markup.</li>
         <li>Chart SVGs may not convey all data points to assistive technology. Text summaries are provided alongside charts where possible.</li>
         <li>Some text in chart components may be smaller than ideal on very small screens.</li>
+        <li>Not every control has been checked against the WCAG 2.2 minimum target size of 24 by 24 CSS pixels, or for reflow at a 320 CSS pixel width. These are on the list.</li>
       </ul>
     </section>
 

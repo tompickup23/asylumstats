@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { parseCorrections } from "../lib/corrections-parse";
+import { formatFindingDate } from "../lib/finding-dates";
+import releases from "../data/site/releases.json";
+
+interface CorrectionRow {
+  date: string;
+  title: string;
+  href: string;
+  text: string;
+  where: "finding" | "release";
+}
+
+const findings = await getCollection("findings");
+const rows: CorrectionRow[] = [];
+for (const finding of findings) {
+  for (const c of parseCorrections(finding.body ?? "")) {
+    rows.push({
+      date: c.date,
+      title: finding.data.headline,
+      href: `/findings/${finding.id.replace(/\.md$/, "")}/`,
+      text: c.text,
+      where: "finding"
+    });
+  }
+}
+for (const release of releases) {
+  if (/correction|withdraw|recalibrat/i.test(release.title)) {
+    rows.push({ date: release.date, title: release.title, href: "/releases/", text: release.summary, where: "release" });
+  }
+}
+rows.sort((a, b) => b.date.localeCompare(a.date));
+
+const findingCount = findings.filter((f) => !f.data.superseded_by).length;
+const correctedFindings = new Set(rows.filter((r) => r.where === "finding").map((r) => r.href)).size;
+---
+
+<BaseLayout
+  title="Corrections: every change to a published figure on asylumstats"
+  description={`${rows.length} corrections across ${findingCount} findings. Each one says what was wrong, what changed, and what still stands.`}
+>
+  <article class="legal-page shell">
+    <h1>Corrections</h1>
+    <p class="legal-intro">
+      Every correction published on this site, collected from the pieces that carry them.
+      Each says what was wrong, what changed, and what still stands. The corrected text
+      stays on the original page; nothing is rewritten silently.
+    </p>
+    <p class="corrections-tally">
+      <strong>{findingCount}</strong> findings published &middot; <strong>{correctedFindings}</strong> carry a correction &middot; <strong>{rows.length}</strong> corrections in total &middot; model v8.0
+    </p>
+
+    <section class="legal-section">
+      {rows.map((row) => (
+        <div class="correction-row">
+          <p class="correction-meta">
+            <time datetime={row.date}>{formatFindingDate(row.date)}</time>
+            <span class="correction-where">{row.where === "finding" ? "Finding" : "Release diary"}</span>
+          </p>
+          <h2><a href={row.href}>{row.title}</a></h2>
+          <p>{row.text}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="legal-section">
+      <h2>How corrections work here</h2>
+      <p>
+        A correction is added to the top of the piece it concerns, dated, with the
+        original claim quoted so the change can be judged. Withdrawn figures are named
+        rather than deleted, and a test blocks each withdrawn figure from returning.
+        The <a href="/releases/">release diary</a> records what changed and when, and
+        the <a href="/methodology/">methodology</a> carries the reasoning behind every
+        model change. To report an error: <a href="mailto:info@asylumstats.co.uk">info@asylumstats.co.uk</a>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .corrections-tally { font-size: 0.95rem; opacity: 0.85; margin-bottom: 2rem; }
+  .correction-row { padding: 1.25rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.1)); }
+  .correction-row h2 { font-size: 1.1rem; margin: 0.25rem 0 0.5rem; }
+  .correction-row h2 a { text-decoration: none; }
+  .correction-row h2 a:hover { text-decoration: underline; }
+  .correction-meta { display: flex; gap: 0.75rem; font-size: 0.85rem; opacity: 0.7; margin: 0; }
+  .correction-where { text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.75rem; }
+</style>

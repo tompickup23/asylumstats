@@ -15,17 +15,17 @@ export default defineConfig({
   // moved. A slug that states a number will always rot, so the replacements state the
   // subject instead. Blackburn is the exception: its slug said 2028 while every line of
   // the page said 2027, so it was wrong on the day it was published.
+  //
+  // One entry per path. trailingSlash is unset, so Astro treats "/x" and "/x/" as the
+  // same route and a pair of entries was a route collision, ten warnings per build and
+  // a hard error in a later Astro. The slash form of each URL still redirects, and the
+  // targets carry the slash so the hop lands on the page rather than on a second redirect.
   redirects: {
-    "/findings/109-areas-minority-wbi-2051": "/findings/86-areas-minority-wbi-2051",
-    "/findings/109-areas-minority-wbi-2051/": "/findings/86-areas-minority-wbi-2051/",
-    "/findings/blackburn-minority-wb-2028": "/findings/blackburn-minority-wb-2027",
-    "/findings/blackburn-minority-wb-2028/": "/findings/blackburn-minority-wb-2027/",
-    "/findings/backlog-64k-awaiting-decision": "/findings/backlog-awaiting-decision",
-    "/findings/backlog-64k-awaiting-decision/": "/findings/backlog-awaiting-decision/",
-    "/findings/small-boats-41k-2025": "/findings/small-boats-arrivals",
-    "/findings/small-boats-41k-2025/": "/findings/small-boats-arrivals/",
-    "/findings/daily-hotel-cost-5-77m": "/findings/daily-hotel-cost",
-    "/findings/daily-hotel-cost-5-77m/": "/findings/daily-hotel-cost/"
+    "/findings/109-areas-minority-wbi-2051": "/findings/86-areas-minority-wbi-2051/",
+    "/findings/blackburn-minority-wb-2028": "/findings/blackburn-minority-wb-2027/",
+    "/findings/backlog-64k-awaiting-decision": "/findings/backlog-awaiting-decision/",
+    "/findings/small-boats-41k-2025": "/findings/small-boats-arrivals/",
+    "/findings/daily-hotel-cost-5-77m": "/findings/daily-hotel-cost/"
   },
   vite: {
     plugins: [tailwindcss()],
