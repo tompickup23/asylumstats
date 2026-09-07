@@ -89,3 +89,14 @@ ranking consolidation `tests/superseded-findings.test.ts` documents as deliberat
 `anonymity`, `rendered-text-runons` and `support-vs-accommodation` each walk all
 486 built pages against a 5s timeout. They fail on a loaded machine and pass on a
 quiet one. If they go red, rebuild clean and rerun before believing them.
+
+## One passenger commit in the PR
+
+`a10a31f docs: merge AGENTS.md into CLAUDE.md, symlink AGENTS.md` is **not part
+of this work**. It was sitting on local `main` unpushed when this branch was cut,
+so it came along and now rides in PR #95, which is why the diff touches
+`CLAUDE.md` and `AGENTS.md`.
+
+It looks intentional and probably wants to land anyway, so nothing was done to
+it. But it is Tom's commit, not this session's, and merging #95 merges it too.
+To land it separately instead: push it to `main` first, then rebase this branch.
