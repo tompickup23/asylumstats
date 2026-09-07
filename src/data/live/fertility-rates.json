@@ -178,8 +178,9 @@
   "deprivationGradient": {
     "mostDeprivedQuintileBirths": 144522,
     "leastDeprivedQuintileBirths": 87216,
-    "ratio": 1.66,
-    "insight": "Women in the most deprived quintile have 1.66x more births than the least deprived. This deprivation gradient is a major driver of apparent ethnic fertility differentials. Pakistani and Bangladeshi populations are concentrated in deprived areas."
+    "insight": "The most deprived quintile records 1.66x as many births as the least deprived. This is a ratio of birth counts and not a fertility rate: Table 8 publishes no count of women aged 15-44 per decile, so the age composition of each decile is not controlled for. Deprivation and ethnicity are strongly confounded, with Pakistani and Bangladeshi populations concentrated in deprived areas, so neither gradient can be read as the independent effect of the other.",
+    "birthCountRatio": 1.66,
+    "denominator": null
   },
   "regionalBirthShares": {
     "NORTH EAST": {

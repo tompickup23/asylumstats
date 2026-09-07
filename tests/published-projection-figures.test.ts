@@ -6,6 +6,8 @@ import {
   nationalWhiteBritishShare,
   distinctAreaCodes,
   RETIRED_AREA_CODES,
+  whiteBritishCrossingRange,
+  nationalGroupShare,
 } from "../src/lib/ethnic-projections";
 import rawProjections from "../src/data/live/ethnic-projections.json";
 import validation from "../src/data/live/out-of-sample-validation.json";
@@ -136,6 +138,48 @@ describe("the same metric reads the same on every page that prints it", () => {
     const { total } = areasBelowFiftyBy(2051);
     expect(finding).toContain(`${total} local authorities projected minority White British by 2051`);
     expect(finding).toContain(`stat_value: "${total}"`);
+  });
+
+  /**
+   * The hole this block had. It checked the finding, the teaser and the
+   * methodology, and /national/ was none of those. The commit that introduced
+   * areasBelowFiftyBy was 146fde1, "carry the v8.0 recalibration through every
+   * page that publishes it", and it missed this page: /national/ kept its own
+   * inline filter from April and published 93 from 23 August while every checked
+   * surface said 86. 93 is the count with neither correction applied. It counts
+   * Sheffield under both its retired and its current code, and it counts the six
+   * London boroughs whose projection the plausibility guard withholds.
+   *
+   * So this asserts the rule rather than the number. Any page that prints the
+   * count must get it from the helper, because a page that derives it itself
+   * will agree only until the model moves.
+   */
+  it("derives the count from the helper on every page that prints it", () => {
+    const offenders: string[] = [];
+    for (const file of ["src/pages/national.astro", "src/pages/index.astro"]) {
+      const text = read(file);
+      if (!/areasBelowFiftyBy/.test(text)) offenders.push(`${file}: does not use areasBelowFiftyBy`);
+      // A second, hand-rolled filter on the same threshold is the bug itself.
+      if (/projections\??\.\[?["']2051["']\]?\??\.white_british\s*<\s*50/.test(text)) {
+        offenders.push(`${file}: filters on the raw 2051 projection instead of the helper`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("prints no unguarded or undeduplicated variant of the count", () => {
+    // 92 is the count deduplicated but unguarded, 93 neither, 87 guarded but not
+    // deduplicated. None of the three may appear beside this claim on any page.
+    const offenders: string[] = [];
+    for (const file of ["src/pages/national.astro", "src/pages/index.astro", "src/components/SisterSiteTeaser.astro"]) {
+      const text = read(file);
+      for (const wrong of [87, 92, 93]) {
+        if (new RegExp(`${wrong}\\s+(areas|local authorities|councils)`).test(text)) {
+          offenders.push(`${file}: ${wrong}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
   });
 
   it("agrees on the national share", () => {
@@ -308,5 +352,159 @@ describe("a stated crossing year is borne out by the projection", () => {
       if (decadal != null && decadal >= 50) marginal.push(area.areaName);
     }
     expect(marginal.sort()).toEqual(["Bedford", "Welwyn Hatfield", "West Northamptonshire"]);
+  });
+});
+
+/**
+ * A crossing year used to ship bare: "approximately 2027", "around 2050". It is
+ * interpolated between two decadal projections and then divided by a slope, so it
+ * is more fragile than either projection it comes from, and the methodology tells
+ * readers to carry the model's error with every figure. A year with no interval
+ * reads as a date rather than a projection, so the finding now states a range and
+ * this pins that range to the derivation rather than to a typed-in pair of years.
+ */
+describe("a published crossing year carries its sensitivity range", () => {
+  const lancashire = read("src/content/findings/blackburn-minority-wb-2027.md");
+  const AREAS: Array<[string, string]> = [
+    ["E06000008", "Blackburn with Darwen"],
+    ["E07000122", "Pendle"],
+    ["E07000123", "Preston"],
+    ["E07000117", "Burnley"],
+  ];
+
+  it("reproduces the central year the article prints", () => {
+    for (const [code, name] of AREAS) {
+      const range = whiteBritishCrossingRange(code);
+      expect(range, name).not.toBeNull();
+      const stated = (rawProjections.areas as any)[code].thresholds?.find(
+        (t: any) => t.label === "White British <50%"
+      )?.year;
+      expect(range!.central, name).toBe(stated);
+    }
+  });
+
+  it("brackets the central year", () => {
+    for (const [code, name] of AREAS) {
+      const { central, earliest, latest } = whiteBritishCrossingRange(code)!;
+      expect(earliest, name).toBeLessThanOrEqual(central);
+      expect(latest, name).toBeGreaterThanOrEqual(central);
+    }
+  });
+
+  it("widens with the horizon, because a later crossing compounds more", () => {
+    const width = (code: string) => {
+      const r = whiteBritishCrossingRange(code)!;
+      return r.latest - r.earliest;
+    };
+    expect(width("E07000117")).toBeGreaterThan(width("E06000008"));
+  });
+
+  it("prints the derived range in the article, not a typed-in one", () => {
+    for (const [code, name] of AREAS) {
+      const { earliest, latest } = whiteBritishCrossingRange(code)!;
+      const dash = `${earliest}-${latest}`;
+      const prose = `a range of ${earliest} to ${latest}`;
+      expect(
+        lancashire.includes(dash) || lancashire.includes(prose),
+        `${name}: article states neither "${dash}" nor "${prose}"`
+      ).toBe(true);
+    }
+  });
+
+  it("no longer offers a bare approximate year", () => {
+    expect(lancashire).not.toMatch(/below 50% by approximately \d{4}/);
+    expect(lancashire).not.toContain("About a year from minority status");
+  });
+});
+
+/**
+ * The count was not the only aggregate /national/ derived for itself. The
+ * national ethnic trajectory chart summed over the raw key set, so it counted
+ * Sheffield and Barnsley twice and plotted 74.5% for 2021 against the 74.4% the
+ * finding and the teaser publish. Two duplicated authorities are 800,000 people
+ * in 57 million, which is why it survived a correction sweep: too small to look
+ * wrong, too visible to be right, and printed next to the other value.
+ */
+describe("a national aggregate is derived once, not per page", () => {
+  it("rounds to the share the other surfaces publish", () => {
+    expect(nationalGroupShare("white_british", 2021)!.pct.toFixed(1)).toBe("74.4");
+    expect(nationalGroupShare("white_british", 2051)!.pct.toFixed(1)).toBe("55.1");
+  });
+
+  it("agrees with the White British wrapper on every published year", () => {
+    for (const year of [2011, 2021, 2031, 2041, 2051]) {
+      expect(nationalGroupShare("white_british", year)?.pct, String(year)).toBe(
+        nationalWhiteBritishShare(year)?.pct
+      );
+    }
+  });
+
+  it("sums the plotted groups to a whole population, so no area is counted twice", () => {
+    // The five plotted groups plus "other" are the whole of each area. If a page
+    // aggregated over the raw keys these would still sum to 100, which is why
+    // this checks the helper is used rather than checking the total.
+    for (const year of [2021, 2051]) {
+      const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
+      const total = groups.reduce((sum, g) => sum + (nationalGroupShare(g, year)?.pct ?? 0), 0);
+      expect(total, String(year)).toBeCloseTo(100, 1);
+    }
+  });
+
+  it("leaves /national/ no way to aggregate the projection file itself", () => {
+    const page = read("src/pages/national.astro");
+    expect(page).not.toContain("ethnic-projections.json");
+    expect(page).toContain("nationalGroupShare");
+  });
+});
+
+/**
+ * Relayed from the ukdemographics session, which runs the same model, and correct:
+ * the 2061 aggregate carries a denominator the 2051 one does not.
+ *
+ * 49 authorities have no 2061 projection, so a 2061 count is taken over 269 where
+ * 2051 is taken over 318, and the 49 are not a random 49. The homepage trajectory
+ * chart already stopped at 2051 and said why in its own caption, and then the key
+ * stats underneath printed 86 by 2051 next to 99 by 2061 as if they were a series.
+ * The page stated the rule and broke it two elements later.
+ *
+ * The same session claimed 93 was "the most nearly correct figure on the estate".
+ * That part is wrong and the test below says why: 93 double-counts Sheffield, which
+ * no reading makes correct. What is right underneath it is that 86 is a lower bound
+ * rather than the model's answer, because the guard only ever removes areas that are
+ * below 50%. Both facts are now published rather than only the flattering one.
+ */
+describe("a count carries the denominator it was taken over", () => {
+  it("scores 2061 over fewer authorities than 2051", () => {
+    expect(areasBelowFiftyBy(2051).areasScored).toBe(318);
+    expect(areasBelowFiftyBy(2061).areasScored).toBe(269);
+  });
+
+  it("says so wherever both years are printed together", () => {
+    const page = read("src/pages/index.astro");
+    expect(page).toContain("areasScored");
+    expect(page).toMatch(/Not comparable/i);
+  });
+
+  it("publishes the guard gap, because the guard only removes areas below 50%", () => {
+    const at2051 = areasBelowFiftyBy(2051);
+    expect(at2051.total).toBe(86);
+    expect(at2051.beforeGuard).toBe(92);
+    expect(at2051.withheld).toBe(6);
+    // A lower bound, never above the model's own count.
+    expect(at2051.total).toBeLessThanOrEqual(at2051.beforeGuard);
+    expect(read("src/pages/index.astro")).toContain("beforeGuard");
+  });
+
+  it("does not make 93 defensible: it counts one authority twice", () => {
+    // Sheffield falls below 50% under both its retired and its current code, so
+    // the raw key count is the deduplicated count plus one. Whatever view is taken
+    // of the guard, double-counting an authority is not a view.
+    const raw = Object.keys(rawProjections.areas).filter((code) => {
+      const share = (rawProjections.areas as any)[code]?.projections?.["2051"]?.white_british;
+      return share != null && share < 50;
+    });
+    expect(raw.length).toBe(93);
+    expect(raw.length - areasBelowFiftyBy(2051).beforeGuard).toBe(1);
+    expect(raw).toContain("E08000019");
   });
 });

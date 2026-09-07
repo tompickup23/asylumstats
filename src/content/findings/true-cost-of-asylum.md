@@ -19,7 +19,7 @@ video_poster: "/og/findings/true-cost-of-asylum.png"
 
 **£4,181 million.** That is what the Home Office spent on asylum support, resettlement and accommodation in the year to March 2026, signed off by the Comptroller and Auditor General. It is the single biggest number in the asylum system, it is down from £4,513 million the year before, and it is roughly half the true bill.
 
-The total annual cost of the UK asylum system is around **£8.0 billion**, or **£234 per income taxpayer**. The defensible range is £7.2 billion to £8.8 billion, and the width of that range is itself the finding: about 60% of the total is now audited, and the rest is estimated because no government body publishes it.
+The total annual cost of the UK asylum system is around **£8.0 billion**, or **£234 per income taxpayer**. The defensible range is £7.2 billion to £8.8 billion, and the width of that range is itself the finding: 55% of the total is an audited outturn, a further 8% is attributed from an audited total, and the 35% that is estimated is estimated because no government body publishes it.
 
 No official body publishes the complete total. The Home Office publishes its own accounts. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did, and we show which parts are audited and which are not.
 
@@ -27,14 +27,30 @@ No official body publishes the complete total. The Home Office publishes its own
 
 This matters more than the headline figure, so it comes first.
 
-| Basis | What it means | Share of the central total |
-|---|---|---|
-| **Audited** | An outturn line in the Home Office accounts, examined by the National Audit Office | £4,363M |
-| **Attributed** | An audited total multiplied by a stated asylum share, because the directorate does more than asylum | £657M |
-| **Published** | Another body publishes it, but not as an asylum-specific total | £175M |
-| **Estimated** | Our estimate, with the method shown below | £2,778M |
+| Basis | What it means | Of the central total | Share |
+|---|---|---|---|
+| **Audited** | An outturn line in the Home Office accounts, examined by the National Audit Office | £4,363M | 55% |
+| **Attributed** | An audited total multiplied by a stated asylum share, because the directorate does more than asylum | £657M | 8% |
+| **Published** | Another body publishes it, but not as an asylum-specific total | £175M | 2% |
+| **Estimated** | Our estimate, with the method shown below | £2,778M | 35% |
 
 Every figure in the first two rows can be traced to a page of HC 440. The fourth row cannot, and the reason is the same in each case: the department that incurs the cost does not record it by immigration status.
+
+## Attribution, not counterfactual
+
+The figure answers "what share of public spending is associated with the asylum system". It does not answer "what would the exchequer save if the asylum system stopped", and the gap between those two questions is worth about £1.0 billion.
+
+| Kind | What it means | Of the central total | Share |
+|---|---|---|---|
+| **Direct** | Incurred because of this caseload and scaling with it: accommodation contracts, tribunal sitting days, ESOL places | £6,035M | 76% |
+| **Transfer** | A payment to a person. Marginal equals average by construction, because a pound paid is a pound | £924M | 12% |
+| **Average attribution** | An average cost per head of a wider population, applied to this one | £1,014M | 13% |
+
+The last row is the one that needs saying. Healthcare takes NHS spend per capita. Education takes funding per pupil. Criminal justice takes cost per prison place. Family reunion takes an estimated £26,500 of public services per person. Each of those averages carries a share of fixed capacity with it: the hospital estate, school buildings, the prison estate.
+
+Fixed capacity does not fall away in proportion to the population using it. Remove a prisoner and the prison remains; the marginal saving is food and some staffing, not the £47,000 average. So for that £1.0 billion the average overstates what would actually stop being spent, most sharply for prisons, least for education, where per-pupil funding is close to the mechanism by which money actually follows a child.
+
+This is not a hidden thumb on the scale in one direction. The £8.0 billion also excludes whole categories set out below, which pushes the other way. But the two questions have different answers and this article answers the first one. A reader who wants the second should treat roughly £1.0 billion of the total as an upper bound on its own contribution.
 
 ### Two things this calculation deliberately does not do
 
@@ -269,7 +285,7 @@ The conservative column uses the lowest defensible assumption in each estimated 
 
 **The central estimate is £234 per income taxpayer per year**, on a range of £212 to £257. Taxpayers: 34.1 million, HMRC projected 2024-25. Households: 27.8 million, ONS.
 
-Around 60% of that is now audited. The remainder is estimated because the departments that incur it, principally DWP, NHS and DfE, do not record spending by immigration status. If any of them published asylum-specific figures, this article would be shorter and its range narrower.
+55% of that is an audited outturn, and 63% is either audited or attributed from an audited total. The remainder is estimated because the departments that incur it, principally DWP, NHS and DfE, do not record spending by immigration status. If any of them published asylum-specific figures, this article would be shorter and its range narrower.
 
 ## What this does NOT include
 

@@ -1,4 +1,5 @@
 import rawProjections from "../data/live/ethnic-projections.json";
+import validation from "../data/live/out-of-sample-validation.json";
 import { plausibleThrough } from "./projection-plausibility";
 
 export interface EthnicGroup {
@@ -229,7 +230,8 @@ export function distinctAreaCodes(): string[] {
  * random 49, so a 2061 figure from this function is not comparable with the
  * earlier years and should be reported with its area count or not at all.
  */
-export function nationalWhiteBritishShare(
+export function nationalGroupShare(
+  group: keyof EthnicGroup,
   year: number
 ): { pct: number; areas: number } | null {
   let weighted = 0;
@@ -251,13 +253,13 @@ export function nationalWhiteBritishShare(
       if (!absolute) continue;
       const total = Object.values(absolute).reduce((sum, n) => sum + n, 0);
       if (!total) continue;
-      weighted += absolute.white_british;
+      weighted += absolute[group];
       population += total;
       areas += 1;
       continue;
     }
 
-    const share = area.projections?.[String(year)]?.white_british;
+    const share = area.projections?.[String(year)]?.[group];
     if (share == null) continue;
 
     weighted += share * pop;
@@ -273,6 +275,19 @@ export function nationalWhiteBritishShare(
 }
 
 /**
+ * The White British case, which is the one most pages print.
+ *
+ * Kept as its own name because it is the figure the findings and the teaser are
+ * written around, and because a caller passing the wrong group string would
+ * otherwise fail silently at a percentage that looks plausible.
+ */
+export function nationalWhiteBritishShare(
+  year: number
+): { pct: number; areas: number } | null {
+  return nationalGroupShare("white_british", year);
+}
+
+/**
  * Authorities the model puts below a 50% White British share at `year`, read off
  * the decadal projection and with the plausibility guard applied.
  *
@@ -281,6 +296,24 @@ export function nationalWhiteBritishShare(
  * plausibleThrough withholds, and their place pages do not show it. Counting
  * them anyway gives 92 where this site publishes 86, and would put a number on
  * the homepage that no place page will confirm.
+ *
+ * Two things about `total` that a caller must not print without.
+ *
+ * It is a LOWER BOUND, not the model's answer. The guard withholds exactly the
+ * fastest-diversifying areas, and every area it withholds is below 50%, so it can
+ * only ever push the count down: 86 published against 92 the model produces at
+ * 2051. That is the same bias this file refuses to accept in
+ * nationalWhiteBritishShare, tolerated here for a different and narrower reason,
+ * which is that a count names areas and no count should name an area whose place
+ * page declines to show the projection behind it. `withheld` carries the size of
+ * the gap so a page can say so rather than implying 86 is all the model found.
+ *
+ * And `areasScored` is not the same at every year. 49 authorities have no 2061
+ * projection and they are not a random 49, so a 2061 count is taken over 269
+ * authorities where 2051 is taken over 318. Printing the two side by side as a
+ * series compares different denominators. The homepage trajectory already stops
+ * at 2051 for exactly this reason while the key stats beneath it did not, which
+ * is the failure this field exists to make visible.
  *
  * This also deliberately does not read `thresholds[]`. That array carries an
  * interpolated crossing year which can name a decade at which the decadal
@@ -292,14 +325,25 @@ export function nationalWhiteBritishShare(
 export function areasBelowFiftyBy(year: number): {
   total: number;
   majorityToday: number;
+  /** Authorities that have a projection for `year` at all. See below. */
+  areasScored: number;
+  /** The count before the plausibility guard. See withheld, below. */
+  beforeGuard: number;
+  /** Authorities the guard removed from `total`, all of them below 50%. */
+  withheld: number;
 } {
   let total = 0;
   let majorityToday = 0;
+  let areasScored = 0;
+  let beforeGuard = 0;
 
   for (const code of distinctAreaCodes()) {
     const area = data.areas[code];
     const share = area.projections?.[String(year)]?.white_british;
-    if (share == null || share >= 50) continue;
+    if (share == null) continue;
+    areasScored += 1;
+    if (share >= 50) continue;
+    beforeGuard += 1;
 
     const through = plausibleThrough(area as unknown as Parameters<typeof plausibleThrough>[0]);
     if (through === null || through < year) continue;
@@ -308,7 +352,79 @@ export function areasBelowFiftyBy(year: number): {
     if ((area.current?.groups?.white_british ?? 0) >= 50) majorityToday += 1;
   }
 
-  return { total, majorityToday };
+  return { total, majorityToday, areasScored, beforeGuard, withheld: beforeGuard - total };
+}
+
+
+/**
+ * The range of years within which an area's White British share crosses 50%.
+ *
+ * A crossing year is not measured. It is interpolated between two decadal
+ * projections, so it inherits their error and then divides by a slope, which
+ * makes it more fragile than either endpoint. The site published bare years
+ * ("approximately 2027", "around 2050") while the methodology told readers to
+ * carry the model's error with every figure, and a year with no interval reads
+ * as a date rather than a projection.
+ *
+ * The band re-runs the same interpolation with the model's measured out-of-sample
+ * error applied to the projected endpoint, widened by sqrt(decades) on the same
+ * rule the Monte Carlo run uses. It is a sensitivity band and not a confidence
+ * interval: it propagates the one-decade error that was actually measured and
+ * nothing else, so it understates the true uncertainty at long horizons rather
+ * than bounding it. That is why a further-out crossing comes back wider, and why
+ * a crossing beyond the tested horizon should be read as a scenario.
+ */
+export const WHITE_BRITISH_MAE_PP = validation.summary.white_british.mae;
+
+export interface CrossingYearRange {
+  central: number;
+  earliest: number;
+  latest: number;
+}
+
+export function whiteBritishCrossingRange(code: string): CrossingYearRange | null {
+  const area = data.areas[code];
+  if (!area) return null;
+
+  const observedYear = area.current?.year ?? 2021;
+  const observed = area.current?.groups?.white_british;
+  if (observed == null || observed < 50) return null;
+
+  const years = Object.keys(area.projections ?? {})
+    .map(Number)
+    .filter((y) => Number.isFinite(y))
+    .sort((a, b) => a - b);
+
+  // `shift` moves the projected endpoint by that many MAEs. A positive shift
+  // holds the share up and pushes the crossing later.
+  const crossing = (shift: number): number | null => {
+    let priorYear = observedYear;
+    let priorShare = observed;
+    for (const year of years) {
+      const projected = area.projections?.[String(year)]?.white_british;
+      if (projected == null) continue;
+      const decades = (year - observedYear) / 10;
+      const share = projected + shift * WHITE_BRITISH_MAE_PP * Math.sqrt(Math.max(decades, 0));
+      if (share < 50) {
+        return priorYear + ((priorShare - 50) / (priorShare - share)) * (year - priorYear);
+      }
+      priorYear = year;
+      priorShare = share;
+    }
+    return null;
+  };
+
+  const central = crossing(0);
+  if (central == null) return null;
+  const latest = crossing(1);
+  const earliest = crossing(-1);
+  if (latest == null || earliest == null) return null;
+
+  return {
+    central: Math.round(central),
+    earliest: Math.round(earliest),
+    latest: Math.round(latest),
+  };
 }
 
 /**
