@@ -337,8 +337,16 @@ const output = {
   deprivationGradient: {
     mostDeprivedQuintileBirths: q1Births,
     leastDeprivedQuintileBirths: q5Births,
-    ratio: deprivationRatio,
-    insight: `Women in the most deprived quintile have ${deprivationRatio}x more births than the least deprived. This deprivation gradient is a major driver of apparent ethnic fertility differentials — Pakistani and Bangladeshi populations are concentrated in deprived areas.`
+    // A ratio of BIRTH COUNTS, not of fertility rates. Table 8 gives births by
+    // IMD decile and no denominator, so there is no count of women aged 15-44
+    // per decile to divide by. Deprived deciles have younger age structures and
+    // therefore more women of childbearing age, so an unknown part of this ratio
+    // is age composition rather than fertility. This field previously read
+    // "women in the most deprived quintile have 1.66x more births", which is a
+    // rate claim the source cannot support, and the finding published it.
+    birthCountRatio: deprivationRatio,
+    denominator: null,
+    insight: `The most deprived quintile records ${deprivationRatio}x as many births as the least deprived. This is a ratio of birth counts and not a fertility rate: Table 8 publishes no count of women aged 15-44 per decile, so the age composition of each decile is not controlled for. Deprivation and ethnicity are strongly confounded, with Pakistani and Bangladeshi populations concentrated in deprived areas, so neither gradient can be read as the independent effect of the other.`
   },
   regionalBirthShares: regionalShares,
   onsBirths2024ByEthnicity: birthsByEthnicity,

@@ -230,7 +230,8 @@ export function distinctAreaCodes(): string[] {
  * random 49, so a 2061 figure from this function is not comparable with the
  * earlier years and should be reported with its area count or not at all.
  */
-export function nationalWhiteBritishShare(
+export function nationalGroupShare(
+  group: keyof EthnicGroup,
   year: number
 ): { pct: number; areas: number } | null {
   let weighted = 0;
@@ -252,13 +253,13 @@ export function nationalWhiteBritishShare(
       if (!absolute) continue;
       const total = Object.values(absolute).reduce((sum, n) => sum + n, 0);
       if (!total) continue;
-      weighted += absolute.white_british;
+      weighted += absolute[group];
       population += total;
       areas += 1;
       continue;
     }
 
-    const share = area.projections?.[String(year)]?.white_british;
+    const share = area.projections?.[String(year)]?.[group];
     if (share == null) continue;
 
     weighted += share * pop;
@@ -271,6 +272,19 @@ export function nationalWhiteBritishShare(
   // projected years accumulate percent-points over people and are already scaled.
   const isObserved = year === 2011 || year === 2021;
   return { pct: isObserved ? (weighted / population) * 100 : weighted / population, areas };
+}
+
+/**
+ * The White British case, which is the one most pages print.
+ *
+ * Kept as its own name because it is the figure the findings and the teaser are
+ * written around, and because a caller passing the wrong group string would
+ * otherwise fail silently at a percentage that looks plausible.
+ */
+export function nationalWhiteBritishShare(
+  year: number
+): { pct: number; areas: number } | null {
+  return nationalGroupShare("white_british", year);
 }
 
 /**

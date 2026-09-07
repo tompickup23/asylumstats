@@ -7,6 +7,7 @@ import {
   distinctAreaCodes,
   RETIRED_AREA_CODES,
   whiteBritishCrossingRange,
+  nationalGroupShare,
 } from "../src/lib/ethnic-projections";
 import rawProjections from "../src/data/live/ethnic-projections.json";
 import validation from "../src/data/live/out-of-sample-validation.json";
@@ -413,5 +414,45 @@ describe("a published crossing year carries its sensitivity range", () => {
   it("no longer offers a bare approximate year", () => {
     expect(lancashire).not.toMatch(/below 50% by approximately \d{4}/);
     expect(lancashire).not.toContain("About a year from minority status");
+  });
+});
+
+/**
+ * The count was not the only aggregate /national/ derived for itself. The
+ * national ethnic trajectory chart summed over the raw key set, so it counted
+ * Sheffield and Barnsley twice and plotted 74.5% for 2021 against the 74.4% the
+ * finding and the teaser publish. Two duplicated authorities are 800,000 people
+ * in 57 million, which is why it survived a correction sweep: too small to look
+ * wrong, too visible to be right, and printed next to the other value.
+ */
+describe("a national aggregate is derived once, not per page", () => {
+  it("rounds to the share the other surfaces publish", () => {
+    expect(nationalGroupShare("white_british", 2021)!.pct.toFixed(1)).toBe("74.4");
+    expect(nationalGroupShare("white_british", 2051)!.pct.toFixed(1)).toBe("55.1");
+  });
+
+  it("agrees with the White British wrapper on every published year", () => {
+    for (const year of [2011, 2021, 2031, 2041, 2051]) {
+      expect(nationalGroupShare("white_british", year)?.pct, String(year)).toBe(
+        nationalWhiteBritishShare(year)?.pct
+      );
+    }
+  });
+
+  it("sums the plotted groups to a whole population, so no area is counted twice", () => {
+    // The five plotted groups plus "other" are the whole of each area. If a page
+    // aggregated over the raw keys these would still sum to 100, which is why
+    // this checks the helper is used rather than checking the total.
+    for (const year of [2021, 2051]) {
+      const groups = ["white_british", "white_other", "asian", "black", "mixed", "other"] as const;
+      const total = groups.reduce((sum, g) => sum + (nationalGroupShare(g, year)?.pct ?? 0), 0);
+      expect(total, String(year)).toBeCloseTo(100, 1);
+    }
+  });
+
+  it("leaves /national/ no way to aggregate the projection file itself", () => {
+    const page = read("src/pages/national.astro");
+    expect(page).not.toContain("ethnic-projections.json");
+    expect(page).toContain("nationalGroupShare");
   });
 });

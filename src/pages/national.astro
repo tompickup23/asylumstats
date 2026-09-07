@@ -6,8 +6,7 @@ import { loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getSeriesDelta } from "../lib/route-analytics";
 import { getCollection } from "astro:content";
-import { getSignificantDemographicShifts, areasBelowFiftyBy } from "../lib/ethnic-projections";
-import rawProjections from "../data/live/ethnic-projections.json";
+import { getSignificantDemographicShifts, areasBelowFiftyBy, nationalGroupShare } from "../lib/ethnic-projections";
 import grantRateData from "../data/live/grant-rates-nationality.json";
 import schoolValidationData from "../data/live/school-validation.json";
 
@@ -56,8 +55,14 @@ const verdictColor: Record<string, string> = {
 };
 
 // Aggregate national demographic projections
-const allAreas = rawProjections.areas as Record<string, any>;
 const projYears = [2021, 2031, 2041, 2051];
+// Every series comes from nationalGroupShare, never aggregated here.
+// This block used to sum over Object.values(allAreas), which is the raw key set,
+// so it counted Sheffield and Barnsley twice and plotted 74.5% for 2021 and
+// 55.1% for 2051 where the finding and the teaser publish 74.4% and 55.0%. The
+// gap is small because the two duplicated authorities are 800,000 people in 57
+// million, which is exactly why it survived: it is too small to look wrong and
+// too visible to be right, sitting next to a teaser that prints the other value.
 const nationalEthLines = (() => {
   const groups = ["white_british", "asian", "black", "mixed", "white_other"] as const;
   const colors: Record<string, string> = { white_british: "#1a6ba8", asian: "#b45309", black: "#6d28d9", mixed: "#a51d5c", white_other: "#8b939c" };
@@ -65,22 +70,10 @@ const nationalEthLines = (() => {
 
   return groups.map(g => ({
     label: labels[g], color: colors[g],
-    points: projYears.map(y => {
-      const yearKey = String(y);
-      let total = 0, groupTotal = 0;
-      for (const area of Object.values(allAreas)) {
-        if (y === 2021) {
-          total += (area as any).current?.total_population || 0;
-          groupTotal += ((area as any).current?.groups_absolute?.[g]) || ((area as any).current?.total_population || 0) * ((area as any).current?.groups?.[g] || 0) / 100;
-        } else if ((area as any).projections?.[yearKey]) {
-          // Use projection percentages with 2021 population as weight
-          const pop = (area as any).current?.total_population || 0;
-          total += pop;
-          groupTotal += pop * ((area as any).projections[yearKey]?.[g] || 0) / 100;
-        }
-      }
-      return { year: y, value: total > 0 ? Math.round(groupTotal / total * 1000) / 10 : 0 };
-    })
+    points: projYears.map(y => ({
+      year: y,
+      value: Math.round((nationalGroupShare(g, y)?.pct ?? 0) * 10) / 10
+    }))
   }));
 })();
 
