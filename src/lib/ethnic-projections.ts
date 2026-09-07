@@ -297,6 +297,24 @@ export function nationalWhiteBritishShare(
  * them anyway gives 92 where this site publishes 86, and would put a number on
  * the homepage that no place page will confirm.
  *
+ * Two things about `total` that a caller must not print without.
+ *
+ * It is a LOWER BOUND, not the model's answer. The guard withholds exactly the
+ * fastest-diversifying areas, and every area it withholds is below 50%, so it can
+ * only ever push the count down: 86 published against 92 the model produces at
+ * 2051. That is the same bias this file refuses to accept in
+ * nationalWhiteBritishShare, tolerated here for a different and narrower reason,
+ * which is that a count names areas and no count should name an area whose place
+ * page declines to show the projection behind it. `withheld` carries the size of
+ * the gap so a page can say so rather than implying 86 is all the model found.
+ *
+ * And `areasScored` is not the same at every year. 49 authorities have no 2061
+ * projection and they are not a random 49, so a 2061 count is taken over 269
+ * authorities where 2051 is taken over 318. Printing the two side by side as a
+ * series compares different denominators. The homepage trajectory already stops
+ * at 2051 for exactly this reason while the key stats beneath it did not, which
+ * is the failure this field exists to make visible.
+ *
  * This also deliberately does not read `thresholds[]`. That array carries an
  * interpolated crossing year which can name a decade at which the decadal
  * projection is still above 50%: West Northamptonshire is listed as crossing in
@@ -307,14 +325,25 @@ export function nationalWhiteBritishShare(
 export function areasBelowFiftyBy(year: number): {
   total: number;
   majorityToday: number;
+  /** Authorities that have a projection for `year` at all. See below. */
+  areasScored: number;
+  /** The count before the plausibility guard. See withheld, below. */
+  beforeGuard: number;
+  /** Authorities the guard removed from `total`, all of them below 50%. */
+  withheld: number;
 } {
   let total = 0;
   let majorityToday = 0;
+  let areasScored = 0;
+  let beforeGuard = 0;
 
   for (const code of distinctAreaCodes()) {
     const area = data.areas[code];
     const share = area.projections?.[String(year)]?.white_british;
-    if (share == null || share >= 50) continue;
+    if (share == null) continue;
+    areasScored += 1;
+    if (share >= 50) continue;
+    beforeGuard += 1;
 
     const through = plausibleThrough(area as unknown as Parameters<typeof plausibleThrough>[0]);
     if (through === null || through < year) continue;
@@ -323,7 +352,7 @@ export function areasBelowFiftyBy(year: number): {
     if ((area.current?.groups?.white_british ?? 0) >= 50) majorityToday += 1;
   }
 
-  return { total, majorityToday };
+  return { total, majorityToday, areasScored, beforeGuard, withheld: beforeGuard - total };
 }
 
 

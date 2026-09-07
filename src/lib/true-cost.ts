@@ -122,6 +122,33 @@ export const SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR = Math.round(
 
 export type CostBasis = "audited" | "attributed" | "published" | "estimated";
 
+/**
+ * What kind of quantity a category is, which is a different question from how well
+ * sourced it is.
+ *
+ * `basis` says whether a reader can check the figure. `kind` says what the figure
+ * would mean if the asylum system did not exist, and the two are independent: an
+ * audited line can still be an average attribution, and an estimate can still be a
+ * genuinely marginal cost.
+ *
+ *   direct              - incurred because of this caseload and scaling with it.
+ *                         Accommodation contracts, tribunal sitting days, ESOL
+ *                         places. Remove the caseload and the cost goes with it.
+ *   transfer            - a payment to a person. Marginal equals average by
+ *                         construction, because a pound paid is a pound.
+ *   average_attribution - an average cost per head of some wider population,
+ *                         applied to this one. NHS spend per capita, funding per
+ *                         pupil, cost per prison place.
+ *
+ * The last kind is the one that needs saying out loud. An average carries a share
+ * of fixed capacity: hospital estate, school buildings, the prison estate. Those
+ * costs do not fall away in proportion when the population using them does, so an
+ * average-attributed figure overstates what the exchequer would actually stop
+ * spending. It is a fair answer to "what share of public spending is associated
+ * with this population" and the wrong answer to "what would we save".
+ */
+export type CostKind = "direct" | "transfer" | "average_attribution";
+
 export interface CostCategory {
   id: string;
   label: string;
@@ -132,6 +159,8 @@ export interface CostCategory {
    * estimated  - our estimate, method shown in the finding
    */
   basis: CostBasis;
+  /** See CostKind. Independent of `basis`. */
+  kind: CostKind;
   conservative: number;
   central: number;
   upper: number;
@@ -182,6 +211,7 @@ const HOME_OFFICE_CATEGORIES: CostCategory[] = [
     id: "asra",
     label: "Asylum support, resettlement and accommodation",
     basis: "audited",
+    kind: "direct",
     conservative: asra,
     central: asra,
     upper: asra,
@@ -191,6 +221,7 @@ const HOME_OFFICE_CATEGORIES: CostCategory[] = [
     id: "border_security_command",
     label: "Border Security Command",
     basis: "audited",
+    kind: "direct",
     conservative: borderSecurityCommand,
     central: borderSecurityCommand,
     upper: borderSecurityCommand,
@@ -200,6 +231,7 @@ const HOME_OFFICE_CATEGORIES: CostCategory[] = [
     id: "immigration_enforcement",
     label: "Immigration enforcement, asylum share",
     basis: "attributed",
+    kind: "direct",
     ...enforcementShare,
     note: `${ATTRIBUTION.immigrationEnforcement.conservative * 100}% to ${ATTRIBUTION.immigrationEnforcement.upper * 100}% of the audited £${toMillions(araDirectorates.immigrationEnforcement.resourceOutturn).toLocaleString()}m segment. Enforcement covers all immigration offending, not only asylum. Detention costs of £159m sit inside this segment and are not added separately.`
   },
@@ -207,6 +239,7 @@ const HOME_OFFICE_CATEGORIES: CostCategory[] = [
     id: "border_force",
     label: "Border Force, asylum share",
     basis: "attributed",
+    kind: "direct",
     ...borderForceShare,
     note: `${ATTRIBUTION.borderForce.conservative * 100}% to ${ATTRIBUTION.borderForce.upper * 100}% of the audited £${toMillions(araDirectorates.borderForce.resourceOutturn).toLocaleString()}m segment. Border Force protects all UK borders, including trade and drugs, so most of it is not asylum.`
   }
@@ -224,6 +257,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "post_decision_welfare",
     label: "Post-decision welfare",
     basis: "estimated",
+    kind: "transfer",
     conservative: 740,
     central: 924,
     upper: 1098,
@@ -233,6 +267,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "family_reunion",
     label: "Family reunion dependants",
     basis: "estimated",
+    kind: "average_attribution",
     conservative: 377,
     central: 500,
     upper: 623,
@@ -242,6 +277,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "modern_slavery",
     label: "Modern slavery support",
     basis: "estimated",
+    kind: "direct",
     conservative: 255,
     central: 340,
     upper: 425,
@@ -251,6 +287,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "integration",
     label: "ESOL and integration",
     basis: "estimated",
+    kind: "direct",
     conservative: 200,
     central: 250,
     upper: 300,
@@ -260,6 +297,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "healthcare",
     label: "Healthcare",
     basis: "estimated",
+    kind: "average_attribution",
     conservative: 204,
     central: 222,
     upper: 259,
@@ -269,6 +307,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "criminal_justice",
     label: "Criminal justice",
     basis: "estimated",
+    kind: "average_attribution",
     conservative: 127,
     central: 152,
     upper: 203,
@@ -278,6 +317,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "education",
     label: "Education",
     basis: "estimated",
+    kind: "average_attribution",
     conservative: 105,
     central: 140,
     upper: 185,
@@ -287,6 +327,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "translation",
     label: "Translation and interpreting",
     basis: "estimated",
+    kind: "direct",
     conservative: 80,
     central: 125,
     upper: 170,
@@ -296,6 +337,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "local_authority_unfunded",
     label: "Local authority unfunded costs",
     basis: "estimated",
+    kind: "direct",
     conservative: 105,
     central: 125,
     upper: 145,
@@ -305,6 +347,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "tribunals",
     label: "Tribunals and courts",
     basis: "published",
+    kind: "direct",
     conservative: 102,
     central: 115,
     upper: 130,
@@ -314,6 +357,7 @@ const OTHER_CATEGORIES: CostCategory[] = [
     id: "legal_aid",
     label: "Legal aid",
     basis: "published",
+    kind: "direct",
     conservative: 55,
     central: 60,
     upper: 70,
@@ -349,6 +393,24 @@ export const BY_BASIS: Record<CostBasis, { gbpM: number; sharePct: number }> = (
   for (const basis of bases) {
     const gbpM = sum(COST_CATEGORIES.filter((c) => c.basis === basis), "central");
     out[basis] = { gbpM, sharePct: (gbpM / TOTAL_GBP_M.central) * 100 };
+  }
+  return out;
+})();
+
+/**
+ * The central total split by what kind of quantity each category is.
+ *
+ * Published because the headline is an attribution and not a counterfactual, and
+ * those differ by a knowable amount. The average-attributed share is the part of
+ * the total that would NOT fall away in proportion if the caseload did, because
+ * an average carries fixed capacity with it.
+ */
+export const BY_KIND: Record<CostKind, { gbpM: number; sharePct: number }> = (() => {
+  const kinds: CostKind[] = ["direct", "transfer", "average_attribution"];
+  const out = {} as Record<CostKind, { gbpM: number; sharePct: number }>;
+  for (const kind of kinds) {
+    const gbpM = sum(COST_CATEGORIES.filter((c) => c.kind === kind), "central");
+    out[kind] = { gbpM, sharePct: (gbpM / TOTAL_GBP_M.central) * 100 };
   }
   return out;
 })();

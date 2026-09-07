@@ -456,3 +456,55 @@ describe("a national aggregate is derived once, not per page", () => {
     expect(page).toContain("nationalGroupShare");
   });
 });
+
+/**
+ * Relayed from the ukdemographics session, which runs the same model, and correct:
+ * the 2061 aggregate carries a denominator the 2051 one does not.
+ *
+ * 49 authorities have no 2061 projection, so a 2061 count is taken over 269 where
+ * 2051 is taken over 318, and the 49 are not a random 49. The homepage trajectory
+ * chart already stopped at 2051 and said why in its own caption, and then the key
+ * stats underneath printed 86 by 2051 next to 99 by 2061 as if they were a series.
+ * The page stated the rule and broke it two elements later.
+ *
+ * The same session claimed 93 was "the most nearly correct figure on the estate".
+ * That part is wrong and the test below says why: 93 double-counts Sheffield, which
+ * no reading makes correct. What is right underneath it is that 86 is a lower bound
+ * rather than the model's answer, because the guard only ever removes areas that are
+ * below 50%. Both facts are now published rather than only the flattering one.
+ */
+describe("a count carries the denominator it was taken over", () => {
+  it("scores 2061 over fewer authorities than 2051", () => {
+    expect(areasBelowFiftyBy(2051).areasScored).toBe(318);
+    expect(areasBelowFiftyBy(2061).areasScored).toBe(269);
+  });
+
+  it("says so wherever both years are printed together", () => {
+    const page = read("src/pages/index.astro");
+    expect(page).toContain("areasScored");
+    expect(page).toMatch(/Not comparable/i);
+  });
+
+  it("publishes the guard gap, because the guard only removes areas below 50%", () => {
+    const at2051 = areasBelowFiftyBy(2051);
+    expect(at2051.total).toBe(86);
+    expect(at2051.beforeGuard).toBe(92);
+    expect(at2051.withheld).toBe(6);
+    // A lower bound, never above the model's own count.
+    expect(at2051.total).toBeLessThanOrEqual(at2051.beforeGuard);
+    expect(read("src/pages/index.astro")).toContain("beforeGuard");
+  });
+
+  it("does not make 93 defensible: it counts one authority twice", () => {
+    // Sheffield falls below 50% under both its retired and its current code, so
+    // the raw key count is the deduplicated count plus one. Whatever view is taken
+    // of the guard, double-counting an authority is not a view.
+    const raw = Object.keys(rawProjections.areas).filter((code) => {
+      const share = (rawProjections.areas as any)[code]?.projections?.["2051"]?.white_british;
+      return share != null && share < 50;
+    });
+    expect(raw.length).toBe(93);
+    expect(raw.length - areasBelowFiftyBy(2051).beforeGuard).toBe(1);
+    expect(raw).toContain("E08000019");
+  });
+});

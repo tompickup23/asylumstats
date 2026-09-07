@@ -36,6 +36,22 @@ This matters more than the headline figure, so it comes first.
 
 Every figure in the first two rows can be traced to a page of HC 440. The fourth row cannot, and the reason is the same in each case: the department that incurs the cost does not record it by immigration status.
 
+## Attribution, not counterfactual
+
+The figure answers "what share of public spending is associated with the asylum system". It does not answer "what would the exchequer save if the asylum system stopped", and the gap between those two questions is worth about £1.0 billion.
+
+| Kind | What it means | Of the central total | Share |
+|---|---|---|---|
+| **Direct** | Incurred because of this caseload and scaling with it: accommodation contracts, tribunal sitting days, ESOL places | £6,035M | 76% |
+| **Transfer** | A payment to a person. Marginal equals average by construction, because a pound paid is a pound | £924M | 12% |
+| **Average attribution** | An average cost per head of a wider population, applied to this one | £1,014M | 13% |
+
+The last row is the one that needs saying. Healthcare takes NHS spend per capita. Education takes funding per pupil. Criminal justice takes cost per prison place. Family reunion takes an estimated £26,500 of public services per person. Each of those averages carries a share of fixed capacity with it: the hospital estate, school buildings, the prison estate.
+
+Fixed capacity does not fall away in proportion to the population using it. Remove a prisoner and the prison remains; the marginal saving is food and some staffing, not the £47,000 average. So for that £1.0 billion the average overstates what would actually stop being spent, most sharply for prisons, least for education, where per-pupil funding is close to the mechanism by which money actually follows a child.
+
+This is not a hidden thumb on the scale in one direction. The £8.0 billion also excludes whole categories set out below, which pushes the other way. But the two questions have different answers and this article answers the first one. A reader who wants the second should treat roughly £1.0 billion of the total as an upper bound on its own contribution.
+
 ### Two things this calculation deliberately does not do
 
 **It does not add expense types to budget segments.** The accounts report "asylum costs excluding grants" of £2,962 million and "detention costs" of £159 million. Those are expense *types* spread across the department. They sit *inside* the budget segments counted below. Adding both would count the same money twice, which is the most common way a total like this goes wrong.

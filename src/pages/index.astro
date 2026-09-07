@@ -196,8 +196,10 @@ const demographicShifts = getSignificantDemographicShifts(2051);
 // Counted off the decadal projections with the plausibility guard applied, which
 // is the basis the findings publish. getSignificantDemographicShifts reads the
 // interpolated thresholds array and returns a different number.
-const areasBelow50 = areasBelowFiftyBy(2051).total;
-const areasBelow50by2061 = areasBelowFiftyBy(2061).total;
+const below50at2051 = areasBelowFiftyBy(2051);
+const below50at2061 = areasBelowFiftyBy(2061);
+const areasBelow50 = below50at2051.total;
+const areasBelow50by2061 = below50at2061.total;
 const demographicShifts2061 = getSignificantDemographicShifts(2061);
 const wbi2011 = nationalWhiteBritishShare(2011);
 const wbi2021 = nationalWhiteBritishShare(2021);
@@ -423,11 +425,18 @@ function findingColor(verdict: string): string {
       <div class="demo-key-stats">
         <div class="demo-key-stat">
           <span class="demo-key-number" style="color: var(--critical);">{areasBelow50}</span>
-          <span class="demo-key-label">areas White British under 50% by 2051</span>
+          <span class="demo-key-label">
+            areas White British under 50% by 2051, of {below50at2051.areasScored}. The model
+            puts {below50at2051.beforeGuard} below 50%; {below50at2051.withheld} are held back
+            because their projection is not published area by area
+          </span>
         </div>
         <div class="demo-key-stat">
           <span class="demo-key-number" style="color: var(--warning);">{areasBelow50by2061}</span>
-          <span class="demo-key-label">areas White British under 50% by 2061</span>
+          <span class="demo-key-label">
+            areas White British under 50% by 2061, of the {below50at2061.areasScored} with a
+            2061 projection. Not comparable with the {below50at2051.areasScored} above it
+          </span>
         </div>
         <div class="demo-key-stat">
           <span class="demo-key-number" style="color: var(--warning);">{muslimMajority2051}</span>

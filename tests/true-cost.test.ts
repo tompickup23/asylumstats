@@ -12,6 +12,7 @@ import {
   SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA,
   TOTAL_GBP_M,
   BY_BASIS,
+  BY_KIND,
   TRACEABLE_TO_ACCOUNTS_PCT,
   UK_TAXPAYERS,
   assertNoDoubleCount
@@ -251,6 +252,57 @@ describe("the basis shares in the prose reproduce from the categories", () => {
   it("prints each basis share in the table beside its money", () => {
     for (const [basis, { gbpM, sharePct }] of Object.entries(BY_BASIS)) {
       expect(finding, basis).toContain(`£${gbpM.toLocaleString("en-GB")}M | ${Math.round(sharePct)}%`);
+    }
+  });
+});
+
+/**
+ * The audit's sharpest point, and the one that was not a wording problem.
+ *
+ * Multiplying a population by average public-service spend attributes costs that
+ * would not fall away in proportion if the population did, because an average
+ * carries fixed capacity: hospital estate, school buildings, the prison estate.
+ * The article headlined "the true cost" and gave no way to tell which of its
+ * categories were of that kind, so a reader could not separate "spending
+ * associated with this system" from "spending that would stop".
+ *
+ * `kind` is a second dimension alongside `basis` and independent of it: an
+ * audited line can still be an average attribution. These pin the split and the
+ * disclosure, so a new category cannot be added without declaring which it is.
+ */
+describe("the total distinguishes attribution from counterfactual", () => {
+  it("classifies every category", () => {
+    for (const category of COST_CATEGORIES) {
+      expect(["direct", "transfer", "average_attribution"], category.id).toContain(category.kind);
+    }
+  });
+
+  it("splits the central total across exactly the three kinds", () => {
+    const summed =
+      BY_KIND.direct.gbpM + BY_KIND.transfer.gbpM + BY_KIND.average_attribution.gbpM;
+    expect(summed).toBe(TOTAL_GBP_M.central);
+  });
+
+  it("puts the average-attributed share at about an eighth of the total", () => {
+    expect(BY_KIND.average_attribution.gbpM).toBe(1014);
+    expect(Math.round(BY_KIND.average_attribution.sharePct)).toBe(13);
+  });
+
+  it("classes the four per-head multiplications as average attributions", () => {
+    const byId = new Map(COST_CATEGORIES.map((c) => [c.id, c.kind]));
+    for (const id of ["healthcare", "education", "criminal_justice", "family_reunion"]) {
+      expect(byId.get(id), id).toBe("average_attribution");
+    }
+    // A transfer is not an average attribution: a pound of Universal Credit paid
+    // is a pound that stops being paid, with no fixed capacity behind it.
+    expect(byId.get("post_decision_welfare")).toBe("transfer");
+  });
+
+  it("states the distinction and the amount in the article", () => {
+    expect(finding).toMatch(/Attribution, not counterfactual/i);
+    expect(finding).toContain("what would the exchequer save");
+    for (const { gbpM, sharePct } of Object.values(BY_KIND)) {
+      expect(finding).toContain(`£${gbpM.toLocaleString("en-GB")}M | ${Math.round(sharePct)}%`);
     }
   });
 });
