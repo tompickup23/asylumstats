@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataDrawer from "../components/DataDrawer.astro";
-import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
 import PageGuide from "../components/PageGuide.astro";
 import BenchmarkStrip from "../components/BenchmarkStrip.astro";
@@ -14,10 +13,8 @@ import {
 } from "../lib/asylum-support-logic";
 import { getAreaTrendSummary } from "../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../lib/entity-analytics";
-import { getEntityProfiles, getLeadEntityProfileForTrail } from "../lib/entities";
+import { getEntityProfiles } from "../lib/entities";
 import { loadHotelEntityLedger } from "../lib/hotel-data";
-import { getCompareInvestigationTrails } from "../lib/investigations";
-import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest } from "../lib/route-data";
 import {
   formatOrdinal,
@@ -29,7 +26,6 @@ import { getEthnicProjection } from "../lib/ethnic-projections";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
-const moneyLedger = loadMoneyLedger();
 type ComparePlace = (typeof localRouteLatest.areas)[number];
 const comparePlaces = localRouteLatest.defaultCompareCodes
   .map((code) => localRouteLatest.areas.find((place) => place.areaCode === code))
@@ -313,10 +309,6 @@ const compareGuideItems = [
     cta: "Open the deep data"
   }
 ];
-const compareCaseFiles = getCompareInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
-  trail,
-  leadEntity: getLeadEntityProfileForTrail(trail)
-}));
 const entityProfiles = getEntityProfiles();
 const namedEstateProfiles = entityProfiles.filter((profile) => profile.currentSiteCount > 0);
 const comparePlaceCards = comparePlaces.map((place) => {
@@ -338,7 +330,6 @@ const comparePlaceCards = comparePlaces.map((place) => {
 const compareSections = [
   { id: "compare-findings", label: "Findings" },
   { id: "compare-guide", label: "How to use" },
-  ...(compareCaseFiles.length > 0 ? [{ id: "compare-case-files", label: "Case files" }] : []),
   { id: "supported-asylum-logic", label: "How to read" },
   { id: "default-compare-set", label: "Default set" },
   { id: "compare-data", label: "Explorer + charts" }
@@ -442,37 +433,6 @@ const compareSections = [
     items={compareGuideItems}
   />
 
-  {compareCaseFiles.length > 0 && (
-    <section id="compare-case-files" class="section section-anchor priority-section">
-      <div class="section-head">
-        <div>
-          <h2>Concrete case files from the wider compare field</h2>
-          <p class="lede">
-            The compare surface is not just quartiles and rates. Named hotels, provider links, and owner chains already
-            show how different local models look in practice.
-          </p>
-        </div>
-      </div>
-      <div class="feature-grid">
-        {compareCaseFiles.map(({ trail, leadEntity }) => (
-          <InvestigationTrail
-            kicker={trail.kicker}
-            title={trail.title}
-            summary={trail.summary}
-            chips={trail.chips}
-            tone={trail.tone}
-            steps={trail.steps}
-            footnote={trail.footnote}
-            footerLinks={
-              leadEntity
-                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
-                : []
-            }
-          />
-        ))}
-      </div>
-    </section>
-  )}
 
   <section id="supported-asylum-logic" class="section section-anchor">
     <div class="section-head">
@@ -575,24 +535,11 @@ const compareSections = [
           </div>
           <p class="tiny">
             <a class="source-pill" href={`/places/${place.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`}>Open place page</a>
-            {localLeadEntity && (
-              <a class="source-pill" href={`/entities/${localLeadEntity.entityId}/`}>
-                Open {localLeadEntity.entityName} profile
-              </a>
-            )}
-            {!localLeadEntity && regionalProviderCoverage && (
-              <a class="source-pill" href={`/entities/${regionalProviderCoverage.profile.entityId}/`}>
-                Open {regionalProviderCoverage.profile.entityName} regional profile
-              </a>
-            )}
-            {!localLeadEntity && !regionalProviderCoverage && (
-              <a class="source-pill" href="/entities/?entity_footprint=named_estate#entity-explorer">
-                Open named actor explorer
-              </a>
-            )}
-            {!localLeadEntity && compareCaseFiles.length > 0 && (
-              <a class="source-pill" href="#compare-case-files">Open named case files</a>
-            )}
+            {/*
+              These linked the parked per-supplier profiles. The supplier index carries
+              the payment ledger, which is the part with evidence behind it.
+            */}
+            <a class="source-pill" href="/entities/">Who was paid</a>
           </p>
           <p class="tiny">
             {localLeadEntity

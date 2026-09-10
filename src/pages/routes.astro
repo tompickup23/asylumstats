@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataDrawer from "../components/DataDrawer.astro";
-import InvestigationTrail from "../components/InvestigationTrail.astro";
 import PageContents from "../components/PageContents.astro";
 import PageGuide from "../components/PageGuide.astro";
 import RegionTileMap from "../components/RegionTileMap.astro";
@@ -11,18 +10,12 @@ import {
   buildSupportedAsylumStockDescription,
   supportedAsylumReadingRules
 } from "../lib/asylum-support-logic";
-import { getLeadEntityProfileForTrail } from "../lib/entities";
-import { loadHotelEntityLedger } from "../lib/hotel-data";
-import { getRouteInvestigationTrails } from "../lib/investigations";
-import { loadMoneyLedger } from "../lib/money-data";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { getRegionPressureSummaries, getSeriesDelta } from "../lib/route-analytics";
 import { loadBorderSecurity, signedPct } from "../lib/border-security";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
-const hotelLedger = loadHotelEntityLedger();
-const moneyLedger = loadMoneyLedger();
 const routeSignalCards = routeDashboard.nationalCards.slice(0, 3);
 const featuredRoutes = [...routeDashboard.routeFamilies]
   .sort((a, b) => b.latestValue - a.latestValue)
@@ -185,10 +178,6 @@ const routeFindingCards = [
     body: `In ${postDecisionPath.appeals.latestQuarterLabel ?? "the latest tribunal quarter"}, the immigration and asylum tribunal took in ${(postDecisionPath.appeals.series.receipts?.at(-1)?.value ?? 0).toLocaleString()} appeals and cleared ${(postDecisionPath.appeals.series.disposals?.at(-1)?.value ?? 0).toLocaleString()}, leaving ${(postDecisionPath.appeals.series.openCaseload?.at(-1)?.value ?? 0).toLocaleString()} cases open. Mean time to clear reached ${postDecisionPath.appeals.meanWeeksToClear ?? "n/a"} weeks.`
   }
 ];
-const routeCaseFiles = getRouteInvestigationTrails(localRouteLatest.areas, hotelLedger, moneyLedger, 3).map((trail) => ({
-  trail,
-  leadEntity: getLeadEntityProfileForTrail(trail)
-}));
 const routeGuideItems = [
   {
     eyebrow: "Start here",
@@ -215,7 +204,6 @@ const routeGuideItems = [
 const routeSections = [
   { id: "route-findings", label: "Findings" },
   { id: "route-guide", label: "How to use" },
-  ...(routeCaseFiles.length > 0 ? [{ id: "route-case-files", label: "Case files" }] : []),
   { id: "route-logic", label: "How to read" },
   { id: "national-stock-flow", label: "Stock vs flow" },
   { id: "route-data", label: "Explorer + charts" }
@@ -308,37 +296,6 @@ function formatCardValue(value: number, suffix?: string): string {
     items={routeGuideItems}
   />
 
-  {routeCaseFiles.length > 0 && (
-    <section id="route-case-files" class="section section-anchor priority-section">
-      <div class="section-head">
-        <div>
-          <h2>Named case files behind the national numbers</h2>
-          <p class="lede">
-            National stocks and flows only become concrete when they land in named hotels, named actors, and specific
-            places. These live case files show where that chain is already public.
-          </p>
-        </div>
-      </div>
-      <div class="feature-grid">
-        {routeCaseFiles.map(({ trail, leadEntity }) => (
-          <InvestigationTrail
-            kicker={trail.kicker}
-            title={trail.title}
-            summary={trail.summary}
-            chips={trail.chips}
-            tone={trail.tone}
-            steps={trail.steps}
-            footnote={trail.footnote}
-            footerLinks={
-              leadEntity
-                ? [{ href: `/entities/${leadEntity.entityId}/`, label: `Open ${leadEntity.entityName} profile` }]
-                : []
-            }
-          />
-        ))}
-      </div>
-    </section>
-  )}
 
   <section id="route-logic" class="section section-anchor">
     <div class="section-head">
