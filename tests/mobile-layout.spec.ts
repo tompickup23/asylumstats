@@ -33,25 +33,7 @@ const filteredViews = [
     expectedFocus: "contingency",
     expectedLocation: "compare_model=hotel-heavy"
   },
-  // hotels-filtered removed — hotels page disabled
-  {
-    name: "spending-filtered",
-    path: "/spending/?money_route=asylum_support&money_value=with_value&money_sort=value#money-explorer",
-    root: "#money-explorer",
-    summary: "[data-money-summary]",
-    expectedSummary: /Showing \d+ of \d+ public ledger rows/,
-    expectedFocus: "asylum_support",
-    expectedLocation: "money_sort=value"
-  },
-  {
-    name: "entities-filtered",
-    path: "/entities/?entity_role=prime_provider&entity_footprint=named_estate&entity_sort=estate#entity-explorer",
-    root: "#entity-explorer",
-    summary: "[data-entity-summary]",
-    expectedSummary: /Showing \d+ of \d+ matching profiles/,
-    expectedFocus: "prime_provider",
-    expectedLocation: "entity_footprint=named_estate"
-  },
+  // hotels- and spending-filtered views removed with their parked starter-ledger explorers
   // place-drilldown removed — section removed in place page trim
 ] as const;
 
@@ -167,37 +149,6 @@ test.describe("mobile filtered views", () => {
       }
 
       // hotels-filtered block removed — hotels page disabled
-
-      if (view.name === "spending-filtered") {
-        await expect(page.locator('select[name="money_route"]')).toHaveValue(view.expectedFocus);
-        const visibleMoneyRows = await page
-          .locator("[data-money-row]:not([hidden])")
-          .evaluateAll((elements) =>
-            elements.map((element) => ({
-              route: element.getAttribute("data-route") ?? "",
-              hasValue: element.getAttribute("data-has-value") ?? ""
-            }))
-          );
-        expect(visibleMoneyRows.length).toBeGreaterThan(0);
-        expect(visibleMoneyRows.every((row) => row.route === "asylum_support" && row.hasValue === "true")).toBe(
-          true
-        );
-      }
-
-      if (view.name === "entities-filtered") {
-        await expect(page.locator('select[name="entity_role"]')).toHaveValue(view.expectedFocus);
-        await expect(page.locator('select[name="entity_footprint"]')).toHaveValue("named_estate");
-        const visibleEntityRows = await page
-          .locator("[data-entity-item]:not([hidden])")
-          .evaluateAll((elements) =>
-            elements.map((element) => ({
-              role: element.getAttribute("data-role") ?? "",
-              currentSites: Number(element.getAttribute("data-current-sites") ?? "0")
-            }))
-          );
-        expect(visibleEntityRows.length).toBeGreaterThan(0);
-        expect(visibleEntityRows.every((row) => row.role === "prime_provider" && row.currentSites > 0)).toBe(true);
-      }
 
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflowWidth).toBeLessThanOrEqual(2);

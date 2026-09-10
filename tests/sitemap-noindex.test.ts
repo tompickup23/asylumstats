@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { getEntityProfiles } from "../src/lib/entities";
 import { getIndexableSitePaths } from "../src/lib/site";
 
 /**
@@ -58,6 +59,21 @@ describe("sitemap and noindex agree", () => {
     expect(councils).toBeDefined();
     expect(declaresNoIndex(councils!)).toBe(true);
     expect(getIndexableSitePaths()).not.toContain("/councils/");
+  });
+
+  it("keeps individual entity profiles parked and out of the sitemap", () => {
+    // Supplier strings in the Home Office ledger are not yet resolved to legal entities.
+    // Keep these pages available by direct link, but do not invite search indexing until
+    // company-number resolution makes actor-level assertions defensible.
+    const profileTemplate = join(PAGES_DIR, "entities", "[id].astro");
+    expect(existsSync(profileTemplate)).toBe(true);
+    expect(declaresNoIndex(profileTemplate)).toBe(true);
+
+    const profilePaths = getEntityProfiles().map((profile) => `/entities/${profile.entityId}/`);
+    expect(profilePaths.length).toBeGreaterThan(0);
+    for (const path of profilePaths) {
+      expect(getIndexableSitePaths()).not.toContain(path);
+    }
   });
 
   it("has /spending/ and /entities/ indexable on both signals", () => {

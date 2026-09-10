@@ -431,7 +431,8 @@ const sections = [
                 <span style="font-size: 0.85rem;">{supplier.entityName}</span>
                 <div class="tiny" style="opacity: 0.6;">{supplier.siteCount} site{supplier.siteCount === 1 ? "" : "s"} | {supplier.publicContractCount} contract{supplier.publicContractCount === 1 ? "" : "s"}</div>
               </div>
-              <a class="source-pill" href={`/entities/${supplier.supplierId}/`}>Profile</a>
+              {/* Per-supplier profiles are parked; the index carries the payment ledger. */}
+              <a class="source-pill" href="/entities/">Who was paid</a>
             </div>
           ))}
         </div>
