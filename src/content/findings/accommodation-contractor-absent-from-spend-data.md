@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://www.gov.uk/government/collections/home-office-spending"
 source_label: "Home Office spending over £25,000"
 summary: "Clearsprings Ready Homes holds two of the seven asylum accommodation contracts, covering southern England and Wales. It does not appear in the Home Office's published spending data for 2022/23 or 2023/24, the two years when hotel use peaked."
+seo_title: "Clearsprings is missing from Home Office spending data"
+seo_description: "Clearsprings Ready Homes holds two of the seven asylum accommodation contracts, but appears nowhere in Home Office spending for 2022-24."
 ---
 
 **A statement about publication, not about payment.** Clearsprings Ready Homes plainly held and delivered its contracts throughout this period. The finding is that the Home Office's published record of payments over £25,000 does not show them.

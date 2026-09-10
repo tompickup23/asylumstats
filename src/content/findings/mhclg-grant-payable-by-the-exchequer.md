@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/publications/mhclg-spending-over-25000-december-2025"
 source_label: "MHCLG spending over £25,000"
 summary: "Homes for Ukraine and the Afghan resettlement schemes are paid by MHCLG, not the Home Office. Across 22 months of its published spending, only £22.8 million mentions refugees at all, while £51.9 billion carries a single catch-all narrative."
+seo_title: "MHCLG labels 63% of its spending with one catch-all phrase"
+seo_description: "Homes for Ukraine and Afghan resettlement are paid by MHCLG. In 22 months of published spending, £51.9bn carries one catch-all label."
 ---
 
 **The refugee schemes most people have heard of are not Home Office spending.** Homes for Ukraine and the Afghan resettlement programmes are funded by the Ministry of Housing, Communities and Local Government, which pays councils directly. None of it appears in Home Office data.

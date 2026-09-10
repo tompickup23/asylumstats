@@ -22,6 +22,15 @@ interface Props {
   bodyClass?: string;
   mainClass?: string;
   hideFooter?: boolean;
+  /**
+   * Append " | asylumstats" to the title. Default true.
+   *
+   * Set false where the page has spent its pixel budget on the query it is trying to
+   * answer. The suffix costs 122px of the 600px Google renders before it truncates, a
+   * fifth of the line, and Google already has the site name from `og:site_name` and the
+   * WebSite node below, which is what it prints beside the URL either way.
+   */
+  brandTitle?: boolean;
 }
 
 const {
@@ -33,11 +42,12 @@ const {
   structuredData: pageStructuredData = [],
   bodyClass,
   mainClass,
-  hideFooter = false
+  hideFooter = false,
+  brandTitle = true
 } = Astro.props;
 const siteOrigin = Astro.site ?? new URL(SITE_URL);
 const pathname = Astro.url.pathname || "/";
-const pageTitle = normalisePageTitle(title);
+const pageTitle = brandTitle ? normalisePageTitle(title) : title;
 const canonicalUrl = new URL(canonicalOverride ?? pathname, siteOrigin).toString();
 const socialImageUrl = /^https?:\/\//.test(image) ? image : new URL(image, siteOrigin).toString();
 const robotsContent = noIndex ? "noindex,follow,max-image-preview:large" : "index,follow,max-image-preview:large";
@@ -139,7 +149,8 @@ const structuredData = [
          global.css. The CSP below allows no font host, so a Google Fonts link would be
          blocked at the browser; self-hosting is also the right answer for privacy. -->
     <meta name="google-site-verification" content="adrI-dNLQZ4U-yrUhxHTknbuCZENyMXfgz7M6r7H6aE" />
-    <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "2dc3cef6e76e40b6a1555008f9774191"}'></script><!-- End Cloudflare Web Analytics -->
+    <!-- Cloudflare Web Analytics is production-only so local Astro work cannot inflate public traffic. -->
+    {import.meta.env.PROD && <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: "2dc3cef6e76e40b6a1555008f9774191" })}></script>}
     {structuredData.map((item) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(item)} />
     ))}
@@ -189,8 +200,10 @@ const structuredData = [
           <a href={SOCIAL_PROFILES.youtube} rel="me noopener">YouTube</a>
         </div>
         <div class="footer-legal">
-          asylumstats.co.uk is an independent research project. It uses publicly available government data (ONS, Home Office, DfE, NHS Digital).
-          Not affiliated with or endorsed by any political party, council, or candidate. No cookies. No advertising or behavioural tracking. Cookieless page counts only.
+          asylumstats.co.uk publishes asylum spending, dispersal and route data drawn from published government sources (ONS, Home Office, DfE, NHS Digital).
+          An independent research project by Tom Pickup, a Lancashire county councillor and Reform UK member; no party, council or candidate has any say over what appears here.
+          Every headline figure is traceable to the source it came from, the method is published in full, and corrections are logged publicly.
+          No cookies. No advertising or behavioural tracking. Cookieless page counts only.
           Contact: <a href="mailto:info@asylumstats.co.uk">info@asylumstats.co.uk</a>.
           &copy; {new Date().getFullYear()} asylumstats.co.uk. All projections are demographic estimates, not predictions.
           <a href="/methodology/">Full methodology &amp; limitations</a>.

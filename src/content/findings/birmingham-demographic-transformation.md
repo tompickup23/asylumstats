@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry projection model"
 summary: "Birmingham's White British population fell from 53% (2011) to 43% (2021). Ten percentage points gone in a single decade. Hamilton-Perry projects 14.9% by 2051, driven by cohort change ratios observed between the two censuses: age structure, fertility and migration together, not a fertility rate on its own."
+seo_title: "Birmingham: 43% White British, projected under 15% by 2051"
+seo_description: "Birmingham's White British share fell from 53% in 2011 to 43% in 2021. The Hamilton-Perry model projects 14.9% by 2051."
 ---
 
 > **Correction, 7 September 2026.** This piece credited the projection to a

@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables"
 source_label: "Home Office Immigration Statistics (Asy_D02)"
 summary: "First full grant rate league table from Home Office decision data. 107 nationalities. 11 have 75%+ initial grant rates (genuine refugees). 41 have under 25% (overwhelmingly refused). The gap between the two groups is the clearest evidence that the system processes genuine refugees and economic migrants alike, then treats them identically until decision."
+seo_title: "Asylum grant rate by nationality: Yemen 95%, India 3%"
+seo_description: "The first full asylum grant rate league table built from Home Office decision data. Of 107 nationalities, 11 grant above 75% and 41 below 25%."
 ---
 
 **The Home Office publishes 139,000 rows of asylum decision data. It does not publish a league table by nationality.**

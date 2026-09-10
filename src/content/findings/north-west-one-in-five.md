@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "Home Office local authority data, 30 June 2026"
 summary: "18,962 people on asylum support in the North West at 30 June 2026, 20.3% of the 93,293 national total. London carries 12,140, or 13.0%. The North West has held the largest regional share through every quarter of the current decline, and its share has risen slightly as the national total has fallen."
+seo_title: "The North West carries one in five on asylum support"
+seo_description: "18,962 people on asylum support in the North West at 30 June 2026, 20.3% of the national total. London carries 12,140, or 13.0%."
 ---
 
 **18,962 people on asylum support in the North West at 30 June 2026. One in five nationally.**

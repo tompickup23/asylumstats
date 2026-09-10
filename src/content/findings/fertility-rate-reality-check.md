@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths"
 source_label: "ONS Linked Births 2024"
 summary: "ONS 2024 births data reveals White British fertility has fallen to an empirical TFR of approximately 1.31. well below the 1.55 assumed by academic models and the 1.71 implied by Census 2021 child-woman ratios. Pakistani fertility remains at 2.52. The fertility gap between ethnic groups is wider than any published model uses."
+seo_title: "White British fertility has fallen to 1.31"
+seo_description: "ONS 2024 births give White British an empirical TFR near 1.31, below the 1.55 academic models assume. Pakistani fertility remains at 2.52."
 ---
 
 **Every ethnic demographic model in use today overestimates White British fertility.**

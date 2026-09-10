@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://reshare.ukdataservice.ac.uk/852508/"
 source_label: "NEWETHPOP (University of Leeds)"
 summary: "The NEWETHPOP cohort-component model, the UK's most cited academic ethnic projection, over-predicted White British population share in 282 out of 296 local authorities. NEWETHPOP MAE against the Census 2021 actuals: 3.95pp across 296 areas. A previous version of this piece set that against a 1.71pp score for our own model and claimed we were 33 per cent more accurate. That comparison has been withdrawn: our 1.71pp came from a backcast fitted on the same two Censuses it was tested against, so it measured our own guardrails rather than forecast accuracy. On a genuine out-of-sample test, fitting 2001 to 2011 and forecasting 2021, our model scores 1.56pp."
+seo_title: "Academic projections over-predicted White British share"
+seo_description: "NEWETHPOP over-predicted White British share in 282 of 296 local authorities, scoring 3.95pp mean absolute error against Census 2021."
 video_url: "/videos/newethpop_validation_reel.mp4"
 ---
 

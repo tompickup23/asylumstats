@@ -4,16 +4,19 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import { getCounties } from "../../../lib/county-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
+import { formatFindingDate } from "../../../lib/finding-dates";
 
 const localRouteLatest = loadLocalRouteLatest();
 const counties = getCounties();
+// From the data, not typed: this page said 31 March 2026 after the mart moved to June.
+const snapshotLabel = formatFindingDate(localRouteLatest.snapshotDate ?? "2026-06-30");
 const englandTotal = counties.reduce((total, county) => total + county.supportedAsylum, 0);
 const maxCounty = counties[0]?.supportedAsylum || 1;
 
 const pageTitle = `Asylum seekers by county: all ${counties.length} English counties`;
 const pageDescription =
   `Asylum seekers on support in every English county, from ${counties[0]?.countyName} down. ` +
-  `${englandTotal.toLocaleString()} people across ${counties.length} counties as at 31 March 2026.`;
+  `${englandTotal.toLocaleString()} people across ${counties.length} counties as at ${snapshotLabel}.`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -24,7 +27,7 @@ const pageDescription =
       <span class="kicker">England</span>
       <h1>Asylum seekers by county</h1>
       <DataFreshness
-        updated={localRouteLatest.snapshotDate ?? "2026-03-31"}
+        updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
         source="Home Office"
         sourceUrl="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
       />
@@ -58,7 +61,7 @@ const pageDescription =
       ))}
     </div>
     <p class="cty-caption">
-      Count is people on asylum support at 31 March 2026. Rate is per 10,000 residents.
+      Count is people on asylum support at {snapshotLabel}. Rate is per 10,000 residents.
     </p>
   </section>
 </BaseLayout>

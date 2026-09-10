@@ -9,6 +9,8 @@ verdict: info
 source_url: "https://commonslibrary.parliament.uk/research-briefings/cdp-2025-0184/"
 source_label: "House of Commons Library, CDP-2025-0184"
 summary: "The House of Commons Library puts Home Office spending on asylum hotel accommodation at £2.1 billion in 2024/25, which is £5.77 million a day, inside £4 billion on asylum support altogether. That is a 2024/25 figure and it is the most recent hotel-specific one published. The population it paid for has since fallen from 30,657 people in hotels to 16,021."
+seo_title: "Asylum hotels cost £5.77 million a day in 2024/25"
+seo_description: "The Commons Library puts asylum hotel spending at £2.1 billion in 2024/25, or £5.77 million a day. The hotel population has since fallen to 16,021."
 ---
 
 **£2.1 billion on asylum hotel accommodation in 2024/25**, which works out at **£5.77 million a day**. That sits inside £4 billion spent on asylum support altogether.

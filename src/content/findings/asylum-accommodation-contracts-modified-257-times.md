@@ -8,6 +8,7 @@ verdict: info
 source_url: "https://www.nao.org.uk/wp-content/uploads/2025/05/home-offices-asylum-accommodation-contracts.pdf"
 source_label: "National Audit Office, The Home Office's asylum accommodation contracts, May 2025"
 summary: "Seven regional contracts, modified 257 times in under six years. The ten-year cost estimate has risen from £4.5 billion at award to £15.3 billion."
+seo_title: "Asylum accommodation contracts changed 257 times"
 ---
 
 **257 modifications** across the seven regional contracts between 2019 and January 2025, according to the National Audit Office. Around 48% relate to managing the impact of COVID-19 and 16% to adding large sites.

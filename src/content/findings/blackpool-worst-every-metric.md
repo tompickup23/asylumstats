@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "ONS recorded crime, NHS Digital ASC finance, DfE SEND, Home Office local authority data"
 summary: "Blackpool has the highest recorded crime rate, the highest adult social care spend per head and the fastest SEND growth of the 25 areas this site tracks. Its asylum support rate has fallen from 40.0 per 10,000 at the end of 2025 to 16.5 at 30 June 2026, which ranks 94th of 361 UK authorities, so the fourth domain no longer belongs in the list."
+seo_title: "Blackpool is worst on three of the four pressures tracked"
+seo_description: "Blackpool has the highest recorded crime rate, the highest adult social care spend per head and the fastest SEND growth of 25 areas."
 ---
 
 **Blackpool is highest of the 25 areas tracked here on three of the four pressures, and it is no longer near the top on the fourth.**

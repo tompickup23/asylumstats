@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice"
 source_label: "ONS Crime Statistics"
 summary: "Among 25 tracked local authorities, areas with higher asylum dispersal rates tend to have higher police recorded crime rates (r = 0.68). However, both metrics correlate strongly with the Index of Multiple Deprivation, so the association likely reflects deprivation-driven placement policy rather than a causal link between asylum seekers and crime."
+seo_title: "Asylum dispersal and crime: deprivation is the common driver"
+seo_description: "Across 25 local authorities, higher asylum dispersal tracks higher recorded crime (r = 0.68). Both track deprivation, the likelier cause."
 ---
 
 Among our 25 tracked local authorities, there is a moderate positive correlation (r = 0.68) between the asylum dispersal rate per 10,000 residents and the total police recorded crime rate per 1,000 residents.

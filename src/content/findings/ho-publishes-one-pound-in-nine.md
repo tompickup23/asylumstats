@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.nao.org.uk/wp-content/uploads/2025/12/an-analysis-of-the-asylum-system.pdf"
 source_label: "National Audit Office, An analysis of the asylum system, December 2025"
 summary: "The Home Office spent about £4.9 billion on asylum in 2024/25. Its own published record of payments over £25,000 accounts for £540 million of that. The rest is reported in totals, not payment by payment."
+seo_title: "Home Office publishes £11 in every £100 spent on asylum"
+seo_description: "The Home Office spent about £4.9 billion on asylum in 2024/25. Its published record of payments over £25,000 accounts for £540 million of it."
 ---
 
 **£4.9 billion spent. £539.7 million itemised.** The National Audit Office published a full breakdown of actual 2024-25 asylum costs in December 2025. Set against it, the Home Office's own transparency publication accounts for about **£11 in every £100**.

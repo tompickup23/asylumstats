@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import AskedAndAnswered from "../../../components/AskedAndAnswered.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
 import { slugifyAreaName } from "../../../lib/site";
 import { getCounties, type County } from "../../../lib/county-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
+import { buildPlaceTitle } from "../../../lib/serp";
+import { formatFindingDate } from "../../../lib/finding-dates";
+import { ROUTES_RELEASE_DATE } from "../../../lib/data-releases";
 
 const localRouteLatest = loadLocalRouteLatest();
 
@@ -20,15 +24,33 @@ const { county } = Astro.props as { county: County };
 
 const maxAreaAsylum = county.areas[0]?.supportedAsylum || 1;
 
-// Keyword first, so that a truncated title still matches the query it is for.
-const pageTitle = `Asylum seekers in ${county.countyName}: ${county.supportedAsylum.toLocaleString()} on support`;
+// The query as typed, answered in the title. See src/lib/serp.ts for why the frame is a
+// question and why there is no rank clause: at 600px there is room for the question and
+// one number, and the rank lives in the description instead.
+// The quarter these figures describe, taken from the data rather than typed. Every
+// sentence below used to say "31 March 2026", written when that was the current release
+// and left behind when the routes mart moved to year ending June 2026 on 4 September. A
+// hardcoded reference date on a page whose whole claim is traceability is the one kind of
+// error that cannot be argued with, and it is exactly what a featured snippet would lift.
+const snapshotLabel = formatFindingDate(localRouteLatest.snapshotDate ?? "2026-06-30");
+// The day the Home Office published it, from the fetch manifest. This said "21 May 2026"
+// in prose, which was the previous quarter's release.
+const releaseLabel = ROUTES_RELEASE_DATE ? formatFindingDate(ROUTES_RELEASE_DATE) : "its latest release";
+
+const pageTitle = buildPlaceTitle({
+  areaName: county.countyName,
+  supportedAsylum: county.supportedAsylum
+});
 
 function ordinal(n: number): string {
   const rest = n % 100;
   if (rest >= 11 && rest <= 13) return `${n}th`;
   return `${n}${["th", "st", "nd", "rd"][n % 10] ?? "th"}`;
 }
-const rankLabel = `${ordinal(county.nationalRank)} highest of ${county.countyCount} English counties`;
+// "1st highest" is not English. Rank one is simply the highest.
+const rankLabel = county.nationalRank === 1
+  ? `highest of ${county.countyCount} English counties`
+  : `${ordinal(county.nationalRank)} highest of ${county.countyCount} English counties`;
 
 const pageDescription =
   `${county.countyName}: ${county.supportedAsylum.toLocaleString()} asylum seekers on support, ` +
@@ -36,14 +58,18 @@ const pageDescription =
   `${county.supportedAsylumRate ?? "-"} per 10,000 residents.`;
 
 // The searches these pages exist for are phrased as questions, so the page answers them
-// in that form. Google restricted FAQ rich results to a narrow set of sites in 2023, so
-// treat the markup as a bonus: the durable gain is the question wording on the page.
+// in that form, each under its own h2 with the answer immediately beneath. The FAQPage
+// markup below is left alone but earns nothing: Google restricted FAQ rich results to
+// government and health sites in August 2023 and stopped showing them entirely on
+// 7 May 2026. What still works is the shape of the content, which is what a featured
+// snippet is lifted from and what an AI Overview cites. Answers are held to roughly
+// 40-60 words so they can be lifted whole.
 const askedAndAnswered = [
   {
     question: `How many asylum seekers are there in ${county.countyName}?`,
     answer:
       `${county.supportedAsylum.toLocaleString()} people were receiving asylum support in ` +
-      `${county.countyName} as at 31 March 2026, across its ${county.areaCount} local ` +
+      `${county.countyName} as at ${snapshotLabel}, across its ${county.areaCount} local ` +
       `authorities. That is ${county.supportedAsylumRate ?? "-"} per 10,000 residents and ` +
       `makes it the ${rankLabel} on this measure. The figure counts people on support at ` +
       `that date, which is not the same as the number waiting for a decision.`
@@ -51,22 +77,23 @@ const askedAndAnswered = [
   {
     question: `How many refugees are there in ${county.countyName}?`,
     answer:
-      `Two resettlement routes are published for ${county.countyName}. ` +
-      `${county.afghanProgrammePopulation.toLocaleString()} people were in the Afghan ` +
-      `Resettlement Programme as at 31 March 2026, which is a population counted at a point ` +
-      `in time. Separately, ${county.homesForUkraineArrivals.toLocaleString()} Homes for ` +
-      `Ukraine arrivals have been recorded there since the scheme opened, which is a running ` +
-      `count of arrivals rather than of who lives there now. The two measure different ` +
-      `things and should not be added together.`
+      `Two resettlement routes are published for ${county.countyName}: ` +
+      `${county.afghanProgrammePopulation.toLocaleString()} people in the Afghan ` +
+      `Resettlement Programme at ${snapshotLabel}, and ` +
+      `${county.homesForUkraineArrivals.toLocaleString()} Homes for Ukraine arrivals since ` +
+      `the scheme opened. The two should not be added together: the first counts who is ` +
+      `there now, the second counts everyone who has ever arrived.`
   },
   {
     question: `Which part of ${county.countyName} has the most asylum seekers?`,
     answer:
       `${county.areas[0]?.areaName} has the most, with ` +
-      `${county.areas[0]?.supportedAsylum.toLocaleString()} people on asylum support, ` +
-      `followed by ${county.areas[1]?.areaName ?? "no other authority"}` +
-      `${county.areas[1] ? ` with ${county.areas[1].supportedAsylum.toLocaleString()}` : ""}. ` +
-      `Every authority in the county is listed on this page.`
+      `${county.areas[0]?.supportedAsylum.toLocaleString()} people on asylum support at ` +
+      `${snapshotLabel}` +
+      `${county.areas[1] ? `, followed by ${county.areas[1].areaName} with ${county.areas[1].supportedAsylum.toLocaleString()}` : ""}. ` +
+      `The county total is spread unevenly: dispersal is negotiated authority by authority, ` +
+      `so neighbouring councils in the same county can carry very different numbers. Every ` +
+      `authority in ${county.countyName} is listed on this page with its own rate per 10,000.`
   }
 ];
 
@@ -83,7 +110,7 @@ const pageStructuredData = [
 ];
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription} structuredData={pageStructuredData}>
+<BaseLayout title={pageTitle} brandTitle={false} description={pageDescription} structuredData={pageStructuredData}>
   <Breadcrumbs items={[
     { label: "Places", href: "/places/" },
     { label: "Counties", href: "/places/counties/" },
@@ -95,7 +122,7 @@ const pageStructuredData = [
       <span class="kicker">County</span>
       <h1>Asylum seekers in {county.countyName}</h1>
       <DataFreshness
-        updated={localRouteLatest.snapshotDate ?? "2026-03-31"}
+        updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
         source="Home Office"
         sourceUrl="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
       />
@@ -126,7 +153,7 @@ const pageStructuredData = [
 
   <PlainEnglish
     headline={`${county.supportedAsylum.toLocaleString()} people were on asylum support in ${county.countyName}`}
-    body={`That is the position as at 31 March 2026, counted across the ${county.areaCount} local authorities that make up ${county.countyName}. It works out at ${county.supportedAsylumRate ?? "-"} per 10,000 residents. It counts people receiving asylum support at that date, which is not the same as the number waiting for a decision, and not the number of people who passed through support over the year.`}
+    body={`That is the position as at ${snapshotLabel}, counted across the ${county.areaCount} local authorities that make up ${county.countyName}. It works out at ${county.supportedAsylumRate ?? "-"} per 10,000 residents. It counts people receiving asylum support at that date, which is not the same as the number waiting for a decision, and not the number of people who passed through support over the year.`}
     tone={county.supportedAsylum > 10000 ? "alert" : county.supportedAsylum > 3000 ? "info" : "success"}
   />
 
@@ -143,7 +170,7 @@ const pageStructuredData = [
         <span class="tiny">Afghan Resettlement Programme</span>
         <strong class="cty-route-value">{county.afghanProgrammePopulation.toLocaleString()}</strong>
         <p class="cty-route-note">
-          People in the programme in {county.countyName} as at 31 March 2026. This is a
+          People in the programme in {county.countyName} as at {snapshotLabel}. This is a
           population, counted at a point in time.
         </p>
       </article>
@@ -185,20 +212,15 @@ const pageStructuredData = [
     </div>
     <p class="cty-area-caption">
       Click any authority for its full profile. Figures are people on asylum support at
-      31 March 2026.
+      {snapshotLabel}.
     </p>
   </section>
 
   <!-- THE QUESTIONS PEOPLE ACTUALLY ASK -->
-  <section class="section shell">
-    <h2 class="cty-section-title">Common questions about {county.countyName}</h2>
-    {askedAndAnswered.map((row) => (
-      <article class="cty-qa">
-        <h3 class="cty-q">{row.question}</h3>
-        <p class="cty-a">{row.answer}</p>
-      </article>
-    ))}
-  </section>
+  <AskedAndAnswered
+    items={askedAndAnswered.map((row) => ({ question: row.question, answer: row.answer }))}
+    label={`Common questions about ${county.countyName}`}
+  />
 
   <!-- HOW THE COUNTY IS DEFINED -->
   <section class="section shell">
@@ -220,8 +242,8 @@ const pageStructuredData = [
     <p class="cty-lede">
       Every figure on this page is the sum of figures published for the individual local
       authorities. Nothing is modelled or estimated. Source: Home Office, Immigration
-      system statistics, regional and local authority data, released 21 May 2026, covering
-      the position as at 31 March 2026.
+      system statistics, regional and local authority data, released {releaseLabel}, covering
+      the position as at {snapshotLabel}.
     </p>
   </section>
 </BaseLayout>

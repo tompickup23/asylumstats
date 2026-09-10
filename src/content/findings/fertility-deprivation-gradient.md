@@ -9,6 +9,8 @@ verdict: info
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths"
 source_label: "ONS Linked Births 2024, Table 8"
 summary: "ONS 2024 births by IMD deprivation decile: the most deprived quintile records 25.5% of births, the least deprived 15.4%. That is a ratio of birth counts, not a fertility rate, because the published table carries no count of women aged 15-44 per decile. Deprivation and ethnicity are heavily confounded, so neither gradient can be read as the independent effect of the other."
+seo_title: "England's most deprived fifth records 25.5% of births"
+seo_description: "ONS 2024 births by deprivation decile: the most deprived fifth records 25.5% of births, the least deprived 15.4%. A ratio of counts, not a fertility rate."
 ---
 
 > **Correction, 7 September 2026.** This piece was headlined "Women in the most

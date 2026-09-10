@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.nao.org.uk/wp-content/uploads/2025/12/an-analysis-of-the-asylum-system.pdf"
 source_label: "National Audit Office, An analysis of the asylum system, December 2025"
 summary: "The Home Office paid councils about £883 million in 2024/25 for dispersal accommodation and for children who arrive alone. Searching every supplier name in its published spending file finds £1.6 million of it."
+seo_title: "£883m went to councils for asylum. £1.6m of it is findable"
+seo_description: "The Home Office paid councils about £883 million in 2024/25 for dispersal and for lone children. Its published spending file accounts for £1.6 million."
 ---
 
 **The National Audit Office puts it at £883 million** in 2024-25: £247m in grants to councils for dispersal accommodation, and £636m in grants and incentive payments for unaccompanied asylum-seeking children.

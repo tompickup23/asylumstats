@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats"
 source_label: "Home Office, migrants detected crossing the English Channel in small boats"
 summary: "15,897 people were detected arriving by small boat between 1 January and 20 August 2026, against 27,997 over the same period of 2025, a fall of 43.2%. The complete 2025 year was 41,472. Small boats still account for 87.6% of detected illegal entry in the year to June 2026, so the route has shrunk without being displaced."
+seo_title: "Small boat arrivals down 43%, still 88% of illegal entry"
+seo_description: "15,897 people arrived by small boat between 1 January and 20 August 2026, against 27,997 in the same period of 2025, a fall of 43.2%."
 ---
 
 **15,897 people** were detected arriving by small boat between 1 January and 20 August 2026. Over the same weeks of 2025 the figure was **27,997**, so arrivals are running **43.2% below** last year.

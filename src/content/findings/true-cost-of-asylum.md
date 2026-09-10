@@ -9,6 +9,8 @@ verdict: critical
 source_url: "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026"
 source_label: "Home Office Annual Report and Accounts 2025-26, NAO, MoJ, HMCTS, DfE"
 summary: "The total annual cost of the UK asylum system is around £8.0 billion, or £234 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
+seo_title: "The true cost of asylum: £234 per income taxpayer a year"
+seo_description: "The UK asylum system costs around £8.0 billion a year, or £234 per income taxpayer. The Home Office spent an audited £4,181 million in 2025-26."
 video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/og/findings/true-cost-of-asylum.png"
 ---

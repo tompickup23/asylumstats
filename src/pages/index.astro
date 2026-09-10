@@ -241,8 +241,8 @@ function findingColor(verdict: string): string {
 ---
 
 <BaseLayout
-  title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
-  description={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in ${dailyCostPeriod}, ${fmtGbp(dailyCostGbp)} a day. ${fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial decision at ${snapshotDate}. Every figure traced to the source.`}
+  title="asylumstats: UK asylum data, hotel costs and dispersal by council"
+  description={`Asylum support, hotel costs and dispersal for every UK local authority. ${fmtGbp(annualCostGbp)} on hotels in ${dailyCostPeriod}; ${fmtInt(latestQuarter.awaitingInitialDecision)} awaiting a decision.`}
   image="/og/home.png"
 >
   {/*
@@ -596,7 +596,7 @@ function findingColor(verdict: string): string {
       <div style="margin-top: 1rem;">
         <ShareButton
           url={SITE_URL}
-          title="asylumstats: UK asylum data, hotel costs, ethnic projections by local authority"
+          title="asylumstats: UK asylum data, hotel costs and dispersal by council"
           text={`The Home Office spent ${fmtGbp(annualCostGbp)} on asylum hotels in ${dailyCostPeriod}, ${fmtGbp(dailyCostGbp)} a day. Sourced data by local authority: ${SITE_URL}`}
           compact
         />

@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://www.ons.gov.uk/datasets/create"
 source_label: "ONS Census 2021 Custom Dataset"
 summary: "Our model separates Roma (98,785) and Gypsy/Irish Traveller (63,348) from the White Other category for the first time. Roma are concentrated in London boroughs (Hammersmith 0.81%, Haringey 0.76%). Gypsy/Travellers are concentrated in rural LAs (Maidstone 0.58%, Fenland 0.57%). These populations were previously invisible in demographic projections."
+seo_title: "Roma and Gypsy/Traveller populations tracked separately"
+seo_description: "The model separates Roma (98,785) and Gypsy/Irish Traveller (63,348) from White Other for the first time. Roma concentrate in London."
 ---
 
 **Two populations that have never been separately projected: Roma and Gypsy/Irish Traveller.**

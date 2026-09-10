@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "Home Office local authority data, 30 June 2026"
 summary: "18,301 of the 93,293 people on asylum support at 30 June 2026 were in ten local authorities, 19.6% of the national total. Glasgow City carries 3,938, more than twice the next area. Dozens of councils carry nobody. The supported population has fallen from 107,003 at the end of 2025, but the concentration has barely moved."
+seo_title: "One in five asylum seekers is in just ten councils"
+seo_description: "18,301 of the 93,293 people on asylum support at 30 June 2026 were in ten local authorities, 19.6% of the total. Glasgow City alone carries 3,938."
 ---
 
 **18,301 of the 93,293 people on asylum support** at 30 June 2026 were in ten local authorities. That is **19.6%** of the national total in ten places out of 361.
