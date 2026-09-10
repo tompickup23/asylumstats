@@ -14,6 +14,7 @@ import smallBoatsSeries from "../data/live/small-boats.json";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
 import { PER_TAXPAYER_GBP, TOTAL_GBP_M } from "../lib/true-cost";
+import { loadAsylumCostReconciliation, formatGbpShort } from "../lib/ho-spend";
 
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
@@ -238,6 +239,73 @@ function findingColor(verdict: string): string {
   };
   return colors[verdict] ?? "var(--accent)";
 }
+/**
+ * The hero cycles three cost figures instead of standing on one.
+ *
+ * One figure had to carry the whole claim, and £5.77M a day is the narrowest of the
+ * three: hotels only, in one financial year, on a population that has since halved. A
+ * reader who saw only that had no way to know it is about a seventh of what the system
+ * costs, or that most of the spending has no published receipt.
+ *
+ * The rule this has to obey is the one the site already runs on: two figures on
+ * different bases may be shown side by side with both named, never summed or presented
+ * as versions of the same quantity. That is why each panel below carries its own scope,
+ * period, basis and source, and why the three deliberately use three different units.
+ * The failure being avoided is a real one from this page's history: the hero once said
+ * "£62 per income taxpayer per year" for hotels while the strip below said £234 for the
+ * whole system. Both were right, both were per-taxpayer-per-year, and together they read
+ * as the site contradicting itself. Same unit, different scope, is the trap. Different
+ * unit, scope named, is not.
+ *
+ * The per-taxpayer figure is an ATTRIBUTION, not a counterfactual. It is what the system
+ * costs divided by the number of income taxpayers; it is not a sum anyone would get back,
+ * because a large part of the total is average-attributed capacity that does not fall
+ * away in proportion with the caseload. The label says "works out at" rather than "costs
+ * you" for that reason, and the range travels with the central figure.
+ */
+const costRecon = loadAsylumCostReconciliation();
+const capture = costRecon.headline.capture!;
+
+const heroStats = [
+  {
+    id: "hotels",
+    value: fmtGbp(dailyCostGbp),
+    label: `a day on asylum hotels in ${dailyCostPeriod}`,
+    deck:
+      `That is ${fmtGbp(annualCostGbp)} across ${dailyCostPeriod}, inside the £4bn the Home Office ` +
+      `spent on asylum support altogether. The hotel population has fallen since: ` +
+      `${fmtInt(latestQuarter.hotelAccommodation)} people were in hotels at ${snapshotDate}.`,
+    basis: "Hotel accommodation only, 2024/25. Published estimate.",
+    sourceLabel: "House of Commons Library, CDP-2025-0184",
+    sourceHref: dailyCostSource
+  },
+  {
+    id: "taxpayer",
+    value: `£${PER_TAXPAYER_GBP.central}`,
+    label: "per income taxpayer a year, across the whole system",
+    deck:
+      `£${(TOTAL_GBP_M.central / 1000).toFixed(1)}bn a year divided by 34.1 million income ` +
+      `taxpayers, covering accommodation and support, enforcement, border security, welfare ` +
+      `after a decision, NHS, education, tribunals and legal aid. Range £${PER_TAXPAYER_GBP.conservative} ` +
+      `to £${PER_TAXPAYER_GBP.upper}. It is what the system costs divided by taxpayers, not a sum that ` +
+      `would be saved.`,
+    basis: "Whole system, 2025-26. Audited outturn plus estimates, each labelled on the breakdown.",
+    sourceLabel: "Full breakdown and every category",
+    sourceHref: "/findings/true-cost-of-asylum/"
+  },
+  {
+    id: "published",
+    value: `£${capture.perHundredPounds}`,
+    label: "in every £100 of asylum spending has a published receipt",
+    deck:
+      `The Home Office accounts for the rest to Parliament and to its auditors in totals, ` +
+      `but publishes a payment-by-payment record of only part of it. This is about what you ` +
+      `are allowed to see, not about money going astray.`,
+    basis: `Payments over £25,000 set against audited outturn, ${costRecon.fy}. Two bases, named, never summed.`,
+    sourceLabel: "How the two compare, line by line",
+    sourceHref: "/what-the-home-office-publishes/"
+  }
+];
 ---
 
 <BaseLayout
@@ -253,23 +321,61 @@ function findingColor(verdict: string): string {
   */}
   <section class="hero-section">
     <div class="hero-inner shell">
-      <div class="hero-claim">
+      {/*
+        Only the first panel is rendered. The rest travel as JSON in a script tag that is
+        never executed, so the page has exactly one h1 with one figure in it: a crawler
+        and a reader with no JavaScript both get a complete, honest hero rather than three
+        headline numbers stacked on top of each other.
+      */}
+      <div class="hero-claim" data-hero-rotator>
         <p class="hero-eyebrow">Home Office asylum accommodation</p>
         <h1 class="hero-headline">
-          <span class="hero-stat">{fmtGbp(dailyCostGbp)}</span>
-          <span class="hero-label">a day on asylum hotels in {dailyCostPeriod}</span>
+          <span class="hero-stat" data-hero-value>{heroStats[0].value}</span>
+          <span class="hero-label" data-hero-label>{heroStats[0].label}</span>
         </h1>
-        <p class="hero-deck">
-          That is {fmtGbp(annualCostGbp)} across {dailyCostPeriod}, inside the £4bn the Home Office spent on asylum
-          support altogether. {fmtInt(latestQuarter.awaitingInitialDecision)} people were awaiting an initial
-          decision at {snapshotDate}.
-        </p>
-        {dailyCostSource && (
-          <a class="hero-source" href={dailyCostSource} target="_blank" rel="noopener">
-            House of Commons Library, CDP-2025-0184
-          </a>
-        )}
+        <p class="hero-deck" data-hero-deck>{heroStats[0].deck}</p>
+        <p class="hero-basis" data-hero-basis>{heroStats[0].basis}</p>
+        <a
+          class="hero-source"
+          data-hero-source
+          href={heroStats[0].sourceHref}
+          target={heroStats[0].sourceHref.startsWith("http") ? "_blank" : undefined}
+          rel={heroStats[0].sourceHref.startsWith("http") ? "noopener" : undefined}
+        >{heroStats[0].sourceLabel}</a>
+
+        {/*
+          Controls are rendered by script, not here, because without script there is
+          nothing to control. WCAG 2.2 SC 2.2.2 requires anything that auto-updates for
+          more than five seconds alongside other content to be pausable, so the pause
+          button is not optional decoration.
+        */}
+        <div class="hero-rot-controls" data-hero-controls hidden>
+          <button type="button" class="hero-rot-toggle" data-hero-toggle aria-pressed="false">
+            <span data-hero-toggle-text>Pause</span>
+          </button>
+          {/*
+            Rendered here rather than created in script. Astro scopes this component's CSS
+            with a data-astro-cid attribute, and an element built by document.createElement
+            never carries it, so JS-built dots came out unstyled at 0x0 and were invisible
+            and unclickable. Server-rendering them keeps the styles scoped and gives the
+            script nothing to do but attach listeners.
+          */}
+          <div class="hero-rot-dots" role="tablist" aria-label="Choose a headline figure" data-hero-dots>
+            {heroStats.map((stat, position) => (
+              <button
+                type="button"
+                class="hero-rot-dot"
+                role="tab"
+                data-hero-dot
+                aria-selected={position === 0 ? "true" : "false"}
+                aria-label={`${stat.value} ${stat.label}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
+
+      <script type="application/json" data-hero-stats set:html={JSON.stringify(heroStats)} />
 
       <aside class="hero-lookup" aria-labelledby="hero-lookup-title">
         <h2 class="hl-title" id="hero-lookup-title">Find your area</h2>
@@ -789,6 +895,102 @@ function findingColor(verdict: string): string {
   }
 </script>
 
+<script is:inline>
+  /*
+    Rotates the hero figure. Enhancement only: the panel the server rendered stays put if
+    any of this fails, and the JSON below is data, never executed.
+
+    Three accessibility rules shape it, and the site's own accessibility statement commits
+    to all three. Anything that auto-updates for more than five seconds beside other
+    content has to be pausable (WCAG 2.2 SC 2.2.2), so there is a real pause button and it
+    is the first control. prefers-reduced-motion means no automatic movement at all: the
+    dots still work, so the content is reachable, it just never moves on its own. And a
+    reader who takes control by pressing a dot is not then fought with, so any manual
+    choice stops the timer for good.
+  */
+  (function () {
+    var root = document.querySelector("[data-hero-rotator]");
+    var payload = document.querySelector("[data-hero-stats]");
+    if (!root || !payload) return;
+
+    var stats;
+    try {
+      stats = JSON.parse(payload.textContent || "[]");
+    } catch (error) {
+      return;
+    }
+    if (!Array.isArray(stats) || stats.length < 2) return;
+
+    var valueEl = root.querySelector("[data-hero-value]");
+    var labelEl = root.querySelector("[data-hero-label]");
+    var deckEl = root.querySelector("[data-hero-deck]");
+    var basisEl = root.querySelector("[data-hero-basis]");
+    var sourceEl = root.querySelector("[data-hero-source]");
+    var controls = root.querySelector("[data-hero-controls]");
+    var toggle = root.querySelector("[data-hero-toggle]");
+    var toggleText = root.querySelector("[data-hero-toggle-text]");
+    var dotWrap = root.querySelector("[data-hero-dots]");
+    if (!valueEl || !labelEl || !deckEl || !basisEl || !sourceEl || !controls || !toggle || !dotWrap) return;
+
+    var INTERVAL_MS = 7000;
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var index = 0;
+    var timer = null;
+
+    var dots = [].slice.call(dotWrap.querySelectorAll("[data-hero-dot]"));
+    if (dots.length !== stats.length) return;
+    dots.forEach(function (dot, position) {
+      dot.addEventListener("click", function () {
+        stop();
+        show(position);
+      });
+    });
+
+    function show(position) {
+      index = position % stats.length;
+      var stat = stats[index];
+      valueEl.textContent = stat.value;
+      labelEl.textContent = stat.label;
+      deckEl.textContent = stat.deck;
+      basisEl.textContent = stat.basis;
+      sourceEl.textContent = stat.sourceLabel;
+      sourceEl.href = stat.sourceHref;
+      var external = stat.sourceHref.indexOf("http") === 0;
+      if (external) {
+        sourceEl.setAttribute("target", "_blank");
+        sourceEl.setAttribute("rel", "noopener");
+      } else {
+        sourceEl.removeAttribute("target");
+        sourceEl.removeAttribute("rel");
+      }
+      dots.forEach(function (dot, position2) {
+        var current = position2 === index;
+        dot.setAttribute("aria-selected", current ? "true" : "false");
+        dot.classList.toggle("is-current", current);
+      });
+    }
+
+    function start() {
+      if (timer) return;
+      timer = window.setInterval(function () { show(index + 1); }, INTERVAL_MS);
+      toggle.setAttribute("aria-pressed", "false");
+      toggleText.textContent = "Pause";
+    }
+
+    function stop() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+      toggle.setAttribute("aria-pressed", "true");
+      toggleText.textContent = "Play";
+    }
+
+    toggle.addEventListener("click", function () { timer ? stop() : start(); });
+
+    controls.hidden = false;
+    show(0);
+    if (reduceMotion) stop(); else start();
+  })();
+</script>
+
 <style>
   /* ═══ HERO ═══ */
   /*
@@ -881,6 +1083,74 @@ function findingColor(verdict: string): string {
   }
   /* The source is a citation, so it is set as one: small, underlined, and naming the
      document rather than saying "source" and pointing at it. */
+  /* The basis line. Deliberately quiet but not faint: it is the sentence that stops a
+     figure being read as a different figure's scope, so it has to survive a skim. */
+  .hero-basis {
+    margin: 0.75rem 0 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    max-width: 54ch;
+  }
+
+  .hero-rot-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 1.1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-rot-toggle {
+    /* 24x24 minimum target, which is the WCAG 2.2 criterion the accessibility
+       statement lists as still outstanding elsewhere on the site. */
+    min-height: 32px;
+    padding: 0.3rem 0.85rem;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .hero-rot-toggle:hover { border-color: var(--accent); }
+
+  .hero-rot-dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .hero-rot-dot {
+    /* The visible dot is small, so the button carries invisible padding to reach the
+       24x24 target rather than making the dot itself large. */
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .hero-rot-dot::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: var(--text-faint);
+  }
+
+  .hero-rot-dot.is-current::after { background: var(--accent); }
+
+  .hero-rot-toggle:focus-visible,
+  .hero-rot-dot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
   .hero-source {
     display: inline-block;
     margin-top: 1.25rem;
