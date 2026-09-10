@@ -50,10 +50,24 @@ async function submitIndexNow({ siteUrl, key, args }) {
     throw new Error("IndexNow accepts at most 10,000 same-host canonical URLs per notification.");
   }
 
+  // IndexNow authenticates by fetching the key file off the site itself, so submitting
+  // before that file is public earns a 403 rather than a queued crawl. This step runs
+  // before the deploy, by design, which means on the deploy that first adds the key the
+  // file is still only in dist. Check rather than assume: it costs one request, it turns
+  // an unavoidable first-run failure into a skip, and the next deploy submits normally.
+  const keyLocation = `${siteUrl}/${key}.txt`;
+  if (!(await keyIsPublished(keyLocation, key))) {
+    console.log(
+      `IndexNow: ${keyLocation} does not yet serve the key, so ${urls.length} URLs were ` +
+      "not submitted. It ships with this deploy; the next one will announce them."
+    );
+    return;
+  }
+
   const response = await fetch("https://api.indexnow.org/indexnow", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ host: new URL(siteUrl).host, key, keyLocation: `${siteUrl}/${key}.txt`, urlList: urls }),
+    body: JSON.stringify({ host: new URL(siteUrl).host, key, keyLocation, urlList: urls }),
   });
   if (!response.ok) throw new Error(`IndexNow rejected ${urls.length} URLs: HTTP ${response.status}`);
   console.log(`IndexNow notified of ${urls.length} changed canonical URL${urls.length === 1 ? "" : "s"}.`);
@@ -66,6 +80,15 @@ function option(args, name) {
 
 function values(args, name) {
   return args.flatMap((arg, index) => arg === name && args[index + 1] ? [args[index + 1]] : []);
+}
+
+async function keyIsPublished(keyLocation, key) {
+  try {
+    const response = await fetch(keyLocation);
+    return response.ok && (await response.text()).trim() === key;
+  } catch {
+    return false;
+  }
 }
 
 /** loc -> lastmod (empty string where the URL carries none). */

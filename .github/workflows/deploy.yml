@@ -57,8 +57,12 @@ jobs:
       # nothing. Notifying a minute before the content lands is fine: IndexNow queues.
       # Only runs on a push to main, so a workflow_dispatch rehearsal announces nothing.
       # No GitHub event data is interpolated here.
+      # continue-on-error because telling a search engine about a change is an
+      # optimisation and the deploy is not. This step failing once already held the
+      # whole site back from going live, which is the wrong trade in every case.
       - name: Notify IndexNow of changed canonical URLs
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        continue-on-error: true
         env:
           INDEXNOW_SUBMIT: "1"
         run: node scripts/indexnow-submit.mjs --changed
