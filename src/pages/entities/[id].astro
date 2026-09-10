@@ -261,9 +261,18 @@ function formatSourceKind(kind: string): string {
       <div>
         <h2>What matters first</h2>
         <p class="lede">
+          {/*
+            Three states, not two. This tested currentSiteCount alone and called anything
+            without a named site "money-led", so a profile with no sites AND no money rows
+            said "is currently a money-led profile" one line above "sits on 0 public money
+            rows". Millennium & Copthorne shipped exactly that. A page that describes the
+            absence of evidence has to say which evidence is absent.
+          */}
           {profile.currentSiteCount > 0
             ? `${profile.entityName} is already visible on named hotel sites, which means the public chain can now run from actor to hotel to place and, in some cases, to public money.`
-            : `${profile.entityName} is currently a money-led profile. The public evidence is contractual or funding-based rather than tied to a named hotel estate.`}
+            : profile.moneyRecordCount > 0
+              ? `${profile.entityName} is currently a money-led profile. The public evidence is contractual or funding-based rather than tied to a named hotel estate.`
+              : `${profile.entityName} has no named current hotel site and no public money row in this ledger. It appears here through hotel-chain evidence alone, which is the weakest link in the chain and the reason this profile is thin.`}
         </p>
       </div>
       <span class="chip accent">{profile.primaryRoleLabel}</span>
