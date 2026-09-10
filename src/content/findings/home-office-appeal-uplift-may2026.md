@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
 source_label: "Home Office Asy_D04 Outcome Analysis, YE March 2026 release"
 summary: "Of 105 nationalities tracked in the Asy_D04 outcome analysis, 101 see asylum grant rates rise between initial decision and final outcome after appeal, by an average of 14.6 percentage points. Sri Lanka 26.9 percent initial to 60.1 percent after appeals. Iraq 30.9 percent to 57.0 percent. Russia 57.8 percent to 79.4 percent. The published initial grant rate of 39 percent for YE March 2026 understates the true protection rate by roughly 14 percentage points."
+seo_title: "Asylum grant rates rise on appeal across 101 nationalities"
+seo_description: "101 of 105 nationalities see asylum grant rates rise between initial decision and final outcome after appeal, by an average of 14.6 percentage points."
 ---
 
 **The initial-decision grant rate is not the final grant rate, and the gap is large. The Home Office publishes both, in the Asy_D04 Outcome Analysis dataset released 21 May 2026. Almost nobody quotes the second one.**

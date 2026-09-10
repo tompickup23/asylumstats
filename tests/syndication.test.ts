@@ -52,11 +52,17 @@ describe.skipIf(!built)("syndication surfaces", () => {
     const stamped = (sitemap().match(/<lastmod>/g) ?? []).length;
     expect(urls).toBeGreaterThan(100);
     expect(stamped).toBeGreaterThan(0);
-    expect(stamped).toBeLessThan(urls / 2);
 
+    // This used to assert stamped < urls / 2, written when only the findings carried a
+    // date and a low count was the available proxy for "not stamping everything". The
+    // place pages now carry the Home Office release date they are built from, which is a
+    // real per-record date, so coverage is near total and the proportion no longer says
+    // anything. What matters is that no date is invented, and that is asserted here and
+    // in tests/sitemap-lastmod.test.ts rather than inferred from a ratio.
     const today = new Date().toISOString().slice(0, 10);
     const dates = [...sitemap().matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
-    expect(dates.filter((d) => d === today).length).toBeLessThan(dates.length);
+    expect(dates.filter((d) => d === today), "build-date stamp in the sitemap").toEqual([]);
+    expect(dates.every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))).toBe(true);
   });
 
   it("declares a logo in a format the consumer accepts", () => {

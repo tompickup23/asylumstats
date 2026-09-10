@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://www.ons.gov.uk/datasets/create"
 source_label: "ONS Census 2021 Custom Dataset"
 summary: "Our model is the first to project the Arab ethnic group separately. Census 2021 counts 319,452 people identifying as Arab. previously hidden inside 'Other ethnic group'. In areas like Brent (5.3% to 12.9%) and Westminster (7.6% to 9.2%), the Arab population is projected to grow faster than most other groups."
+seo_title: "Arab population projected to triple in 20 councils by 2051"
+seo_description: "The first projection to separate the Arab ethnic group from 'Other'. Census 2021 counts 319,452 people; Brent goes from 5.3% to 12.9%."
 ---
 
 **No demographic model has ever projected the Arab population of England separately. Until now.**

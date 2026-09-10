@@ -9,6 +9,8 @@ verdict: info
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "Home Office local authority data, 30 June 2026"
 summary: "Ribble Valley has 24 people on asylum support, 3.6 per 10,000, ranking 230th of 361. Hyndburn, which it borders, has 426 at 49.0 per 10,000 and ranks 2nd in the UK. Same county, same region, same prime provider, thirteen times the rate across a boundary you can walk over."
+seo_title: "Ribble Valley and Hyndburn: nine miles, 13x the asylum load"
+seo_description: "Ribble Valley has 24 people on asylum support, 3.6 per 10,000, ranking 230th of 361. Hyndburn, which it borders, has 426 at 49.0 and ranks 2nd."
 ---
 
 **Nine miles. Two different countries, on paper.**

@@ -47,6 +47,9 @@ import {
   getDistributionStats,
   getPercentileRank
 } from "../../lib/route-analytics";
+import { buildPlaceDescription, buildPlaceTitle } from "../../lib/serp";
+import { buildPlaceQuestions } from "../../lib/place-questions";
+import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
 
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
@@ -236,7 +239,38 @@ const pressureScore = computePressureScore(
 const areaMPs = getMPsForArea(area.areaName);
 const primaryMP = areaMPs.length > 0 ? areaMPs[0] : null;
 
-const pageDescription = `${area.areaName}: ${area.supportedAsylum.toLocaleString()} on asylum support, rank ${areaRank} nationally.${primaryMP ? ` MP: ${primaryMP.mpName} (${primaryMP.party}).` : ""} Hotels, demographics, crime, SEND, social care.`;
+// The three queries this page type exists for, answered in the words they are typed in,
+// each under its own heading. See src/lib/place-questions.ts.
+const askedAndAnswered = buildPlaceQuestions({
+  areaName: area.areaName,
+  supportedAsylum: area.supportedAsylum,
+  ratePer10k: area.supportedAsylumRate ?? null,
+  rank: areaRank,
+  areaCount: localRouteLatest.areas.length,
+  ratePercentile,
+  contingencyAccommodation: area.contingencyAccommodation,
+  subsistenceOnly: area.subsistenceOnly,
+  namedHotelNames: currentHotelSites.map((site) => site.siteName),
+  unnamedSiteCount,
+  primeProviderName: regionalPrimeProviderCoverage?.profile.entityName ?? null,
+  snapshotDate: localRouteLatest.snapshotDate ?? "2026-06-30"
+});
+
+const pageDescription = buildPlaceDescription({
+  areaName: area.areaName,
+  supportedAsylum: area.supportedAsylum,
+  rank: areaRank,
+  areaCount: localRouteLatest.areas.length,
+  ratePer10k: area.supportedAsylumRate,
+  contingencyAccommodation: area.contingencyAccommodation,
+  // Only where the area has one. Birmingham has ten constituencies and Leeds five, and
+  // naming areaMPs[0] in the description asserted, to anyone who only ever saw the search
+  // result, that the city has a single MP. The page body has always been honest about
+  // this: it prints the card and then "10 MPs cover constituencies in or overlapping
+  // Birmingham." The description had no room for the qualifier and so dropped it instead
+  // of the claim. The freed pixels go to the tail clause, which is more use anyway.
+  mp: areaMPs.length === 1 ? `${areaMPs[0].mpName} (${areaMPs[0].party})` : null
+});
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
   description: pageDescription,
@@ -250,6 +284,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
 
 const placeSections = [
   { id: "place-summary", label: "Summary" },
+  ...(askedAndAnswered.length > 0 ? [{ id: "place-questions", label: "Questions" }] : []),
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "local-numbers", label: "Local numbers" },
   ...(ethnicProjection ? [{ id: "tabpanel-demographics", label: "Demographics" }] : []),
@@ -269,10 +304,18 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
 // England, where this site has no county tier.
 const areaCountyName = countyForAreaCode(area.areaCode);
 
+// ukdemographics.co.uk is built on ONS Census 2021, which covers England and Wales only.
+// The cross-link below was generated from the slug for every area, so all 32 Scottish and
+// 11 Northern Irish place pages pointed at a 404 on the sibling site: /places/glasgow-city/
+// and /places/belfast/ do not exist there and never will. A broken outbound link costs
+// both sites, so the banner is shown only where the target is actually published.
+const hasDemographicsSibling = area.countryName === "England" || area.countryName === "Wales";
+
 ---
 
 <BaseLayout
-  title={`Asylum seekers in ${area.areaName}: ${area.supportedAsylum.toLocaleString()} on support | asylumstats`}
+  title={buildPlaceTitle({ areaName: area.areaName, supportedAsylum: area.supportedAsylum })}
+  brandTitle={false}
   description={pageDescription}
   image={`/og/places/${slugifyAreaName(area.areaName)}.png`}
   structuredData={pageStructuredData}
@@ -291,7 +334,7 @@ const areaCountyName = countyForAreaCode(area.areaCode);
       <h1>{area.areaName}</h1>
       <div class="page-head-meta">
         <DataFreshness
-          updated={localRouteLatest.snapshotDate ?? "2025-12-31"}
+          updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
           source="Home Office"
           sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
         />
@@ -373,6 +416,8 @@ const areaCountyName = countyForAreaCode(area.areaCode);
       hotelSites={namedSiteCount + unnamedSiteCount}
     />
   </section>
+
+  <AskedAndAnswered id="place-questions" items={askedAndAnswered} label={`Common questions about asylum in ${area.areaName}`} />
 
   <!-- TREND -->
   {areaTrend && (
@@ -640,17 +685,19 @@ const areaCountyName = countyForAreaCode(area.areaCode);
   )}
 
   <!-- UKD cross-link banner -->
-  <div class="ukd-cross-link">
-    <div class="ukd-cross-inner">
-      <span class="ukd-cross-label">Full demographic profile</span>
-      <span class="ukd-cross-desc">
-        School pressure, housing demand, service demand scoring, economic profile, language projections, and more on UK Demographics.
-      </span>
-      <a href={`https://ukdemographics.co.uk/places/${slugifyAreaName(area.areaName)}/`} class="ukd-cross-btn" rel="noopener">
-        View {area.areaName} on UK Demographics &rarr;
-      </a>
+  {hasDemographicsSibling && (
+    <div class="ukd-cross-link">
+      <div class="ukd-cross-inner">
+        <span class="ukd-cross-label">Full demographic profile</span>
+        <span class="ukd-cross-desc">
+          School pressure, housing demand, service demand scoring, economic profile, language projections, and more on UK Demographics.
+        </span>
+        <a href={`https://ukdemographics.co.uk/places/${slugifyAreaName(area.areaName)}/`} class="ukd-cross-btn" rel="noopener">
+          View {area.areaName} on UK Demographics &rarr;
+        </a>
+      </div>
     </div>
-  </div>
+  )}
 
     </div><!-- end tabpanel-demographics -->
 

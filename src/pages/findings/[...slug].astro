@@ -65,8 +65,9 @@ const verdictLabel: Record<string, string> = {
 ---
 
 <BaseLayout
-  title={`${finding.data.headline} | asylumstats`}
-  description={finding.data.summary}
+  title={finding.data.seo_title ?? `${finding.data.headline} | asylumstats`}
+  brandTitle={false}
+  description={finding.data.seo_description ?? finding.data.summary}
   image={ogImage}
   canonicalOverride={replacementHref}
   structuredData={[{

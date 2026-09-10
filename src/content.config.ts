@@ -22,6 +22,22 @@ const findings = defineCollection({
     source_label: z.string().default("Source"),
     summary: z.string(),
     /**
+     * Title and description for search results only. The page keeps `headline` as its H1
+     * and `summary` on the listing, in the feed and in the JSON-LD, because those are
+     * editorial text written for a reader who is already here.
+     *
+     * They are separate fields because the two jobs have different budgets. Google clips
+     * a title at about 600px and a snippet at about 920px, and every headline on this site
+     * ran 900-1,050px: the reader saw a sentence, the searcher saw half of one. Google
+     * rewrites roughly seven descriptions in ten anyway, and rewrites those over about 180
+     * characters far more often than ones in range, so the gain from fitting is control of
+     * the wording rather than any ranking effect.
+     *
+     * Check with `node scripts/audit/serp-widths.mjs --check` after the build.
+     */
+    seo_title: z.string().optional(),
+    seo_description: z.string().optional(),
+    /**
      * Slug of the article that replaces this one.
      *
      * Set when a later article covers the same claim on a newer data release. The page

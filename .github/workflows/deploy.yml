@@ -51,6 +51,18 @@ jobs:
           path: |
             playwright-report
             test-results
+      # Before the upload, because this compares the sitemap just built against the one
+      # the live site is still serving, and submits only the URLs that are new or whose
+      # lastmod moved. After the deploy that comparison is against itself and reports
+      # nothing. Notifying a minute before the content lands is fine: IndexNow queues.
+      # Only runs on a push to main, so a workflow_dispatch rehearsal announces nothing.
+      # No GitHub event data is interpolated here.
+      - name: Notify IndexNow of changed canonical URLs
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          INDEXNOW_SUBMIT: "1"
+        run: node scripts/indexnow-submit.mjs --changed
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

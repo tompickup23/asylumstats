@@ -4,9 +4,11 @@ interface Props {
   nextUpdate?: string;
   source: string;
   sourceUrl?: string;
+  /** Set false on a page where the corrections link would be redundant, e.g. /corrections/. */
+  showCorrections?: boolean;
 }
 
-const { updated, nextUpdate, source, sourceUrl } = Astro.props;
+const { updated, nextUpdate, source, sourceUrl, showCorrections = true } = Astro.props;
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -30,6 +32,19 @@ const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "agi
     <a href={sourceUrl} target="_blank" rel="noopener" class="freshness-source">{source}</a>
   ) : (
     <span class="freshness-source">{source}</span>
+  )}
+  {/*
+    The corrections log belongs next to the freshness claim, not only in the footer.
+    Migration Observatory and the Commons Library rank on institutional trust; a public
+    record of every figure this site has had to correct is the nearest thing an
+    independent publisher has to that, and it was reachable only from the footer and the
+    methodology page. Putting it where the data provenance is asserted is the point.
+  */}
+  {showCorrections && (
+    <>
+      <span class="freshness-sep"> · </span>
+      <a href="/corrections/" class="freshness-source freshness-corrections">Corrections log</a>
+    </>
   )}
 </span>
 
@@ -65,6 +80,6 @@ const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "agi
   a.freshness-source:hover { color: var(--text); }
   @media (max-width: 640px) {
     .freshness-badge { font-size: 0.78rem; }
-    .freshness-next, .freshness-sep { display: none; }
+    .freshness-next { display: none; }
   }
 </style>

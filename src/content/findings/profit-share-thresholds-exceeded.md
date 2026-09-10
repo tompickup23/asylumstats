@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://www.nao.org.uk/wp-content/uploads/2025/05/home-offices-asylum-accommodation-contracts.pdf"
 source_label: "National Audit Office, The Home Office's asylum accommodation contracts, May 2025"
 summary: "Supplier profit on the asylum accommodation contracts has averaged 7%. Five of the seven contracts have passed the point at which profit must be shared back with the Home Office."
+seo_title: "Five of seven asylum contracts passed profit-share thresholds"
+seo_description: "Supplier profit on the asylum accommodation contracts has averaged 7%. Five of the seven have passed the profit-share threshold."
 ---
 
 **Reported profit has averaged 7%** on the asylum accommodation contracts — at the lower end of the Home Office's original 5% to 13% estimate, but higher than the operating profit those suppliers report in their own accounts, which runs at 3% to 7%.

@@ -22,7 +22,11 @@ const parents = recon.components.filter((c) => !c.parentId && c.componentId !== 
 const childrenOf = (id: string) => recon.components.filter((c) => c.parentId === id);
 const total = recon.components.find((c) => c.componentId === "TOTAL")!;
 
-const title = "How much of its asylum spending does the Home Office actually publish?";
+// The heading stays a question, because that is the shape of the query and what a
+// featured snippet is extracted from. The title tag is the short form: the question runs
+// 650px against Google's 600px budget, and the brand suffix takes 122px of that.
+const heading = "How much of its asylum spending does the Home Office actually publish?";
+const title = "What the Home Office publishes on asylum";
 const description =
   `The Home Office spent ${formatGbpShort(recon.headline.estimatedGbp)} on asylum in ` +
   `${recon.fy}. Its published spending data accounts for ` +
@@ -90,7 +94,7 @@ const structuredData = [
   <article class="shell publishes">
     <!-- Layer 0. The answer, in one sentence, before anything else. -->
     <header class="lede">
-      <h1>{title}</h1>
+      <h1>{heading}</h1>
       <p class="answer">
         The Home Office spent <strong>{formatGbpShort(recon.headline.estimatedGbp)}</strong> on
         asylum in {recon.fy} — {perPersonInUk(recon.headline.estimatedGbp)}. It published a

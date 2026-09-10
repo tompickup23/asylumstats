@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v8.0"
 summary: "Blackburn with Darwen: 56.9% White British in Census 2021. The projection crosses 50% in 2027, and on the model's own error the crossing sits between 2026 and 2028. Pendle follows around 2033-2035, Preston 2035-2039, Burnley 2048-2053. Four Lancashire towns crossing the same threshold within a generation."
+seo_title: "Blackburn projected minority White British by 2027"
+seo_description: "Blackburn with Darwen was 56.9% White British in 2021 and crosses 50% in 2026-2028. Pendle follows 2033-2035, Preston 2035-2039."
 ---
 
 **Blackburn. 56.9% White British. The projection crosses 50% in 2027, and the model's own error puts the crossing between 2026 and 2028.**

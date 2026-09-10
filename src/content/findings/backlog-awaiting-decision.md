@@ -9,6 +9,7 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
 source_label: "Home Office immigration system statistics, year ending June 2026"
 summary: "40,168 people were waiting for an initial decision on an asylum claim at 30 June 2026. The queue has fallen in six consecutive quarters, from a peak of 175,457 in June 2023 and 64,426 at the end of 2025. It is falling because decisions are outrunning claims: 22,176 initial decisions against 17,233 new claims in the quarter."
+seo_description: "40,168 people were awaiting an initial asylum decision at 30 June 2026, down from a peak of 175,457 in June 2023. Six quarters of falls."
 ---
 
 **40,168 people** were waiting for the Home Office to make an initial decision on an asylum claim at 30 June 2026.

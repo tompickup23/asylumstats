@@ -8,6 +8,8 @@ verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "Home Office local authority data, 30 June 2026"
 summary: "Counted per head of population rather than in absolute numbers, Hyndburn is second of 361 UK local authorities on asylum support, Burnley fourth, Blackburn with Darwen sixth and Pendle ninth. Only Glasgow City is above them. None of the ten largest caseloads in absolute terms appears in the top nine by rate."
+seo_title: "Four Lancashire councils are in the UK top nine per head"
+seo_description: "Per head of population, Hyndburn is 2nd of 361 UK local authorities on asylum support, Burnley 4th, Blackburn with Darwen 6th and Pendle 9th."
 ---
 
 Counted per head of population, four East Lancashire authorities sit in the **top nine of 361** UK local authorities for people on asylum support, at 30 June 2026.

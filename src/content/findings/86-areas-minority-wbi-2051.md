@@ -9,6 +9,8 @@ verdict: alert
 source_url: "https://www.ons.gov.uk/census"
 source_label: "Census 2021 + Hamilton-Perry v8.0 projection model"
 summary: "86 English local authorities are projected to have a White British population below 50% by 2051. 59 of those have a White British majority today. This is not a London story: Bolton, Pendle, Oldham, Thurrock and Broxbourne all cross the threshold. Recomputed 13 August 2026 on a model recalibrated against an out-of-sample test, replacing an earlier count of 109."
+seo_title: "86 councils projected minority White British by 2051"
+seo_description: "86 English local authorities are projected below a 50% White British share by 2051. 59 of them have a White British majority today."
 ---
 
 > **Correction, 13 August 2026.** This piece originally said 109 areas and cited

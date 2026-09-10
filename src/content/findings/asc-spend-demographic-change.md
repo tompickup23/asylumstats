@@ -8,6 +8,8 @@ verdict: info
 source_url: "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-activity-and-finance-report"
 source_label: "NHS Digital ASC Report"
 summary: "The five councils with the fastest White British population decline spend an average of £612 per capita on adult social care, compared to £472 for the five with the slowest change. Ageing populations, deprivation, and demographic transition all contribute to higher social care demand."
+seo_title: "Fastest-changing councils spend most on adult social care"
+seo_description: "The five councils with the fastest White British decline spend £612 a head on adult social care, against £472 for the five slowest changing."
 ---
 
 Adult social care spending varies widely across our 25 tracked local authorities, from **£442 per capita** (Ribble Valley) to **£724** (Blackpool).

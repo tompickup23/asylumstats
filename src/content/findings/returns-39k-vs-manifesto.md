@@ -9,6 +9,8 @@ verdict: info
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026/how-many-people-are-returned-from-the-uk"
 source_label: "Home Office Returns dataset, YE March 2026"
 summary: "The Home Office's headline return figure for year ending March 2026 is 39,000 people removed from the UK. The Reform UK 2024 manifesto wanted approximately 250,000 returns a year. Labour's Border Security Command produced a 13 percent rise in enforced removals and a 5 percent rise in voluntary returns, but no order-of-magnitude shift. The 39,000 ceiling is structural, produced by limited return-agreement coverage, tribunal pipeline length, and identity verification constraints."
+seo_title: "Britain returns 39,000 people a year. Manifestos promise more"
+seo_description: "The Home Office removed 39,000 people in the year to March 2026. Reform UK's 2024 manifesto wanted about 250,000 a year."
 ---
 
 **The Home Office's headline return figure for year ending March 2026 is 39,000 people removed from the UK. The Reform UK 2024 manifesto wanted approximately 250,000 returns a year. The previous Conservative government's stated ambition was higher. The number that the British removal system actually delivers has not changed materially in twenty years.**

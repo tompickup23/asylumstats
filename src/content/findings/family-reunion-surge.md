@@ -9,6 +9,8 @@ verdict: info
 source_url: "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
 source_label: "Home Office immigration system statistics, year ending June 2026"
 summary: "12,888 refugee family reunion grants in the year to June 2026, down from 20,643 in the year to June 2025. The route peaked at 19,258 in calendar 2024 after running between 3,700 and 7,500 a year for the previous decade. It is still 73% above the 2019 level, and the direction has reversed."
+seo_title: "Refugee family reunion peaked in 2024 and is now falling"
+seo_description: "12,888 refugee family reunion grants in the year to June 2026, down from 20,643 a year earlier. Still 73% above the 2019 level."
 ---
 
 **12,888 refugee family reunion grants** in the year to June 2026, down from **20,643** in the year to June 2025.
