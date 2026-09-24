@@ -440,3 +440,72 @@ export function allWhiteBritishChangeRates(): number[] {
     .map((a) => Math.abs(a.annualChangePp?.white_british ?? NaN))
     .filter((v) => Number.isFinite(v));
 }
+
+/**
+ * Mean White British share across a named set of authorities, 2021 and a projected year.
+ *
+ * Both regional surfaces computed this with their own inline loop over the raw projection
+ * file: /regional/ grouped every area by `regionName`, and each /places/regions/<region>/
+ * page looped its own area list. Two implementations of one quantity, and they agreed only
+ * for as long as nobody edited either. That is the shape of the defect the site has
+ * already published twice — /national/ kept an inline filter through the v8.0 merge and
+ * printed 93 authorities where every other surface said 86 — so the fix is one
+ * implementation rather than a test that the two copies still match.
+ *
+ * It is an unweighted mean of area shares, not a population-weighted regional share, which
+ * is what both callers were already computing and what the label on the page says. For a
+ * population-weighted figure use `nationalGroupShare`, and do not present the two as the
+ * same measure.
+ *
+ * Areas with no White British record are skipped; an area with no projection for `year`
+ * falls back to its current share, so a region is never dragged down by a missing series.
+ * Returns nulls when the set contains no scored area at all.
+ */
+export function meanWhiteBritishShare(
+  areaCodes: Iterable<string>,
+  year: number
+): { current: number | null; projected: number | null; areasScored: number } {
+  let currentSum = 0;
+  let projectedSum = 0;
+  let areasScored = 0;
+
+  for (const code of areaCodes) {
+    if (RETIRED_AREA_CODES.has(code)) continue;
+    const area = data.areas[code];
+    const current = area?.current?.groups?.white_british;
+    if (!current) continue;
+    currentSum += current;
+    projectedSum += area.projections?.[String(year)]?.white_british ?? current;
+    areasScored += 1;
+  }
+
+  return areasScored === 0
+    ? { current: null, projected: null, areasScored: 0 }
+    : { current: currentSum / areasScored, projected: projectedSum / areasScored, areasScored };
+}
+
+/**
+ * Authorities projected above `threshold` on a named per-area percentage field at `year`.
+ *
+ * The homepage and the sister-site teaser each counted Muslim-majority and foreign-born-
+ * majority authorities by reaching into the raw projection file. The counts were right,
+ * because both already ran over `distinctAreaCodes()`, but reading the raw file from a
+ * page is how the retired-code double count reached production in the first place. One
+ * counter, one dedupe.
+ *
+ * No plausibility guard: these are the model's own projected fields, and the guard is
+ * calibrated on the White British series alone. Say so wherever the count is published.
+ */
+export function countAreasAbove(
+  field: "muslimPct2051" | "foreignBornPct2051",
+  threshold: number
+): number {
+  return distinctAreaCodes().filter((code) => {
+    const area = data.areas[code] as Record<string, any>;
+    const value =
+      field === "muslimPct2051"
+        ? area?.muslimPct2051
+        : area?.nativity?.["2051"]?.foreignBornPct;
+    return typeof value === "number" && value > threshold;
+  }).length;
+}

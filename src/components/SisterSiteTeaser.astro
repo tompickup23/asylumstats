@@ -3,14 +3,13 @@
 // Shows the national ethnic trajectory with a compact sparkline and CTA.
 // Uses the same ethnic-projections data shared across both sites.
 
-import rawProjections from "../data/live/ethnic-projections.json";
 import {
   areasBelowFiftyBy,
   distinctAreaCodes,
   nationalWhiteBritishShare,
+  countAreasAbove,
 } from "../lib/ethnic-projections";
 
-const projData = rawProjections as any;
 const allAreaCodes = distinctAreaCodes();
 
 // Derived, not written in. These were four hardcoded v7.0 percentages that the
@@ -28,14 +27,10 @@ const trajectory = [2011, 2021, 2051]
   .map((point) => ({ ...point, pct: Number(point.pct.toFixed(1)) }));
 
 const areasBelow50by2051 = areasBelowFiftyBy(2051).total;
-const muslimMajority2051 = allAreaCodes.filter((code) => {
-  const mp = projData.areas[code]?.muslimPct2051;
-  return mp && mp > 50;
-}).length;
-const foreignBornMajority2051 = allAreaCodes.filter((code) => {
-  const fb = projData.areas[code]?.nativity?.["2051"]?.foreignBornPct;
-  return fb && fb > 50;
-}).length;
+// Counted through the shared helper, which owns the retired-code dedupe. Reading the raw
+// projection file from a component is how the double count reached production before.
+const muslimMajority2051 = countAreasAbove("muslimPct2051", 50);
+const foreignBornMajority2051 = countAreasAbove("foreignBornPct2051", 50);
 
 // Sparkline geometry: 4 points over 2011-2061, plotted in a 200x60 viewBox.
 const VB_W = 200;

@@ -7,9 +7,8 @@ import SisterSiteTeaser from "../components/SisterSiteTeaser.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
-import { getSignificantDemographicShifts, getEthnicProjection, areasBelowFiftyBy, nationalWhiteBritishShare, distinctAreaCodes } from "../lib/ethnic-projections";
+import { getSignificantDemographicShifts, getEthnicProjection, areasBelowFiftyBy, nationalWhiteBritishShare, distinctAreaCodes, countAreasAbove } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
-import rawProjections from "../data/live/ethnic-projections.json";
 import smallBoatsSeries from "../data/live/small-boats.json";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
@@ -208,16 +207,10 @@ const wbi2051 = nationalWhiteBritishShare(2051);
 const areasBelow30by2051 = demographicShifts.filter(a => a.currentWbPct < 30 || (a.currentWbPct - a.annualDeclinePp * 30) < 30).length;
 
 // Dynamic demographic counts (not hardcoded)
-const projData = rawProjections as any;
-const allAreaCodes = distinctAreaCodes();
-const muslimMajority2051 = allAreaCodes.filter(code => {
-  const mp = projData.areas[code]?.muslimPct2051;
-  return mp && mp > 50;
-}).length;
-const foreignBornMajority2051 = allAreaCodes.filter(code => {
-  const fb = projData.areas[code]?.nativity?.["2051"]?.foreignBornPct;
-  return fb && fb > 50;
-}).length;
+// Counted through the shared helper, which owns the retired-code dedupe. Reading the
+// raw projection file from a page is how the double count reached production before.
+const muslimMajority2051 = countAreasAbove("muslimPct2051", 50);
+const foreignBornMajority2051 = countAreasAbove("foreignBornPct2051", 50);
 
 // Verdict display labels (not "alert" etc)
 function findingLabel(verdict: string): string {
