@@ -1,13 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import AsylumSpendLedger from "../../components/AsylumSpendLedger.astro";
+import SupplierIndex from "../../components/SupplierIndex.astro";
 import PageContents from "../../components/PageContents.astro";
 
 // The explorer, presets and profile grids all sat on the starter ledger: nine profiles,
 // four entity links, no supplier payment rows. Only the payment ledger survives, and it
 // is the whole page now rather than the top of it.
 const entitySections = [
-  { id: "ho-spend-ledger", label: "Payment ledger" }
+  { id: "supplier-index", label: "Every supplier" }
 ];
 
 
@@ -15,16 +15,17 @@ const entitySections = [
 
 <BaseLayout
   image="/og/entities.png"
-  title="Serco, Mears and Clearsprings: asylum housing"
-  description="Named provider, owner-group, operator, and public-body profiles tied to the visible hotel estate, money rows, and local pressure."
+  title="Who the Home Office paid for asylum: every supplier"
+  description="Every supplier the Home Office paid for asylum since 2010: 366 names, £4.31bn, 16,872 payments, with the years and expense types behind each."
 >
   <section class="page-top">
     <section class="page-head">
       <span class="kicker">Entities</span>
-      <h1>Track the named actors behind hotels, contracts, and local pressure.</h1>
+      <h1>Who the Home Office paid for asylum, and how much.</h1>
       <p>
-        This page turns scattered supplier, owner, operator, and public-body references into readable actor profiles.
-        Start with the strongest public actors, then widen out only if you need the full profile field.
+        Every supplier the department recorded against an asylum classification since 2010,
+        taken from its own published payments over £25,000. What each was paid, how many
+        payments, which years, and the largest thing it was billing for.
       </p>
     </section>
 
@@ -55,11 +56,11 @@ const entitySections = [
   <PageContents title="Start here" sections={entitySections} variant="priority" />
 
   {/*
-    /entities/ IS the supplier index, so it lists every supplier with enough of a record
-    to stand on rather than the top twelve. /spending/ keeps the short list, because
-    there the ledger is one section of a page about the money as a whole.
+    The ledger headline totals, then the list itself. /spending/ carries the same headline
+    with a twelve-row summary and the money framing around it; this page is the list, and
+    the table below it is what makes the two different pages rather than one page twice.
   */}
-  <AsylumSpendLedger limit={120} />
+  <SupplierIndex limit={120} />
 
 
 

@@ -21,6 +21,7 @@ import { loadLocalRouteLatest } from "../../lib/route-data";
 import { countyForAreaCode, buildCountyPath } from "../../lib/county-directory";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
+import { getUkPlacesRecord, ukPlacesUrl } from "../../lib/ukplaces-registry";
 import {
   getEthnicProjection, getEthnicCompositionTimeline,
   getReligionData, getNativityData, getStochasticData,
@@ -62,6 +63,9 @@ export function getStaticPaths() {
 }
 
 const { area } = Astro.props;
+const ukPlacesRecord = getUkPlacesRecord(area.areaCode);
+const demographicsUrl = ukPlacesRecord?.coverage.ukdemographics.url ?? null;
+const placeRecordUrl = ukPlacesRecord ? ukPlacesUrl(ukPlacesRecord) : null;
 const hotelSites = hotelLedger.sites.filter(
   (site) => site.areaCode === area.areaCode || site.areaName === area.areaName
 );
@@ -303,13 +307,6 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
 // County the area sits in, for the breadcrumb link up to the county page. Null outside
 // England, where this site has no county tier.
 const areaCountyName = countyForAreaCode(area.areaCode);
-
-// ukdemographics.co.uk is built on ONS Census 2021, which covers England and Wales only.
-// The cross-link below was generated from the slug for every area, so all 32 Scottish and
-// 11 Northern Irish place pages pointed at a 404 on the sibling site: /places/glasgow-city/
-// and /places/belfast/ do not exist there and never will. A broken outbound link costs
-// both sites, so the banner is shown only where the target is actually published.
-const hasDemographicsSibling = area.countryName === "England" || area.countryName === "Wales";
 
 ---
 
@@ -685,16 +682,26 @@ const hasDemographicsSibling = area.countryName === "England" || area.countryNam
   )}
 
   <!-- UKD cross-link banner -->
-  {hasDemographicsSibling && (
+  {demographicsUrl && (
     <div class="ukd-cross-link">
       <div class="ukd-cross-inner">
         <span class="ukd-cross-label">Full demographic profile</span>
         <span class="ukd-cross-desc">
           School pressure, housing demand, service demand scoring, economic profile, language projections, and more on UK Demographics.
         </span>
-        <a href={`https://ukdemographics.co.uk/places/${slugifyAreaName(area.areaName)}/`} class="ukd-cross-btn" rel="noopener">
+        <a href={demographicsUrl} class="ukd-cross-btn" rel="noopener">
           View {area.areaName} on UK Demographics &rarr;
         </a>
+      </div>
+    </div>
+  )}
+
+  {placeRecordUrl && (
+    <div class="ukd-cross-link">
+      <div class="ukd-cross-inner">
+        <span class="ukd-cross-label">Local geography</span>
+        <span class="ukd-cross-desc">The shared local-authority geography record and its source coverage.</span>
+        <a href={placeRecordUrl} class="ukd-cross-btn" rel="noopener">Place record on UK Places</a>
       </div>
     </div>
   )}
