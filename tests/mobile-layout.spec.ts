@@ -10,7 +10,7 @@ const pages = [
   // findings block: it is the larger and more complete of the two datasets, so it is
   // the evidence a mobile reader should meet first.
   { name: "spending", path: "/spending/", focus: "#ho-spend-ledger", hasPageContents: true },
-  { name: "entities", path: "/entities/", focus: "#ho-spend-ledger", hasPageContents: true },
+  { name: "entities", path: "/entities/", focus: "#supplier-index", hasPageContents: true },
   { name: "entity-serco", path: "/entities/supplier_serco/", focus: "#entity-findings", hasPageContents: true },
   { name: "compare", path: "/compare/", focus: "#compare-findings", hasPageContents: true },
   { name: "routes", path: "/routes/", focus: "#route-findings", hasPageContents: true },
