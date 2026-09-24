@@ -1,0 +1,155 @@
+---
+import {
+  loadHoAsylumEntities,
+  loadAsylumCostReconciliation,
+  getPageworthyEntities,
+  formatGbpShort
+} from "../lib/ho-spend";
+
+/**
+ * The supplier index: every named supplier with a payment record worth publishing.
+ *
+ * This exists because parking the starter ledger left /entities/ carrying nothing but the
+ * ledger summary that also sits on /spending/, and 95% of its prose was word for word the
+ * same. Two indexed pages that say the same thing compete with each other and neither
+ * earns the query. /spending/ keeps the twelve-row summary and the money framing; this is
+ * the list itself, and it carries per-supplier detail the summary has no room for.
+ *
+ * The financial-year span and the largest expense type come from data already in the mart
+ * and rendered nowhere. They are also what makes each row worth reading: £519m to
+ * Clearsprings Ready Homes across five years of INITIAL ACCOMMODATION is a different fact
+ * from £540m to Calder Conferences across three years of HOTEL ACCOMMODATION.
+ *
+ * Rows are suppliers as the Home Office published them, NOT resolved legal entities. None
+ * of the 366 carries a company number, and `entity-aliases.csv` records the house rule
+ * that a shared name root does not establish a shared company. That is why this is a list
+ * and not a set of per-supplier pages: a list reports what was published, a page asserts
+ * an actor.
+ */
+interface Props {
+  /** How many suppliers to list. */
+  limit?: number;
+}
+
+const { limit = 120 } = Astro.props;
+
+const ledger = loadHoAsylumEntities();
+const recon = loadAsylumCostReconciliation();
+const rows = getPageworthyEntities(ledger.entities)
+  .slice(0, limit)
+  .map((entity) => {
+    const years = Object.keys(entity.byFy ?? {}).sort();
+    return {
+      name: entity.name,
+      amountGbp: entity.amountGbp,
+      transactions: entity.transactions,
+      // "2015/16 to 2025/26" reads as a span; a single year should not pretend to be one.
+      yearSpan: years.length === 0 ? null : years.length === 1 ? years[0] : `${years[0]} to ${years[years.length - 1]}`,
+      yearCount: years.length,
+      topType: entity.topExpenseTypes?.[0]?.label ?? null
+    };
+  });
+
+const listed = rows.length;
+const total = ledger.summary.entities;
+---
+
+<section id="supplier-index" class="section section-anchor">
+  <div class="section-head">
+    <div>
+      <span class="tiny">Who was paid</span>
+      <h2>The {listed} suppliers with a substantial payment record</h2>
+      {/*
+        Built as one string rather than interleaved expressions and text. Astro collapses
+        the newline between `{expr}` and the line under it, so the readable JSX version
+        rendered "across16,872 payments.366 names" — caught by the run-on guard.
+      */}
+      <p class="lede">
+        {`Every supplier the Home Office recorded against an asylum classification, ranked ` +
+         `by what it was paid, out of ${formatGbpShort(ledger.summary.totalGbp)} across ` +
+         `${ledger.summary.transactions.toLocaleString("en-GB")} payments. ` +
+         `${total.toLocaleString("en-GB")} names appear in the files altogether; these are ` +
+         `the ones with enough of a record to read.`}
+      </p>
+    </div>
+  </div>
+
+  {/*
+    Worded differently from the same warning on /spending/ on purpose. It has to be here,
+    because a table of pound figures is exactly what gets read as the cost of asylum, but
+    two indexed pages carrying the identical paragraph is what made these two near
+    duplicates in the first place.
+  */}
+  <p class="supplier-caveat">
+    <strong>These are payments, not the cost of asylum.</strong> They are only what the
+    department itemises: over £25,000, to a named supplier. Against them the National Audit
+    Office puts {recon.fy} asylum spending at {formatGbpShort(recon.headline.estimatedGbp)}.
+    <a href="/what-the-home-office-publishes">What is published and what is not</a>.
+  </p>
+
+  <div class="table-scroll">
+    <table class="supplier-table">
+      <caption class="visually-hidden">
+        Home Office asylum payments over £25,000 by supplier, 2010 to 2026, with the number
+        of payments, the financial years they span and the largest expense type.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Supplier</th>
+          <th scope="col" class="num">Paid</th>
+          <th scope="col" class="num">Payments</th>
+          <th scope="col">Years</th>
+          <th scope="col">Largest expense type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            <th scope="row">{row.name}</th>
+            <td class="num">{formatGbpShort(row.amountGbp)}</td>
+            <td class="num">{row.transactions.toLocaleString("en-GB")}</td>
+            <td>{row.yearSpan ?? "not stated"}</td>
+            <td class="type">{row.topType ?? "not stated"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="tiny supplier-foot">
+    Rows are supplier names exactly as the Home Office published them, not resolved
+    companies. Group companies stay separate unless a merge is documented, so Clearsprings
+    Ready Homes, Clearsprings Management and Clearel appear separately.
+    <a href="/data/ho-asylum-entities.json">Download all {total.toLocaleString("en-GB")} suppliers (JSON)</a>.
+    Source: Home Office spending over £25,000, Open Government Licence v3.0.
+  </p>
+</section>
+
+<style>
+  /* .table-scroll is not a global class: every page that uses it styles it locally, so a
+     component borrowing the name inherits nothing. Without this the five-column table
+     pushed the whole page sideways on a narrow screen instead of scrolling inside its own
+     box, which is the one thing a wide table must never do. */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .supplier-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .supplier-table th, .supplier-table td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+  .supplier-table thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); white-space: nowrap; }
+  .supplier-table tbody th { font-weight: 600; }
+  .supplier-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .supplier-table .type { color: var(--text-muted); font-size: 0.82rem; }
+  .supplier-table tbody tr:hover { background: var(--bg-subtle); }
+  .supplier-caveat {
+    border-left: 3px solid var(--warning);
+    background: var(--bg-subtle);
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+  .supplier-foot { margin-top: 1rem; color: var(--text-muted); line-height: 1.6; }
+</style>
