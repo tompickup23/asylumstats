@@ -7,7 +7,7 @@ import { slugifyAreaName, regionNameInSentence, buildPublicPlaceRegionSlug } fro
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { buildPlaceTitle } from "../../../lib/serp";
-import rawProjections from "../../../data/live/ethnic-projections.json";
+import { getEthnicProjection, meanWhiteBritishShare } from "../../../lib/ethnic-projections";
 import {
   ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
   accommodationCostForArea
@@ -36,18 +36,11 @@ const regionalAccommodationCostLabel = totalRegional > 0
   ? ` Accommodation and support at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(totalRegional) / 1_000_000).toFixed(0)}M a year.`
   : "";
 
-// Compute regional WBI
-const allAreas = (rawProjections as any).areas as Record<string, any>;
-let wbiSum2021 = 0, wbiSum2051 = 0, wbiCount = 0;
-for (const row of region.areas) {
-  const proj = allAreas[row.area.areaCode];
-  if (!proj?.current?.groups?.white_british) continue;
-  wbiSum2021 += proj.current.groups.white_british;
-  wbiSum2051 += proj.projections?.["2051"]?.white_british ?? proj.current.groups.white_british;
-  wbiCount++;
-}
-const regionWbi2021 = wbiCount > 0 ? wbiSum2021 / wbiCount : null;
-const regionWbi2051 = wbiCount > 0 ? wbiSum2051 / wbiCount : null;
+// The same regional mean /regional/ prints, from the same function, so the two cannot
+// drift apart. It was an inline loop over the raw projection file on both pages.
+const regionShare = meanWhiteBritishShare(region.areas.map((row) => row.area.areaCode), 2051);
+const regionWbi2021 = regionShare.current;
+const regionWbi2051 = regionShare.projected;
 
 // ukdemographics.co.uk publishes a regional demographic profile for the same ten regions
 // this site covers in England and Wales. It has no Scotland or Northern Ireland region,
@@ -134,7 +127,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
       {areasSorted.map((row, i) => {
         const a = row.area;
         const pct = (a.supportedAsylum / maxAreaAsylum) * 100;
-        const proj = allAreas[a.areaCode];
+        const proj = getEthnicProjection(a.areaCode);
         const wbiNow = proj?.current?.groups?.white_british;
         const wbi51 = proj?.projections?.["2051"]?.white_british;
         return (

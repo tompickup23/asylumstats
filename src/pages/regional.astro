@@ -1,29 +1,31 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataFreshness from "../components/DataFreshness.astro";
+import { meanWhiteBritishShare } from "../lib/ethnic-projections";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
 import { loadLocalRouteLatest } from "../lib/route-data";
-import rawProjections from "../data/live/ethnic-projections.json";
 
 const localRouteLatest = loadLocalRouteLatest();
 const placeDirectory = getPlaceDirectory();
 const regionalPressure = getRegionPressureSummaries(localRouteLatest.areas);
 
 // Compute WBI % per region (2021 and projected 2051)
-const allAreas = (rawProjections as any).areas as Record<string, any>;
-const regionWBI = new Map<string, { wbi2021: number; wbi2051: number; count: number }>();
+// One implementation of the regional mean, shared with each /places/regions/<region>/
+// page. This used to be an inline loop over the raw projection file here and a second one
+// there, which is how a figure diverges between two pages without anyone editing it.
+const codesByRegion = new Map<string, string[]>();
 for (const area of localRouteLatest.areas) {
-  const proj = allAreas[area.areaCode];
-  if (!proj?.current?.groups?.white_british) continue;
-  const region = area.regionName;
-  if (!regionWBI.has(region)) regionWBI.set(region, { wbi2021: 0, wbi2051: 0, count: 0 });
-  const r = regionWBI.get(region)!;
-  r.wbi2021 += proj.current.groups.white_british;
-  r.wbi2051 += proj.projections?.["2051"]?.white_british ?? proj.current.groups.white_british;
-  r.count++;
+  const codes = codesByRegion.get(area.regionName) ?? [];
+  codes.push(area.areaCode);
+  codesByRegion.set(area.regionName, codes);
 }
-for (const [, r] of regionWBI) { r.wbi2021 /= r.count; r.wbi2051 /= r.count; }
+const regionWBI = new Map<string, { wbi2021: number; wbi2051: number }>();
+for (const [region, codes] of codesByRegion) {
+  const share = meanWhiteBritishShare(codes, 2051);
+  if (share.current === null || share.projected === null) continue;
+  regionWBI.set(region, { wbi2021: share.current, wbi2051: share.projected });
+}
 
 // Sort regions by asylum support (descending)
 const regionsSorted = [...placeDirectory.regions].sort((a, b) => b.supportedAsylum - a.supportedAsylum);
