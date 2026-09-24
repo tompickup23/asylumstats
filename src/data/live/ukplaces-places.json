@@ -9223,9 +9223,9 @@
         "url": "https://ukelections.co.uk/seats/barnsley/"
       },
       "ukdemographics": {
-        "hasPage": false,
-        "slug": null,
-        "url": null
+        "hasPage": true,
+        "slug": "barnsley",
+        "url": "https://ukdemographics.co.uk/places/barnsley/"
       },
       "aidoge": {
         "hasPage": false,
@@ -9258,9 +9258,9 @@
         "url": "https://ukelections.co.uk/seats/sheffield/"
       },
       "ukdemographics": {
-        "hasPage": false,
-        "slug": null,
-        "url": null
+        "hasPage": true,
+        "slug": "sheffield",
+        "url": "https://ukdemographics.co.uk/places/sheffield/"
       },
       "aidoge": {
         "hasPage": false,
