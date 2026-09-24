@@ -4,16 +4,13 @@ import AsylumSpendLedger from "../components/AsylumSpendLedger.astro";
 import PageContents from "../components/PageContents.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
 import followMoney from "../data/live/follow-money.json";
-import { loadMoneyLedger } from "../lib/money-data";
-
-const moneyLedger = loadMoneyLedger();
 
 // Only the sections that survive the starter ledger being parked. Every other entry
 // pointed at an explorer, preset or profile grid built over eleven hand-curated records.
 const spendingSections = [
   { id: "ho-spend-ledger", label: "Payment ledger" },
   { id: "integrity-techniques", label: "Techniques" },
-  { id: "scope-rules", label: "Scope and limits" }
+  { id: "scope-rules", label: "Scope and rules" }
 ];
 ---
 
@@ -120,18 +117,12 @@ const spendingSections = [
     </div>
 
     <div class="panel panel-pad">
-      <h2>Inclusion test and current limits</h2>
+      <h2>Inclusion rules</h2>
       <div class="signal-list">
         {asylumFinance.inclusionTests.map((rule) => (
           <article class="signal-card">
             <span class="tiny">Inclusion test</span>
             <p class="tiny">{rule}</p>
-          </article>
-        ))}
-        {moneyLedger.limitations.map((item) => (
-          <article class="signal-card accent">
-            <span class="tiny">Current limit</span>
-            <p class="tiny">{item}</p>
           </article>
         ))}
       </div>
