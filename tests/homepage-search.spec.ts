@@ -22,15 +22,30 @@ const SEARCHES = [
   { name: "council lookup", input: "#future-search", results: "#future-results" }
 ] as const;
 
+/**
+ * Load the homepage and wait for the search index to arrive with it.
+ *
+ * The handlers only run on an input event, so typing before the fetch resolves finds an
+ * empty list and never re-renders; the wait is not optional. It has to be armed BEFORE
+ * the navigation, though. Registering waitForResponse after goto races the fetch, and on
+ * a fast run the response has already landed, so the wait never settles and the test
+ * times out at 60s. That failed once in CI and passed every time locally, which is what
+ * that race looks like.
+ */
+async function loadWithIndex(page: import("@playwright/test").Page) {
+  const indexLoaded = page.waitForResponse((response) =>
+    response.url().includes("/search-index.json"));
+  await page.goto("/");
+  await indexLoaded;
+}
+
 test.describe("homepage search", () => {
   for (const search of SEARCHES) {
     test(`${search.name} returns results and raises no error`, async ({ page }) => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
 
-      await page.goto("/");
-      // The handlers populate from a fetch, so the input is live before the data is.
-      await page.waitForResponse((response) => response.url().includes("/search-index.json"));
+      await loadWithIndex(page);
 
       await page.fill(search.input, "Burnley");
       const results = page.locator(search.results);
@@ -43,8 +58,7 @@ test.describe("homepage search", () => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
 
-      await page.goto("/");
-      await page.waitForResponse((response) => response.url().includes("/search-index.json"));
+      await loadWithIndex(page);
       const results = page.locator(search.results);
 
       await page.fill(search.input, "bur");
@@ -65,8 +79,7 @@ test.describe("homepage search", () => {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
 
-    await page.goto("/");
-    await page.waitForResponse((response) => response.url().includes("/search-index.json"));
+    await loadWithIndex(page);
 
     await page.fill("#area-search", "BB11 2ED");
     const result = page.locator("#area-results a").first();
@@ -76,7 +89,7 @@ test.describe("homepage search", () => {
   });
 
   test("header search still works, since all three read one index", async ({ page }) => {
-    await page.goto("/");
+    await loadWithIndex(page);
     await page.click("[data-site-search-open]");
     await page.fill("[data-site-search-input]", "Burnley");
     await expect(page.locator("[data-site-search-results] a").first()).toContainText("Burnley");
