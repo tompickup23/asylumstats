@@ -711,14 +711,18 @@ const heroStats = [
   if (searchInput && resultsContainer) {
     let areas: Array<{ areaCode: string; areaName: string; regionName: string; supportedAsylum: number; supportedAsylumRate: number | null }> = [];
 
+    // Places only. /search-index.json carries four kinds — place, region, finding and
+    // page — and only the 361 place entries have an areaName. This took the whole array,
+    // so the name filter below hit the "Home" page entry first and threw
+    // "Cannot read properties of undefined (reading 'toLowerCase')" on every keystroke.
+    // Both homepage lookups link to /places/<slug>/, so a place is the only kind either
+    // can use, and narrowing here is also what stops a fifth kind breaking them again.
     fetch("/search-index.json")
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          areas = data;
-        } else if (data.areas) {
-          areas = data.areas;
-        }
+        const entries = Array.isArray(data) ? data : data.areas ?? [];
+        areas = entries.filter((entry: { kind?: string; areaName?: string }) =>
+          entry.kind === "place" && typeof entry.areaName === "string");
       })
       .catch(() => {});
 
@@ -828,10 +832,13 @@ const heroStats = [
   if (futureInput && futureResults && futurePreview) {
     let futureAreas: any[] = [];
 
+    // Places only, for the same reason as the area lookup above.
     fetch("/search-index.json")
       .then((r) => r.json())
       .then((data) => {
-        futureAreas = Array.isArray(data) ? data : data.areas ?? [];
+        const entries = Array.isArray(data) ? data : data.areas ?? [];
+        futureAreas = entries.filter((entry: any) =>
+          entry.kind === "place" && typeof entry.areaName === "string");
       })
       .catch(() => {});
 

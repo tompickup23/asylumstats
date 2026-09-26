@@ -44,6 +44,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop
+      # Behaviour, not layout. The two homepage lookups shipped broken and no suite drove
+      # them: the Playwright matcher only picked up specs named for layout, so a spec for
+      # anything else would never have run.
+      - run: npm run test:search
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
