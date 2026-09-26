@@ -2,7 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: /.*layout\.spec\.ts/,
+  // Was /.*layout\.spec\.ts/, which silently excluded any spec not named for layout.
+  // The homepage search spec is behaviour, not layout, and would never have run.
+  testMatch: /.*\.spec\.ts/,
   snapshotPathTemplate: "{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}",
   fullyParallel: false,
   workers: 1,

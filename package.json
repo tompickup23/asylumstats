@@ -58,6 +58,7 @@
     "test": "vitest run",
     "test:mobile": "playwright test tests/mobile-layout.spec.ts --project=mobile-chromium",
     "test:desktop": "playwright test tests/desktop-layout.spec.ts --project=desktop-chromium",
+  "test:search": "playwright test tests/homepage-search.spec.ts --project=mobile-chromium --project=desktop-chromium",
     "test:watch": "vitest",
     "audit:projections": "node scripts/audit/projection-integrity.mjs",
     "audit:projections:check": "node scripts/audit/projection-integrity.mjs --check"
