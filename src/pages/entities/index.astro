@@ -2,6 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SupplierIndex from "../../components/SupplierIndex.astro";
 import PageContents from "../../components/PageContents.astro";
+import { loadHoAsylumEntities, formatGbpShort } from "../../lib/ho-spend";
+
+// Read from the ledger: the written-in totals went stale the first month a new file landed.
+const { summary } = loadHoAsylumEntities();
 
 // The explorer, presets and profile grids all sat on the starter ledger: nine profiles,
 // four entity links, no supplier payment rows. Only the payment ledger survives, and it
@@ -16,7 +20,7 @@ const entitySections = [
 <BaseLayout
   image="/og/entities.png"
   title="Who the Home Office paid for asylum: every supplier"
-  description="Every supplier the Home Office paid for asylum since 2010: 366 names, £4.31bn, 16,872 payments, with the years and expense types behind each."
+  description={`Every supplier the Home Office paid for asylum since 2010: ${summary.entities} names, ${formatGbpShort(summary.totalGbp)}, ${summary.transactions.toLocaleString("en-GB")} payments, with the years and expense types behind each.`}
 >
   <section class="page-top">
     <section class="page-head">

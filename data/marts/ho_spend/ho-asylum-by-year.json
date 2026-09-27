@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-07T14:13:42.606Z",
+ "generatedAt": "2026-09-27T10:23:03.505Z",
  "basis": "published_transaction",
  "noTrendLineRule": "Year-on-year comparison of this series is unsafe on its own. The Home Office has used at least eleven expense-area labels for asylum since 2010 and none at all between 2017 and 2020. A change between two years can be a reclassification. areaLabels records which labels were in use each year.",
  "years": [
@@ -124,8 +124,8 @@
   },
   {
    "fy": "2026/27",
-   "amountGbp": 35653558.28,
-   "transactions": 409,
+   "amountGbp": 51401413.38,
+   "transactions": 640,
    "areaLabels": [
     "UKAG - Asylum Group",
     "UKAP - Asylum & Protection",

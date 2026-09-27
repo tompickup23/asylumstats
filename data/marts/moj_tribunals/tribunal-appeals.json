@@ -1,87 +1,87 @@
 {
-  "generatedAt": "2026-09-07T14:07:51.213Z",
+  "generatedAt": "2026-09-27T10:27:48.516Z",
   "datasetId": "moj_tribunals",
   "chamberLabel": "First-tier Tribunal, Immigration and Asylum Chamber",
   "chamberShortLabel": "FtTIAC",
   "release": {
-    "title": "Tribunal Statistics Quarterly: January to March 2026",
-    "periodLabel": "Q4 2025/26",
-    "periodCoverage": "January to March 2026",
-    "publishedDate": "2026-06-11",
-    "nextEditionDate": "2026-09-10",
-    "nextEditionCoverage": "April to June 2026"
+    "title": "Tribunal Statistics Quarterly: April to June 2026",
+    "periodLabel": "Q1 2026/27",
+    "periodCoverage": "April to June 2026",
+    "publishedDate": "2026-09-10",
+    "nextEditionDate": "2026-12-10",
+    "nextEditionCoverage": "July to September 2026"
   },
   "periodBasis": "financial_year_quarter",
-  "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
+  "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q1 2026/27 covers April to June 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
   "continuityNote": "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.",
-  "provisionalNote": "Q4 2025/26 figures are provisional and subject to revision. Earlier quarters of 2025/26 are revised as later editions land, and 2024/25 is now final.",
-  "latestPeriodLabel": "Q4 2025/26",
-  "previousPeriodLabel": "Q4 2024/25",
+  "provisionalNote": "Q1 2026/27 figures are provisional and subject to revision. MOJ marks Q4 2025/26 as revised in this edition. Earlier periods are final.",
+  "latestPeriodLabel": "Q1 2026/27",
+  "previousPeriodLabel": "Q1 2025/26",
   "latestAnnualLabel": "2025/26",
   "previousAnnualLabel": "2024/25",
   "headline": {
     "receipts": {
-      "latest": 27689,
-      "previous": 26273,
-      "change": 1416,
-      "changePct": 5.4
+      "latest": 21762,
+      "previous": 27534,
+      "change": -5772,
+      "changePct": -21
     },
     "disposals": {
-      "latest": 15317,
-      "previous": 11420,
-      "change": 3897,
-      "changePct": 34.1
+      "latest": 16786,
+      "previous": 12893,
+      "change": 3893,
+      "changePct": 30.2
     },
     "openCaseload": {
-      "latest": 151767,
-      "previous": 90389,
-      "change": 61378,
-      "changePct": 67.9
+      "latest": 155798,
+      "previous": 105522,
+      "change": 50276,
+      "changePct": 47.6
     },
     "determinedAtHearing": {
-      "latest": 6978,
-      "previous": 6729,
-      "change": 249,
-      "changePct": 3.7
+      "latest": 7512,
+      "previous": 6478,
+      "change": 1034,
+      "changePct": 16
     },
     "allowedRatePct": {
-      "latest": 39,
-      "previous": 42.5,
-      "change": -3.5,
-      "changePct": -8.2
+      "latest": 38,
+      "previous": 40,
+      "change": -2,
+      "changePct": -5
     },
     "annualReceipts": {
-      "latest": 117697,
+      "latest": 117722,
       "previous": 79074,
-      "change": 38623,
-      "changePct": 48.8
+      "change": 38648,
+      "changePct": 48.9
     },
     "annualDisposals": {
-      "latest": 56869,
+      "latest": 56845,
       "previous": 40991,
-      "change": 15878,
+      "change": 15854,
       "changePct": 38.7
     }
   },
   "latestBreakdown": [
     {
       "label": "Receipts",
-      "value": 27689,
+      "value": 21762,
       "metricId": "fttiac_receipts"
     },
     {
       "label": "Disposals",
-      "value": 15317,
+      "value": 16786,
       "metricId": "fttiac_disposals"
     },
     {
       "label": "Determined at hearing or on paper",
-      "value": 6978,
+      "value": 7512,
       "metricId": "fttiac_determined_at_hearing"
     },
     {
       "label": "Open caseload at quarter end",
-      "value": 151767,
+      "value": 155798,
       "metricId": "fttiac_open_caseload"
     }
   ],
@@ -90,30 +90,30 @@
       "id": "asylum_protection",
       "label": "Asylum, protection and revocation of protection",
       "sourceColumn": "Asylum/Protection/Revocation of Protection",
-      "meanWeeksToClear": 67,
+      "meanWeeksToClear": 72,
       "receipts": {
-        "latest": 14748,
-        "previous": 13955,
-        "change": 793,
-        "changePct": 5.7
+        "latest": 11596,
+        "previous": 14574,
+        "change": -2978,
+        "changePct": -20.4
       },
       "disposals": {
-        "latest": 7799,
-        "previous": 5550,
-        "change": 2249,
-        "changePct": 40.5
+        "latest": 8709,
+        "previous": 6099,
+        "change": 2610,
+        "changePct": 42.8
       },
       "openCaseload": {
-        "latest": 87450,
-        "previous": 50976,
-        "change": 36474,
-        "changePct": 71.6
+        "latest": 90341,
+        "previous": 59925,
+        "change": 30416,
+        "changePct": 50.8
       },
       "allowedRatePct": {
-        "latest": 40,
-        "previous": 42.9,
-        "change": -2.9,
-        "changePct": -6.8
+        "latest": 39,
+        "previous": 40,
+        "change": -1,
+        "changePct": -2.5
       },
       "series": {
         "receipts": [
@@ -553,24 +553,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 14574,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 16485,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 17822,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
-            "value": 14748,
+            "value": 14749,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 11596,
             "seriesStatus": "provisional"
           }
         ],
@@ -1011,24 +1017,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 6099,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 7004,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 7462,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
-            "value": 7799,
+            "value": 7789,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 8709,
             "seriesStatus": "provisional"
           }
         ],
@@ -1295,6 +1307,12 @@
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
             "value": 87450,
+            "seriesStatus": "final"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 90341,
             "seriesStatus": "final"
           }
         ],
@@ -1735,24 +1753,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 40,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 39,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 36,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
             "value": 40,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 39,
             "seriesStatus": "provisional"
           }
         ]
@@ -1762,30 +1786,30 @@
       "id": "human_rights",
       "label": "Human rights",
       "sourceColumn": "Human Rights",
-      "meanWeeksToClear": 71,
+      "meanWeeksToClear": 74,
       "receipts": {
-        "latest": 4713,
-        "previous": 5180,
-        "change": -467,
-        "changePct": -9
+        "latest": 3762,
+        "previous": 4956,
+        "change": -1194,
+        "changePct": -24.1
       },
       "disposals": {
-        "latest": 2885,
-        "previous": 2963,
-        "change": -78,
-        "changePct": -2.6
+        "latest": 3013,
+        "previous": 3170,
+        "change": -157,
+        "changePct": -5
       },
       "openCaseload": {
-        "latest": 30867,
-        "previous": 21962,
-        "change": 8905,
-        "changePct": 40.5
+        "latest": 31459,
+        "previous": 23887,
+        "change": 7572,
+        "changePct": 31.7
       },
       "allowedRatePct": {
-        "latest": 44,
-        "previous": 48.1,
-        "change": -4.1,
-        "changePct": -8.5
+        "latest": 42,
+        "previous": 46,
+        "change": -4,
+        "changePct": -8.7
       },
       "series": {
         "receipts": [
@@ -2039,24 +2063,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 4956,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 5264,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 5530,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
             "value": 4713,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 3762,
             "seriesStatus": "provisional"
           }
         ],
@@ -2305,24 +2335,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 3170,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 2978,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 2694,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
-            "value": 2885,
+            "value": 2879,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 3013,
             "seriesStatus": "provisional"
           }
         ],
@@ -2590,6 +2626,12 @@
             "periodEnd": "2026-03-31",
             "value": 30867,
             "seriesStatus": "final"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 31459,
+            "seriesStatus": "final"
           }
         ],
         "allowedRatePct": [
@@ -2837,24 +2879,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 46,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 45,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 42,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
             "value": 44,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 42,
             "seriesStatus": "provisional"
           }
         ]
@@ -2864,30 +2912,30 @@
       "id": "eea_free_movement",
       "label": "EEA free movement",
       "sourceColumn": "EEA Free Movement",
-      "meanWeeksToClear": 46,
+      "meanWeeksToClear": 48,
       "receipts": {
-        "latest": 8185,
-        "previous": 7089,
-        "change": 1096,
-        "changePct": 15.5
+        "latest": 6328,
+        "previous": 7958,
+        "change": -1630,
+        "changePct": -20.5
       },
       "disposals": {
-        "latest": 4587,
-        "previous": 2858,
-        "change": 1729,
-        "changePct": 60.5
+        "latest": 5015,
+        "previous": 3586,
+        "change": 1429,
+        "changePct": 39.8
       },
       "openCaseload": {
-        "latest": 33149,
-        "previous": 17192,
-        "change": 15957,
-        "changePct": 92.8
+        "latest": 33671,
+        "previous": 21433,
+        "change": 12238,
+        "changePct": 57.1
       },
       "allowedRatePct": {
-        "latest": 30,
-        "previous": 35,
-        "change": -5,
-        "changePct": -14.3
+        "latest": 26,
+        "previous": 32,
+        "change": -6,
+        "changePct": -18.8
       },
       "series": {
         "receipts": [
@@ -3141,24 +3189,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 7958,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 8505,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 8771,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
-            "value": 8185,
+            "value": 8209,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 6328,
             "seriesStatus": "provisional"
           }
         ],
@@ -3407,24 +3461,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 3586,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 4731,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 3711,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
-            "value": 4587,
+            "value": 4579,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 5015,
             "seriesStatus": "provisional"
           }
         ],
@@ -3692,6 +3752,12 @@
             "periodEnd": "2026-03-31",
             "value": 33149,
             "seriesStatus": "final"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 33671,
+            "seriesStatus": "final"
           }
         ],
         "allowedRatePct": [
@@ -3939,24 +4005,30 @@
             "periodLabel": "Q1 2025/26",
             "periodEnd": "2025-06-30",
             "value": 32,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q2 2025/26",
             "periodEnd": "2025-09-30",
             "value": 29,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q3 2025/26",
             "periodEnd": "2025-12-31",
             "value": 29,
-            "seriesStatus": "revised"
+            "seriesStatus": "final"
           },
           {
             "periodLabel": "Q4 2025/26",
             "periodEnd": "2026-03-31",
             "value": 30,
+            "seriesStatus": "revised"
+          },
+          {
+            "periodLabel": "Q1 2026/27",
+            "periodEnd": "2026-06-30",
+            "value": 26,
             "seriesStatus": "provisional"
           }
         ]
@@ -3965,10 +4037,10 @@
   ],
   "timeliness": {
     "quarterly": {
-      "basisLabel": "January to March 2026 against January to March 2025",
-      "latestMeanWeeks": 61,
-      "previousMeanWeeks": 50,
-      "changeWeeks": 11
+      "basisLabel": "April to June 2026 against April to June 2025",
+      "latestMeanWeeks": 65,
+      "previousMeanWeeks": 52,
+      "changeWeeks": 13
     },
     "annual": {
       "basisLabel": "2025/26 against 2024/25",
@@ -3979,11 +4051,6 @@
     "note": "Mean time from receipt to clearance. MOJ has withdrawn the quartile measures for First-tier Tribunal figures pending a review of how aggregate timeliness is derived from caseload data. Means are unaffected."
   },
   "revisionStatusByPeriod": [
-    {
-      "periodLabel": "Q1 2024/25",
-      "status": "final",
-      "publishedStatus": "final"
-    },
     {
       "periodLabel": "Q2 2024/25",
       "status": "final",
@@ -4001,21 +4068,26 @@
     },
     {
       "periodLabel": "Q1 2025/26",
-      "status": "revised",
-      "publishedStatus": "revised"
+      "status": "final",
+      "publishedStatus": "final"
     },
     {
       "periodLabel": "Q2 2025/26",
-      "status": "revised",
-      "publishedStatus": "revised"
+      "status": "final",
+      "publishedStatus": "final"
     },
     {
       "periodLabel": "Q3 2025/26",
+      "status": "final",
+      "publishedStatus": "final"
+    },
+    {
+      "periodLabel": "Q4 2025/26",
       "status": "revised",
       "publishedStatus": "revised"
     },
     {
-      "periodLabel": "Q4 2025/26",
+      "periodLabel": "Q1 2026/27",
       "status": "provisional",
       "publishedStatus": "provisional"
     }
@@ -4458,24 +4530,30 @@
         "periodLabel": "Q1 2025/26",
         "periodEnd": "2025-06-30",
         "value": 27534,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q2 2025/26",
         "periodEnd": "2025-09-30",
         "value": 30309,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q3 2025/26",
         "periodEnd": "2025-12-31",
         "value": 32165,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q4 2025/26",
         "periodEnd": "2026-03-31",
-        "value": 27689,
+        "value": 27714,
+        "seriesStatus": "revised"
+      },
+      {
+        "periodLabel": "Q1 2026/27",
+        "periodEnd": "2026-06-30",
+        "value": 21762,
         "seriesStatus": "provisional"
       }
     ],
@@ -4916,24 +4994,30 @@
         "periodLabel": "Q1 2025/26",
         "periodEnd": "2025-06-30",
         "value": 12893,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q2 2025/26",
         "periodEnd": "2025-09-30",
         "value": 14756,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q3 2025/26",
         "periodEnd": "2025-12-31",
         "value": 13903,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q4 2025/26",
         "periodEnd": "2026-03-31",
-        "value": 15317,
+        "value": 15293,
+        "seriesStatus": "revised"
+      },
+      {
+        "periodLabel": "Q1 2026/27",
+        "periodEnd": "2026-06-30",
+        "value": 16786,
         "seriesStatus": "provisional"
       }
     ],
@@ -5200,6 +5284,12 @@
         "periodLabel": "Q4 2025/26",
         "periodEnd": "2026-03-31",
         "value": 151767,
+        "seriesStatus": "final"
+      },
+      {
+        "periodLabel": "Q1 2026/27",
+        "periodEnd": "2026-06-30",
+        "value": 155798,
         "seriesStatus": "final"
       }
     ],
@@ -5640,24 +5730,30 @@
         "periodLabel": "Q1 2025/26",
         "periodEnd": "2025-06-30",
         "value": 6478,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q2 2025/26",
         "periodEnd": "2025-09-30",
         "value": 6120,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q3 2025/26",
         "periodEnd": "2025-12-31",
         "value": 6255,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q4 2025/26",
         "periodEnd": "2026-03-31",
         "value": 6978,
+        "seriesStatus": "revised"
+      },
+      {
+        "periodLabel": "Q1 2026/27",
+        "periodEnd": "2026-06-30",
+        "value": 7512,
         "seriesStatus": "provisional"
       }
     ],
@@ -6098,24 +6194,30 @@
         "periodLabel": "Q1 2025/26",
         "periodEnd": "2025-06-30",
         "value": 40,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q2 2025/26",
         "periodEnd": "2025-09-30",
         "value": 38,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q3 2025/26",
         "periodEnd": "2025-12-31",
         "value": 36,
-        "seriesStatus": "revised"
+        "seriesStatus": "final"
       },
       {
         "periodLabel": "Q4 2025/26",
         "periodEnd": "2026-03-31",
         "value": 39,
+        "seriesStatus": "revised"
+      },
+      {
+        "periodLabel": "Q1 2026/27",
+        "periodEnd": "2026-06-30",
+        "value": 38,
         "seriesStatus": "provisional"
       }
     ]
@@ -6233,8 +6335,8 @@
       {
         "periodLabel": "2025/26",
         "periodEnd": "2026-03-31",
-        "value": 117697,
-        "seriesStatus": "provisional"
+        "value": 117722,
+        "seriesStatus": "revised"
       }
     ],
     "disposals": [
@@ -6349,30 +6451,30 @@
       {
         "periodLabel": "2025/26",
         "periodEnd": "2026-03-31",
-        "value": 56869,
-        "seriesStatus": "provisional"
+        "value": 56845,
+        "seriesStatus": "revised"
       }
     ]
   },
   "readingNotes": [
     "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.",
-    "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
-    "Q4 2025/26 figures are provisional and subject to revision. Earlier quarters of 2025/26 are revised as later editions land, and 2024/25 is now final.",
+    "MOJ publishes tribunal statistics on financial-year quarters, so Q1 2026/27 covers April to June 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
+    "Q1 2026/27 figures are provisional and subject to revision. MOJ marks Q4 2025/26 as revised in this edition. Earlier periods are final.",
     "Open caseload is a quarter-end snapshot taken at the point of data extraction, so it cannot be reconstructed by adding receipts and subtracting disposals across quarters.",
     "Disposals include appeals withdrawn, struck out or found invalid. The allowed rate is calculated only on the smaller group determined at a hearing or on paper."
   ],
   "sources": [
     {
       "source_id": "moj_tribunals",
-      "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-april-to-june-2026",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6aa18eb1c5796a7a179c658d/Tribunals_Statistics_Quarterly_Main_Tables_Q1_2026_27.ods",
       "methodology_url": "https://www.gov.uk/government/collections/tribunals-statistics",
-      "release_date": "2026-06-11"
+      "release_date": "2026-09-10"
     }
   ],
   "reconciliation": {
-    "checkedAt": "2026-09-07T14:07:51.213Z",
-    "checkCount": 17,
+    "checkedAt": "2026-09-27T10:27:48.517Z",
+    "checkCount": 20,
     "allPassed": true
   }
 }

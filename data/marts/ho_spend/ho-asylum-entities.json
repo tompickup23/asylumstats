@@ -1,21 +1,21 @@
 {
- "generatedAt": "2026-09-07T14:13:42.606Z",
+ "generatedAt": "2026-09-27T10:23:03.505Z",
  "basis": "published_transaction",
  "licence": "Open Government Licence v3.0 (Crown copyright)",
  "sourceCollection": "https://www.gov.uk/government/collections/home-office-spending",
  "whatThisIsNot": "Not total asylum spending. Only transactions over £25,000 recorded by the Home Office against an asylum classification. The NAO puts actual 2024-25 Home Office and MoJ asylum spend at around £4.9 billion. The difference is reported in aggregate elsewhere, not missing.",
  "coverage": {
   "earliest": "2010-04-06",
-  "latest": "2026-05-29",
+  "latest": "2026-07-31",
   "earliestLabel": "April 2010",
-  "latestLabel": "May 2026"
+  "latestLabel": "July 2026"
  },
  "summary": {
-  "transactions": 16872,
-  "totalGbp": 4312728883.43,
-  "entities": 366,
-  "filesInCorpus": 255,
-  "filesParsed": 255
+  "transactions": 17103,
+  "totalGbp": 4328476738.53,
+  "entities": 369,
+  "filesInCorpus": 275,
+  "filesParsed": 275
  },
  "entities": [
   {
@@ -491,24 +491,24 @@
     "ALEXANDER MANN SOLUTIONS LIMITED",
     "ALEXANDER MANN SOLUTIONS LTD"
    ],
-   "amountGbp": 60851660.32,
-   "transactions": 1128,
+   "amountGbp": 65897333.88,
+   "transactions": 1304,
    "byFy": {
     "2021/22": 147081.9,
     "2022/23": 2661486.71,
     "2023/24": 17056735.6,
     "2024/25": 12842318.98,
     "2025/26": 20983309.85,
-    "2026/27": 7160727.28
+    "2026/27": 12206400.84
    },
    "topExpenseTypes": [
     {
      "label": "ADVICE",
-     "amountGbp": 40205357.85
+     "amountGbp": 41660357.85
     },
     {
      "label": "CONTINGENT LABOUR OTHER",
-     "amountGbp": 15283315.08
+     "amountGbp": 18873988.64
     },
     {
      "label": "OTHER",
@@ -615,15 +615,15 @@
     "BLOOM PROCUREMENT SERVICES LIMITED",
     "BLOOM PROCUREMENT SERVICES LTD"
    ],
-   "amountGbp": 47900121.07,
-   "transactions": 105,
+   "amountGbp": 47930541.07,
+   "transactions": 106,
    "byFy": {
     "2021/22": 1347103.39,
     "2022/23": 7876365.62,
     "2023/24": 36767210.94,
     "2024/25": 1078527.82,
     "2025/26": 800538.3,
-    "2026/27": 30375
+    "2026/27": 60795
    },
    "topExpenseTypes": [
     {
@@ -743,8 +743,8 @@
    "rawSuppliers": [
     "GOVERNMENT LEGAL DEPARTMENT"
    ],
-   "amountGbp": 23475290.06,
-   "transactions": 53,
+   "amountGbp": 26884282.33,
+   "transactions": 54,
    "byFy": {
     "2016/17": 5386471.19,
     "2021/22": 11879226.43,
@@ -752,12 +752,12 @@
     "2023/24": 63905.2,
     "2024/25": 25188.44,
     "2025/26": 130000,
-    "2026/27": 4056579.13
+    "2026/27": 7465571.4
    },
    "topExpenseTypes": [
     {
      "label": "LEGAL ADVICE",
-     "amountGbp": 10030222.14
+     "amountGbp": 13439214.41
     },
     {
      "label": "LEGAL SERVICES & FEES",
@@ -1039,18 +1039,19 @@
    "rawSuppliers": [
     "MITIE LTD"
    ],
-   "amountGbp": 17882987.7,
-   "transactions": 51,
+   "amountGbp": 17970206.45,
+   "transactions": 54,
    "byFy": {
     "2022/23": 2703364.77,
     "2023/24": 10614510.1,
     "2024/25": 2360715.41,
-    "2025/26": 2204397.42
+    "2025/26": 2204397.42,
+    "2026/27": 87218.75
    },
    "topExpenseTypes": [
     {
      "label": "SECURITY GUARDS",
-     "amountGbp": 17882987.7
+     "amountGbp": 17970206.45
     }
    ]
   },
@@ -1063,17 +1064,17 @@
    "rawSuppliers": [
     "PORTAKABIN"
    ],
-   "amountGbp": 17783046,
-   "transactions": 13,
+   "amountGbp": 17894216.4,
+   "transactions": 14,
    "byFy": {
     "2024/25": 15837570,
     "2025/26": 1834305.6,
-    "2026/27": 111170.4
+    "2026/27": 222340.8
    },
    "topExpenseTypes": [
     {
      "label": "CONTRACT OUT SERVICE",
-     "amountGbp": 17783046
+     "amountGbp": 17894216.4
     }
    ]
   },
@@ -1166,6 +1167,47 @@
    ]
   },
   {
+   "entityId": "deloitte-llp",
+   "name": "Deloitte LLP",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "DELOITTE LLP"
+   ],
+   "amountGbp": 12706966.15,
+   "transactions": 118,
+   "byFy": {
+    "2016/17": 384000,
+    "2023/24": 728379.6,
+    "2024/25": 4521420,
+    "2025/26": 6482291.05,
+    "2026/27": 590875.5
+   },
+   "topExpenseTypes": [
+    {
+     "label": "IT",
+     "amountGbp": 9315055.69
+    },
+    {
+     "label": "IT RUN COST",
+     "amountGbp": 1741500
+    },
+    {
+     "label": "SYSTEM CLEARING",
+     "amountGbp": 648435.36
+    },
+    {
+     "label": "FIXED CAPACITY",
+     "amountGbp": 495693
+    },
+    {
+     "label": "IT & TELECOMS COMPONENTS",
+     "amountGbp": 204000
+    }
+   ]
+  },
+  {
    "entityId": "adecco-uk-ltd",
    "name": "Adecco UK Ltd",
    "companyNumber": null,
@@ -1185,47 +1227,6 @@
     {
      "label": "CONTINGENT LABOUR OTHER",
      "amountGbp": 12462032.12
-    }
-   ]
-  },
-  {
-   "entityId": "deloitte-llp",
-   "name": "Deloitte LLP",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "DELOITTE LLP"
-   ],
-   "amountGbp": 12211273.15,
-   "transactions": 113,
-   "byFy": {
-    "2016/17": 384000,
-    "2023/24": 728379.6,
-    "2024/25": 4521420,
-    "2025/26": 6482291.05,
-    "2026/27": 95182.5
-   },
-   "topExpenseTypes": [
-    {
-     "label": "IT",
-     "amountGbp": 9315055.69
-    },
-    {
-     "label": "IT RUN COST",
-     "amountGbp": 1741500
-    },
-    {
-     "label": "SYSTEM CLEARING",
-     "amountGbp": 648435.36
-    },
-    {
-     "label": "IT & TELECOMS COMPONENTS",
-     "amountGbp": 204000
-    },
-    {
-     "label": "INTEGRATION LOAN SCHEME",
-     "amountGbp": 180000
     }
    ]
   },
@@ -1517,13 +1518,14 @@
    "rawSuppliers": [
     "MASTEK (UK) LTD"
    ],
-   "amountGbp": 6933391.17,
-   "transactions": 70,
+   "amountGbp": 6968830.21,
+   "transactions": 71,
    "byFy": {
     "2014/15": 3465782.95,
     "2016/17": 769399.96,
     "2022/23": 281012.5,
-    "2023/24": 2417195.76
+    "2023/24": 2417195.76,
+    "2026/27": 35439.04
    },
    "topExpenseTypes": [
     {
@@ -1532,7 +1534,7 @@
     },
     {
      "label": "SYSTEM CLEARING",
-     "amountGbp": 2505304.26
+     "amountGbp": 2540743.3
     },
     {
      "label": "IT, TELECOMMS COMPONENTS",
@@ -1580,22 +1582,22 @@
    "rawSuppliers": [
     "CAPGEMINI UK PLC"
    ],
-   "amountGbp": 6024474.76,
-   "transactions": 81,
+   "amountGbp": 6608353.74,
+   "transactions": 87,
    "byFy": {
     "2022/23": 69954.96,
     "2024/25": 997404.96,
     "2025/26": 4407635.99,
-    "2026/27": 549478.85
+    "2026/27": 1133357.83
    },
    "topExpenseTypes": [
     {
      "label": "SYSTEM CLEARING",
-     "amountGbp": 2226050.13
+     "amountGbp": 2661016.07
     },
     {
      "label": "OUTCOME BASED",
-     "amountGbp": 1741271.63
+     "amountGbp": 1877774.67
     },
     {
      "label": "OTHER ICT COSTS",
@@ -1608,6 +1610,44 @@
     {
      "label": "ADVICE",
      "amountGbp": 415800
+    }
+   ]
+  },
+  {
+   "entityId": "constellia-public-ltd",
+   "name": "Constellia Public Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "CONSTELLIA PUBLIC LTD"
+   ],
+   "amountGbp": 5902181.19,
+   "transactions": 36,
+   "byFy": {
+    "2025/26": 3075503.06,
+    "2026/27": 2826678.13
+   },
+   "topExpenseTypes": [
+    {
+     "label": "ADVICE",
+     "amountGbp": 5360013.63
+    },
+    {
+     "label": "OUTCOME BASED",
+     "amountGbp": 318758.68
+    },
+    {
+     "label": "CONTRACT OUT SERVICE",
+     "amountGbp": 93291.82
+    },
+    {
+     "label": "IT",
+     "amountGbp": 74314
+    },
+    {
+     "label": "CONTINGENT LABOUR OTHER",
+     "amountGbp": 34542.86
     }
    ]
   },
@@ -1707,12 +1747,12 @@
    "rawSuppliers": [
     "SOPRA STERIA LTD"
    ],
-   "amountGbp": 5026715.64,
-   "transactions": 52,
+   "amountGbp": 5126705.51,
+   "transactions": 55,
    "byFy": {
     "2022/23": 644857.5,
     "2025/26": 836226.21,
-    "2026/27": 3545631.93
+    "2026/27": 3645621.8
    },
    "topExpenseTypes": [
     {
@@ -1729,45 +1769,11 @@
     },
     {
      "label": "IT",
-     "amountGbp": 224436.45
+     "amountGbp": 298180.7
     },
     {
      "label": "BASIC SALARY",
      "amountGbp": 171634.56
-    }
-   ]
-  },
-  {
-   "entityId": "constellia-public-ltd",
-   "name": "Constellia Public Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "CONSTELLIA PUBLIC LTD"
-   ],
-   "amountGbp": 4955395.33,
-   "transactions": 30,
-   "byFy": {
-    "2025/26": 3075503.06,
-    "2026/27": 1879892.27
-   },
-   "topExpenseTypes": [
-    {
-     "label": "ADVICE",
-     "amountGbp": 4522084.63
-    },
-    {
-     "label": "OUTCOME BASED",
-     "amountGbp": 318758.68
-    },
-    {
-     "label": "CONTRACT OUT SERVICE",
-     "amountGbp": 93291.82
-    },
-    {
-     "label": "FM PROJECTS NON CAPITAL",
-     "amountGbp": 21260.2
     }
    ]
   },
@@ -1911,15 +1917,20 @@
    "rawSuppliers": [
     "WOMBLE BOND DICKINSON (UK) LLP"
    ],
-   "amountGbp": 4352966.5,
-   "transactions": 1,
+   "amountGbp": 4393673.13,
+   "transactions": 2,
    "byFy": {
-    "2025/26": 4352966.5
+    "2025/26": 4352966.5,
+    "2026/27": 40706.63
    },
    "topExpenseTypes": [
     {
      "label": "EX GRATIA",
      "amountGbp": 4352966.5
+    },
+    {
+     "label": "LEGAL ADVICE",
+     "amountGbp": 40706.63
     }
    ]
   },
@@ -2079,6 +2090,28 @@
     {
      "label": "PRINT",
      "amountGbp": 3656816.94
+    }
+   ]
+  },
+  {
+   "entityId": "kirklees-metropolitan-council",
+   "name": "Kirklees Metropolitan Council",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "KIRKLEES METROPOLITAN COUNCIL"
+   ],
+   "amountGbp": 3491735.08,
+   "transactions": 4,
+   "byFy": {
+    "2025/26": 2299319.4,
+    "2026/27": 1192415.68
+   },
+   "topExpenseTypes": [
+    {
+     "label": "BUSINESS RATES",
+     "amountGbp": 3491735.08
     }
    ]
   },
@@ -2457,27 +2490,6 @@
    ]
   },
   {
-   "entityId": "kirklees-metropolitan-council",
-   "name": "Kirklees Metropolitan Council",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "KIRKLEES METROPOLITAN COUNCIL"
-   ],
-   "amountGbp": 2299319.4,
-   "transactions": 2,
-   "byFy": {
-    "2025/26": 2299319.4
-   },
-   "topExpenseTypes": [
-    {
-     "label": "BUSINESS RATES",
-     "amountGbp": 2299319.4
-    }
-   ]
-  },
-  {
    "entityId": "refugee-action-regions-nw-se-and-sw",
    "name": "Refugee Action ( Regions - Nw, Se & Sw )",
    "companyNumber": null,
@@ -2610,17 +2622,17 @@
    "rawSuppliers": [
     "BIG WORD INTERPRETING SERVICES LTD (THE)"
    ],
-   "amountGbp": 1967685.99,
-   "transactions": 17,
+   "amountGbp": 2015623.9,
+   "transactions": 19,
    "byFy": {
     "2022/23": 1071858.91,
     "2023/24": 793467.08,
-    "2026/27": 102360
+    "2026/27": 150297.91
    },
    "topExpenseTypes": [
     {
      "label": "TRANSLATOR",
-     "amountGbp": 1967685.99
+     "amountGbp": 2015623.9
     }
    ]
   },
@@ -2904,6 +2916,33 @@
    ]
   },
   {
+   "entityId": "cushman-and-wakefield-debenham-tie-leung-ltd",
+   "name": "Cushman & Wakefield Debenham Tie Leung Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "CUSHMAN & WAKEFIELD DEBENHAM TIE LEUNG LTD"
+   ],
+   "amountGbp": 1417311.82,
+   "transactions": 13,
+   "byFy": {
+    "2024/25": 253732.8,
+    "2025/26": 1040054.77,
+    "2026/27": 123524.25
+   },
+   "topExpenseTypes": [
+    {
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 717043.25
+    },
+    {
+     "label": "IT LICENCES (PFI)",
+     "amountGbp": 700268.57
+    }
+   ]
+  },
+  {
    "entityId": "business-systems-uk-ltd",
    "name": "Business Systems (UK) Ltd",
    "companyNumber": null,
@@ -2931,6 +2970,27 @@
    ]
   },
   {
+   "entityId": "wsp-uk-ltd",
+   "name": "Wsp UK Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "WSP UK LTD"
+   ],
+   "amountGbp": 1317387.5,
+   "transactions": 5,
+   "byFy": {
+    "2026/27": 1317387.5
+   },
+   "topExpenseTypes": [
+    {
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 1317387.5
+    }
+   ]
+  },
+  {
    "entityId": "teleperformance-ltd",
    "name": "Teleperformance Ltd",
    "companyNumber": null,
@@ -2948,32 +3008,6 @@
     {
      "label": "TELEPHONE",
      "amountGbp": 1309230.4
-    }
-   ]
-  },
-  {
-   "entityId": "cushman-and-wakefield-debenham-tie-leung-ltd",
-   "name": "Cushman & Wakefield Debenham Tie Leung Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "CUSHMAN & WAKEFIELD DEBENHAM TIE LEUNG LTD"
-   ],
-   "amountGbp": 1293787.57,
-   "transactions": 12,
-   "byFy": {
-    "2024/25": 253732.8,
-    "2025/26": 1040054.77
-   },
-   "topExpenseTypes": [
-    {
-     "label": "IT LICENCES (PFI)",
-     "amountGbp": 700268.57
-    },
-    {
-     "label": "FM PROJECTS NON CAPITAL",
-     "amountGbp": 593519
     }
    ]
   },
@@ -2999,6 +3033,33 @@
     {
      "label": "IT, TELECOMMS COMPONENTS",
      "amountGbp": 333000
+    }
+   ]
+  },
+  {
+   "entityId": "scotland-office",
+   "name": "Scotland Office",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "SCOTLAND OFFICE"
+   ],
+   "amountGbp": 1235220.68,
+   "transactions": 11,
+   "byFy": {
+    "2021/22": 564790.5,
+    "2022/23": 51706,
+    "2026/27": 618724.18
+   },
+   "topExpenseTypes": [
+    {
+     "label": "LEGAL ADVICE",
+     "amountGbp": 953055.5
+    },
+    {
+     "label": "LEGAL REPRESENTATION",
+     "amountGbp": 282165.18
     }
    ]
   },
@@ -3312,29 +3373,24 @@
    ]
   },
   {
-   "entityId": "scotland-office",
-   "name": "Scotland Office",
+   "entityId": "landmarc-support-services-ltd",
+   "name": "Landmarc Support Services Ltd",
    "companyNumber": null,
    "role": "other",
    "mergeBasis": null,
    "rawSuppliers": [
-    "SCOTLAND OFFICE"
+    "LANDMARC SUPPORT SERVICES LTD"
    ],
-   "amountGbp": 959442.18,
-   "transactions": 9,
+   "amountGbp": 861932.26,
+   "transactions": 11,
    "byFy": {
-    "2021/22": 564790.5,
-    "2022/23": 51706,
-    "2026/27": 342945.68
+    "2025/26": 304432.79,
+    "2026/27": 557499.47
    },
    "topExpenseTypes": [
     {
-     "label": "LEGAL ADVICE",
-     "amountGbp": 677277
-    },
-    {
-     "label": "LEGAL REPRESENTATION",
-     "amountGbp": 282165.18
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 861932.26
     }
    ]
   },
@@ -3593,6 +3649,29 @@
    ]
   },
   {
+   "entityId": "pinsent-masons-llp",
+   "name": "Pinsent Masons LLP",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "PINSENT MASONS LLP"
+   ],
+   "amountGbp": 751977.83,
+   "transactions": 7,
+   "byFy": {
+    "2024/25": 27928.08,
+    "2025/26": 532249.67,
+    "2026/27": 191800.08
+   },
+   "topExpenseTypes": [
+    {
+     "label": "LEGAL ADVICE",
+     "amountGbp": 751977.83
+    }
+   ]
+  },
+  {
    "entityId": "london-borough-of-barnet-1-g",
    "name": "London Borough of Barnet 1 (g)",
    "companyNumber": null,
@@ -3736,29 +3815,6 @@
    ]
   },
   {
-   "entityId": "pinsent-masons-llp",
-   "name": "Pinsent Masons LLP",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "PINSENT MASONS LLP"
-   ],
-   "amountGbp": 645780.71,
-   "transactions": 6,
-   "byFy": {
-    "2024/25": 27928.08,
-    "2025/26": 532249.67,
-    "2026/27": 85602.96
-   },
-   "topExpenseTypes": [
-    {
-     "label": "LEGAL ADVICE",
-     "amountGbp": 645780.71
-    }
-   ]
-  },
-  {
    "entityId": "buckinghamshire-county-council-1-g",
    "name": "Buckinghamshire County Council 1 (g)",
    "companyNumber": null,
@@ -3786,6 +3842,41 @@
    ]
   },
   {
+   "entityId": "allied-publicity-services-manchester-limited",
+   "name": "Allied Publicity Services (manchester) Limited",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "ALLIED PUBLICITY SERVICES (MANCHESTER) LIMITED"
+   ],
+   "amountGbp": 627742.67,
+   "transactions": 12,
+   "byFy": {
+    "2022/23": 75129.6,
+    "2023/24": 181459.2,
+    "2026/27": 371153.87
+   },
+   "topExpenseTypes": [
+    {
+     "label": "MARKETING & MEDIA",
+     "amountGbp": 256588.8
+    },
+    {
+     "label": "OFFICE MACHINERY",
+     "amountGbp": 170970.68
+    },
+    {
+     "label": "OTHER",
+     "amountGbp": 106666.79
+    },
+    {
+     "label": "PRINTING",
+     "amountGbp": 93516.4
+    }
+   ]
+  },
+  {
    "entityId": "lincolnshire-county-council-1-g",
    "name": "Lincolnshire County Council 1 (g)",
    "companyNumber": null,
@@ -3809,6 +3900,27 @@
     {
      "label": "GRANTS",
      "amountGbp": 135073
+    }
+   ]
+  },
+  {
+   "entityId": "nhs-surrey-and-sussex-icb",
+   "name": "NHS Surrey & Sussex Icb",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "NHS SURREY & SUSSEX ICB"
+   ],
+   "amountGbp": 618833.6,
+   "transactions": 1,
+   "byFy": {
+    "2026/27": 618833.6
+   },
+   "topExpenseTypes": [
+    {
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 618833.6
     }
    ]
   },
@@ -3899,63 +4011,6 @@
     {
      "label": "GRANT",
      "amountGbp": 600000
-    }
-   ]
-  },
-  {
-   "entityId": "landmarc-support-services-ltd",
-   "name": "Landmarc Support Services Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "LANDMARC SUPPORT SERVICES LTD"
-   ],
-   "amountGbp": 593328.75,
-   "transactions": 8,
-   "byFy": {
-    "2025/26": 304432.79,
-    "2026/27": 288895.96
-   },
-   "topExpenseTypes": [
-    {
-     "label": "FM PROJECTS NON CAPITAL",
-     "amountGbp": 593328.75
-    }
-   ]
-  },
-  {
-   "entityId": "allied-publicity-services-manchester-limited",
-   "name": "Allied Publicity Services (manchester) Limited",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "ALLIED PUBLICITY SERVICES (MANCHESTER) LIMITED"
-   ],
-   "amountGbp": 591488.07,
-   "transactions": 11,
-   "byFy": {
-    "2022/23": 75129.6,
-    "2023/24": 181459.2,
-    "2026/27": 334899.27
-   },
-   "topExpenseTypes": [
-    {
-     "label": "MARKETING & MEDIA",
-     "amountGbp": 256588.8
-    },
-    {
-     "label": "OFFICE MACHINERY",
-     "amountGbp": 170970.68
-    },
-    {
-     "label": "PRINTING",
-     "amountGbp": 93516.4
-    },
-    {
-     "label": "OTHER",
-     "amountGbp": 70412.19
     }
    ]
   },
@@ -4627,6 +4682,37 @@
    ]
   },
   {
+   "entityId": "cabinet-office",
+   "name": "Cabinet Office",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "CABINET OFFICE"
+   ],
+   "amountGbp": 447548.12,
+   "transactions": 7,
+   "byFy": {
+    "2021/22": 68420,
+    "2022/23": 314891.05,
+    "2026/27": 64237.07
+   },
+   "topExpenseTypes": [
+    {
+     "label": "RECRUITMENT ADVERTISING",
+     "amountGbp": 214437.07
+    },
+    {
+     "label": "AD PRODUCTION",
+     "amountGbp": 143139.82
+    },
+    {
+     "label": "RUN COST DEVICE PFI",
+     "amountGbp": 89971.23
+    }
+   ]
+  },
+  {
    "entityId": "specialist-computer-centres-plc",
    "name": "Specialist Computer Centres PLC",
    "companyNumber": null,
@@ -4675,6 +4761,32 @@
    ]
   },
   {
+   "entityId": "mitie-care-and-custody",
+   "name": "Mitie Care & Custody",
+   "companyNumber": null,
+   "role": "custodial",
+   "mergeBasis": "Mitie group companies are kept separate. Mitie FM, Mitie Ltd and Mitie Care & Custody are distinct registered companies doing different work.",
+   "rawSuppliers": [
+    "MITIE CARE & CUSTODY LTD"
+   ],
+   "amountGbp": 434060.57,
+   "transactions": 10,
+   "byFy": {
+    "2023/24": 26201,
+    "2026/27": 407859.57
+   },
+   "topExpenseTypes": [
+    {
+     "label": "CONTRACTS",
+     "amountGbp": 279652.61
+    },
+    {
+     "label": "IN COUNTRY ESCORT",
+     "amountGbp": 154407.96
+    }
+   ]
+  },
+  {
    "entityId": "capita",
    "name": "Capita",
    "companyNumber": null,
@@ -4713,6 +4825,27 @@
     {
      "label": "IT & TELECOMS COMPONENTS",
      "amountGbp": 422209.31
+    }
+   ]
+  },
+  {
+   "entityId": "tetra-tech-ltd",
+   "name": "Tetra Tech Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "TETRA TECH LTD"
+   ],
+   "amountGbp": 418357.83,
+   "transactions": 2,
+   "byFy": {
+    "2026/27": 418357.83
+   },
+   "topExpenseTypes": [
+    {
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 418357.83
     }
    ]
   },
@@ -4926,36 +5059,6 @@
     {
      "label": "INTEGRATION LOAN SCHEME",
      "amountGbp": 386823.35
-    }
-   ]
-  },
-  {
-   "entityId": "cabinet-office",
-   "name": "Cabinet Office",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "CABINET OFFICE"
-   ],
-   "amountGbp": 383311.05,
-   "transactions": 6,
-   "byFy": {
-    "2021/22": 68420,
-    "2022/23": 314891.05
-   },
-   "topExpenseTypes": [
-    {
-     "label": "RECRUITMENT ADVERTISING",
-     "amountGbp": 150200
-    },
-    {
-     "label": "AD PRODUCTION",
-     "amountGbp": 143139.82
-    },
-    {
-     "label": "RUN COST DEVICE PFI",
-     "amountGbp": 89971.23
     }
    ]
   },
@@ -5333,28 +5436,23 @@
    ]
   },
   {
-   "entityId": "mitie-care-and-custody",
-   "name": "Mitie Care & Custody",
+   "entityId": "vf-services-uk-ltd",
+   "name": "Vf Services UK Ltd",
    "companyNumber": null,
-   "role": "custodial",
-   "mergeBasis": "Mitie group companies are kept separate. Mitie FM, Mitie Ltd and Mitie Care & Custody are distinct registered companies doing different work.",
+   "role": "other",
+   "mergeBasis": null,
    "rawSuppliers": [
-    "MITIE CARE & CUSTODY LTD"
+    "VF SERVICES UK LTD"
    ],
-   "amountGbp": 298107.38,
-   "transactions": 7,
+   "amountGbp": 302159.35,
+   "transactions": 1,
    "byFy": {
-    "2023/24": 26201,
-    "2026/27": 271906.38
+    "2026/27": 302159.35
    },
    "topExpenseTypes": [
     {
-     "label": "CONTRACTS",
-     "amountGbp": 195168.74
-    },
-    {
-     "label": "IN COUNTRY ESCORT",
-     "amountGbp": 102938.64
+     "label": "BUILDING SERVICE CHARGES",
+     "amountGbp": 302159.35
     }
    ]
   },
@@ -5455,6 +5553,40 @@
    ]
   },
   {
+   "entityId": "crown-solicitors-office",
+   "name": "Crown Solicitors Office",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "CROWN SOLICITORS OFFICE"
+   ],
+   "amountGbp": 274055.77,
+   "transactions": 8,
+   "byFy": {
+    "2021/22": 56853.48,
+    "2026/27": 217202.29
+   },
+   "topExpenseTypes": [
+    {
+     "label": "LEGAL ADVICE",
+     "amountGbp": 151478.69
+    },
+    {
+     "label": "LEGAL REPRESENTATION",
+     "amountGbp": 90091.08
+    },
+    {
+     "label": "PUBLIC",
+     "amountGbp": 23000
+    },
+    {
+     "label": "ADVERSE LEGAL",
+     "amountGbp": 9486
+    }
+   ]
+  },
+  {
    "entityId": "atos-i-t-services-uk-ltd",
    "name": "Atos I T Services UK Ltd",
    "companyNumber": null,
@@ -5539,6 +5671,27 @@
    ]
   },
   {
+   "entityId": "gleeds-cost-management-ltd",
+   "name": "Gleeds Cost Management Ltd",
+   "companyNumber": null,
+   "role": "other",
+   "mergeBasis": null,
+   "rawSuppliers": [
+    "GLEEDS COST MANAGEMENT LTD"
+   ],
+   "amountGbp": 255605.8,
+   "transactions": 3,
+   "byFy": {
+    "2026/27": 255605.8
+   },
+   "topExpenseTypes": [
+    {
+     "label": "FM PROJECTS NON CAPITAL",
+     "amountGbp": 255605.8
+    }
+   ]
+  },
+  {
    "entityId": "interserve-facilities-management-ltd",
    "name": "Interserve (facilities Management) Ltd",
    "companyNumber": null,
@@ -5586,27 +5739,6 @@
     {
      "label": "GRANTS",
      "amountGbp": 67863
-    }
-   ]
-  },
-  {
-   "entityId": "tetra-tech-ltd",
-   "name": "Tetra Tech Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "TETRA TECH LTD"
-   ],
-   "amountGbp": 251570.23,
-   "transactions": 1,
-   "byFy": {
-    "2026/27": 251570.23
-   },
-   "topExpenseTypes": [
-    {
-     "label": "FM PROJECTS NON CAPITAL",
-     "amountGbp": 251570.23
     }
    ]
   },
@@ -5747,40 +5879,6 @@
     {
      "label": "GRANTS",
      "amountGbp": 36930
-    }
-   ]
-  },
-  {
-   "entityId": "crown-solicitors-office",
-   "name": "Crown Solicitors Office",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "CROWN SOLICITORS OFFICE"
-   ],
-   "amountGbp": 228796.87,
-   "transactions": 6,
-   "byFy": {
-    "2021/22": 56853.48,
-    "2026/27": 171943.39
-   },
-   "topExpenseTypes": [
-    {
-     "label": "LEGAL ADVICE",
-     "amountGbp": 106219.79
-    },
-    {
-     "label": "LEGAL REPRESENTATION",
-     "amountGbp": 90091.08
-    },
-    {
-     "label": "PUBLIC",
-     "amountGbp": 23000
-    },
-    {
-     "label": "ADVERSE LEGAL",
-     "amountGbp": 9486
     }
    ]
   },
@@ -7057,27 +7155,6 @@
     {
      "label": "GRANT",
      "amountGbp": 47570
-    }
-   ]
-  },
-  {
-   "entityId": "gleeds-cost-management-ltd",
-   "name": "Gleeds Cost Management Ltd",
-   "companyNumber": null,
-   "role": "other",
-   "mergeBasis": null,
-   "rawSuppliers": [
-    "GLEEDS COST MANAGEMENT LTD"
-   ],
-   "amountGbp": 95047.84,
-   "transactions": 2,
-   "byFy": {
-    "2026/27": 95047.84
-   },
-   "topExpenseTypes": [
-    {
-     "label": "FM PROJECTS NON CAPITAL",
-     "amountGbp": 95047.84
     }
    ]
   },

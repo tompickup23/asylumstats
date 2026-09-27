@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "04_September_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "25_September_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-09-03",
-  "latestWeekEnding": "2026-08-30",
+  "coverageEnd": "2026-09-24",
+  "latestWeekEnding": "2026-09-20",
   "yearToDate": {
-    "asAt": "2026-09-03",
+    "asAt": "2026-09-24",
     "year": 2026,
-    "arrivals": 16513,
+    "arrivals": 18609,
     "priorYear": 2025,
-    "priorYearArrivals": 29003,
-    "changePct": -43.1
+    "priorYearArrivals": 32188,
+    "changePct": -42.2
   },
   "latestWeek": {
-    "weekEnding": "2026-08-30",
-    "arrivals": 616,
-    "boats": 10,
-    "migrantsPrevented": 339,
-    "eventsPrevented": 13
+    "weekEnding": "2026-09-20",
+    "arrivals": 199,
+    "boats": 3,
+    "migrantsPrevented": 40,
+    "eventsPrevented": 5
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3195,6 +3195,27 @@
       "boats": 10,
       "migrantsPrevented": 339,
       "eventsPrevented": 13
+    },
+    {
+      "weekEnding": "2026-09-06",
+      "arrivals": 625,
+      "boats": 8,
+      "migrantsPrevented": 282,
+      "eventsPrevented": 10
+    },
+    {
+      "weekEnding": "2026-09-13",
+      "arrivals": 143,
+      "boats": 2,
+      "migrantsPrevented": 100,
+      "eventsPrevented": 2
+    },
+    {
+      "weekEnding": "2026-09-20",
+      "arrivals": 199,
+      "boats": 3,
+      "migrantsPrevented": 40,
+      "eventsPrevented": 5
     }
   ],
   "daily": [
@@ -19037,6 +19058,111 @@
       "date": "2026-09-03",
       "arrivals": 0,
       "boats": 0
+    },
+    {
+      "date": "2026-09-04",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-05",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-06",
+      "arrivals": 625,
+      "boats": 8
+    },
+    {
+      "date": "2026-09-07",
+      "arrivals": 143,
+      "boats": 2
+    },
+    {
+      "date": "2026-09-08",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-09",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-10",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-11",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-12",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-13",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-14",
+      "arrivals": 144,
+      "boats": 2
+    },
+    {
+      "date": "2026-09-15",
+      "arrivals": 55,
+      "boats": 1
+    },
+    {
+      "date": "2026-09-16",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-17",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-18",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-19",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-20",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-09-21",
+      "arrivals": 150,
+      "boats": 3
+    },
+    {
+      "date": "2026-09-22",
+      "arrivals": 154,
+      "boats": 3
+    },
+    {
+      "date": "2026-09-23",
+      "arrivals": 781,
+      "boats": 10
+    },
+    {
+      "date": "2026-09-24",
+      "arrivals": 44,
+      "boats": 1
     }
   ]
 }

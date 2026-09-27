@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-07T14:08:59.412Z",
+  "generatedAt": "2026-09-27T10:28:28.693Z",
   "localSnapshotDate": "2026-06-30",
   "routeFamilies": [
     {
@@ -4550,20 +4550,20 @@
     ],
     "postDecisionPath": {
       "appeals": {
-        "latestQuarterLabel": "Q4 2025/26",
-        "dataCompleteThroughLabel": "Q4 2025/26",
+        "latestQuarterLabel": "Q1 2026/27",
+        "dataCompleteThroughLabel": "Q1 2026/27",
         "periodBasis": "financial_year_quarter",
-        "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q4 2025/26 covers January to March 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
+        "periodBasisNote": "MOJ publishes tribunal statistics on financial-year quarters, so Q1 2026/27 covers April to June 2026. The Home Office claims, decisions, backlog, support and returns series elsewhere on this site use calendar quarters. The two bases are not interchangeable and should not be plotted on a single axis.",
         "scopeLabel": "First-tier Tribunal, Immigration and Asylum Chamber, all case types",
         "scopeNote": "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.",
-        "provisionalNote": "Q4 2025/26 figures are provisional and subject to revision. Earlier quarters of 2025/26 are revised as later editions land, and 2024/25 is now final.",
-        "sourceLabel": "Tribunal Statistics Quarterly: January to March 2026",
-        "sourceReleaseDate": "2026-06-11",
-        "nextEditionDate": "2026-09-10",
-        "meanWeeksToClear": 61,
-        "meanWeeksToClearChange": 11,
-        "allowedRatePct": 39,
-        "allowedRatePctPrevious": 42.5,
+        "provisionalNote": "Q1 2026/27 figures are provisional and subject to revision. MOJ marks Q4 2025/26 as revised in this edition. Earlier periods are final.",
+        "sourceLabel": "Tribunal Statistics Quarterly: April to June 2026",
+        "sourceReleaseDate": "2026-09-10",
+        "nextEditionDate": "2026-12-10",
+        "meanWeeksToClear": 65,
+        "meanWeeksToClearChange": 13,
+        "allowedRatePct": 38,
+        "allowedRatePctPrevious": 40,
         "series": {
           "receipts": [
             {
@@ -5002,24 +5002,30 @@
               "periodLabel": "Q1 2025/26",
               "periodEnd": "2025-06-30",
               "value": 27534,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q2 2025/26",
               "periodEnd": "2025-09-30",
               "value": 30309,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q3 2025/26",
               "periodEnd": "2025-12-31",
               "value": 32165,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q4 2025/26",
               "periodEnd": "2026-03-31",
-              "value": 27689,
+              "value": 27714,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q1 2026/27",
+              "periodEnd": "2026-06-30",
+              "value": 21762,
               "seriesStatus": "provisional"
             }
           ],
@@ -5460,24 +5466,30 @@
               "periodLabel": "Q1 2025/26",
               "periodEnd": "2025-06-30",
               "value": 12893,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q2 2025/26",
               "periodEnd": "2025-09-30",
               "value": 14756,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q3 2025/26",
               "periodEnd": "2025-12-31",
               "value": 13903,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q4 2025/26",
               "periodEnd": "2026-03-31",
-              "value": 15317,
+              "value": 15293,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q1 2026/27",
+              "periodEnd": "2026-06-30",
+              "value": 16786,
               "seriesStatus": "provisional"
             }
           ],
@@ -5744,6 +5756,12 @@
               "periodLabel": "Q4 2025/26",
               "periodEnd": "2026-03-31",
               "value": 151767,
+              "seriesStatus": "final"
+            },
+            {
+              "periodLabel": "Q1 2026/27",
+              "periodEnd": "2026-06-30",
+              "value": 155798,
               "seriesStatus": "final"
             }
           ],
@@ -6184,24 +6202,30 @@
               "periodLabel": "Q1 2025/26",
               "periodEnd": "2025-06-30",
               "value": 40,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q2 2025/26",
               "periodEnd": "2025-09-30",
               "value": 38,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q3 2025/26",
               "periodEnd": "2025-12-31",
               "value": 36,
-              "seriesStatus": "revised"
+              "seriesStatus": "final"
             },
             {
               "periodLabel": "Q4 2025/26",
               "periodEnd": "2026-03-31",
               "value": 39,
+              "seriesStatus": "revised"
+            },
+            {
+              "periodLabel": "Q1 2026/27",
+              "periodEnd": "2026-06-30",
+              "value": 38,
               "seriesStatus": "provisional"
             }
           ]
@@ -6209,22 +6233,22 @@
         "latestDeterminationBreakdown": [
           {
             "label": "Receipts",
-            "value": 27689,
+            "value": 21762,
             "metricId": "fttiac_receipts"
           },
           {
             "label": "Disposals",
-            "value": 15317,
+            "value": 16786,
             "metricId": "fttiac_disposals"
           },
           {
             "label": "Determined at hearing or on paper",
-            "value": 6978,
+            "value": 7512,
             "metricId": "fttiac_determined_at_hearing"
           },
           {
             "label": "Open caseload at quarter end",
-            "value": 151767,
+            "value": 155798,
             "metricId": "fttiac_open_caseload"
           }
         ],
@@ -6232,29 +6256,29 @@
           {
             "id": "asylum_protection",
             "label": "Asylum, protection and revocation of protection",
-            "receipts": 14748,
-            "disposals": 7799,
-            "openCaseload": 87450,
-            "allowedRatePct": 40,
-            "meanWeeksToClear": 67
+            "receipts": 11596,
+            "disposals": 8709,
+            "openCaseload": 90341,
+            "allowedRatePct": 39,
+            "meanWeeksToClear": 72
           },
           {
             "id": "human_rights",
             "label": "Human rights",
-            "receipts": 4713,
-            "disposals": 2885,
-            "openCaseload": 30867,
-            "allowedRatePct": 44,
-            "meanWeeksToClear": 71
+            "receipts": 3762,
+            "disposals": 3013,
+            "openCaseload": 31459,
+            "allowedRatePct": 42,
+            "meanWeeksToClear": 74
           },
           {
             "id": "eea_free_movement",
             "label": "EEA free movement",
-            "receipts": 8185,
-            "disposals": 4587,
-            "openCaseload": 33149,
-            "allowedRatePct": 30,
-            "meanWeeksToClear": 46
+            "receipts": 6328,
+            "disposals": 5015,
+            "openCaseload": 33671,
+            "allowedRatePct": 26,
+            "meanWeeksToClear": 48
           }
         ]
       },
@@ -8678,10 +8702,10 @@
     },
     {
       "source_id": "moj_tribunals",
-      "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
+      "source_url": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-april-to-june-2026",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6aa18eb1c5796a7a179c658d/Tribunals_Statistics_Quarterly_Main_Tables_Q1_2026_27.ods",
       "methodology_url": "https://www.gov.uk/government/collections/tribunals-statistics",
-      "release_date": "2026-06-11"
+      "release_date": "2026-09-10"
     }
   ]
 }
