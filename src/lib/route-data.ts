@@ -131,6 +131,9 @@ export interface RouteDashboard {
       initialGrants: RouteSeriesPoint[];
       initialRefusals: RouteSeriesPoint[];
       initialWithdrawals: RouteSeriesPoint[];
+      /** Main applicants only: the basis of the Home Office's published grant rate. */
+      mainApplicantGrants: RouteSeriesPoint[];
+      mainApplicantRefusals: RouteSeriesPoint[];
     };
     stockSeries: {
       awaitingInitialDecision: RouteSeriesPoint[];
