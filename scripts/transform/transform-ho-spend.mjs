@@ -122,6 +122,18 @@ function parseDate(value) {
   return null;
 }
 
+/**
+ * The day a spreadsheet date cell shows, as "YYYY-MM-DD". SheetJS builds these cells at
+ * LOCAL midnight, so toISOString() reads the day before anywhere east of UTC, and in
+ * British Summer Time too. That shifted four 2012-13 ODS files by a day, which broke
+ * their dedupe against the CSV copies of the same months: a run on a laptop in September
+ * put 2013/14 £16.5m above the same run on CI. Local getters give the day as displayed.
+ */
+function calendarDay(date) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
 /** UK financial year, April to March, as "2024/25". */
 function financialYear(date) {
   if (!date) return null;
@@ -237,7 +249,7 @@ function loadRows() {
         rows.push({
           file: entry.file,
           publication: entry.publication,
-          date: rec.date instanceof Date ? rec.date.toISOString().slice(0, 10) : String(rec.date ?? "").trim(),
+          date: rec.date instanceof Date ? calendarDay(rec.date) : String(rec.date ?? "").trim(),
           expenseType: String(rec.expenseType ?? "").trim(),
           expenseArea: String(rec.expenseArea ?? "").trim(),
           supplier: String(rec.supplier ?? "").trim(),
