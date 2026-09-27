@@ -33,6 +33,7 @@ import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
 import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
 import { consistentBand, consistentBandSeries } from "../../lib/projection-consistency";
+import { whiteBritishShareRange } from "../../lib/ethnic-projections";
 import { plausibleThrough, isTruncated, publishableValue } from "../../lib/projection-plausibility";
 import { getMPsForArea } from "../../lib/mp-data";
 import schoolValidationData from "../../data/live/school-validation.json";
@@ -184,6 +185,10 @@ const wbi2051 = publishableValue(
   ethnicProjection?.projections?.["2051"]?.white_british ?? null
 );
 const wbi2051Band = consistentBand(wbi2051, stochasticData?.[2051]?.wbi ?? null);
+// Only where the stochastic interval is withheld. 220 of 361 areas publish that one; the
+// remaining 141 printed a bare 24.6%-style figure at a thirty-year horizon with nothing on
+// it. This gives those an interval without ever putting two different kinds on one number.
+const wbi2051Sensitivity = wbi2051Band ? null : whiteBritishShareRange(area.areaCode, 2051);
 
 const relChartLines = religionData ? (() => {
   const relGroups = [
@@ -569,6 +574,9 @@ const areaCountyName = countyForAreaCode(area.areaCode);
             {wbi2051 != null ? ` to ${wbi2051.toFixed(1)}% (2051).` : `, projected to ${projHorizon ?? 2021}.`}
             {wbThreshold ? ` White British minority by ~${wbThreshold.year}.` : ""}
             {wbi2051Band ? ` 80% CI: ${wbi2051Band.p10}, ${wbi2051Band.p90}%.` : ""}
+            {wbi2051Sensitivity
+              ? ` On the model's measured out-of-sample error, ${wbi2051Sensitivity.low.toFixed(1)} to ${wbi2051Sensitivity.high.toFixed(1)}%.`
+              : ""}
           </p>
         </div>
       </div>

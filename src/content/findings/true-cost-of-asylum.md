@@ -1,5 +1,5 @@
 ---
-headline: "The true cost of asylum: £234 per income taxpayer, per year"
+headline: "What asylum costs: £234 per income taxpayer a year, in a range of £212 to £257"
 date: "2026-08-13"
 category: spending
 content_type: "article"
@@ -9,11 +9,20 @@ verdict: critical
 source_url: "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026"
 source_label: "Home Office Annual Report and Accounts 2025-26, NAO, MoJ, HMCTS, DfE"
 summary: "The total annual cost of the UK asylum system is around £8.0 billion, or £234 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
-seo_title: "The true cost of asylum: £234 per income taxpayer a year"
-seo_description: "The UK asylum system costs around £8.0 billion a year, or £234 per income taxpayer. The Home Office spent an audited £4,181 million in 2025-26."
+seo_title: "What asylum costs per income taxpayer: £234 a year, £212 to £257"
+seo_description: "About £8.0 billion a year, or £234 per income taxpayer in a range of £212 to £257. An audited £4,181 million of that is Home Office spend."
 video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/og/findings/true-cost-of-asylum.png"
 ---
+
+> **Correction, 27 September 2026.** This was headlined "The true cost of asylum" and is
+> not that. The central figure sits in a defensible range £1.6 billion wide, and 8% of the
+> total is attributed from an audited total rather than measured directly, so what the
+> piece produces is a comprehensive central estimate and the headline claimed a settled
+> number. "True" also invited the counterfactual reading the article itself rejects
+> further down: this is what the system costs divided by taxpayers, not a sum that would
+> be saved. The headline now carries the range. No figure has changed, and the URL is
+> unchanged so existing links still work.
 
 > **Third edition, 13 August 2026.** Rebuilt on the Home Office Annual Report and Accounts 2025-26 (HC 440), published 14 July 2026, which this site did not previously use. The departmental costs are now audited outturn rather than our estimates. The central total moves from £8.05 billion to £7.97 billion, and £236 per taxpayer to £234.
 >

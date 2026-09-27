@@ -22,14 +22,23 @@ describe.skipIf(!existsSync(DIST))("sitemap lastmod", () => {
     expect(entries.length).toBeGreaterThan(100);
   });
 
-  it("never stamps the build date", () => {
+  it("never stamps the build date across the site", () => {
+    // Breadth, not the date itself. This used to fail on ANY URL dated today, which made
+    // it impossible to publish anything on the day it was written: a correction logged
+    // this morning legitimately moves /corrections/ to today, and the guard called that a
+    // build stamp. What a build stamp actually looks like is today's date on everything,
+    // so that is what is asserted. A handful of same-day edits is publishing working.
     const today = new Date().toISOString().slice(0, 10);
-    const stamped = entries.filter((e) => e.lastmod === today);
+    const dated = entries.filter((e) => e.lastmod);
+    const stampedToday = dated.filter((e) => e.lastmod === today);
+    const share = stampedToday.length / Math.max(dated.length, 1);
+
     expect(
-      stamped.map((e) => e.loc),
-      "lastmod equals today's date, which is what a build stamp looks like. Derive it " +
-        "from the release the page renders instead, or leave it off."
-    ).toEqual([]);
+      share < 0.1,
+      `${stampedToday.length} of ${dated.length} URLs carry today's date. That is the shape ` +
+        "of a build stamp rather than a day's edits. Derive lastmod from the release the " +
+        "page renders, or leave it off."
+    ).toBe(true);
   });
 
   it("never dates a page in the future", () => {
