@@ -12,15 +12,15 @@ const FINANCIAL_QUARTER = /^Q[1-4] \d{4}\/\d{2}$/;
 describe("MOJ tribunal appeals mart", () => {
   it("names the release it was built from", () => {
     expect(tribunal.datasetId).toBe("moj_tribunals");
-    expect(tribunal.release.title).toBe("Tribunal Statistics Quarterly: January to March 2026");
-    expect(tribunal.release.publishedDate).toBe("2026-06-11");
-    expect(tribunal.release.nextEditionDate).toBe("2026-09-10");
-    expect(tribunal.latestPeriodLabel).toBe("Q4 2025/26");
+    expect(tribunal.release.title).toBe("Tribunal Statistics Quarterly: April to June 2026");
+    expect(tribunal.release.publishedDate).toBe("2026-09-10");
+    expect(tribunal.release.nextEditionDate).toBe("2026-12-10");
+    expect(tribunal.latestPeriodLabel).toBe("Q1 2026/27");
   });
 
   /**
    * The assertions above pin the current edition on purpose, so a new release is noticed.
-   * These pin the SHAPE, so that when the April to June edition lands and those literals are
+   * These pin the SHAPE, so that when the next edition lands and those literals are
    * updated, the parts that must stay internally consistent still are. The release is now
    * discovered from GOV.UK rather than written into the fetcher, and the failure this guards
    * against is the discovery returning one quarter while the labels describe another.
@@ -46,7 +46,14 @@ describe("MOJ tribunal appeals mart", () => {
     expect(tribunal.previousPeriodLabel).toBe(
       `${quarter} ${previousStart}/${String((previousStart + 1) % 100).padStart(2, "0")}`
     );
-    expect(tribunal.latestAnnualLabel).toBe(year);
+
+    // The annual comparison is the latest COMPLETE financial year, which only a Q4 edition
+    // supplies. On a Q1 edition the quarter's own year has one quarter and no annual total.
+    const completeStart = quarter === "Q4" ? previousStart + 1 : previousStart;
+    expect(tribunal.latestAnnualLabel).toBe(
+      `${completeStart}/${String((completeStart + 1) % 100).padStart(2, "0")}`
+    );
+    expect(tribunal.headline.annualReceipts.latest).toBeGreaterThan(tribunal.headline.receipts.latest);
   });
 
   it("carries no release period in its source id", () => {
@@ -58,26 +65,27 @@ describe("MOJ tribunal appeals mart", () => {
     }
   });
 
-  // These are the published headline figures for Q4 2025/26 against Q4 2024/25. The transform
+  // These are the published headline figures for Q1 2026/27 against Q1 2025/26, and 2025/26
+  // (revised) against 2024/25 for the annual line. The transform
   // asserts them at build time too, so a silent change in the MOJ table cannot slip through.
   it("matches the published headline figures", () => {
-    expect(tribunal.headline.receipts.latest).toBe(27689);
-    expect(tribunal.headline.receipts.previous).toBe(26273);
-    expect(tribunal.headline.disposals.latest).toBe(15317);
-    expect(tribunal.headline.disposals.previous).toBe(11420);
-    expect(tribunal.headline.openCaseload.latest).toBe(151767);
-    expect(tribunal.headline.openCaseload.previous).toBe(90389);
-    expect(tribunal.headline.allowedRatePct.latest).toBe(39);
-    expect(tribunal.headline.allowedRatePct.previous).toBe(42.5);
-    expect(tribunal.headline.annualReceipts.latest).toBe(117697);
+    expect(tribunal.headline.receipts.latest).toBe(21762);
+    expect(tribunal.headline.receipts.previous).toBe(27534);
+    expect(tribunal.headline.disposals.latest).toBe(16786);
+    expect(tribunal.headline.disposals.previous).toBe(12893);
+    expect(tribunal.headline.openCaseload.latest).toBe(155798);
+    expect(tribunal.headline.openCaseload.previous).toBe(105522);
+    expect(tribunal.headline.allowedRatePct.latest).toBe(38);
+    expect(tribunal.headline.allowedRatePct.previous).toBe(40);
+    expect(tribunal.headline.annualReceipts.latest).toBe(117722);
     expect(tribunal.headline.annualReceipts.previous).toBe(79074);
   });
 
   it("splits the caseload by case type", () => {
     const asylum = tribunal.caseTypes.find((row: { id: string }) => row.id === "asylum_protection");
-    expect(asylum.openCaseload.latest).toBe(87450);
-    expect(asylum.openCaseload.previous).toBe(50976);
-    expect(asylum.meanWeeksToClear).toBe(67);
+    expect(asylum.openCaseload.latest).toBe(90341);
+    expect(asylum.openCaseload.previous).toBe(59925);
+    expect(asylum.meanWeeksToClear).toBe(72);
 
     for (const caseType of tribunal.caseTypes) {
       expect(typeof caseType.meanWeeksToClear).toBe("number");
@@ -88,9 +96,9 @@ describe("MOJ tribunal appeals mart", () => {
   it("reports both the quarterly and the annual mean time to clear", () => {
     // The two bases give different answers, so each is published with its basis named rather
     // than collapsed into a single "mean time to clear".
-    expect(tribunal.timeliness.quarterly.latestMeanWeeks).toBe(61);
-    expect(tribunal.timeliness.quarterly.previousMeanWeeks).toBe(50);
-    expect(tribunal.timeliness.quarterly.changeWeeks).toBe(11);
+    expect(tribunal.timeliness.quarterly.latestMeanWeeks).toBe(65);
+    expect(tribunal.timeliness.quarterly.previousMeanWeeks).toBe(52);
+    expect(tribunal.timeliness.quarterly.changeWeeks).toBe(13);
     expect(tribunal.timeliness.annual.latestMeanWeeks).toBe(56);
     expect(tribunal.timeliness.annual.changeWeeks).toBe(9);
   });
@@ -104,8 +112,13 @@ describe("MOJ tribunal appeals mart", () => {
 
     // Q4 of a financial year ends on 31 March of the following calendar year.
     const latest = tribunal.series.receipts.at(-1);
-    expect(latest.periodLabel).toBe("Q4 2025/26");
-    expect(latest.periodEnd).toBe("2026-03-31");
+    expect(latest.periodLabel).toBe("Q1 2026/27");
+    expect(latest.periodEnd).toBe("2026-06-30");
+
+    const lastQuarterOfYear = tribunal.series.receipts.find(
+      (point: { periodLabel: string }) => point.periodLabel === "Q4 2025/26"
+    );
+    expect(lastQuarterOfYear.periodEnd).toBe("2026-03-31");
 
     const firstQuarter = tribunal.series.receipts.find(
       (point: { periodLabel: string }) => point.periodLabel === "Q1 2025/26"
@@ -118,9 +131,10 @@ describe("MOJ tribunal appeals mart", () => {
       tribunal.revisionStatusByPeriod.map((row: { periodLabel: string }) => [row.periodLabel, row])
     );
 
-    expect(byLabel.get("Q4 2025/26")).toMatchObject({ status: "provisional" });
-    expect(byLabel.get("Q3 2025/26")).toMatchObject({ status: "revised" });
-    expect(byLabel.get("Q4 2024/25")).toMatchObject({ status: "final" });
+    // From this edition MOJ prints the markers as superscripts ("Q1ᵖ", "Q4ʳ").
+    expect(byLabel.get("Q1 2026/27")).toMatchObject({ status: "provisional" });
+    expect(byLabel.get("Q4 2025/26")).toMatchObject({ status: "revised" });
+    expect(byLabel.get("Q3 2025/26")).toMatchObject({ status: "final" });
 
     // The status parsed from the ODS revision markers must agree with the status published in
     // the national CSV.

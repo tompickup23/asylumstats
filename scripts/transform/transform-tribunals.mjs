@@ -210,14 +210,17 @@ function normaliseHeader(value) {
 
 // Financial-year labels and quarter cells carry revision markers: "r" for revised as part of
 // the annual reconciliation exercise, "p" for provisional and subject to later revision.
+// From the April to June 2026 edition MOJ writes them as superscript letters ("2025/26ʳ",
+// "Q1ᵖ"). An unrecognised marker is not harmless: "Q4ʳ" fails the quarter pattern and the
+// row is read as an ANNUAL total, so one quarter's receipts stood in for the whole year.
 function splitRevisionMarker(value) {
   const text = String(value ?? "").trim();
-  const match = /^(.*?)(r|p)$/.exec(text);
+  const match = /^(.*?)(r|p|ʳ|ᵖ)$/u.exec(text);
   if (!match) {
     return { text, status: "final" };
   }
 
-  return { text: match[1].trim(), status: match[2] === "p" ? "provisional" : "revised" };
+  return { text: match[1].trim(), status: /[pᵖ]/u.test(match[2]) ? "provisional" : "revised" };
 }
 
 function financialYearBounds(financialYear) {
@@ -432,9 +435,14 @@ const annual = {
 // would compare the wrong quarters: on the April to June release, "Q4 2024/25" is not the
 // year-ago comparison for Q1 2026/27.
 const latestPeriodLabel = release.periodLabel;
-const [latestQuarterToken, latestAnnualLabel] = latestPeriodLabel.split(" ");
+const [latestQuarterToken, latestQuarterYear] = latestPeriodLabel.split(" ");
+const previousPeriodLabel = `${latestQuarterToken} ${shiftFinancialYear(latestQuarterYear, -1)}`;
+// The annual comparison is the latest COMPLETE financial year. Only a Q4 edition completes
+// the year its quarter sits in; on the April to June release, 2026/27 has one quarter and
+// neither FIA_1 nor T_1 carries an annual row for it.
+const latestAnnualLabel =
+  latestQuarterToken === "Q4" ? latestQuarterYear : shiftFinancialYear(latestQuarterYear, -1);
 const previousAnnualLabel = shiftFinancialYear(latestAnnualLabel, -1);
-const previousPeriodLabel = `${latestQuarterToken} ${previousAnnualLabel}`;
 
 // "January to March 2026" and its year-ago counterpart, for the timeliness table headers.
 const latestQuarterCoverage = release.periodCoverage;
@@ -522,7 +530,7 @@ for (const row of timelinessCaseTypeRows.slice(caseTypeTimelinessStart + 1, case
 // are the only thing establishing that the ODS parse is reading the right cells. MOJ moves
 // columns between editions, so they are deliberately release-specific and the transform
 // refuses to run when they stop matching.
-const ANCHORS_RECORDED_FOR = "Q4 2025/26";
+const ANCHORS_RECORDED_FOR = "Q1 2026/27";
 
 const reconciliationChecks = [];
 
@@ -530,29 +538,40 @@ function check(label, actual, expected) {
   reconciliationChecks.push({ label, actual, expected, ok: actual === expected });
 }
 
-check("receipts, Q4 2025/26", findPoint(quarterly.receipts, latestPeriodLabel)?.value, 27689);
-check("receipts, Q4 2024/25", findPoint(quarterly.receipts, previousPeriodLabel)?.value, 26273);
-check("disposals, Q4 2025/26", findPoint(quarterly.disposals, latestPeriodLabel)?.value, 15317);
-check("disposals, Q4 2024/25", findPoint(quarterly.disposals, previousPeriodLabel)?.value, 11420);
-check("open caseload, Q4 2025/26", findPoint(quarterly.openCaseload, latestPeriodLabel)?.value, 151767);
-check("open caseload, Q4 2024/25", findPoint(quarterly.openCaseload, previousPeriodLabel)?.value, 90389);
-check("allowed rate, Q4 2025/26", findPoint(quarterly.allowedRatePct, latestPeriodLabel)?.value, 39);
-check("allowed rate, Q4 2024/25", findPoint(quarterly.allowedRatePct, previousPeriodLabel)?.value, 42.5);
-check("annual receipts, 2025/26", findPoint(annual.receipts, latestAnnualLabel)?.value, 117697);
-check("annual receipts, 2024/25", findPoint(annual.receipts, previousAnnualLabel)?.value, 79074);
+// Read off FIA_1 to FIA_4, T_1 and T_2 of the April to June 2026 main tables, and checked
+// against the bulletin: receipts down 21% to 22,000, disposals up 30% to 17,000, open
+// caseload up 48% to 156,000. 2025/26 annual receipts were revised from 117,697 to 117,722.
+check(`receipts, ${latestPeriodLabel}`, findPoint(quarterly.receipts, latestPeriodLabel)?.value, 21762);
+check(`receipts, ${previousPeriodLabel}`, findPoint(quarterly.receipts, previousPeriodLabel)?.value, 27534);
+check(`disposals, ${latestPeriodLabel}`, findPoint(quarterly.disposals, latestPeriodLabel)?.value, 16786);
+check(`disposals, ${previousPeriodLabel}`, findPoint(quarterly.disposals, previousPeriodLabel)?.value, 12893);
+check(`open caseload, ${latestPeriodLabel}`, findPoint(quarterly.openCaseload, latestPeriodLabel)?.value, 155798);
+check(`open caseload, ${previousPeriodLabel}`, findPoint(quarterly.openCaseload, previousPeriodLabel)?.value, 105522);
+check(`allowed rate, ${latestPeriodLabel}`, findPoint(quarterly.allowedRatePct, latestPeriodLabel)?.value, 38);
+check(`allowed rate, ${previousPeriodLabel}`, findPoint(quarterly.allowedRatePct, previousPeriodLabel)?.value, 40);
+check(`annual receipts, ${latestAnnualLabel}`, findPoint(annual.receipts, latestAnnualLabel)?.value, 117722);
+check(`annual receipts, ${previousAnnualLabel}`, findPoint(annual.receipts, previousAnnualLabel)?.value, 79074);
+// A quarter must never be read as a year. This is what the unrecognised "Q4ʳ" marker did.
+check(
+  "no annual row for a financial year with no complete annual total",
+  annual.receipts.some((point) => point.periodLabel === latestQuarterYear) === (latestQuarterToken === "Q4"),
+  true
+);
 
 const asylumProtection = caseTypeSeries.find((entry) => entry.id === "asylum_protection");
 check(
-  "asylum and protection open caseload, Q4 2025/26",
+  `asylum and protection open caseload, ${latestPeriodLabel}`,
   findPoint(asylumProtection.openCaseload, latestPeriodLabel)?.value,
-  87450
+  90341
 );
 check(
-  "asylum and protection open caseload, Q4 2024/25",
+  `asylum and protection open caseload, ${previousPeriodLabel}`,
   findPoint(asylumProtection.openCaseload, previousPeriodLabel)?.value,
-  50976
+  59925
 );
-check(`mean weeks to clear, ${latestQuarterCoverage}`, quarterlyTimeliness.latestMeanWeeks, 61);
+check(`mean weeks to clear, ${latestQuarterCoverage}`, quarterlyTimeliness.latestMeanWeeks, 65);
+check(`mean weeks to clear, ${latestAnnualLabel}`, annualTimeliness.latestMeanWeeks, 56);
+check(`mean weeks to clear, ${previousAnnualLabel}`, annualTimeliness.previousMeanWeeks, 47);
 for (const caseType of CASE_TYPES) {
   check(
     `mean weeks to clear by case type, ${caseType.id}`,
@@ -560,7 +579,7 @@ for (const caseType of CASE_TYPES) {
     "number"
   );
 }
-check("mean weeks to clear, January to March 2025", quarterlyTimeliness.previousMeanWeeks, 50);
+check(`mean weeks to clear, ${previousQuarterCoverage}`, quarterlyTimeliness.previousMeanWeeks, 52);
 
 // Independent cross-check of the ODS parse against the published national CSV, which also
 // carries the per-quarter revision status.
@@ -705,8 +724,24 @@ const periodBasisNote =
 const continuityNote =
   "This series is not a like-for-like continuation of the Home Office asylum-appeals-lodged dataset that ended at 2023 Q1. It counts every appeal lodged with the First-tier Tribunal Immigration and Asylum Chamber, including human rights and EEA free movement cases, so the volumes are much larger than the old asylum-only figures. The two series should not be spliced into one continuous line.";
 
+// Built from the markers MOJ printed, not from a rule about which quarters are usually
+// revised: the April to June 2026 edition marked only Q4 2025/26 revised and called the
+// rest of 2025/26 final, which the old fixed sentence contradicted.
+const periodsWithStatus = (status) =>
+  revisionStatusByPeriod.filter((row) => row.status === status).map((row) => row.periodLabel);
+const listPeriods = (labels) =>
+  labels.length > 1 ? `${labels.slice(0, -1).join(", ")} and ${labels.at(-1)}` : labels[0];
+const provisionalPeriods = periodsWithStatus("provisional");
+const revisedPeriods = periodsWithStatus("revised");
+if (provisionalPeriods.length === 0) {
+  throw new Error(`MOJ marked no period provisional in ${release.title}. Check the revision markers.`);
+}
 const provisionalNote =
-  `${latestPeriodLabel} figures are provisional and subject to revision. Earlier quarters of ${latestAnnualLabel} are revised as later editions land, and ${previousAnnualLabel} is now final.`;
+  `${listPeriods(provisionalPeriods)} figures are provisional and subject to revision.` +
+  (revisedPeriods.length > 0
+    ? ` MOJ marks ${listPeriods(revisedPeriods)} as revised in this edition.`
+    : "") +
+  " Earlier periods are final.";
 
 const tribunalAppeals = {
   generatedAt: new Date().toISOString(),
