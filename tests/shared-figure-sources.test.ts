@@ -34,6 +34,13 @@ const GUARDED_SOURCES = [
       "owns distinctAreaCodes (the retired Sheffield and Barnsley codes), the plausibility " +
       "guard, and the population weighting. Use getEthnicProjection, meanWhiteBritishShare, " +
       "nationalGroupShare, areasBelowFiftyBy or countAreasAbove."
+  },
+  {
+    file: "small-boats.json",
+    helper: "src/lib/headline-figures.ts",
+    why:
+      "owns the year-to-date comparison the homepage card, the small boats explainer and its " +
+      "social card all print. Use smallBoats()."
   }
 ];
 

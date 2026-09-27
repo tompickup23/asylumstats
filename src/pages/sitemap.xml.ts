@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import { ROUTES_RELEASE_DATE, newestDate } from "../lib/data-releases";
 import { parseCorrections } from "../lib/corrections-parse";
 import releases from "../data/site/releases.json";
+import { explainerPath, getExplainers } from "../lib/explainers";
 
 export const prerender = true;
 
@@ -57,6 +58,18 @@ export const GET: APIRoute = async () => {
     if (changed) lastmod.set(path, changed);
   }
   if (!paths.includes("/findings/")) paths.push("/findings/");
+
+  // Each explainer changed on the day its source was published, which is what its
+  // figures and its dateModified both say.
+  const explainers = getExplainers();
+  for (const explainer of explainers) {
+    const path = explainerPath(explainer.slug);
+    paths.push(path);
+    lastmod.set(path, explainer.published);
+  }
+  if (!paths.includes("/explained/")) paths.push("/explained/");
+  const newestExplainer = newestDate(...explainers.map((e) => e.published));
+  if (newestExplainer) lastmod.set("/explained/", newestExplainer);
 
   const newestFinding = newestDate(...findings.map((f) => f.data.updated ?? f.data.date));
   if (newestFinding) lastmod.set("/findings/", newestFinding);

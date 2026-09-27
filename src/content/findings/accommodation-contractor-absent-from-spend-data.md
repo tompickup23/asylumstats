@@ -2,6 +2,7 @@
 headline: "Clearsprings Ready Homes is absent from two years of published Home Office spending"
 date: "2026-09-03"
 category: accountability
+featured: 3
 stat_value: "2 years"
 stat_label: "Peak hotel years with no published Home Office payment to Clearsprings"
 verdict: info

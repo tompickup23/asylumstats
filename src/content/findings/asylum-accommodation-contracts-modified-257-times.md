@@ -2,6 +2,7 @@
 headline: "The asylum accommodation contracts have been changed 257 times"
 date: "2026-09-03"
 category: accountability
+featured: 2
 stat_value: "257"
 stat_label: "Modifications to the seven asylum accommodation contracts, 2019 to January 2025"
 verdict: info

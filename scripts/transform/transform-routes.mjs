@@ -1072,6 +1072,11 @@ const asylumClaimsByQuarter = new Map();
 const asylumInitialDecisionsByQuarter = new Map();
 const asylumInitialGrantDecisionsByQuarter = new Map();
 const asylumInitialRefusalsByQuarter = new Map();
+// The Home Office grant rate is main applicants only, excluding withdrawals and
+// administrative outcomes: grants / (grants + refusals). The totals above count
+// dependants too, so a rate taken from them is not the published figure.
+const mainApplicantGrantsByQuarter = new Map();
+const mainApplicantRefusalsByQuarter = new Map();
 const asylumInitialWithdrawalsByQuarter = new Map();
 const asylumInitialAdministrativeOutcomesByQuarter = new Map();
 const returnsTotalByQuarter = new Map();
@@ -1108,6 +1113,15 @@ for (const row of asylumInitialDecisionRows) {
 
   if (outcomeGroup === "Refused") {
     asylumInitialRefusalsByQuarter.set(quarter, (asylumInitialRefusalsByQuarter.get(quarter) || 0) + decisions);
+  }
+
+  if (String(row["Applicant type"] || "").trim() === "Main Applicant") {
+    if (outcomeGroup === "Grant of Protection" || outcomeGroup === "Grant of Other Leave") {
+      mainApplicantGrantsByQuarter.set(quarter, (mainApplicantGrantsByQuarter.get(quarter) || 0) + decisions);
+    }
+    if (outcomeGroup === "Refused") {
+      mainApplicantRefusalsByQuarter.set(quarter, (mainApplicantRefusalsByQuarter.get(quarter) || 0) + decisions);
+    }
   }
 
   if (outcomeGroup === "Withdrawn") {
@@ -1241,6 +1255,12 @@ const asylumInitialDecisionsQuarterlySeries = [...asylumInitialDecisionsByQuarte
     periodEnd: endOfQuarter(periodLabel),
     value
   }));
+
+function quarterlySeriesFrom(byQuarter) {
+  return [...byQuarter.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([periodLabel, value]) => ({ periodLabel, periodEnd: endOfQuarter(periodLabel), value }));
+}
 
 const asylumInitialGrantQuarterlySeries = [...asylumInitialGrantDecisionsByQuarter.entries()]
   .sort(([left], [right]) => left.localeCompare(right))
@@ -2140,7 +2160,9 @@ const nationalSystemDynamics = {
       periodLabel,
       periodEnd,
       value
-    }))
+    })),
+    mainApplicantGrants: quarterlySeriesFrom(mainApplicantGrantsByQuarter),
+    mainApplicantRefusals: quarterlySeriesFrom(mainApplicantRefusalsByQuarter)
   },
   stockSeries: {
     awaitingInitialDecision: asylumAwaitingDecisionQuarterlySeries.map(({ periodLabel, periodEnd, value }) => ({

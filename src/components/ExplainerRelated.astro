@@ -1,0 +1,88 @@
+---
+/** Where to go next from an explainer: related questions, findings and data pages. */
+import { getCollection } from "astro:content";
+import type { Explainer } from "../lib/explainers";
+import { explainerPath, getExplainer } from "../lib/explainers";
+
+interface Props {
+  explainer: Explainer;
+}
+
+const { explainer } = Astro.props;
+const findings = (await getCollection("findings")).filter((f) => !f.data.superseded_by);
+const relatedFindings = explainer.relatedFindings.map((slug) => {
+  const finding = findings.find((f) => f.id.replace(/\.md$/, "") === slug);
+  if (!finding) throw new Error(`Explainer "${explainer.slug}" links to missing finding "${slug}".`);
+  return { href: `/findings/${slug}/`, label: finding.data.headline, stat: finding.data.stat_value };
+});
+const relatedQuestions = explainer.relatedExplainers.map((slug) => {
+  const other = getExplainer(slug);
+  if (!other) throw new Error(`Explainer "${explainer.slug}" links to missing explainer "${slug}".`);
+  return { href: explainerPath(slug), label: other.question, stat: other.figure };
+});
+---
+
+<section class="er-section" aria-labelledby="read-next">
+  <h2 id="read-next">Read next</h2>
+  <div class="er-grid">
+    {[...relatedQuestions, ...relatedFindings].map((item) => (
+      <a class="er-card" href={item.href}>
+        <span class="er-stat">{item.stat}</span>
+        <span class="er-label">{item.label}</span>
+      </a>
+    ))}
+  </div>
+  <p class="er-pages">
+    {explainer.relatedPages.map((page, index) => (
+      <>{index > 0 && " · "}<a href={page.href}>{page.label} &rarr;</a></>
+    ))}
+    {" · "}<a href="/explained/">Every question answered &rarr;</a>
+  </p>
+</section>
+
+<style>
+  .er-section {
+    margin: 2.5rem 0 1rem;
+  }
+  .er-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 0 0 0.75rem;
+  }
+  .er-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  .er-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: inherit;
+    text-decoration: none;
+  }
+  .er-card:hover,
+  .er-card:focus-visible {
+    border-color: var(--accent);
+  }
+  .er-stat {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .er-label {
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+  .er-pages {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  .er-pages a {
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import QuestionCard from "../../components/QuestionCard.astro";
+import { explainersByTopic, explainerPath, getExplainers, TOPIC_LABELS } from "../../lib/explainers";
+import { SITE_URL } from "../../lib/site";
+
+const groups = explainersByTopic();
+const all = getExplainers();
+---
+
+<BaseLayout
+  title="UK asylum questions answered with the latest figures"
+  brandTitle={false}
+  description="How many asylum seekers are in the UK, what hotels cost, how long appeals take, how many small boats cross. Updated with the official data."
+  image="/og/explained.png"
+  structuredData={[
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "UK asylum questions answered",
+      itemListElement: all.map((explainer, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE_URL}${explainerPath(explainer.slug)}`,
+        name: explainer.question
+      }))
+    }
+  ]}
+>
+  <Breadcrumbs items={[{ label: "Explained" }]} />
+  <section class="shell explained-head">
+    <h1>Asylum questions, answered</h1>
+    <p>
+      The questions people ask most about the UK asylum system, each answered in a paragraph with the latest
+      official figure, its date and its source. The answers rewrite themselves when the Home Office or the
+      Ministry of Justice publishes new data.
+    </p>
+  </section>
+
+  {groups.map((group) => (
+    <section class="shell explained-group" aria-labelledby={`topic-${group.topic}`}>
+      <h2 id={`topic-${group.topic}`} class="explained-topic">{TOPIC_LABELS[group.topic]}</h2>
+      <div class="explained-grid">
+        {group.items.map((explainer) => <QuestionCard explainer={explainer} />)}
+      </div>
+    </section>
+  ))}
+
+  <section class="shell explained-foot">
+    <p>
+      Looking for the investigations behind these numbers? <a href="/findings/">Read the research and findings</a>,
+      or <a href="/places/">look up any local authority</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .explained-head {
+    padding-top: 2.5rem;
+  }
+  .explained-head h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0;
+  }
+  .explained-head p {
+    max-width: 640px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .explained-group {
+    margin-top: 2rem;
+  }
+  .explained-topic {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+  }
+  .explained-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .explained-foot {
+    margin: 2.5rem auto 3rem;
+  }
+  .explained-foot a {
+    color: var(--accent);
+  }
+</style>

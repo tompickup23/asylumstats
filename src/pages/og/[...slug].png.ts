@@ -20,6 +20,7 @@ import { getCollection } from "astro:content";
 import { loadRouteDashboard, loadLocalRouteLatest } from "../../lib/route-data";
 import { getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 import { loadAsylumCostReconciliation } from "../../lib/ho-spend";
+import { getExplainers } from "../../lib/explainers";
 
 const BUILD_OG = process.env.BUILD_OG === "1";
 
@@ -191,6 +192,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
       verdict: "critical"
     },
     {
+      slug: "explained",
+      title: "UK asylum questions, answered with the latest figures",
+      stat: getExplainers().length.toLocaleString(),
+      statLabel: "Questions answered, each updated with the official data",
+      verdict: "info"
+    },
+    {
       slug: "findings",
       title: "Findings, each one checked against source",
       stat: findings.filter((f) => !f.data.superseded_by).length.toLocaleString(),
@@ -202,8 +210,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
     props: { title: p.title, stat: p.stat, statLabel: p.statLabel, verdict: p.verdict }
   }));
 
+  // One card per explainer, carrying the same live figure the page leads with.
+  const explainerPaths = getExplainers().flatMap((explainer) => {
+    const props = { title: explainer.question, stat: explainer.figure, statLabel: explainer.figureLabel, verdict: "info" };
+    return [
+      { params: { slug: `explained/${explainer.slug}` }, props: { ...props, size: "og" } },
+      { params: { slug: `square/explained/${explainer.slug}` }, props: { ...props, size: "square" } }
+    ];
+  });
+
   return [
     ...sectionPaths,
+    ...explainerPaths,
     {
       params: { slug: "home" },
       props: {

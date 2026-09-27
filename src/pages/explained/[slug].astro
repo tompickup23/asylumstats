@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ExplainerAnswer from "../../components/ExplainerAnswer.astro";
+import ExplainerFigures from "../../components/ExplainerFigures.astro";
+import ExplainerRelated from "../../components/ExplainerRelated.astro";
+import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
+import TrendChart from "../../components/TrendChart.astro";
+import ShareButton from "../../components/ShareButton.astro";
+import { getExplainers, TOPIC_LABELS, type Explainer } from "../../lib/explainers";
+import { SITE_NAME, SITE_URL, buildAbsoluteUrl } from "../../lib/site";
+
+export function getStaticPaths() {
+  return getExplainers().map((explainer) => ({ params: { slug: explainer.slug }, props: { explainer } }));
+}
+
+interface Props {
+  explainer: Explainer;
+}
+
+const { explainer } = Astro.props;
+const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
+const ogImage = `/og/explained/${explainer.slug}.png`;
+---
+
+<BaseLayout
+  title={explainer.seoTitle}
+  brandTitle={false}
+  description={explainer.seoDescription}
+  image={ogImage}
+  structuredData={[
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: explainer.question,
+      description: explainer.answer,
+      url: pageUrl,
+      image: `${SITE_URL}${ogImage}`,
+      datePublished: explainer.published,
+      dateModified: explainer.published,
+      author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+      isBasedOn: explainer.sources.map((source) => source.url)
+    }
+  ]}
+>
+  <Breadcrumbs items={[{ label: "Explained", href: "/explained/" }, { label: explainer.question }]} />
+  <article class="explainer shell">
+    <p class="explainer-kicker">{TOPIC_LABELS[explainer.topic]}</p>
+    <h1 class="explainer-question">{explainer.question}</h1>
+    <ExplainerAnswer explainer={explainer} />
+
+    {explainer.chart && (
+      <TrendChart
+        points={explainer.chart.points}
+        title={explainer.chart.title}
+        description={explainer.chart.description}
+        valueSuffix={explainer.chart.valueSuffix}
+        source={explainer.chart.source}
+        sourceUrl={explainer.chart.sourceUrl}
+      />
+    )}
+
+    <section class="explainer-basis" aria-labelledby="what-it-counts">
+      <h2 id="what-it-counts">What the figure counts</h2>
+      {explainer.basis.map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <ExplainerFigures explainer={explainer} />
+
+    <div class="explainer-questions">
+      <AskedAndAnswered items={explainer.questions} label={`More questions about ${explainer.question.toLowerCase().replace(/\?$/, "")}`} id="more-questions" />
+    </div>
+
+    <div class="explainer-share">
+      <ShareButton url={pageUrl} title={explainer.question} text={`${explainer.answer} ${pageUrl}`} />
+    </div>
+
+    <ExplainerRelated explainer={explainer} />
+  </article>
+</BaseLayout>
+
+<style>
+  .explainer {
+    max-width: 760px;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+  .explainer-kicker {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .explainer-question {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+    line-height: 1.15;
+    margin: 0;
+  }
+  .explainer-basis {
+    margin: 2rem 0;
+  }
+  .explainer-basis h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 0 0 0.75rem;
+  }
+  .explainer-basis p {
+    line-height: 1.65;
+    max-width: 68ch;
+    margin: 0 0 0.9rem;
+  }
+  .explainer-questions :global(.shell) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .explainer-share {
+    margin: 2rem 0 0;
+  }
+</style>

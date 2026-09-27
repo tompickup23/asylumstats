@@ -1,0 +1,108 @@
+---
+/** Key figures and, where the national number breaks down by place, the areas behind it. */
+import type { Explainer } from "../lib/explainers";
+
+interface Props {
+  explainer: Explainer;
+}
+
+const { explainer } = Astro.props;
+const { keyFigures = [], areas } = explainer;
+---
+
+{keyFigures.length > 0 && (
+  <section class="ef-section" aria-labelledby="key-figures">
+    <h2 id="key-figures">Key figures</h2>
+    <table class="ef-table">
+      <tbody>
+        {keyFigures.map((row) => (
+          <tr>
+            <th scope="row">{row.label}</th>
+            <td>
+              <span class="ef-value">{row.value}</span>
+              {row.note && <span class="ef-note">{row.note}</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+)}
+
+{areas && (
+  <section class="ef-section" aria-labelledby="in-your-area">
+    <h2 id="in-your-area">{areas.title}</h2>
+    <p class="ef-lede">{areas.note} <a href="/places/">Find any area</a>.</p>
+    <ol class="ef-areas">
+      {areas.rows.map((row) => (
+        <li>
+          <a href={row.href}>{row.name}</a>
+          <span class="ef-value">{row.value}</span>
+          {row.detail && <span class="ef-note">{row.detail}</span>}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}
+
+<style>
+  .ef-section {
+    margin: 2rem 0;
+  }
+  .ef-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 0 0 0.75rem;
+  }
+  .ef-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .ef-table th,
+  .ef-table td {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: baseline;
+    font-size: 0.95rem;
+  }
+  .ef-table th {
+    font-weight: 400;
+    color: var(--text-muted);
+    padding-right: 1rem;
+  }
+  .ef-table td {
+    text-align: right;
+  }
+  .ef-value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .ef-note {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .ef-lede {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+  .ef-lede a,
+  .ef-areas a {
+    color: var(--accent);
+  }
+  .ef-areas {
+    margin: 0;
+    padding-left: 1.4rem;
+  }
+  .ef-areas li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .ef-areas .ef-note {
+    grid-column: 1 / -1;
+  }
+</style>

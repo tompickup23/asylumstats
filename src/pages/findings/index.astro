@@ -1,133 +1,95 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import FindingCard from "../../components/FindingCard.astro";
+import QuestionCard from "../../components/QuestionCard.astro";
 import { getCollection } from "astro:content";
-import { formatFindingDate, findingDisplayDate, findingIsRevised } from "../../lib/finding-dates";
+import { arrangeResearch } from "../../lib/research-sections";
+import { getExplainers } from "../../lib/explainers";
 
-const allContent = (await getCollection("findings"))
-  .filter((f) => !f.data.superseded_by)
-  .sort(
-  (a, b) =>
-    new Date(findingDisplayDate(b.data)).getTime() -
-    new Date(findingDisplayDate(a.data)).getTime()
-);
-
-const articles = allContent.filter((f) => f.data.content_type === "article");
-const findings = allContent.filter((f) => f.data.content_type !== "article");
-
-const verdictColor: Record<string, string> = {
-  alert: "var(--warning)",
-  critical: "var(--critical)",
-  resolved: "var(--positive)",
-  info: "var(--accent)"
-};
-
-const verdictLabel: Record<string, string> = {
-  alert: "Finding",
-  critical: "Investigation",
-  resolved: "Resolved",
-  info: "Analysis"
-};
-
-const categoryLabel: Record<string, string> = {
-  spending: "Spending",
-  routes: "Routes",
-  demographics: "Demographics",
-  backlog: "Backlog",
-  accountability: "Accountability",
-  crime: "Crime",
-  "pressure-index": "Pressure",
-  "social-care": "Social care",
-  send: "Schools"
-};
+// Latest first for freshness, then the questions people search for, then the flagship
+// investigations, then everything else by topic. See src/lib/research-sections.ts.
+const { latest, featured, groups } = arrangeResearch(await getCollection("findings"));
+const questions = getExplainers();
 ---
 
 <BaseLayout
   image="/og/findings.png"
   title="Asylum research: cost, grant rates and dispersal"
-  description="Articles and findings on UK asylum costs, demographic change, and the system. Every number sourced. No spin."
+  description="The latest UK asylum figures explained, and investigations into asylum costs, contracts and the system. Every number sourced."
 >
-  <section class="findings-header shell">
+  <section class="research-head shell">
     <h1>Research</h1>
-    <p class="findings-intro">
-      Articles backed by data. Findings verified against source.
-      Scrutinise the methodology. Check the sources. Draw your own conclusions.
+    <p>
+      Articles backed by data. Findings verified against source. Scrutinise the methodology,
+      check the sources, draw your own conclusions.
     </p>
   </section>
 
-  <!-- ARTICLES (long-form) -->
-  {articles.length > 0 && (
-    <section class="articles-section shell">
-      <h2 class="section-label">Articles</h2>
-      <div class="articles-list">
-        {articles.map((article) => (
-          <a href={`/findings/${article.id.replace(/\.md$/, "")}/`} class="article-hero-card">
-            <div class="article-hero-meta">
-              <span class="article-type-badge">Article</span>
-              <span class="article-category">{categoryLabel[article.data.category] ?? article.data.category}</span>
-              <span class="article-date">
-                {findingIsRevised(article.data) ? "Updated " : ""}{formatFindingDate(findingDisplayDate(article.data))}
-              </span>
-            </div>
-            <h2 class="article-hero-headline">{article.data.headline}</h2>
-            <div class="article-hero-stat">
-              <span class="article-stat-value" style={`color: ${verdictColor[article.data.verdict]}`}>
-                {article.data.stat_value}
-              </span>
-              <span class="article-stat-label">{article.data.stat_label}</span>
-            </div>
-            <p class="article-hero-summary">{article.data.summary}</p>
-            <span class="article-hero-cta">Read the full article &rarr;</span>
-          </a>
-        ))}
+  <section class="research-section shell" id="latest" aria-labelledby="latest-title">
+    <h2 id="latest-title" class="research-label">Latest</h2>
+    <div class="research-grid">
+      {latest.map((item) => <FindingCard finding={item} />)}
+    </div>
+  </section>
+
+  <section class="research-section shell" id="questions" aria-labelledby="questions-title">
+    <div class="research-label-row">
+      <h2 id="questions-title" class="research-label">Questions answered</h2>
+      <a href="/explained/" class="research-more">All questions &rarr;</a>
+    </div>
+    <div class="research-grid research-grid--questions">
+      {questions.map((explainer) => <QuestionCard explainer={explainer} />)}
+    </div>
+  </section>
+
+  {featured.length > 0 && (
+    <section class="research-section shell" id="investigations" aria-labelledby="featured-title">
+      <h2 id="featured-title" class="research-label">Investigations</h2>
+      <div class="research-heroes">
+        {featured.map((item) => <FindingCard finding={item} variant="hero" />)}
       </div>
     </section>
   )}
 
-  <!-- FINDINGS (stat cards) -->
-  <section class="findings-section shell">
-    <h2 class="section-label">Findings</h2>
-    <div class="findings-grid">
-      {findings.map((finding) => (
-        <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-card">
-          <div class="finding-meta">
-            <span class="finding-category">{categoryLabel[finding.data.category] ?? finding.data.category}</span>
-            <span class="finding-date">
-              {findingIsRevised(finding.data) ? "Updated " : ""}{formatFindingDate(findingDisplayDate(finding.data))}
-            </span>
-          </div>
-          <h3 class="finding-headline">{finding.data.headline}</h3>
-          <div class="finding-stat-row">
-            <span class="finding-stat" style={`color: ${verdictColor[finding.data.verdict]}`}>
-              {finding.data.stat_value}
-            </span>
-            <span class="finding-stat-label">{finding.data.stat_label}</span>
-          </div>
-          <p class="finding-summary">{finding.data.summary}</p>
-          <span class="finding-source">{finding.data.source_label} &rarr;</span>
-        </a>
-      ))}
-    </div>
-  </section>
+  {groups.map((group) => (
+    <section class="research-section shell" id={group.id} aria-labelledby={`${group.id}-title`}>
+      <h2 id={`${group.id}-title`} class="research-label">{group.label}</h2>
+      <div class="research-grid">
+        {group.items.map((item) => <FindingCard finding={item} />)}
+      </div>
+    </section>
+  ))}
 </BaseLayout>
 
 <style>
-  .findings-header {
+  .research-head {
     padding-top: 2.5rem;
   }
-  .findings-header h1 {
+  .research-head h1 {
     font-family: var(--font-display);
     font-size: 2rem;
     font-weight: 600;
     margin: 0;
   }
-  .findings-intro {
+  .research-head p {
     color: var(--text-muted);
     font-size: 0.95rem;
     max-width: 550px;
     margin: 0.5rem 0 0;
   }
-
-  .section-label {
+  .research-section {
+    margin-top: 2.5rem;
+  }
+  .research-section:last-of-type {
+    padding-bottom: 3rem;
+  }
+  .research-label-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .research-label {
     font-family: var(--font-display);
     font-size: 0.82rem;
     font-weight: 600;
@@ -136,186 +98,28 @@ const categoryLabel: Record<string, string> = {
     color: var(--text-muted);
     margin: 0 0 1rem;
   }
-
-  /* ARTICLES */
-  .articles-section {
-    margin-top: 2rem;
-  }
-  .articles-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .article-hero-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--critical);
-    border-radius: var(--radius-sm);
-    padding: 2rem;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    transition: border-color 180ms, transform 120ms;
-  }
-  .article-hero-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .article-hero-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-  .article-type-badge {
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--critical);
-    background: color-mix(in srgb, var(--critical) 10%, transparent);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-  }
-  .article-category {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-  }
-  .article-date {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-  }
-  .article-hero-headline {
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: -0.02em;
-  }
-  .article-hero-stat {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-  }
-  .article-stat-value {
-    font-family: var(--font-display);
-    font-size: 2.2rem;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .article-stat-label {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-  }
-  .article-hero-summary {
-    font-size: 0.92rem;
-    color: var(--text);
-    line-height: 1.6;
-    margin: 0;
-  }
-  .article-hero-cta {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--accent);
-    margin-top: auto;
-  }
-
-  /* FINDINGS */
-  .findings-section {
-    margin-top: 2.5rem;
-    padding-bottom: 3rem;
-  }
-  .findings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-  .finding-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1.5rem;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    transition: border-color 180ms, transform 120ms;
-  }
-  .finding-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .finding-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .finding-category {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-  }
-  .finding-date {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-  }
-  .finding-headline {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin: 0;
-  }
-  .finding-stat-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-  }
-  .finding-stat {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .finding-stat-label {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-  }
-  .finding-summary {
+  .research-more {
     font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .finding-source {
-    font-size: 0.78rem;
     font-weight: 600;
     color: var(--accent);
-    margin-top: auto;
   }
-
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1rem;
+  }
+  .research-grid--questions {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+  .research-heroes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 1rem;
+  }
   @media (max-width: 640px) {
-    .article-hero-card { padding: 1.25rem; }
-    .article-stat-value { font-size: 1.6rem; }
-    .findings-grid { grid-template-columns: 1fr; }
+    .research-grid,
+    .research-heroes {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

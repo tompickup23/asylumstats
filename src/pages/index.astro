@@ -9,9 +9,11 @@ import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getSignificantDemographicShifts, getEthnicProjection, areasBelowFiftyBy, nationalWhiteBritishShare, distinctAreaCodes, countAreasAbove } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
-import smallBoatsSeries from "../data/live/small-boats.json";
+import { initialGrantRate, smallBoats, formatLongDate } from "../lib/headline-figures";
 import { getPublicPlaceAreas, slugifyAreaName, SITE_URL } from "../lib/site";
 import { getCollection } from "astro:content";
+import { findingDisplayDate, findingIsRevised, formatFindingDate } from "../lib/finding-dates";
+import { arrangeResearch } from "../lib/research-sections";
 import { PER_TAXPAYER_GBP, TOTAL_GBP_M } from "../lib/true-cost";
 import { loadAsylumCostReconciliation, formatGbpShort } from "../lib/ho-spend";
 
@@ -131,14 +133,8 @@ const smallBoatSharePct = irregularEntryTotal > 0 ? (smallBoatArrivals / irregul
 // year-ending total; this is the running calendar year, published weekly on Fridays.
 // Presenting both without saying which is which is how the family reunion figures came
 // to read as a contradiction when both were correct.
-const smallBoatsWeekly = smallBoatsSeries as {
-  coverageEnd: string;
-  yearToDate: { year: number; arrivals: number; priorYear: number; priorYearArrivals: number; changePct: number | null };
-};
-const sbYtd = smallBoatsWeekly.yearToDate;
-const sbAsAt = new Date(`${smallBoatsWeekly.coverageEnd}T00:00:00Z`).toLocaleDateString("en-GB", {
-  day: "numeric", month: "long", year: "numeric", timeZone: "UTC"
-});
+const sbYtd = smallBoats();
+const sbAsAt = formatLongDate(sbYtd.asAt);
 
 // One card, two measures, each labelled. The weekly series leads because it is the
 // figure a reader arrives for; the year-ending total follows because it is the official
@@ -157,18 +153,11 @@ const smallBoatsCardContext = [
 // Data vintage, read from the payload. Never hardcode: the stock date moves every quarter.
 const dataVintage = routeDashboard.localSnapshotDate ?? localRouteLatest.snapshotDate;
 
-// Grant rate: the trailing four published quarters, so the card moves with the data
-// instead of staying pinned to whichever calendar year was current when it was written.
-const flowSeries = routeDashboard.nationalSystemDynamics?.flowSeries;
-const decisionQuarters = ((flowSeries?.initialDecisions as any[]) ?? []).slice(-4);
-const grantQuarters = ((flowSeries?.initialGrants as any[]) ?? []).slice(-4);
-const totalDecisionsWindow = decisionQuarters.reduce((sum: number, q: any) => sum + (q.value ?? 0), 0);
-const totalGrantsWindow = grantQuarters.reduce((sum: number, q: any) => sum + (q.value ?? 0), 0);
-const grantRatePct = totalDecisionsWindow > 0 ? ((totalGrantsWindow / totalDecisionsWindow) * 100).toFixed(1) : "34.3";
-const grantRateWindowLabel =
-  decisionQuarters.length === 4
-    ? `${decisionQuarters[0].periodLabel} to ${decisionQuarters[3].periodLabel}`
-    : "latest published quarters";
+// Grant rate on the Home Office's own basis, from the shared helper. This card used to
+// divide grants by every initial decision, withdrawals included, and showed 31.5% beside
+// an official 38% for the same four quarters.
+const grantRate = initialGrantRate();
+if (!grantRate) throw new Error("No grant rate: the main-applicant decision series is missing or short.");
 
 // Area distribution
 const areasAbove30 = localRouteLatest.areas.filter((a) => (a.supportedAsylumRate ?? 0) > 30).length;
@@ -182,12 +171,8 @@ const topAreas = localRouteLatest.areas
   .sort((a, b) => (b.supportedAsylumRate ?? 0) - (a.supportedAsylumRate ?? 0))
   .slice(0, 10);
 
-// Get latest 3 findings for the strip
-const allFindings = await getCollection("findings");
-const topFindings = allFindings
-  .filter((f) => !f.data.superseded_by)
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+// The same three pieces that lead /findings/, from the one helper that orders both.
+const topFindings = arrangeResearch(await getCollection("findings")).latest;
 
 const snapshotDate = latestQuarter.stockPeriodLabel ?? "Q4 2025";
 
@@ -398,18 +383,20 @@ const heroStats = [
 
   <!-- ═══ TOP FINDINGS ═══ -->
   <section class="findings-strip shell">
-    <h2 class="strip-title">What we found</h2>
+    <h2 class="strip-title">Latest</h2>
     <div class="findings-row">
       {topFindings.map((finding) => (
         <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-strip-card">
-          <span class="fsc-verdict" style={`color: ${findingColor(finding.data.verdict)}`}>{findingLabel(finding.data.verdict)}</span>
+          <span class="fsc-verdict" style={`color: ${findingColor(finding.data.verdict)}`}>
+            {findingLabel(finding.data.verdict)} · {findingIsRevised(finding.data) ? "Updated " : ""}{formatFindingDate(findingDisplayDate(finding.data))}
+          </span>
           <span class="fsc-stat" style={`color: ${findingColor(finding.data.verdict)}`}>{finding.data.stat_value}</span>
           <span class="fsc-headline">{finding.data.headline}</span>
           <span class="fsc-cta">Read more &rarr;</span>
         </a>
       ))}
     </div>
-    <a href="/findings/" class="cta-link">All {allFindings.length} findings &rarr;</a>
+    <a href="/findings/" class="cta-link">All research and findings &rarr;</a>
   </section>
 
   <!-- ═══ COST STRIP ═══ -->
@@ -424,7 +411,7 @@ const heroStats = [
       <div class="cost-item">
         <span class="cost-number">£{HOTEL_NIGHTLY_2024_25}</span>
         <span class="cost-label">per person per night in a hotel</span>
-        <span class="cost-context">{dailyCostPeriod} average, the year the £{(dailyCostGbp / 1_000_000).toFixed(2)}M daily figure covers. {fmtInt(latestQuarter.hotelAccommodation)} people were in asylum hotels at {snapshotDate}, down from 30,657 at the end of 2025.</span>
+        <span class="cost-context">{dailyCostPeriod} average, the year the £{(dailyCostGbp / 1_000_000).toFixed(2)}M daily figure covers. {fmtInt(latestQuarter.hotelAccommodation)} people were in asylum hotels at {snapshotDate}, down from 30,657 at the end of 2025. <a href="/explained/asylum-hotel-cost-per-night/" style="color: var(--accent);">Why the nightly cost has risen since.</a></span>
       </div>
       <div class="cost-item">
         <span class="cost-number">{fmtGbp(tenYearGbp)}</span>
@@ -446,26 +433,30 @@ const heroStats = [
       />
     </div>
     <div class="system-grid">
-      <article class="sys-card">
+      <a class="sys-card sys-card-link" href="/explained/how-many-asylum-seekers-are-in-the-uk/">
         <span class="sys-value sys-accent">{fmtInt(latestQuarter.supportedAsylum)}</span>
         <span class="sys-label">On asylum support</span>
         <span class="sys-context">Receiving Home Office accommodation, subsistence, or both. As at {snapshotDate}.</span>
-      </article>
-      <article class="sys-card">
+        <span class="sys-more">How many asylum seekers are in the UK &rarr;</span>
+      </a>
+      <a class="sys-card sys-card-link" href="/explained/how-many-asylum-seekers-are-waiting-for-a-decision/">
         <span class="sys-value sys-warn">{fmtInt(latestQuarter.awaitingInitialDecision)}</span>
         <span class="sys-label">Awaiting an initial decision</span>
         <span class="sys-context">As at {snapshotDate}. Cases lodged but not yet decided at first instance.</span>
-      </article>
-      <article class="sys-card">
+        <span class="sys-more">The asylum backlog explained &rarr;</span>
+      </a>
+      <a class="sys-card sys-card-link" href="/explained/how-many-small-boats-have-crossed-this-year/">
         <span class="sys-value sys-coral">{fmtInt(sbYtd.arrivals)}</span>
         <span class="sys-label">Small boat arrivals, {sbYtd.year} so far</span>
         <span class="sys-context">{smallBoatsCardContext}</span>
-      </article>
-      <article class="sys-card">
-        <span class="sys-value sys-coral">{grantRatePct}%</span>
+        <span class="sys-more">Small boat crossings this year &rarr;</span>
+      </a>
+      <a class="sys-card sys-card-link" href="/explained/uk-asylum-grant-rate/">
+        <span class="sys-value sys-coral">{grantRate.pct.toFixed(0)}%</span>
         <span class="sys-label">Initial grant rate</span>
-        <span class="sys-context">At first decision only, {grantRateWindowLabel}. After appeals the final grant rate is on average 14.6pp higher, across the 101 of 105 nationalities whose rate rises (Asy_D04).</span>
-      </article>
+        <span class="sys-context">Main applicants granted at first decision, {grantRate.windowLabel}, withdrawals excluded: the Home Office's own measure. After appeals the final grant rate is on average 14.6pp higher, across the 101 of 105 nationalities whose rate rises (Asy_D04).</span>
+        <span class="sys-more">The grant rate explained &rarr;</span>
+      </a>
       <article class="sys-card">
         <span class="sys-value sys-warn">{fmtInt(familyReunion)}</span>
         <span class="sys-label">Refugee family reunion grants</span>
@@ -1682,6 +1673,22 @@ const heroStats = [
     font-size: 0.82rem;
     color: var(--text-muted);
     line-height: 1.4;
+  }
+  .sys-card-link {
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .sys-card-link:hover,
+  .sys-card-link:focus-visible {
+    border-color: var(--accent);
+  }
+  .sys-more {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
   }
 
   /* ═══ FUTURE AREA ═══ */

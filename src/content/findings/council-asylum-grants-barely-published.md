@@ -2,6 +2,7 @@
 headline: "£883 million went to councils for asylum. £1.6 million of it is findable"
 date: "2026-09-03"
 category: accountability
+featured: 4
 stat_value: "£1.6m"
 stat_label: "Of £883m in council asylum grants, the amount traceable by supplier name"
 verdict: alert

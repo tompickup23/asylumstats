@@ -1,0 +1,78 @@
+---
+/**
+ * The answer block at the top of an explainer: the figure, the 40 to 60 word answer, and
+ * the date, source and next update underneath it. This is the paragraph a search engine
+ * lifts into a snippet, so it stands alone and leads with the number.
+ */
+import type { Explainer } from "../lib/explainers";
+import { formatLongDate } from "../lib/headline-figures";
+
+interface Props {
+  explainer: Explainer;
+}
+
+const { explainer } = Astro.props;
+---
+
+<section class="explainer-answer" aria-label="The short answer">
+  <p class="ea-figure">
+    <span class="ea-value">{explainer.figure}</span>
+    <span class="ea-label">{explainer.figureLabel}</span>
+  </p>
+  <p class="ea-text">{explainer.answer}</p>
+  <p class="ea-meta">
+    {explainer.asAtLabel ? `Figures for ${explainer.asAtLabel}` : `Figures to ${formatLongDate(explainer.asAt)}`}, published {formatLongDate(explainer.published)}.
+    {explainer.nextUpdate && (
+      <>{" "}{explainer.nextUpdate.label} {formatLongDate(explainer.nextUpdate.date)}.</>
+    )}
+    {" "}Source:{" "}
+    {explainer.sources.map((source, index) => (
+      <>
+        {index > 0 && "; "}
+        <a href={source.url} target="_blank" rel="noopener">{source.label}</a>
+      </>
+    ))}.
+  </p>
+</section>
+
+<style>
+  .explainer-answer {
+    margin: 1.25rem 0 2rem;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+  }
+  .ea-figure {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    margin: 0 0 0.6rem;
+  }
+  .ea-value {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .ea-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .ea-text {
+    font-size: 1.08rem;
+    line-height: 1.6;
+    margin: 0 0 0.8rem;
+  }
+  .ea-meta {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .ea-meta a {
+    color: var(--accent);
+  }
+</style>
