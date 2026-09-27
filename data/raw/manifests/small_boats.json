@@ -4,18 +4,18 @@
   "release": "Migrants detected crossing the English Channel in small boats, time series",
   "cadence": "weekly (Fridays)",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
-  "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a9a9e583b22fb169dc1921b/04_September_2026_Small_boats_-_time_series.ods",
+  "sourceUrl": "https://assets.publishing.service.gov.uk/media/6ab6550ca9c3d267bcccef10/25_September_2026_Small_boats_-_time_series.ods",
   "bank": "home-office/weekly",
   "areaTier": "national",
   "fileCount": 1,
-  "totalBytes": 75733,
+  "totalBytes": 76164,
   "files": [
     {
-      "file": "04_September_2026_Small_boats_-_time_series.ods",
-      "sizeBytes": 75733,
-      "sha256": "803fdea64e4bf765abdef8fddc9681a740a14b6f5234d494e7cdd10cb8390548"
+      "file": "25_September_2026_Small_boats_-_time_series.ods",
+      "sizeBytes": 76164,
+      "sha256": "a2205fb39343ce6db4be09131ad800feab323303573c46389f05cddc6d45d433"
     }
   ],
-  "coverageEnd": "2026-09-03",
+  "coverageEnd": "2026-09-24",
   "maxAgeDays": 10
 }

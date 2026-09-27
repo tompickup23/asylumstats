@@ -24,7 +24,21 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const RAW_DIR = resolve(ROOT, "data/raw/small_boats");
 const MART_DIR = resolve(ROOT, "data/marts/small_boats");
 
-const sourceFile = readdirSync(RAW_DIR).filter((name) => name.endsWith(".ods")).sort().pop();
+// Files are named "<day>_<Month>_<year>_Small_boats_-_time_series.ods", so an alphabetical
+// sort puts 28 August after 25 September. Order by the date in the name instead.
+function publishedDate(name) {
+  const match = /^(\d{1,2})_([A-Za-z]+)_(\d{4})_/.exec(name);
+  const date = match ? new Date(`${match[1]} ${match[2]} ${match[3]} UTC`) : null;
+  if (!date || Number.isNaN(date.getTime())) {
+    throw new Error(`Cannot read a publication date from ${name} in data/raw/small_boats`);
+  }
+  return date.getTime();
+}
+
+const sourceFile = readdirSync(RAW_DIR)
+  .filter((name) => name.endsWith(".ods"))
+  .sort((a, b) => publishedDate(a) - publishedDate(b))
+  .pop();
 if (!sourceFile) {
   throw new Error("No .ods in data/raw/small_boats. Run: npm run fetch:smallboats");
 }

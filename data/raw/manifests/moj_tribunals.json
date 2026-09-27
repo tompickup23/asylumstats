@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-09-07T14:07:44.690Z",
+  "generatedAt": "2026-09-27T10:18:38.283Z",
   "dataset": "moj_tribunals",
   "datasetId": "moj_tribunals",
   "publisher": "Ministry of Justice",
   "cadence": "quarterly",
-  "release": "Tribunal Statistics Quarterly: January to March 2026",
-  "releaseTitle": "Tribunal Statistics Quarterly: January to March 2026",
-  "releasePeriodLabel": "Q4 2025/26",
-  "releasePeriodCoverage": "January to March 2026",
+  "release": "Tribunal Statistics Quarterly: April to June 2026",
+  "releaseTitle": "Tribunal Statistics Quarterly: April to June 2026",
+  "releasePeriodLabel": "Q1 2026/27",
+  "releasePeriodCoverage": "April to June 2026",
   "releasePeriodBasis": "financial_year_quarter",
-  "releaseDate": "2026-06-11",
-  "nextEdition": "2026-09-10",
-  "nextEditionDate": "2026-09-10",
-  "nextEditionCoverage": "April to June 2026",
+  "releaseDate": "2026-09-10",
+  "nextEdition": "2026-12-10",
+  "nextEditionDate": "2026-12-10",
+  "nextEditionCoverage": "July to September 2026",
   "nextEditionIsExpected": true,
-  "landing": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
-  "landingUrl": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-january-to-march-2026",
+  "landing": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-april-to-june-2026",
+  "landingUrl": "https://www.gov.uk/government/statistics/tribunals-statistics-quarterly-april-to-june-2026",
   "fetchedFileCount": 2,
   "files": [
     {
       "sourceId": "moj_tribunals_main_tables",
-      "fileName": "Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296ed51f6fa5c3377e5cd9/Tribunals_Statistics_Quarterly_Main_Tables_Q4_2025_26.ods",
-      "sizeBytes": 721463,
-      "fileSha256": "06c4699824e6c850617c9a8f04da8382d9c72df84444d419c832703b33cfeec7"
+      "fileName": "Tribunals_Statistics_Quarterly_Main_Tables_Q1_2026_27.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6aa18eb1c5796a7a179c658d/Tribunals_Statistics_Quarterly_Main_Tables_Q1_2026_27.ods",
+      "sizeBytes": 792256,
+      "fileSha256": "39ee826338ad1b7b7f633103d00894bdef8f8d36fa2e0741b1c8fbb5b368a763"
     },
     {
       "sourceId": "moj_tribunals_csvs",
       "fileName": "CSVs.zip",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a296f79a3674dfd3eb50633/CSVs.zip",
-      "sizeBytes": 80650,
-      "fileSha256": "a6f06a2ab70ed97f7e2b90b14e49e20fd835cff0a81f2690819b8d7393ca76f5"
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6aa1650f4e17456e2cdf522a/CSVs.zip",
+      "sizeBytes": 83008,
+      "fileSha256": "c02e8946fd41bb7bdbc1200dc7a6aef7a132c3d22c7979f69a5167f26a5eda98"
     }
   ]
 }

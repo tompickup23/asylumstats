@@ -145,6 +145,19 @@ const latestSupportBreakdown = nationalSystemDynamics.latestSupportBreakdown;
 const recentOutcomeCohorts = nationalSystemDynamics.recentOutcomeCohorts;
 const postDecisionPath = nationalSystemDynamics.postDecisionPath;
 const latestAppealDeterminationBreakdown = postDecisionPath.appeals.latestDeterminationBreakdown;
+// Stated from the quarter's figures. "Far more" was written against an 81% gap and was
+// still printed when the next edition narrowed it to 30%.
+const tribunalReceipts = postDecisionPath.appeals.series.receipts?.at(-1)?.value ?? 0;
+const tribunalDisposals = postDecisionPath.appeals.series.disposals?.at(-1)?.value ?? 0;
+const tribunalIntakeGapPct = tribunalDisposals
+  ? Math.round(((tribunalReceipts - tribunalDisposals) / tribunalDisposals) * 100)
+  : 0;
+const tribunalIntakeSentence =
+  tribunalIntakeGapPct > 0
+    ? `took in ${tribunalIntakeGapPct}% more appeals than it cleared`
+    : tribunalIntakeGapPct < 0
+      ? `cleared ${-tribunalIntakeGapPct}% more appeals than it took in`
+      : "cleared about as many appeals as it took in";
 const latestReturnsBreakdown = postDecisionPath.returns.latestBreakdown;
 const maxLatestDecisionBreakdownValue = Math.max(...latestQuarterDecisionBreakdown.map((row) => row.value), 1);
 const maxLatestSupportBreakdownValue = Math.max(...latestSupportBreakdown.map((row) => row.value), 1);
@@ -564,8 +577,8 @@ function formatCardValue(value: number, suffix?: string): string {
       <div class="panel panel-pad">
         <h3>Latest tribunal mix</h3>
         <p class="lede">
-          In {postDecisionPath.appeals.latestQuarterLabel ?? "the latest tribunal quarter"}, the First-tier Tribunal
-          took in far more appeals than it cleared. Disposals include appeals withdrawn, struck out or found invalid,
+          In {postDecisionPath.appeals.latestQuarterLabel ?? "the latest tribunal quarter"}, the First-tier Tribunal{" "}
+          {tribunalIntakeSentence}. Disposals include appeals withdrawn, struck out or found invalid,
           so only the smaller group determined at a hearing or on paper carries an allowed rate, which stood at{" "}
           {postDecisionPath.appeals.allowedRatePct ?? "n/a"}% against{" "}
           {postDecisionPath.appeals.allowedRatePctPrevious ?? "n/a"}% a year earlier.

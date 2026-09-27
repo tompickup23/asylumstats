@@ -4,6 +4,10 @@ import AsylumSpendLedger from "../components/AsylumSpendLedger.astro";
 import PageContents from "../components/PageContents.astro";
 import asylumFinance from "../data/live/asylum-finance.json";
 import followMoney from "../data/live/follow-money.json";
+import { loadHoAsylumEntities, loadAsylumCostReconciliation, formatGbpShort } from "../lib/ho-spend";
+
+const ledgerTotal = formatGbpShort(loadHoAsylumEntities().summary.totalGbp);
+const itemisedPerHundred = loadAsylumCostReconciliation().headline.capture?.perHundredPounds;
 
 // Only the sections that survive the starter ledger being parked. Every other entry
 // pointed at an explorer, preset or profile grid built over eleven hand-curated records.
@@ -17,7 +21,7 @@ const spendingSections = [
 <BaseLayout
   image="/og/spending.png"
   title="UK asylum spending: what the Home Office publishes"
-  description="£4.31bn of Home Office asylum payments over £25,000 since 2010, set against audited outturn. Only £11 in every £100 is itemised."
+  description={`${ledgerTotal} of Home Office asylum payments over £25,000 since 2010, set against audited outturn. Only £${itemisedPerHundred} in every £100 is itemised.`}
 >
   <section class="page-top">
     <section class="page-head">

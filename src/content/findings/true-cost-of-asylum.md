@@ -1,6 +1,7 @@
 ---
 headline: "What asylum costs: £234 per income taxpayer a year, in a range of £212 to £257"
 date: "2026-08-13"
+updated: "2026-09-27"
 category: spending
 content_type: "article"
 stat_value: "£8.0B"
@@ -158,11 +159,11 @@ We use £140 million as the central figure. As with healthcare, the true number 
 
 ### Tribunals and courts: approximately £115 million
 
-The Immigration and Asylum Chamber of the First-tier Tribunal costs £79.5 million per year to run. The backlog has reached 121,000 open cases. Mean clearance time: 60 weeks for an asylum appeal.
+The Immigration and Asylum Chamber of the First-tier Tribunal costs £79.5 million per year to run. At 30 June 2026 it had 155,798 open cases, 90,341 of them asylum and protection appeals, and an asylum and protection appeal took a mean of 72 weeks to clear in April to June 2026.
 
 The Home Office spends a further £22 million per year on its own appeal representation. Upper Tribunal and judicial review costs add an estimated £10-15 million (not separately published by HMCTS).
 
-Source: HMCTS Tribunal Statistics; NAO December 2025.
+Source: MOJ Tribunal Statistics Quarterly, April to June 2026 (caseload and clearance time); NAO December 2025 (running and representation costs).
 
 ### Legal aid: approximately £60 million
 
