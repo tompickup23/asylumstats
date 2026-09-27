@@ -2,6 +2,7 @@
 headline: "The Home Office publishes about £11 in every £100 it spends on asylum"
 date: "2026-09-03"
 category: spending
+featured: 1
 stat_value: "11%"
 stat_label: "Asylum spending itemised in transparency data, 2024/25"
 verdict: alert

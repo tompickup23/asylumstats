@@ -1,0 +1,61 @@
+---
+/** A question with its live answer figure, for the /explained/ and /findings/ hubs. */
+import type { Explainer } from "../lib/explainers";
+import { explainerPath } from "../lib/explainers";
+
+interface Props {
+  explainer: Explainer;
+}
+
+const { explainer } = Astro.props;
+---
+
+<a class="question-card" href={explainerPath(explainer.slug)}>
+  <span class="qc-question">{explainer.question}</span>
+  <span class="qc-figure">{explainer.figure}</span>
+  <span class="qc-label">{explainer.figureLabel}</span>
+  <span class="qc-cta">Read the answer &rarr;</span>
+</a>
+
+<style>
+  .question-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .question-card:hover,
+  .question-card:focus-visible {
+    border-color: var(--accent);
+  }
+  .qc-question {
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .qc-figure {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 0.3rem;
+  }
+  .qc-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .qc-cta {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

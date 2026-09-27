@@ -16,7 +16,18 @@ const findings = defineCollection({
     category: z.enum(["spending", "routes", "demographics", "backlog", "accountability", "crime", "send", "social-care", "pressure-index"]),
     stat_value: z.string(),
     stat_label: z.string(),
-    content_type: z.enum(["finding", "article"]).default("finding"),
+    /**
+     * "news" is a dated piece on something that happened this week: an announcement, a
+     * scheme's first figures. It leads the Latest strip and links on to the evergreen
+     * explainer that keeps the search traffic once the news has passed.
+     */
+    content_type: z.enum(["finding", "article", "news"]).default("finding"),
+    /**
+     * Position among the flagship investigations at the top of /findings/, 1 first. The
+     * rest are grouped by topic, so a strong piece no longer sinks the week something
+     * newer is published.
+     */
+    featured: z.number().int().positive().optional(),
     verdict: z.enum(["alert", "critical", "resolved", "info"]).default("info"),
     source_url: z.string().url(),
     source_label: z.string().default("Source"),
