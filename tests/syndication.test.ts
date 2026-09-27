@@ -59,9 +59,16 @@ describe.skipIf(!built)("syndication surfaces", () => {
     // real per-record date, so coverage is near total and the proportion no longer says
     // anything. What matters is that no date is invented, and that is asserted here and
     // in tests/sitemap-lastmod.test.ts rather than inferred from a ratio.
+    // Asserted on breadth, not on the date. A page genuinely edited today should carry
+    // today, and forbidding that outright stopped a same-day correction from shipping.
+    // See the note in tests/sitemap-lastmod.test.ts.
     const today = new Date().toISOString().slice(0, 10);
     const dates = [...sitemap().matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
-    expect(dates.filter((d) => d === today), "build-date stamp in the sitemap").toEqual([]);
+    const stampedToday = dates.filter((d) => d === today).length;
+    expect(
+      stampedToday / Math.max(dates.length, 1) < 0.1,
+      `${stampedToday} of ${dates.length} URLs dated today: a build stamp, not a day's edits`
+    ).toBe(true);
     expect(dates.every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))).toBe(true);
   });
 

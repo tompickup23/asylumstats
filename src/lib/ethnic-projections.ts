@@ -509,3 +509,44 @@ export function countAreasAbove(
     return typeof value === "number" && value > threshold;
   }).length;
 }
+
+export interface ShareRange {
+  central: number;
+  low: number;
+  high: number;
+}
+
+/**
+ * A projected share with the model's measured out-of-sample error carried on it.
+ *
+ * Crossing years have published a sensitivity band since August; the share point estimates
+ * they are derived FROM did not, so a page could say Blackburn crosses 50% between 2026 and
+ * 2028 and then print its 2051 share as 24.6%, a bare figure to one decimal place at a
+ * thirty-year horizon. The audit is right that the second reads as a measurement.
+ *
+ * Same rule as `whiteBritishCrossingRange`, deliberately: one measured error, the
+ * white_british mean absolute error from the out-of-sample test, widened by sqrt(decades)
+ * on the same basis as the Monte Carlo run. It is a sensitivity band, not a confidence
+ * interval. It propagates the one-decade error that was actually measured and nothing else,
+ * so at a thirty-year horizon it understates the true uncertainty rather than bounding it.
+ *
+ * This is NOT for areas that already publish the stochastic 80% interval. Two intervals of
+ * different kinds on one figure is the "same unit, different meaning" trap this site has
+ * been caught by before. Use `consistentBand` first and fall back to this only where it
+ * withholds, so every area carries exactly one and no area carries two.
+ */
+export function whiteBritishShareRange(code: string, year: number): ShareRange | null {
+  const area = data.areas[code];
+  const projected = area?.projections?.[String(year)]?.white_british;
+  if (projected == null || !Number.isFinite(projected)) return null;
+
+  const observedYear = area.current?.year ?? 2021;
+  const decades = Math.max((year - observedYear) / 10, 0);
+  const spread = WHITE_BRITISH_MAE_PP * Math.sqrt(decades);
+
+  return {
+    central: projected,
+    low: Math.max(0, projected - spread),
+    high: Math.min(100, projected + spread),
+  };
+}

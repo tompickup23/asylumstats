@@ -24,6 +24,10 @@ import { readFile } from "node:fs/promises";
 const SITE_URL = "https://asylumstats.co.uk";
 const KEY = "c0d15baf467d49dcab4b9849a77a0fb6";
 const BUILT_SITEMAP = "dist/sitemap.xml";
+/** URLs per request. 50 is verified good; 448 in one request is not. */
+const BATCH_SIZE = 50;
+/** Courtesy gap between requests. */
+const PAUSE_MS = 1200;
 
 await submitIndexNow({ siteUrl: SITE_URL, key: KEY, args: process.argv.slice(2) });
 
@@ -46,8 +50,8 @@ async function submitIndexNow({ siteUrl, key, args }) {
     console.log("IndexNow: no canonical URLs changed in this deploy.");
     return;
   }
-  if (urls.length > 10_000 || urls.some((url) => new URL(url).origin !== siteUrl)) {
-    throw new Error("IndexNow accepts at most 10,000 same-host canonical URLs per notification.");
+  if (urls.some((url) => new URL(url).origin !== siteUrl)) {
+    throw new Error("IndexNow accepts same-host canonical URLs only.");
   }
 
   // IndexNow authenticates by fetching the key file off the site itself, so submitting
@@ -64,13 +68,29 @@ async function submitIndexNow({ siteUrl, key, args }) {
     return;
   }
 
-  const response = await fetch("https://api.indexnow.org/indexnow", {
-    method: "POST",
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ host: new URL(siteUrl).host, key, keyLocation, urlList: urls }),
-  });
-  if (!response.ok) throw new Error(`IndexNow rejected ${urls.length} URLs: HTTP ${response.status}`);
-  console.log(`IndexNow notified of ${urls.length} changed canonical URL${urls.length === 1 ? "" : "s"}.`);
+  // Chunked, because the documented 10,000-URL ceiling is not the one the endpoint
+  // enforces. A single request carrying 448 URLs came back 403, the status IndexNow uses
+  // for an invalid key, while the very same key and keyLocation succeeded at 10 and at 50
+  // in the same minute. The status is misleading and the size is the real cause, so the
+  // batch is split rather than trusted.
+  let submitted = 0;
+  for (let index = 0; index < urls.length; index += BATCH_SIZE) {
+    const batch = urls.slice(index, index + BATCH_SIZE);
+    const response = await fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ host: new URL(siteUrl).host, key, keyLocation, urlList: batch }),
+    });
+    if (!response.ok) {
+      throw new Error(
+        `IndexNow rejected a batch of ${batch.length} URLs (${submitted} already accepted): ` +
+        `HTTP ${response.status}`
+      );
+    }
+    submitted += batch.length;
+    if (index + BATCH_SIZE < urls.length) await new Promise((r) => setTimeout(r, PAUSE_MS));
+  }
+  console.log(`IndexNow notified of ${submitted} changed canonical URL${submitted === 1 ? "" : "s"}.`);
 }
 
 function option(args, name) {
