@@ -191,6 +191,30 @@ are National Audit Office copyright, non-commercial reuse with a prescribed
 acknowledgement. The licence travels on each row and must stay there. Do not reproduce
 NAO tables or substantial text; cite the figures and link the report.
 
+## Explainers and the research page (added 27 Sep 2026)
+
+`/explained/<slug>/` pages answer one searched-for question each. They are built from
+`src/lib/explainers/` (`system.ts` reads the marts, `cost.ts` reads
+`src/lib/official-figures.ts`), and the page route, the `/explained/` hub, `/findings/`,
+the sitemap, the search index and the OG cards all read `getExplainers()`. The answers
+rewrite themselves on each refresh; `tests/explainers.test.ts` holds every title and
+description inside Google's pixel budget and every link to a page that exists.
+
+- **`official-figures.ts` does NOT refresh itself.** It holds figures that arrive as prose
+  (ministerial letters, SIs, press releases), each with its date and source. Check it when
+  a new letter or rate review lands. Known expiry: the UK-France pilot extension ends
+  1 October 2026.
+- **Grant rate = main applicants, grants / (grants + refusals).** Anything else does not
+  match the Home Office's published figure. `initialGrantRate()` in
+  `src/lib/headline-figures.ts` is the one implementation, and a test pins it to the
+  published 38% (YE Jun 2026) and 48% (YE Jun 2025).
+- **`/findings/` order** is set by `src/lib/research-sections.ts`: Latest (newest three
+  by shown date, news first on a tie), Questions answered, Investigations (`featured:`
+  rank in frontmatter), then topic groups with demographics last. The homepage "Latest"
+  strip reads the same helper.
+- `content_type: news` is for dated pieces on this week's events; they should link on to
+  the evergreen explainer.
+
 ## Cross-repo integration
 
 **Consumed by another repo (10 Aug 2026):**
