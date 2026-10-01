@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-10-01T18:11:50.315Z",
+  "generatedAt": "2026-10-01T20:51:52.653Z",
   "inputs": [
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/manual/regional-source-watch.csv",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/src/data/live/local-route-latest.json",
-      "fileSha256": "53885b8d0377f7d77fe3e7af3b1c7c4f73fa26e4e86fb7d94878a036728d6f96"
+      "fileSha256": "6cf3181165ecdd5c89a2c91c995ed44e49c837c9db87723fd290c6a39f1fc41b"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
@@ -36,7 +36,7 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nemp-data-page.html",
-      "fileSha256": "30f5054d4ff92ec4d8af795ed21c8ae13be64e48fb2029a63a88719e166e5d02"
+      "fileSha256": "51f77721306977f75f9e7a8d3dbaa1e5f9a16bc01e073ca350ebbc4159c4404b"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-observatory-local-data-guide.html",
@@ -82,7 +82,7 @@
     "nwrsmpSupportedSeriesAreaCount": 354,
     "nwrsmpSupportedSeriesPointCount": 12408,
     "nwrsmpSupportedSeriesLatestPeriod": "2026-06-30",
-    "regionalPartnerAssetCount": 12,
+    "regionalPartnerAssetCount": 8,
     "migrationObservatoryGuideLinkCount": 4
   }
 }

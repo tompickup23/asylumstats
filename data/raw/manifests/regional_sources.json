@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T18:11:07.396Z",
+  "generatedAt": "2026-10-01T20:51:10.730Z",
   "datasetId": "regional_sources",
   "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
   "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
@@ -44,8 +44,8 @@
     {
       "fileName": "nemp-data-page.html",
       "sourceUrl": "https://www.nemp.org.uk/data/",
-      "sizeBytes": 86322,
-      "fileSha256": "30f5054d4ff92ec4d8af795ed21c8ae13be64e48fb2029a63a88719e166e5d02"
+      "sizeBytes": 11926,
+      "fileSha256": "51f77721306977f75f9e7a8d3dbaa1e5f9a16bc01e073ca350ebbc4159c4404b"
     },
     {
       "fileName": "migration-observatory-local-data-guide.html",
