@@ -1,57 +1,66 @@
 {
-  "generatedAt": "2026-09-07T14:14:11.352Z",
+  "generatedAt": "2026-10-01T18:11:07.396Z",
   "datasetId": "regional_sources",
   "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
   "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
-  "workbookCount": 7,
+  "workbookCount": 8,
   "files": [
     {
       "fileName": "nwrsmp-media.json",
       "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
-      "sizeBytes": 4457,
-      "fileSha256": "4fb23c79e27726894635473986537bd9c32cd9e2887a5bfb1f6be0fc9c36a46b"
+      "sizeBytes": 4948,
+      "fileSha256": "6b878a4c486f79da76538fc04c96045aa0b906dd03e50e84b01097ff491d7083"
     },
     {
       "fileName": "nwrsmp-data-page.json",
       "sourceUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
-      "sizeBytes": 10938,
-      "fileSha256": "86ab74ed662c968d4d6ccab260648824cd05b2b280367182ebd9aea4a5eb4175"
+      "sizeBytes": 10939,
+      "fileSha256": "4e555454f2904de98542a716bd86e3262a87c230a74a4029c9cc38d3f898cd34"
     },
     {
       "fileName": "migration-yorkshire-statistics.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics",
-      "sizeBytes": 100897,
-      "fileSha256": "cb645ecf5c0914b69d861f574a1cb5ecd74a96148dfee80d973fe3274178b4f4"
+      "sizeBytes": 104180,
+      "fileSha256": "17dbaa3a708775854488ce9319abdbb05a0ed441c22ec5c35087d5cb7c2599c2"
     },
     {
       "fileName": "migration-yorkshire-refugee-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/refugee-and-asylum-seeker-dashboard",
-      "sizeBytes": 97745,
-      "fileSha256": "1723e4626ba17fff67bc26908b82d3b103ad8939bb112d33b9be0178e5d9c567"
+      "sizeBytes": 101028,
+      "fileSha256": "3b769d95f10918cd682cd73bd91e9fba90a941fad0d14cc21a992ed677cc3a55"
     },
     {
       "fileName": "migration-yorkshire-ukraine-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/ukraine-data-dashboard",
-      "sizeBytes": 99958,
-      "fileSha256": "012760f171fdf86114c34f43988fac2293a8aaa03998d0950a23b3bec21ee938"
+      "sizeBytes": 103241,
+      "fileSha256": "a41d0cedc24900a765628810a718ca594ce118b57aca7335215a2f26805e60f8"
     },
     {
       "fileName": "migration-yorkshire-euss-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/european-union-settlement-scheme-dashboard",
-      "sizeBytes": 96474,
-      "fileSha256": "223c443632af300827d6fd03c7213d18fac8933349a1f0f1926af6b552c18d61"
+      "sizeBytes": 99757,
+      "fileSha256": "84d147f2804f1c8622d087f41bc2b89e3dd7dca6a0d1d0437446378ce3648a66"
     },
     {
       "fileName": "nemp-data-page.html",
       "sourceUrl": "https://www.nemp.org.uk/data/",
-      "sizeBytes": 86298,
-      "fileSha256": "0ddbd2bdf1312c983f9d18fc22f988915718932a87871b91dda790f440108f23"
+      "sizeBytes": 86322,
+      "fileSha256": "30f5054d4ff92ec4d8af795ed21c8ae13be64e48fb2029a63a88719e166e5d02"
     },
     {
       "fileName": "migration-observatory-local-data-guide.html",
       "sourceUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
       "sizeBytes": 140750,
       "fileSha256": "b08a3187c4e9c51feb1f076283e82a4c7e11a06c35d11babf8196ca941ccfebc"
+    },
+    {
+      "fileName": "nwrsmp-workbook-2026-09-16.xlsx",
+      "publishedAt": "2026-09-16",
+      "title": "North West Public Accessible August 2026 (XLS, 1691KB)",
+      "sourceUrl": "https://northwestrsmp.org.uk/wp-content/uploads/2026/09/North-West-Public-Accessible-August-2026-XLS-1691KB.xlsx",
+      "fileSizeBytes": 1731227,
+      "sizeBytes": 1731227,
+      "fileSha256": "c1ecdf3b40d86b360a1c637390b0582440b9dcbf69d3c70d95a0dded6f348494"
     },
     {
       "fileName": "nwrsmp-workbook-2026-06-02.xlsx",

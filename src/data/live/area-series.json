@@ -248,7 +248,7 @@
     "areaCode": "E06000001",
     "areaName": "Hartlepool",
     "periodEnd": "2022-12-31",
-    "value": 379,
+    "value": 380,
     "dataStatus": "official_anchor"
   },
   {
@@ -333,6 +333,20 @@
     "areaName": "Hartlepool",
     "periodEnd": "2025-12-31",
     "value": 405,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000001",
+    "areaName": "Hartlepool",
+    "periodEnd": "2026-03-31",
+    "value": 403,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000001",
+    "areaName": "Hartlepool",
+    "periodEnd": "2026-06-30",
+    "value": 379,
     "dataStatus": "official_anchor"
   },
   {
@@ -584,7 +598,7 @@
     "areaCode": "E06000002",
     "areaName": "Middlesbrough",
     "periodEnd": "2022-12-31",
-    "value": 617,
+    "value": 624,
     "dataStatus": "official_anchor"
   },
   {
@@ -669,6 +683,20 @@
     "areaName": "Middlesbrough",
     "periodEnd": "2025-12-31",
     "value": 699,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000002",
+    "areaName": "Middlesbrough",
+    "periodEnd": "2026-03-31",
+    "value": 677,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000002",
+    "areaName": "Middlesbrough",
+    "periodEnd": "2026-06-30",
+    "value": 671,
     "dataStatus": "official_anchor"
   },
   {
@@ -920,7 +948,7 @@
     "areaCode": "E06000003",
     "areaName": "Redcar and Cleveland",
     "periodEnd": "2022-12-31",
-    "value": 171,
+    "value": 174,
     "dataStatus": "official_anchor"
   },
   {
@@ -1005,6 +1033,20 @@
     "areaName": "Redcar and Cleveland",
     "periodEnd": "2025-12-31",
     "value": 260,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000003",
+    "areaName": "Redcar and Cleveland",
+    "periodEnd": "2026-03-31",
+    "value": 275,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000003",
+    "areaName": "Redcar and Cleveland",
+    "periodEnd": "2026-06-30",
+    "value": 243,
     "dataStatus": "official_anchor"
   },
   {
@@ -1256,7 +1298,7 @@
     "areaCode": "E06000004",
     "areaName": "Stockton-on-Tees",
     "periodEnd": "2022-12-31",
-    "value": 753,
+    "value": 777,
     "dataStatus": "official_anchor"
   },
   {
@@ -1341,6 +1383,20 @@
     "areaName": "Stockton-on-Tees",
     "periodEnd": "2025-12-31",
     "value": 832,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000004",
+    "areaName": "Stockton-on-Tees",
+    "periodEnd": "2026-03-31",
+    "value": 837,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000004",
+    "areaName": "Stockton-on-Tees",
+    "periodEnd": "2026-06-30",
+    "value": 822,
     "dataStatus": "official_anchor"
   },
   {
@@ -1645,6 +1701,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000005",
+    "areaName": "Darlington",
+    "periodEnd": "2026-03-31",
+    "value": 228,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000005",
+    "areaName": "Darlington",
+    "periodEnd": "2026-06-30",
+    "value": 214,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000006",
     "areaName": "Halton",
     "periodEnd": "2014-12-31",
@@ -1922,6 +1992,20 @@
     "areaName": "Halton",
     "periodEnd": "2025-12-31",
     "value": 601,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000006",
+    "areaName": "Halton",
+    "periodEnd": "2026-03-31",
+    "value": 604,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000006",
+    "areaName": "Halton",
+    "periodEnd": "2026-06-30",
+    "value": 604,
     "dataStatus": "official_anchor"
   },
   {
@@ -2237,6 +2321,20 @@
     "areaName": "Warrington",
     "periodEnd": "2025-12-31",
     "value": 456,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000007",
+    "areaName": "Warrington",
+    "periodEnd": "2026-03-31",
+    "value": 375,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000007",
+    "areaName": "Warrington",
+    "periodEnd": "2026-06-30",
+    "value": 397,
     "dataStatus": "official_anchor"
   },
   {
@@ -2576,6 +2674,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000008",
+    "areaName": "Blackburn with Darwen",
+    "periodEnd": "2026-03-31",
+    "value": 765,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000008",
+    "areaName": "Blackburn with Darwen",
+    "periodEnd": "2026-06-30",
+    "value": 760,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000009",
     "areaName": "Blackpool",
     "periodEnd": "2014-06-30",
@@ -2856,6 +2968,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000009",
+    "areaName": "Blackpool",
+    "periodEnd": "2026-03-31",
+    "value": 496,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000009",
+    "areaName": "Blackpool",
+    "periodEnd": "2026-06-30",
+    "value": 236,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000010",
     "areaName": "Kingston upon Hull, City of",
     "periodEnd": "2014-03-31",
@@ -3104,7 +3230,7 @@
     "areaCode": "E06000010",
     "areaName": "Kingston upon Hull, City of",
     "periodEnd": "2022-12-31",
-    "value": 4777,
+    "value": 942,
     "dataStatus": "official_anchor"
   },
   {
@@ -3189,6 +3315,20 @@
     "areaName": "Kingston upon Hull, City of",
     "periodEnd": "2025-12-31",
     "value": 766,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000010",
+    "areaName": "Kingston upon Hull, City of",
+    "periodEnd": "2026-03-31",
+    "value": 608,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000010",
+    "areaName": "Kingston upon Hull, City of",
+    "periodEnd": "2026-06-30",
+    "value": 522,
     "dataStatus": "official_anchor"
   },
   {
@@ -3279,7 +3419,7 @@
     "areaCode": "E06000011",
     "areaName": "East Riding of Yorkshire",
     "periodEnd": "2022-12-31",
-    "value": 18,
+    "value": 286,
     "dataStatus": "official_anchor"
   },
   {
@@ -3364,6 +3504,20 @@
     "areaName": "East Riding of Yorkshire",
     "periodEnd": "2025-12-31",
     "value": 53,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000011",
+    "areaName": "East Riding of Yorkshire",
+    "periodEnd": "2026-03-31",
+    "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000011",
+    "areaName": "East Riding of Yorkshire",
+    "periodEnd": "2026-06-30",
+    "value": 55,
     "dataStatus": "official_anchor"
   },
   {
@@ -3654,6 +3808,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000012",
+    "areaName": "North East Lincolnshire",
+    "periodEnd": "2026-03-31",
+    "value": 282,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000012",
+    "areaName": "North East Lincolnshire",
+    "periodEnd": "2026-06-30",
+    "value": 267,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000013",
     "areaName": "North Lincolnshire",
     "periodEnd": "2016-06-30",
@@ -3871,6 +4039,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000013",
+    "areaName": "North Lincolnshire",
+    "periodEnd": "2026-03-31",
+    "value": 74,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000013",
+    "areaName": "North Lincolnshire",
+    "periodEnd": "2026-06-30",
+    "value": 87,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000014",
     "areaName": "York",
     "periodEnd": "2020-09-30",
@@ -3937,7 +4119,7 @@
     "areaCode": "E06000014",
     "areaName": "York",
     "periodEnd": "2022-12-31",
-    "value": 40,
+    "value": 357,
     "dataStatus": "official_anchor"
   },
   {
@@ -4022,6 +4204,20 @@
     "areaName": "York",
     "periodEnd": "2025-12-31",
     "value": 272,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000014",
+    "areaName": "York",
+    "periodEnd": "2026-03-31",
+    "value": 341,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000014",
+    "areaName": "York",
+    "periodEnd": "2026-06-30",
+    "value": 366,
     "dataStatus": "official_anchor"
   },
   {
@@ -4361,6 +4557,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000015",
+    "areaName": "Derby",
+    "periodEnd": "2026-03-31",
+    "value": 1106,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000015",
+    "areaName": "Derby",
+    "periodEnd": "2026-06-30",
+    "value": 1127,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000016",
     "areaName": "Leicester",
     "periodEnd": "2014-03-31",
@@ -4697,6 +4907,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000016",
+    "areaName": "Leicester",
+    "periodEnd": "2026-03-31",
+    "value": 1370,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000016",
+    "areaName": "Leicester",
+    "periodEnd": "2026-06-30",
+    "value": 1333,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000017",
     "areaName": "Rutland",
     "periodEnd": "2019-09-30",
@@ -4750,6 +4974,20 @@
     "areaName": "Rutland",
     "periodEnd": "2025-12-31",
     "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000017",
+    "areaName": "Rutland",
+    "periodEnd": "2026-03-31",
+    "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000017",
+    "areaName": "Rutland",
+    "periodEnd": "2026-06-30",
+    "value": 8,
     "dataStatus": "official_anchor"
   },
   {
@@ -5089,6 +5327,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000018",
+    "areaName": "Nottingham",
+    "periodEnd": "2026-03-31",
+    "value": 1538,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000018",
+    "areaName": "Nottingham",
+    "periodEnd": "2026-06-30",
+    "value": 1352,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000019",
     "areaName": "Herefordshire, County of",
     "periodEnd": "2014-06-30",
@@ -5233,6 +5485,20 @@
     "areaName": "Herefordshire, County of",
     "periodEnd": "2025-12-31",
     "value": 19,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000019",
+    "areaName": "Herefordshire, County of",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000019",
+    "areaName": "Herefordshire, County of",
+    "periodEnd": "2026-06-30",
+    "value": 25,
     "dataStatus": "official_anchor"
   },
   {
@@ -5569,6 +5835,20 @@
     "areaName": "Telford and Wrekin",
     "periodEnd": "2025-12-31",
     "value": 710,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000020",
+    "areaName": "Telford and Wrekin",
+    "periodEnd": "2026-03-31",
+    "value": 566,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000020",
+    "areaName": "Telford and Wrekin",
+    "periodEnd": "2026-06-30",
+    "value": 562,
     "dataStatus": "official_anchor"
   },
   {
@@ -5908,6 +6188,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000021",
+    "areaName": "Stoke-on-Trent",
+    "periodEnd": "2026-03-31",
+    "value": 1189,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000021",
+    "areaName": "Stoke-on-Trent",
+    "periodEnd": "2026-06-30",
+    "value": 1021,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000022",
     "areaName": "Bath and North East Somerset",
     "periodEnd": "2014-09-30",
@@ -6073,6 +6367,20 @@
     "areaName": "Bath and North East Somerset",
     "periodEnd": "2025-12-31",
     "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000022",
+    "areaName": "Bath and North East Somerset",
+    "periodEnd": "2026-03-31",
+    "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000022",
+    "areaName": "Bath and North East Somerset",
+    "periodEnd": "2026-06-30",
+    "value": 4,
     "dataStatus": "official_anchor"
   },
   {
@@ -6412,6 +6720,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000023",
+    "areaName": "Bristol, City of",
+    "periodEnd": "2026-03-31",
+    "value": 879,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000023",
+    "areaName": "Bristol, City of",
+    "periodEnd": "2026-06-30",
+    "value": 689,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000024",
     "areaName": "North Somerset",
     "periodEnd": "2014-12-31",
@@ -6667,6 +6989,20 @@
     "areaCode": "E06000024",
     "areaName": "North Somerset",
     "periodEnd": "2025-12-31",
+    "value": 83,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000024",
+    "areaName": "North Somerset",
+    "periodEnd": "2026-03-31",
+    "value": 77,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000024",
+    "areaName": "North Somerset",
+    "periodEnd": "2026-06-30",
     "value": 83,
     "dataStatus": "official_anchor"
   },
@@ -7007,6 +7343,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000025",
+    "areaName": "South Gloucestershire",
+    "periodEnd": "2026-03-31",
+    "value": 165,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000025",
+    "areaName": "South Gloucestershire",
+    "periodEnd": "2026-06-30",
+    "value": 151,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000026",
     "areaName": "Plymouth",
     "periodEnd": "2014-03-31",
@@ -7343,6 +7693,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000026",
+    "areaName": "Plymouth",
+    "periodEnd": "2026-03-31",
+    "value": 495,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000026",
+    "areaName": "Plymouth",
+    "periodEnd": "2026-06-30",
+    "value": 490,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000027",
     "areaName": "Torbay",
     "periodEnd": "2014-03-31",
@@ -7592,6 +7956,20 @@
     "areaName": "Torbay",
     "periodEnd": "2025-12-31",
     "value": 56,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000027",
+    "areaName": "Torbay",
+    "periodEnd": "2026-03-31",
+    "value": 57,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000027",
+    "areaName": "Torbay",
+    "periodEnd": "2026-06-30",
+    "value": 31,
     "dataStatus": "official_anchor"
   },
   {
@@ -7931,6 +8309,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000030",
+    "areaName": "Swindon",
+    "periodEnd": "2026-03-31",
+    "value": 515,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000030",
+    "areaName": "Swindon",
+    "periodEnd": "2026-06-30",
+    "value": 511,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000031",
     "areaName": "Peterborough",
     "periodEnd": "2014-03-31",
@@ -8264,6 +8656,20 @@
     "areaName": "Peterborough",
     "periodEnd": "2025-12-31",
     "value": 508,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000031",
+    "areaName": "Peterborough",
+    "periodEnd": "2026-03-31",
+    "value": 414,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000031",
+    "areaName": "Peterborough",
+    "periodEnd": "2026-06-30",
+    "value": 448,
     "dataStatus": "official_anchor"
   },
   {
@@ -8603,6 +9009,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000032",
+    "areaName": "Luton",
+    "periodEnd": "2026-03-31",
+    "value": 461,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000032",
+    "areaName": "Luton",
+    "periodEnd": "2026-06-30",
+    "value": 377,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000033",
     "areaName": "Southend-on-Sea",
     "periodEnd": "2014-03-31",
@@ -8936,6 +9356,20 @@
     "areaName": "Southend-on-Sea",
     "periodEnd": "2025-12-31",
     "value": 248,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000033",
+    "areaName": "Southend-on-Sea",
+    "periodEnd": "2026-03-31",
+    "value": 257,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000033",
+    "areaName": "Southend-on-Sea",
+    "periodEnd": "2026-06-30",
+    "value": 264,
     "dataStatus": "official_anchor"
   },
   {
@@ -9275,6 +9709,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000034",
+    "areaName": "Thurrock",
+    "periodEnd": "2026-03-31",
+    "value": 145,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000034",
+    "areaName": "Thurrock",
+    "periodEnd": "2026-06-30",
+    "value": 155,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000035",
     "areaName": "Medway",
     "periodEnd": "2014-03-31",
@@ -9611,6 +10059,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000035",
+    "areaName": "Medway",
+    "periodEnd": "2026-03-31",
+    "value": 316,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000035",
+    "areaName": "Medway",
+    "periodEnd": "2026-06-30",
+    "value": 346,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000036",
     "areaName": "Bracknell Forest",
     "periodEnd": "2014-03-31",
@@ -9884,6 +10346,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000036",
+    "areaName": "Bracknell Forest",
+    "periodEnd": "2026-03-31",
+    "value": 12,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000036",
+    "areaName": "Bracknell Forest",
+    "periodEnd": "2026-06-30",
+    "value": 12,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000037",
     "areaName": "West Berkshire",
     "periodEnd": "2021-12-31",
@@ -10000,6 +10476,20 @@
     "areaName": "West Berkshire",
     "periodEnd": "2025-12-31",
     "value": 37,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000037",
+    "areaName": "West Berkshire",
+    "periodEnd": "2026-03-31",
+    "value": 46,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000037",
+    "areaName": "West Berkshire",
+    "periodEnd": "2026-06-30",
+    "value": 43,
     "dataStatus": "official_anchor"
   },
   {
@@ -10339,6 +10829,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000038",
+    "areaName": "Reading",
+    "periodEnd": "2026-03-31",
+    "value": 578,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000038",
+    "areaName": "Reading",
+    "periodEnd": "2026-06-30",
+    "value": 523,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000039",
     "areaName": "Slough",
     "periodEnd": "2014-03-31",
@@ -10675,6 +11179,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000039",
+    "areaName": "Slough",
+    "periodEnd": "2026-03-31",
+    "value": 289,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000039",
+    "areaName": "Slough",
+    "periodEnd": "2026-06-30",
+    "value": 318,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000040",
     "areaName": "Windsor and Maidenhead",
     "periodEnd": "2014-06-30",
@@ -10948,6 +11466,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000040",
+    "areaName": "Windsor and Maidenhead",
+    "periodEnd": "2026-03-31",
+    "value": 302,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000040",
+    "areaName": "Windsor and Maidenhead",
+    "periodEnd": "2026-06-30",
+    "value": 368,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000041",
     "areaName": "Wokingham",
     "periodEnd": "2014-12-31",
@@ -11162,6 +11694,20 @@
     "areaName": "Wokingham",
     "periodEnd": "2025-12-31",
     "value": 219,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000041",
+    "areaName": "Wokingham",
+    "periodEnd": "2026-03-31",
+    "value": 188,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000041",
+    "areaName": "Wokingham",
+    "periodEnd": "2026-06-30",
+    "value": 125,
     "dataStatus": "official_anchor"
   },
   {
@@ -11501,6 +12047,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000042",
+    "areaName": "Milton Keynes",
+    "periodEnd": "2026-03-31",
+    "value": 450,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000042",
+    "areaName": "Milton Keynes",
+    "periodEnd": "2026-06-30",
+    "value": 443,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000043",
     "areaName": "Brighton and Hove",
     "periodEnd": "2014-03-31",
@@ -11834,6 +12394,20 @@
     "areaName": "Brighton and Hove",
     "periodEnd": "2025-12-31",
     "value": 101,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000043",
+    "areaName": "Brighton and Hove",
+    "periodEnd": "2026-03-31",
+    "value": 179,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000043",
+    "areaName": "Brighton and Hove",
+    "periodEnd": "2026-06-30",
+    "value": 188,
     "dataStatus": "official_anchor"
   },
   {
@@ -12173,6 +12747,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000044",
+    "areaName": "Portsmouth",
+    "periodEnd": "2026-03-31",
+    "value": 699,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000044",
+    "areaName": "Portsmouth",
+    "periodEnd": "2026-06-30",
+    "value": 660,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000045",
     "areaName": "Southampton",
     "periodEnd": "2014-03-31",
@@ -12509,6 +13097,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000045",
+    "areaName": "Southampton",
+    "periodEnd": "2026-03-31",
+    "value": 336,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000045",
+    "areaName": "Southampton",
+    "periodEnd": "2026-06-30",
+    "value": 315,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000047",
     "areaName": "County Durham",
     "periodEnd": "2014-03-31",
@@ -12796,6 +13398,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000047",
+    "areaName": "County Durham",
+    "periodEnd": "2026-03-31",
+    "value": 592,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000047",
+    "areaName": "County Durham",
+    "periodEnd": "2026-06-30",
+    "value": 634,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000049",
     "areaName": "Cheshire East",
     "periodEnd": "2014-09-30",
@@ -13038,6 +13654,20 @@
     "areaName": "Cheshire East",
     "periodEnd": "2025-12-31",
     "value": 465,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000049",
+    "areaName": "Cheshire East",
+    "periodEnd": "2026-03-31",
+    "value": 385,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000049",
+    "areaName": "Cheshire East",
+    "periodEnd": "2026-06-30",
+    "value": 358,
     "dataStatus": "official_anchor"
   },
   {
@@ -13342,6 +13972,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000050",
+    "areaName": "Cheshire West and Chester",
+    "periodEnd": "2026-03-31",
+    "value": 659,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000050",
+    "areaName": "Cheshire West and Chester",
+    "periodEnd": "2026-06-30",
+    "value": 654,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000051",
     "areaName": "Shropshire",
     "periodEnd": "2021-12-31",
@@ -13451,6 +14095,20 @@
     "areaName": "Shropshire",
     "periodEnd": "2025-12-31",
     "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000051",
+    "areaName": "Shropshire",
+    "periodEnd": "2026-03-31",
+    "value": 51,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000051",
+    "areaName": "Shropshire",
+    "periodEnd": "2026-06-30",
+    "value": 111,
     "dataStatus": "official_anchor"
   },
   {
@@ -13633,6 +14291,20 @@
     "areaName": "Cornwall",
     "periodEnd": "2025-12-31",
     "value": 18,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000052",
+    "areaName": "Cornwall",
+    "periodEnd": "2026-03-31",
+    "value": 18,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000052",
+    "areaName": "Cornwall",
+    "periodEnd": "2026-06-30",
+    "value": 15,
     "dataStatus": "official_anchor"
   },
   {
@@ -13934,6 +14606,20 @@
     "areaName": "Wiltshire",
     "periodEnd": "2025-12-31",
     "value": 208,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000054",
+    "areaName": "Wiltshire",
+    "periodEnd": "2026-03-31",
+    "value": 205,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000054",
+    "areaName": "Wiltshire",
+    "periodEnd": "2026-06-30",
+    "value": 196,
     "dataStatus": "official_anchor"
   },
   {
@@ -14273,6 +14959,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000055",
+    "areaName": "Bedford",
+    "periodEnd": "2026-03-31",
+    "value": 178,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000055",
+    "areaName": "Bedford",
+    "periodEnd": "2026-06-30",
+    "value": 139,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000056",
     "areaName": "Central Bedfordshire",
     "periodEnd": "2014-03-31",
@@ -14560,6 +15260,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000056",
+    "areaName": "Central Bedfordshire",
+    "periodEnd": "2026-03-31",
+    "value": 144,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000056",
+    "areaName": "Central Bedfordshire",
+    "periodEnd": "2026-06-30",
+    "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000057",
     "areaName": "Northumberland",
     "periodEnd": "2014-03-31",
@@ -14787,7 +15501,7 @@
     "areaCode": "E06000057",
     "areaName": "Northumberland",
     "periodEnd": "2022-12-31",
-    "value": 323,
+    "value": 325,
     "dataStatus": "official_anchor"
   },
   {
@@ -14872,6 +15586,20 @@
     "areaName": "Northumberland",
     "periodEnd": "2025-12-31",
     "value": 691,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000057",
+    "areaName": "Northumberland",
+    "periodEnd": "2026-03-31",
+    "value": 703,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000057",
+    "areaName": "Northumberland",
+    "periodEnd": "2026-06-30",
+    "value": 678,
     "dataStatus": "official_anchor"
   },
   {
@@ -15099,6 +15827,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000058",
+    "areaName": "Bournemouth, Christchurch and Poole",
+    "periodEnd": "2026-03-31",
+    "value": 450,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000058",
+    "areaName": "Bournemouth, Christchurch and Poole",
+    "periodEnd": "2026-06-30",
+    "value": 333,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000059",
     "areaName": "Dorset",
     "periodEnd": "2018-03-31",
@@ -15187,6 +15929,20 @@
     "areaName": "Dorset",
     "periodEnd": "2025-12-31",
     "value": 5,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000059",
+    "areaName": "Dorset",
+    "periodEnd": "2026-03-31",
+    "value": 5,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000059",
+    "areaName": "Dorset",
+    "periodEnd": "2026-06-30",
+    "value": 6,
     "dataStatus": "official_anchor"
   },
   {
@@ -15414,6 +16170,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000060",
+    "areaName": "Buckinghamshire",
+    "periodEnd": "2026-03-31",
+    "value": 210,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000060",
+    "areaName": "Buckinghamshire",
+    "periodEnd": "2026-06-30",
+    "value": 180,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000061",
     "areaName": "North Northamptonshire",
     "periodEnd": "2018-03-31",
@@ -15635,6 +16405,20 @@
     "areaName": "North Northamptonshire",
     "periodEnd": "2025-12-31",
     "value": 592,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000061",
+    "areaName": "North Northamptonshire",
+    "periodEnd": "2026-03-31",
+    "value": 613,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000061",
+    "areaName": "North Northamptonshire",
+    "periodEnd": "2026-06-30",
+    "value": 641,
     "dataStatus": "official_anchor"
   },
   {
@@ -15862,6 +16646,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000062",
+    "areaName": "West Northamptonshire",
+    "periodEnd": "2026-03-31",
+    "value": 436,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000062",
+    "areaName": "West Northamptonshire",
+    "periodEnd": "2026-06-30",
+    "value": 478,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000063",
     "areaName": "Cumberland",
     "periodEnd": "2023-06-30",
@@ -15936,6 +16734,20 @@
     "areaName": "Cumberland",
     "periodEnd": "2025-12-31",
     "value": 515,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000063",
+    "areaName": "Cumberland",
+    "periodEnd": "2026-03-31",
+    "value": 518,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000063",
+    "areaName": "Cumberland",
+    "periodEnd": "2026-06-30",
+    "value": 493,
     "dataStatus": "official_anchor"
   },
   {
@@ -16016,6 +16828,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000064",
+    "areaName": "Westmorland and Furness",
+    "periodEnd": "2026-03-31",
+    "value": 235,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000064",
+    "areaName": "Westmorland and Furness",
+    "periodEnd": "2026-06-30",
+    "value": 240,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000065",
     "areaName": "North Yorkshire",
     "periodEnd": "2023-06-30",
@@ -16093,6 +16919,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E06000065",
+    "areaName": "North Yorkshire",
+    "periodEnd": "2026-03-31",
+    "value": 352,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000065",
+    "areaName": "North Yorkshire",
+    "periodEnd": "2026-06-30",
+    "value": 325,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E06000066",
     "areaName": "Somerset",
     "periodEnd": "2023-06-30",
@@ -16167,6 +17007,20 @@
     "areaName": "Somerset",
     "periodEnd": "2025-12-31",
     "value": 365,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000066",
+    "areaName": "Somerset",
+    "periodEnd": "2026-03-31",
+    "value": 310,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E06000066",
+    "areaName": "Somerset",
+    "periodEnd": "2026-06-30",
+    "value": 198,
     "dataStatus": "official_anchor"
   },
   {
@@ -16429,6 +17283,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000008",
+    "areaName": "Cambridge",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000008",
+    "areaName": "Cambridge",
+    "periodEnd": "2026-06-30",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000009",
     "areaName": "East Cambridgeshire",
     "periodEnd": "2020-12-31",
@@ -16531,6 +17399,20 @@
     "areaName": "East Cambridgeshire",
     "periodEnd": "2025-12-31",
     "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000009",
+    "areaName": "East Cambridgeshire",
+    "periodEnd": "2026-03-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000009",
+    "areaName": "East Cambridgeshire",
+    "periodEnd": "2026-06-30",
+    "value": 20,
     "dataStatus": "official_anchor"
   },
   {
@@ -16678,6 +17560,20 @@
     "areaName": "Fenland",
     "periodEnd": "2025-12-31",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000010",
+    "areaName": "Fenland",
+    "periodEnd": "2026-03-31",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000010",
+    "areaName": "Fenland",
+    "periodEnd": "2026-06-30",
+    "value": 3,
     "dataStatus": "official_anchor"
   },
   {
@@ -16860,6 +17756,20 @@
     "areaName": "Huntingdonshire",
     "periodEnd": "2025-12-31",
     "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000011",
+    "areaName": "Huntingdonshire",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000011",
+    "areaName": "Huntingdonshire",
+    "periodEnd": "2026-06-30",
+    "value": 23,
     "dataStatus": "official_anchor"
   },
   {
@@ -17048,6 +17958,20 @@
     "areaCode": "E07000012",
     "areaName": "South Cambridgeshire",
     "periodEnd": "2025-12-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000012",
+    "areaName": "South Cambridgeshire",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000012",
+    "areaName": "South Cambridgeshire",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -17241,6 +18165,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000032",
+    "areaName": "Amber Valley",
+    "periodEnd": "2026-03-31",
+    "value": 109,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000032",
+    "areaName": "Amber Valley",
+    "periodEnd": "2026-06-30",
+    "value": 124,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000033",
     "areaName": "Bolsover",
     "periodEnd": "2016-09-30",
@@ -17427,6 +18365,20 @@
     "areaName": "Bolsover",
     "periodEnd": "2025-12-31",
     "value": 130,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000033",
+    "areaName": "Bolsover",
+    "periodEnd": "2026-03-31",
+    "value": 141,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000033",
+    "areaName": "Bolsover",
+    "periodEnd": "2026-06-30",
+    "value": 138,
     "dataStatus": "official_anchor"
   },
   {
@@ -17689,6 +18641,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000034",
+    "areaName": "Chesterfield",
+    "periodEnd": "2026-03-31",
+    "value": 30,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000034",
+    "areaName": "Chesterfield",
+    "periodEnd": "2026-06-30",
+    "value": 49,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000036",
     "areaName": "Erewash",
     "periodEnd": "2014-03-31",
@@ -17878,6 +18844,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000036",
+    "areaName": "Erewash",
+    "periodEnd": "2026-03-31",
+    "value": 87,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000036",
+    "areaName": "Erewash",
+    "periodEnd": "2026-06-30",
+    "value": 90,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000037",
     "areaName": "High Peak",
     "periodEnd": "2019-12-31",
@@ -18018,6 +18998,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000037",
+    "areaName": "High Peak",
+    "periodEnd": "2026-03-31",
+    "value": 7,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000037",
+    "areaName": "High Peak",
+    "periodEnd": "2026-06-30",
+    "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000038",
     "areaName": "North East Derbyshire",
     "periodEnd": "2014-09-30",
@@ -18064,6 +19058,20 @@
     "areaName": "North East Derbyshire",
     "periodEnd": "2025-12-31",
     "value": 54,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000038",
+    "areaName": "North East Derbyshire",
+    "periodEnd": "2026-03-31",
+    "value": 58,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000038",
+    "areaName": "North East Derbyshire",
+    "periodEnd": "2026-06-30",
+    "value": 60,
     "dataStatus": "official_anchor"
   },
   {
@@ -18239,6 +19247,20 @@
     "areaName": "South Derbyshire",
     "periodEnd": "2025-12-31",
     "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000039",
+    "areaName": "South Derbyshire",
+    "periodEnd": "2026-03-31",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000039",
+    "areaName": "South Derbyshire",
+    "periodEnd": "2026-06-30",
+    "value": 36,
     "dataStatus": "official_anchor"
   },
   {
@@ -18428,6 +19450,20 @@
     "areaName": "East Devon",
     "periodEnd": "2025-12-31",
     "value": 224,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000040",
+    "areaName": "East Devon",
+    "periodEnd": "2026-03-31",
+    "value": 120,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000040",
+    "areaName": "East Devon",
+    "periodEnd": "2026-06-30",
+    "value": 125,
     "dataStatus": "official_anchor"
   },
   {
@@ -18627,6 +19663,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000041",
+    "areaName": "Exeter",
+    "periodEnd": "2026-03-31",
+    "value": 21,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000041",
+    "areaName": "Exeter",
+    "periodEnd": "2026-06-30",
+    "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000042",
     "areaName": "Mid Devon",
     "periodEnd": "2022-03-31",
@@ -18732,6 +19782,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000043",
+    "areaName": "North Devon",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000043",
+    "areaName": "North Devon",
+    "periodEnd": "2026-06-30",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000044",
     "areaName": "South Hams",
     "periodEnd": "2015-03-31",
@@ -18806,6 +19870,20 @@
     "areaName": "South Hams",
     "periodEnd": "2025-12-31",
     "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000044",
+    "areaName": "South Hams",
+    "periodEnd": "2026-03-31",
+    "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000044",
+    "areaName": "South Hams",
+    "periodEnd": "2026-06-30",
+    "value": 18,
     "dataStatus": "official_anchor"
   },
   {
@@ -18904,6 +19982,20 @@
     "areaName": "Teignbridge",
     "periodEnd": "2025-12-31",
     "value": 40,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000045",
+    "areaName": "Teignbridge",
+    "periodEnd": "2026-03-31",
+    "value": 35,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000045",
+    "areaName": "Teignbridge",
+    "periodEnd": "2026-06-30",
+    "value": 42,
     "dataStatus": "official_anchor"
   },
   {
@@ -19015,6 +20107,20 @@
     "areaCode": "E07000046",
     "areaName": "Torridge",
     "periodEnd": "2025-12-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000046",
+    "areaName": "Torridge",
+    "periodEnd": "2026-03-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000046",
+    "areaName": "Torridge",
+    "periodEnd": "2026-06-30",
     "value": 6,
     "dataStatus": "official_anchor"
   },
@@ -19141,6 +20247,20 @@
     "areaCode": "E07000047",
     "areaName": "West Devon",
     "periodEnd": "2025-12-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000047",
+    "areaName": "West Devon",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000047",
+    "areaName": "West Devon",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -19450,6 +20570,20 @@
     "areaName": "Eastbourne",
     "periodEnd": "2025-12-31",
     "value": 39,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000061",
+    "areaName": "Eastbourne",
+    "periodEnd": "2026-03-31",
+    "value": 44,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000061",
+    "areaName": "Eastbourne",
+    "periodEnd": "2026-06-30",
+    "value": 40,
     "dataStatus": "official_anchor"
   },
   {
@@ -19789,6 +20923,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000062",
+    "areaName": "Hastings",
+    "periodEnd": "2026-03-31",
+    "value": 61,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000062",
+    "areaName": "Hastings",
+    "periodEnd": "2026-06-30",
+    "value": 99,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000063",
     "areaName": "Lewes",
     "periodEnd": "2015-03-31",
@@ -19964,6 +21112,13 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000063",
+    "areaName": "Lewes",
+    "periodEnd": "2026-03-31",
+    "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000064",
     "areaName": "Rother",
     "periodEnd": "2014-09-30",
@@ -20041,6 +21196,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000064",
+    "areaName": "Rother",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000064",
+    "areaName": "Rother",
+    "periodEnd": "2026-06-30",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000065",
     "areaName": "Wealden",
     "periodEnd": "2014-09-30",
@@ -20115,6 +21284,20 @@
     "areaName": "Wealden",
     "periodEnd": "2025-12-31",
     "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000065",
+    "areaName": "Wealden",
+    "periodEnd": "2026-03-31",
+    "value": 265,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000065",
+    "areaName": "Wealden",
+    "periodEnd": "2026-06-30",
+    "value": 419,
     "dataStatus": "official_anchor"
   },
   {
@@ -20454,6 +21637,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000066",
+    "areaName": "Basildon",
+    "periodEnd": "2026-03-31",
+    "value": 354,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000066",
+    "areaName": "Basildon",
+    "periodEnd": "2026-06-30",
+    "value": 352,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000067",
     "areaName": "Braintree",
     "periodEnd": "2014-03-31",
@@ -20685,6 +21882,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000067",
+    "areaName": "Braintree",
+    "periodEnd": "2026-03-31",
+    "value": 767,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000067",
+    "areaName": "Braintree",
+    "periodEnd": "2026-06-30",
+    "value": 791,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000068",
     "areaName": "Brentwood",
     "periodEnd": "2017-06-30",
@@ -20850,6 +22061,20 @@
     "areaName": "Brentwood",
     "periodEnd": "2025-12-31",
     "value": 23,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000068",
+    "areaName": "Brentwood",
+    "periodEnd": "2026-03-31",
+    "value": 19,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000068",
+    "areaName": "Brentwood",
+    "periodEnd": "2026-06-30",
+    "value": 22,
     "dataStatus": "official_anchor"
   },
   {
@@ -21112,6 +22337,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000069",
+    "areaName": "Castle Point",
+    "periodEnd": "2026-03-31",
+    "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000069",
+    "areaName": "Castle Point",
+    "periodEnd": "2026-06-30",
+    "value": 25,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000070",
     "areaName": "Chelmsford",
     "periodEnd": "2014-03-31",
@@ -21368,6 +22607,20 @@
     "areaName": "Chelmsford",
     "periodEnd": "2025-12-31",
     "value": 368,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000070",
+    "areaName": "Chelmsford",
+    "periodEnd": "2026-03-31",
+    "value": 246,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000070",
+    "areaName": "Chelmsford",
+    "periodEnd": "2026-06-30",
+    "value": 143,
     "dataStatus": "official_anchor"
   },
   {
@@ -21707,6 +22960,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000071",
+    "areaName": "Colchester",
+    "periodEnd": "2026-03-31",
+    "value": 317,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000071",
+    "areaName": "Colchester",
+    "periodEnd": "2026-06-30",
+    "value": 302,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000072",
     "areaName": "Epping Forest",
     "periodEnd": "2014-03-31",
@@ -22036,6 +23303,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000072",
+    "areaName": "Epping Forest",
+    "periodEnd": "2026-03-31",
+    "value": 128,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000072",
+    "areaName": "Epping Forest",
+    "periodEnd": "2026-06-30",
+    "value": 81,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000073",
     "areaName": "Harlow",
     "periodEnd": "2014-03-31",
@@ -22316,6 +23597,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000073",
+    "areaName": "Harlow",
+    "periodEnd": "2026-03-31",
+    "value": 45,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000073",
+    "areaName": "Harlow",
+    "periodEnd": "2026-06-30",
+    "value": 56,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000074",
     "areaName": "Maldon",
     "periodEnd": "2020-03-31",
@@ -22425,6 +23720,20 @@
     "areaName": "Maldon",
     "periodEnd": "2025-12-31",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000074",
+    "areaName": "Maldon",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000074",
+    "areaName": "Maldon",
+    "periodEnd": "2026-06-30",
+    "value": 1,
     "dataStatus": "official_anchor"
   },
   {
@@ -22722,6 +24031,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000075",
+    "areaName": "Rochford",
+    "periodEnd": "2026-03-31",
+    "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000075",
+    "areaName": "Rochford",
+    "periodEnd": "2026-06-30",
+    "value": 141,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000076",
     "areaName": "Tendring",
     "periodEnd": "2018-06-30",
@@ -22939,6 +24262,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000076",
+    "areaName": "Tendring",
+    "periodEnd": "2026-03-31",
+    "value": 214,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000076",
+    "areaName": "Tendring",
+    "periodEnd": "2026-06-30",
+    "value": 213,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000077",
     "areaName": "Uttlesford",
     "periodEnd": "2021-12-31",
@@ -23055,6 +24392,20 @@
     "areaName": "Uttlesford",
     "periodEnd": "2025-12-31",
     "value": 60,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000077",
+    "areaName": "Uttlesford",
+    "periodEnd": "2026-03-31",
+    "value": 44,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000077",
+    "areaName": "Uttlesford",
+    "periodEnd": "2026-06-30",
+    "value": 21,
     "dataStatus": "official_anchor"
   },
   {
@@ -23282,6 +24633,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000078",
+    "areaName": "Cheltenham",
+    "periodEnd": "2026-03-31",
+    "value": 69,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000078",
+    "areaName": "Cheltenham",
+    "periodEnd": "2026-06-30",
+    "value": 143,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000080",
     "areaName": "Forest of Dean",
     "periodEnd": "2017-12-31",
@@ -23362,6 +24727,20 @@
     "areaCode": "E07000080",
     "areaName": "Forest of Dean",
     "periodEnd": "2025-12-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000080",
+    "areaName": "Forest of Dean",
+    "periodEnd": "2026-03-31",
+    "value": 11,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000080",
+    "areaName": "Forest of Dean",
+    "periodEnd": "2026-06-30",
     "value": 6,
     "dataStatus": "official_anchor"
   },
@@ -23702,6 +25081,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000081",
+    "areaName": "Gloucester",
+    "periodEnd": "2026-03-31",
+    "value": 316,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000081",
+    "areaName": "Gloucester",
+    "periodEnd": "2026-06-30",
+    "value": 290,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000082",
     "areaName": "Stroud",
     "periodEnd": "2017-09-30",
@@ -23797,6 +25190,20 @@
     "areaName": "Stroud",
     "periodEnd": "2025-12-31",
     "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000082",
+    "areaName": "Stroud",
+    "periodEnd": "2026-03-31",
+    "value": 7,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000082",
+    "areaName": "Stroud",
+    "periodEnd": "2026-06-30",
+    "value": 13,
     "dataStatus": "official_anchor"
   },
   {
@@ -24066,6 +25473,13 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000083",
+    "areaName": "Tewkesbury",
+    "periodEnd": "2026-06-30",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000084",
     "areaName": "Basingstoke and Deane",
     "periodEnd": "2016-03-31",
@@ -24185,6 +25599,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000084",
+    "areaName": "Basingstoke and Deane",
+    "periodEnd": "2026-03-31",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000084",
+    "areaName": "Basingstoke and Deane",
+    "periodEnd": "2026-06-30",
+    "value": 20,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000085",
     "areaName": "East Hampshire",
     "periodEnd": "2021-12-31",
@@ -24300,6 +25728,20 @@
     "areaCode": "E07000085",
     "areaName": "East Hampshire",
     "periodEnd": "2025-12-31",
+    "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000085",
+    "areaName": "East Hampshire",
+    "periodEnd": "2026-03-31",
+    "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000085",
+    "areaName": "East Hampshire",
+    "periodEnd": "2026-06-30",
     "value": 8,
     "dataStatus": "official_anchor"
   },
@@ -24577,6 +26019,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000086",
+    "areaName": "Eastleigh",
+    "periodEnd": "2026-03-31",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000086",
+    "areaName": "Eastleigh",
+    "periodEnd": "2026-06-30",
+    "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000087",
     "areaName": "Fareham",
     "periodEnd": "2019-06-30",
@@ -24766,6 +26222,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000087",
+    "areaName": "Fareham",
+    "periodEnd": "2026-03-31",
+    "value": 23,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000087",
+    "areaName": "Fareham",
+    "periodEnd": "2026-06-30",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000088",
     "areaName": "Gosport",
     "periodEnd": "2014-06-30",
@@ -24931,6 +26401,20 @@
     "areaName": "Gosport",
     "periodEnd": "2025-12-31",
     "value": 21,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000088",
+    "areaName": "Gosport",
+    "periodEnd": "2026-03-31",
+    "value": 21,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000088",
+    "areaName": "Gosport",
+    "periodEnd": "2026-06-30",
+    "value": 23,
     "dataStatus": "official_anchor"
   },
   {
@@ -25284,6 +26768,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000090",
+    "areaName": "Havant",
+    "periodEnd": "2026-03-31",
+    "value": 16,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000090",
+    "areaName": "Havant",
+    "periodEnd": "2026-06-30",
+    "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000091",
     "areaName": "New Forest",
     "periodEnd": "2017-09-30",
@@ -25337,6 +26835,13 @@
     "areaName": "New Forest",
     "periodEnd": "2025-12-31",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000091",
+    "areaName": "New Forest",
+    "periodEnd": "2026-06-30",
+    "value": 7,
     "dataStatus": "official_anchor"
   },
   {
@@ -25634,6 +27139,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000092",
+    "areaName": "Rushmoor",
+    "periodEnd": "2026-03-31",
+    "value": 111,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000092",
+    "areaName": "Rushmoor",
+    "periodEnd": "2026-06-30",
+    "value": 76,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000093",
     "areaName": "Test Valley",
     "periodEnd": "2020-03-31",
@@ -25760,6 +27279,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000093",
+    "areaName": "Test Valley",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000093",
+    "areaName": "Test Valley",
+    "periodEnd": "2026-06-30",
+    "value": 22,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000094",
     "areaName": "Winchester",
     "periodEnd": "2019-03-31",
@@ -25834,6 +27367,20 @@
     "areaName": "Winchester",
     "periodEnd": "2025-12-31",
     "value": 68,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000094",
+    "areaName": "Winchester",
+    "periodEnd": "2026-03-31",
+    "value": 70,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000094",
+    "areaName": "Winchester",
+    "periodEnd": "2026-06-30",
+    "value": 67,
     "dataStatus": "official_anchor"
   },
   {
@@ -26173,6 +27720,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000095",
+    "areaName": "Broxbourne",
+    "periodEnd": "2026-03-31",
+    "value": 194,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000095",
+    "areaName": "Broxbourne",
+    "periodEnd": "2026-06-30",
+    "value": 43,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000096",
     "areaName": "Dacorum",
     "periodEnd": "2014-03-31",
@@ -26485,6 +28046,20 @@
     "areaName": "Dacorum",
     "periodEnd": "2025-12-31",
     "value": 464,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000096",
+    "areaName": "Dacorum",
+    "periodEnd": "2026-03-31",
+    "value": 365,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000096",
+    "areaName": "Dacorum",
+    "periodEnd": "2026-06-30",
+    "value": 274,
     "dataStatus": "official_anchor"
   },
   {
@@ -26824,6 +28399,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000098",
+    "areaName": "Hertsmere",
+    "periodEnd": "2026-03-31",
+    "value": 39,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000098",
+    "areaName": "Hertsmere",
+    "periodEnd": "2026-06-30",
+    "value": 58,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000099",
     "areaName": "North Hertfordshire",
     "periodEnd": "2014-03-31",
@@ -27132,6 +28721,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000099",
+    "areaName": "North Hertfordshire",
+    "periodEnd": "2026-03-31",
+    "value": 68,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000099",
+    "areaName": "North Hertfordshire",
+    "periodEnd": "2026-06-30",
+    "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000102",
     "areaName": "Three Rivers",
     "periodEnd": "2014-03-31",
@@ -27248,6 +28851,20 @@
     "areaName": "Three Rivers",
     "periodEnd": "2025-12-31",
     "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000102",
+    "areaName": "Three Rivers",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000102",
+    "areaName": "Three Rivers",
+    "periodEnd": "2026-06-30",
+    "value": 5,
     "dataStatus": "official_anchor"
   },
   {
@@ -27580,6 +29197,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000103",
+    "areaName": "Watford",
+    "periodEnd": "2026-03-31",
+    "value": 18,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000103",
+    "areaName": "Watford",
+    "periodEnd": "2026-06-30",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000105",
     "areaName": "Ashford",
     "periodEnd": "2014-03-31",
@@ -27878,6 +29509,20 @@
     "areaName": "Ashford",
     "periodEnd": "2025-12-31",
     "value": 168,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000105",
+    "areaName": "Ashford",
+    "periodEnd": "2026-03-31",
+    "value": 104,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000105",
+    "areaName": "Ashford",
+    "periodEnd": "2026-06-30",
+    "value": 38,
     "dataStatus": "official_anchor"
   },
   {
@@ -28182,6 +29827,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000106",
+    "areaName": "Canterbury",
+    "periodEnd": "2026-03-31",
+    "value": 222,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000106",
+    "areaName": "Canterbury",
+    "periodEnd": "2026-06-30",
+    "value": 205,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000107",
     "areaName": "Dartford",
     "periodEnd": "2014-03-31",
@@ -28483,6 +30142,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000107",
+    "areaName": "Dartford",
+    "periodEnd": "2026-03-31",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000107",
+    "areaName": "Dartford",
+    "periodEnd": "2026-06-30",
+    "value": 41,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000108",
     "areaName": "Dover",
     "periodEnd": "2020-09-30",
@@ -28634,6 +30307,20 @@
     "areaName": "Dover",
     "periodEnd": "2025-12-31",
     "value": 67,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000108",
+    "areaName": "Dover",
+    "periodEnd": "2026-03-31",
+    "value": 74,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000108",
+    "areaName": "Dover",
+    "periodEnd": "2026-06-30",
+    "value": 83,
     "dataStatus": "official_anchor"
   },
   {
@@ -28952,6 +30639,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000109",
+    "areaName": "Gravesham",
+    "periodEnd": "2026-03-31",
+    "value": 101,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000109",
+    "areaName": "Gravesham",
+    "periodEnd": "2026-06-30",
+    "value": 71,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000110",
     "areaName": "Maidstone",
     "periodEnd": "2014-03-31",
@@ -29169,6 +30870,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000110",
+    "areaName": "Maidstone",
+    "periodEnd": "2026-03-31",
+    "value": 54,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000110",
+    "areaName": "Maidstone",
+    "periodEnd": "2026-06-30",
+    "value": 46,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000111",
     "areaName": "Sevenoaks",
     "periodEnd": "2020-12-31",
@@ -29214,6 +30929,20 @@
     "areaCode": "E07000111",
     "areaName": "Sevenoaks",
     "periodEnd": "2025-12-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000111",
+    "areaName": "Sevenoaks",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000111",
+    "areaName": "Sevenoaks",
+    "periodEnd": "2026-06-30",
     "value": 4,
     "dataStatus": "official_anchor"
   },
@@ -29460,6 +31189,20 @@
     "areaName": "Shepway",
     "periodEnd": "2025-12-31",
     "value": 31,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000112",
+    "areaName": "Shepway",
+    "periodEnd": "2026-03-31",
+    "value": 38,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000112",
+    "areaName": "Shepway",
+    "periodEnd": "2026-06-30",
+    "value": 45,
     "dataStatus": "official_anchor"
   },
   {
@@ -29715,6 +31458,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000113",
+    "areaName": "Swale",
+    "periodEnd": "2026-03-31",
+    "value": 72,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000113",
+    "areaName": "Swale",
+    "periodEnd": "2026-06-30",
+    "value": 77,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000114",
     "areaName": "Thanet",
     "periodEnd": "2014-03-31",
@@ -29953,6 +31710,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000114",
+    "areaName": "Thanet",
+    "periodEnd": "2026-03-31",
+    "value": 106,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000114",
+    "areaName": "Thanet",
+    "periodEnd": "2026-06-30",
+    "value": 94,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000115",
     "areaName": "Tonbridge and Malling",
     "periodEnd": "2023-09-30",
@@ -30006,6 +31777,20 @@
     "areaName": "Tonbridge and Malling",
     "periodEnd": "2025-12-31",
     "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000115",
+    "areaName": "Tonbridge and Malling",
+    "periodEnd": "2026-03-31",
+    "value": 7,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000115",
+    "areaName": "Tonbridge and Malling",
+    "periodEnd": "2026-06-30",
+    "value": 9,
     "dataStatus": "official_anchor"
   },
   {
@@ -30160,6 +31945,20 @@
     "areaName": "Tunbridge Wells",
     "periodEnd": "2025-06-30",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000116",
+    "areaName": "Tunbridge Wells",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000116",
+    "areaName": "Tunbridge Wells",
+    "periodEnd": "2026-06-30",
+    "value": 1,
     "dataStatus": "official_anchor"
   },
   {
@@ -30492,6 +32291,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000117",
+    "areaName": "Burnley",
+    "periodEnd": "2026-03-31",
+    "value": 455,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000117",
+    "areaName": "Burnley",
+    "periodEnd": "2026-06-30",
+    "value": 471,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000118",
     "areaName": "Chorley",
     "periodEnd": "2016-06-30",
@@ -30762,6 +32575,20 @@
     "areaName": "Chorley",
     "periodEnd": "2025-12-31",
     "value": 229,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000118",
+    "areaName": "Chorley",
+    "periodEnd": "2026-03-31",
+    "value": 242,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000118",
+    "areaName": "Chorley",
+    "periodEnd": "2026-06-30",
+    "value": 239,
     "dataStatus": "official_anchor"
   },
   {
@@ -31042,6 +32869,20 @@
     "areaName": "Fylde",
     "periodEnd": "2025-12-31",
     "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000119",
+    "areaName": "Fylde",
+    "periodEnd": "2026-03-31",
+    "value": 76,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000119",
+    "areaName": "Fylde",
+    "periodEnd": "2026-06-30",
+    "value": 88,
     "dataStatus": "official_anchor"
   },
   {
@@ -31381,6 +33222,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000120",
+    "areaName": "Hyndburn",
+    "periodEnd": "2026-03-31",
+    "value": 412,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000120",
+    "areaName": "Hyndburn",
+    "periodEnd": "2026-06-30",
+    "value": 426,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000121",
     "areaName": "Lancaster",
     "periodEnd": "2015-12-31",
@@ -31665,6 +33520,20 @@
     "areaName": "Lancaster",
     "periodEnd": "2025-12-31",
     "value": 245,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000121",
+    "areaName": "Lancaster",
+    "periodEnd": "2026-03-31",
+    "value": 245,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000121",
+    "areaName": "Lancaster",
+    "periodEnd": "2026-06-30",
+    "value": 238,
     "dataStatus": "official_anchor"
   },
   {
@@ -32004,6 +33873,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000122",
+    "areaName": "Pendle",
+    "periodEnd": "2026-03-31",
+    "value": 434,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000122",
+    "areaName": "Pendle",
+    "periodEnd": "2026-06-30",
+    "value": 441,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000123",
     "areaName": "Preston",
     "periodEnd": "2014-03-31",
@@ -32340,6 +34223,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000123",
+    "areaName": "Preston",
+    "periodEnd": "2026-03-31",
+    "value": 429,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000123",
+    "areaName": "Preston",
+    "periodEnd": "2026-06-30",
+    "value": 407,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000124",
     "areaName": "Ribble Valley",
     "periodEnd": "2016-09-30",
@@ -32603,6 +34500,20 @@
     "areaName": "Ribble Valley",
     "periodEnd": "2025-12-31",
     "value": 31,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000124",
+    "areaName": "Ribble Valley",
+    "periodEnd": "2026-03-31",
+    "value": 32,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000124",
+    "areaName": "Ribble Valley",
+    "periodEnd": "2026-06-30",
+    "value": 24,
     "dataStatus": "official_anchor"
   },
   {
@@ -32876,6 +34787,20 @@
     "areaName": "Rossendale",
     "periodEnd": "2025-12-31",
     "value": 243,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000125",
+    "areaName": "Rossendale",
+    "periodEnd": "2026-03-31",
+    "value": 244,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000125",
+    "areaName": "Rossendale",
+    "periodEnd": "2026-06-30",
+    "value": 238,
     "dataStatus": "official_anchor"
   },
   {
@@ -33156,6 +35081,20 @@
     "areaName": "South Ribble",
     "periodEnd": "2025-12-31",
     "value": 377,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000126",
+    "areaName": "South Ribble",
+    "periodEnd": "2026-03-31",
+    "value": 337,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000126",
+    "areaName": "South Ribble",
+    "periodEnd": "2026-06-30",
+    "value": 385,
     "dataStatus": "official_anchor"
   },
   {
@@ -33460,6 +35399,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000127",
+    "areaName": "West Lancashire",
+    "periodEnd": "2026-03-31",
+    "value": 420,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000127",
+    "areaName": "West Lancashire",
+    "periodEnd": "2026-06-30",
+    "value": 420,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000128",
     "areaName": "Wyre",
     "periodEnd": "2015-06-30",
@@ -33761,6 +35714,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000128",
+    "areaName": "Wyre",
+    "periodEnd": "2026-03-31",
+    "value": 360,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000128",
+    "areaName": "Wyre",
+    "periodEnd": "2026-06-30",
+    "value": 361,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000129",
     "areaName": "Blaby",
     "periodEnd": "2014-03-31",
@@ -33940,6 +35907,20 @@
     "areaName": "Blaby",
     "periodEnd": "2025-12-31",
     "value": 33,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000129",
+    "areaName": "Blaby",
+    "periodEnd": "2026-03-31",
+    "value": 32,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000129",
+    "areaName": "Blaby",
+    "periodEnd": "2026-06-30",
+    "value": 34,
     "dataStatus": "official_anchor"
   },
   {
@@ -34216,6 +36197,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000130",
+    "areaName": "Charnwood",
+    "periodEnd": "2026-03-31",
+    "value": 210,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000130",
+    "areaName": "Charnwood",
+    "periodEnd": "2026-06-30",
+    "value": 103,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000131",
     "areaName": "Harborough",
     "periodEnd": "2018-06-30",
@@ -34366,6 +36361,20 @@
     "areaCode": "E07000131",
     "areaName": "Harborough",
     "periodEnd": "2025-12-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000131",
+    "areaName": "Harborough",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000131",
+    "areaName": "Harborough",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -34538,6 +36547,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000132",
+    "areaName": "Hinckley and Bosworth",
+    "periodEnd": "2026-03-31",
+    "value": 95,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000132",
+    "areaName": "Hinckley and Bosworth",
+    "periodEnd": "2026-06-30",
+    "value": 143,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000133",
     "areaName": "Melton",
     "periodEnd": "2022-12-31",
@@ -34626,6 +36649,20 @@
     "areaName": "Melton",
     "periodEnd": "2025-12-31",
     "value": 13,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000133",
+    "areaName": "Melton",
+    "periodEnd": "2026-03-31",
+    "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000133",
+    "areaName": "Melton",
+    "periodEnd": "2026-06-30",
+    "value": 16,
     "dataStatus": "official_anchor"
   },
   {
@@ -34745,6 +36782,20 @@
     "areaName": "North West Leicestershire",
     "periodEnd": "2025-12-31",
     "value": 96,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000134",
+    "areaName": "North West Leicestershire",
+    "periodEnd": "2026-03-31",
+    "value": 98,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000134",
+    "areaName": "North West Leicestershire",
+    "periodEnd": "2026-06-30",
+    "value": 101,
     "dataStatus": "official_anchor"
   },
   {
@@ -35084,6 +37135,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000135",
+    "areaName": "Oadby and Wigston",
+    "periodEnd": "2026-03-31",
+    "value": 34,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000135",
+    "areaName": "Oadby and Wigston",
+    "periodEnd": "2026-06-30",
+    "value": 32,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000136",
     "areaName": "Boston",
     "periodEnd": "2017-06-30",
@@ -35273,6 +37338,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000136",
+    "areaName": "Boston",
+    "periodEnd": "2026-03-31",
+    "value": 113,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000136",
+    "areaName": "Boston",
+    "periodEnd": "2026-06-30",
+    "value": 108,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000137",
     "areaName": "East Lindsey",
     "periodEnd": "2014-03-31",
@@ -35410,6 +37489,20 @@
     "areaName": "East Lindsey",
     "periodEnd": "2025-12-31",
     "value": 104,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000137",
+    "areaName": "East Lindsey",
+    "periodEnd": "2026-03-31",
+    "value": 95,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000137",
+    "areaName": "East Lindsey",
+    "periodEnd": "2026-06-30",
+    "value": 110,
     "dataStatus": "official_anchor"
   },
   {
@@ -35637,6 +37730,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000138",
+    "areaName": "Lincoln",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000138",
+    "areaName": "Lincoln",
+    "periodEnd": "2026-06-30",
+    "value": 30,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000139",
     "areaName": "North Kesteven",
     "periodEnd": "2015-06-30",
@@ -35725,6 +37832,20 @@
     "areaName": "North Kesteven",
     "periodEnd": "2025-12-31",
     "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000139",
+    "areaName": "North Kesteven",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000139",
+    "areaName": "North Kesteven",
+    "periodEnd": "2026-06-30",
+    "value": 35,
     "dataStatus": "official_anchor"
   },
   {
@@ -35868,6 +37989,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000140",
+    "areaName": "South Holland",
+    "periodEnd": "2026-03-31",
+    "value": 79,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000140",
+    "areaName": "South Holland",
+    "periodEnd": "2026-06-30",
+    "value": 76,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000141",
     "areaName": "South Kesteven",
     "periodEnd": "2018-12-31",
@@ -35977,6 +38112,20 @@
     "areaName": "South Kesteven",
     "periodEnd": "2025-12-31",
     "value": 215,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000141",
+    "areaName": "South Kesteven",
+    "periodEnd": "2026-03-31",
+    "value": 270,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000141",
+    "areaName": "South Kesteven",
+    "periodEnd": "2026-06-30",
+    "value": 283,
     "dataStatus": "official_anchor"
   },
   {
@@ -36211,6 +38360,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000142",
+    "areaName": "West Lindsey",
+    "periodEnd": "2026-03-31",
+    "value": 55,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000142",
+    "areaName": "West Lindsey",
+    "periodEnd": "2026-06-30",
+    "value": 64,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000143",
     "areaName": "Breckland",
     "periodEnd": "2014-03-31",
@@ -36425,6 +38588,20 @@
     "areaName": "Breckland",
     "periodEnd": "2025-12-31",
     "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000143",
+    "areaName": "Breckland",
+    "periodEnd": "2026-03-31",
+    "value": 41,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000143",
+    "areaName": "Breckland",
+    "periodEnd": "2026-06-30",
+    "value": 56,
     "dataStatus": "official_anchor"
   },
   {
@@ -36715,6 +38892,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000144",
+    "areaName": "Broadland",
+    "periodEnd": "2026-03-31",
+    "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000144",
+    "areaName": "Broadland",
+    "periodEnd": "2026-06-30",
+    "value": 13,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000145",
     "areaName": "Great Yarmouth",
     "periodEnd": "2020-12-31",
@@ -36810,6 +39001,20 @@
     "areaName": "Great Yarmouth",
     "periodEnd": "2025-12-31",
     "value": 11,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000145",
+    "areaName": "Great Yarmouth",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000145",
+    "areaName": "Great Yarmouth",
+    "periodEnd": "2026-06-30",
+    "value": 12,
     "dataStatus": "official_anchor"
   },
   {
@@ -36918,6 +39123,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000146",
+    "areaName": "King's Lynn and West Norfolk",
+    "periodEnd": "2026-03-31",
+    "value": 50,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000146",
+    "areaName": "King's Lynn and West Norfolk",
+    "periodEnd": "2026-06-30",
+    "value": 65,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000147",
     "areaName": "North Norfolk",
     "periodEnd": "2014-03-31",
@@ -37006,6 +39225,20 @@
     "areaName": "North Norfolk",
     "periodEnd": "2025-06-30",
     "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000147",
+    "areaName": "North Norfolk",
+    "periodEnd": "2026-03-31",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000147",
+    "areaName": "North Norfolk",
+    "periodEnd": "2026-06-30",
+    "value": 8,
     "dataStatus": "official_anchor"
   },
   {
@@ -37345,6 +39578,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000148",
+    "areaName": "Norwich",
+    "periodEnd": "2026-03-31",
+    "value": 266,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000148",
+    "areaName": "Norwich",
+    "periodEnd": "2026-06-30",
+    "value": 211,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000149",
     "areaName": "South Norfolk",
     "periodEnd": "2014-06-30",
@@ -37636,6 +39883,20 @@
     "areaName": "South Norfolk",
     "periodEnd": "2025-12-31",
     "value": 13,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000149",
+    "areaName": "South Norfolk",
+    "periodEnd": "2026-03-31",
+    "value": 21,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000149",
+    "areaName": "South Norfolk",
+    "periodEnd": "2026-06-30",
+    "value": 19,
     "dataStatus": "official_anchor"
   },
   {
@@ -37947,6 +40208,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000170",
+    "areaName": "Ashfield",
+    "periodEnd": "2026-03-31",
+    "value": 157,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000170",
+    "areaName": "Ashfield",
+    "periodEnd": "2026-06-30",
+    "value": 185,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000171",
     "areaName": "Bassetlaw",
     "periodEnd": "2014-03-31",
@@ -38189,6 +40464,20 @@
     "areaName": "Bassetlaw",
     "periodEnd": "2025-12-31",
     "value": 192,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000171",
+    "areaName": "Bassetlaw",
+    "periodEnd": "2026-03-31",
+    "value": 203,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000171",
+    "areaName": "Bassetlaw",
+    "periodEnd": "2026-06-30",
+    "value": 197,
     "dataStatus": "official_anchor"
   },
   {
@@ -38528,6 +40817,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000172",
+    "areaName": "Broxtowe",
+    "periodEnd": "2026-03-31",
+    "value": 234,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000172",
+    "areaName": "Broxtowe",
+    "periodEnd": "2026-06-30",
+    "value": 264,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000173",
     "areaName": "Gedling",
     "periodEnd": "2015-03-31",
@@ -38752,6 +41055,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000173",
+    "areaName": "Gedling",
+    "periodEnd": "2026-03-31",
+    "value": 90,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000173",
+    "areaName": "Gedling",
+    "periodEnd": "2026-06-30",
+    "value": 121,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000174",
     "areaName": "Mansfield",
     "periodEnd": "2015-06-30",
@@ -38955,6 +41272,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000174",
+    "areaName": "Mansfield",
+    "periodEnd": "2026-03-31",
+    "value": 193,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000174",
+    "areaName": "Mansfield",
+    "periodEnd": "2026-06-30",
+    "value": 192,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000175",
     "areaName": "Newark and Sherwood",
     "periodEnd": "2023-09-30",
@@ -39008,6 +41339,20 @@
     "areaName": "Newark and Sherwood",
     "periodEnd": "2025-12-31",
     "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000175",
+    "areaName": "Newark and Sherwood",
+    "periodEnd": "2026-03-31",
+    "value": 94,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000175",
+    "areaName": "Newark and Sherwood",
+    "periodEnd": "2026-06-30",
+    "value": 110,
     "dataStatus": "official_anchor"
   },
   {
@@ -39162,6 +41507,20 @@
     "areaName": "Rushcliffe",
     "periodEnd": "2025-12-31",
     "value": 39,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000176",
+    "areaName": "Rushcliffe",
+    "periodEnd": "2026-03-31",
+    "value": 46,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000176",
+    "areaName": "Rushcliffe",
+    "periodEnd": "2026-06-30",
+    "value": 60,
     "dataStatus": "official_anchor"
   },
   {
@@ -39477,6 +41836,20 @@
     "areaName": "Cherwell",
     "periodEnd": "2025-12-31",
     "value": 146,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000177",
+    "areaName": "Cherwell",
+    "periodEnd": "2026-03-31",
+    "value": 80,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000177",
+    "areaName": "Cherwell",
+    "periodEnd": "2026-06-30",
+    "value": 106,
     "dataStatus": "official_anchor"
   },
   {
@@ -39816,6 +42189,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000178",
+    "areaName": "Oxford",
+    "periodEnd": "2026-03-31",
+    "value": 230,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000178",
+    "areaName": "Oxford",
+    "periodEnd": "2026-06-30",
+    "value": 184,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000179",
     "areaName": "South Oxfordshire",
     "periodEnd": "2015-03-31",
@@ -40096,6 +42483,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000179",
+    "areaName": "South Oxfordshire",
+    "periodEnd": "2026-03-31",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000179",
+    "areaName": "South Oxfordshire",
+    "periodEnd": "2026-06-30",
+    "value": 23,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000180",
     "areaName": "Vale of White Horse",
     "periodEnd": "2014-03-31",
@@ -40369,6 +42770,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000180",
+    "areaName": "Vale of White Horse",
+    "periodEnd": "2026-03-31",
+    "value": 92,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000180",
+    "areaName": "Vale of White Horse",
+    "periodEnd": "2026-06-30",
+    "value": 85,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000181",
     "areaName": "West Oxfordshire",
     "periodEnd": "2017-09-30",
@@ -40506,6 +42921,20 @@
     "areaName": "West Oxfordshire",
     "periodEnd": "2025-12-31",
     "value": 123,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000181",
+    "areaName": "West Oxfordshire",
+    "periodEnd": "2026-03-31",
+    "value": 81,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000181",
+    "areaName": "West Oxfordshire",
+    "periodEnd": "2026-06-30",
+    "value": 6,
     "dataStatus": "official_anchor"
   },
   {
@@ -40744,6 +43173,20 @@
     "areaName": "Cannock Chase",
     "periodEnd": "2025-12-31",
     "value": 31,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000192",
+    "areaName": "Cannock Chase",
+    "periodEnd": "2026-03-31",
+    "value": 28,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000192",
+    "areaName": "Cannock Chase",
+    "periodEnd": "2026-06-30",
+    "value": 29,
     "dataStatus": "official_anchor"
   },
   {
@@ -41076,6 +43519,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000193",
+    "areaName": "East Staffordshire",
+    "periodEnd": "2026-03-31",
+    "value": 147,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000193",
+    "areaName": "East Staffordshire",
+    "periodEnd": "2026-06-30",
+    "value": 149,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000194",
     "areaName": "Lichfield",
     "periodEnd": "2023-12-31",
@@ -41129,6 +43586,20 @@
     "areaName": "Lichfield",
     "periodEnd": "2025-12-31",
     "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000194",
+    "areaName": "Lichfield",
+    "periodEnd": "2026-03-31",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000194",
+    "areaName": "Lichfield",
+    "periodEnd": "2026-06-30",
+    "value": 5,
     "dataStatus": "official_anchor"
   },
   {
@@ -41363,6 +43834,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000195",
+    "areaName": "Newcastle-under-Lyme",
+    "periodEnd": "2026-03-31",
+    "value": 181,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000195",
+    "areaName": "Newcastle-under-Lyme",
+    "periodEnd": "2026-06-30",
+    "value": 192,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000196",
     "areaName": "South Staffordshire",
     "periodEnd": "2014-09-30",
@@ -41458,6 +43943,20 @@
     "areaName": "South Staffordshire",
     "periodEnd": "2025-12-31",
     "value": 81,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000196",
+    "areaName": "South Staffordshire",
+    "periodEnd": "2026-03-31",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000196",
+    "areaName": "South Staffordshire",
+    "periodEnd": "2026-06-30",
+    "value": 22,
     "dataStatus": "official_anchor"
   },
   {
@@ -41612,6 +44111,20 @@
     "areaName": "Stafford",
     "periodEnd": "2025-12-31",
     "value": 29,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000197",
+    "areaName": "Stafford",
+    "periodEnd": "2026-03-31",
+    "value": 53,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000197",
+    "areaName": "Stafford",
+    "periodEnd": "2026-06-30",
+    "value": 76,
     "dataStatus": "official_anchor"
   },
   {
@@ -41797,6 +44310,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000198",
+    "areaName": "Staffordshire Moorlands",
+    "periodEnd": "2026-03-31",
+    "value": 35,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000198",
+    "areaName": "Staffordshire Moorlands",
+    "periodEnd": "2026-06-30",
+    "value": 36,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000199",
     "areaName": "Tamworth",
     "periodEnd": "2014-03-31",
@@ -41920,6 +44447,20 @@
     "areaName": "Tamworth",
     "periodEnd": "2025-12-31",
     "value": 208,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000199",
+    "areaName": "Tamworth",
+    "periodEnd": "2026-03-31",
+    "value": 95,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000199",
+    "areaName": "Tamworth",
+    "periodEnd": "2026-06-30",
+    "value": 133,
     "dataStatus": "official_anchor"
   },
   {
@@ -42094,6 +44635,20 @@
     "areaCode": "E07000200",
     "areaName": "Babergh",
     "periodEnd": "2025-12-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000200",
+    "areaName": "Babergh",
+    "periodEnd": "2026-03-31",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000200",
+    "areaName": "Babergh",
+    "periodEnd": "2026-06-30",
     "value": 6,
     "dataStatus": "official_anchor"
   },
@@ -42434,6 +44989,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000202",
+    "areaName": "Ipswich",
+    "periodEnd": "2026-03-31",
+    "value": 114,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000202",
+    "areaName": "Ipswich",
+    "periodEnd": "2026-06-30",
+    "value": 113,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000203",
     "areaName": "Mid Suffolk",
     "periodEnd": "2015-06-30",
@@ -42564,6 +45133,20 @@
     "areaName": "Mid Suffolk",
     "periodEnd": "2025-12-31",
     "value": 22,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000203",
+    "areaName": "Mid Suffolk",
+    "periodEnd": "2026-03-31",
+    "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000203",
+    "areaName": "Mid Suffolk",
+    "periodEnd": "2026-06-30",
+    "value": 26,
     "dataStatus": "official_anchor"
   },
   {
@@ -42837,6 +45420,20 @@
     "areaName": "Elmbridge",
     "periodEnd": "2025-12-31",
     "value": 25,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000207",
+    "areaName": "Elmbridge",
+    "periodEnd": "2026-03-31",
+    "value": 22,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000207",
+    "areaName": "Elmbridge",
+    "periodEnd": "2026-06-30",
+    "value": 13,
     "dataStatus": "official_anchor"
   },
   {
@@ -43134,6 +45731,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000208",
+    "areaName": "Epsom and Ewell",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000208",
+    "areaName": "Epsom and Ewell",
+    "periodEnd": "2026-06-30",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000209",
     "areaName": "Guildford",
     "periodEnd": "2015-09-30",
@@ -43393,6 +46004,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000209",
+    "areaName": "Guildford",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000209",
+    "areaName": "Guildford",
+    "periodEnd": "2026-06-30",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000210",
     "areaName": "Mole Valley",
     "periodEnd": "2016-09-30",
@@ -43557,6 +46182,20 @@
     "areaCode": "E07000210",
     "areaName": "Mole Valley",
     "periodEnd": "2025-12-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000210",
+    "areaName": "Mole Valley",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000210",
+    "areaName": "Mole Valley",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -43813,6 +46452,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000211",
+    "areaName": "Reigate and Banstead",
+    "periodEnd": "2026-03-31",
+    "value": 288,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000211",
+    "areaName": "Reigate and Banstead",
+    "periodEnd": "2026-06-30",
+    "value": 249,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000212",
     "areaName": "Runnymede",
     "periodEnd": "2015-09-30",
@@ -43943,6 +46596,20 @@
     "areaName": "Runnymede",
     "periodEnd": "2025-09-30",
     "value": 8,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000212",
+    "areaName": "Runnymede",
+    "periodEnd": "2026-03-31",
+    "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000212",
+    "areaName": "Runnymede",
+    "periodEnd": "2026-06-30",
+    "value": 28,
     "dataStatus": "official_anchor"
   },
   {
@@ -44268,6 +46935,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000213",
+    "areaName": "Spelthorne",
+    "periodEnd": "2026-03-31",
+    "value": 78,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000213",
+    "areaName": "Spelthorne",
+    "periodEnd": "2026-06-30",
+    "value": 70,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000214",
     "areaName": "Surrey Heath",
     "periodEnd": "2014-06-30",
@@ -44506,6 +47187,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000214",
+    "areaName": "Surrey Heath",
+    "periodEnd": "2026-03-31",
+    "value": 68,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000214",
+    "areaName": "Surrey Heath",
+    "periodEnd": "2026-06-30",
+    "value": 37,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000215",
     "areaName": "Tandridge",
     "periodEnd": "2015-12-31",
@@ -44671,6 +47366,20 @@
     "areaName": "Tandridge",
     "periodEnd": "2025-12-31",
     "value": 19,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000215",
+    "areaName": "Tandridge",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000215",
+    "areaName": "Tandridge",
+    "periodEnd": "2026-06-30",
+    "value": 16,
     "dataStatus": "official_anchor"
   },
   {
@@ -44954,6 +47663,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000216",
+    "areaName": "Waverley",
+    "periodEnd": "2026-03-31",
+    "value": 7,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000216",
+    "areaName": "Waverley",
+    "periodEnd": "2026-06-30",
+    "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000217",
     "areaName": "Woking",
     "periodEnd": "2017-12-31",
@@ -45143,6 +47866,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000217",
+    "areaName": "Woking",
+    "periodEnd": "2026-03-31",
+    "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000217",
+    "areaName": "Woking",
+    "periodEnd": "2026-06-30",
+    "value": 7,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000218",
     "areaName": "North Warwickshire",
     "periodEnd": "2023-12-31",
@@ -45203,6 +47940,20 @@
     "areaName": "North Warwickshire",
     "periodEnd": "2025-12-31",
     "value": 48,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000218",
+    "areaName": "North Warwickshire",
+    "periodEnd": "2026-03-31",
+    "value": 65,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000218",
+    "areaName": "North Warwickshire",
+    "periodEnd": "2026-06-30",
+    "value": 67,
     "dataStatus": "official_anchor"
   },
   {
@@ -45444,6 +48195,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000219",
+    "areaName": "Nuneaton and Bedworth",
+    "periodEnd": "2026-03-31",
+    "value": 310,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000219",
+    "areaName": "Nuneaton and Bedworth",
+    "periodEnd": "2026-06-30",
+    "value": 318,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000220",
     "areaName": "Rugby",
     "periodEnd": "2014-03-31",
@@ -45598,6 +48363,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000220",
+    "areaName": "Rugby",
+    "periodEnd": "2026-03-31",
+    "value": 506,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000220",
+    "areaName": "Rugby",
+    "periodEnd": "2026-06-30",
+    "value": 567,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000221",
     "areaName": "Stratford-on-Avon",
     "periodEnd": "2022-12-31",
@@ -45686,6 +48465,20 @@
     "areaName": "Stratford-on-Avon",
     "periodEnd": "2025-12-31",
     "value": 148,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000221",
+    "areaName": "Stratford-on-Avon",
+    "periodEnd": "2026-03-31",
+    "value": 123,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000221",
+    "areaName": "Stratford-on-Avon",
+    "periodEnd": "2026-06-30",
+    "value": 63,
     "dataStatus": "official_anchor"
   },
   {
@@ -45962,6 +48755,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000222",
+    "areaName": "Warwick",
+    "periodEnd": "2026-03-31",
+    "value": 360,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000222",
+    "areaName": "Warwick",
+    "periodEnd": "2026-06-30",
+    "value": 380,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000223",
     "areaName": "Adur",
     "periodEnd": "2014-03-31",
@@ -46214,6 +49021,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000223",
+    "areaName": "Adur",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000223",
+    "areaName": "Adur",
+    "periodEnd": "2026-06-30",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000224",
     "areaName": "Arun",
     "periodEnd": "2018-03-31",
@@ -46365,6 +49186,20 @@
     "areaName": "Arun",
     "periodEnd": "2025-12-31",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000224",
+    "areaName": "Arun",
+    "periodEnd": "2026-03-31",
+    "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000224",
+    "areaName": "Arun",
+    "periodEnd": "2026-06-30",
+    "value": 3,
     "dataStatus": "official_anchor"
   },
   {
@@ -46575,6 +49410,20 @@
     "areaName": "Chichester",
     "periodEnd": "2025-12-31",
     "value": 179,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000225",
+    "areaName": "Chichester",
+    "periodEnd": "2026-03-31",
+    "value": 110,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000225",
+    "areaName": "Chichester",
+    "periodEnd": "2026-06-30",
+    "value": 86,
     "dataStatus": "official_anchor"
   },
   {
@@ -46907,6 +49756,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000226",
+    "areaName": "Crawley",
+    "periodEnd": "2026-03-31",
+    "value": 304,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000226",
+    "areaName": "Crawley",
+    "periodEnd": "2026-06-30",
+    "value": 301,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000227",
     "areaName": "Horsham",
     "periodEnd": "2014-12-31",
@@ -47135,6 +49998,20 @@
     "areaName": "Horsham",
     "periodEnd": "2025-12-31",
     "value": 93,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000227",
+    "areaName": "Horsham",
+    "periodEnd": "2026-03-31",
+    "value": 45,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000227",
+    "areaName": "Horsham",
+    "periodEnd": "2026-06-30",
+    "value": 4,
     "dataStatus": "official_anchor"
   },
   {
@@ -47425,6 +50302,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000228",
+    "areaName": "Mid Sussex",
+    "periodEnd": "2026-03-31",
+    "value": 366,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000228",
+    "areaName": "Mid Sussex",
+    "periodEnd": "2026-06-30",
+    "value": 326,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000229",
     "areaName": "Worthing",
     "periodEnd": "2014-03-31",
@@ -47646,6 +50537,20 @@
     "areaName": "Worthing",
     "periodEnd": "2025-12-31",
     "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000229",
+    "areaName": "Worthing",
+    "periodEnd": "2026-03-31",
+    "value": 15,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000229",
+    "areaName": "Worthing",
+    "periodEnd": "2026-06-30",
+    "value": 19,
     "dataStatus": "official_anchor"
   },
   {
@@ -47894,6 +50799,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000234",
+    "areaName": "Bromsgrove",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000234",
+    "areaName": "Bromsgrove",
+    "periodEnd": "2026-06-30",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000235",
     "areaName": "Malvern Hills",
     "periodEnd": "2014-09-30",
@@ -47905,6 +50824,13 @@
     "areaName": "Malvern Hills",
     "periodEnd": "2023-09-30",
     "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000235",
+    "areaName": "Malvern Hills",
+    "periodEnd": "2026-06-30",
+    "value": 7,
     "dataStatus": "official_anchor"
   },
   {
@@ -48244,6 +51170,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000236",
+    "areaName": "Redditch",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000236",
+    "areaName": "Redditch",
+    "periodEnd": "2026-06-30",
+    "value": 13,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000237",
     "areaName": "Worcester",
     "periodEnd": "2014-03-31",
@@ -48489,6 +51429,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000237",
+    "areaName": "Worcester",
+    "periodEnd": "2026-03-31",
+    "value": 72,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000237",
+    "areaName": "Worcester",
+    "periodEnd": "2026-06-30",
+    "value": 78,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000238",
     "areaName": "Wychavon",
     "periodEnd": "2018-12-31",
@@ -48640,6 +51594,20 @@
     "areaName": "Wychavon",
     "periodEnd": "2025-12-31",
     "value": 113,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000238",
+    "areaName": "Wychavon",
+    "periodEnd": "2026-03-31",
+    "value": 111,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000238",
+    "areaName": "Wychavon",
+    "periodEnd": "2026-06-30",
+    "value": 42,
     "dataStatus": "official_anchor"
   },
   {
@@ -48913,6 +51881,20 @@
     "areaName": "Wyre Forest",
     "periodEnd": "2025-12-31",
     "value": 43,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000239",
+    "areaName": "Wyre Forest",
+    "periodEnd": "2026-03-31",
+    "value": 47,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000239",
+    "areaName": "Wyre Forest",
+    "periodEnd": "2026-06-30",
+    "value": 56,
     "dataStatus": "official_anchor"
   },
   {
@@ -49252,6 +52234,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000240",
+    "areaName": "St Albans",
+    "periodEnd": "2026-03-31",
+    "value": 40,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000240",
+    "areaName": "St Albans",
+    "periodEnd": "2026-06-30",
+    "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000241",
     "areaName": "Welwyn Hatfield",
     "periodEnd": "2014-03-31",
@@ -49581,6 +52577,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000241",
+    "areaName": "Welwyn Hatfield",
+    "periodEnd": "2026-03-31",
+    "value": 153,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000241",
+    "areaName": "Welwyn Hatfield",
+    "periodEnd": "2026-06-30",
+    "value": 131,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000242",
     "areaName": "East Hertfordshire",
     "periodEnd": "2015-12-31",
@@ -49654,6 +52664,13 @@
     "areaCode": "E07000242",
     "areaName": "East Hertfordshire",
     "periodEnd": "2025-09-30",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000242",
+    "areaName": "East Hertfordshire",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -49952,6 +52969,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000243",
+    "areaName": "Stevenage",
+    "periodEnd": "2026-03-31",
+    "value": 261,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000243",
+    "areaName": "Stevenage",
+    "periodEnd": "2026-06-30",
+    "value": 267,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000244",
     "areaName": "East Suffolk",
     "periodEnd": "2018-03-31",
@@ -50176,6 +53207,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E07000244",
+    "areaName": "East Suffolk",
+    "periodEnd": "2026-03-31",
+    "value": 66,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000244",
+    "areaName": "East Suffolk",
+    "periodEnd": "2026-06-30",
+    "value": 66,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E07000245",
     "areaName": "West Suffolk",
     "periodEnd": "2019-09-30",
@@ -50285,6 +53330,20 @@
     "areaName": "West Suffolk",
     "periodEnd": "2025-12-31",
     "value": 18,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000245",
+    "areaName": "West Suffolk",
+    "periodEnd": "2026-03-31",
+    "value": 32,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E07000245",
+    "areaName": "West Suffolk",
+    "periodEnd": "2026-06-30",
+    "value": 38,
     "dataStatus": "official_anchor"
   },
   {
@@ -50624,6 +53683,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000001",
+    "areaName": "Bolton",
+    "periodEnd": "2026-03-31",
+    "value": 1059,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000001",
+    "areaName": "Bolton",
+    "periodEnd": "2026-06-30",
+    "value": 1037,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000002",
     "areaName": "Bury",
     "periodEnd": "2014-03-31",
@@ -50957,6 +54030,20 @@
     "areaName": "Bury",
     "periodEnd": "2025-12-31",
     "value": 404,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000002",
+    "areaName": "Bury",
+    "periodEnd": "2026-03-31",
+    "value": 389,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000002",
+    "areaName": "Bury",
+    "periodEnd": "2026-06-30",
+    "value": 368,
     "dataStatus": "official_anchor"
   },
   {
@@ -51296,6 +54383,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000003",
+    "areaName": "Manchester",
+    "periodEnd": "2026-03-31",
+    "value": 1606,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000003",
+    "areaName": "Manchester",
+    "periodEnd": "2026-06-30",
+    "value": 1509,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000004",
     "areaName": "Oldham",
     "periodEnd": "2014-03-31",
@@ -51629,6 +54730,20 @@
     "areaName": "Oldham",
     "periodEnd": "2025-12-31",
     "value": 796,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000004",
+    "areaName": "Oldham",
+    "periodEnd": "2026-03-31",
+    "value": 781,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000004",
+    "areaName": "Oldham",
+    "periodEnd": "2026-06-30",
+    "value": 733,
     "dataStatus": "official_anchor"
   },
   {
@@ -51968,6 +55083,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000005",
+    "areaName": "Rochdale",
+    "periodEnd": "2026-03-31",
+    "value": 715,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000005",
+    "areaName": "Rochdale",
+    "periodEnd": "2026-06-30",
+    "value": 727,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000006",
     "areaName": "Salford",
     "periodEnd": "2014-03-31",
@@ -52301,6 +55430,20 @@
     "areaName": "Salford",
     "periodEnd": "2025-12-31",
     "value": 706,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000006",
+    "areaName": "Salford",
+    "periodEnd": "2026-03-31",
+    "value": 681,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000006",
+    "areaName": "Salford",
+    "periodEnd": "2026-06-30",
+    "value": 656,
     "dataStatus": "official_anchor"
   },
   {
@@ -52640,6 +55783,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000007",
+    "areaName": "Stockport",
+    "periodEnd": "2026-03-31",
+    "value": 609,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000007",
+    "areaName": "Stockport",
+    "periodEnd": "2026-06-30",
+    "value": 664,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000008",
     "areaName": "Tameside",
     "periodEnd": "2014-03-31",
@@ -52973,6 +56130,20 @@
     "areaName": "Tameside",
     "periodEnd": "2025-12-31",
     "value": 508,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000008",
+    "areaName": "Tameside",
+    "periodEnd": "2026-03-31",
+    "value": 506,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000008",
+    "areaName": "Tameside",
+    "periodEnd": "2026-06-30",
+    "value": 488,
     "dataStatus": "official_anchor"
   },
   {
@@ -53312,6 +56483,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000009",
+    "areaName": "Trafford",
+    "periodEnd": "2026-03-31",
+    "value": 258,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000009",
+    "areaName": "Trafford",
+    "periodEnd": "2026-06-30",
+    "value": 165,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000010",
     "areaName": "Wigan",
     "periodEnd": "2014-03-31",
@@ -53648,6 +56833,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000010",
+    "areaName": "Wigan",
+    "periodEnd": "2026-03-31",
+    "value": 1188,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000010",
+    "areaName": "Wigan",
+    "periodEnd": "2026-06-30",
+    "value": 1193,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000011",
     "areaName": "Knowsley",
     "periodEnd": "2014-03-31",
@@ -53967,6 +57166,20 @@
     "areaName": "Knowsley",
     "periodEnd": "2025-12-31",
     "value": 320,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000011",
+    "areaName": "Knowsley",
+    "periodEnd": "2026-03-31",
+    "value": 312,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000011",
+    "areaName": "Knowsley",
+    "periodEnd": "2026-06-30",
+    "value": 309,
     "dataStatus": "official_anchor"
   },
   {
@@ -54306,6 +57519,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000012",
+    "areaName": "Liverpool",
+    "periodEnd": "2026-03-31",
+    "value": 2053,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000012",
+    "areaName": "Liverpool",
+    "periodEnd": "2026-06-30",
+    "value": 1961,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000013",
     "areaName": "St Helens",
     "periodEnd": "2014-03-31",
@@ -54639,6 +57866,20 @@
     "areaName": "St Helens",
     "periodEnd": "2025-12-31",
     "value": 668,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000013",
+    "areaName": "St Helens",
+    "periodEnd": "2026-03-31",
+    "value": 576,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000013",
+    "areaName": "St Helens",
+    "periodEnd": "2026-06-30",
+    "value": 560,
     "dataStatus": "official_anchor"
   },
   {
@@ -54978,6 +58219,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000014",
+    "areaName": "Sefton",
+    "periodEnd": "2026-03-31",
+    "value": 417,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000014",
+    "areaName": "Sefton",
+    "periodEnd": "2026-06-30",
+    "value": 411,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000015",
     "areaName": "Wirral",
     "periodEnd": "2014-03-31",
@@ -55314,6 +58569,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000015",
+    "areaName": "Wirral",
+    "periodEnd": "2026-03-31",
+    "value": 705,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000015",
+    "areaName": "Wirral",
+    "periodEnd": "2026-06-30",
+    "value": 701,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000017",
     "areaName": "Doncaster",
     "periodEnd": "2014-03-31",
@@ -55562,7 +58831,7 @@
     "areaCode": "E08000017",
     "areaName": "Doncaster",
     "periodEnd": "2022-12-31",
-    "value": 498,
+    "value": 666,
     "dataStatus": "official_anchor"
   },
   {
@@ -55647,6 +58916,20 @@
     "areaName": "Doncaster",
     "periodEnd": "2025-12-31",
     "value": 658,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000017",
+    "areaName": "Doncaster",
+    "periodEnd": "2026-03-31",
+    "value": 561,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000017",
+    "areaName": "Doncaster",
+    "periodEnd": "2026-06-30",
+    "value": 538,
     "dataStatus": "official_anchor"
   },
   {
@@ -55898,7 +59181,7 @@
     "areaCode": "E08000018",
     "areaName": "Rotherham",
     "periodEnd": "2022-12-31",
-    "value": 610,
+    "value": 823,
     "dataStatus": "official_anchor"
   },
   {
@@ -55983,6 +59266,20 @@
     "areaName": "Rotherham",
     "periodEnd": "2025-12-31",
     "value": 445,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000018",
+    "areaName": "Rotherham",
+    "periodEnd": "2026-03-31",
+    "value": 403,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000018",
+    "areaName": "Rotherham",
+    "periodEnd": "2026-06-30",
+    "value": 388,
     "dataStatus": "official_anchor"
   },
   {
@@ -56234,7 +59531,7 @@
     "areaCode": "E08000021",
     "areaName": "Newcastle upon Tyne",
     "periodEnd": "2022-12-31",
-    "value": 1268,
+    "value": 1810,
     "dataStatus": "official_anchor"
   },
   {
@@ -56319,6 +59616,20 @@
     "areaName": "Newcastle upon Tyne",
     "periodEnd": "2025-12-31",
     "value": 1128,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000021",
+    "areaName": "Newcastle upon Tyne",
+    "periodEnd": "2026-03-31",
+    "value": 1005,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000021",
+    "areaName": "Newcastle upon Tyne",
+    "periodEnd": "2026-06-30",
+    "value": 915,
     "dataStatus": "official_anchor"
   },
   {
@@ -56658,6 +59969,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000022",
+    "areaName": "North Tyneside",
+    "periodEnd": "2026-03-31",
+    "value": 447,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000022",
+    "areaName": "North Tyneside",
+    "periodEnd": "2026-06-30",
+    "value": 436,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000023",
     "areaName": "South Tyneside",
     "periodEnd": "2014-03-31",
@@ -56906,7 +60231,7 @@
     "areaCode": "E08000023",
     "areaName": "South Tyneside",
     "periodEnd": "2022-12-31",
-    "value": 450,
+    "value": 455,
     "dataStatus": "official_anchor"
   },
   {
@@ -56991,6 +60316,20 @@
     "areaName": "South Tyneside",
     "periodEnd": "2025-12-31",
     "value": 625,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000023",
+    "areaName": "South Tyneside",
+    "periodEnd": "2026-03-31",
+    "value": 631,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000023",
+    "areaName": "South Tyneside",
+    "periodEnd": "2026-06-30",
+    "value": 628,
     "dataStatus": "official_anchor"
   },
   {
@@ -57242,7 +60581,7 @@
     "areaCode": "E08000024",
     "areaName": "Sunderland",
     "periodEnd": "2022-12-31",
-    "value": 424,
+    "value": 487,
     "dataStatus": "official_anchor"
   },
   {
@@ -57327,6 +60666,20 @@
     "areaName": "Sunderland",
     "periodEnd": "2025-12-31",
     "value": 831,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000024",
+    "areaName": "Sunderland",
+    "periodEnd": "2026-03-31",
+    "value": 805,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000024",
+    "areaName": "Sunderland",
+    "periodEnd": "2026-06-30",
+    "value": 823,
     "dataStatus": "official_anchor"
   },
   {
@@ -57666,6 +61019,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000025",
+    "areaName": "Birmingham",
+    "periodEnd": "2026-03-31",
+    "value": 2142,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000025",
+    "areaName": "Birmingham",
+    "periodEnd": "2026-06-30",
+    "value": 2136,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000026",
     "areaName": "Coventry",
     "periodEnd": "2014-03-31",
@@ -57999,6 +61366,20 @@
     "areaName": "Coventry",
     "periodEnd": "2025-12-31",
     "value": 1719,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000026",
+    "areaName": "Coventry",
+    "periodEnd": "2026-03-31",
+    "value": 1712,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000026",
+    "areaName": "Coventry",
+    "periodEnd": "2026-06-30",
+    "value": 1700,
     "dataStatus": "official_anchor"
   },
   {
@@ -58338,6 +61719,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000027",
+    "areaName": "Dudley",
+    "periodEnd": "2026-03-31",
+    "value": 663,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000027",
+    "areaName": "Dudley",
+    "periodEnd": "2026-06-30",
+    "value": 611,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000028",
     "areaName": "Sandwell",
     "periodEnd": "2014-03-31",
@@ -58674,6 +62069,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000028",
+    "areaName": "Sandwell",
+    "periodEnd": "2026-03-31",
+    "value": 1500,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000028",
+    "areaName": "Sandwell",
+    "periodEnd": "2026-06-30",
+    "value": 1467,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000029",
     "areaName": "Solihull",
     "periodEnd": "2014-03-31",
@@ -58944,6 +62353,20 @@
     "areaName": "Solihull",
     "periodEnd": "2025-12-31",
     "value": 300,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000029",
+    "areaName": "Solihull",
+    "periodEnd": "2026-03-31",
+    "value": 207,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000029",
+    "areaName": "Solihull",
+    "periodEnd": "2026-06-30",
+    "value": 205,
     "dataStatus": "official_anchor"
   },
   {
@@ -59283,6 +62706,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000030",
+    "areaName": "Walsall",
+    "periodEnd": "2026-03-31",
+    "value": 650,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000030",
+    "areaName": "Walsall",
+    "periodEnd": "2026-06-30",
+    "value": 663,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000031",
     "areaName": "Wolverhampton",
     "periodEnd": "2014-03-31",
@@ -59619,6 +63056,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000031",
+    "areaName": "Wolverhampton",
+    "periodEnd": "2026-03-31",
+    "value": 1094,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000031",
+    "areaName": "Wolverhampton",
+    "periodEnd": "2026-06-30",
+    "value": 1018,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000032",
     "areaName": "Bradford",
     "periodEnd": "2014-03-31",
@@ -59867,7 +63318,7 @@
     "areaCode": "E08000032",
     "areaName": "Bradford",
     "periodEnd": "2022-12-31",
-    "value": 1323,
+    "value": 1775,
     "dataStatus": "official_anchor"
   },
   {
@@ -59952,6 +63403,20 @@
     "areaName": "Bradford",
     "periodEnd": "2025-12-31",
     "value": 1368,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000032",
+    "areaName": "Bradford",
+    "periodEnd": "2026-03-31",
+    "value": 1266,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000032",
+    "areaName": "Bradford",
+    "periodEnd": "2026-06-30",
+    "value": 1097,
     "dataStatus": "official_anchor"
   },
   {
@@ -60203,7 +63668,7 @@
     "areaCode": "E08000033",
     "areaName": "Calderdale",
     "periodEnd": "2022-12-31",
-    "value": 467,
+    "value": 636,
     "dataStatus": "official_anchor"
   },
   {
@@ -60288,6 +63753,20 @@
     "areaName": "Calderdale",
     "periodEnd": "2025-12-31",
     "value": 608,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000033",
+    "areaName": "Calderdale",
+    "periodEnd": "2026-03-31",
+    "value": 509,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000033",
+    "areaName": "Calderdale",
+    "periodEnd": "2026-06-30",
+    "value": 452,
     "dataStatus": "official_anchor"
   },
   {
@@ -60539,7 +64018,7 @@
     "areaCode": "E08000034",
     "areaName": "Kirklees",
     "periodEnd": "2022-12-31",
-    "value": 796,
+    "value": 1008,
     "dataStatus": "official_anchor"
   },
   {
@@ -60624,6 +64103,20 @@
     "areaName": "Kirklees",
     "periodEnd": "2025-12-31",
     "value": 722,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000034",
+    "areaName": "Kirklees",
+    "periodEnd": "2026-03-31",
+    "value": 707,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000034",
+    "areaName": "Kirklees",
+    "periodEnd": "2026-06-30",
+    "value": 668,
     "dataStatus": "official_anchor"
   },
   {
@@ -60875,7 +64368,7 @@
     "areaCode": "E08000035",
     "areaName": "Leeds",
     "periodEnd": "2022-12-31",
-    "value": 1206,
+    "value": 1544,
     "dataStatus": "official_anchor"
   },
   {
@@ -60960,6 +64453,20 @@
     "areaName": "Leeds",
     "periodEnd": "2025-12-31",
     "value": 1772,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000035",
+    "areaName": "Leeds",
+    "periodEnd": "2026-03-31",
+    "value": 1416,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000035",
+    "areaName": "Leeds",
+    "periodEnd": "2026-06-30",
+    "value": 1365,
     "dataStatus": "official_anchor"
   },
   {
@@ -61211,7 +64718,7 @@
     "areaCode": "E08000036",
     "areaName": "Wakefield",
     "periodEnd": "2022-12-31",
-    "value": 384,
+    "value": 805,
     "dataStatus": "official_anchor"
   },
   {
@@ -61296,6 +64803,20 @@
     "areaName": "Wakefield",
     "periodEnd": "2025-12-31",
     "value": 713,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000036",
+    "areaName": "Wakefield",
+    "periodEnd": "2026-03-31",
+    "value": 648,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000036",
+    "areaName": "Wakefield",
+    "periodEnd": "2026-06-30",
+    "value": 724,
     "dataStatus": "official_anchor"
   },
   {
@@ -61547,7 +65068,7 @@
     "areaCode": "E08000037",
     "areaName": "Gateshead",
     "periodEnd": "2022-12-31",
-    "value": 780,
+    "value": 863,
     "dataStatus": "official_anchor"
   },
   {
@@ -61635,6 +65156,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000037",
+    "areaName": "Gateshead",
+    "periodEnd": "2026-03-31",
+    "value": 639,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000037",
+    "areaName": "Gateshead",
+    "periodEnd": "2026-06-30",
+    "value": 606,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000038",
     "areaName": "Barnsley",
     "periodEnd": "2025-12-31",
@@ -61642,10 +65177,38 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E08000038",
+    "areaName": "Barnsley",
+    "periodEnd": "2026-03-31",
+    "value": 269,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000038",
+    "areaName": "Barnsley",
+    "periodEnd": "2026-06-30",
+    "value": 276,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E08000039",
     "areaName": "Sheffield",
     "periodEnd": "2025-12-31",
     "value": 1264,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000039",
+    "areaName": "Sheffield",
+    "periodEnd": "2026-03-31",
+    "value": 1126,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E08000039",
+    "areaName": "Sheffield",
+    "periodEnd": "2026-06-30",
+    "value": 1034,
     "dataStatus": "official_anchor"
   },
   {
@@ -61708,6 +65271,20 @@
     "areaCode": "E09000001",
     "areaName": "City of London",
     "periodEnd": "2025-09-30",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000001",
+    "areaName": "City of London",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000001",
+    "areaName": "City of London",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -62048,6 +65625,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000002",
+    "areaName": "Barking and Dagenham",
+    "periodEnd": "2026-03-31",
+    "value": 301,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000002",
+    "areaName": "Barking and Dagenham",
+    "periodEnd": "2026-06-30",
+    "value": 271,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000003",
     "areaName": "Barnet",
     "periodEnd": "2014-03-31",
@@ -62384,6 +65975,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000003",
+    "areaName": "Barnet",
+    "periodEnd": "2026-03-31",
+    "value": 1137,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000003",
+    "areaName": "Barnet",
+    "periodEnd": "2026-06-30",
+    "value": 878,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000004",
     "areaName": "Bexley",
     "periodEnd": "2014-03-31",
@@ -62717,6 +66322,20 @@
     "areaName": "Bexley",
     "periodEnd": "2025-12-31",
     "value": 103,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000004",
+    "areaName": "Bexley",
+    "periodEnd": "2026-03-31",
+    "value": 109,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000004",
+    "areaName": "Bexley",
+    "periodEnd": "2026-06-30",
+    "value": 115,
     "dataStatus": "official_anchor"
   },
   {
@@ -63056,6 +66675,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000005",
+    "areaName": "Brent",
+    "periodEnd": "2026-03-31",
+    "value": 902,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000005",
+    "areaName": "Brent",
+    "periodEnd": "2026-06-30",
+    "value": 789,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000006",
     "areaName": "Bromley",
     "periodEnd": "2014-03-31",
@@ -63389,6 +67022,20 @@
     "areaName": "Bromley",
     "periodEnd": "2025-12-31",
     "value": 175,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000006",
+    "areaName": "Bromley",
+    "periodEnd": "2026-03-31",
+    "value": 148,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000006",
+    "areaName": "Bromley",
+    "periodEnd": "2026-06-30",
+    "value": 144,
     "dataStatus": "official_anchor"
   },
   {
@@ -63728,6 +67375,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000007",
+    "areaName": "Camden",
+    "periodEnd": "2026-03-31",
+    "value": 223,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000007",
+    "areaName": "Camden",
+    "periodEnd": "2026-06-30",
+    "value": 168,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000008",
     "areaName": "Croydon",
     "periodEnd": "2014-03-31",
@@ -64061,6 +67722,20 @@
     "areaName": "Croydon",
     "periodEnd": "2025-12-31",
     "value": 1483,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000008",
+    "areaName": "Croydon",
+    "periodEnd": "2026-03-31",
+    "value": 974,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000008",
+    "areaName": "Croydon",
+    "periodEnd": "2026-06-30",
+    "value": 1008,
     "dataStatus": "official_anchor"
   },
   {
@@ -64400,6 +68075,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000009",
+    "areaName": "Ealing",
+    "periodEnd": "2026-03-31",
+    "value": 1163,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000009",
+    "areaName": "Ealing",
+    "periodEnd": "2026-06-30",
+    "value": 1073,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000010",
     "areaName": "Enfield",
     "periodEnd": "2014-03-31",
@@ -64733,6 +68422,20 @@
     "areaName": "Enfield",
     "periodEnd": "2025-12-31",
     "value": 390,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000010",
+    "areaName": "Enfield",
+    "periodEnd": "2026-03-31",
+    "value": 361,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000010",
+    "areaName": "Enfield",
+    "periodEnd": "2026-06-30",
+    "value": 353,
     "dataStatus": "official_anchor"
   },
   {
@@ -65072,6 +68775,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000011",
+    "areaName": "Greenwich",
+    "periodEnd": "2026-03-31",
+    "value": 144,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000011",
+    "areaName": "Greenwich",
+    "periodEnd": "2026-06-30",
+    "value": 153,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000012",
     "areaName": "Hackney",
     "periodEnd": "2014-03-31",
@@ -65405,6 +69122,20 @@
     "areaName": "Hackney",
     "periodEnd": "2025-12-31",
     "value": 589,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000012",
+    "areaName": "Hackney",
+    "periodEnd": "2026-03-31",
+    "value": 458,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000012",
+    "areaName": "Hackney",
+    "periodEnd": "2026-06-30",
+    "value": 373,
     "dataStatus": "official_anchor"
   },
   {
@@ -65744,6 +69475,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000013",
+    "areaName": "Hammersmith and Fulham",
+    "periodEnd": "2026-03-31",
+    "value": 286,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000013",
+    "areaName": "Hammersmith and Fulham",
+    "periodEnd": "2026-06-30",
+    "value": 225,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000014",
     "areaName": "Haringey",
     "periodEnd": "2014-03-31",
@@ -66077,6 +69822,20 @@
     "areaName": "Haringey",
     "periodEnd": "2025-12-31",
     "value": 180,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000014",
+    "areaName": "Haringey",
+    "periodEnd": "2026-03-31",
+    "value": 161,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000014",
+    "areaName": "Haringey",
+    "periodEnd": "2026-06-30",
+    "value": 154,
     "dataStatus": "official_anchor"
   },
   {
@@ -66416,6 +70175,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000015",
+    "areaName": "Harrow",
+    "periodEnd": "2026-03-31",
+    "value": 327,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000015",
+    "areaName": "Harrow",
+    "periodEnd": "2026-06-30",
+    "value": 343,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000016",
     "areaName": "Havering",
     "periodEnd": "2014-03-31",
@@ -66749,6 +70522,20 @@
     "areaName": "Havering",
     "periodEnd": "2025-12-31",
     "value": 178,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000016",
+    "areaName": "Havering",
+    "periodEnd": "2026-03-31",
+    "value": 176,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000016",
+    "areaName": "Havering",
+    "periodEnd": "2026-06-30",
+    "value": 186,
     "dataStatus": "official_anchor"
   },
   {
@@ -67088,6 +70875,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000017",
+    "areaName": "Hillingdon",
+    "periodEnd": "2026-03-31",
+    "value": 1532,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000017",
+    "areaName": "Hillingdon",
+    "periodEnd": "2026-06-30",
+    "value": 1188,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000018",
     "areaName": "Hounslow",
     "periodEnd": "2014-03-31",
@@ -67421,6 +71222,20 @@
     "areaName": "Hounslow",
     "periodEnd": "2025-12-31",
     "value": 1720,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000018",
+    "areaName": "Hounslow",
+    "periodEnd": "2026-03-31",
+    "value": 1298,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000018",
+    "areaName": "Hounslow",
+    "periodEnd": "2026-06-30",
+    "value": 1139,
     "dataStatus": "official_anchor"
   },
   {
@@ -67760,6 +71575,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000019",
+    "areaName": "Islington",
+    "periodEnd": "2026-03-31",
+    "value": 56,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000019",
+    "areaName": "Islington",
+    "periodEnd": "2026-06-30",
+    "value": 66,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000020",
     "areaName": "Kensington and Chelsea",
     "periodEnd": "2014-03-31",
@@ -68093,6 +71922,20 @@
     "areaName": "Kensington and Chelsea",
     "periodEnd": "2025-12-31",
     "value": 258,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000020",
+    "areaName": "Kensington and Chelsea",
+    "periodEnd": "2026-03-31",
+    "value": 205,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000020",
+    "areaName": "Kensington and Chelsea",
+    "periodEnd": "2026-06-30",
+    "value": 180,
     "dataStatus": "official_anchor"
   },
   {
@@ -68432,6 +72275,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000021",
+    "areaName": "Kingston upon Thames",
+    "periodEnd": "2026-03-31",
+    "value": 84,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000021",
+    "areaName": "Kingston upon Thames",
+    "periodEnd": "2026-06-30",
+    "value": 62,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000022",
     "areaName": "Lambeth",
     "periodEnd": "2014-03-31",
@@ -68765,6 +72622,20 @@
     "areaName": "Lambeth",
     "periodEnd": "2025-12-31",
     "value": 428,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000022",
+    "areaName": "Lambeth",
+    "periodEnd": "2026-03-31",
+    "value": 346,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000022",
+    "areaName": "Lambeth",
+    "periodEnd": "2026-06-30",
+    "value": 285,
     "dataStatus": "official_anchor"
   },
   {
@@ -69104,6 +72975,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000023",
+    "areaName": "Lewisham",
+    "periodEnd": "2026-03-31",
+    "value": 245,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000023",
+    "areaName": "Lewisham",
+    "periodEnd": "2026-06-30",
+    "value": 210,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000024",
     "areaName": "Merton",
     "periodEnd": "2014-03-31",
@@ -69437,6 +73322,20 @@
     "areaName": "Merton",
     "periodEnd": "2025-12-31",
     "value": 302,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000024",
+    "areaName": "Merton",
+    "periodEnd": "2026-03-31",
+    "value": 253,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000024",
+    "areaName": "Merton",
+    "periodEnd": "2026-06-30",
+    "value": 209,
     "dataStatus": "official_anchor"
   },
   {
@@ -69776,6 +73675,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000025",
+    "areaName": "Newham",
+    "periodEnd": "2026-03-31",
+    "value": 1030,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000025",
+    "areaName": "Newham",
+    "periodEnd": "2026-06-30",
+    "value": 866,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000026",
     "areaName": "Redbridge",
     "periodEnd": "2014-03-31",
@@ -70112,6 +74025,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000026",
+    "areaName": "Redbridge",
+    "periodEnd": "2026-03-31",
+    "value": 459,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000026",
+    "areaName": "Redbridge",
+    "periodEnd": "2026-06-30",
+    "value": 413,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000027",
     "areaName": "Richmond upon Thames",
     "periodEnd": "2014-03-31",
@@ -70445,6 +74372,20 @@
     "areaName": "Richmond upon Thames",
     "periodEnd": "2025-12-31",
     "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000027",
+    "areaName": "Richmond upon Thames",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000027",
+    "areaName": "Richmond upon Thames",
+    "periodEnd": "2026-06-30",
+    "value": 15,
     "dataStatus": "official_anchor"
   },
   {
@@ -70784,6 +74725,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000028",
+    "areaName": "Southwark",
+    "periodEnd": "2026-03-31",
+    "value": 502,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000028",
+    "areaName": "Southwark",
+    "periodEnd": "2026-06-30",
+    "value": 496,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000029",
     "areaName": "Sutton",
     "periodEnd": "2014-03-31",
@@ -71117,6 +75072,20 @@
     "areaName": "Sutton",
     "periodEnd": "2025-12-31",
     "value": 27,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000029",
+    "areaName": "Sutton",
+    "periodEnd": "2026-03-31",
+    "value": 29,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000029",
+    "areaName": "Sutton",
+    "periodEnd": "2026-06-30",
+    "value": 28,
     "dataStatus": "official_anchor"
   },
   {
@@ -71456,6 +75425,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000030",
+    "areaName": "Tower Hamlets",
+    "periodEnd": "2026-03-31",
+    "value": 488,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000030",
+    "areaName": "Tower Hamlets",
+    "periodEnd": "2026-06-30",
+    "value": 473,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000031",
     "areaName": "Waltham Forest",
     "periodEnd": "2014-03-31",
@@ -71789,6 +75772,20 @@
     "areaName": "Waltham Forest",
     "periodEnd": "2025-12-31",
     "value": 185,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000031",
+    "areaName": "Waltham Forest",
+    "periodEnd": "2026-03-31",
+    "value": 158,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000031",
+    "areaName": "Waltham Forest",
+    "periodEnd": "2026-06-30",
+    "value": 161,
     "dataStatus": "official_anchor"
   },
   {
@@ -72128,6 +76125,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000032",
+    "areaName": "Wandsworth",
+    "periodEnd": "2026-03-31",
+    "value": 84,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000032",
+    "areaName": "Wandsworth",
+    "periodEnd": "2026-06-30",
+    "value": 73,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "E09000033",
     "areaName": "Westminster",
     "periodEnd": "2014-03-31",
@@ -72464,6 +76475,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "E09000033",
+    "areaName": "Westminster",
+    "periodEnd": "2026-03-31",
+    "value": 33,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "E09000033",
+    "areaName": "Westminster",
+    "periodEnd": "2026-06-30",
+    "value": 42,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "N09000001",
     "areaName": "Antrim and Newtownabbey",
     "periodEnd": "2020-06-30",
@@ -72537,7 +76562,7 @@
     "areaCode": "N09000001",
     "areaName": "Antrim and Newtownabbey",
     "periodEnd": "2022-12-31",
-    "value": 100,
+    "value": 153,
     "dataStatus": "official_anchor"
   },
   {
@@ -72622,6 +76647,20 @@
     "areaName": "Antrim and Newtownabbey",
     "periodEnd": "2025-12-31",
     "value": 202,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000001",
+    "areaName": "Antrim and Newtownabbey",
+    "periodEnd": "2026-03-31",
+    "value": 212,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000001",
+    "areaName": "Antrim and Newtownabbey",
+    "periodEnd": "2026-06-30",
+    "value": 199,
     "dataStatus": "official_anchor"
   },
   {
@@ -72713,6 +76752,20 @@
     "areaName": "Armagh City, Banbridge and Craigavon",
     "periodEnd": "2025-12-31",
     "value": 99,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000002",
+    "areaName": "Armagh City, Banbridge and Craigavon",
+    "periodEnd": "2026-03-31",
+    "value": 87,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000002",
+    "areaName": "Armagh City, Banbridge and Craigavon",
+    "periodEnd": "2026-06-30",
+    "value": 72,
     "dataStatus": "official_anchor"
   },
   {
@@ -72964,7 +77017,7 @@
     "areaCode": "N09000003",
     "areaName": "Belfast",
     "periodEnd": "2022-12-31",
-    "value": 2737,
+    "value": 2550,
     "dataStatus": "official_anchor"
   },
   {
@@ -73049,6 +77102,20 @@
     "areaName": "Belfast",
     "periodEnd": "2025-12-31",
     "value": 1749,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000003",
+    "areaName": "Belfast",
+    "periodEnd": "2026-03-31",
+    "value": 1607,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000003",
+    "areaName": "Belfast",
+    "periodEnd": "2026-06-30",
+    "value": 1540,
     "dataStatus": "official_anchor"
   },
   {
@@ -73143,6 +77210,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "N09000004",
+    "areaName": "Causeway Coast and Glens",
+    "periodEnd": "2026-03-31",
+    "value": 200,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000004",
+    "areaName": "Causeway Coast and Glens",
+    "periodEnd": "2026-06-30",
+    "value": 206,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "N09000005",
     "areaName": "Derry City and Strabane",
     "periodEnd": "2022-06-30",
@@ -73160,7 +77241,7 @@
     "areaCode": "N09000005",
     "areaName": "Derry City and Strabane",
     "periodEnd": "2022-12-31",
-    "value": 30,
+    "value": 98,
     "dataStatus": "official_anchor"
   },
   {
@@ -73248,6 +77329,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "N09000005",
+    "areaName": "Derry City and Strabane",
+    "periodEnd": "2026-03-31",
+    "value": 228,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000005",
+    "areaName": "Derry City and Strabane",
+    "periodEnd": "2026-06-30",
+    "value": 206,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "N09000006",
     "areaName": "Fermanagh and Omagh",
     "periodEnd": "2014-06-30",
@@ -73279,6 +77374,20 @@
     "areaCode": "N09000006",
     "areaName": "Fermanagh and Omagh",
     "periodEnd": "2025-12-31",
+    "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000006",
+    "areaName": "Fermanagh and Omagh",
+    "periodEnd": "2026-03-31",
+    "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000006",
+    "areaName": "Fermanagh and Omagh",
+    "periodEnd": "2026-06-30",
     "value": 2,
     "dataStatus": "official_anchor"
   },
@@ -73451,6 +77560,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "N09000007",
+    "areaName": "Lisburn and Castlereagh",
+    "periodEnd": "2026-03-31",
+    "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000007",
+    "areaName": "Lisburn and Castlereagh",
+    "periodEnd": "2026-06-30",
+    "value": 16,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "N09000008",
     "areaName": "Mid and East Antrim",
     "periodEnd": "2021-09-30",
@@ -73489,7 +77612,7 @@
     "areaCode": "N09000008",
     "areaName": "Mid and East Antrim",
     "periodEnd": "2022-12-31",
-    "value": 81,
+    "value": 147,
     "dataStatus": "official_anchor"
   },
   {
@@ -73703,6 +77826,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "N09000010",
+    "areaName": "Newry, Mourne and Down",
+    "periodEnd": "2026-03-31",
+    "value": 33,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "N09000010",
+    "areaName": "Newry, Mourne and Down",
+    "periodEnd": "2026-06-30",
+    "value": 29,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "N09000011",
     "areaName": "Ards and North Down",
     "periodEnd": "2014-12-31",
@@ -73913,6 +78050,13 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "N09000011",
+    "areaName": "Ards and North Down",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000005",
     "areaName": "Clackmannanshire",
     "periodEnd": "2021-09-30",
@@ -73980,6 +78124,20 @@
     "areaName": "Clackmannanshire",
     "periodEnd": "2025-12-31",
     "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000005",
+    "areaName": "Clackmannanshire",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000005",
+    "areaName": "Clackmannanshire",
+    "periodEnd": "2026-06-30",
+    "value": 20,
     "dataStatus": "official_anchor"
   },
   {
@@ -74092,6 +78250,20 @@
     "areaName": "Dumfries and Galloway",
     "periodEnd": "2025-12-31",
     "value": 91,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000006",
+    "areaName": "Dumfries and Galloway",
+    "periodEnd": "2026-03-31",
+    "value": 47,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000006",
+    "areaName": "Dumfries and Galloway",
+    "periodEnd": "2026-06-30",
+    "value": 30,
     "dataStatus": "official_anchor"
   },
   {
@@ -74242,6 +78414,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000008",
+    "areaName": "East Ayrshire",
+    "periodEnd": "2026-03-31",
+    "value": 76,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000008",
+    "areaName": "East Ayrshire",
+    "periodEnd": "2026-06-30",
+    "value": 78,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000010",
     "areaName": "East Lothian",
     "periodEnd": "2020-12-31",
@@ -74354,6 +78540,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000010",
+    "areaName": "East Lothian",
+    "periodEnd": "2026-03-31",
+    "value": 71,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000010",
+    "areaName": "East Lothian",
+    "periodEnd": "2026-06-30",
+    "value": 75,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000011",
     "areaName": "East Renfrewshire",
     "periodEnd": "2020-09-30",
@@ -74414,6 +78614,20 @@
     "areaName": "East Renfrewshire",
     "periodEnd": "2025-12-31",
     "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000011",
+    "areaName": "East Renfrewshire",
+    "periodEnd": "2026-03-31",
+    "value": 4,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000011",
+    "areaName": "East Renfrewshire",
+    "periodEnd": "2026-06-30",
+    "value": 9,
     "dataStatus": "official_anchor"
   },
   {
@@ -74560,7 +78774,7 @@
     "areaCode": "S12000014",
     "areaName": "Falkirk",
     "periodEnd": "2022-12-31",
-    "value": 12,
+    "value": 44,
     "dataStatus": "official_anchor"
   },
   {
@@ -74648,6 +78862,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000014",
+    "areaName": "Falkirk",
+    "periodEnd": "2026-03-31",
+    "value": 71,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000014",
+    "areaName": "Falkirk",
+    "periodEnd": "2026-06-30",
+    "value": 67,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000017",
     "areaName": "Highland",
     "periodEnd": "2014-09-30",
@@ -74665,7 +78893,7 @@
     "areaCode": "S12000018",
     "areaName": "Inverclyde",
     "periodEnd": "2022-12-31",
-    "value": 1,
+    "value": 61,
     "dataStatus": "official_anchor"
   },
   {
@@ -74750,6 +78978,20 @@
     "areaName": "Inverclyde",
     "periodEnd": "2025-12-31",
     "value": 175,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000018",
+    "areaName": "Inverclyde",
+    "periodEnd": "2026-03-31",
+    "value": 212,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000018",
+    "areaName": "Inverclyde",
+    "periodEnd": "2026-06-30",
+    "value": 261,
     "dataStatus": "official_anchor"
   },
   {
@@ -74907,6 +79149,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000019",
+    "areaName": "Midlothian",
+    "periodEnd": "2026-03-31",
+    "value": 54,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000019",
+    "areaName": "Midlothian",
+    "periodEnd": "2026-06-30",
+    "value": 79,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000020",
     "areaName": "Moray",
     "periodEnd": "2022-03-31",
@@ -74981,6 +79237,20 @@
     "areaName": "Moray",
     "periodEnd": "2025-12-31",
     "value": 3,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000020",
+    "areaName": "Moray",
+    "periodEnd": "2026-03-31",
+    "value": 2,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000020",
+    "areaName": "Moray",
+    "periodEnd": "2026-06-30",
+    "value": 2,
     "dataStatus": "official_anchor"
   },
   {
@@ -75096,6 +79366,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000021",
+    "areaName": "North Ayrshire",
+    "periodEnd": "2026-03-31",
+    "value": 67,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000021",
+    "areaName": "North Ayrshire",
+    "periodEnd": "2026-06-30",
+    "value": 82,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000026",
     "areaName": "Scottish Borders",
     "periodEnd": "2023-09-30",
@@ -75135,6 +79419,20 @@
     "areaName": "Scottish Borders",
     "periodEnd": "2025-12-31",
     "value": 24,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000026",
+    "areaName": "Scottish Borders",
+    "periodEnd": "2026-03-31",
+    "value": 30,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000026",
+    "areaName": "Scottish Borders",
+    "periodEnd": "2026-06-30",
+    "value": 38,
     "dataStatus": "official_anchor"
   },
   {
@@ -75415,6 +79713,20 @@
     "areaName": "South Ayrshire",
     "periodEnd": "2025-12-31",
     "value": 21,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000028",
+    "areaName": "South Ayrshire",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000028",
+    "areaName": "South Ayrshire",
+    "periodEnd": "2026-06-30",
+    "value": 20,
     "dataStatus": "official_anchor"
   },
   {
@@ -75582,7 +79894,7 @@
     "areaCode": "S12000029",
     "areaName": "South Lanarkshire",
     "periodEnd": "2022-12-31",
-    "value": 5,
+    "value": 63,
     "dataStatus": "official_anchor"
   },
   {
@@ -75667,6 +79979,20 @@
     "areaName": "South Lanarkshire",
     "periodEnd": "2025-12-31",
     "value": 191,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000029",
+    "areaName": "South Lanarkshire",
+    "periodEnd": "2026-03-31",
+    "value": 261,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000029",
+    "areaName": "South Lanarkshire",
+    "periodEnd": "2026-06-30",
+    "value": 269,
     "dataStatus": "official_anchor"
   },
   {
@@ -75786,6 +80112,20 @@
     "areaName": "Stirling",
     "periodEnd": "2025-12-31",
     "value": 5,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000030",
+    "areaName": "Stirling",
+    "periodEnd": "2026-03-31",
+    "value": 5,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000030",
+    "areaName": "Stirling",
+    "periodEnd": "2026-06-30",
+    "value": 6,
     "dataStatus": "official_anchor"
   },
   {
@@ -75925,7 +80265,7 @@
     "areaCode": "S12000033",
     "areaName": "Aberdeen City",
     "periodEnd": "2022-12-31",
-    "value": 486,
+    "value": 107,
     "dataStatus": "official_anchor"
   },
   {
@@ -76013,6 +80353,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000033",
+    "areaName": "Aberdeen City",
+    "periodEnd": "2026-03-31",
+    "value": 679,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000033",
+    "areaName": "Aberdeen City",
+    "periodEnd": "2026-06-30",
+    "value": 718,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000034",
     "areaName": "Aberdeenshire",
     "periodEnd": "2023-06-30",
@@ -76090,9 +80444,37 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000034",
+    "areaName": "Aberdeenshire",
+    "periodEnd": "2026-03-31",
+    "value": 237,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000034",
+    "areaName": "Aberdeenshire",
+    "periodEnd": "2026-06-30",
+    "value": 216,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000035",
     "areaName": "Argyll and Bute",
     "periodEnd": "2025-09-30",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000035",
+    "areaName": "Argyll and Bute",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000035",
+    "areaName": "Argyll and Bute",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -76433,6 +80815,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000036",
+    "areaName": "City of Edinburgh",
+    "periodEnd": "2026-03-31",
+    "value": 167,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000036",
+    "areaName": "City of Edinburgh",
+    "periodEnd": "2026-06-30",
+    "value": 181,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000038",
     "areaName": "Renfrewshire",
     "periodEnd": "2014-03-31",
@@ -76748,6 +81144,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000038",
+    "areaName": "Renfrewshire",
+    "periodEnd": "2026-03-31",
+    "value": 114,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000038",
+    "areaName": "Renfrewshire",
+    "periodEnd": "2026-06-30",
+    "value": 133,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000039",
     "areaName": "West Dunbartonshire",
     "periodEnd": "2014-09-30",
@@ -76836,6 +81246,20 @@
     "areaName": "West Dunbartonshire",
     "periodEnd": "2025-12-31",
     "value": 39,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000039",
+    "areaName": "West Dunbartonshire",
+    "periodEnd": "2026-03-31",
+    "value": 41,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000039",
+    "areaName": "West Dunbartonshire",
+    "periodEnd": "2026-06-30",
+    "value": 49,
     "dataStatus": "official_anchor"
   },
   {
@@ -76976,6 +81400,20 @@
     "areaName": "West Lothian",
     "periodEnd": "2025-12-31",
     "value": 79,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000040",
+    "areaName": "West Lothian",
+    "periodEnd": "2026-03-31",
+    "value": 56,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000040",
+    "areaName": "West Lothian",
+    "periodEnd": "2026-06-30",
+    "value": 31,
     "dataStatus": "official_anchor"
   },
   {
@@ -77123,6 +81561,20 @@
     "areaName": "Angus",
     "periodEnd": "2025-12-31",
     "value": 32,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000041",
+    "areaName": "Angus",
+    "periodEnd": "2026-03-31",
+    "value": 55,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000041",
+    "areaName": "Angus",
+    "periodEnd": "2026-06-30",
+    "value": 73,
     "dataStatus": "official_anchor"
   },
   {
@@ -77462,6 +81914,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000042",
+    "areaName": "Dundee City",
+    "periodEnd": "2026-03-31",
+    "value": 52,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000042",
+    "areaName": "Dundee City",
+    "periodEnd": "2026-06-30",
+    "value": 78,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "S12000045",
     "areaName": "East Dunbartonshire",
     "periodEnd": "2014-09-30",
@@ -77508,6 +81974,20 @@
     "areaName": "East Dunbartonshire",
     "periodEnd": "2025-12-31",
     "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000045",
+    "areaName": "East Dunbartonshire",
+    "periodEnd": "2026-03-31",
+    "value": 14,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000045",
+    "areaName": "East Dunbartonshire",
+    "periodEnd": "2026-06-30",
+    "value": 17,
     "dataStatus": "official_anchor"
   },
   {
@@ -77669,6 +82149,20 @@
     "areaName": "Fife",
     "periodEnd": "2025-12-31",
     "value": 9,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000047",
+    "areaName": "Fife",
+    "periodEnd": "2026-03-31",
+    "value": 33,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000047",
+    "areaName": "Fife",
+    "periodEnd": "2026-06-30",
+    "value": 45,
     "dataStatus": "official_anchor"
   },
   {
@@ -77906,7 +82400,7 @@
     "areaCode": "S12000048",
     "areaName": "Perth and Kinross",
     "periodEnd": "2022-12-31",
-    "value": 6,
+    "value": 106,
     "dataStatus": "official_anchor"
   },
   {
@@ -77991,6 +82485,20 @@
     "areaName": "Perth and Kinross",
     "periodEnd": "2025-12-31",
     "value": 201,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000048",
+    "areaName": "Perth and Kinross",
+    "periodEnd": "2026-03-31",
+    "value": 122,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000048",
+    "areaName": "Perth and Kinross",
+    "periodEnd": "2026-06-30",
+    "value": 70,
     "dataStatus": "official_anchor"
   },
   {
@@ -78130,7 +82638,7 @@
     "areaCode": "S12000049",
     "areaName": "Glasgow City",
     "periodEnd": "2022-12-31",
-    "value": 4569,
+    "value": 4698,
     "dataStatus": "official_anchor"
   },
   {
@@ -78215,6 +82723,20 @@
     "areaName": "Glasgow City",
     "periodEnd": "2025-12-31",
     "value": 3835,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000049",
+    "areaName": "Glasgow City",
+    "periodEnd": "2026-03-31",
+    "value": 3870,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000049",
+    "areaName": "Glasgow City",
+    "periodEnd": "2026-06-30",
+    "value": 3938,
     "dataStatus": "official_anchor"
   },
   {
@@ -78435,6 +82957,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "S12000050",
+    "areaName": "North Lanarkshire",
+    "periodEnd": "2026-03-31",
+    "value": 215,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "S12000050",
+    "areaName": "North Lanarkshire",
+    "periodEnd": "2026-06-30",
+    "value": 267,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000001",
     "areaName": "Isle of Anglesey",
     "periodEnd": "2024-03-31",
@@ -78487,6 +83023,20 @@
     "areaCode": "W06000001",
     "areaName": "Isle of Anglesey",
     "periodEnd": "2025-12-31",
+    "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000001",
+    "areaName": "Isle of Anglesey",
+    "periodEnd": "2026-03-31",
+    "value": 26,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000001",
+    "areaName": "Isle of Anglesey",
+    "periodEnd": "2026-06-30",
     "value": 26,
     "dataStatus": "official_anchor"
   },
@@ -78656,6 +83206,20 @@
     "areaName": "Gwynedd",
     "periodEnd": "2025-12-31",
     "value": 47,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000002",
+    "areaName": "Gwynedd",
+    "periodEnd": "2026-03-31",
+    "value": 77,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000002",
+    "areaName": "Gwynedd",
+    "periodEnd": "2026-06-30",
+    "value": 91,
     "dataStatus": "official_anchor"
   },
   {
@@ -78834,6 +83398,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000003",
+    "areaName": "Conwy",
+    "periodEnd": "2026-03-31",
+    "value": 20,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000003",
+    "areaName": "Conwy",
+    "periodEnd": "2026-06-30",
+    "value": 22,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000004",
     "areaName": "Denbighshire",
     "periodEnd": "2023-09-30",
@@ -78904,6 +83482,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000004",
+    "areaName": "Denbighshire",
+    "periodEnd": "2026-03-31",
+    "value": 62,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000004",
+    "areaName": "Denbighshire",
+    "periodEnd": "2026-06-30",
+    "value": 66,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000005",
     "areaName": "Flintshire",
     "periodEnd": "2023-09-30",
@@ -78964,6 +83556,20 @@
     "areaName": "Flintshire",
     "periodEnd": "2025-12-31",
     "value": 60,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000005",
+    "areaName": "Flintshire",
+    "periodEnd": "2026-03-31",
+    "value": 59,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000005",
+    "areaName": "Flintshire",
+    "periodEnd": "2026-06-30",
+    "value": 78,
     "dataStatus": "official_anchor"
   },
   {
@@ -79303,6 +83909,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000006",
+    "areaName": "Wrexham",
+    "periodEnd": "2026-03-31",
+    "value": 127,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000006",
+    "areaName": "Wrexham",
+    "periodEnd": "2026-06-30",
+    "value": 117,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000008",
     "areaName": "Ceredigion",
     "periodEnd": "2018-12-31",
@@ -79356,6 +83976,20 @@
     "areaName": "Pembrokeshire",
     "periodEnd": "2025-12-31",
     "value": 6,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000009",
+    "areaName": "Pembrokeshire",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000009",
+    "areaName": "Pembrokeshire",
+    "periodEnd": "2026-06-30",
+    "value": 16,
     "dataStatus": "official_anchor"
   },
   {
@@ -79475,6 +84109,20 @@
     "areaName": "Carmarthenshire",
     "periodEnd": "2025-12-31",
     "value": 58,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000010",
+    "areaName": "Carmarthenshire",
+    "periodEnd": "2026-03-31",
+    "value": 58,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000010",
+    "areaName": "Carmarthenshire",
+    "periodEnd": "2026-06-30",
+    "value": 60,
     "dataStatus": "official_anchor"
   },
   {
@@ -79814,6 +84462,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000011",
+    "areaName": "Swansea",
+    "periodEnd": "2026-03-31",
+    "value": 677,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000011",
+    "areaName": "Swansea",
+    "periodEnd": "2026-06-30",
+    "value": 618,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000012",
     "areaName": "Neath Port Talbot",
     "periodEnd": "2014-03-31",
@@ -80073,6 +84735,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000012",
+    "areaName": "Neath Port Talbot",
+    "periodEnd": "2026-03-31",
+    "value": 63,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000012",
+    "areaName": "Neath Port Talbot",
+    "periodEnd": "2026-06-30",
+    "value": 64,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000013",
     "areaName": "Bridgend",
     "periodEnd": "2014-03-31",
@@ -80297,6 +84973,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000013",
+    "areaName": "Bridgend",
+    "periodEnd": "2026-03-31",
+    "value": 42,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000013",
+    "areaName": "Bridgend",
+    "periodEnd": "2026-06-30",
+    "value": 41,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000014",
     "areaName": "Vale of Glamorgan",
     "periodEnd": "2017-12-31",
@@ -80504,6 +85194,20 @@
     "areaName": "Vale of Glamorgan",
     "periodEnd": "2025-12-31",
     "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000014",
+    "areaName": "Vale of Glamorgan",
+    "periodEnd": "2026-03-31",
+    "value": 17,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000014",
+    "areaName": "Vale of Glamorgan",
+    "periodEnd": "2026-06-30",
+    "value": 21,
     "dataStatus": "official_anchor"
   },
   {
@@ -80843,6 +85547,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000015",
+    "areaName": "Cardiff",
+    "periodEnd": "2026-03-31",
+    "value": 1418,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000015",
+    "areaName": "Cardiff",
+    "periodEnd": "2026-06-30",
+    "value": 1313,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000016",
     "areaName": "Rhondda Cynon Taf",
     "periodEnd": "2014-03-31",
@@ -81074,6 +85792,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000016",
+    "areaName": "Rhondda Cynon Taf",
+    "periodEnd": "2026-03-31",
+    "value": 189,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000016",
+    "areaName": "Rhondda Cynon Taf",
+    "periodEnd": "2026-06-30",
+    "value": 188,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000018",
     "areaName": "Caerphilly",
     "periodEnd": "2020-09-30",
@@ -81228,6 +85960,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000018",
+    "areaName": "Caerphilly",
+    "periodEnd": "2026-03-31",
+    "value": 89,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000018",
+    "areaName": "Caerphilly",
+    "periodEnd": "2026-06-30",
+    "value": 84,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000019",
     "areaName": "Blaenau Gwent",
     "periodEnd": "2023-06-30",
@@ -81301,6 +86047,20 @@
     "areaCode": "W06000019",
     "areaName": "Blaenau Gwent",
     "periodEnd": "2025-12-31",
+    "value": 42,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000019",
+    "areaName": "Blaenau Gwent",
+    "periodEnd": "2026-03-31",
+    "value": 40,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000019",
+    "areaName": "Blaenau Gwent",
+    "periodEnd": "2026-06-30",
     "value": 42,
     "dataStatus": "official_anchor"
   },
@@ -81417,6 +86177,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000020",
+    "areaName": "Torfaen",
+    "periodEnd": "2026-03-31",
+    "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000020",
+    "areaName": "Torfaen",
+    "periodEnd": "2026-06-30",
+    "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000021",
     "areaName": "Monmouthshire",
     "periodEnd": "2016-06-30",
@@ -81434,6 +86208,20 @@
     "areaCode": "W06000021",
     "areaName": "Monmouthshire",
     "periodEnd": "2016-12-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000021",
+    "areaName": "Monmouthshire",
+    "periodEnd": "2026-03-31",
+    "value": 1,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000021",
+    "areaName": "Monmouthshire",
+    "periodEnd": "2026-06-30",
     "value": 1,
     "dataStatus": "official_anchor"
   },
@@ -81774,6 +86562,20 @@
     "dataStatus": "official_anchor"
   },
   {
+    "areaCode": "W06000022",
+    "areaName": "Newport",
+    "periodEnd": "2026-03-31",
+    "value": 344,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000022",
+    "areaName": "Newport",
+    "periodEnd": "2026-06-30",
+    "value": 306,
+    "dataStatus": "official_anchor"
+  },
+  {
     "areaCode": "W06000023",
     "areaName": "Powys",
     "periodEnd": "2015-06-30",
@@ -81834,6 +86636,20 @@
     "areaName": "Powys",
     "periodEnd": "2025-12-31",
     "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000023",
+    "areaName": "Powys",
+    "periodEnd": "2026-03-31",
+    "value": 10,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000023",
+    "areaName": "Powys",
+    "periodEnd": "2026-06-30",
+    "value": 5,
     "dataStatus": "official_anchor"
   },
   {
@@ -82023,6 +86839,20 @@
     "areaName": "Merthyr Tydfil",
     "periodEnd": "2025-12-31",
     "value": 33,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000024",
+    "areaName": "Merthyr Tydfil",
+    "periodEnd": "2026-03-31",
+    "value": 45,
+    "dataStatus": "official_anchor"
+  },
+  {
+    "areaCode": "W06000024",
+    "areaName": "Merthyr Tydfil",
+    "periodEnd": "2026-06-30",
+    "value": 54,
     "dataStatus": "official_anchor"
   }
 ]

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-28T16:45:23.361Z",
+ "generatedAt": "2026-10-01T18:10:33.618Z",
  "basis": "published_transaction",
  "licence": "Open Government Licence v3.0 (Crown copyright)",
  "sourceCollection": "https://www.gov.uk/government/collections/home-office-spending",
@@ -14,8 +14,8 @@
   "transactions": 17103,
   "totalGbp": 4328476738.53,
   "entities": 369,
-  "filesInCorpus": 275,
-  "filesParsed": 275
+  "filesInCorpus": 276,
+  "filesParsed": 276
  },
  "entities": [
   {
