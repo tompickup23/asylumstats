@@ -96,7 +96,8 @@ describe("regional-source-watch.json", () => {
     expect(watch.nwrsmp.supportedSeries.firstPeriodEnd).toBe("2014-03-31");
 
     // No pinned values: each NWRSMP release moves the latest period and publication date.
-    const { latestPeriodEnd, primaryWorkbookPublishedAt } = watch.nwrsmp.supportedSeries;
+    const latestPeriodEnd = watch.nwrsmp.supportedSeries.latestPeriodEnd ?? "";
+    const primaryWorkbookPublishedAt = watch.nwrsmp.supportedSeries.primaryWorkbookPublishedAt ?? "";
     expect(latestPeriodEnd).toMatch(/^\d{4}-(03-31|06-30|09-30|12-31)$/);
     expect(primaryWorkbookPublishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(latestPeriodEnd > watch.nwrsmp.supportedSeries.firstPeriodEnd).toBe(true);
