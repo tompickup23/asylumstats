@@ -12,11 +12,11 @@ seo_title: "Five of seven asylum contracts passed profit-share thresholds"
 seo_description: "Supplier profit on the asylum accommodation contracts has averaged 7%. Five of the seven have passed the profit-share threshold."
 ---
 
-**Reported profit has averaged 7%** on the asylum accommodation contracts — at the lower end of the Home Office's original 5% to 13% estimate, but higher than the operating profit those suppliers report in their own accounts, which runs at 3% to 7%.
+**Reported profit has averaged 7%** on the asylum accommodation contracts. That is at the lower end of the Home Office's original 5% to 13% estimate, but higher than the operating profit those suppliers report in their own accounts, which runs at 3% to 7%.
 
 **Five of the seven contracts have exceeded their profit-share thresholds.** Those thresholds differ between contracts, and passing one means a share of profit is returned to the department. The Home Office commissioned a third party in 2024 to audit how suppliers report performance and declared profit, and expected to agree the amount to be returned once that finished.
 
-**Hotels may be the more profitable form.** Data reported by suppliers suggests hotel accommodation is more profitable than other forms — and hotels accounted for 76% of contract cost. The Home Office has worked to raise occupancy from 75% to 80%, which it estimates avoided £109 million of hotel spending.
+**Hotels may be the more profitable form.** Data reported by suppliers suggests hotel accommodation is more profitable than other forms, and hotels accounted for 76% of contract cost. The Home Office has worked to raise occupancy from 75% to 80%, which it estimates avoided £109 million of hotel spending.
 
 These are the suppliers' own reported figures, audited by the department rather than by us.
 

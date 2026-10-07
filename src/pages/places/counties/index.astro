@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import { getCounties } from "../../../lib/county-directory";
+import { countyCanonicalPath } from "../../../lib/site";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { formatFindingDate } from "../../../lib/finding-dates";
 
@@ -44,7 +45,7 @@ const pageDescription =
     </p>
     <div class="cty-list">
       {counties.map((county, i) => (
-        <a href={county.countyPath} class="cty-row">
+        <a href={countyCanonicalPath(county)} class="cty-row">
           <span class="cty-rank">{i + 1}</span>
           <div class="cty-info">
             <span class="cty-name">{county.countyName}</span>

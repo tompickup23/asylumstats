@@ -133,19 +133,31 @@ describe("no impossible values anywhere", () => {
 });
 
 describe("counties reach the sitemap", () => {
-  it("includes every county page and the index in the indexable paths", async () => {
+  it("includes every multi-authority county page and the index in the indexable paths", async () => {
     const { getIndexableSitePaths } = await import("../src/lib/site");
     const paths = new Set(getIndexableSitePaths());
     expect(paths.has("/places/counties/")).toBe(true);
-    for (const county of getCounties()) {
+    for (const county of getCounties().filter((c) => c.areaCount > 1)) {
       expect(paths.has(county.countyPath)).toBe(true);
     }
   });
 
-  it("adds exactly the county pages plus the index, nothing stray", async () => {
+  it("leaves single-authority counties to their place page, which is in the sitemap", async () => {
+    const { getIndexableSitePaths, countyCanonicalPath, buildPlacePath } = await import("../src/lib/site");
+    const paths = new Set(getIndexableSitePaths());
+    const single = getCounties().filter((c) => c.areaCount === 1);
+    expect(single.length).toBeGreaterThan(0);
+    for (const county of single) {
+      expect(paths.has(county.countyPath)).toBe(false);
+      expect(countyCanonicalPath(county)).toBe(buildPlacePath(county.areas[0]));
+      expect(paths.has(countyCanonicalPath(county))).toBe(true);
+    }
+  });
+
+  it("adds exactly the multi-authority county pages plus the index, nothing stray", async () => {
     const { getIndexableSitePaths } = await import("../src/lib/site");
     const countyPaths = getIndexableSitePaths().filter((p) => p.startsWith("/places/counties/"));
-    expect(countyPaths.length).toBe(getCounties().length + 1);
+    expect(countyPaths.length).toBe(getCounties().filter((c) => c.areaCount > 1).length + 1);
   });
 });
 

@@ -4,7 +4,7 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import AskedAndAnswered from "../../../components/AskedAndAnswered.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
-import { slugifyAreaName } from "../../../lib/site";
+import { countyCanonicalPath, slugifyAreaName } from "../../../lib/site";
 import { getCounties, type County } from "../../../lib/county-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { buildPlaceTitle } from "../../../lib/serp";
@@ -22,6 +22,9 @@ export function getStaticPaths() {
 
 const { county } = Astro.props as { county: County };
 
+// A single-authority county defers to that authority's place page. See countyCanonicalPath.
+const canonicalPath = countyCanonicalPath(county);
+
 const maxAreaAsylum = county.areas[0]?.supportedAsylum || 1;
 
 // The query as typed, answered in the title. See src/lib/serp.ts for why the frame is a
@@ -37,8 +40,11 @@ const snapshotLabel = formatFindingDate(localRouteLatest.snapshotDate ?? "2026-0
 // in prose, which was the previous quarter's release.
 const releaseLabel = ROUTES_RELEASE_DATE ? formatFindingDate(ROUTES_RELEASE_DATE) : "its latest release";
 
+// Cornwall the county also holds the Isles of Scilly, so it keeps its own page, but its
+// name is also the name of its larger authority and the two titles came out identical.
+const sharesNameWithAuthority = county.areas.some((area) => area.areaName === county.countyName);
 const pageTitle = buildPlaceTitle({
-  areaName: county.countyName,
+  areaName: sharesNameWithAuthority ? `the county of ${county.countyName}` : county.countyName,
   supportedAsylum: county.supportedAsylum
 });
 
@@ -110,7 +116,13 @@ const pageStructuredData = [
 ];
 ---
 
-<BaseLayout title={pageTitle} brandTitle={false} description={pageDescription} structuredData={pageStructuredData}>
+<BaseLayout
+  title={pageTitle}
+  brandTitle={false}
+  description={pageDescription}
+  structuredData={pageStructuredData}
+  canonicalOverride={canonicalPath === county.countyPath ? undefined : canonicalPath}
+>
   <Breadcrumbs items={[
     { label: "Places", href: "/places/" },
     { label: "Counties", href: "/places/counties/" },
