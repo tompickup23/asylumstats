@@ -25,10 +25,12 @@ on:
 # The job commits and pushes refreshed data back to main, so the workflow
 # token needs contents: write. Without this it defaults to read-only and
 # the final `git push` fails with 403. actions: write is for the deploy
-# dispatch at the end; see the comment on that step.
+# dispatch at the end; see the comment on that step. issues: write is for the issue
+# opened when the refreshed data fails the tests.
 permissions:
   contents: write
   actions: write
+  issues: write
 
 jobs:
   refresh:
@@ -165,8 +167,52 @@ jobs:
           else
             echo "Only run timestamps moved. Nothing to commit."
           fi
-      - name: Commit and push updated data
+      # Advisory: lists every figure that moved 15% or more, in the run summary, so a
+      # large move gets a human look. Never fails the run; a big move is often real.
+      # No GitHub event data is interpolated here.
+      - name: Report large figure moves
         if: steps.changes.outputs.changed == 'true'
+        run: node scripts/audit/figure-changes.mjs --base HEAD | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # The same unit tests the deploy runs, run here before anything reaches main.
+      #
+      # Until 7 October 2026 only deploy.yml ran them, after this job had already pushed.
+      # On 1 October two tests that pinned figures from the previous release failed on the
+      # new one, so main went red, every deploy failed, and the live site kept the
+      # 28 September build for nine days while three refreshes piled up behind it. Nobody
+      # was told. Now refreshed data that fails the tests goes to a branch and an issue,
+      # and main keeps the last data that passed. No GitHub event data is interpolated here.
+      - name: Test the refreshed data
+        id: datatests
+        if: steps.changes.outputs.changed == 'true'
+        continue-on-error: true
+        run: npm test
+
+      - name: Park refreshed data that failed the tests
+        if: steps.changes.outputs.changed == 'true' && steps.datatests.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          branch="data/refresh-failed-$(date -u +%Y-%m-%d-%H%M)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add src/data/live/ data/marts/ data/canonical/ data/raw/manifests/
+          git commit -m "data: refresh that failed the tests $(date -u +%Y-%m-%d)"
+          git push origin "$branch"
+          gh label create refresh-failed --color B60205 --description "Refreshed data failed the tests" --force
+          gh issue create --label refresh-failed \
+            --title "Data refresh failed the tests ($(date -u +%Y-%m-%d))" \
+            --body "The refreshed data failed \`npm test\` and was not committed to main. The live site keeps the last data that passed.
+
+          Run: $RUN_URL
+          Data: branch \`$branch\`
+
+          If the failure is a test pinned to an old figure, the test is wrong: make it check shape, not values. If a figure moved, check it against the primary source before merging."
+
+      - name: Commit and push updated data
+        if: steps.changes.outputs.changed == 'true' && steps.datatests.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -205,7 +251,7 @@ jobs:
       # lost. Dispatching deploy.yml explicitly is the documented way round it.
       # No GitHub event data is interpolated here.
       - name: Deploy the refreshed data
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed == 'true' && steps.datatests.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy.yml --ref main
@@ -228,7 +274,12 @@ jobs:
           HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
           HOSPEND_OUTCOME: ${{ steps.hospend.outcome }}
           ASYLUMFINANCE_OUTCOME: ${{ steps.asylumfinance.outcome }}
+          DATATESTS_OUTCOME: ${{ steps.datatests.outcome }}
         run: |
+          if [ "$DATATESTS_OUTCOME" = "failure" ]; then
+            echo "The refreshed data failed npm test and was NOT committed. See the refresh-failed issue."
+            exit 1
+          fi
           skipped=""
           if [ "$REGIONAL_OUTCOME" = "failure" ]; then
             skipped="$skipped regional-sources"

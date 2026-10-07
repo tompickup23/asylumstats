@@ -94,8 +94,19 @@ describe("regional-source-watch.json", () => {
     expect(watch.summary.nwrsmpSupportedSeriesAreaCount).toBeGreaterThan(300);
     expect(watch.summary.nwrsmpSupportedSeriesPointCount).toBeGreaterThan(10000);
     expect(watch.nwrsmp.supportedSeries.firstPeriodEnd).toBe("2014-03-31");
-    expect(watch.nwrsmp.supportedSeries.latestPeriodEnd).toBe("2025-12-31");
-    expect(watch.nwrsmp.supportedSeries.primaryWorkbookPublishedAt).toBe("2026-02-27");
+
+    // No pinned values: each NWRSMP release moves the latest period and publication date.
+    const latestPeriodEnd = watch.nwrsmp.supportedSeries.latestPeriodEnd ?? "";
+    const primaryWorkbookPublishedAt = watch.nwrsmp.supportedSeries.primaryWorkbookPublishedAt ?? "";
+    expect(latestPeriodEnd).toMatch(/^\d{4}-(03-31|06-30|09-30|12-31)$/);
+    expect(primaryWorkbookPublishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(latestPeriodEnd > watch.nwrsmp.supportedSeries.firstPeriodEnd).toBe(true);
+    // The workbook is published after the quarter it reports, and within about two quarters of it.
+    const lagDays =
+      (Date.parse(primaryWorkbookPublishedAt) - Date.parse(latestPeriodEnd)) / 86_400_000;
+    expect(lagDays).toBeGreaterThan(0);
+    expect(lagDays).toBeLessThan(200);
+    expect(watch.nwrsmp.documents.map((row) => row.publishedAt)).toContain(primaryWorkbookPublishedAt);
   });
 
   it("sorts the north west workbook series newest first", () => {

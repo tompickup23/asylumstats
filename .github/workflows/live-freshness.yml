@@ -1,0 +1,43 @@
+name: Live site freshness
+
+# Compares the date the live site was last built with the last commit on main that
+# changed the site. If main has moved on and the live site has not caught up within
+# three days, something is stopping deploys, and this opens an issue saying so.
+#
+# Belt and braces with the report-failure job in deploy.yml: that one catches a failed
+# deploy, this one also catches a deploy that never ran.
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      # No GitHub event data is interpolated here.
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          live="$(curl -sSI https://asylumstats.co.uk/ | tr -d '\r' | awk -F': ' 'tolower($1)=="last-modified"{print $2}')"
+          live_epoch="$(date -u -d "$live" +%s)"
+          main_epoch="$(git log -1 --format=%ct -- src data public astro.config.mjs package.json)"
+          lag_days=$(( (main_epoch - live_epoch) / 86400 ))
+          age_days=$(( ($(date -u +%s) - main_epoch) / 86400 ))
+          echo "Live built: $live. Main last changed: $(date -u -d @"$main_epoch"). Live is $lag_days day(s) behind."
+          if [ "$lag_days" -ge 1 ] && [ "$age_days" -ge 3 ]; then
+            gh label create deploy-failed --color B60205 --description "The live site did not update" --force
+            if [ -z "$(gh issue list --label deploy-failed --state open --json number --jq '.[0].number')" ]; then
+              gh issue create --label deploy-failed \
+                --title "Live site is behind main" \
+                --body "The live site was built $live, but main changed $(date -u -d @"$main_epoch" +%F) and has not been deployed in $age_days days."
+            fi
+            exit 1
+          fi
