@@ -34,10 +34,10 @@ permissions:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -254,7 +254,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true' && steps.datatests.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run deploy.yml --ref main
+        run: gh workflow run deploy.yml --ref main -f announce=true
 
       # Last, and strict: the data above has already been committed, so this only
       # decides whether the run ends loudly. Every stale item found on 13 Aug 2026 had
