@@ -1,6 +1,7 @@
 import type { HotelAreaSummary, HotelEntityLedger, HotelSiteSummary } from "./hotel-data";
 import type { MoneyLedger, MoneyRecord } from "./money-data";
 import type { LocalRouteAreaSummary } from "./route-data";
+import { buildPlacePath } from "./site-identity";
 
 type InvestigationTone = "" | "accent" | "teal" | "warm";
 type MoneyMatchType = "direct" | "provider" | "none";
@@ -128,8 +129,8 @@ function getMoneyMatch(site: HotelSiteSummary, records: MoneyRecord[]): MoneyMat
   };
 }
 
-function buildPlaceHref(areaCode: string | null): string {
-  return areaCode ? `/places/${areaCode}/#evidence-chain` : "/compare/#compare-explorer";
+function buildPlaceHref(area: { areaName: string } | null | undefined): string {
+  return area ? `${buildPlacePath(area)}#evidence-chain` : "/compare/#compare-explorer";
 }
 
 function buildSiteTrail(site: HotelSiteSummary, area: LocalRouteAreaSummary | undefined, match: MoneyMatch): InvestigationTrail {
@@ -180,7 +181,7 @@ function buildSiteTrail(site: HotelSiteSummary, area: LocalRouteAreaSummary | un
       {
         label: "Place pressure",
         body: localPressureSummary,
-        href: buildPlaceHref(site.areaCode),
+        href: buildPlaceHref(area),
         cta: "Open place profile"
       }
     ],
@@ -214,7 +215,7 @@ function buildAreaVisibilityTrail(area: LocalRouteAreaSummary, hotelArea: HotelA
       {
         label: "Place pressure",
         body: `${area.supportedAsylum.toLocaleString()} people were on asylum support here at quarter end. The pressure line and the visibility gap belong in the same frame.`,
-        href: buildPlaceHref(area.areaCode),
+        href: buildPlaceHref(area),
         cta: "Open place profile"
       },
       {

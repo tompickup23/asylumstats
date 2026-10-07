@@ -8,7 +8,10 @@ import { buildPlaceSubregions } from "../../lib/place-subregions";
 import { buildPlaceRegionMapViews } from "../../lib/region-map-explorer";
 import { getRegionPressureSummaries } from "../../lib/route-analytics";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../../lib/route-data";
-import { getPublicPlaceAreas } from "../../lib/site";
+import { buildPlacePath, getPublicPlaceAreas } from "../../lib/site";
+import { buildLocalAuthorityDataset, HOME_OFFICE_LOCAL_AUTHORITY_SOURCE, LOCAL_AUTHORITY_CSV_PATH } from "../../lib/datasets";
+import { ROUTES_RELEASE_DATE } from "../../lib/data-releases";
+import { formatFindingDate } from "../../lib/finding-dates";
 
 const localRouteLatest = loadLocalRouteLatest();
 const routeDashboard = loadRouteDashboard();
@@ -417,10 +420,25 @@ for (const region of placeDirectory.regions) {
 
 const pageDescription =
   "Browse UK asylum pressure by region and place, with hotel visibility folded into local place pages and the national system logic kept separate.";
+
+const datasetSnapshotLabel = formatFindingDate(loadLocalRouteLatest().snapshotDate);
+const datasetReleaseLabel = ROUTES_RELEASE_DATE ? formatFindingDate(ROUTES_RELEASE_DATE) : null;
+const datasetStructuredData = [
+  buildLocalAuthorityDataset(
+    `People on asylum support in every UK local authority at ${datasetSnapshotLabel}, by type of ` +
+      "accommodation (initial, dispersal, contingency including hotels, other, and subsistence only), " +
+      "with population and a rate per 10,000. Taken from the Home Office immigration system statistics " +
+      "regional and local authority data, one row per authority."
+  )
+];
 ---
 
 <BaseLayout
-  image="/og/places.png" title={`Asylum seekers by local authority: all ${placeCount} UK areas`} description={pageDescription}>
+  image="/og/places.png"
+  title={`Asylum seekers by local authority: all ${placeCount} UK areas`}
+  description={pageDescription}
+  structuredData={datasetStructuredData}
+>
   <!-- SEARCH-FIRST: Find your area -->
   <section id="place-search" class="section section-anchor priority-section" style="padding: 2.5rem 0;">
     <div style="max-width: 700px; margin: 0 auto; text-align: center;">
@@ -466,7 +484,7 @@ const pageDescription =
             )}
           </div>
           <h3>
-            <a href={`/places/${row.area.areaCode}/`}>{row.area.areaName}</a>
+            <a href={buildPlacePath(row.area)}>{row.area.areaName}</a>
           </h3>
           <p class="lede">
             {row.area.supportedAsylum.toLocaleString()} people on asylum support at quarter end, with{" "}
@@ -478,6 +496,27 @@ const pageDescription =
         </article>
       ))}
     </div>
+  </section>
+
+  <section id="download" class="section section-anchor">
+    <div class="section-head">
+      <div>
+        <h2>Download the data</h2>
+      </div>
+      <a class="chip accent" href={LOCAL_AUTHORITY_CSV_PATH} download>Download CSV</a>
+    </div>
+    <p class="lede">
+      People on asylum support in every local authority at {datasetSnapshotLabel}: one row per
+      authority, with the type of accommodation, population and a rate per 10,000 residents.
+    </p>
+    <p class="tiny">
+      Source: Home Office,{" "}
+      <a href={HOME_OFFICE_LOCAL_AUTHORITY_SOURCE.url} rel="noreferrer">{HOME_OFFICE_LOCAL_AUTHORITY_SOURCE.name}</a>
+      {datasetReleaseLabel && <>, published {datasetReleaseLabel}</>}. Contains public sector information
+      licensed under the{" "}
+      <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="noreferrer">Open Government Licence v3.0</a>.
+      The rate is calculated here from the two published columns.
+    </p>
   </section>
 
   <section class="section shell" style="padding-bottom: 3rem;">

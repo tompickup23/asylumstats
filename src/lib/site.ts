@@ -1,9 +1,11 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
 import { getCounties, type County } from "./county-directory";
+import { HOME_OFFICE_LOCAL_AUTHORITY_SOURCE, LOCAL_AUTHORITY_DATASET_ID, OGL_V3, SITE_ORGANIZATION } from "./datasets";
+import { ROUTES_RELEASE_DATE } from "./data-releases";
+import { SITE_NAME, SITE_URL, buildPlacePath, slugifyAreaName } from "./site-identity";
 
-export const SITE_NAME = "asylumstats";
-export const SITE_URL = "https://asylumstats.co.uk";
+export { SITE_NAME, SITE_URL, buildPlacePath, slugifyAreaName };
 export const DEFAULT_DESCRIPTION =
   "Follow YOUR money. UK asylum costs, routes, and demographic impact. Every figure sourced, every claim checked.";
 export const DEFAULT_SOCIAL_IMAGE_PATH = "/og-card.png";
@@ -82,13 +84,6 @@ function slugifyRegionName(regionName: string): string {
   return regionName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-export function slugifyAreaName(areaName: string): string {
-  return areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
-
-export function buildPlacePath(area: { areaCode: string; areaName: string }): string {
-  return `/places/${slugifyAreaName(area.areaName)}/`;
-}
 
 /**
  * The page that should stand for a county. A county made of a single authority (Cornwall,
@@ -251,17 +246,19 @@ export function buildPlaceStructuredData(
       url: options.canonicalUrl,
       image: options.socialImageUrl,
       isAccessibleForFree: true,
-      dateModified: options.snapshotDate,
-      temporalCoverage: `${options.snapshotDate}/${options.snapshotDate}`,
+      license: OGL_V3,
+      // The day the Home Office published the figures, not the date they describe; that
+      // is temporalCoverage.
+      ...(ROUTES_RELEASE_DATE ? { dateModified: ROUTES_RELEASE_DATE } : {}),
+      temporalCoverage: options.snapshotDate,
       spatialCoverage: {
         "@id": areaId
       },
-      creator: {
-        "@id": `${SITE_URL}/#organization`
-      },
-      publisher: {
-        "@id": `${SITE_URL}/#organization`
-      },
+      creator: SITE_ORGANIZATION,
+      publisher: SITE_ORGANIZATION,
+      isBasedOn: HOME_OFFICE_LOCAL_AUTHORITY_SOURCE,
+      // This area's row of the national table, which is where the download lives.
+      isPartOf: { "@id": LOCAL_AUTHORITY_DATASET_ID },
       keywords: [
         "asylum support",
         "contingency accommodation",

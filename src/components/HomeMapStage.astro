@@ -709,7 +709,8 @@ const payload = JSON.stringify({
     };
 
     const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    const buildAreaHref = (areaCode: string, areaName?: string) => `/places/${areaName ? slugify(areaName) : areaCode}/`;
+    // A place page lives at its name; /places/<area code>/ has never existed. See buildPlacePath.
+    const buildAreaHref = (areaName: string) => `/places/${slugify(areaName)}/`;
 
     const loadBoundaryPayload = (() => {
       let promise: Promise<BoundaryPayload> | null = null;
@@ -1420,7 +1421,7 @@ const payload = JSON.stringify({
           setChip(focusPrimary, primaryMetric.text, primaryMetric.tone);
           setChip(focusSecondary, `${formatInteger(area.contingencyAccommodation)} contingency`);
           focusLink.hidden = false;
-          focusLink.href = buildAreaHref(area.areaCode);
+          focusLink.href = buildAreaHref(area.areaName);
           focusLink.textContent = "Open place page";
           return;
         }
@@ -1626,7 +1627,7 @@ const payload = JSON.stringify({
           const proxiesToSubregion =
             Boolean(areaSubregionId) && (!selectedSubregionId || areaSubregionId !== selectedSubregionId);
 
-          link.setAttribute("href", buildAreaHref(boundaryArea.areaCode));
+          link.setAttribute("href", buildAreaHref(boundaryArea.areaName));
           link.setAttribute("class", `region-map-link ${selected ? "is-selected" : ""}`);
           link.dataset.homeAuthorityScope = boundaryArea.areaCode;
           link.dataset.homeAuthorityRegion = regionName;

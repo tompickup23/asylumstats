@@ -32,7 +32,7 @@ jobs:
       # so they skip there; without this step a pull request could only fail them after
       # merge, at deploy time. No GitHub event data is interpolated here.
       - name: Guards that need the built site
-        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts
+        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts tests/datasets.test.ts tests/internal-links.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop

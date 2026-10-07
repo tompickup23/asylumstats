@@ -1,5 +1,6 @@
 import { getPercentileRank } from "./route-analytics";
 import type { LocalRouteAreaSummary } from "./route-data";
+import { buildPlacePath } from "./site-identity";
 
 export interface PlaceDrilldownRow {
   areaCode: string;
@@ -100,7 +101,7 @@ function buildRows(
         secondaryLabel: candidate.areaCode === currentArea.areaCode ? "Current page" : candidate.regionName,
         widthPct: Math.max(4, Number(((value / maxValue) * 100).toFixed(1))),
         isCurrent: candidate.areaCode === currentArea.areaCode,
-        href: `/places/${candidate.areaCode}/?place_metric=${metric.id}&place_scope=${scope}`
+        href: `${buildPlacePath(candidate)}?place_metric=${metric.id}&place_scope=${scope}`
       };
     })
   };
