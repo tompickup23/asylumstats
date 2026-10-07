@@ -44,8 +44,8 @@
     "transform:hospend:check": "node scripts/transform/transform-ho-spend.mjs --check",
     "ingest:hospend": "npm run fetch:hospend && npm run transform:hospend",
     "audit:serp": "node scripts/audit/serp-widths.mjs",
-  "audit:serp:check": "node scripts/audit/serp-widths.mjs --check",
-  "audit:coverage": "node scripts/audit/area-coverage.mjs",
+    "audit:serp:check": "node scripts/audit/serp-widths.mjs --check",
+    "audit:coverage": "node scripts/audit/area-coverage.mjs",
     "audit:coverage:check": "node scripts/audit/area-coverage.mjs --check",
     "audit:freshness": "node scripts/audit/source-freshness.mjs",
     "audit:links": "node scripts/audit/source-links.mjs",
@@ -58,7 +58,7 @@
     "test": "vitest run",
     "test:mobile": "playwright test tests/mobile-layout.spec.ts --project=mobile-chromium",
     "test:desktop": "playwright test tests/desktop-layout.spec.ts --project=desktop-chromium",
-  "test:search": "playwright test tests/homepage-search.spec.ts --project=mobile-chromium --project=desktop-chromium",
+    "test:search": "playwright test tests/homepage-search.spec.ts --project=mobile-chromium --project=desktop-chromium",
     "test:watch": "vitest",
     "audit:projections": "node scripts/audit/projection-integrity.mjs",
     "audit:projections:check": "node scripts/audit/projection-integrity.mjs --check"
@@ -68,10 +68,10 @@
     "@fontsource/source-serif-4": "^5.3.0",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "^7.1.1",
+    "astro": "^7.2.10",
     "satori": "^0.26.0",
     "sharp": "^0.35.4",
-    "svgo": "^4.0.2",
+    "svgo": "^4.1.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
@@ -79,10 +79,11 @@
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.3.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "fast-uri": "^3.1.6",
-    "fflate": "^0.7.5"
+    "fflate": "^0.7.5",
+    "devalue": "^5.9.2"
   }
 }
