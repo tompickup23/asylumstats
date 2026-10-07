@@ -3,30 +3,13 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { buildLocalAuthorityCsv } from "../src/lib/datasets";
 import { loadLocalRouteLatest } from "../src/lib/route-data";
-
-/** One CSV line, honouring double-quoted fields ("Bristol, City of"). No field spans lines. */
-function parseLine(line: string): string[] {
-  const cells: string[] = [];
-  let cell = "";
-  let quoted = false;
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-    if (quoted) {
-      if (char === '"' && line[i + 1] === '"') { cell += '"'; i += 1; }
-      else if (char === '"') quoted = false;
-      else cell += char;
-    } else if (char === '"') quoted = true;
-    else if (char === ",") { cells.push(cell); cell = ""; }
-    else cell += char;
-  }
-  cells.push(cell);
-  return cells;
-}
+import { parseCsv, parseCsvGrid } from "../scripts/lib/csv-parser.mjs";
 
 describe("local authority CSV", () => {
-  const [header, ...rows] = buildLocalAuthorityCsv().trimEnd().split("\n");
-  const columns = parseLine(header);
-  const records = rows.map((row) => Object.fromEntries(parseLine(row).map((cell, i) => [columns[i], cell])));
+  // The shared parser (CLAUDE.md rule 7), so the file is read the way the pipeline reads CSVs.
+  const grid: string[][] = parseCsvGrid(buildLocalAuthorityCsv());
+  const [columns, ...rows] = grid;
+  const records: Array<Record<string, string>> = parseCsv(buildLocalAuthorityCsv());
   const { areas } = loadLocalRouteLatest();
 
   it("has one row per authority and no combined stock-plus-flow total", () => {
@@ -36,7 +19,7 @@ describe("local authority CSV", () => {
   });
 
   it("reproduces the published counts, and the breakdown sums to the total", () => {
-    for (const row of rows) expect(parseLine(row).length).toBe(columns.length);
+    for (const row of rows) expect(row.length).toBe(columns.length);
     expect(records.find((r) => r.area_code === "E06000023")?.area_name).toBe("Bristol, City of");
     const byCode = new Map(areas.map((area) => [area.areaCode, area]));
     for (const record of records) {

@@ -2,15 +2,15 @@
 
 ## What This Is
 
-UK asylum and refugee accountability site. Astro 5 static site deployed to GitHub Pages at asylumstats.co.uk. Tracks asylum support, hotel secrecy, public money, and local area pressure using official GOV.UK statistics, Companies House data, council evidence, and parliamentary scrutiny reports.
+UK asylum and refugee accountability site. Astro 7 static site deployed to GitHub Pages at asylumstats.co.uk. Tracks asylum support, hotel secrecy, public money, and local area pressure using official GOV.UK statistics, Companies House data, council evidence, and parliamentary scrutiny reports.
 
 ## Architecture
 
-- **Framework:** Astro 5 static site (zero JS runtime, pure HTML/CSS output)
+- **Framework:** Astro 7 static site (static HTML, with small inline scripts for search, maps and filters)
 - **Language:** TypeScript data loaders, Astro components, Node.js transform scripts (.mjs)
 - **Hosting:** GitHub Pages via GitHub Actions (`deploy.yml`)
 - **Domain:** asylumstats.co.uk (DNS on one.com, A records + CNAME → GitHub Pages)
-- **Dependencies:** Only 2 production deps: `astro` and `xlsx`. Dev: `vitest`
+- **Dependencies:** see `package.json`. Production: `astro`, `xlsx`, Tailwind via `@tailwindcss/vite`, and the OG-card chain (`satori`, `@resvg/resvg-js`, `sharp`, `svgo`, fonts). Dev: `vitest`, `@playwright/test`, `@astrojs/check`
 
 ## Data Pipeline
 
@@ -78,10 +78,10 @@ src/data/mock/      → editorial content  → overview.json (official KPIs), re
 # Dev server
 npm run dev
 
-# Production build (157 pages, ~900ms)
+# Production build (about 500 pages)
 npm run build
 
-# Run tests (26 tests, 3 files)
+# Unit and data tests (vitest; guards that need dist skip until a build exists)
 npm test
 
 # Type check
@@ -99,16 +99,14 @@ npm run ingest:lancashirecc # Fetch + transform LCC data
 - **Framework:** Vitest v4
 - **Config:** `vitest.config.ts`
 - **Location:** `tests/`
-- **Current:** 26 tests across 3 files (csv-parser, data-loaders, source-scope)
+- **Current:** about 60 vitest files and 14 Playwright specs. Built-site guards (`support-vs-accommodation`, `rendered-text-runons`, `rendered-text-dashes`, `datasets`, `internal-links`) read `dist/` and run after the build in CI
 - **Run:** `npm test` or `npx vitest run`
 
 ## Deployment
 
-Push to `main` triggers `.github/workflows/deploy.yml`:
-1. `npm ci` → `npm run build` → upload `dist/` artifact → deploy to GitHub Pages
+Push to `main` triggers `.github/workflows/deploy.yml`: `npm ci`, `npm test`, `npm run check`, build, the built-site guards, the Playwright mobile, desktop and search specs, IndexNow, then deploy to GitHub Pages. A failed deploy opens a `deploy-failed` issue, and `live-freshness.yml` opens one if the live build falls more than three days behind `main`.
 
-Weekly data refresh: `.github/workflows/refresh-data.yml` (manual dispatch or Monday 8am cron):
-1. Runs all 3 public ingestion pipelines → auto-commits changed data
+Data refresh: `.github/workflows/refresh-data.yml` (Monday 08:00 and Thursday 12:00 and 16:00 UTC, or dispatch). Runs every ingest, reports figures that moved 15% or more, runs `npm test` on the new data, and only then commits to `main` and dispatches a deploy. Data that fails the tests goes to a `data/refresh-failed-*` branch with a `refresh-failed` issue. Tests must check shape and cross-source agreement, never pin a figure from one release: two pinned values held every deploy for nine days in October 2026.
 
 ## Critical Rules
 
@@ -121,26 +119,13 @@ Weekly data refresh: `.github/workflows/refresh-data.yml` (manual dispatch or Mo
 7. **CSV parser is shared**: Use `scripts/lib/csv-parser.mjs` — do not duplicate.
 8. **Test before push**: `npm run build && npm test` should both pass.
 
-## Data Stats (current)
+## Current counts
 
-- **Route data:** 13,482 observations across 361 local authority areas
-- **Hotel entity ledger:** 9 named sites, 4 current, 4 entity links, 4 integrity signals, 3 unnamed-only areas
-- **Money ledger:** 11 records, 9 supplier/body profiles, investigative leads
-- **LCC context layer:** 753,220 transactions (20 monthly files, context only)
-- **Place pages:** 147 generated from live data (areas with ≥200 supported asylum)
+Not written here, because they rot (this section said 147 place pages when there were 361). Read them from the data: `src/data/live/local-route-latest.json` (areas), `npm run build` (pages), `npm run audit:coverage` and `npm run audit:freshness`.
 
-## Next Priorities for Improvement
+## Open work
 
-1. **More live data**: Deeper normalisation of refugee funding instruction tariff tables
-2. **Local procurement**: Council procurement tied to named hotels or schemes
-3. **Subcontractor ingestion**: Expand supplier network beyond prime providers
-4. **Charts**: Add Observable Plot or similar for route trends, area comparisons
-5. **Map integration**: MapLibre or Leaflet for geographic visualisation of hotel locations and area pressure
-6. **More tests**: E2E tests, transform script output validation
-7. **SEO**: Add OpenGraph meta tags, structured data, sitemap.xml
-8. **Accessibility audit**: Screen reader testing, ARIA labels on data tables
-9. **Performance**: Consider image optimisation, font subsetting
-10. **Content expansion**: More editorial content for releases, place page narratives
+Tracked in GitHub issues and `docs/`. Decisions waiting on Tom are in the `audit-corrections-open-items` memory: provenance badges, splitting the demographic and asylum products, the privacy-page controller identity, the author byline.
 
 ## Editorial Position
 

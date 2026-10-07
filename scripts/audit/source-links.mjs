@@ -83,6 +83,31 @@ const BOT_BLOCKED = [
     note: "East Lindsey statement. Council CDN serves 403 to unknown user agents."
   },
   {
+    url: "https://bills.parliament.uk/bills/4254",
+    checked: "2026-10-07",
+    note: "Immigration and Asylum Bill page. Same parliament.uk bot policy."
+  },
+  {
+    url: "https://committees.parliament.uk/publications/55072/documents/305271/default/",
+    checked: "2026-10-07",
+    note: "Committee document; serves a PDF download in a browser. Same parliament.uk bot policy."
+  },
+  {
+    url: "https://committees.parliament.uk/publications/49663/documents/265736/default/",
+    checked: "2026-10-07",
+    note: "Committee document; serves a PDF download in a browser. Same parliament.uk bot policy."
+  },
+  {
+    url: "https://questions-statements.parliament.uk/written-questions/detail/2026-09-03/27030",
+    checked: "2026-10-07",
+    note: "Written question 27030, answered 10 September 2026. Same parliament.uk bot policy."
+  },
+  {
+    url: "https://questions-statements.parliament.uk/written-questions/detail/2026-09-07/HL3145",
+    checked: "2026-10-07",
+    note: "Written question HL3145, answered 21 September 2026. Same parliament.uk bot policy."
+  },
+  {
     url: "https://www.hotelowner.co.uk/102005-splendid-hospitality-group-acquires-the-stanwell-hotel-near-heathrow/",
     checked: "2026-08-29",
     note: "Trade press behind a bot filter."

@@ -48,12 +48,24 @@ function headersCsp(): string {
   return line.replace(/.*Content-Security-Policy:\s*/i, "");
 }
 
+/**
+ * Directives a browser honours only from a response header. In a <meta> CSP they are
+ * ignored and each page logs a console error saying so, which every page on the site did
+ * until 7 October 2026 for frame-ancestors. They belong in _headers and nowhere else.
+ */
+const HEADER_ONLY = new Set(["frame-ancestors", "report-uri", "sandbox"]);
+
 describe("CSP parity between the meta tag and _headers", () => {
   const meta = parseCsp(metaCsp());
   const headers = parseCsp(headersCsp());
 
-  it("declares the same directives in both", () => {
-    expect([...headers.keys()].sort()).toEqual([...meta.keys()].sort());
+  it("keeps header-only directives out of the meta tag", () => {
+    expect([...meta.keys()].filter((name) => HEADER_ONLY.has(name))).toEqual([]);
+  });
+
+  it("declares the same directives in both, apart from header-only ones", () => {
+    const shared = [...headers.keys()].filter((name) => !HEADER_ONLY.has(name)).sort();
+    expect(shared).toEqual([...meta.keys()].sort());
   });
 
   it("allows the same sources for every directive", () => {

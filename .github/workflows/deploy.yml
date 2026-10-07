@@ -4,6 +4,14 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      # refresh-data.yml dispatches this workflow after committing new figures, and that
+      # deploy changes real pages, so it should announce them. A hand-run rehearsal should
+      # not, which is why the default is false.
+      announce:
+        description: "Notify IndexNow of changed URLs"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -16,10 +24,13 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: the desktop layout spec compares screenshots pixel for
+    # pixel, and a runner OS change moves font rendering under every baseline at once.
+    # Move deliberately, with update-desktop-baselines.yml on the same image.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -48,7 +59,7 @@ jobs:
       # them: the Playwright matcher only picked up specs named for layout, so a spec for
       # anything else would never have run.
       - run: npm run test:search
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: playwright-report
@@ -59,31 +70,33 @@ jobs:
       # the live site is still serving, and submits only the URLs that are new or whose
       # lastmod moved. After the deploy that comparison is against itself and reports
       # nothing. Notifying a minute before the content lands is fine: IndexNow queues.
-      # Only runs on a push to main, so a workflow_dispatch rehearsal announces nothing.
+      # Runs on a push to main, and on a dispatch that asks for it (the data refresh does,
+      # since until 7 October 2026 a quarterly release changed hundreds of pages and told
+      # no search engine). A plain workflow_dispatch rehearsal announces nothing.
       # No GitHub event data is interpolated here.
       # continue-on-error because telling a search engine about a change is an
       # optimisation and the deploy is not. This step failing once already held the
       # whole site back from going live, which is the wrong trade in every case.
       - name: Notify IndexNow of changed canonical URLs
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.announce)
         continue-on-error: true
         env:
           INDEXNOW_SUBMIT: "1"
         run: node scripts/indexnow-submit.mjs --changed
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # A failed deploy leaves the live site on the previous build, which looks fine from
   # outside. From 1 to 7 October 2026 every deploy failed and nobody was told for nine
@@ -92,7 +105,7 @@ jobs:
   report-failure:
     needs: [build, deploy]
     if: failure()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       issues: write
     steps:
