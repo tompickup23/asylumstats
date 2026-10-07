@@ -13,7 +13,7 @@ describe("local evidence layer", () => {
 
     expect(points.length).toBeGreaterThan(0);
     expect(points.every((point) => point.regionHref.startsWith("/places/regions/"))).toBe(true);
-    expect(points.some((point) => point.placeHref === "/places/E06000062/")).toBe(true);
+    expect(points.some((point) => point.placeHref === "/places/west-northamptonshire/")).toBe(true);
   });
 
   it("groups current named sites by region for the lower-level evidence layer", () => {
@@ -38,7 +38,7 @@ describe("local evidence layer", () => {
     expect(eastMidlandsAreas.length).toBeGreaterThan(0);
     expect(eastMidlandsAreas[0].latestPublicDateLabel).toBeTruthy();
     expect(eastMidlandsAreas[0].siteNames.length).toBeGreaterThan(0);
-    expect(eastMidlandsAreas[0].placeHref).toBe("/places/E06000062/");
+    expect(eastMidlandsAreas[0].placeHref).toBe("/places/west-northamptonshire/");
   });
 
   it("features one dated lead local evidence row per visible region", () => {

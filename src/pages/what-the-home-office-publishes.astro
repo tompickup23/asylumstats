@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PlainEnglish from "../components/PlainEnglish.astro";
 import ProportionGrid from "../components/ProportionGrid.astro";
 import { SITE_URL } from "../lib/site";
+import { OGL_V3, SITE_ORGANIZATION } from "../lib/datasets";
 import {
   loadAsylumCostReconciliation,
   loadHoAsylumEntities,
@@ -68,11 +69,20 @@ const structuredData = [
     description:
       "Every transaction over £25,000 that the Home Office recorded against an asylum " +
       "classification, normalised from its own published transparency files.",
-    url: `${SITE_URL}/what-the-home-office-publishes`,
+    "@id": `${SITE_URL}/what-the-home-office-publishes/#dataset`,
+    url: `${SITE_URL}/what-the-home-office-publishes/`,
     temporalCoverage: "2010/2026",
-    license: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    license: OGL_V3,
     isAccessibleForFree: true,
-    creator: { "@id": `${SITE_URL}/#organization` },
+    creator: SITE_ORGANIZATION,
+    publisher: SITE_ORGANIZATION,
+    isBasedOn: {
+      "@type": "Dataset",
+      name: "Home Office spending over £25,000",
+      url: entities.sourceCollection,
+      creator: { "@type": "Organization", name: "Home Office" },
+      license: OGL_V3
+    },
     variableMeasured: "Payments over £25,000 by supplier and financial year",
     distribution: [
       {

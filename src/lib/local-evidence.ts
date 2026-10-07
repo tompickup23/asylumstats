@@ -1,6 +1,7 @@
 import { loadHotelEntityLedger } from "./hotel-data";
 import { loadLocalRouteLatest } from "./route-data";
 import { buildPublicPlaceRegionPath } from "./site";
+import { buildPlacePath } from "./site-identity";
 
 export interface LocalEvidencePoint {
   siteId: string;
@@ -131,7 +132,7 @@ export function getCurrentLocalEvidencePoints(): LocalEvidencePoint[] {
         supportedAsylum: area?.supportedAsylum ?? null,
         supportedAsylumRate: area?.supportedAsylumRate ?? null,
         contingencyAccommodation: area?.contingencyAccommodation ?? null,
-        placeHref: site.areaCode ? `/places/${site.areaCode}/` : null,
+        placeHref: area ? buildPlacePath(area) : null,
         regionHref: buildPublicPlaceRegionPath(site.regionName),
         chainLabel: buildChainLabel(site.entityCoverage),
         chainSummary: buildChainSummary(
