@@ -84,3 +84,29 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # A failed deploy leaves the live site on the previous build, which looks fine from
+  # outside. From 1 to 7 October 2026 every deploy failed and nobody was told for nine
+  # days. This opens one issue per run of failures, and comments on it after that.
+  # Reads run metadata only; no GitHub event data is interpolated here.
+  report-failure:
+    needs: [build, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create deploy-failed --color B60205 --description "The live site did not update" --force
+          open="$(gh issue list --label deploy-failed --state open --json number --jq '.[0].number')"
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "Failed again: $RUN_URL"
+          else
+            gh issue create --label deploy-failed \
+              --title "Deploy failed: the live site is not updating" \
+              --body "The deploy failed and the live site is still serving the previous build. Run: $RUN_URL. Close this issue once a deploy succeeds."
+          fi
