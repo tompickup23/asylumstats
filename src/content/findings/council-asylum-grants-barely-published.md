@@ -17,8 +17,8 @@ seo_description: "The Home Office paid councils about £883 million in 2024/25 f
 
 **Searching every supplier name in the Home Office's published spending file for that year returns £1.6 million.** The largest single council payment is Liverpool City Council at £438,960. That is roughly **£1 published for every £550 paid**.
 
-**Why the money is invisible from both ends.** Transparency regimes publish what a body *spends*, never what it *receives*. A grant leaving the Home Office is not itemised in its file; the same grant arriving at a council is income, and appears in no council spend file either. Neither side is concealing anything — the reporting simply has no place to put it.
+**Why the money is invisible from both ends.** Transparency regimes publish what a body *spends*, never what it *receives*. A grant leaving the Home Office is not itemised in its file; the same grant arriving at a council is income, and appears in no council spend file either. Neither side is concealing anything; the reporting simply has no place to put it.
 
-**One trap worth naming.** A search for "council" in the supplier field returns £3.59m, not £1.6m, because it catches **Refugee Council** — a charity, not a local authority, paid £2.0m that year. Counting it more than doubles the answer and is wrong.
+**One trap worth naming.** A search for "council" in the supplier field returns £3.59m, not £1.6m, because it catches **Refugee Council**, a charity rather than a local authority, paid £2.0m that year. Counting it more than doubles the answer and is wrong.
 
 Spending figures cited from *An analysis of the asylum system*, National Audit Office, December 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.

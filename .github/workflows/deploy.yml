@@ -40,7 +40,7 @@ jobs:
       # it looks for is created by the compiler, so it cannot be seen before the build.
       # No GitHub event data is interpolated here.
       - name: Guards that need the built site
-        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts
+        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop

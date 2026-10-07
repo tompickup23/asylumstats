@@ -30,6 +30,6 @@ Across all 402 published files from 2010 to 2026, Clearsprings Ready Homes appea
 **Right of reply.** If Clearsprings Ready Homes or the Home Office can account for the
 absence, we will say so on this page. Write to info@asylumstats.co.uk.
 
-**What this does not show.** Why the payments are absent. There are ordinary explanations — a different payment route, netting, a reporting change — and we have not established which applies. The record is the finding; the reason is not.
+**What this does not show.** Why the payments are absent. There are ordinary explanations, such as a different payment route, netting or a reporting change, and we have not established which applies. The record is the finding; the reason is not.
 
 Contract figures cited from *The Home Office's asylum accommodation contracts*, National Audit Office, May 2025. Payment data: Home Office spending over £25,000, Open Government Licence v3.0.

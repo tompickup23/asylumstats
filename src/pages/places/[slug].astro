@@ -18,7 +18,7 @@ import { getAreaTrendSummary } from "../../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
 import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
-import { countyForAreaCode, buildCountyPath } from "../../lib/county-directory";
+import { countyForAreaCode, buildCountyPath, getCounties } from "../../lib/county-directory";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
 import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
 import { getUkPlacesRecord, ukPlacesUrl } from "../../lib/ukplaces-registry";
@@ -311,7 +311,13 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
 }
 // County the area sits in, for the breadcrumb link up to the county page. Null outside
 // England, where this site has no county tier.
-const areaCountyName = countyForAreaCode(area.areaCode);
+// A county that is this authority alone has no page of its own (see countyCanonicalPath),
+// so the crumb would only lead back here.
+const countyOfArea = countyForAreaCode(area.areaCode);
+const areaCountyName =
+  countyOfArea && getCounties().find((county) => county.countyName === countyOfArea)?.areaCount !== 1
+    ? countyOfArea
+    : null;
 
 ---
 

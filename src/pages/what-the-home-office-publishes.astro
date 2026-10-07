@@ -30,7 +30,7 @@ const title = "What the Home Office publishes on asylum";
 const description =
   `The Home Office spent ${formatGbpShort(recon.headline.estimatedGbp)} on asylum in ` +
   `${recon.fy}. Its published spending data accounts for ` +
-  `${formatGbpShort(recon.headline.publishedGbp)} — about £${capture.perHundredPounds} in every £100.`;
+  `${formatGbpShort(recon.headline.publishedGbp)}, about £${capture.perHundredPounds} in every £100.`;
 
 const faq = [
   {
@@ -97,7 +97,7 @@ const structuredData = [
       <h1>{heading}</h1>
       <p class="answer">
         The Home Office spent <strong>{formatGbpShort(recon.headline.estimatedGbp)}</strong> on
-        asylum in {recon.fy} — {perPersonInUk(recon.headline.estimatedGbp)}. It published a
+        asylum in {recon.fy}, {perPersonInUk(recon.headline.estimatedGbp)}. It published a
         detailed record of <strong>{formatGbpShort(recon.headline.publishedGbp)}</strong> of it.
         That is about <strong>£{capture.perHundredPounds} in every £100</strong>.
       </p>
@@ -121,15 +121,15 @@ const structuredData = [
     <section class="section">
       <ProportionGrid
         filled={capture.perHundredPounds}
-        filledLabel={`£${capture.perHundredPounds} — a published receipt exists`}
-        emptyLabel={`£${100 - capture.perHundredPounds} — spent and audited, but not itemised`}
+        filledLabel={`£${capture.perHundredPounds}: a published receipt exists`}
+        emptyLabel={`£${100 - capture.perHundredPounds}: spent and audited, but not itemised`}
         alt={`A grid of 100 squares. ${capture.perHundredPounds} are filled, showing the £${capture.perHundredPounds} in every £100 of asylum spending that appears in published data.`}
       />
 
       <PlainEnglish
         tone="alert"
         headline="This is not missing money"
-        body="The Home Office does account for all of it — to Parliament, and to its auditors, in totals. What it does not do is publish a line-by-line record of most of it. This page is about what you are allowed to see, not about money going astray."
+        body="The Home Office does account for all of it, to Parliament and to its auditors, in totals. What it does not do is publish a line-by-line record of most of it. This page is about what you are allowed to see, not about money going astray."
       />
     </section>
 
@@ -194,7 +194,7 @@ const structuredData = [
       <h3>The councils</h3>
       <p>
         The Home Office paid councils about{" "}
-        <strong>{formatGbpShort(recon.councilTest.estimatedGbp)}</strong> in {recon.fy} — money for
+        <strong>{formatGbpShort(recon.councilTest.estimatedGbp)}</strong> in {recon.fy}: money for
         housing people, and for looking after children who arrive alone. Searching every
         supplier name in the published file for that year finds{" "}
         <strong>{formatGbpFull(recon.councilTest.publishedGbp)}</strong>.
@@ -211,7 +211,7 @@ const structuredData = [
       <h2>How we know, and how to check it</h2>
       <p>
         Every figure in the "published" column comes from the Home Office's own
-        <a href={entities.sourceCollection} rel="noreferrer">spending over £25,000</a> files —
+        <a href={entities.sourceCollection} rel="noreferrer">spending over £25,000</a> files:{" "}
         {entities.summary.filesParsed} of {entities.summary.filesInCorpus} published files,
         covering 2010 to 2026, holding {entities.summary.transactions.toLocaleString("en-GB")}{" "}
         asylum transactions worth {formatGbpShort(entities.summary.totalGbp)} across{" "}

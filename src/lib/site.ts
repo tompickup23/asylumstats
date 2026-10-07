@@ -1,6 +1,6 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
-import { getCounties } from "./county-directory";
+import { getCounties, type County } from "./county-directory";
 
 export const SITE_NAME = "asylumstats";
 export const SITE_URL = "https://asylumstats.co.uk";
@@ -42,6 +42,7 @@ const INDEXABLE_STATIC_PATHS = [
   // its noIndex, so listing it here would ask search engines to index a page that tells
   // them not to. Individual /councils/<body>/ pages are noIndex for the same reason.
   "/spending/",
+  "/what-the-home-office-publishes/",
   "/entities/",
   "/compare/",
   "/routes/",
@@ -87,6 +88,17 @@ export function slugifyAreaName(areaName: string): string {
 
 export function buildPlacePath(area: { areaCode: string; areaName: string }): string {
   return `/places/${slugifyAreaName(area.areaName)}/`;
+}
+
+/**
+ * The page that should stand for a county. A county made of a single authority (Cornwall,
+ * Rutland, Herefordshire and the rest) has a county page that repeats a subset of that
+ * authority's place page under the same question, which Search Console reads as two pages
+ * competing for one query. For those the place page is canonical, the county page points
+ * at it, and only the place page goes in the sitemap.
+ */
+export function countyCanonicalPath(county: County): string {
+  return county.areaCount === 1 && county.areas[0] ? buildPlacePath(county.areas[0]) : county.countyPath;
 }
 
 export function normalisePageTitle(title: string): string {
@@ -156,8 +168,9 @@ export function getIndexableSitePaths(): string[] {
 
   // Counties are produced by getStaticPaths, which this function cannot see. They have to
   // be added here by hand or they build fine and never reach the sitemap.
+  // Single-authority counties are left out: their place page is the canonical one.
   for (const county of getCounties()) {
-    paths.add(county.countyPath);
+    if (countyCanonicalPath(county) === county.countyPath) paths.add(county.countyPath);
   }
 
   return [...paths].sort((a, b) => a.localeCompare(b));

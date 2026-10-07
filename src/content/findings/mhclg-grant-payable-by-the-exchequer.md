@@ -14,9 +14,9 @@ seo_description: "Homes for Ukraine and Afghan resettlement are paid by MHCLG. I
 
 **The refugee schemes most people have heard of are not Home Office spending.** Homes for Ukraine and the Afghan resettlement programmes are funded by the Ministry of Housing, Communities and Local Government, which pays councils directly. None of it appears in Home Office data.
 
-**Nor is it findable in MHCLG's own.** Across 22 monthly publications from September 2024 to June 2026 — 54,464 rows, £82.2 billion — only **117 rows worth £22.8 million** mention refugees, Ukraine or Afghanistan. Those rows are operational: £13.7m for "Funding for Homes for Ukraine operation", £3.3m for Afghan Resettlement Programme housing casework.
+**Nor is it findable in MHCLG's own.** Across 22 monthly publications from September 2024 to June 2026 (54,464 rows, £82.2 billion), only **117 rows worth £22.8 million** mention refugees, Ukraine or Afghanistan. Those rows are operational: £13.7m for "Funding for Homes for Ukraine operation", £3.3m for Afghan Resettlement Programme housing casework.
 
-**Meanwhile £51.9 billion — 63.1% of everything the department publishes — carries one narrative: "Grant payable by the Exchequer".** Of that, £34.0 billion goes to councils with the purpose unstated.
+**Meanwhile £51.9 billion, 63.1% of everything the department publishes, carries one narrative: "Grant payable by the Exchequer".** Of that, £34.0 billion goes to councils with the purpose unstated.
 
 The tariff payments that fund the schemes are almost certainly inside that bucket. They cannot be counted, separated or checked from what is published, and no rule requires them to be labelled.
 

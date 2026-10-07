@@ -28,6 +28,11 @@ jobs:
       - env:
           BUILD_OG: "1"
         run: npm run build
+      # The same built-site guards deploy.yml runs. `npm test` above runs before the build,
+      # so they skip there; without this step a pull request could only fail them after
+      # merge, at deploy time. No GitHub event data is interpolated here.
+      - name: Guards that need the built site
+        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop
