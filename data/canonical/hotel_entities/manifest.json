@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-05T17:01:16.510Z",
+  "generated_at": "2026-10-08T18:27:50.152Z",
   "dataset_id": "hotel_entities",
   "source_files": [
     {
@@ -30,7 +30,7 @@
     {
       "name": "archiveLeads",
       "path": "data/raw/hotel_entities/archive-hotel-leads.json",
-      "sha256": "65a3e18060750d413f825639a7a19706dc81f30740b64fbfe7c96460e1b0360b"
+      "sha256": "98b6aaed2b29bb624f837f53bb7febc1ec0aeb5b06b3ee0057a5a4c86de57d94"
     },
     {
       "name": "asylumFinance",
