@@ -1,7 +1,7 @@
 ---
 headline: "86 local authorities projected minority White British by 2051"
 date: "2026-04-14"
-updated: "2026-08-13"
+updated: "2026-10-12"
 category: demographics
 stat_value: "86"
 stat_label: "Areas WBI <50% by 2051"
@@ -12,6 +12,16 @@ summary: "86 English local authorities are projected to have a White British pop
 seo_title: "86 councils projected minority White British by 2051"
 seo_description: "86 English local authorities are projected below a 50% White British share by 2051. 59 of them have a White British majority today."
 ---
+
+> **Correction, 12 October 2026.** This piece said the White British share across
+> the 318 authorities, weighted by their 2021 populations, is **55.0%** by 2051. It
+> is **55.1%** (55.13%). Two things changed it. Barnsley and Sheffield were being
+> read from records left over from an older model run, filed under their old area
+> codes; they now come from the current records, which moves Barnsley's 2051
+> projection from 62.9% to 80.8% and Sheffield's from 47.8% to 46.7%. And the
+> previous figure, 55.06%, had been cut to 55.0% rather than rounded to 55.1%. The
+> projection file is now an exact copy of UK Demographics' file. The 2021 share,
+> 74.4%, and the count of 86 do not change.
 
 > **Correction, 13 August 2026.** This piece originally said 109 areas and cited
 > the model's backcast score as validation. Both were wrong. The backcast fitted
@@ -65,7 +75,7 @@ the threshold years ago.
 
 **The national picture.** England and Wales White British share: 74.4% (Census
 2021, ONS TS021). Across the 318 distinct local authorities the model projects,
-weighted by their 2021 populations, the share is 74.4% in 2021 and **55.0% by
+weighted by their 2021 populations, the share is 74.4% in 2021 and **55.1% by
 2051**. The cohort-component model, which assumes ethnic fertility rates converge
 partway to the national mean, gives 54.6% on the same weighting.
 
