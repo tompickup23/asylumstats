@@ -36,6 +36,7 @@ src/data/mock/      → editorial content  → overview.json (official KPIs), re
 ### Shared Utilities
 
 - `scripts/lib/csv-parser.mjs` — RFC 4180 CSV parser, `readCsv()`, `fileSha256()`, `hashId()`. Used by both transform scripts.
+- `scripts/sync/sync-from-ukd.mjs`: `src/data/live/ethnic-projections.json` is a byte-for-byte copy of UK Demographics' file at a named commit (`npm run sync:ukd -- --commit <sha>`), recorded with its sha256 in `data/sync/ukd-ethnic-projections.json`. Never edit it here or run the model scripts in `scripts/model/` against it: fix it in UKD and sync. `npm run sync:ukd:check`, `scripts/audit/projection-integrity.mjs` (check 0) and `tests/ukd-sync.test.ts` check identity. Barnsley and Sheffield are keyed E08000016 and E08000019 in that file and E08000038 and E08000039 in the Home Office data; `projectionCode()` in `src/lib/ethnic-projections.ts` resolves either.
 - `scripts/lib/nomis-guard.mjs`: `refuseNomisDatasetApi()`. Nomis's robots.txt disallows `nomisweb.co.uk/api/` for all agents, so since 12 Oct 2026 the four scripts that called it (`fetch-census-ethnicity`, `fetch-census-2011-ethnicity-age`, `fetch-census-2011-migration`, `fetch-economic-data`) stop there before any request and print the raw files already held and the ONS download for the same table, where one is identified. `tests/nomis-guard.test.ts` fails if any other file under `scripts/` mentions the dataset API.
 
 ## Key File Locations

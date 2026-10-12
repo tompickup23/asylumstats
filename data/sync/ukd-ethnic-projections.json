@@ -1,0 +1,13 @@
+{
+  "description": "Provenance of src/data/live/ethnic-projections.json: a byte-for-byte copy of the UK Demographics file at the commit below. Written by scripts/sync/sync-from-ukd.mjs; checked by its --check mode, scripts/audit/projection-integrity.mjs and tests/ukd-sync.test.ts.",
+  "source": {
+    "repository": "tompickup23/ukdemographics",
+    "commit": "643f9b3cf76a1575c3e8ff8291dac20da34e320e",
+    "committedAt": "2026-10-12T10:27:35+01:00",
+    "path": "src/data/live/ethnic-projections.json"
+  },
+  "sha256": "5792e340c3864dd1fc9b39ab7bb37b6a12b935326a0a0d12ef8d98f213645fe9",
+  "bytes": 4573366,
+  "areas": 318,
+  "syncedAt": "2026-10-12"
+}

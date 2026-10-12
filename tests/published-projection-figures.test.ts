@@ -6,6 +6,10 @@ import {
   nationalWhiteBritishShare,
   distinctAreaCodes,
   RETIRED_AREA_CODES,
+  PROJECTION_CODE_ALIASES,
+  projectionCode,
+  getEthnicProjection,
+  meanWhiteBritishShare,
   whiteBritishCrossingRange,
   nationalGroupShare,
 } from "../src/lib/ethnic-projections";
@@ -99,8 +103,8 @@ describe("the model's own accuracy figures come from the validation file", () =>
 });
 
 describe("the area count is the distinct authorities, not the raw keys", () => {
-  it("drops the retired duplicate codes and nothing else", () => {
-    // Barnsley and Sheffield each appear twice. Sheffield falls below 50% under
+  it("drops the alias codes and nothing else", () => {
+    // Barnsley and Sheffield used to appear twice. Sheffield fell below 50% under
     // both codes, so counting raw keys published 87 areas where the truth was 86.
     const raw = Object.keys(areas);
     const distinct = distinctAreaCodes();
@@ -108,7 +112,22 @@ describe("the area count is the distinct authorities, not the raw keys", () => {
     expect(distinct.length).toBe(raw.length - retiredPresent.length);
     for (const code of distinct) expect(RETIRED_AREA_CODES.has(code), code).toBe(false);
     expect(new Set(distinct).size).toBe(distinct.length);
-    expect(RETIRED_AREA_CODES.has("E08000019")).toBe(true);
+  });
+
+  it("finds Barnsley and Sheffield under either code, once", () => {
+    // The place pages are keyed on the Home Office codes (E08000038, E08000039);
+    // the projection file on the ONS ones. Each alias resolves to a record that
+    // is counted as a distinct authority, and the alias itself never is.
+    for (const [alias, code] of Object.entries(PROJECTION_CODE_ALIASES)) {
+      expect(RETIRED_AREA_CODES.has(alias), alias).toBe(true);
+      expect(RETIRED_AREA_CODES.has(code), code).toBe(false);
+      expect(getEthnicProjection(alias), alias).not.toBeNull();
+      expect(getEthnicProjection(alias)).toBe(getEthnicProjection(code));
+      expect(distinctAreaCodes().filter((c) => projectionCode(c) === code)).toEqual([code]);
+      const both = meanWhiteBritishShare([alias, code], 2051);
+      const one = meanWhiteBritishShare([code], 2051);
+      expect(both).toEqual(one);
+    }
   });
 });
 
