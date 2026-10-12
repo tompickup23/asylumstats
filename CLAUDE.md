@@ -36,6 +36,7 @@ src/data/mock/      → editorial content  → overview.json (official KPIs), re
 ### Shared Utilities
 
 - `scripts/lib/csv-parser.mjs` — RFC 4180 CSV parser, `readCsv()`, `fileSha256()`, `hashId()`. Used by both transform scripts.
+- `scripts/lib/nomis-guard.mjs`: `refuseNomisDatasetApi()`. Nomis's robots.txt disallows `nomisweb.co.uk/api/` for all agents, so since 12 Oct 2026 the four scripts that called it (`fetch-census-ethnicity`, `fetch-census-2011-ethnicity-age`, `fetch-census-2011-migration`, `fetch-economic-data`) stop there before any request and print the raw files already held and the ONS download for the same table, where one is identified. `tests/nomis-guard.test.ts` fails if any other file under `scripts/` mentions the dataset API.
 
 ## Key File Locations
 
