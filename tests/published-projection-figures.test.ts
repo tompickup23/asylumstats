@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   areasBelowFiftyBy,
@@ -291,9 +291,27 @@ describe("the same metric reads the same on every page that prints it", () => {
     const [f21, f51] = grab(finding, /the share is (\d+\.\d)% in 2021 and (\d+\.\d)% by 2051/, "finding national share");
     expect(oneDecimal(now).has(f21), `finding 2021 ${f21}`).toBe(true);
     expect(oneDecimal(then).has(f51), `finding 2051 ${f51}`).toBe(true);
-    const [t21, t51] = grab(teaser, /(\d+\.\d) -> (\d+\.\d)%/, "teaser national share");
-    expect(oneDecimal(now).has(t21), `teaser 2021 ${t21}`).toBe(true);
-    expect(oneDecimal(then).has(t51), `teaser 2051 ${t51}`).toBe(true);
+    // The teaser no longer types the share: it prints the sparkline's own points.
+    // The rendered check below compares the two on the built homepage.
+    expect(teaser, "the teaser types the national share again").not.toMatch(/\d+\.\d -> \d+\.\d%/);
+  });
+
+  const builtHome = join(root, "dist", "index.html");
+  it.skipIf(!existsSync(builtHome))("prints one 2051 share in the teaser, the sparkline's", () => {
+    // The teaser showed 55.0% in its stat beside a sparkline showing 55.1% for the
+    // same 2051 share: one typed and truncated, one derived and rounded.
+    const html = readFileSync(builtHome, "utf8");
+    const section = html.slice(html.indexOf('class="sister-teaser'), html.indexOf("</section>", html.indexOf('class="sister-teaser')));
+    const labels = new Map(
+      [...section.matchAll(/<span class="ss-year"[^>]*>(\d{4})<\/span>\s*<span class="ss-pct"[^>]*>(\d+\.\d)%<\/span>/g)].map((m) => [m[1], m[2]])
+    );
+    const hero = section.match(/class="st-stat-value"[^>]*>(\d+\.\d) (?:&rarr;|\u2192) (\d+\.\d)%</);
+    expect(labels.get("2021"), "sparkline 2021 label").toBeTruthy();
+    expect(labels.get("2051"), "sparkline 2051 label").toBeTruthy();
+    expect(hero, "teaser hero stat").toBeTruthy();
+    expect(hero![1]).toBe(labels.get("2021"));
+    expect(hero![2]).toBe(labels.get("2051"));
+    expect(hero![2]).toBe(nationalWhiteBritishShare(2051)!.pct.toFixed(1));
   });
 
   /**
