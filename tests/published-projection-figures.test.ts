@@ -9,6 +9,7 @@ import {
   whiteBritishCrossingRange,
   nationalGroupShare,
 } from "../src/lib/ethnic-projections";
+import { plausibleThrough } from "../src/lib/projection-plausibility";
 import rawProjections from "../src/data/live/ethnic-projections.json";
 import validation from "../src/data/live/out-of-sample-validation.json";
 
@@ -29,19 +30,62 @@ const read = (p: string) => readFileSync(join(root, p), "utf8");
  *   1. every figure the site publishes about this model reproduces from the data
  *   2. the same metric carries the same value on every page that prints it
  *   3. the withdrawn CLAIM cannot come back, in words as well as in digits
+ *
+ * No figure from one model run is typed into the checks for 1 and 2. Each one
+ * compares a number printed on a page against the data file or the helper the
+ * page prints from, or compares two derivations of the same quantity. A model
+ * re-run therefore passes if the prose moves with it, and fails, naming the
+ * sentence, if it does not. Before 12 October 2026 this file asserted 74.4, 55.1,
+ * 86, 59, 67, 92, 93, 318, 269, 1.56, 0.05 and 285 directly, so every re-run
+ * failed CI by design. Withdrawn and superseded figures (section 3) stay as
+ * literals: they are history, and the check is that they do not come back.
  */
 
-describe("the model's own accuracy figures come from the validation file", () => {
-  it("publishes the MAE the out-of-sample run actually measured", () => {
-    const mae = validation.summary.white_british.mae;
-    expect(mae.toFixed(2)).toBe("1.56");
-    expect(validation.summary.white_british.bias.toFixed(2)).toBe("0.05");
-    expect(validation.areasScored).toBe(285);
-  });
+const areas = rawProjections.areas as Record<string, any>;
+const wb = (code: string, year: number) => areas[code]?.projections?.[String(year)]?.white_british;
+const publishable = (code: string, year: number) => {
+  const through = plausibleThrough(areas[code]);
+  return wb(code, year) != null && through != null && through >= year;
+};
 
-  it("publishes the settings the out-of-sample run actually used", () => {
-    expect(validation.settings.SHRINK_K).toBe(25);
-    expect(validation.settings.CCR_CEILING).toBe(1.65);
+/** Prose with markdown emphasis, tags, entities and line wrapping taken out. Dated
+ * correction notices (blockquotes) are left out: they record what was true on
+ * their date and must not move with the data. */
+const prose = (text: string) =>
+  text
+    .split("\n")
+    .filter((line) => !line.trimStart().startsWith(">"))
+    .join("\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&rarr;/g, "->")
+    .replace(/\*\*/g, "")
+    .replace(/\s+/g, " ");
+
+/** Every capture of `re` in `text`, failing loudly if the sentence has gone. */
+const grab = (text: string, re: RegExp, label: string): string[] => {
+  const m = text.match(re);
+  if (!m) throw new Error(`${label}: sentence not found (${re}). Update this test with the prose.`);
+  return m.slice(1);
+};
+
+/**
+ * A share printed to one decimal. The finding and the teaser truncate (55.06
+ * reads 55.0) where the homepage rounds (55.1), so either reading of the same
+ * value is accepted, and nothing further from it than that.
+ */
+const oneDecimal = (pct: number) =>
+  new Set([(Math.trunc(pct * 10) / 10).toFixed(1), pct.toFixed(1)]);
+
+describe("the model's own accuracy figures come from the validation file", () => {
+  it("holds a summary consistent with the run it describes", () => {
+    const s = validation.summary.white_british;
+    expect(s.n).toBe(validation.areasScored);
+    expect(s.overPredict + s.underPredict).toBeLessThanOrEqual(s.n);
+    expect(s.mae).toBeGreaterThan(0);
+    // A mean absolute error can never be smaller than the size of the mean error.
+    expect(s.mae).toBeGreaterThanOrEqual(Math.abs(s.bias));
+    expect(s.p10).toBeLessThanOrEqual(s.median);
+    expect(s.median).toBeLessThanOrEqual(s.p90);
   });
 
   it("describes the fit it ran, not a different one", () => {
@@ -54,45 +98,58 @@ describe("the model's own accuracy figures come from the validation file", () =>
 });
 
 describe("the area count is the distinct authorities, not the raw keys", () => {
-  it("drops the retired duplicate codes", () => {
+  it("drops the retired duplicate codes and nothing else", () => {
     // Barnsley and Sheffield each appear twice. Sheffield falls below 50% under
-    // both codes, so counting raw keys publishes 87 areas where the truth is 86.
-    expect(Object.keys(rawProjections.areas)).toHaveLength(320);
-    expect(distinctAreaCodes()).toHaveLength(318);
+    // both codes, so counting raw keys published 87 areas where the truth was 86.
+    const raw = Object.keys(areas);
+    const distinct = distinctAreaCodes();
+    const retiredPresent = raw.filter((c) => RETIRED_AREA_CODES.has(c));
+    expect(distinct.length).toBe(raw.length - retiredPresent.length);
+    for (const code of distinct) expect(RETIRED_AREA_CODES.has(code), code).toBe(false);
+    expect(new Set(distinct).size).toBe(distinct.length);
     expect(RETIRED_AREA_CODES.has("E08000019")).toBe(true);
   });
 });
 
 describe("the published counts reproduce from the projection file", () => {
-  it("puts 86 authorities below 50% by 2051, 59 of them majority today", () => {
-    const { total, majorityToday } = areasBelowFiftyBy(2051);
-    expect(total).toBe(86);
-    expect(majorityToday).toBe(59);
-  });
-
-  it("puts 67 below 50% by 2041", () => {
-    expect(areasBelowFiftyBy(2041).total).toBe(67);
+  it("counts the distinct authorities below 50%, guarded, by a direct scan", () => {
+    for (const year of [2031, 2041, 2051, 2061]) {
+      const scored = distinctAreaCodes().filter((c) => wb(c, year) != null);
+      const below = scored.filter((c) => wb(c, year) < 50);
+      const guarded = below.filter((c) => publishable(c, year));
+      const today = guarded.filter((c) => (areas[c].current?.groups?.white_british ?? 0) >= 50);
+      const result = areasBelowFiftyBy(year);
+      expect(result.areasScored, String(year)).toBe(scored.length);
+      expect(result.beforeGuard, String(year)).toBe(below.length);
+      expect(result.total, String(year)).toBe(guarded.length);
+      expect(result.majorityToday, String(year)).toBe(today.length);
+    }
   });
 
   it("applies the plausibility guard to the count", () => {
-    // Six London boroughs have a withheld 2051 projection. Their place pages do
-    // not show it, so no aggregate may count it: without the guard this is 92.
-    const withheld = ["E09000010", "E09000003", "E09000014", "E09000022", "E09000019", "E09000012"];
-    const naive = distinctAreaCodes().filter((code) => {
-      const share = (rawProjections.areas as any)[code]?.projections?.["2051"]?.white_british;
-      return share != null && share < 50;
-    });
-    expect(naive.length).toBe(92);
-    for (const code of withheld) expect(naive).toContain(code);
+    // Some areas have a withheld 2051 projection. Their place pages do not show
+    // it, so no aggregate may count it.
+    const at2051 = areasBelowFiftyBy(2051);
+    const withheld = distinctAreaCodes().filter((c) => wb(c, 2051) != null && wb(c, 2051) < 50 && !publishable(c, 2051));
+    expect(withheld.length).toBeGreaterThan(0);
+    expect(at2051.withheld).toBe(withheld.length);
+    expect(at2051.total).toBe(at2051.beforeGuard - withheld.length);
   });
 
-  it("weights the national share to 74.4% in 2021 and 55.0% by 2051", () => {
-    expect(nationalWhiteBritishShare(2021)!.pct.toFixed(1)).toBe("74.4");
-    expect(nationalWhiteBritishShare(2051)!.pct.toFixed(1)).toBe("55.1");
-    // The finding truncates to one decimal, as the sister site does, so it reads
-    // 55.0. Assert the underlying value rather than the rendering convention.
-    expect(nationalWhiteBritishShare(2051)!.pct).toBeGreaterThan(55.0);
-    expect(nationalWhiteBritishShare(2051)!.pct).toBeLessThan(55.1);
+  it("weights the national share by population, by a direct scan", () => {
+    // Projected years weight each area's share by its 2021 population, across
+    // every distinct area that has the year, guarded or not (see the helper).
+    for (const year of [2031, 2041, 2051]) {
+      let num = 0;
+      let den = 0;
+      for (const code of distinctAreaCodes()) {
+        const pop = areas[code].current?.total_population ?? 0;
+        if (!pop || wb(code, year) == null) continue;
+        num += wb(code, year) * pop;
+        den += pop;
+      }
+      expect(nationalWhiteBritishShare(year)!.pct, String(year)).toBeCloseTo(num / den, 9);
+    }
   });
 
   /**
@@ -103,7 +160,6 @@ describe("the published counts reproduce from the projection file", () => {
    * those only pinned 2021 and 2051.
    */
   it("weights an observed year by its own population, not by 2021's", () => {
-    const areas = rawProjections.areas as Record<string, any>;
     const sum = (year: number) => {
       let people = 0;
       let whiteBritish = 0;
@@ -130,14 +186,36 @@ describe("the published counts reproduce from the projection file", () => {
 });
 
 describe("the same metric reads the same on every page that prints it", () => {
-  const finding = read("src/content/findings/86-areas-minority-wbi-2051.md");
-  const teaser = read("src/components/SisterSiteTeaser.astro");
-  const methodology = read("src/pages/methodology.astro");
+  const findingRaw = read("src/content/findings/86-areas-minority-wbi-2051.md");
+  const front = findingRaw.split("---")[1];
+  const finding = prose(findingRaw.split("---").slice(2).join("---"));
+  const teaser = prose(read("src/components/SisterSiteTeaser.astro"));
+  const methodology = prose(read("src/pages/methodology.astro"));
+  const index = prose(read("src/pages/index.astro"));
 
-  it("agrees on the 2051 count", () => {
-    const { total } = areasBelowFiftyBy(2051);
-    expect(finding).toContain(`${total} local authorities projected minority White British by 2051`);
-    expect(finding).toContain(`stat_value: "${total}"`);
+  it("agrees on the 2051 count and its split, in the frontmatter", () => {
+    const { total, majorityToday } = areasBelowFiftyBy(2051);
+    const [stat] = grab(front, /stat_value: "(\d+)"/, "stat_value");
+    const [headline] = grab(front, /headline: "(\d+) local authorities projected minority White British by 2051"/, "headline");
+    const [summary, split] = grab(
+      front, /summary: "(\d+) English local authorities[^"]*?(\d+) of those have a White British majority today/, "summary");
+    const [seoTitle] = grab(front, /seo_title: "(\d+) councils projected minority/, "seo_title");
+    const [seoDesc, seoSplit] = grab(
+      front, /seo_description: "(\d+) English local authorities[^"]*?(\d+) of them have a White British majority today/, "seo_description");
+    for (const [label, n] of [["stat_value", stat], ["headline", headline], ["summary", summary], ["seo_title", seoTitle], ["seo_description", seoDesc]]) {
+      expect(Number(n), label).toBe(total);
+    }
+    expect(Number(split), "summary split").toBe(majorityToday);
+    expect(Number(seoSplit), "seo split").toBe(majorityToday);
+  });
+
+  it("agrees on the counts by year and the split, in the finding's body", () => {
+    const [by2041, by2051] = grab(finding, /(\d+) by 2041\. (\d+) by 2051\./, "counts by year");
+    expect(Number(by2041), "2041").toBe(areasBelowFiftyBy(2041).total);
+    expect(Number(by2051), "2051").toBe(areasBelowFiftyBy(2051).total);
+    const [ofThe, have] = grab(finding, /Of the (\d+), (\d+) have a White British majority today/, "split");
+    expect(Number(ofThe)).toBe(areasBelowFiftyBy(2051).total);
+    expect(Number(have)).toBe(areasBelowFiftyBy(2051).majorityToday);
   });
 
   /**
@@ -168,14 +246,22 @@ describe("the same metric reads the same on every page that prints it", () => {
   });
 
   it("prints no unguarded or undeduplicated variant of the count", () => {
-    // 92 is the count deduplicated but unguarded, 93 neither, 87 guarded but not
-    // deduplicated. None of the three may appear beside this claim on any page.
+    // The three wrong counts, derived rather than typed: deduplicated but
+    // unguarded, neither, and guarded but not deduplicated. None may appear
+    // beside this claim on any page.
+    const at2051 = areasBelowFiftyBy(2051);
+    const allKeys = Object.keys(areas);
+    const rawBelow = allKeys.filter((c) => wb(c, 2051) != null && wb(c, 2051) < 50);
+    const retiredGuarded = rawBelow.filter((c) => RETIRED_AREA_CODES.has(c) && publishable(c, 2051)).length;
+    const wrong = new Set([at2051.beforeGuard, rawBelow.length, at2051.total + retiredGuarded]);
+    wrong.delete(at2051.total);
+    expect(wrong.size).toBeGreaterThan(0);
     const offenders: string[] = [];
     for (const file of ["src/pages/national.astro", "src/pages/index.astro", "src/components/SisterSiteTeaser.astro"]) {
       const text = read(file);
-      for (const wrong of [87, 92, 93]) {
-        if (new RegExp(`${wrong}\\s+(areas|local authorities|councils)`).test(text)) {
-          offenders.push(`${file}: ${wrong}`);
+      for (const n of wrong) {
+        if (new RegExp(`\\b${n}\\s+(areas|local authorities|councils)`).test(text)) {
+          offenders.push(`${file}: ${n}`);
         }
       }
     }
@@ -183,8 +269,14 @@ describe("the same metric reads the same on every page that prints it", () => {
   });
 
   it("agrees on the national share", () => {
-    expect(finding).toContain("74.4% in 2021");
-    expect(teaser).toContain("74.4 &rarr; 55.0%");
+    const now = nationalWhiteBritishShare(2021)!.pct;
+    const then = nationalWhiteBritishShare(2051)!.pct;
+    const [f21, f51] = grab(finding, /the share is (\d+\.\d)% in 2021 and (\d+\.\d)% by 2051/, "finding national share");
+    expect(oneDecimal(now).has(f21), `finding 2021 ${f21}`).toBe(true);
+    expect(oneDecimal(then).has(f51), `finding 2051 ${f51}`).toBe(true);
+    const [t21, t51] = grab(teaser, /(\d+\.\d) -> (\d+\.\d)%/, "teaser national share");
+    expect(oneDecimal(now).has(t21), `teaser 2021 ${t21}`).toBe(true);
+    expect(oneDecimal(then).has(t51), `teaser 2051 ${t51}`).toBe(true);
   });
 
   /**
@@ -222,10 +314,34 @@ describe("the same metric reads the same on every page that prints it", () => {
     expect(methodology).toContain(`${n} local authorities`);
   });
 
-  it("agrees on the accuracy figure", () => {
-    for (const [name, page] of [["teaser", teaser], ["methodology", methodology]] as const) {
-      expect(page, name).toContain("1.56pp");
+  it("agrees on the accuracy figures with the validation file", () => {
+    const s = validation.summary.white_british;
+    const mae = `${s.mae.toFixed(2)}pp`;
+    const bias = `${s.bias >= 0 ? "+" : ""}${s.bias.toFixed(2)}`;
+    for (const [name, page] of [["teaser", teaser], ["methodology", methodology], ["index", index], ["finding", finding]] as const) {
+      expect(page, name).toContain(mae);
     }
+    const [fMae, fBias, fAreas] = grab(finding, /\(MAE (\d\.\d\d)pp, bias ([+-]\d\.\d\d)pp across (\d+) areas\)/, "finding source line");
+    expect(`${fMae}pp`).toBe(mae);
+    expect(fBias).toBe(bias);
+    expect(Number(fAreas)).toBe(validation.areasScored);
+    const [fMean] = grab(finding, /mean error of ([+-]\d\.\d\d) percentage points/, "finding mean error");
+    expect(fMean).toBe(bias);
+    const [mMae, mBias, mAreas] = grab(
+      methodology, /forecasting 2021: MAE (\d\.\d\d)pp on the White British share, bias ([+-]\d\.\d\d)pp, across (\d+) areas/,
+      "methodology model summary");
+    expect(`${mMae}pp`).toBe(mae);
+    expect(mBias).toBe(bias);
+    expect(Number(mAreas)).toBe(validation.areasScored);
+  });
+
+  it("agrees on the model settings with the validation file", () => {
+    const { SHRINK_K, CCR_CEILING } = validation.settings;
+    const [k, ceiling] = grab(methodology, /cell size \(K=(\d+)\) and capped at a growth ceiling of (\d+\.\d+) per decade/, "methodology settings");
+    expect(Number(k)).toBe(SHRINK_K);
+    expect(Number(ceiling)).toBe(CCR_CEILING);
+    const [fCeiling] = grab(finding, /capped at (\d+\.\d+) growth per decade/, "finding ceiling");
+    expect(Number(fCeiling)).toBe(CCR_CEILING);
   });
 });
 
@@ -426,9 +542,15 @@ describe("a published crossing year carries its sensitivity range", () => {
  * wrong, too visible to be right, and printed next to the other value.
  */
 describe("a national aggregate is derived once, not per page", () => {
-  it("rounds to the share the other surfaces publish", () => {
-    expect(nationalGroupShare("white_british", 2021)!.pct.toFixed(1)).toBe("74.4");
-    expect(nationalGroupShare("white_british", 2051)!.pct.toFixed(1)).toBe("55.1");
+  it("aggregates over the distinct authorities, never the raw keys", () => {
+    // The chart's 74.5% against everyone else's 74.4% was the raw keys: Sheffield
+    // and Barnsley counted twice. The helper may cover fewer areas than the
+    // distinct set (an area missing a year), never more.
+    for (const year of [2021, 2051]) {
+      expect(nationalGroupShare("white_british", year)!.areas, String(year)).toBeLessThanOrEqual(
+        distinctAreaCodes().length
+      );
+    }
   });
 
   it("agrees with the White British wrapper on every published year", () => {
@@ -475,8 +597,10 @@ describe("a national aggregate is derived once, not per page", () => {
  */
 describe("a count carries the denominator it was taken over", () => {
   it("scores 2061 over fewer authorities than 2051", () => {
-    expect(areasBelowFiftyBy(2051).areasScored).toBe(318);
-    expect(areasBelowFiftyBy(2061).areasScored).toBe(269);
+    const scored = (year: number) => distinctAreaCodes().filter((c) => wb(c, year) != null).length;
+    expect(areasBelowFiftyBy(2051).areasScored).toBe(scored(2051));
+    expect(areasBelowFiftyBy(2061).areasScored).toBe(scored(2061));
+    expect(areasBelowFiftyBy(2061).areasScored).toBeLessThan(areasBelowFiftyBy(2051).areasScored);
   });
 
   it("says so wherever both years are printed together", () => {
@@ -487,24 +611,20 @@ describe("a count carries the denominator it was taken over", () => {
 
   it("publishes the guard gap, because the guard only removes areas below 50%", () => {
     const at2051 = areasBelowFiftyBy(2051);
-    expect(at2051.total).toBe(86);
-    expect(at2051.beforeGuard).toBe(92);
-    expect(at2051.withheld).toBe(6);
+    expect(at2051.withheld).toBeGreaterThan(0);
+    expect(at2051.total + at2051.withheld).toBe(at2051.beforeGuard);
     // A lower bound, never above the model's own count.
     expect(at2051.total).toBeLessThanOrEqual(at2051.beforeGuard);
     expect(read("src/pages/index.astro")).toContain("beforeGuard");
   });
 
-  it("does not make 93 defensible: it counts one authority twice", () => {
+  it("does not make the raw-key count defensible: it counts an authority twice", () => {
     // Sheffield falls below 50% under both its retired and its current code, so
-    // the raw key count is the deduplicated count plus one. Whatever view is taken
-    // of the guard, double-counting an authority is not a view.
-    const raw = Object.keys(rawProjections.areas).filter((code) => {
-      const share = (rawProjections.areas as any)[code]?.projections?.["2051"]?.white_british;
-      return share != null && share < 50;
-    });
-    expect(raw.length).toBe(93);
-    expect(raw.length - areasBelowFiftyBy(2051).beforeGuard).toBe(1);
-    expect(raw).toContain("E08000019");
+    // the raw key count exceeds the deduplicated one by the retired codes below
+    // 50%. Whatever view is taken of the guard, double-counting an authority is
+    // not a view.
+    const raw = Object.keys(areas).filter((c) => wb(c, 2051) != null && wb(c, 2051) < 50);
+    const retiredBelow = raw.filter((c) => RETIRED_AREA_CODES.has(c)).length;
+    expect(raw.length - areasBelowFiftyBy(2051).beforeGuard).toBe(retiredBelow);
   });
 });
