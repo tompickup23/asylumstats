@@ -1,5 +1,6 @@
 import rawProjections from "../data/live/ethnic-projections.json";
 import validation from "../data/live/out-of-sample-validation.json";
+import censusManifest from "../../data/raw/manifests/census_ethnic_groups.json";
 import { plausibleThrough } from "./projection-plausibility";
 
 export interface EthnicGroup {
@@ -234,6 +235,20 @@ export function nationalGroupShare(
   group: keyof EthnicGroup,
   year: number
 ): { pct: number; areas: number } | null {
+  // 2011 is England and Wales as a whole, from Census 2011 KS201EW: every local
+  // authority on 2011 boundaries, as recorded from the extract the Census fields
+  // were rebased on (data/raw/manifests/census_ethnic_groups.json). Summing the
+  // area records instead would either leave out the eleven authorities created
+  // after 2011, which have no 2011 record here, or, as this did until October
+  // 2026, count their 2021 Census inside the 2011 figure.
+  if (year === 2011) {
+    const ew = (censusManifest as unknown as {
+      englandAndWales?: Record<string, { areas: number; total: number; groups: Record<string, number> }>;
+    }).englandAndWales?.["2011"];
+    if (!ew || !(ew.total > 0) || ew.groups[group] == null) return null;
+    return { pct: (ew.groups[group] / ew.total) * 100, areas: ew.areas };
+  }
+
   let weighted = 0;
   let population = 0;
   let areas = 0;
@@ -243,13 +258,11 @@ export function nationalGroupShare(
     const pop = area?.current?.total_population ?? 0;
     if (!pop) continue;
 
-    // An observed year is weighted by its OWN population, not by 2021's. Applying 2021
-    // weights to the 2011 Census returns 80.0% where the observed share across these areas
-    // is 80.2%, and the homepage labels that row "2011 Census". A projected year has no
+    // An observed year is weighted by its OWN population, not by 2021's. 2011 is
+    // handled above; 2021 sums the areas' Census counts. A projected year has no
     // population of its own, so it uses 2021 weights, which is the method the findings state.
-    if (year === 2011 || year === 2021) {
-      const absolute =
-        year === 2011 ? area.baseline?.groups_absolute : area.current?.groups_absolute;
+    if (year === 2021) {
+      const absolute = area.current?.groups_absolute;
       if (!absolute) continue;
       const total = Object.values(absolute).reduce((sum, n) => sum + n, 0);
       if (!total) continue;

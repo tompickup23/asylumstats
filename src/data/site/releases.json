@@ -1,5 +1,11 @@
 [
   {
+    "date": "2026-10-12",
+    "title": "Correction: the 2011 White British share on the homepage",
+    "summary": "The homepage gave the White British share of England and Wales at the 2011 Census as 80.2%. It summed the 2011 figures of the local authority records this site holds, and for the eleven authorities created after 2011, which have no 2011 record, that sum used their 2021 Census instead. Census 2011 table KS201EW gives 45,134,686 White British residents of 56,075,912 in England and Wales, 80.5%, which is the figure the homepage now shows, read from the England and Wales totals of the same Census extract the site's area figures come from. The 2021 figure, 74.4%, does not change.",
+    "sourceUrl": "https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/ethnicity/bulletins/ethnicgroupenglandandwales/census2021"
+  },
+  {
     "date": "2026-10-07",
     "title": "Correction: December 2022 figures for 29 places, and broken place links",
     "summary": "The quarterly trend on 29 place pages showed wrong figures for 31 December 2022. The largest errors were Kingston upon Hull, shown as 4,777 where the Home Office gives 942; Aberdeen City, 486 against 107; and York, 40 against 357. The other 26 were in the North East, Yorkshire and the Humber, Scotland and Northern Ireland. The series is built from the North West Regional Strategic Migration Partnership's workbooks, which republish the Home Office table, and these figures came from an earlier edition; we have not established whether the error was in that edition or in how this site read it. Every one of the 12,408 points in the series now matches the Home Office's own table (Asy_D11, year ending June 2026), and every refresh now checks the latest quarter against the Home Office table for each authority before it goes live. A failing check had also held the site on its 28 September build until 7 October; it now carries the figures to 30 June 2026. Separately, the eight \"Top areas\" cards on /places/ and some place links on supplier pages pointed at addresses that did not exist, and are fixed. The table behind every place page can now be downloaded as a CSV from /places/.",
