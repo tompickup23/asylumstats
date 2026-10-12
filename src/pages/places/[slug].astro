@@ -28,10 +28,10 @@ import {
   getShiftShareData, getDiversityIndex, getEnglishProficiency,
   getMigrationProfile, getSocioeconomicData
 } from "../../lib/ethnic-projections";
-import { getCrimeProfile, getCrimeRatePercentile } from "../../lib/crime-data";
-import { getSendProfile, getSendGrowthPercentile } from "../../lib/send-data";
-import { getAscProfile, getAscSpendPercentile } from "../../lib/asc-data";
+import { getSendForArea, getSendGrowthPercentile, getSendSource, getSendCaveat } from "../../lib/send-data";
+import { getAscForArea, getAscSpendPercentile, getAscSource, getAscCaveat } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
+import { ordinal } from "../../lib/ordinal";
 import { consistentBand, consistentBandSeries } from "../../lib/projection-consistency";
 import { whiteBritishShareRange } from "../../lib/ethnic-projections";
 import { plausibleThrough, isTruncated, publishableValue } from "../../lib/projection-plausibility";
@@ -211,12 +211,14 @@ const natChartLines = nativityData ? (() => {
     { label: "Foreign-born", color: "#b45309", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
   ];
 })() : [];
-const crimeProfile = getCrimeProfile(area.areaCode);
-const crimePercentile = getCrimeRatePercentile(area.areaCode);
-const sendProfile = getSendProfile(area.areaCode);
-const sendPercentile = getSendGrowthPercentile(area.areaCode);
-const ascProfile = getAscProfile(area.areaCode);
-const ascPercentile = getAscSpendPercentile(area.areaCode);
+// SEND and adult social care are run by upper-tier councils: a two-tier district
+// shows its county's figures and percentile, labelled as the county's.
+const sendFor = getSendForArea(area.areaCode);
+const sendProfile = sendFor?.profile ?? null;
+const sendPercentile = sendFor ? getSendGrowthPercentile(sendFor.councilCode) : null;
+const ascFor = getAscForArea(area.areaCode);
+const ascProfile = ascFor?.profile ?? null;
+const ascPercentile = ascFor ? getAscSpendPercentile(ascFor.councilCode) : null;
 // Per-area cost, reinstated on the True Cost v3 constant.
 //
 // Withheld since PR #36 because the base was disputed. It is settled now, but the fix
@@ -298,7 +300,7 @@ const placeSections = [
   { id: "local-numbers", label: "Local numbers" },
   ...(ethnicProjection ? [{ id: "tabpanel-demographics", label: "Demographics" }] : []),
   ...(socioData?.economicActivity ? [{ id: "tabpanel-economy", label: "Economy" }] : []),
-  ...((crimeProfile || sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
+  ...((sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
   { id: "tabpanel-benchmarks", label: "Benchmarks" }
 ];
 
@@ -553,7 +555,7 @@ const areaCountyName =
     <div class="tab-bar" role="tablist">
       {ethnicProjection && <button role="tab" type="button" class="tab-btn" aria-selected="true" aria-controls="tabpanel-demographics" data-tab="demographics">Demographics</button>}
       {(socioData?.economicActivity || ethnicProjection?.schoolEthnicity) && <button role="tab" type="button" class="tab-btn" aria-selected={!ethnicProjection ? "true" : "false"} aria-controls="tabpanel-economy" data-tab="economy">Economy</button>}
-      {(crimeProfile || sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
+      {(sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
       <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-benchmarks" data-tab="benchmarks">Benchmarks</button>
     </div>
 
@@ -913,84 +915,24 @@ const areaCountyName =
     <!-- TAB: Services -->
     <div id="tabpanel-services" role="tabpanel" class="tab-panel" data-tab-panel="services" hidden>
 
-  {crimeProfile && (
-    <section id="crime-profile" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Crime</h2>
-          <p class="lede">
-            {crimeProfile.totalCrimeRate.toFixed(1)} crimes per 1,000 residents
-            {crimePercentile !== null ? ` (${crimePercentile}th percentile)` : ""}.
-            {crimeProfile.yearOnYearChange !== 0
-              ? ` ${crimeProfile.yearOnYearChange > 0 ? "Up" : "Down"} ${Math.abs(crimeProfile.yearOnYearChange).toFixed(1)}% year-on-year.`
-              : ""}
-          </p>
-        </div>
-      </div>
-      <div class="grid-2">
-        <article class="feature-card">
-          <h3>Crime breakdown</h3>
-          <div class="stacked-bars">
-            {crimeProfile.breakdown.map((item) => {
-              const maxRate = Math.max(...crimeProfile.breakdown.map((b) => b.rate));
-              return (
-                <div class="stacked-bar-row">
-                  <div class="stacked-bar-label" style="min-width: 8rem;">
-                    <span style="font-size: 0.78rem;">{item.type}</span>
-                  </div>
-                  <div class="stacked-bar" style="background: var(--bg-subtle);">
-                    <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
-                  </div>
-                  <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
-                </div>
-              );
-            })}
-          </div>
-        </article>
-        <article class="feature-card">
-          <h3>Key metrics</h3>
-          <div class="metric-list">
-            <div class="metric-item">
-              <span class="metric-value">{crimeProfile.totalCrimeRate.toFixed(1)}</span>
-              <span class="metric-label">Per 1,000 residents</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">{crimeProfile.hateCrimeCount.toLocaleString()}</span>
-              <span class="metric-label">Hate crimes</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">{crimeProfile.violentCrimeRate.toFixed(1)}</span>
-              <span class="metric-label">Violent crime /1,000</span>
-            </div>
-          </div>
-          <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">ONS recorded crime, {crimeProfile.period}. Correlation with asylum dispersal does not imply causation.</p>
-          </details>
-        </article>
-      </div>
-    </section>
-  )}
-
   <!-- SEND -->
   {sendProfile && (
     <section id="send-profile" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>SEND pressure</h2>
+          <h2>Special educational needs</h2>
+          {sendFor?.viaCounty && (
+            <p class="tiny">SEND for {area.areaName} pupils is run by {sendFor.viaCounty.countyName} County Council. The figures below are the county's.</p>
+          )}
           <p class="lede">
-            EHCP rate: {sendProfile.ehcpRatePer10k} per 10,000 pupils{sendPercentile !== null ? ` (${sendPercentile}th percentile)` : ""}.
-            5-year growth: +{sendProfile.fiveYearGrowthPct.toFixed(1)}%.
+            {sendProfile.ehcpPctOfPupils != null ? `${sendProfile.ehcpPctOfPupils.toFixed(1)}% of pupils have an EHC plan, ${sendProfile.period}.` : `Pupils with an EHC plan, ${sendProfile.period}.`}
+            {sendProfile.fiveYearGrowthPct != null ? ` Five-year growth: +${sendProfile.fiveYearGrowthPct.toFixed(1)}%${sendPercentile !== null ? ` (${ordinal(sendPercentile)} percentile of councils)` : ""}.` : ""}
           </p>
         </div>
       </div>
       <div class="grid-2">
         <article class="feature-card">
-          <div class="chip-row">
-            <span class="chip accent">{sendProfile.period}</span>
-            {sendProfile.fiveYearGrowthPct > 40 && <span class="chip coral">Rapid growth</span>}
-          </div>
-          <h3>Primary need types</h3>
+          <h3>Primary need, share of pupils with an EHC plan</h3>
           <div class="stacked-bars">
             {sendProfile.primaryNeeds.filter((n) => n.pct > 5).map((need) => (
               <div class="stacked-bar-row">
@@ -1009,17 +951,19 @@ const areaCountyName =
           <h3>Key metrics</h3>
           <div class="metric-list">
             <div class="metric-item">
-              <span class="metric-value">{sendProfile.totalEhcps.toLocaleString()}</span>
-              <span class="metric-label">Total EHCPs</span>
+              <span class="metric-value">{sendProfile.ehcpPupils.toLocaleString()}</span>
+              <span class="metric-label">Pupils with an EHC plan</span>
             </div>
-            <div class="metric-item">
-              <span class="metric-value">{sendProfile.asdPrevalencePct.toFixed(1)}%</span>
-              <span class="metric-label">ASD as primary need</span>
-            </div>
+            {sendProfile.asdPrevalencePct != null && (
+              <div class="metric-item">
+                <span class="metric-value">{sendProfile.asdPrevalencePct.toFixed(1)}%</span>
+                <span class="metric-label">Autism as primary need</span>
+              </div>
+            )}
           </div>
           <details class="method-note">
             <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">DfE SEN2 return, {sendProfile.period}. Rising EHCPs reflect multiple factors, not solely population change.</p>
+            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">{getSendSource()}. {getSendCaveat()}</p>
           </details>
         </article>
       </div>
@@ -1031,34 +975,35 @@ const areaCountyName =
     <section id="asc-profile" class="section section-anchor">
       <div class="section-head">
         <div>
-          <h2>Social care</h2>
+          <h2>Adult social care</h2>
+          {ascFor?.viaCounty && (
+            <p class="tiny">Adult social care for {area.areaName} residents is run by {ascFor.viaCounty.countyName} County Council. The figures below are the county's.</p>
+          )}
           <p class="lede">
-            Adult social care: £{ascProfile.grossSpendPerCapita} per capita{ascPercentile !== null ? ` (${ascPercentile}th percentile)` : ""}.
+            {ascProfile.grossSpendPerCapita != null
+              ? `£${Math.round(ascProfile.grossSpendPerCapita).toLocaleString()} gross spend per resident aged 18 and over, ${ascProfile.grossSpendPeriod}${ascPercentile !== null ? ` (${ordinal(ascPercentile)} percentile of councils)` : ""}.`
+              : `No spend figure for ${ascProfile.grossSpendPeriod}.`}
           </p>
         </div>
       </div>
       <article class="feature-card">
         <div class="metric-list" style="grid-template-columns: repeat(2, 1fr);">
-          <div class="metric-item">
-            <span class="metric-value">£{ascProfile.grossSpendPerCapita}</span>
-            <span class="metric-label">Gross spend per capita</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-value">{ascProfile.residentialRatePer10k65}</span>
-            <span class="metric-label">Residential per 10k 65+</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-value">{ascProfile.qualityOfLifeScore.toFixed(1)}</span>
-            <span class="metric-label">Quality of life (ASCOF 1A)</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-value">{ascProfile.dtocDaysAnnual.toLocaleString()}</span>
-            <span class="metric-label">Delayed transfer days</span>
-          </div>
+          {ascProfile.grossSpendPerCapita != null && (
+            <div class="metric-item">
+              <span class="metric-value">£{Math.round(ascProfile.grossSpendPerCapita).toLocaleString()}</span>
+              <span class="metric-label">Gross spend per adult, {ascProfile.grossSpendPeriod}</span>
+            </div>
+          )}
+          {ascProfile.residentialRatePer10k65 != null && (
+            <div class="metric-item">
+              <span class="metric-value">{ascProfile.residentialRatePer10k65.toFixed(0)}</span>
+              <span class="metric-label">Aged 65+ in residential care per 10,000 aged 65+, {ascProfile.residentialPeriod}</span>
+            </div>
+          )}
         </div>
         <details class="method-note">
           <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-          <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">NHS Digital SALT/ASCOF, {ascProfile.period}.</p>
+          <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">{getAscSource()}. {getAscCaveat()}</p>
         </details>
       </article>
     </section>
@@ -1092,29 +1037,23 @@ const areaCountyName =
               <span class="metric-label">WB annual change</span>
             </div>
           )}
-          {pressureScore.components.crimeRate !== null && (
-            <div class="metric-item">
-              <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.crimeRate.toFixed(1)}</span>
-              <span class="metric-label">Crime /1,000</span>
-            </div>
-          )}
           {pressureScore.components.sendGrowth !== null && (
             <div class="metric-item">
               <span class="metric-value" style="font-size: 1.3rem;">+{pressureScore.components.sendGrowth.toFixed(1)}%</span>
-              <span class="metric-label">SEND 5yr growth</span>
+              <span class="metric-label">EHC plan 5yr growth</span>
             </div>
           )}
           {pressureScore.components.ascSpend !== null && (
             <div class="metric-item">
               <span class="metric-value" style="font-size: 1.3rem;">£{pressureScore.components.ascSpend}</span>
-              <span class="metric-label">ASC /capita</span>
+              <span class="metric-label">Social care £ per adult</span>
             </div>
           )}
         </div>
         <details class="method-note">
           <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Methodology</summary>
           <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-            Each domain converted to percentile rank (0-100). Composite = unweighted mean. Measures correlation, not causation.
+            Each domain is converted to a percentile rank from 0 to 100 against every authority holding it, and the score is their unweighted mean. Asylum support: Home Office local authority data. Demographic change: Census 2011 and 2021. SEND and adult social care: DfE and DHSC figures for the council that runs the service. The four domains are weighted equally. It measures pressures on councils that occur together, not causes.
           </p>
         </details>
       </article>

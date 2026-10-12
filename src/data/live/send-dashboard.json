@@ -1,758 +1,5723 @@
 {
-  "source": "Department for Education, Special educational needs in England, academic year 2023/24",
-  "methodology": "EHCP issuance counts from the SEN2 return. Rates calculated per 10,000 school-age population (5-16). Growth rates compare 2019/20 to 2023/24 academic years.",
-  "lastUpdated": "2026-04-10",
-  "caveat": "Rising EHCP numbers may reflect improved identification, changes in diagnostic criteria, increased parental awareness, or genuine prevalence changes. Comparison across areas must account for differences in assessment practice and local authority resources.",
+  "source": "DfE, Special educational needs in England, academic year 2025/26, published 11 June 2026, Explore Education Statistics: pupils in all schools by type of SEN provision, and pupils with an EHC plan by primary type of need",
+  "dataSets": [
+    {
+      "title": "Pupils in all schools, by type of SEN provision - 2016 to 2025 - 2026 format",
+      "id": "019df85e-ab00-7458-a4ff-b381997776cb",
+      "version": "1.1",
+      "published": "2026-06-11T08:30:27.204375+00:00"
+    },
+    {
+      "title": "Ethnicity by type of SEN provision and type of need - 2016 to 2025 - 2026 format",
+      "id": "019df85c-f5a6-7217-87ff-6ef033fc1e9c",
+      "version": "1.1",
+      "published": "2026-06-11T08:30:27.294498+00:00"
+    }
+  ],
+  "sourceUrl": "https://explore-education-statistics.service.gov.uk/find-statistics/special-educational-needs-in-england",
+  "lastUpdated": "2026-06-11",
+  "edition": "2025/26",
+  "growthBasePeriod": "2020/21",
+  "files": {
+    "provision": {
+      "fileName": "sen-api-provision_2025-26.json",
+      "fileSha256": "896d1598505bd0ca0c564cddc45e3a9ddd4a1d870c7d994df33eefd25f414773",
+      "dataSetId": "019df85e-ab00-7458-a4ff-b381997776cb"
+    },
+    "need": {
+      "fileName": "sen-api-need_2025-26.json",
+      "fileSha256": "7fdbb63d34d38e61232fae34794b02c969dbaf010835c6d6568cc07c2bdadb14",
+      "dataSetId": "019df85c-f5a6-7217-87ff-6ef033fc1e9c"
+    }
+  },
+  "methodology": "Pupils with an EHC plan and DfE's percentage of pupils, all schools, 2025/26, from the provision data set (school type, phase and hospital school totals). Five-year growth compares 2025/26 with 2020/21 in the same data set. Primary need is the share of pupils with an EHC plan in each primary type of need, from the ethnicity data set at its ethnicity and phase totals, which covers state-funded and non-maintained special schools only.",
+  "caveat": "SEND is run by upper-tier councils, so district pages show their county. Figures count pupils on the January school census who have an EHC plan; plans held by children under school age, young people in further education and those not in school are not included. The autism figure is the share of pupils with an EHC plan whose primary need is autism, not a prevalence in the population. Rising numbers may reflect identification, diagnosis and parental awareness as well as need.",
+  "england": {
+    "areaName": "England",
+    "ehcpPupils": 538547,
+    "ehcpPctOfPupils": 6.0,
+    "pupilsOnRoll": 8920227,
+    "fiveYearGrowthPct": 65.4,
+    "ehcpPupilsFiveYearsEarlier": 325618,
+    "asdPrevalencePct": 33.5,
+    "primaryNeeds": [
+      {
+        "need": "Autistic spectrum disorder",
+        "pct": 33.5
+      },
+      {
+        "need": "Speech, language and communications needs",
+        "pct": 22.1
+      },
+      {
+        "need": "Social, emotional and mental health",
+        "pct": 16.9
+      },
+      {
+        "need": "Moderate learning difficulty",
+        "pct": 7.2
+      },
+      {
+        "need": "Severe learning difficulty",
+        "pct": 6.3
+      },
+      {
+        "need": "Specific learning difficulty",
+        "pct": 4.3
+      }
+    ],
+    "primaryNeedBase": 493764,
+    "period": "2025/26 academic year"
+  },
   "areas": {
-    "E06000008": {
-      "areaName": "Blackburn with Darwen",
-      "ehcpRatePer10k": 412,
-      "asdPrevalencePct": 31.2,
-      "fiveYearGrowthPct": 42.1,
-      "totalEhcps": 2841,
+    "E06000001": {
+      "areaName": "Hartlepool",
+      "ehcpPupils": 776,
+      "ehcpPctOfPupils": 5.2,
+      "pupilsOnRoll": 14800,
+      "fiveYearGrowthPct": 61.3,
+      "ehcpPupilsFiveYearsEarlier": 481,
+      "asdPrevalencePct": 25.5,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 31.2
+          "need": "Autistic spectrum disorder",
+          "pct": 25.5
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 19.2
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.9
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.6
-        },
-        {
-          "need": "Other",
-          "pct": 22.8
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E06000009": {
-      "areaName": "Blackpool",
-      "ehcpRatePer10k": 478,
-      "asdPrevalencePct": 28.4,
-      "fiveYearGrowthPct": 51.2,
-      "totalEhcps": 2124,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 28.4
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 20.6
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 17.9
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 12.5
-        },
-        {
-          "need": "Other",
-          "pct": 25.6
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000117": {
-      "areaName": "Burnley",
-      "ehcpRatePer10k": 398,
-      "asdPrevalencePct": 29.8,
-      "fiveYearGrowthPct": 38.7,
-      "totalEhcps": 1247,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 29.8
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 19.0
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.7
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 12.1
-        },
-        {
-          "need": "Other",
-          "pct": 24.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000118": {
-      "areaName": "Chorley",
-      "ehcpRatePer10k": 342,
-      "asdPrevalencePct": 33.1,
-      "fiveYearGrowthPct": 35.2,
-      "totalEhcps": 1412,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 33.1
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 17.8
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 15.9
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.1
-        },
-        {
-          "need": "Other",
-          "pct": 20.9
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E08000017": {
-      "areaName": "Doncaster",
-      "ehcpRatePer10k": 424,
-      "asdPrevalencePct": 30.4,
-      "fiveYearGrowthPct": 44.8,
-      "totalEhcps": 4218,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 30.4
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 19.5
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 17.1
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.9
-        },
-        {
-          "need": "Other",
-          "pct": 23.6
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E06000047": {
-      "areaName": "County Durham",
-      "ehcpRatePer10k": 388,
-      "asdPrevalencePct": 27.8,
-      "fiveYearGrowthPct": 39.4,
-      "totalEhcps": 6842,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 27.8
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.8
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.6
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 12.7
-        },
-        {
-          "need": "Other",
-          "pct": 26.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E10000012": {
-      "areaName": "Essex",
-      "ehcpRatePer10k": 362,
-      "asdPrevalencePct": 34.2,
-      "fiveYearGrowthPct": 41.8,
-      "totalEhcps": 18421,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 34.2
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.2
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.2
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.7
-        },
-        {
-          "need": "Other",
-          "pct": 19.8
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000119": {
-      "areaName": "Fylde",
-      "ehcpRatePer10k": 318,
-      "asdPrevalencePct": 35.4,
-      "fiveYearGrowthPct": 32.1,
-      "totalEhcps": 742,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 35.4
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 17.4
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 15.5
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.4
-        },
-        {
-          "need": "Other",
-          "pct": 18.6
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E10000014": {
-      "areaName": "Hampshire",
-      "ehcpRatePer10k": 348,
-      "asdPrevalencePct": 36.8,
-      "fiveYearGrowthPct": 38.2,
-      "totalEhcps": 16842,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 36.8
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.0
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.0
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.0
-        },
-        {
-          "need": "Other",
-          "pct": 17.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000120": {
-      "areaName": "Hyndburn",
-      "ehcpRatePer10k": 408,
-      "asdPrevalencePct": 28.2,
-      "fiveYearGrowthPct": 40.4,
-      "totalEhcps": 1124,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 28.2
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 19.2
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.9
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 12.5
-        },
-        {
-          "need": "Other",
-          "pct": 25.8
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E10000016": {
-      "areaName": "Kent",
-      "ehcpRatePer10k": 378,
-      "asdPrevalencePct": 33.8,
-      "fiveYearGrowthPct": 43.2,
-      "totalEhcps": 21247,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 33.8
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.6
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.4
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.9
-        },
-        {
-          "need": "Other",
+          "need": "Speech, language and communications needs",
           "pct": 20.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E10000017": {
-      "areaName": "Lancashire",
-      "ehcpRatePer10k": 372,
-      "asdPrevalencePct": 31.4,
-      "fiveYearGrowthPct": 40.1,
-      "totalEhcps": 14218,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 31.4
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 18.4
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.3
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.6
-        },
-        {
-          "need": "Other",
-          "pct": 22.6
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000121": {
-      "areaName": "Lancaster",
-      "ehcpRatePer10k": 356,
-      "asdPrevalencePct": 32.1,
-      "fiveYearGrowthPct": 36.8,
-      "totalEhcps": 1842,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 32.1
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.1
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.1
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.4
-        },
-        {
-          "need": "Other",
-          "pct": 21.9
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E10000020": {
-      "areaName": "Norfolk",
-      "ehcpRatePer10k": 394,
-      "asdPrevalencePct": 30.2,
-      "fiveYearGrowthPct": 42.4,
-      "totalEhcps": 12124,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 30.2
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.9
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.7
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.9
-        },
-        {
-          "need": "Other",
-          "pct": 23.8
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E06000061": {
-      "areaName": "North Northamptonshire",
-      "ehcpRatePer10k": 382,
-      "asdPrevalencePct": 32.8,
-      "fiveYearGrowthPct": 45.1,
-      "totalEhcps": 4842,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 32.8
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 18.6
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.5
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.2
-        },
-        {
-          "need": "Other",
-          "pct": 21.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000122": {
-      "areaName": "Pendle",
-      "ehcpRatePer10k": 418,
-      "asdPrevalencePct": 27.4,
-      "fiveYearGrowthPct": 41.2,
-      "totalEhcps": 1342,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 27.4
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 19.4
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 17.0
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 12.8
-        },
-        {
-          "need": "Other",
-          "pct": 26.6
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E06000011": {
-      "areaName": "Preston",
-      "ehcpRatePer10k": 432,
-      "asdPrevalencePct": 29.2,
-      "fiveYearGrowthPct": 46.8,
-      "totalEhcps": 2418,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 29.2
-        },
-        {
-          "need": "Speech, Language and Communication",
+          "need": "Moderate learning difficulty",
           "pct": 19.6
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 17.2
-        },
-        {
-          "need": "Moderate Learning Difficulty",
+          "need": "Social, emotional and mental health",
           "pct": 12.2
         },
         {
-          "need": "Other",
-          "pct": 24.8
+          "need": "Severe learning difficulty",
+          "pct": 11.8
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.0
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 756,
+      "period": "2025/26 academic year"
     },
-    "E07000124": {
-      "areaName": "Ribble Valley",
-      "ehcpRatePer10k": 298,
-      "asdPrevalencePct": 37.2,
-      "fiveYearGrowthPct": 28.4,
-      "totalEhcps": 542,
+    "E06000002": {
+      "areaName": "Middlesbrough",
+      "ehcpPupils": 1738,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 25595,
+      "fiveYearGrowthPct": 86.9,
+      "ehcpPupilsFiveYearsEarlier": 930,
+      "asdPrevalencePct": 28.9,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 37.2
+          "need": "Autistic spectrum disorder",
+          "pct": 28.9
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 17.0
+          "need": "Social, emotional and mental health",
+          "pct": 19.0
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 15.2
+          "need": "Severe learning difficulty",
+          "pct": 17.8
         },
         {
-          "need": "Moderate Learning Difficulty",
-          "pct": 9.8
+          "need": "Speech, language and communications needs",
+          "pct": 13.2
         },
         {
-          "need": "Other",
-          "pct": 16.8
+          "need": "Moderate learning difficulty",
+          "pct": 7.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1676,
+      "period": "2025/26 academic year"
     },
-    "E07000125": {
-      "areaName": "Rossendale",
-      "ehcpRatePer10k": 348,
-      "asdPrevalencePct": 31.8,
-      "fiveYearGrowthPct": 34.2,
-      "totalEhcps": 842,
+    "E06000003": {
+      "areaName": "Redcar and Cleveland",
+      "ehcpPupils": 1226,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 20593,
+      "fiveYearGrowthPct": 31.1,
+      "ehcpPupilsFiveYearsEarlier": 935,
+      "asdPrevalencePct": 35.2,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 31.8
+          "need": "Autistic spectrum disorder",
+          "pct": 35.2
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 18.0
+          "need": "Social, emotional and mental health",
+          "pct": 21.4
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.0
-        },
-        {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.5
-        },
-        {
-          "need": "Other",
-          "pct": 22.2
-        }
-      ],
-      "period": "Academic year 2023/24"
-    },
-    "E07000126": {
-      "areaName": "South Ribble",
-      "ehcpRatePer10k": 328,
-      "asdPrevalencePct": 34.4,
-      "fiveYearGrowthPct": 33.1,
-      "totalEhcps": 1124,
-      "primaryNeeds": [
-        {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 34.4
-        },
-        {
-          "need": "Speech, Language and Communication",
-          "pct": 17.6
-        },
-        {
-          "need": "Social, Emotional and Mental Health",
+          "need": "Speech, language and communications needs",
           "pct": 15.7
         },
         {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.7
+          "need": "Severe learning difficulty",
+          "pct": 8.5
         },
         {
-          "need": "Other",
-          "pct": 19.6
+          "need": "Moderate learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.8
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1099,
+      "period": "2025/26 academic year"
     },
-    "E10000034": {
-      "areaName": "Staffordshire",
-      "ehcpRatePer10k": 358,
-      "asdPrevalencePct": 33.2,
-      "fiveYearGrowthPct": 39.8,
-      "totalEhcps": 11242,
+    "E06000004": {
+      "areaName": "Stockton-on-Tees",
+      "ehcpPupils": 2078,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 33134,
+      "fiveYearGrowthPct": 53.4,
+      "ehcpPupilsFiveYearsEarlier": 1355,
+      "asdPrevalencePct": 20.2,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 33.2
+          "need": "Speech, language and communications needs",
+          "pct": 27.7
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 18.2
+          "need": "Autistic spectrum disorder",
+          "pct": 20.2
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.1
+          "need": "Social, emotional and mental health",
+          "pct": 17.5
         },
         {
-          "need": "Moderate Learning Difficulty",
-          "pct": 11.0
+          "need": "Moderate learning difficulty",
+          "pct": 15.8
         },
         {
-          "need": "Other",
-          "pct": 20.8
+          "need": "Severe learning difficulty",
+          "pct": 4.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.9
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1865,
+      "period": "2025/26 academic year"
     },
-    "E07000127": {
-      "areaName": "West Lancashire",
-      "ehcpRatePer10k": 312,
-      "asdPrevalencePct": 35.8,
-      "fiveYearGrowthPct": 31.4,
-      "totalEhcps": 1042,
+    "E06000005": {
+      "areaName": "Darlington",
+      "ehcpPupils": 1142,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 16037,
+      "fiveYearGrowthPct": 62.9,
+      "ehcpPupilsFiveYearsEarlier": 701,
+      "asdPrevalencePct": 36.4,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 35.8
+          "need": "Autistic spectrum disorder",
+          "pct": 36.4
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 17.2
+          "need": "Social, emotional and mental health",
+          "pct": 18.7
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 15.4
+          "need": "Speech, language and communications needs",
+          "pct": 16.7
         },
         {
-          "need": "Moderate Learning Difficulty",
-          "pct": 10.3
+          "need": "Moderate learning difficulty",
+          "pct": 12.8
         },
         {
-          "need": "Other",
-          "pct": 18.2
+          "need": "Physical disability",
+          "pct": 3.6
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.3
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1015,
+      "period": "2025/26 academic year"
     },
-    "E06000062": {
-      "areaName": "West Northamptonshire",
-      "ehcpRatePer10k": 392,
-      "asdPrevalencePct": 32.4,
-      "fiveYearGrowthPct": 44.2,
-      "totalEhcps": 5842,
+    "E06000006": {
+      "areaName": "Halton",
+      "ehcpPupils": 1366,
+      "ehcpPctOfPupils": 7.4,
+      "pupilsOnRoll": 18375,
+      "fiveYearGrowthPct": 80.7,
+      "ehcpPupilsFiveYearsEarlier": 756,
+      "asdPrevalencePct": 23.5,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 32.4
+          "need": "Speech, language and communications needs",
+          "pct": 31.1
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 18.8
+          "need": "Social, emotional and mental health",
+          "pct": 24.8
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.6
+          "need": "Autistic spectrum disorder",
+          "pct": 23.5
         },
         {
-          "need": "Moderate Learning Difficulty",
+          "need": "Moderate learning difficulty",
+          "pct": 4.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 1305,
+      "period": "2025/26 academic year"
+    },
+    "E06000007": {
+      "areaName": "Warrington",
+      "ehcpPupils": 2020,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 32899,
+      "fiveYearGrowthPct": 66.4,
+      "ehcpPupilsFiveYearsEarlier": 1214,
+      "asdPrevalencePct": 33.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.6
+        },
+        {
+          "need": "Moderate learning difficulty",
           "pct": 11.3
         },
         {
-          "need": "Other",
-          "pct": 21.6
+          "need": "Severe learning difficulty",
+          "pct": 4.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.3
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1908,
+      "period": "2025/26 academic year"
     },
-    "E10000038": {
-      "areaName": "Worcestershire",
-      "ehcpRatePer10k": 364,
-      "asdPrevalencePct": 33.4,
-      "fiveYearGrowthPct": 37.8,
-      "totalEhcps": 7242,
+    "E06000008": {
+      "areaName": "Blackburn with Darwen",
+      "ehcpPupils": 1549,
+      "ehcpPctOfPupils": 5.2,
+      "pupilsOnRoll": 29935,
+      "fiveYearGrowthPct": 70.4,
+      "ehcpPupilsFiveYearsEarlier": 909,
+      "asdPrevalencePct": 29.6,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 33.4
+          "need": "Speech, language and communications needs",
+          "pct": 31.5
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 18.3
+          "need": "Autistic spectrum disorder",
+          "pct": 29.6
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 16.2
+          "need": "Social, emotional and mental health",
+          "pct": 10.9
         },
         {
-          "need": "Moderate Learning Difficulty",
+          "need": "Moderate learning difficulty",
+          "pct": 9.9
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 1472,
+      "period": "2025/26 academic year"
+    },
+    "E06000009": {
+      "areaName": "Blackpool",
+      "ehcpPupils": 1433,
+      "ehcpPctOfPupils": 7.3,
+      "pupilsOnRoll": 19656,
+      "fiveYearGrowthPct": 70.0,
+      "ehcpPupilsFiveYearsEarlier": 843,
+      "asdPrevalencePct": 27.2,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 28.7
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 12.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 6.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.4
+        }
+      ],
+      "primaryNeedBase": 1355,
+      "period": "2025/26 academic year"
+    },
+    "E06000010": {
+      "areaName": "Kingston upon Hull, City of",
+      "ehcpPupils": 3056,
+      "ehcpPctOfPupils": 7.0,
+      "pupilsOnRoll": 43519,
+      "fiveYearGrowthPct": 80.1,
+      "ehcpPupilsFiveYearsEarlier": 1697,
+      "asdPrevalencePct": 20.4,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 34.3
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 20.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 5.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.2
+        }
+      ],
+      "primaryNeedBase": 3014,
+      "period": "2025/26 academic year"
+    },
+    "E06000011": {
+      "areaName": "East Riding of Yorkshire",
+      "ehcpPupils": 2712,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 45532,
+      "fiveYearGrowthPct": 55.5,
+      "ehcpPupilsFiveYearsEarlier": 1744,
+      "asdPrevalencePct": 20.0,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 27.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 22.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 20.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.0
+        }
+      ],
+      "primaryNeedBase": 2601,
+      "period": "2025/26 academic year"
+    },
+    "E06000012": {
+      "areaName": "North East Lincolnshire",
+      "ehcpPupils": 1533,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 23159,
+      "fiveYearGrowthPct": 75.4,
+      "ehcpPupilsFiveYearsEarlier": 874,
+      "asdPrevalencePct": 15.1,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 30.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.1
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 15.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 13.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.2
+        }
+      ],
+      "primaryNeedBase": 1338,
+      "period": "2025/26 academic year"
+    },
+    "E06000013": {
+      "areaName": "North Lincolnshire",
+      "ehcpPupils": 1593,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 23998,
+      "fiveYearGrowthPct": 74.5,
+      "ehcpPupilsFiveYearsEarlier": 913,
+      "asdPrevalencePct": 30.2,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 31.1
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 30.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.6
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.1
+        }
+      ],
+      "primaryNeedBase": 1310,
+      "period": "2025/26 academic year"
+    },
+    "E06000014": {
+      "areaName": "York",
+      "ehcpPupils": 1494,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 27370,
+      "fiveYearGrowthPct": 81.1,
+      "ehcpPupilsFiveYearsEarlier": 825,
+      "asdPrevalencePct": 43.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 43.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Physical disability",
+          "pct": 5.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 2.4
+        }
+      ],
+      "primaryNeedBase": 1445,
+      "period": "2025/26 academic year"
+    },
+    "E06000015": {
+      "areaName": "Derby",
+      "ehcpPupils": 3103,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 47329,
+      "fiveYearGrowthPct": 63.4,
+      "ehcpPupilsFiveYearsEarlier": 1899,
+      "asdPrevalencePct": 45.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 45.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 12.9
+        },
+        {
+          "need": "Hearing impairment",
+          "pct": 6.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.7
+        }
+      ],
+      "primaryNeedBase": 2985,
+      "period": "2025/26 academic year"
+    },
+    "E06000016": {
+      "areaName": "Leicester",
+      "ehcpPupils": 3019,
+      "ehcpPctOfPupils": 4.9,
+      "pupilsOnRoll": 62040,
+      "fiveYearGrowthPct": 55.7,
+      "ehcpPupilsFiveYearsEarlier": 1939,
+      "asdPrevalencePct": 29.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 27.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.3
+        },
+        {
+          "need": "Physical disability",
+          "pct": 6.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.2
+        }
+      ],
+      "primaryNeedBase": 2886,
+      "period": "2025/26 academic year"
+    },
+    "E06000017": {
+      "areaName": "Rutland",
+      "ehcpPupils": 439,
+      "ehcpPctOfPupils": 5.6,
+      "pupilsOnRoll": 7772,
+      "fiveYearGrowthPct": 49.3,
+      "ehcpPupilsFiveYearsEarlier": 294,
+      "asdPrevalencePct": 23.2,
+      "primaryNeeds": [
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 24.3
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 23.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 13.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.3
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 3.0
+        }
+      ],
+      "primaryNeedBase": 263,
+      "period": "2025/26 academic year"
+    },
+    "E06000018": {
+      "areaName": "Nottingham",
+      "ehcpPupils": 1799,
+      "ehcpPctOfPupils": 3.5,
+      "pupilsOnRoll": 51209,
+      "fiveYearGrowthPct": 80.6,
+      "ehcpPupilsFiveYearsEarlier": 996,
+      "asdPrevalencePct": 49.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 49.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 9.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 1765,
+      "period": "2025/26 academic year"
+    },
+    "E06000019": {
+      "areaName": "Herefordshire, County of",
+      "ehcpPupils": 1488,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 24851,
+      "fiveYearGrowthPct": 61.0,
+      "ehcpPupilsFiveYearsEarlier": 924,
+      "asdPrevalencePct": 29.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 22.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 14.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 7.5
+        }
+      ],
+      "primaryNeedBase": 1340,
+      "period": "2025/26 academic year"
+    },
+    "E06000020": {
+      "areaName": "Telford and Wrekin",
+      "ehcpPupils": 1796,
+      "ehcpPctOfPupils": 5.4,
+      "pupilsOnRoll": 33470,
+      "fiveYearGrowthPct": 48.4,
+      "ehcpPupilsFiveYearsEarlier": 1210,
+      "asdPrevalencePct": 19.4,
+      "primaryNeeds": [
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 20.6
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.9
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 6.7
+        }
+      ],
+      "primaryNeedBase": 1711,
+      "period": "2025/26 academic year"
+    },
+    "E06000021": {
+      "areaName": "Stoke-on-Trent",
+      "ehcpPupils": 2715,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 41809,
+      "fiveYearGrowthPct": 59.4,
+      "ehcpPupilsFiveYearsEarlier": 1703,
+      "asdPrevalencePct": 8.8,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 39.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 14.0
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 8.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.6
+        }
+      ],
+      "primaryNeedBase": 2299,
+      "period": "2025/26 academic year"
+    },
+    "E06000022": {
+      "areaName": "Bath and North East Somerset",
+      "ehcpPupils": 1897,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 31546,
+      "fiveYearGrowthPct": 62.1,
+      "ehcpPupilsFiveYearsEarlier": 1170,
+      "asdPrevalencePct": 30.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 30.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.0
+        }
+      ],
+      "primaryNeedBase": 1834,
+      "period": "2025/26 academic year"
+    },
+    "E06000023": {
+      "areaName": "Bristol, City of",
+      "ehcpPupils": 4040,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 69339,
+      "fiveYearGrowthPct": 82.2,
+      "ehcpPupilsFiveYearsEarlier": 2217,
+      "asdPrevalencePct": 33.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 24.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.1
+        }
+      ],
+      "primaryNeedBase": 3852,
+      "period": "2025/26 academic year"
+    },
+    "E06000024": {
+      "areaName": "North Somerset",
+      "ehcpPupils": 1979,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 32275,
+      "fiveYearGrowthPct": 163.5,
+      "ehcpPupilsFiveYearsEarlier": 751,
+      "asdPrevalencePct": 23.0,
+      "primaryNeeds": [
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 29.0
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 23.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 1956,
+      "period": "2025/26 academic year"
+    },
+    "E06000025": {
+      "areaName": "South Gloucestershire",
+      "ehcpPupils": 2608,
+      "ehcpPctOfPupils": 6.2,
+      "pupilsOnRoll": 41884,
+      "fiveYearGrowthPct": 57.3,
+      "ehcpPupilsFiveYearsEarlier": 1658,
+      "asdPrevalencePct": 33.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 2475,
+      "period": "2025/26 academic year"
+    },
+    "E06000026": {
+      "areaName": "Plymouth",
+      "ehcpPupils": 2267,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 39211,
+      "fiveYearGrowthPct": 50.0,
+      "ehcpPupilsFiveYearsEarlier": 1511,
+      "asdPrevalencePct": 19.3,
+      "primaryNeeds": [
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 26.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.8
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.3
+        },
+        {
+          "need": "Severe learning difficulty",
           "pct": 11.0
         },
         {
-          "need": "Other",
-          "pct": 20.6
+          "need": "Moderate learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.8
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 2155,
+      "period": "2025/26 academic year"
     },
-    "E07000128": {
-      "areaName": "Wyre",
-      "ehcpRatePer10k": 308,
-      "asdPrevalencePct": 36.1,
-      "fiveYearGrowthPct": 30.2,
-      "totalEhcps": 842,
+    "E06000027": {
+      "areaName": "Torbay",
+      "ehcpPupils": 1382,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 19593,
+      "fiveYearGrowthPct": 22.5,
+      "ehcpPupilsFiveYearsEarlier": 1128,
+      "asdPrevalencePct": 33.7,
       "primaryNeeds": [
         {
-          "need": "Autistic Spectrum Disorder",
-          "pct": 36.1
+          "need": "Autistic spectrum disorder",
+          "pct": 33.7
         },
         {
-          "need": "Speech, Language and Communication",
-          "pct": 17.2
+          "need": "Speech, language and communications needs",
+          "pct": 20.3
         },
         {
-          "need": "Social, Emotional and Mental Health",
-          "pct": 15.4
+          "need": "Social, emotional and mental health",
+          "pct": 19.4
         },
         {
-          "need": "Moderate Learning Difficulty",
+          "need": "Moderate learning difficulty",
+          "pct": 9.8
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 1320,
+      "period": "2025/26 academic year"
+    },
+    "E06000030": {
+      "areaName": "Swindon",
+      "ehcpPupils": 2463,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 37256,
+      "fiveYearGrowthPct": 55.7,
+      "ehcpPupilsFiveYearsEarlier": 1582,
+      "asdPrevalencePct": 33.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 2403,
+      "period": "2025/26 academic year"
+    },
+    "E06000031": {
+      "areaName": "Peterborough",
+      "ehcpPupils": 2341,
+      "ehcpPctOfPupils": 5.6,
+      "pupilsOnRoll": 41771,
+      "fiveYearGrowthPct": 69.4,
+      "ehcpPupilsFiveYearsEarlier": 1382,
+      "asdPrevalencePct": 41.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.7
+        }
+      ],
+      "primaryNeedBase": 2287,
+      "period": "2025/26 academic year"
+    },
+    "E06000032": {
+      "areaName": "Luton",
+      "ehcpPupils": 2423,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 41530,
+      "fiveYearGrowthPct": 76.5,
+      "ehcpPupilsFiveYearsEarlier": 1373,
+      "asdPrevalencePct": 27.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 23.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 7.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.4
+        }
+      ],
+      "primaryNeedBase": 2376,
+      "period": "2025/26 academic year"
+    },
+    "E06000033": {
+      "areaName": "Southend-on-Sea",
+      "ehcpPupils": 1952,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 32438,
+      "fiveYearGrowthPct": 70.6,
+      "ehcpPupilsFiveYearsEarlier": 1144,
+      "asdPrevalencePct": 36.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 36.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 1928,
+      "period": "2025/26 academic year"
+    },
+    "E06000034": {
+      "areaName": "Thurrock",
+      "ehcpPupils": 2105,
+      "ehcpPctOfPupils": 6.7,
+      "pupilsOnRoll": 31239,
+      "fiveYearGrowthPct": 62.8,
+      "ehcpPupilsFiveYearsEarlier": 1293,
+      "asdPrevalencePct": 34.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 34.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 29.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.6
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 2105,
+      "period": "2025/26 academic year"
+    },
+    "E06000035": {
+      "areaName": "Medway",
+      "ehcpPupils": 3274,
+      "ehcpPctOfPupils": 6.2,
+      "pupilsOnRoll": 52482,
+      "fiveYearGrowthPct": 64.9,
+      "ehcpPupilsFiveYearsEarlier": 1986,
+      "asdPrevalencePct": 33.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.7
+        }
+      ],
+      "primaryNeedBase": 2954,
+      "period": "2025/26 academic year"
+    },
+    "E06000036": {
+      "areaName": "Bracknell Forest",
+      "ehcpPupils": 1042,
+      "ehcpPctOfPupils": 4.7,
+      "pupilsOnRoll": 22062,
+      "fiveYearGrowthPct": 59.6,
+      "ehcpPupilsFiveYearsEarlier": 653,
+      "asdPrevalencePct": 40.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.5
+        }
+      ],
+      "primaryNeedBase": 1025,
+      "period": "2025/26 academic year"
+    },
+    "E06000037": {
+      "areaName": "West Berkshire",
+      "ehcpPupils": 1929,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 29723,
+      "fiveYearGrowthPct": 52.1,
+      "ehcpPupilsFiveYearsEarlier": 1268,
+      "asdPrevalencePct": 39.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 39.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.6
+        },
+        {
+          "need": "Speech, language and communications needs",
           "pct": 10.2
         },
         {
-          "need": "Other",
-          "pct": 17.9
+          "need": "Hearing impairment",
+          "pct": 9.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.5
         }
       ],
-      "period": "Academic year 2023/24"
+      "primaryNeedBase": 1585,
+      "period": "2025/26 academic year"
+    },
+    "E06000038": {
+      "areaName": "Reading",
+      "ehcpPupils": 1279,
+      "ehcpPctOfPupils": 4.7,
+      "pupilsOnRoll": 26939,
+      "fiveYearGrowthPct": 50.3,
+      "ehcpPupilsFiveYearsEarlier": 851,
+      "asdPrevalencePct": 27.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 18.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 1220,
+      "period": "2025/26 academic year"
+    },
+    "E06000039": {
+      "areaName": "Slough",
+      "ehcpPupils": 1877,
+      "ehcpPctOfPupils": 5.4,
+      "pupilsOnRoll": 34689,
+      "fiveYearGrowthPct": 55.4,
+      "ehcpPupilsFiveYearsEarlier": 1208,
+      "asdPrevalencePct": 39.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 39.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        }
+      ],
+      "primaryNeedBase": 1706,
+      "period": "2025/26 academic year"
+    },
+    "E06000040": {
+      "areaName": "Windsor and Maidenhead",
+      "ehcpPupils": 1567,
+      "ehcpPctOfPupils": 5.6,
+      "pupilsOnRoll": 27804,
+      "fiveYearGrowthPct": 43.9,
+      "ehcpPupilsFiveYearsEarlier": 1089,
+      "asdPrevalencePct": 38.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 20.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 11.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 10.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.5
+        }
+      ],
+      "primaryNeedBase": 1222,
+      "period": "2025/26 academic year"
+    },
+    "E06000041": {
+      "areaName": "Wokingham",
+      "ehcpPupils": 1729,
+      "ehcpPctOfPupils": 5.0,
+      "pupilsOnRoll": 34306,
+      "fiveYearGrowthPct": 83.7,
+      "ehcpPupilsFiveYearsEarlier": 941,
+      "asdPrevalencePct": 35.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 35.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 16.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 15.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.0
+        }
+      ],
+      "primaryNeedBase": 1647,
+      "period": "2025/26 academic year"
+    },
+    "E06000042": {
+      "areaName": "Milton Keynes",
+      "ehcpPupils": 2417,
+      "ehcpPctOfPupils": 4.6,
+      "pupilsOnRoll": 53117,
+      "fiveYearGrowthPct": 40.4,
+      "ehcpPupilsFiveYearsEarlier": 1721,
+      "asdPrevalencePct": 41.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 8.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.0
+        }
+      ],
+      "primaryNeedBase": 2276,
+      "period": "2025/26 academic year"
+    },
+    "E06000043": {
+      "areaName": "Brighton and Hove",
+      "ehcpPupils": 1952,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 33623,
+      "fiveYearGrowthPct": 46.7,
+      "ehcpPupilsFiveYearsEarlier": 1331,
+      "asdPrevalencePct": 54.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 54.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 13.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 11.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 1925,
+      "period": "2025/26 academic year"
+    },
+    "E06000044": {
+      "areaName": "Portsmouth",
+      "ehcpPupils": 2121,
+      "ehcpPctOfPupils": 7.2,
+      "pupilsOnRoll": 29581,
+      "fiveYearGrowthPct": 72.9,
+      "ehcpPupilsFiveYearsEarlier": 1227,
+      "asdPrevalencePct": 26.0,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 29.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 24.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 2090,
+      "period": "2025/26 academic year"
+    },
+    "E06000045": {
+      "areaName": "Southampton",
+      "ehcpPupils": 2370,
+      "ehcpPctOfPupils": 6.7,
+      "pupilsOnRoll": 35292,
+      "fiveYearGrowthPct": 54.5,
+      "ehcpPupilsFiveYearsEarlier": 1534,
+      "asdPrevalencePct": 38.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.6
+        }
+      ],
+      "primaryNeedBase": 2180,
+      "period": "2025/26 academic year"
+    },
+    "E06000046": {
+      "areaName": "Isle of Wight",
+      "ehcpPupils": 1264,
+      "ehcpPctOfPupils": 7.6,
+      "pupilsOnRoll": 16601,
+      "fiveYearGrowthPct": 41.4,
+      "ehcpPupilsFiveYearsEarlier": 894,
+      "asdPrevalencePct": 14.9,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 34.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 14.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.3
+        }
+      ],
+      "primaryNeedBase": 1256,
+      "period": "2025/26 academic year"
+    },
+    "E06000047": {
+      "areaName": "County Durham",
+      "ehcpPupils": 4260,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 74080,
+      "fiveYearGrowthPct": 73.2,
+      "ehcpPupilsFiveYearsEarlier": 2459,
+      "asdPrevalencePct": 40.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 13.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 2.7
+        }
+      ],
+      "primaryNeedBase": 4047,
+      "period": "2025/26 academic year"
+    },
+    "E06000049": {
+      "areaName": "Cheshire East",
+      "ehcpPupils": 3905,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 60416,
+      "fiveYearGrowthPct": 83.9,
+      "ehcpPupilsFiveYearsEarlier": 2123,
+      "asdPrevalencePct": 26.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 8.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.0
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 3418,
+      "period": "2025/26 academic year"
+    },
+    "E06000050": {
+      "areaName": "Cheshire West and Chester",
+      "ehcpPupils": 3871,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 54746,
+      "fiveYearGrowthPct": 95.6,
+      "ehcpPupilsFiveYearsEarlier": 1979,
+      "asdPrevalencePct": 25.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 25.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.5
+        }
+      ],
+      "primaryNeedBase": 3522,
+      "period": "2025/26 academic year"
+    },
+    "E06000051": {
+      "areaName": "Shropshire",
+      "ehcpPupils": 2745,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 43684,
+      "fiveYearGrowthPct": 88.3,
+      "ehcpPupilsFiveYearsEarlier": 1458,
+      "asdPrevalencePct": 23.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 23.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 23.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.4
+        }
+      ],
+      "primaryNeedBase": 2132,
+      "period": "2025/26 academic year"
+    },
+    "E06000052": {
+      "areaName": "Cornwall",
+      "ehcpPupils": 3654,
+      "ehcpPctOfPupils": 5.0,
+      "pupilsOnRoll": 73481,
+      "fiveYearGrowthPct": 72.8,
+      "ehcpPupilsFiveYearsEarlier": 2114,
+      "asdPrevalencePct": 22.9,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 35.8
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 22.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 3219,
+      "period": "2025/26 academic year"
+    },
+    "E06000053": {
+      "areaName": "Isles of Scilly",
+      "ehcpPupils": 6,
+      "ehcpPctOfPupils": 2.5,
+      "pupilsOnRoll": 243,
+      "fiveYearGrowthPct": -33.3,
+      "ehcpPupilsFiveYearsEarlier": 9,
+      "asdPrevalencePct": 50.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 50.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 33.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 16.7
+        }
+      ],
+      "primaryNeedBase": 6,
+      "period": "2025/26 academic year"
+    },
+    "E06000054": {
+      "areaName": "Wiltshire",
+      "ehcpPupils": 5079,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 74539,
+      "fiveYearGrowthPct": 65.4,
+      "ehcpPupilsFiveYearsEarlier": 3071,
+      "asdPrevalencePct": 33.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.1
+        }
+      ],
+      "primaryNeedBase": 4529,
+      "period": "2025/26 academic year"
+    },
+    "E06000055": {
+      "areaName": "Bedford",
+      "ehcpPupils": 1839,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 36311,
+      "fiveYearGrowthPct": 64.3,
+      "ehcpPupilsFiveYearsEarlier": 1119,
+      "asdPrevalencePct": 29.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 12.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        }
+      ],
+      "primaryNeedBase": 1801,
+      "period": "2025/26 academic year"
+    },
+    "E06000056": {
+      "areaName": "Central Bedfordshire",
+      "ehcpPupils": 3338,
+      "ehcpPctOfPupils": 6.7,
+      "pupilsOnRoll": 49817,
+      "fiveYearGrowthPct": 93.8,
+      "ehcpPupilsFiveYearsEarlier": 1722,
+      "asdPrevalencePct": 34.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 34.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.4
+        }
+      ],
+      "primaryNeedBase": 3230,
+      "period": "2025/26 academic year"
+    },
+    "E06000057": {
+      "areaName": "Northumberland",
+      "ehcpPupils": 3458,
+      "ehcpPctOfPupils": 7.7,
+      "pupilsOnRoll": 45014,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 27.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 25.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.4
+        }
+      ],
+      "primaryNeedBase": 3336,
+      "period": "2025/26 academic year"
+    },
+    "E06000058": {
+      "areaName": "Bournemouth, Christchurch and Poole",
+      "ehcpPupils": 3535,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 54556,
+      "fiveYearGrowthPct": 79.2,
+      "ehcpPupilsFiveYearsEarlier": 1973,
+      "asdPrevalencePct": 34.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 34.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 3314,
+      "period": "2025/26 academic year"
+    },
+    "E06000059": {
+      "areaName": "Dorset",
+      "ehcpPupils": 3308,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 51332,
+      "fiveYearGrowthPct": 48.5,
+      "ehcpPupilsFiveYearsEarlier": 2228,
+      "asdPrevalencePct": 27.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 10.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.7
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 4.0
+        }
+      ],
+      "primaryNeedBase": 3044,
+      "period": "2025/26 academic year"
+    },
+    "E06000060": {
+      "areaName": "Buckinghamshire",
+      "ehcpPupils": 5002,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 98299,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 33.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 4770,
+      "period": "2025/26 academic year"
+    },
+    "E06000061": {
+      "areaName": "North Northamptonshire",
+      "ehcpPupils": 3941,
+      "ehcpPctOfPupils": 6.7,
+      "pupilsOnRoll": 58508,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 19.9,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.4
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 12.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.9
+        }
+      ],
+      "primaryNeedBase": 3843,
+      "period": "2025/26 academic year"
+    },
+    "E06000062": {
+      "areaName": "West Northamptonshire",
+      "ehcpPupils": 4197,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 70375,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 31.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 31.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.4
+        }
+      ],
+      "primaryNeedBase": 3825,
+      "period": "2025/26 academic year"
+    },
+    "E06000063": {
+      "areaName": "Cumberland",
+      "ehcpPupils": 2420,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 39502,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 37.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 37.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.6
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.4
+        }
+      ],
+      "primaryNeedBase": 2352,
+      "period": "2025/26 academic year"
+    },
+    "E06000064": {
+      "areaName": "Westmorland and Furness",
+      "ehcpPupils": 2147,
+      "ehcpPctOfPupils": 6.9,
+      "pupilsOnRoll": 31227,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 20.6,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 28.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.9
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 20.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 8.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.9
+        }
+      ],
+      "primaryNeedBase": 1887,
+      "period": "2025/26 academic year"
+    },
+    "E06000065": {
+      "areaName": "North Yorkshire",
+      "ehcpPupils": 4698,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 86087,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 36.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 36.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 4416,
+      "period": "2025/26 academic year"
+    },
+    "E06000066": {
+      "areaName": "Somerset",
+      "ehcpPupils": 4614,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 79343,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 32.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 32.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.7
+        }
+      ],
+      "primaryNeedBase": 3542,
+      "period": "2025/26 academic year"
+    },
+    "E08000001": {
+      "areaName": "Bolton",
+      "ehcpPupils": 3431,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 57265,
+      "fiveYearGrowthPct": 70.4,
+      "ehcpPupilsFiveYearsEarlier": 2014,
+      "asdPrevalencePct": 37.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 37.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.1
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 3333,
+      "period": "2025/26 academic year"
+    },
+    "E08000002": {
+      "areaName": "Bury",
+      "ehcpPupils": 2178,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 30505,
+      "fiveYearGrowthPct": 72.0,
+      "ehcpPupilsFiveYearsEarlier": 1266,
+      "asdPrevalencePct": 31.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 31.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 2082,
+      "period": "2025/26 academic year"
+    },
+    "E08000003": {
+      "areaName": "Manchester",
+      "ehcpPupils": 7622,
+      "ehcpPctOfPupils": 7.8,
+      "pupilsOnRoll": 98058,
+      "fiveYearGrowthPct": 94.1,
+      "ehcpPupilsFiveYearsEarlier": 3926,
+      "asdPrevalencePct": 23.1,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 29.8
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 23.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 9.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 7286,
+      "period": "2025/26 academic year"
+    },
+    "E08000004": {
+      "areaName": "Oldham",
+      "ehcpPupils": 3575,
+      "ehcpPctOfPupils": 7.5,
+      "pupilsOnRoll": 47369,
+      "fiveYearGrowthPct": 75.0,
+      "ehcpPupilsFiveYearsEarlier": 2043,
+      "asdPrevalencePct": 38.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.9
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 3305,
+      "period": "2025/26 academic year"
+    },
+    "E08000005": {
+      "areaName": "Rochdale",
+      "ehcpPupils": 2503,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 38288,
+      "fiveYearGrowthPct": 61.3,
+      "ehcpPupilsFiveYearsEarlier": 1552,
+      "asdPrevalencePct": 38.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 2354,
+      "period": "2025/26 academic year"
+    },
+    "E08000006": {
+      "areaName": "Salford",
+      "ehcpPupils": 2905,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 44488,
+      "fiveYearGrowthPct": 58.1,
+      "ehcpPupilsFiveYearsEarlier": 1837,
+      "asdPrevalencePct": 33.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.9
+        }
+      ],
+      "primaryNeedBase": 2715,
+      "period": "2025/26 academic year"
+    },
+    "E08000007": {
+      "areaName": "Stockport",
+      "ehcpPupils": 3311,
+      "ehcpPctOfPupils": 7.0,
+      "pupilsOnRoll": 47409,
+      "fiveYearGrowthPct": 58.3,
+      "ehcpPupilsFiveYearsEarlier": 2092,
+      "asdPrevalencePct": 35.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 35.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.7
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 2975,
+      "period": "2025/26 academic year"
+    },
+    "E08000008": {
+      "areaName": "Tameside",
+      "ehcpPupils": 2834,
+      "ehcpPctOfPupils": 7.6,
+      "pupilsOnRoll": 37051,
+      "fiveYearGrowthPct": 111.7,
+      "ehcpPupilsFiveYearsEarlier": 1339,
+      "asdPrevalencePct": 19.9,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 32.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.3
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 11.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.0
+        }
+      ],
+      "primaryNeedBase": 2725,
+      "period": "2025/26 academic year"
+    },
+    "E08000009": {
+      "areaName": "Trafford",
+      "ehcpPupils": 2571,
+      "ehcpPctOfPupils": 5.7,
+      "pupilsOnRoll": 45043,
+      "fiveYearGrowthPct": 47.3,
+      "ehcpPupilsFiveYearsEarlier": 1746,
+      "asdPrevalencePct": 25.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 25.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.1
+        }
+      ],
+      "primaryNeedBase": 2507,
+      "period": "2025/26 academic year"
+    },
+    "E08000010": {
+      "areaName": "Wigan",
+      "ehcpPupils": 3106,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 48586,
+      "fiveYearGrowthPct": 77.9,
+      "ehcpPupilsFiveYearsEarlier": 1746,
+      "asdPrevalencePct": 29.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.3
+        }
+      ],
+      "primaryNeedBase": 2786,
+      "period": "2025/26 academic year"
+    },
+    "E08000011": {
+      "areaName": "Knowsley",
+      "ehcpPupils": 1883,
+      "ehcpPctOfPupils": 8.7,
+      "pupilsOnRoll": 21717,
+      "fiveYearGrowthPct": 82.1,
+      "ehcpPupilsFiveYearsEarlier": 1034,
+      "asdPrevalencePct": 38.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.7
+        }
+      ],
+      "primaryNeedBase": 1874,
+      "period": "2025/26 academic year"
+    },
+    "E08000012": {
+      "areaName": "Liverpool",
+      "ehcpPupils": 6241,
+      "ehcpPctOfPupils": 7.9,
+      "pupilsOnRoll": 79118,
+      "fiveYearGrowthPct": 126.5,
+      "ehcpPupilsFiveYearsEarlier": 2756,
+      "asdPrevalencePct": 36.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 36.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 15.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 14.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.4
+        }
+      ],
+      "primaryNeedBase": 5826,
+      "period": "2025/26 academic year"
+    },
+    "E08000013": {
+      "areaName": "St. Helens",
+      "ehcpPupils": 2049,
+      "ehcpPctOfPupils": 7.6,
+      "pupilsOnRoll": 26828,
+      "fiveYearGrowthPct": 122.0,
+      "ehcpPupilsFiveYearsEarlier": 923,
+      "asdPrevalencePct": 38.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.8
+        }
+      ],
+      "primaryNeedBase": 1902,
+      "period": "2025/26 academic year"
+    },
+    "E08000014": {
+      "areaName": "Sefton",
+      "ehcpPupils": 2978,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 41789,
+      "fiveYearGrowthPct": 105.2,
+      "ehcpPupilsFiveYearsEarlier": 1451,
+      "asdPrevalencePct": 40.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 2792,
+      "period": "2025/26 academic year"
+    },
+    "E08000015": {
+      "areaName": "Wirral",
+      "ehcpPupils": 4628,
+      "ehcpPctOfPupils": 9.1,
+      "pupilsOnRoll": 50765,
+      "fiveYearGrowthPct": 143.5,
+      "ehcpPupilsFiveYearsEarlier": 1901,
+      "asdPrevalencePct": 21.8,
+      "primaryNeeds": [
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 23.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 21.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 13.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.5
+        }
+      ],
+      "primaryNeedBase": 4418,
+      "period": "2025/26 academic year"
+    },
+    "E08000016": {
+      "areaName": "Barnsley",
+      "ehcpPupils": 2237,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 35107,
+      "fiveYearGrowthPct": 50.4,
+      "ehcpPupilsFiveYearsEarlier": 1487,
+      "asdPrevalencePct": 34.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 34.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 1995,
+      "period": "2025/26 academic year"
+    },
+    "E08000017": {
+      "areaName": "Doncaster",
+      "ehcpPupils": 2282,
+      "ehcpPctOfPupils": 4.6,
+      "pupilsOnRoll": 49424,
+      "fiveYearGrowthPct": 59.4,
+      "ehcpPupilsFiveYearsEarlier": 1432,
+      "asdPrevalencePct": 33.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 29.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Physical disability",
+          "pct": 5.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.0
+        }
+      ],
+      "primaryNeedBase": 2195,
+      "period": "2025/26 academic year"
+    },
+    "E08000018": {
+      "areaName": "Rotherham",
+      "ehcpPupils": 3207,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 44886,
+      "fiveYearGrowthPct": 68.1,
+      "ehcpPupilsFiveYearsEarlier": 1908,
+      "asdPrevalencePct": 38.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 3115,
+      "period": "2025/26 academic year"
+    },
+    "E08000019": {
+      "areaName": "Sheffield",
+      "ehcpPupils": 5079,
+      "ehcpPctOfPupils": 5.9,
+      "pupilsOnRoll": 86632,
+      "fiveYearGrowthPct": 103.2,
+      "ehcpPupilsFiveYearsEarlier": 2500,
+      "asdPrevalencePct": 38.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.8
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.6
+        }
+      ],
+      "primaryNeedBase": 4995,
+      "period": "2025/26 academic year"
+    },
+    "E08000021": {
+      "areaName": "Newcastle upon Tyne",
+      "ehcpPupils": 2702,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 46647,
+      "fiveYearGrowthPct": 71.0,
+      "ehcpPupilsFiveYearsEarlier": 1580,
+      "asdPrevalencePct": 37.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 37.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 12.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.3
+        }
+      ],
+      "primaryNeedBase": 2675,
+      "period": "2025/26 academic year"
+    },
+    "E08000022": {
+      "areaName": "North Tyneside",
+      "ehcpPupils": 2164,
+      "ehcpPctOfPupils": 7.0,
+      "pupilsOnRoll": 30934,
+      "fiveYearGrowthPct": 40.5,
+      "ehcpPupilsFiveYearsEarlier": 1540,
+      "asdPrevalencePct": 30.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 30.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.6
+        }
+      ],
+      "primaryNeedBase": 2012,
+      "period": "2025/26 academic year"
+    },
+    "E08000023": {
+      "areaName": "South Tyneside",
+      "ehcpPupils": 1341,
+      "ehcpPctOfPupils": 5.9,
+      "pupilsOnRoll": 22753,
+      "fiveYearGrowthPct": 37.5,
+      "ehcpPupilsFiveYearsEarlier": 975,
+      "asdPrevalencePct": 40.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 13.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 8.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.0
+        }
+      ],
+      "primaryNeedBase": 1341,
+      "period": "2025/26 academic year"
+    },
+    "E08000024": {
+      "areaName": "Sunderland",
+      "ehcpPupils": 2240,
+      "ehcpPctOfPupils": 5.4,
+      "pupilsOnRoll": 41439,
+      "fiveYearGrowthPct": 50.9,
+      "ehcpPupilsFiveYearsEarlier": 1484,
+      "asdPrevalencePct": 51.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 51.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 11.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.3
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 2.2
+        }
+      ],
+      "primaryNeedBase": 2031,
+      "period": "2025/26 academic year"
+    },
+    "E08000025": {
+      "areaName": "Birmingham",
+      "ehcpPupils": 9967,
+      "ehcpPctOfPupils": 4.7,
+      "pupilsOnRoll": 210486,
+      "fiveYearGrowthPct": 38.1,
+      "ehcpPupilsFiveYearsEarlier": 7217,
+      "asdPrevalencePct": 44.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 44.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.3
+        },
+        {
+          "need": "Physical disability",
+          "pct": 5.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.2
+        }
+      ],
+      "primaryNeedBase": 9294,
+      "period": "2025/26 academic year"
+    },
+    "E08000026": {
+      "areaName": "Coventry",
+      "ehcpPupils": 3029,
+      "ehcpPctOfPupils": 4.8,
+      "pupilsOnRoll": 63027,
+      "fiveYearGrowthPct": 66.2,
+      "ehcpPupilsFiveYearsEarlier": 1822,
+      "asdPrevalencePct": 35.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 35.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 12.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 11.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.3
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 2.6
+        }
+      ],
+      "primaryNeedBase": 3011,
+      "period": "2025/26 academic year"
+    },
+    "E08000027": {
+      "areaName": "Dudley",
+      "ehcpPupils": 2956,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 48386,
+      "fiveYearGrowthPct": 46.0,
+      "ehcpPupilsFiveYearsEarlier": 2024,
+      "asdPrevalencePct": 17.8,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 40.4
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 17.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 11.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.3
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.7
+        }
+      ],
+      "primaryNeedBase": 2693,
+      "period": "2025/26 academic year"
+    },
+    "E08000028": {
+      "areaName": "Sandwell",
+      "ehcpPupils": 3436,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 63015,
+      "fiveYearGrowthPct": 78.3,
+      "ehcpPupilsFiveYearsEarlier": 1927,
+      "asdPrevalencePct": 25.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 28.9
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 25.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 3284,
+      "period": "2025/26 academic year"
+    },
+    "E08000029": {
+      "areaName": "Solihull",
+      "ehcpPupils": 2046,
+      "ehcpPctOfPupils": 5.0,
+      "pupilsOnRoll": 41070,
+      "fiveYearGrowthPct": 43.4,
+      "ehcpPupilsFiveYearsEarlier": 1427,
+      "asdPrevalencePct": 36.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 36.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.9
+        }
+      ],
+      "primaryNeedBase": 2003,
+      "period": "2025/26 academic year"
+    },
+    "E08000030": {
+      "areaName": "Walsall",
+      "ehcpPupils": 3414,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 54603,
+      "fiveYearGrowthPct": 88.3,
+      "ehcpPupilsFiveYearsEarlier": 1813,
+      "asdPrevalencePct": 14.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 17.1
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 14.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 13.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.4
+        }
+      ],
+      "primaryNeedBase": 3136,
+      "period": "2025/26 academic year"
+    },
+    "E08000031": {
+      "areaName": "Wolverhampton",
+      "ehcpPupils": 2644,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 51953,
+      "fiveYearGrowthPct": 50.7,
+      "ehcpPupilsFiveYearsEarlier": 1754,
+      "asdPrevalencePct": 26.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 27.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.9
+        }
+      ],
+      "primaryNeedBase": 2473,
+      "period": "2025/26 academic year"
+    },
+    "E08000032": {
+      "areaName": "Bradford",
+      "ehcpPupils": 6055,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 99744,
+      "fiveYearGrowthPct": 70.2,
+      "ehcpPupilsFiveYearsEarlier": 3558,
+      "asdPrevalencePct": 26.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 33.5
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.2
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 5963,
+      "period": "2025/26 academic year"
+    },
+    "E08000033": {
+      "areaName": "Calderdale",
+      "ehcpPupils": 2568,
+      "ehcpPctOfPupils": 7.1,
+      "pupilsOnRoll": 36207,
+      "fiveYearGrowthPct": 100.6,
+      "ehcpPupilsFiveYearsEarlier": 1280,
+      "asdPrevalencePct": 35.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 35.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 2303,
+      "period": "2025/26 academic year"
+    },
+    "E08000034": {
+      "areaName": "Kirklees",
+      "ehcpPupils": 3531,
+      "ehcpPctOfPupils": 5.3,
+      "pupilsOnRoll": 67205,
+      "fiveYearGrowthPct": 54.1,
+      "ehcpPupilsFiveYearsEarlier": 2291,
+      "asdPrevalencePct": 19.6,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 28.7
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.8
+        }
+      ],
+      "primaryNeedBase": 3294,
+      "period": "2025/26 academic year"
+    },
+    "E08000035": {
+      "areaName": "Leeds",
+      "ehcpPupils": 5477,
+      "ehcpPctOfPupils": 4.0,
+      "pupilsOnRoll": 135588,
+      "fiveYearGrowthPct": 75.2,
+      "ehcpPupilsFiveYearsEarlier": 3127,
+      "asdPrevalencePct": 42.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 42.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 15.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.9
+        }
+      ],
+      "primaryNeedBase": 5213,
+      "period": "2025/26 academic year"
+    },
+    "E08000036": {
+      "areaName": "Wakefield",
+      "ehcpPupils": 3397,
+      "ehcpPctOfPupils": 5.9,
+      "pupilsOnRoll": 57141,
+      "fiveYearGrowthPct": 54.3,
+      "ehcpPupilsFiveYearsEarlier": 2202,
+      "asdPrevalencePct": 30.3,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 33.5
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 30.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.6
+        }
+      ],
+      "primaryNeedBase": 2970,
+      "period": "2025/26 academic year"
+    },
+    "E08000037": {
+      "areaName": "Gateshead",
+      "ehcpPupils": 1703,
+      "ehcpPctOfPupils": 5.7,
+      "pupilsOnRoll": 30087,
+      "fiveYearGrowthPct": null,
+      "ehcpPupilsFiveYearsEarlier": null,
+      "asdPrevalencePct": 41.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.6
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 2.6
+        }
+      ],
+      "primaryNeedBase": 1655,
+      "period": "2025/26 academic year"
+    },
+    "E09000001": {
+      "areaName": "City of London",
+      "ehcpPupils": 15,
+      "ehcpPctOfPupils": 0.5,
+      "pupilsOnRoll": 2891,
+      "fiveYearGrowthPct": 114.3,
+      "ehcpPupilsFiveYearsEarlier": 7,
+      "asdPrevalencePct": 53.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 53.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.4
+        },
+        {
+          "need": "Hearing impairment",
+          "pct": 7.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.7
+        },
+        {
+          "need": "Multi-sensory impairment",
+          "pct": 7.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 7.7
+        }
+      ],
+      "primaryNeedBase": 13,
+      "period": "2025/26 academic year"
+    },
+    "E09000002": {
+      "areaName": "Barking and Dagenham",
+      "ehcpPupils": 2361,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 46055,
+      "fiveYearGrowthPct": 61.7,
+      "ehcpPupilsFiveYearsEarlier": 1460,
+      "asdPrevalencePct": 47.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 47.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 7.1
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.2
+        }
+      ],
+      "primaryNeedBase": 2284,
+      "period": "2025/26 academic year"
+    },
+    "E09000003": {
+      "areaName": "Barnet",
+      "ehcpPupils": 3906,
+      "ehcpPctOfPupils": 5.7,
+      "pupilsOnRoll": 67996,
+      "fiveYearGrowthPct": 68.3,
+      "ehcpPupilsFiveYearsEarlier": 2321,
+      "asdPrevalencePct": 48.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 48.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.6
+        }
+      ],
+      "primaryNeedBase": 3634,
+      "period": "2025/26 academic year"
+    },
+    "E09000004": {
+      "areaName": "Bexley",
+      "ehcpPupils": 2540,
+      "ehcpPctOfPupils": 5.9,
+      "pupilsOnRoll": 43011,
+      "fiveYearGrowthPct": 64.2,
+      "ehcpPupilsFiveYearsEarlier": 1547,
+      "asdPrevalencePct": 44.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 44.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 2435,
+      "period": "2025/26 academic year"
+    },
+    "E09000005": {
+      "areaName": "Brent",
+      "ehcpPupils": 2865,
+      "ehcpPctOfPupils": 5.7,
+      "pupilsOnRoll": 50019,
+      "fiveYearGrowthPct": 44.6,
+      "ehcpPupilsFiveYearsEarlier": 1982,
+      "asdPrevalencePct": 46.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 46.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 7.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 2726,
+      "period": "2025/26 academic year"
+    },
+    "E09000006": {
+      "areaName": "Bromley",
+      "ehcpPupils": 3624,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 57500,
+      "fiveYearGrowthPct": 58.7,
+      "ehcpPupilsFiveYearsEarlier": 2284,
+      "asdPrevalencePct": 19.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 28.9
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.0
+        }
+      ],
+      "primaryNeedBase": 3229,
+      "period": "2025/26 academic year"
+    },
+    "E09000007": {
+      "areaName": "Camden",
+      "ehcpPupils": 1344,
+      "ehcpPctOfPupils": 4.7,
+      "pupilsOnRoll": 28805,
+      "fiveYearGrowthPct": 24.0,
+      "ehcpPupilsFiveYearsEarlier": 1084,
+      "asdPrevalencePct": 48.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 48.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 13.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Hearing impairment",
+          "pct": 4.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 1226,
+      "period": "2025/26 academic year"
+    },
+    "E09000008": {
+      "areaName": "Croydon",
+      "ehcpPupils": 3951,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 63189,
+      "fiveYearGrowthPct": 55.2,
+      "ehcpPupilsFiveYearsEarlier": 2546,
+      "asdPrevalencePct": 37.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 37.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.2
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 3442,
+      "period": "2025/26 academic year"
+    },
+    "E09000009": {
+      "areaName": "Ealing",
+      "ehcpPupils": 3690,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 57704,
+      "fiveYearGrowthPct": 46.8,
+      "ehcpPupilsFiveYearsEarlier": 2513,
+      "asdPrevalencePct": 26.5,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 30.5
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 13.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 8.9
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 2.5
+        }
+      ],
+      "primaryNeedBase": 3287,
+      "period": "2025/26 academic year"
+    },
+    "E09000010": {
+      "areaName": "Enfield",
+      "ehcpPupils": 3806,
+      "ehcpPctOfPupils": 6.9,
+      "pupilsOnRoll": 55209,
+      "fiveYearGrowthPct": 52.8,
+      "ehcpPupilsFiveYearsEarlier": 2491,
+      "asdPrevalencePct": 37.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 37.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 30.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 10.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.1
+        }
+      ],
+      "primaryNeedBase": 3606,
+      "period": "2025/26 academic year"
+    },
+    "E09000011": {
+      "areaName": "Greenwich",
+      "ehcpPupils": 2959,
+      "ehcpPctOfPupils": 6.3,
+      "pupilsOnRoll": 46827,
+      "fiveYearGrowthPct": 75.4,
+      "ehcpPupilsFiveYearsEarlier": 1687,
+      "asdPrevalencePct": 47.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 47.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 21.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.0
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.9
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 3.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 2614,
+      "period": "2025/26 academic year"
+    },
+    "E09000012": {
+      "areaName": "Hackney",
+      "ehcpPupils": 2880,
+      "ehcpPctOfPupils": 6.9,
+      "pupilsOnRoll": 42007,
+      "fiveYearGrowthPct": 38.5,
+      "ehcpPupilsFiveYearsEarlier": 2079,
+      "asdPrevalencePct": 46.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 46.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 25.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 10.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.5
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 2.7
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.5
+        }
+      ],
+      "primaryNeedBase": 2309,
+      "period": "2025/26 academic year"
+    },
+    "E09000013": {
+      "areaName": "Hammersmith and Fulham",
+      "ehcpPupils": 1657,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 25980,
+      "fiveYearGrowthPct": 26.9,
+      "ehcpPupilsFiveYearsEarlier": 1306,
+      "asdPrevalencePct": 47.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 47.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 1449,
+      "period": "2025/26 academic year"
+    },
+    "E09000014": {
+      "areaName": "Haringey",
+      "ehcpPupils": 2413,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 40220,
+      "fiveYearGrowthPct": 42.8,
+      "ehcpPupilsFiveYearsEarlier": 1690,
+      "asdPrevalencePct": 54.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 54.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 7.2
+        },
+        {
+          "need": "Hearing impairment",
+          "pct": 4.6
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 4.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        }
+      ],
+      "primaryNeedBase": 2348,
+      "period": "2025/26 academic year"
+    },
+    "E09000015": {
+      "areaName": "Harrow",
+      "ehcpPupils": 2164,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 42333,
+      "fiveYearGrowthPct": 64.9,
+      "ehcpPupilsFiveYearsEarlier": 1312,
+      "asdPrevalencePct": 38.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 27.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 8.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.0
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.9
+        }
+      ],
+      "primaryNeedBase": 2001,
+      "period": "2025/26 academic year"
+    },
+    "E09000016": {
+      "areaName": "Havering",
+      "ehcpPupils": 2408,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 44047,
+      "fiveYearGrowthPct": 78.1,
+      "ehcpPupilsFiveYearsEarlier": 1352,
+      "asdPrevalencePct": 26.8,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 31.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.4
+        }
+      ],
+      "primaryNeedBase": 2390,
+      "period": "2025/26 academic year"
+    },
+    "E09000017": {
+      "areaName": "Hillingdon",
+      "ehcpPupils": 3189,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 55331,
+      "fiveYearGrowthPct": 36.2,
+      "ehcpPupilsFiveYearsEarlier": 2342,
+      "asdPrevalencePct": 42.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 42.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 2949,
+      "period": "2025/26 academic year"
+    },
+    "E09000018": {
+      "areaName": "Hounslow",
+      "ehcpPupils": 2480,
+      "ehcpPctOfPupils": 5.3,
+      "pupilsOnRoll": 46778,
+      "fiveYearGrowthPct": 32.1,
+      "ehcpPupilsFiveYearsEarlier": 1878,
+      "asdPrevalencePct": 51.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 51.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 10.2
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 2412,
+      "period": "2025/26 academic year"
+    },
+    "E09000019": {
+      "areaName": "Islington",
+      "ehcpPupils": 1910,
+      "ehcpPctOfPupils": 8.2,
+      "pupilsOnRoll": 23300,
+      "fiveYearGrowthPct": 51.5,
+      "ehcpPupilsFiveYearsEarlier": 1261,
+      "asdPrevalencePct": 58.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 58.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 11.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 1901,
+      "period": "2025/26 academic year"
+    },
+    "E09000020": {
+      "areaName": "Kensington and Chelsea",
+      "ehcpPupils": 1161,
+      "ehcpPctOfPupils": 5.0,
+      "pupilsOnRoll": 23241,
+      "fiveYearGrowthPct": 63.3,
+      "ehcpPupilsFiveYearsEarlier": 711,
+      "asdPrevalencePct": 56.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 56.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 8.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.4
+        },
+        {
+          "need": "Physical disability",
+          "pct": 2.0
+        }
+      ],
+      "primaryNeedBase": 999,
+      "period": "2025/26 academic year"
+    },
+    "E09000021": {
+      "areaName": "Kingston upon Thames",
+      "ehcpPupils": 1821,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 30467,
+      "fiveYearGrowthPct": 62.0,
+      "ehcpPupilsFiveYearsEarlier": 1124,
+      "asdPrevalencePct": 38.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 38.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 15.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.8
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 3.6
+        }
+      ],
+      "primaryNeedBase": 1744,
+      "period": "2025/26 academic year"
+    },
+    "E09000022": {
+      "areaName": "Lambeth",
+      "ehcpPupils": 2713,
+      "ehcpPctOfPupils": 7.6,
+      "pupilsOnRoll": 35727,
+      "fiveYearGrowthPct": 34.9,
+      "ehcpPupilsFiveYearsEarlier": 2011,
+      "asdPrevalencePct": 45.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 45.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.4
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 5.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.6
+        }
+      ],
+      "primaryNeedBase": 2492,
+      "period": "2025/26 academic year"
+    },
+    "E09000023": {
+      "areaName": "Lewisham",
+      "ehcpPupils": 2544,
+      "ehcpPctOfPupils": 6.5,
+      "pupilsOnRoll": 39093,
+      "fiveYearGrowthPct": 43.9,
+      "ehcpPupilsFiveYearsEarlier": 1768,
+      "asdPrevalencePct": 41.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 10.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 1.5
+        }
+      ],
+      "primaryNeedBase": 2457,
+      "period": "2025/26 academic year"
+    },
+    "E09000024": {
+      "areaName": "Merton",
+      "ehcpPupils": 2108,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 31824,
+      "fiveYearGrowthPct": 33.2,
+      "ehcpPupilsFiveYearsEarlier": 1583,
+      "asdPrevalencePct": 32.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 32.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.5
+        }
+      ],
+      "primaryNeedBase": 1707,
+      "period": "2025/26 academic year"
+    },
+    "E09000025": {
+      "areaName": "Newham",
+      "ehcpPupils": 3062,
+      "ehcpPctOfPupils": 4.9,
+      "pupilsOnRoll": 62621,
+      "fiveYearGrowthPct": 137.4,
+      "ehcpPupilsFiveYearsEarlier": 1290,
+      "asdPrevalencePct": 53.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 53.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 6.5
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.5
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 2.6
+        }
+      ],
+      "primaryNeedBase": 2975,
+      "period": "2025/26 academic year"
+    },
+    "E09000026": {
+      "areaName": "Redbridge",
+      "ehcpPupils": 3004,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 59357,
+      "fiveYearGrowthPct": 53.1,
+      "ehcpPupilsFiveYearsEarlier": 1962,
+      "asdPrevalencePct": 40.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 29.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 8.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 2972,
+      "period": "2025/26 academic year"
+    },
+    "E09000027": {
+      "areaName": "Richmond upon Thames",
+      "ehcpPupils": 1603,
+      "ehcpPctOfPupils": 4.1,
+      "pupilsOnRoll": 39228,
+      "fiveYearGrowthPct": 44.0,
+      "ehcpPupilsFiveYearsEarlier": 1113,
+      "asdPrevalencePct": 40.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 9.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 2.1
+        }
+      ],
+      "primaryNeedBase": 1543,
+      "period": "2025/26 academic year"
+    },
+    "E09000028": {
+      "areaName": "Southwark",
+      "ehcpPupils": 2625,
+      "ehcpPctOfPupils": 5.6,
+      "pupilsOnRoll": 46793,
+      "fiveYearGrowthPct": 42.8,
+      "ehcpPupilsFiveYearsEarlier": 1838,
+      "asdPrevalencePct": 54.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 54.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 14.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.7
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 3.3
+        }
+      ],
+      "primaryNeedBase": 2440,
+      "period": "2025/26 academic year"
+    },
+    "E09000029": {
+      "areaName": "Sutton",
+      "ehcpPupils": 2358,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 42587,
+      "fiveYearGrowthPct": 51.9,
+      "ehcpPupilsFiveYearsEarlier": 1552,
+      "asdPrevalencePct": 48.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 48.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 12.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 2.1
+        }
+      ],
+      "primaryNeedBase": 2128,
+      "period": "2025/26 academic year"
+    },
+    "E09000030": {
+      "areaName": "Tower Hamlets",
+      "ehcpPupils": 4000,
+      "ehcpPctOfPupils": 8.6,
+      "pupilsOnRoll": 46311,
+      "fiveYearGrowthPct": 58.0,
+      "ehcpPupilsFiveYearsEarlier": 2531,
+      "asdPrevalencePct": 40.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 30.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 9.0
+        },
+        {
+          "need": "Profound and multiple learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 3.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 2.9
+        }
+      ],
+      "primaryNeedBase": 3781,
+      "period": "2025/26 academic year"
+    },
+    "E09000031": {
+      "areaName": "Waltham Forest",
+      "ehcpPupils": 2914,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 43161,
+      "fiveYearGrowthPct": 56.9,
+      "ehcpPupilsFiveYearsEarlier": 1857,
+      "asdPrevalencePct": 44.3,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 44.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 11.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Other difficulty or disability",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 2907,
+      "period": "2025/26 academic year"
+    },
+    "E09000032": {
+      "areaName": "Wandsworth",
+      "ehcpPupils": 2785,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 40746,
+      "fiveYearGrowthPct": 17.8,
+      "ehcpPupilsFiveYearsEarlier": 2365,
+      "asdPrevalencePct": 19.1,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.5
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 19.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.2
+        },
+        {
+          "need": "Vision impairment",
+          "pct": 5.0
+        }
+      ],
+      "primaryNeedBase": 2453,
+      "period": "2025/26 academic year"
+    },
+    "E09000033": {
+      "areaName": "Westminster",
+      "ehcpPupils": 1546,
+      "ehcpPctOfPupils": 5.4,
+      "pupilsOnRoll": 28683,
+      "fiveYearGrowthPct": 53.2,
+      "ehcpPupilsFiveYearsEarlier": 1009,
+      "asdPrevalencePct": 46.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 46.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 7.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.1
+        }
+      ],
+      "primaryNeedBase": 1224,
+      "period": "2025/26 academic year"
+    },
+    "E10000003": {
+      "areaName": "Cambridgeshire",
+      "ehcpPupils": 6386,
+      "ehcpPctOfPupils": 6.2,
+      "pupilsOnRoll": 102260,
+      "fiveYearGrowthPct": 58.6,
+      "ehcpPupilsFiveYearsEarlier": 4027,
+      "asdPrevalencePct": 31.6,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 31.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 13.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 9.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 7.7
+        }
+      ],
+      "primaryNeedBase": 5492,
+      "period": "2025/26 academic year"
+    },
+    "E10000007": {
+      "areaName": "Derbyshire",
+      "ehcpPupils": 6393,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 109988,
+      "fiveYearGrowthPct": 93.0,
+      "ehcpPupilsFiveYearsEarlier": 3312,
+      "asdPrevalencePct": 41.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 16.6
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 14.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.2
+        }
+      ],
+      "primaryNeedBase": 5768,
+      "period": "2025/26 academic year"
+    },
+    "E10000008": {
+      "areaName": "Devon",
+      "ehcpPupils": 7151,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 104849,
+      "fiveYearGrowthPct": 34.9,
+      "ehcpPupilsFiveYearsEarlier": 5302,
+      "asdPrevalencePct": 27.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 27.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 5.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.2
+        }
+      ],
+      "primaryNeedBase": 5961,
+      "period": "2025/26 academic year"
+    },
+    "E10000011": {
+      "areaName": "East Sussex",
+      "ehcpPupils": 3893,
+      "ehcpPctOfPupils": 5.4,
+      "pupilsOnRoll": 72519,
+      "fiveYearGrowthPct": 45.4,
+      "ehcpPupilsFiveYearsEarlier": 2678,
+      "asdPrevalencePct": 40.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 40.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 18.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 14.3
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.9
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.8
+        }
+      ],
+      "primaryNeedBase": 3398,
+      "period": "2025/26 academic year"
+    },
+    "E10000012": {
+      "areaName": "Essex",
+      "ehcpPupils": 11806,
+      "ehcpPctOfPupils": 5.0,
+      "pupilsOnRoll": 233955,
+      "fiveYearGrowthPct": 46.0,
+      "ehcpPupilsFiveYearsEarlier": 8087,
+      "asdPrevalencePct": 35.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 35.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 15.7
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 11265,
+      "period": "2025/26 academic year"
+    },
+    "E10000013": {
+      "areaName": "Gloucestershire",
+      "ehcpPupils": 5899,
+      "ehcpPctOfPupils": 5.8,
+      "pupilsOnRoll": 101894,
+      "fiveYearGrowthPct": 71.7,
+      "ehcpPupilsFiveYearsEarlier": 3435,
+      "asdPrevalencePct": 17.4,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 21.1
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 17.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 14.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 8.3
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.6
+        }
+      ],
+      "primaryNeedBase": 5395,
+      "period": "2025/26 academic year"
+    },
+    "E10000014": {
+      "areaName": "Hampshire",
+      "ehcpPupils": 14462,
+      "ehcpPctOfPupils": 7.4,
+      "pupilsOnRoll": 196267,
+      "fiveYearGrowthPct": 90.9,
+      "ehcpPupilsFiveYearsEarlier": 7575,
+      "asdPrevalencePct": 21.0,
+      "primaryNeeds": [
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 23.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.2
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 21.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 11.0
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.5
+        }
+      ],
+      "primaryNeedBase": 12923,
+      "period": "2025/26 academic year"
+    },
+    "E10000015": {
+      "areaName": "Hertfordshire",
+      "ehcpPupils": 11459,
+      "ehcpPctOfPupils": 5.1,
+      "pupilsOnRoll": 223307,
+      "fiveYearGrowthPct": 89.0,
+      "ehcpPupilsFiveYearsEarlier": 6062,
+      "asdPrevalencePct": 29.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.3
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.6
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.6
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.4
+        }
+      ],
+      "primaryNeedBase": 10848,
+      "period": "2025/26 academic year"
+    },
+    "E10000016": {
+      "areaName": "Kent",
+      "ehcpPupils": 16126,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 268897,
+      "fiveYearGrowthPct": 45.6,
+      "ehcpPupilsFiveYearsEarlier": 11073,
+      "asdPrevalencePct": 50.1,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 50.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 17.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 13.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.4
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 2.8
+        }
+      ],
+      "primaryNeedBase": 14204,
+      "period": "2025/26 academic year"
+    },
+    "E10000017": {
+      "areaName": "Lancashire",
+      "ehcpPupils": 11771,
+      "ehcpPctOfPupils": 6.4,
+      "pupilsOnRoll": 184001,
+      "fiveYearGrowthPct": 75.2,
+      "ehcpPupilsFiveYearsEarlier": 6720,
+      "asdPrevalencePct": 33.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.1
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.1
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.0
+        },
+        {
+          "need": "Physical disability",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 10150,
+      "period": "2025/26 academic year"
+    },
+    "E10000018": {
+      "areaName": "Leicestershire",
+      "ehcpPupils": 7357,
+      "ehcpPctOfPupils": 6.8,
+      "pupilsOnRoll": 107577,
+      "fiveYearGrowthPct": 72.4,
+      "ehcpPupilsFiveYearsEarlier": 4267,
+      "asdPrevalencePct": 23.7,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 23.7
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 22.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 19.8
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 11.8
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 10.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.6
+        }
+      ],
+      "primaryNeedBase": 6136,
+      "period": "2025/26 academic year"
+    },
+    "E10000019": {
+      "areaName": "Lincolnshire",
+      "ehcpPupils": 7355,
+      "ehcpPctOfPupils": 6.7,
+      "pupilsOnRoll": 110127,
+      "fiveYearGrowthPct": 52.7,
+      "ehcpPupilsFiveYearsEarlier": 4816,
+      "asdPrevalencePct": 27.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.3
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 20.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.1
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 6701,
+      "period": "2025/26 academic year"
+    },
+    "E10000020": {
+      "areaName": "Norfolk",
+      "ehcpPupils": 9056,
+      "ehcpPctOfPupils": 7.4,
+      "pupilsOnRoll": 122263,
+      "fiveYearGrowthPct": 94.0,
+      "ehcpPupilsFiveYearsEarlier": 4668,
+      "asdPrevalencePct": 27.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 27.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 23.1
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.4
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 9.8
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.1
+        }
+      ],
+      "primaryNeedBase": 7913,
+      "period": "2025/26 academic year"
+    },
+    "E10000024": {
+      "areaName": "Nottinghamshire",
+      "ehcpPupils": 4156,
+      "ehcpPctOfPupils": 3.2,
+      "pupilsOnRoll": 127919,
+      "fiveYearGrowthPct": 95.1,
+      "ehcpPupilsFiveYearsEarlier": 2130,
+      "asdPrevalencePct": 41.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 41.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 16.6
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 15.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 4.7
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.7
+        }
+      ],
+      "primaryNeedBase": 3671,
+      "period": "2025/26 academic year"
+    },
+    "E10000025": {
+      "areaName": "Oxfordshire",
+      "ehcpPupils": 6512,
+      "ehcpPctOfPupils": 5.5,
+      "pupilsOnRoll": 117702,
+      "fiveYearGrowthPct": 82.3,
+      "ehcpPupilsFiveYearsEarlier": 3572,
+      "asdPrevalencePct": 36.8,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 36.8
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 20.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.7
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.8
+        }
+      ],
+      "primaryNeedBase": 5892,
+      "period": "2025/26 academic year"
+    },
+    "E10000028": {
+      "areaName": "Staffordshire",
+      "ehcpPupils": 7978,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 131032,
+      "fiveYearGrowthPct": 52.7,
+      "ehcpPupilsFiveYearsEarlier": 5224,
+      "asdPrevalencePct": 26.2,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 26.2
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.4
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 11.2
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 5.0
+        }
+      ],
+      "primaryNeedBase": 6709,
+      "period": "2025/26 academic year"
+    },
+    "E10000029": {
+      "areaName": "Suffolk",
+      "ehcpPupils": 7613,
+      "ehcpPctOfPupils": 6.9,
+      "pupilsOnRoll": 109760,
+      "fiveYearGrowthPct": 90.8,
+      "ehcpPupilsFiveYearsEarlier": 3989,
+      "asdPrevalencePct": 29.9,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.9
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.5
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.9
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 7.3
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 6.8
+        }
+      ],
+      "primaryNeedBase": 6887,
+      "period": "2025/26 academic year"
+    },
+    "E10000030": {
+      "areaName": "Surrey",
+      "ehcpPupils": 13280,
+      "ehcpPctOfPupils": 6.6,
+      "pupilsOnRoll": 201187,
+      "fiveYearGrowthPct": 57.0,
+      "ehcpPupilsFiveYearsEarlier": 8459,
+      "asdPrevalencePct": 34.0,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 34.0
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 23.8
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.1
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 8.0
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 5.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 4.5
+        }
+      ],
+      "primaryNeedBase": 11241,
+      "period": "2025/26 academic year"
+    },
+    "E10000031": {
+      "areaName": "Warwickshire",
+      "ehcpPupils": 5858,
+      "ehcpPctOfPupils": 6.0,
+      "pupilsOnRoll": 98276,
+      "fiveYearGrowthPct": 74.7,
+      "ehcpPupilsFiveYearsEarlier": 3353,
+      "asdPrevalencePct": 33.4,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 33.4
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 19.0
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 18.6
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 10.0
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 6.4
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 3.5
+        }
+      ],
+      "primaryNeedBase": 5138,
+      "period": "2025/26 academic year"
+    },
+    "E10000032": {
+      "areaName": "West Sussex",
+      "ehcpPupils": 7829,
+      "ehcpPctOfPupils": 6.1,
+      "pupilsOnRoll": 129246,
+      "fiveYearGrowthPct": 65.4,
+      "ehcpPupilsFiveYearsEarlier": 4732,
+      "asdPrevalencePct": 29.5,
+      "primaryNeeds": [
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 29.5
+        },
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 24.5
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.2
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.4
+        },
+        {
+          "need": "Severe learning difficulty",
+          "pct": 7.1
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 4.6
+        }
+      ],
+      "primaryNeedBase": 6649,
+      "period": "2025/26 academic year"
+    },
+    "E10000034": {
+      "areaName": "Worcestershire",
+      "ehcpPupils": 6141,
+      "ehcpPctOfPupils": 6.9,
+      "pupilsOnRoll": 88604,
+      "fiveYearGrowthPct": 91.0,
+      "ehcpPupilsFiveYearsEarlier": 3216,
+      "asdPrevalencePct": 25.9,
+      "primaryNeeds": [
+        {
+          "need": "Speech, language and communications needs",
+          "pct": 26.7
+        },
+        {
+          "need": "Autistic spectrum disorder",
+          "pct": 25.9
+        },
+        {
+          "need": "Social, emotional and mental health",
+          "pct": 17.9
+        },
+        {
+          "need": "Moderate learning difficulty",
+          "pct": 7.5
+        },
+        {
+          "need": "Specific learning difficulty",
+          "pct": 6.2
+        },
+        {
+          "need": "Physical disability",
+          "pct": 4.5
+        }
+      ],
+      "primaryNeedBase": 5397,
+      "period": "2025/26 academic year"
     }
   }
 }

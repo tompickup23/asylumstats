@@ -3,7 +3,6 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { computePressureScore } from "../src/lib/pressure-index";
 import localRouteLatest from "../src/data/live/local-route-latest.json";
-import crimeDashboard from "../src/data/live/crime-dashboard.json";
 
 /**
  * The published pressure-index table must equal what the code computes.
@@ -40,22 +39,19 @@ function publishedRows(): Row[] {
   return rows;
 }
 
+/**
+ * Ranked over the authorities holding all four domains. Until 12 October 2026 this
+ * ranked the 25 areas in a hand-typed file of crime figures; the SEND and social
+ * care domains now come from published national files, crime is no longer a
+ * domain, and an area scoring on fewer domains (Wales, Scotland, Northern Ireland)
+ * is not comparable with one scoring on all four.
+ */
 function computedRanking() {
-  const allAsylumRates = localRouteLatest.areas.map(
-    (a: { supportedAsylumRate: number | null }) => a.supportedAsylumRate ?? 0
-  );
-  const byName = new Map(
-    localRouteLatest.areas.map((a: { areaName: string; supportedAsylumRate: number | null }) => [
-      a.areaName,
-      a.supportedAsylumRate
-    ])
-  );
-  const areas = Object.entries(
-    crimeDashboard.areas as Record<string, { areaName: string }>
-  ).map(([code, a]) =>
-    computePressureScore(code, a.areaName, byName.get(a.areaName) ?? null, allAsylumRates)
-  );
+  const areas = localRouteLatest.areas as Array<{ areaCode: string; areaName: string; supportedAsylumRate: number | null }>;
+  const allAsylumRates = areas.map((a) => a.supportedAsylumRate ?? 0);
   return areas
+    .map((a) => computePressureScore(a.areaCode, a.areaName, a.supportedAsylumRate, allAsylumRates))
+    .filter((s) => s.availableModules === 4)
     .sort((a, b) => b.compositeScore - a.compositeScore || a.areaName.localeCompare(b.areaName))
     .map((a, i) => ({ rank: i + 1, name: a.areaName, score: a.compositeScore }));
 }
