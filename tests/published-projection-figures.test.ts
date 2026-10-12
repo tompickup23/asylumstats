@@ -11,6 +11,7 @@ import {
 } from "../src/lib/ethnic-projections";
 import rawProjections from "../src/data/live/ethnic-projections.json";
 import validation from "../src/data/live/out-of-sample-validation.json";
+import censusManifest from "../data/raw/manifests/census_ethnic_groups.json";
 
 const root = join(__dirname, "..");
 const read = (p: string) => readFileSync(join(root, p), "utf8");
@@ -98,10 +99,26 @@ describe("the published counts reproduce from the projection file", () => {
   /**
    * An observed year must reproduce as a plain sum of its own people, because that is what
    * the homepage calls it: "2011 Census". The first version of nationalWhiteBritishShare
-   * weighted the 2011 shares by 2021 populations and shipped 80.0% under that label, where
-   * the observed share across these areas is 80.2%. It passed every check above, because
-   * those only pinned 2021 and 2051.
+   * weighted the 2011 shares by 2021 populations and shipped 80.0% under that label. The
+   * second summed the area records' 2011 baselines, which counted the eleven authorities
+   * created after 2011 at their 2021 Census and published 80.2%. Census 2011 KS201EW gives
+   * 80.5% for England and Wales, so 2011 now comes from its England and Wales totals.
    */
+  it("takes 2011 from the KS201EW England and Wales totals, every group", () => {
+    const ew = (censusManifest as any).englandAndWales["2011"];
+    for (const g of ["white_british", "white_other", "asian", "black", "mixed", "other"] as const) {
+      expect(nationalGroupShare(g, 2011)!.pct.toFixed(3), g).toBe(((ew.groups[g] / ew.total) * 100).toFixed(3));
+    }
+    // Every local authority on 2011 boundaries, not the area records here.
+    expect(nationalWhiteBritishShare(2011)!.areas).toBe(ew.areas);
+    expect(ew.areas).toBeGreaterThan(distinctAreaCodes().length);
+  });
+
+  it("2021 summed from the area records is the TS021 England and Wales population", () => {
+    const ew = (censusManifest as any).englandAndWales["2021"];
+    expect(nationalWhiteBritishShare(2021)!.pct.toFixed(3)).toBe(((ew.groups.white_british / ew.total) * 100).toFixed(3));
+  });
+
   it("weights an observed year by its own population, not by 2021's", () => {
     const areas = rawProjections.areas as Record<string, any>;
     const sum = (year: number) => {
@@ -117,7 +134,7 @@ describe("the published counts reproduce from the projection file", () => {
       return (whiteBritish / people) * 100;
     };
 
-    for (const year of [2011, 2021]) {
+    for (const year of [2021]) {
       expect(nationalWhiteBritishShare(year)!.pct.toFixed(2), String(year)).toBe(sum(year).toFixed(2));
     }
   });
