@@ -21,6 +21,30 @@ export const PROJECTION_PATH = "src/data/live/ethnic-projections.json";
 /** The sync record, relative to the Asylum Stats root. */
 export const RECORD_PATH = "data/sync/ukd-ethnic-projections.json";
 
+/**
+ * Every file this site copies from UK Demographics. Each is copied byte for byte
+ * from a named UKD commit and has its own record. The crime, SEND and social care
+ * files were added on 12 October 2026, replacing 25-area files that this site had
+ * held since April 2026 with no raw file or script behind them, which matched no
+ * published table. The district lookup lets a two-tier district read its county's
+ * SEND and social care figures, as UKD's place pages do.
+ *
+ * `count` says what the file holds, for the record and for a sanity check that a
+ * sync did not copy an empty or truncated file.
+ */
+export const SYNCED_FILES = [
+  { key: "ethnic-projections", path: PROJECTION_PATH, record: RECORD_PATH,
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "crime-dashboard", path: "src/data/live/crime-dashboard.json", record: "data/sync/ukd-crime-dashboard.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "send-dashboard", path: "src/data/live/send-dashboard.json", record: "data/sync/ukd-send-dashboard.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "asc-dashboard", path: "src/data/live/asc-dashboard.json", record: "data/sync/ukd-asc-dashboard.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "district-to-utla", path: "src/data/lookups/district-to-utla.json", record: "data/sync/ukd-district-to-utla.json",
+    count: (d) => Object.keys(d.districts ?? {}).length, unit: "districts" }
+];
+
 export function sha256(buf) {
   return createHash("sha256").update(buf).digest("hex");
 }
@@ -63,8 +87,8 @@ export async function readBlobRemote(commit, path = PROJECTION_PATH) {
   return Buffer.from(await res.arrayBuffer());
 }
 
-export function readRecord(root) {
-  const p = join(root, RECORD_PATH);
+export function readRecord(root, recordPath = RECORD_PATH) {
+  const p = join(root, recordPath);
   if (!existsSync(p)) return null;
   return JSON.parse(readFileSync(p, "utf8"));
 }

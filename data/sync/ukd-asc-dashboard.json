@@ -1,0 +1,13 @@
+{
+  "description": "Provenance of src/data/live/asc-dashboard.json: a byte-for-byte copy of the UK Demographics file at the commit below. Written by scripts/sync/sync-from-ukd.mjs; checked by its --check mode and tests/ukd-sync.test.ts.",
+  "source": {
+    "repository": "tompickup23/ukdemographics",
+    "commit": "dd030214a07179d9f9bbb4a9fcaa42f8e3f81224",
+    "committedAt": "2026-10-12T12:13:11+01:00",
+    "path": "src/data/live/asc-dashboard.json"
+  },
+  "sha256": "97600235973f6a73363eaf4148c571e2034dcfe20193cb377513359fa8158622",
+  "bytes": 85732,
+  "areas": 153,
+  "syncedAt": "2026-10-12"
+}

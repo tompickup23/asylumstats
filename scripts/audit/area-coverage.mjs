@@ -58,11 +58,11 @@ const DATASETS = [
     codes: (d) => fromKeys(d.areas) },
   { id: "school-validation", tier: "partial", scope: "DfE school census subset",
     codes: (d) => fromList(d.areas) },
-  { id: "crime-dashboard", tier: "local", scope: "Lancashire plus comparators",
+  { id: "crime-dashboard", tier: "national", scope: "England and Wales, ONS Police Force Area tables (synced from UK Demographics)",
     codes: (d) => (Array.isArray(d.areas) ? fromList(d.areas) : fromKeys(d.areas)) },
-  { id: "send-dashboard", tier: "local", scope: "Lancashire plus comparators",
+  { id: "send-dashboard", tier: "national", scope: "England, upper-tier councils; districts read their county (synced from UK Demographics)",
     codes: (d) => (Array.isArray(d.areas) ? fromList(d.areas) : fromKeys(d.areas)) },
-  { id: "asc-dashboard", tier: "local", scope: "Lancashire plus comparators",
+  { id: "asc-dashboard", tier: "national", scope: "England, upper-tier councils; districts read their county (synced from UK Demographics)",
     codes: (d) => (Array.isArray(d.areas) ? fromList(d.areas) : fromKeys(d.areas)) }
 ];
 
