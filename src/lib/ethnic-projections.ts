@@ -96,7 +96,7 @@ interface EthnicProjectionsData {
 const data = rawProjections as unknown as EthnicProjectionsData;
 
 export function getEthnicProjection(areaCode: string): AreaEthnicProjection | null {
-  return data.areas[areaCode] ?? null;
+  return areaRecord(areaCode) ?? null;
 }
 
 export function getEthnicProjectionSource(): string {
@@ -108,35 +108,35 @@ export function getEthnicProjectionMethodology(): string {
 }
 
 export function getReligionData(areaCode: string) {
-  return data.areas[areaCode]?.religion ?? null;
+  return areaRecord(areaCode)?.religion ?? null;
 }
 
 export function getNativityData(areaCode: string) {
-  return data.areas[areaCode]?.nativity ?? null;
+  return areaRecord(areaCode)?.nativity ?? null;
 }
 
 export function getStochasticData(areaCode: string) {
-  return data.areas[areaCode]?.stochastic ?? null;
+  return areaRecord(areaCode)?.stochastic ?? null;
 }
 
 export function getShiftShareData(areaCode: string) {
-  return data.areas[areaCode]?.shiftShare ?? null;
+  return areaRecord(areaCode)?.shiftShare ?? null;
 }
 
 export function getDiversityIndex(areaCode: string) {
-  return data.areas[areaCode]?.diversityIndex ?? null;
+  return areaRecord(areaCode)?.diversityIndex ?? null;
 }
 
 export function getEnglishProficiency(areaCode: string) {
-  return data.areas[areaCode]?.englishProficiency ?? null;
+  return areaRecord(areaCode)?.englishProficiency ?? null;
 }
 
 export function getMigrationProfile(areaCode: string) {
-  return data.areas[areaCode]?.migrationProfile ?? null;
+  return areaRecord(areaCode)?.migrationProfile ?? null;
 }
 
 export function getSocioeconomicData(areaCode: string) {
-  const area = data.areas[areaCode];
+  const area = areaRecord(areaCode);
   if (!area) return null;
   return {
     economicActivity: area.economicActivity ?? null,
@@ -185,7 +185,7 @@ export function getEthnicCompositionTimeline(areaCode: string): Array<{
   groups: EthnicGroup;
   isProjection: boolean;
 }> | null {
-  const area = data.areas[areaCode];
+  const area = areaRecord(areaCode);
   if (!area) return null;
 
   const timeline = [
@@ -201,16 +201,44 @@ export function getEthnicCompositionTimeline(areaCode: string): Array<{
 }
 
 /**
- * Barnsley and Sheffield each appear twice in the projection file, once under a
- * retired local authority code and once under the current one, so the raw key
- * count is 320 where the model covers 318 distinct authorities. Counting the raw
- * keys double-counts about 801,000 people and, on the 2051 threshold, counts
- * Sheffield twice: it is the whole of the difference between the 87 an
- * undeduplicated count returns and the 86 this site publishes.
+ * Home Office codes for authorities the projection file keys under another code.
+ *
+ * Barnsley and Sheffield are E08000016 and E08000019 in the projection file, as in
+ * the ONS lookup and on ukdemographics.co.uk, but the Home Office published them as
+ * E08000038 and E08000039 in the year ending June 2026 release, and this site's
+ * place pages are built from that release. county-directory.ts translates the same
+ * pair for county totals. Every per-area lookup below goes through projectionCode,
+ * so a page keyed on either code finds the one record.
  */
-export const RETIRED_AREA_CODES = new Set(["E08000016", "E08000019"]);
+export const PROJECTION_CODE_ALIASES: Readonly<Record<string, string>> = {
+  E08000038: "E08000016", // Barnsley
+  E08000039: "E08000019" // Sheffield
+};
 
-/** The distinct authorities the model covers, retired duplicate codes removed. */
+/** The code the projection file holds for an authority given under either code. */
+export function projectionCode(areaCode: string): string {
+  return PROJECTION_CODE_ALIASES[areaCode] ?? areaCode;
+}
+
+function areaRecord(areaCode: string): AreaEthnicProjection | undefined {
+  return data.areas[projectionCode(areaCode)];
+}
+
+/**
+ * Codes that must never count as an authority of their own: the aliases above.
+ *
+ * Until October 2026 this site's copy of the projection file held Barnsley and
+ * Sheffield twice, under both codes, so the raw key count was 320 where the model
+ * covers 318 distinct authorities. Counting the raw keys double-counted about
+ * 801,000 people and, on the 2051 threshold, counted Sheffield twice: the whole of
+ * the difference between the 87 an undeduplicated count returned and the 86 this
+ * site publishes. The file is now copied from UKD, which folds the aliases into one
+ * record (scripts/sync/sync-from-ukd.mjs), so neither alias is a key; the filter
+ * stays so that a copy that brings them back cannot double-count.
+ */
+export const RETIRED_AREA_CODES: ReadonlySet<string> = new Set(Object.keys(PROJECTION_CODE_ALIASES));
+
+/** The distinct authorities the model covers, alias codes removed. */
 export function distinctAreaCodes(): string[] {
   return Object.keys(data.areas).filter((code) => !RETIRED_AREA_CODES.has(code));
 }
@@ -396,7 +424,7 @@ export interface CrossingYearRange {
 }
 
 export function whiteBritishCrossingRange(code: string): CrossingYearRange | null {
-  const area = data.areas[code];
+  const area = areaRecord(code);
   if (!area) return null;
 
   const observedYear = area.current?.year ?? 2021;
@@ -482,8 +510,13 @@ export function meanWhiteBritishShare(
   let projectedSum = 0;
   let areasScored = 0;
 
-  for (const code of areaCodes) {
-    if (RETIRED_AREA_CODES.has(code)) continue;
+  // Resolve each code to its record and count each record once, so a set that
+  // names an authority under both of its codes still scores it once.
+  const seen = new Set<string>();
+  for (const given of areaCodes) {
+    const code = projectionCode(given);
+    if (seen.has(code)) continue;
+    seen.add(code);
     const area = data.areas[code];
     const current = area?.current?.groups?.white_british;
     if (!current) continue;
@@ -549,9 +582,9 @@ export interface ShareRange {
  * withholds, so every area carries exactly one and no area carries two.
  */
 export function whiteBritishShareRange(code: string, year: number): ShareRange | null {
-  const area = data.areas[code];
+  const area = areaRecord(code);
   const projected = area?.projections?.[String(year)]?.white_british;
-  if (projected == null || !Number.isFinite(projected)) return null;
+  if (!area || projected == null || !Number.isFinite(projected)) return null;
 
   const observedYear = area.current?.year ?? 2021;
   const decades = Math.max((year - observedYear) / 10, 0);

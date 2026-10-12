@@ -61,7 +61,9 @@
     "test:search": "playwright test tests/homepage-search.spec.ts --project=mobile-chromium --project=desktop-chromium",
     "test:watch": "vitest",
     "audit:projections": "node scripts/audit/projection-integrity.mjs",
-    "audit:projections:check": "node scripts/audit/projection-integrity.mjs --check"
+    "audit:projections:check": "node scripts/audit/projection-integrity.mjs --check",
+    "sync:ukd": "node scripts/sync/sync-from-ukd.mjs",
+    "sync:ukd:check": "node scripts/sync/sync-from-ukd.mjs --check"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.0",
