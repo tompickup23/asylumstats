@@ -23,19 +23,19 @@ export const RECORD_PATH = "data/sync/ukd-ethnic-projections.json";
 
 /**
  * Every file this site copies from UK Demographics. Each is copied byte for byte
- * from a named UKD commit and has its own record. The crime, SEND and social care
- * files were added on 12 October 2026, replacing 25-area files that this site had
- * held since April 2026 with no raw file or script behind them, which matched no
- * published table. The district lookup lets a two-tier district read its county's
- * SEND and social care figures, as UKD's place pages do.
+ * from a named UKD commit and has its own record. The SEND and social care files
+ * were added on 12 October 2026, replacing 25-area files that this site had held
+ * since April 2026 with no raw file or script behind them, which matched no
+ * published table. Crime is deliberately not synced: this site does not set
+ * recorded crime beside asylum support. The district lookup lets a two-tier
+ * district read its county's SEND and social care figures, as UKD's place pages
+ * do.
  *
  * `count` says what the file holds, for the record and for a sanity check that a
  * sync did not copy an empty or truncated file.
  */
 export const SYNCED_FILES = [
   { key: "ethnic-projections", path: PROJECTION_PATH, record: RECORD_PATH,
-    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
-  { key: "crime-dashboard", path: "src/data/live/crime-dashboard.json", record: "data/sync/ukd-crime-dashboard.json",
     count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
   { key: "send-dashboard", path: "src/data/live/send-dashboard.json", record: "data/sync/ukd-send-dashboard.json",
     count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },

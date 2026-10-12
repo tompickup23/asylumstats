@@ -40,18 +40,18 @@ function publishedRows(): Row[] {
 }
 
 /**
- * Ranked over the authorities holding all five domains. Until 12 October 2026 this
- * ranked the 25 areas in a hand-typed crime file; the crime, SEND and social care
- * domains now come from published national files, and an area scoring on fewer
- * domains (Wales, Scotland, Northern Ireland) is not comparable with one scoring on
- * all five.
+ * Ranked over the authorities holding all four domains. Until 12 October 2026 this
+ * ranked the 25 areas in a hand-typed file of crime figures; the SEND and social
+ * care domains now come from published national files, crime is no longer a
+ * domain, and an area scoring on fewer domains (Wales, Scotland, Northern Ireland)
+ * is not comparable with one scoring on all four.
  */
 function computedRanking() {
   const areas = localRouteLatest.areas as Array<{ areaCode: string; areaName: string; supportedAsylumRate: number | null }>;
   const allAsylumRates = areas.map((a) => a.supportedAsylumRate ?? 0);
   return areas
     .map((a) => computePressureScore(a.areaCode, a.areaName, a.supportedAsylumRate, allAsylumRates))
-    .filter((s) => s.availableModules === 5)
+    .filter((s) => s.availableModules === 4)
     .sort((a, b) => b.compositeScore - a.compositeScore || a.areaName.localeCompare(b.areaName))
     .map((a, i) => ({ rank: i + 1, name: a.areaName, score: a.compositeScore }));
 }

@@ -61,8 +61,9 @@ describe("ethnic-projections.json is the recorded UK Demographics file", () => {
 
 import { SYNCED_FILES } from "../scripts/sync/ukd-source.mjs";
 
-// The crime, SEND and adult social care files and the district lookup are copied
-// from UK Demographics the same way since 12 October 2026. Before that this site
+// The SEND and adult social care files and the district lookup are copied from
+// UK Demographics the same way since 12 October 2026 (crime is not synced: see
+// tests/no-crime-beside-asylum.test.ts). Before that this site
 // held its own 25-area versions, added by hand in April 2026 with no raw file or
 // script; they gave SEND and social care figures for district councils and filed
 // Preston under E06000011 (East Riding of Yorkshire).
@@ -114,7 +115,7 @@ describe("the service files hold councils that run the service, on real codes", 
 
   it("names areas only by codes the projection file or the county lookup knows", () => {
     const counties = new Set(Object.values(lookup).map((d) => d.countyCode));
-    for (const p of ["src/data/live/crime-dashboard.json", "src/data/live/send-dashboard.json", "src/data/live/asc-dashboard.json"]) {
+    for (const p of ["src/data/live/send-dashboard.json", "src/data/live/asc-dashboard.json"]) {
       const stray = Object.keys(read(p).areas).filter((c) => !projectionCodes.has(c) && !counties.has(c));
       expect(stray, p).toEqual([]);
     }

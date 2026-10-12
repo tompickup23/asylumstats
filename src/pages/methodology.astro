@@ -420,7 +420,7 @@ const methodSections = [
       <div>
         <h2>Cross-domain analysis</h2>
         <p class="lede">
-          Place pages combine asylum, demographic, crime, SEND, and social care data. This section explains how domains are combined and what the pressure index represents.
+          Place pages combine asylum, demographic, SEND and adult social care data. This section explains how domains are combined and what the pressure index represents.
         </p>
       </div>
     </div>
@@ -428,20 +428,20 @@ const methodSections = [
       <article class="signal-card">
         <span class="tiny">Data sources</span>
         <p class="tiny">
-          Crime: ONS police recorded crime statistics via Police Force Area tables. SEND: DfE SEN2 return (Education, Health and Care Plans by local authority). Adult social care: NHS Digital SALT collection and ASCOF framework. Each domain uses the most recent annual publication at time of last update.
+          Asylum support: Home Office immigration system statistics, regional and local authority data. Demographic change: Census 2011 and 2021. SEND: DfE, Special educational needs in England, pupils with an EHC plan and five-year growth. Adult social care: DHSC, Adult social care finance report, gross spend per resident aged 18 and over. The SEND and social care files are copied from UK Demographics at a recorded commit; a two-tier district shows its county's figures. Each domain uses the most recent annual publication.
         </p>
       </article>
       <article class="signal-card">
         <span class="tiny">Pressure index</span>
         <p class="tiny">
-          The composite pressure index converts each domain metric to a percentile rank (0-100) among tracked areas, then takes the unweighted mean of available domains. It measures co-occurrence of pressures across asylum dispersal, demographic change, crime rates, SEND demand, and social care spend. A high score indicates multiple domains showing elevated readings simultaneously. It does not imply that any domain causes another.
+          The composite pressure index converts each domain metric to a percentile rank from 0 to 100 against every authority holding it, then takes the unweighted mean of the domains an area has. It measures co-occurrence of pressures on councils across asylum support, demographic change, SEND demand and adult social care spend. A high score indicates several domains showing elevated readings at once. It does not imply that any domain causes another. Changed 12 October 2026: police recorded crime was a fifth domain and has been removed, because this site does not set recorded crime beside asylum support; the four remaining domains keep equal weights, a quarter each instead of a fifth. The SEND and social care domains had also read 25-area files that matched no published table; see the corrections page.
         </p>
       </article>
     </div>
     <article class="signal-card" style="margin-top: 0.5rem;">
       <span class="tiny">Causation caveat</span>
       <p class="tiny">
-        This site presents correlations between local authority characteristics. Correlation does not establish causation. Areas with high asylum dispersal rates also tend to have higher deprivation, lower property values, and different age profiles, all of which independently affect crime rates, SEND demand, and social care costs. The data is presented to inform public accountability, not to attribute causes.
+        This site presents correlations between local authority characteristics. Correlation does not establish causation. Areas with high asylum dispersal rates also tend to have higher deprivation, lower property values and different age profiles, all of which independently affect SEND demand and social care costs. The data is presented to inform public accountability, not to attribute causes.
       </p>
     </article>
   </section>

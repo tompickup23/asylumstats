@@ -3,7 +3,7 @@
  * Copy the UK Demographics files this site publishes from a named UKD commit.
  *
  *   node scripts/sync/sync-from-ukd.mjs --commit <sha or ref>      # copy and record every file
- *   node scripts/sync/sync-from-ukd.mjs --commit <sha> --only crime-dashboard,send-dashboard
+ *   node scripts/sync/sync-from-ukd.mjs --commit <sha> --only send-dashboard,asc-dashboard
  *   node scripts/sync/sync-from-ukd.mjs --check                    # verify only
  *
  * Options:
@@ -13,8 +13,8 @@
  *   --only <keys>       comma-separated keys from SYNCED_FILES (default: all)
  *
  * The files are listed in SYNCED_FILES (scripts/sync/ukd-source.mjs): the
- * projection file, the crime, SEND and adult social care dashboards, and the
- * district to county lookup. The bytes come from git's object store at that
+ * projection file, the SEND and adult social care dashboards, and the district
+ * to county lookup. The bytes come from git's object store at that
  * commit, never from the checkout's working tree, so uncommitted edits in UKD
  * cannot leak in. Each file is written unchanged, read back and hashed, and its
  * commit, path, sha256 and size go to its own record under data/sync/. Nothing in

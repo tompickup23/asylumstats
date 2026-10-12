@@ -28,7 +28,6 @@ import {
   getShiftShareData, getDiversityIndex, getEnglishProficiency,
   getMigrationProfile, getSocioeconomicData
 } from "../../lib/ethnic-projections";
-import { getCrimeProfile, getCrimeRatePercentile, getCrimeSource, getCrimeCaveat } from "../../lib/crime-data";
 import { getSendForArea, getSendGrowthPercentile, getSendSource, getSendCaveat } from "../../lib/send-data";
 import { getAscForArea, getAscSpendPercentile, getAscSource, getAscCaveat } from "../../lib/asc-data";
 import { computePressureScore } from "../../lib/pressure-index";
@@ -212,8 +211,6 @@ const natChartLines = nativityData ? (() => {
     { label: "Foreign-born", color: "#b45309", points: years.map(y => ({ year: y, value: nativityData[y].foreignBornPct })) }
   ];
 })() : [];
-const crimeProfile = getCrimeProfile(area.areaCode);
-const crimePercentile = getCrimeRatePercentile(area.areaCode);
 // SEND and adult social care are run by upper-tier councils: a two-tier district
 // shows its county's figures and percentile, labelled as the county's.
 const sendFor = getSendForArea(area.areaCode);
@@ -303,7 +300,7 @@ const placeSections = [
   { id: "local-numbers", label: "Local numbers" },
   ...(ethnicProjection ? [{ id: "tabpanel-demographics", label: "Demographics" }] : []),
   ...(socioData?.economicActivity ? [{ id: "tabpanel-economy", label: "Economy" }] : []),
-  ...((crimeProfile || sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
+  ...((sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
   { id: "tabpanel-benchmarks", label: "Benchmarks" }
 ];
 
@@ -558,7 +555,7 @@ const areaCountyName =
     <div class="tab-bar" role="tablist">
       {ethnicProjection && <button role="tab" type="button" class="tab-btn" aria-selected="true" aria-controls="tabpanel-demographics" data-tab="demographics">Demographics</button>}
       {(socioData?.economicActivity || ethnicProjection?.schoolEthnicity) && <button role="tab" type="button" class="tab-btn" aria-selected={!ethnicProjection ? "true" : "false"} aria-controls="tabpanel-economy" data-tab="economy">Economy</button>}
-      {(crimeProfile || sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
+      {(sendProfile || ascProfile) && <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-services" data-tab="services">Services</button>}
       <button role="tab" type="button" class="tab-btn" aria-selected="false" aria-controls="tabpanel-benchmarks" data-tab="benchmarks">Benchmarks</button>
     </div>
 
@@ -918,51 +915,6 @@ const areaCountyName =
     <!-- TAB: Services -->
     <div id="tabpanel-services" role="tabpanel" class="tab-panel" data-tab-panel="services" hidden>
 
-  {crimeProfile && (
-    <section id="crime-profile" class="section section-anchor">
-      <div class="section-head">
-        <div>
-          <h2>Crime</h2>
-          <p class="lede">
-            {crimeProfile.totalCrimeRate != null
-              ? `${crimeProfile.totalCrimeRate.toFixed(1)} police recorded crimes per 1,000 residents, excluding fraud, ${crimeProfile.period.replace(/, ONS$/, "").replace(/^Y/, "y")}`
-              : `No published rate for ${area.areaName}`}{crimePercentile !== null ? ` (${ordinal(crimePercentile)} percentile of areas with a rate)` : ""}.
-            {crimeProfile.yearOnYearChange != null && crimeProfile.yearOnYearChange !== 0
-              ? ` ${crimeProfile.yearOnYearChange > 0 ? "Up" : "Down"} ${Math.abs(crimeProfile.yearOnYearChange).toFixed(1)}% on the year before.`
-              : ""}
-          </p>
-        </div>
-      </div>
-      {crimeProfile.suppressed && crimeProfile.suppressionNote && <p class="tiny">{crimeProfile.suppressionNote}</p>}
-      {crimeProfile.basisNote && <p class="tiny">{crimeProfile.basisNote}</p>}
-      {crimeProfile.breakdown.length > 0 && (
-        <article class="feature-card">
-          <h3>By offence group, per 1,000 residents</h3>
-          <div class="stacked-bars">
-            {crimeProfile.breakdown.map((item) => {
-              const maxRate = Math.max(...crimeProfile.breakdown.map((b) => b.rate));
-              return (
-                <div class="stacked-bar-row">
-                  <div class="stacked-bar-label" style="min-width: 8rem;">
-                    <span style="font-size: 0.78rem;">{item.type}</span>
-                  </div>
-                  <div class="stacked-bar" style="background: var(--bg-subtle);">
-                    <div class="bar-seg asian" style={`width: ${(item.rate / maxRate) * 100}%`}></div>
-                  </div>
-                  <div class="stacked-bar-pct">{item.rate.toFixed(1)}</div>
-                </div>
-              );
-            })}
-          </div>
-          <details class="method-note">
-            <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Source</summary>
-            <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">{getCrimeSource()}. {getCrimeCaveat()}</p>
-          </details>
-        </article>
-      )}
-    </section>
-  )}
-
   <!-- SEND -->
   {sendProfile && (
     <section id="send-profile" class="section section-anchor">
@@ -1085,12 +1037,6 @@ const areaCountyName =
               <span class="metric-label">WB annual change</span>
             </div>
           )}
-          {pressureScore.components.crimeRate !== null && (
-            <div class="metric-item">
-              <span class="metric-value" style="font-size: 1.3rem;">{pressureScore.components.crimeRate.toFixed(1)}</span>
-              <span class="metric-label">Crime /1,000, excl. fraud</span>
-            </div>
-          )}
           {pressureScore.components.sendGrowth !== null && (
             <div class="metric-item">
               <span class="metric-value" style="font-size: 1.3rem;">+{pressureScore.components.sendGrowth.toFixed(1)}%</span>
@@ -1107,7 +1053,7 @@ const areaCountyName =
         <details class="method-note">
           <summary class="tiny" style="cursor: pointer; opacity: 0.6;">Methodology</summary>
           <p class="tiny" style="margin-top: 0.4rem; opacity: 0.5;">
-            Each domain is converted to a percentile rank from 0 to 100 against every authority holding it, and the score is their unweighted mean. Asylum support: Home Office local authority data. Demographic change: Census 2011 and 2021. Crime: ONS police recorded crime excluding fraud. SEND and adult social care: DfE and DHSC figures for the council that runs the service. It measures pressures that occur together, not causes.
+            Each domain is converted to a percentile rank from 0 to 100 against every authority holding it, and the score is their unweighted mean. Asylum support: Home Office local authority data. Demographic change: Census 2011 and 2021. SEND and adult social care: DfE and DHSC figures for the council that runs the service. The four domains are weighted equally. It measures pressures on councils that occur together, not causes.
           </p>
         </details>
       </article>

@@ -1,5 +1,4 @@
 import { getEthnicProjection } from "./ethnic-projections";
-import { getCrimeProfile, allCrimeRates } from "./crime-data";
 import { getSendForArea, allSendGrowth } from "./send-data";
 import { getAscForArea, allAscSpend } from "./asc-data";
 import { allWhiteBritishChangeRates } from "./ethnic-projections";
@@ -12,25 +11,29 @@ export interface PressureScore {
   components: {
     asylumRate: number | null;
     demographicChangeRate: number | null;
-    crimeRate: number | null;
     sendGrowth: number | null;
     ascSpend: number | null;
   };
   availableModules: number;
   /** Each domain's percentile rank (0 to 100, unrounded), for the domains the area has. */
-  percentiles: Partial<Record<"asylum" | "demographic" | "crime" | "send" | "asc", number>>;
+  percentiles: Partial<Record<"asylum" | "demographic" | "send" | "asc", number>>;
 }
 
 /**
- * Sources, since 12 October 2026: asylum support from the Home Office local
- * authority data; demographic change from Census 2011 and 2021 via the projection
- * file; police recorded crime excluding fraud, ONS Police Force Area data tables;
- * five-year growth in pupils with an EHC plan, DfE; adult social care spend per
- * adult, DHSC. The last three are synced from UK Demographics. SEND and adult
- * social care are run by upper-tier councils, so a two-tier district takes its
- * county's figure and percentile, and each distribution holds one figure per
- * council that runs the service. Until 12 October the crime, SEND and social care
- * domains read 25-area files that matched no published table.
+ * Four domains since 12 October 2026, each weighted equally: asylum support from
+ * the Home Office local authority data; demographic change from Census 2011 and
+ * 2021 via the projection file; five-year growth in pupils with an EHC plan, DfE;
+ * adult social care spend per adult, DHSC. The last two are synced from UK
+ * Demographics. SEND and adult social care are run by upper-tier councils, so a
+ * two-tier district takes its county's figure and percentile, and each
+ * distribution holds one figure per council that runs the service.
+ *
+ * Police recorded crime was a fifth domain until 12 October 2026. It was removed
+ * because this site does not set recorded crime beside asylum support; UK
+ * Demographics publishes crime in its own context. The remaining domains keep
+ * equal weights, so each now counts for a quarter instead of a fifth. Until the
+ * same date the SEND and social care domains read 25-area files that matched no
+ * published table.
  *
  * The four comparison distributions used to be literal arrays of 25 numbers, transcribed
  * by hand from the April 2026 data. A percentile is only meaningful against the
@@ -67,12 +70,6 @@ export function computePressureScore(
     components.push({ domain: "demographic", percentile: percentileRank(allChanges, absChange) });
   }
 
-  const crime = getCrimeProfile(areaCode);
-  if (crime && crime.totalCrimeRate != null) {
-    const allRates = allCrimeRates();
-    components.push({ domain: "crime", percentile: percentileRank(allRates, crime.totalCrimeRate) });
-  }
-
   const send = getSendForArea(areaCode)?.profile ?? null;
   if (send && send.fiveYearGrowthPct != null) {
     const allGrowth = allSendGrowth();
@@ -97,7 +94,6 @@ export function computePressureScore(
     components: {
       asylumRate: asylumRate,
       demographicChangeRate: ethnic ? Math.abs(ethnic.annualChangePp.white_british) : null,
-      crimeRate: crime?.totalCrimeRate ?? null,
       sendGrowth: send?.fiveYearGrowthPct ?? null,
       ascSpend: asc?.grossSpendPerCapita ?? null
     },
