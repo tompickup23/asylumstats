@@ -492,19 +492,67 @@ describe("a stated crossing year is borne out by the projection", () => {
   });
 
   it("keeps the half-point tolerance honest", () => {
-    // The tolerance above is only defensible while the areas using it are the
-    // three known interpolation artefacts. A fourth means something has moved.
-    const marginal: string[] = [];
+    // The tolerance above is only defensible while every area using it is an
+    // interpolation artefact, and that is recomputed here rather than pinned to
+    // a list of names (it was Bedford, Welwyn Hatfield and West Northamptonshire
+    // in October 2026; a re-run will change the list). The model states the
+    // crossing as the year rounded from a straight line between the published
+    // points either side of 50%. An area still above 50% in its stated year is
+    // an artefact only if that line, drawn through its own published series,
+    // crosses within half a year after the stated year, so rounding to the
+    // nearest year landed on the decade.
+    const offenders: string[] = [];
+    let marginal = 0;
     for (const code of distinctAreaCodes()) {
       const area = (rawProjections.areas as any)[code];
       const threshold = (area.thresholds ?? []).find((t: any) => t.label === "White British <50%");
       if (!threshold) continue;
       const decadal = area.projections?.[String(threshold.year)]?.white_british;
-      if (decadal != null && decadal >= 50) marginal.push(area.areaName);
+      if (decadal == null || decadal < 50) continue;
+      marginal += 1;
+      const crossing = recomputedCrossing(area);
+      const lag = crossing == null ? null : crossing - threshold.year;
+      // 0.05 of a year allows for the published shares being rounded to 0.01.
+      if (lag == null || lag < -0.05 || lag > 0.55) {
+        offenders.push(
+          `${area.areaName}: stated ${threshold.year}, its series crosses ${crossing == null ? "nowhere" : crossing.toFixed(2)}`
+        );
+      }
     }
-    expect(marginal.sort()).toEqual(["Bedford", "Welwyn Hatfield", "West Northamptonshire"]);
+    expect(offenders).toEqual([]);
+    // If no area needs the tolerance, the check above proves nothing; say so
+    // by failing, so the tolerance is reviewed rather than left in place.
+    expect(marginal, "no area uses the half-point tolerance: remove it").toBeGreaterThan(0);
   });
 });
+
+/**
+ * Where the published White British series crosses 50%, by a straight line
+ * between the points either side, as the model computes its threshold year. If
+ * the series ends still above 50% and falling, the last segment is extended.
+ * Null if it never falls below 50%.
+ */
+function recomputedCrossing(area: any): number | null {
+  const series: Array<[number, number]> = [
+    [area.current.year, area.current.groups.white_british] as [number, number],
+    ...Object.entries(area.projections ?? {}).map(
+      ([y, g]: [string, any]) => [Number(y), g.white_british] as [number, number]
+    )
+  ]
+    .filter(([, w]) => typeof w === "number")
+    .sort((p, q) => p[0] - q[0]);
+  for (let i = 0; i < series.length - 1; i++) {
+    const [y0, w0] = series[i];
+    const [y1, w1] = series[i + 1];
+    if (w0 >= 50 && w1 < 50) return y0 + ((50 - w0) / (w1 - w0)) * (y1 - y0);
+  }
+  if (series.length >= 2) {
+    const [y0, w0] = series[series.length - 2];
+    const [y1, w1] = series[series.length - 1];
+    if (w1 >= 50 && w1 < w0) return y1 + ((50 - w1) / (w1 - w0)) * (y1 - y0);
+  }
+  return null;
+}
 
 /**
  * A crossing year used to ship bare: "approximately 2027", "around 2050". It is
