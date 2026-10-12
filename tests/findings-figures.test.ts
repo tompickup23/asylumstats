@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { areasBelowFiftyBy, distinctAreaCodes } from "../src/lib/ethnic-projections";
+import { areasBelowFiftyBy, distinctAreaCodes, nationalWhiteBritishShare } from "../src/lib/ethnic-projections";
 import { plausibleThrough } from "../src/lib/projection-plausibility";
 import rawProjections from "../src/data/live/ethnic-projections.json";
 import areaSeries from "../src/data/live/area-series.json";
@@ -57,6 +57,29 @@ describe("86-areas finding: areas withheld from the count", () => {
     expect(WORDS[word] ?? Number(word)).toBe(areasBelowFiftyBy(2051).withheld);
     const quoted = names.split(/, | and /).map((s) => s.trim()).sort();
     expect(quoted).toEqual(withheld.map((c) => areas[c].areaName).sort());
+  });
+});
+
+describe("86-areas finding: the cohort-component comparison", () => {
+  it("quotes the weighted cohort-component share and the gap to Hamilton-Perry from the data", () => {
+    let weighted = 0, pop = 0, n = 0;
+    for (const code of distinctAreaCodes()) {
+      const a = areas[code];
+      const p = a?.current?.total_population ?? 0;
+      const cc = a?.modelSpread2051?.cohortComponent;
+      if (!p || cc == null) continue;
+      weighted += cc * p; pop += p; n++;
+    }
+    const cc = (weighted / pop).toFixed(1);
+    const hp = nationalWhiteBritishShare(2051)!.pct.toFixed(1);
+    const text = prose(read("86-areas-minority-wbi-2051"));
+    const [share, count] = grab(text, /gives ([\d.]+)% on the same weighting, across the (\d+) authorities/, "cohort-component share");
+    expect(share).toBe(cc);
+    expect(Number(count)).toBe(n);
+    const [gap, hpQ, ccQ] = grab(text, /The two models are ([\d.]+) points apart on this weighting, ([\d.]+)% against ([\d.]+)%/, "gap");
+    expect(hpQ).toBe(hp);
+    expect(ccQ).toBe(cc);
+    expect(gap).toBe((Number(hp) - Number(cc)).toFixed(1));
   });
 });
 
