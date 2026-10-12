@@ -36,8 +36,8 @@ import routeDashboard from "../data/live/route-dashboard.json";
  *
  * 2. MIXING BASES. £150 per person per day was not arbitrary: it was £5.3bn / 97,519 /
  *    365, total-system cost expressed per supported person. That conflates costs
- *    incurred for people who are NOT on asylum support (post-decision welfare, family
- *    reunion, foreign national offenders) with the population on support. So the
+ *    incurred for people who are NOT on asylum support (post-decision welfare and family
+ *    reunion) with the population on support. So the
  *    per-area figure here is deliberately NOT the system total. It is the audited
  *    accommodation and support cost, which is the cost that actually scales with the
  *    number of people supported in an area. The two are exported under names that make
@@ -138,10 +138,10 @@ export type CostBasis = "audited" | "attributed" | "published" | "estimated";
  *                         construction, because a pound paid is a pound.
  *   average_attribution - an average cost per head of some wider population,
  *                         applied to this one. NHS spend per capita, funding per
- *                         pupil, cost per prison place.
+ *                         pupil, public services per family reunion dependant.
  *
  * The last kind is the one that needs saying out loud. An average carries a share
- * of fixed capacity: hospital estate, school buildings, the prison estate. Those
+ * of fixed capacity: hospital estate, school buildings. Those
  * costs do not fall away in proportion when the population using them does, so an
  * average-attributed figure overstates what the exchequer would actually stop
  * spending. It is a fair answer to "what share of public spending is associated
@@ -304,16 +304,6 @@ const OTHER_CATEGORIES: CostCategory[] = [
     note: "No body publishes asylum-specific NHS costs. This is the largest data gap in the calculation and could be materially wrong in either direction."
   },
   {
-    id: "criminal_justice",
-    label: "Criminal justice",
-    basis: "estimated",
-    kind: "average_attribution",
-    conservative: 127,
-    central: 152,
-    upper: 203,
-    note: "A share of foreign national offender prison costs, judged from the overlap between top prison nationalities and top asylum nationalities. Not a measured figure."
-  },
-  {
     id: "education",
     label: "Education",
     basis: "estimated",
@@ -365,6 +355,14 @@ const OTHER_CATEGORIES: CostCategory[] = [
   }
 ];
 
+/**
+ * A criminal justice line (£127M, £152M, £203M) sat in OTHER_CATEGORIES until
+ * 12 October 2026: a share of foreign national offender prison costs, attributed
+ * from the overlap between prison and asylum nationalities. It was removed because
+ * attributing offending by nationality is a link the data cannot support. Do not
+ * reinstate a category of that kind; tests/no-nationality-crime.test.ts checks the
+ * finding's prose and tests/true-cost.test.ts the category list.
+ */
 export const COST_CATEGORIES: CostCategory[] = [...HOME_OFFICE_CATEGORIES, ...OTHER_CATEGORIES];
 
 const sum = (categories: CostCategory[], column: "conservative" | "central" | "upper") =>
@@ -442,7 +440,7 @@ export const PER_TAXPAYER_GBP = {
  *
  * Two substitutions are banned here, both of which have been live on this site:
  *   - a system-total numerator, which produced £150 a day and silently attributes
- *     post-decision welfare and offender costs to people currently on support;
+ *     post-decision welfare and family reunion costs to people currently on support;
  *   - a latest-quarter denominator, which produced £276 a night on the homepage by
  *     dividing one year's cost by another year's population.
  */
