@@ -23,6 +23,19 @@ seo_description: "86 English local authorities are projected below a 50% White B
 > projection file is now an exact copy of UK Demographics' file. The 2021 share,
 > 74.4%, and the count of 86 do not change.
 
+> **Correction, 12 October 2026.** This piece said **15** areas whose projections
+> diverge are left out of the count of 86. The plausibility guard withholds 2051
+> for **six** areas below 50%: Barnet, Hackney, Lambeth, Enfield, Haringey and
+> Islington. Counting them would give 92, which is why the published count is 86.
+>
+> The cohort-component model was said to give **54.6%** on the same weighting,
+> and the two models to agree to within half a point. That run had read each
+> area's ONS population projection twice, adding the single years of age to the
+> all-ages total. Re-run without that error and synced from UK Demographics, it
+> gives **53.6%** across all 318 authorities, 1.5 points below the
+> Hamilton-Perry 55.1%, so the half-point agreement this piece
+> pointed to no longer holds.
+
 > **Correction, 13 August 2026.** This piece originally said 109 areas and cited
 > the model's backcast score as validation. Both were wrong. The backcast fitted
 > its ratios on the same two Censuses it was tested against, so it measured the
@@ -77,12 +90,13 @@ the threshold years ago.
 2021, ONS TS021). Across the 318 distinct local authorities the model projects,
 weighted by their 2021 populations, the share is 74.4% in 2021 and **55.1% by
 2051**. The cohort-component model, which assumes ethnic fertility rates converge
-partway to the national mean, gives 54.6% on the same weighting.
+partway to the national mean, gives 53.6% on the same weighting, across the 318
+authorities that carry a cohort-component figure.
 
-The two models agreeing to within half a point is worth noting, because they did
-not before. Under the settings replaced in August 2026 the Hamilton-Perry model
-ran several points below the cohort-component one. Two methods with different
-assumptions converging is a check on the recalibration, not a coincidence.
+The two models are 1.5 points apart on this weighting, 55.1% against 53.6%. This
+piece previously said they agreed to within half a point and called that a check
+on the recalibration; that agreement came from a cohort-component run with an
+error in it, and it does not hold on the corrected run.
 
 Three things drive it. Fertility: White British TFR 1.31, below replacement. Age
 structure: the White British population is older, dying faster than it replaces
@@ -94,8 +108,9 @@ compound, and with the old growth ceiling of 5.0 a group could quintuple in a
 decade, which is 625 times over four steps. That produced projections that were
 arithmetic rather than demographic in 108 areas: Enfield's "Other" category
 reached 67% by 2051, Barnsley's White Other went from 4.3% to 45.3%. The ceiling
-selected on the out-of-sample test cuts that to a handful of areas, whose remaining
-diverged years are still withheld. Those 15 do not appear in the 86.
+selected on the out-of-sample test cuts that to six areas whose 2051 is still
+withheld: Barnet, Hackney, Lambeth, Enfield, Haringey and Islington. Those six do
+not appear in the 86.
 
 The data is on every place page on this site. Search your area.
 

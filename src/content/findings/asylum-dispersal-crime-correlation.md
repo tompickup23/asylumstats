@@ -1,25 +1,28 @@
 ---
-headline: "Higher asylum dispersal rates correlate with higher recorded crime, but deprivation is the common driver"
+headline: "The 0.68 correlation between asylum dispersal and recorded crime published here is withdrawn"
 date: "2026-04-10"
+updated: "2026-10-12"
 category: crime
-stat_value: "0.68"
-stat_label: "Correlation coefficient"
+stat_value: "Withdrawn"
+stat_label: "Correlation of 0.68 published April 2026, withdrawn 12 October 2026"
 verdict: info
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice"
 source_label: "ONS Crime Statistics"
-summary: "Among 25 tracked local authorities, areas with higher asylum dispersal rates tend to have higher police recorded crime rates (r = 0.68). However, both metrics correlate strongly with the Index of Multiple Deprivation, so the association likely reflects deprivation-driven placement policy rather than a causal link between asylum seekers and crime."
-seo_title: "Asylum dispersal and crime: deprivation is the common driver"
-seo_description: "Across 25 local authorities, higher asylum dispersal tracks higher recorded crime (r = 0.68). Both track deprivation, the likelier cause."
+summary: "Corrected 12 October 2026. This piece reported a correlation of 0.68 between asylum dispersal and recorded crime across 25 areas. The crime figures it used could not be traced to ONS tables, so the correlation is not supported by published data and should not be cited."
+seo_title: "Withdrawn: the asylum dispersal and crime correlation"
+seo_description: "Corrected: the crime figures and the 0.68 correlation in this piece matched no published table and should not be cited."
 ---
 
-Among our 25 tracked local authorities, there is a moderate positive correlation (r = 0.68) between the asylum dispersal rate per 10,000 residents and the total police recorded crime rate per 1,000 residents.
+> **Correction, 12 October 2026.** The crime rates in this piece came from a
+> 25-authority file typed into this site's source by hand in April 2026, with no
+> raw file or script behind it, and they could not be traced to ONS tables. The
+> correlation of **0.68** was computed from that file, so it is not supported by
+> published data and should not be cited. The piece gave Blackpool **142.8** and
+> Ribble Valley **32.4** crimes per 1,000. On ONS's figures, police recorded crime
+> excluding fraud in the year ending March 2026 was **146.5** per 1,000 residents
+> in Blackpool and **38.5** in Ribble Valley (ONS, Crime in England and Wales:
+> Police Force Area data tables, year ending March 2026, Table C2, on ONS mid-2025
+> population estimates). The correlation has not been recomputed. The headline
+> originally read: "Higher asylum dispersal rates correlate with higher recorded crime, but deprivation is the common driver". It now says what this page can support.
 
-**Blackpool** has the highest crime rate (142.8 per 1,000) and a heavy asylum caseload. **Ribble Valley** has the lowest crime rate (32.4) and minimal asylum presence.
-
-This correlation does not establish causation. Both metrics correlate with the **Index of Multiple Deprivation**. Asylum dispersal policy places people in areas with available housing stock, which tends to be in more deprived areas. More deprived areas independently have higher recorded crime rates.
-
-Other confounders include urbanisation, policing intensity, crime recording practices, and local economic conditions. Without controlling for these factors, the raw correlation is not evidence that asylum seekers cause higher crime.
-
-**Methodological limitation:** This is a bivariate correlation across n=25 areas with no statistical controls. A proper analysis would partial out IMD deprivation rank, urbanisation, and policing intensity. Until those controls are applied, the correlation coefficient should not be cited as evidence of any relationship between asylum dispersal and crime. The small sample size (25 LAs) further limits statistical power. We present this for transparency, not as an analytical finding.
-
-The data is presented for transparency. Draw your own conclusions, but draw them honestly.
+**This analysis is withdrawn.** It compared asylum dispersal with recorded crime across 25 areas, using crime figures that matched no published table. Recorded crime follows deprivation, urbanisation, policing and recording practice, and a two-variable correlation across a handful of areas could not have separated any of those from anything else, as the original piece itself said. This site does not publish an analysis linking asylum dispersal to crime.
