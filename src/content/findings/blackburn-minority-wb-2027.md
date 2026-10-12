@@ -1,6 +1,7 @@
 ---
 headline: "Blackburn projected minority White British by 2027. Three more Lancashire towns follow by 2050."
 date: "2026-04-14"
+updated: "2026-10-12"
 category: demographics
 stat_value: "2026-2028"
 stat_label: "Blackburn WBI <50% year"
@@ -12,9 +13,18 @@ seo_title: "Blackburn projected minority White British by 2027"
 seo_description: "Blackburn with Darwen was 56.9% White British in 2021 and crosses 50% in 2026-2028. Pendle follows 2033-2035, Preston 2035-2039."
 ---
 
+> **Correction, 12 October 2026.** Blackburn with Darwen's White British share
+> in 2011 was **66.5%** (Census 2011 KS201EW: 98,144 of 147,489 usual residents),
+> not 66.6%. Preston's asylum figure, **554** people on asylum support, could not
+> be traced to any Home Office quarter: Preston had **429** people on asylum
+> support at 31 December 2025, the quarter Burnley's 461 comes from, and **407** at
+> 30 June 2026. Burnley had **471** at 30 June 2026 (Home Office, Immigration
+> system statistics, regional and local authority data). Nothing else in the
+> piece changes.
+
 **Blackburn. 56.9% White British. The projection crosses 50% in 2027, and the model's own error puts the crossing between 2026 and 2028.**
 
-Census 2021: Blackburn with Darwen, 56.9% White British. Down from 66.6% in 2011. Nearly 10 percentage points gone in one decade.
+Census 2021: Blackburn with Darwen, 56.9% White British. Down from 66.5% in 2011. Nearly 10 percentage points gone in one decade.
 
 The Hamilton-Perry model projects, with a mean absolute error of 1.56pp per decade on the White British share and a bias of +0.05pp, which is close to unbiased. The caveat that matters here is the horizon, not the direction: only a one-decade test has been run, so 2031 is the best-evidenced row below and 2051 the least.
 
@@ -30,9 +40,9 @@ Blackburn is not alone in Lancashire.
 
 **Pendle.** 66.1% White British (2021). Projected below 50% in 2034, on a range of 2033 to 2035. Nelson and Colne are the concentration points. White British projected 28.7% by 2051.
 
-**Preston.** 66.1% White British (2021). Projected below 50% in 2037, on a range of 2035 to 2039. University city. International migration pipeline. 554 on asylum support. White British projected 35.6% by 2051.
+**Preston.** 66.1% White British (2021). Projected below 50% in 2037, on a range of 2035 to 2039. University city. International migration pipeline. 429 on asylum support at 31 December 2025, 407 at 30 June 2026. White British projected 35.6% by 2051.
 
-**Burnley.** 77.9% White British (2021). Projected below 50% in 2050, on a range of 2048 to 2053. Currently 461 on asylum support. The Daneshouse and Stoneyholme ward is already majority South Asian.
+**Burnley.** 77.9% White British (2021). Projected below 50% in 2050, on a range of 2048 to 2053. 461 on asylum support at 31 December 2025, 471 at 30 June 2026. The Daneshouse and Stoneyholme ward is already majority South Asian.
 
 Four Lancashire mill towns. Same industry. Same deprivation. Same trajectory. Different timelines.
 

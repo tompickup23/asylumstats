@@ -1,7 +1,7 @@
 ---
 headline: "86 local authorities projected minority White British by 2051"
 date: "2026-04-14"
-updated: "2026-08-13"
+updated: "2026-10-12"
 category: demographics
 stat_value: "86"
 stat_label: "Areas WBI <50% by 2051"
@@ -12,6 +12,11 @@ summary: "86 English local authorities are projected to have a White British pop
 seo_title: "86 councils projected minority White British by 2051"
 seo_description: "86 English local authorities are projected below a 50% White British share by 2051. 59 of them have a White British majority today."
 ---
+
+> **Correction, 12 October 2026.** This piece said **15** areas whose projections
+> diverge are left out of the count of 86. The plausibility guard withholds 2051
+> for **six** areas below 50%: Barnet, Hackney, Lambeth, Enfield, Haringey and
+> Islington. Counting them would give 92, which is why the published count is 86.
 
 > **Correction, 13 August 2026.** This piece originally said 109 areas and cited
 > the model's backcast score as validation. Both were wrong. The backcast fitted
@@ -84,8 +89,9 @@ compound, and with the old growth ceiling of 5.0 a group could quintuple in a
 decade, which is 625 times over four steps. That produced projections that were
 arithmetic rather than demographic in 108 areas: Enfield's "Other" category
 reached 67% by 2051, Barnsley's White Other went from 4.3% to 45.3%. The ceiling
-selected on the out-of-sample test cuts that to a handful of areas, whose remaining
-diverged years are still withheld. Those 15 do not appear in the 86.
+selected on the out-of-sample test cuts that to six areas whose 2051 is still
+withheld: Barnet, Hackney, Lambeth, Enfield, Haringey and Islington. Those six do
+not appear in the 86.
 
 The data is on every place page on this site. Search your area.
 
