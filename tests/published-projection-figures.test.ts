@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   areasBelowFiftyBy,
@@ -310,9 +310,27 @@ describe("the same metric reads the same on every page that prints it", () => {
     const [f21, f51] = grab(finding, /the share is (\d+\.\d)% in 2021 and (\d+\.\d)% by 2051/, "finding national share");
     expect(oneDecimal(now).has(f21), `finding 2021 ${f21}`).toBe(true);
     expect(oneDecimal(then).has(f51), `finding 2051 ${f51}`).toBe(true);
-    const [t21, t51] = grab(teaser, /(\d+\.\d) -> (\d+\.\d)%/, "teaser national share");
-    expect(oneDecimal(now).has(t21), `teaser 2021 ${t21}`).toBe(true);
-    expect(oneDecimal(then).has(t51), `teaser 2051 ${t51}`).toBe(true);
+    // The teaser no longer types the share: it prints the sparkline's own points.
+    // The rendered check below compares the two on the built homepage.
+    expect(teaser, "the teaser types the national share again").not.toMatch(/\d+\.\d -> \d+\.\d%/);
+  });
+
+  const builtHome = join(root, "dist", "index.html");
+  it.skipIf(!existsSync(builtHome))("prints one 2051 share in the teaser, the sparkline's", () => {
+    // The teaser showed 55.0% in its stat beside a sparkline showing 55.1% for the
+    // same 2051 share: one typed and truncated, one derived and rounded.
+    const html = readFileSync(builtHome, "utf8");
+    const section = html.slice(html.indexOf('class="sister-teaser'), html.indexOf("</section>", html.indexOf('class="sister-teaser')));
+    const labels = new Map(
+      [...section.matchAll(/<span class="ss-year"[^>]*>(\d{4})<\/span>\s*<span class="ss-pct"[^>]*>(\d+\.\d)%<\/span>/g)].map((m) => [m[1], m[2]])
+    );
+    const hero = section.match(/class="st-stat-value"[^>]*>(\d+\.\d) (?:&rarr;|\u2192) (\d+\.\d)%</);
+    expect(labels.get("2021"), "sparkline 2021 label").toBeTruthy();
+    expect(labels.get("2051"), "sparkline 2051 label").toBeTruthy();
+    expect(hero, "teaser hero stat").toBeTruthy();
+    expect(hero![1]).toBe(labels.get("2021"));
+    expect(hero![2]).toBe(labels.get("2051"));
+    expect(hero![2]).toBe(nationalWhiteBritishShare(2051)!.pct.toFixed(1));
   });
 
   /**
@@ -493,19 +511,67 @@ describe("a stated crossing year is borne out by the projection", () => {
   });
 
   it("keeps the half-point tolerance honest", () => {
-    // The tolerance above is only defensible while the areas using it are the
-    // three known interpolation artefacts. A fourth means something has moved.
-    const marginal: string[] = [];
+    // The tolerance above is only defensible while every area using it is an
+    // interpolation artefact, and that is recomputed here rather than pinned to
+    // a list of names (it was Bedford, Welwyn Hatfield and West Northamptonshire
+    // in October 2026; a re-run will change the list). The model states the
+    // crossing as the year rounded from a straight line between the published
+    // points either side of 50%. An area still above 50% in its stated year is
+    // an artefact only if that line, drawn through its own published series,
+    // crosses within half a year after the stated year, so rounding to the
+    // nearest year landed on the decade.
+    const offenders: string[] = [];
+    let marginal = 0;
     for (const code of distinctAreaCodes()) {
       const area = (rawProjections.areas as any)[code];
       const threshold = (area.thresholds ?? []).find((t: any) => t.label === "White British <50%");
       if (!threshold) continue;
       const decadal = area.projections?.[String(threshold.year)]?.white_british;
-      if (decadal != null && decadal >= 50) marginal.push(area.areaName);
+      if (decadal == null || decadal < 50) continue;
+      marginal += 1;
+      const crossing = recomputedCrossing(area);
+      const lag = crossing == null ? null : crossing - threshold.year;
+      // 0.05 of a year allows for the published shares being rounded to 0.01.
+      if (lag == null || lag < -0.05 || lag > 0.55) {
+        offenders.push(
+          `${area.areaName}: stated ${threshold.year}, its series crosses ${crossing == null ? "nowhere" : crossing.toFixed(2)}`
+        );
+      }
     }
-    expect(marginal.sort()).toEqual(["Bedford", "Welwyn Hatfield", "West Northamptonshire"]);
+    expect(offenders).toEqual([]);
+    // If no area needs the tolerance, the check above proves nothing; say so
+    // by failing, so the tolerance is reviewed rather than left in place.
+    expect(marginal, "no area uses the half-point tolerance: remove it").toBeGreaterThan(0);
   });
 });
+
+/**
+ * Where the published White British series crosses 50%, by a straight line
+ * between the points either side, as the model computes its threshold year. If
+ * the series ends still above 50% and falling, the last segment is extended.
+ * Null if it never falls below 50%.
+ */
+function recomputedCrossing(area: any): number | null {
+  const series: Array<[number, number]> = [
+    [area.current.year, area.current.groups.white_british] as [number, number],
+    ...Object.entries(area.projections ?? {}).map(
+      ([y, g]: [string, any]) => [Number(y), g.white_british] as [number, number]
+    )
+  ]
+    .filter(([, w]) => typeof w === "number")
+    .sort((p, q) => p[0] - q[0]);
+  for (let i = 0; i < series.length - 1; i++) {
+    const [y0, w0] = series[i];
+    const [y1, w1] = series[i + 1];
+    if (w0 >= 50 && w1 < 50) return y0 + ((50 - w0) / (w1 - w0)) * (y1 - y0);
+  }
+  if (series.length >= 2) {
+    const [y0, w0] = series[series.length - 2];
+    const [y1, w1] = series[series.length - 1];
+    if (w1 >= 50 && w1 < w0) return y1 + ((50 - w1) / (w1 - w0)) * (y1 - y0);
+  }
+  return null;
+}
 
 /**
  * A crossing year used to ship bare: "approximately 2027", "around 2050". It is
