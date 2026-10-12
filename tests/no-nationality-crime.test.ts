@@ -21,23 +21,6 @@ const NATIONALITY = /\b(nationalit\w*|foreign nationals?|Albanian|Iraqi|Iranian|
 
 /** Paragraphs allowed to carry both kinds of term, with the reason. */
 const ALLOWED: Array<{ file: string; contains: string; reason: string }> = [
-  // The criminal justice line of the cost estimate. Its figure (£127m to £203m)
-  // is a share of foreign national offender prison costs judged from nationality
-  // overlap, and is part of the published £8.0 billion total. Removing it changes
-  // the headline (central £7.8 billion, £229 per income taxpayer), so it is left
-  // for Tom's decision, listed in the PR. The prose naming nationalities was
-  // removed on 12 October 2026. When the line is decided, delete these entries.
-  ...[
-    "### Criminal justice / Foreign National Offenders",
-    "10,772 foreign nationals are held in UK prisons",
-    "We estimate 30-35% of FNO prison costs",
-    "Source: Ministry of Justice Offender Management Statistics Quarterly (prison population by nationality). Home Office",
-    "**Core government sources:**"
-  ].map((contains) => ({
-    file: "true-cost-of-asylum.md",
-    contains,
-    reason: "Criminal justice cost line: judgement call pending, see above."
-  })),
   {
     file: "pakistan-asylum-17x-surge.md",
     contains: "Imran Khan",

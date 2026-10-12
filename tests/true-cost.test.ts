@@ -85,13 +85,13 @@ describe("the finding agrees with the derived constant", () => {
     // rebuild. Saying what changed is the point of a third edition. So the check runs
     // over the prose with those lines removed, rather than banning the strings outright.
     const supersessionMarker =
-      /third edition|second edition|previous edition|moves from|the accounts win/i;
+      /third edition|second edition|previous edition|moves from|the accounts win|Correction, 12 October 2026|^> /i;
     const currentClaims = finding
       .split("\n")
       .filter((line) => !supersessionMarker.test(line))
       .join("\n");
 
-    for (const stale of ["£207", "£230", "£236", "£266", "£8.1 billion", "£9,075M", "£8,050M"]) {
+    for (const stale of ["£207", "£230", "£236", "£266", "£8.1 billion", "£9,075M", "£8,050M", "£234", "£8.0 billion", "£7,973M", "£212", "£257"]) {
       expect(
         currentClaims,
         `the finding states the superseded figure ${stale} outside an edition note`
@@ -238,9 +238,10 @@ describe("the basis shares in the prose reproduce from the categories", () => {
     expect(summed).toBe(TOTAL_GBP_M.central);
   });
 
-  it("puts the audited share at 55%, not 60%", () => {
-    expect(Math.round(BY_BASIS.audited.sharePct)).toBe(55);
-    expect(Math.round(TRACEABLE_TO_ACCOUNTS_PCT)).toBe(63);
+  it("puts the audited share at 56%, not 60%", () => {
+    // 55% and 63% until 12 October 2026, when the criminal justice line was removed.
+    expect(Math.round(BY_BASIS.audited.sharePct)).toBe(56);
+    expect(Math.round(TRACEABLE_TO_ACCOUNTS_PCT)).toBe(64);
   });
 
   it("states those shares in the article and nowhere states a 60% audited share", () => {
@@ -283,14 +284,15 @@ describe("the total distinguishes attribution from counterfactual", () => {
     expect(summed).toBe(TOTAL_GBP_M.central);
   });
 
-  it("puts the average-attributed share at about an eighth of the total", () => {
-    expect(BY_KIND.average_attribution.gbpM).toBe(1014);
-    expect(Math.round(BY_KIND.average_attribution.sharePct)).toBe(13);
+  it("puts the average-attributed share at about a ninth of the total", () => {
+    // £1,014M and 13% until 12 October 2026, when the criminal justice line was removed.
+    expect(BY_KIND.average_attribution.gbpM).toBe(862);
+    expect(Math.round(BY_KIND.average_attribution.sharePct)).toBe(11);
   });
 
-  it("classes the four per-head multiplications as average attributions", () => {
+  it("classes the three per-head multiplications as average attributions", () => {
     const byId = new Map(COST_CATEGORIES.map((c) => [c.id, c.kind]));
-    for (const id of ["healthcare", "education", "criminal_justice", "family_reunion"]) {
+    for (const id of ["healthcare", "education", "family_reunion"]) {
       expect(byId.get(id), id).toBe("average_attribution");
     }
     // A transfer is not an average attribution: a pound of Universal Credit paid
@@ -303,6 +305,17 @@ describe("the total distinguishes attribution from counterfactual", () => {
     expect(finding).toContain("what would the exchequer save");
     for (const { gbpM, sharePct } of Object.values(BY_KIND)) {
       expect(finding).toContain(`£${gbpM.toLocaleString("en-GB")}M | ${Math.round(sharePct)}%`);
+    }
+  });
+});
+
+describe("no cost is attributed by nationality", () => {
+  // The criminal justice line, a share of foreign national offender prison costs
+  // judged from nationality overlap, was removed on 12 October 2026.
+  it("has no criminal justice, offender or nationality-attributed category", () => {
+    for (const c of COST_CATEGORIES) {
+      expect(c.id, c.id).not.toMatch(/criminal|offender|prison/i);
+      expect(`${c.label} ${c.note}`, c.id).not.toMatch(/offender|prison|nationalit/i);
     }
   });
 });
