@@ -1,7 +1,7 @@
 ---
 headline: "What asylum costs: £234 per income taxpayer a year, in a range of £212 to £257"
 date: "2026-08-13"
-updated: "2026-09-27"
+updated: "2026-10-12"
 category: spending
 content_type: "article"
 stat_value: "£8.0B"
@@ -205,7 +205,7 @@ Source: Home Office immigration statistics, year ending December 2025. DWP benef
 
 ### Criminal justice / Foreign National Offenders: approximately £150 million
 
-10,772 foreign nationals are held in UK prisons (12% of the total prison population). The average cost per prisoner is £47,000 per year. Not all foreign national offenders arrived via the asylum system, but the top nationalities in the prison population (Albanian, Iraqi, Vietnamese, Iranian, Eritrean) correlate strongly with the top asylum nationalities.
+10,772 foreign nationals are held in UK prisons (12% of the total prison population). The average cost per prisoner is £47,000 per year. No published statistic says how many of them arrived through the asylum system.
 
 We estimate 30-35% of FNO prison costs are attributable to people who entered via asylum routes. This is a judgement based on nationality overlap, not a precise calculation.
 
@@ -319,28 +319,15 @@ These figures use the static fiscal model. The dynamic model (which accounts for
 
 Source: Migration Observatory, "The Fiscal Impact of Immigration in the UK" (2024). Oxford Economics, "The Fiscal Impact of Immigration on the UK" (2018). OBR, "Impact of Migration on the Fiscal Forecast."
 
-## Foreign National Offenders: the data that exists
-
-The UK does not collect crime statistics by immigration status. This is a deliberate policy gap. But the Ministry of Justice does publish the **prison population by nationality**, and it tells a clear story.
-
-**10,772 foreign nationals** are in UK prisons (12% of the total). The top nationalities:
-
-| Nationality | Prisoners | % of FNO total |
-|-------------|-----------|---------------|
-| Albanian | ~1,185 | 11% |
-| Polish | ~754 | 7% |
-| Romanian | ~754 | 7% |
-| Irish | ~754 | 7% |
-| Jamaican | ~539 | 5% |
-| Vietnamese | ~430 | 4% |
-| Iraqi | ~323 | 3% |
-| Iranian | ~323 | 3% |
-
-Albanian, Iraqi, Iranian, Vietnamese, and Eritrean nationals in the prison population correlate with the top asylum nationalities. Academic research (Bell et al., 2013) found a small but statistically significant association between asylum dispersal and property crime, plausibly linked to the prohibition on working.
-
-The government does **not** publish: arrest data by nationality, conviction data by immigration status, or any direct measure of asylum seeker crime rates. The prison nationality data is the only routine justice statistic with nationality information.
-
-Source: MOJ Offender Management Statistics Quarterly (prison population by nationality, June 2025). Bell et al., "Crime and Immigration: Evidence from Large Immigrant Waves" (2013).
+> **Correction, 12 October 2026.** A section headed "Foreign National Offenders:
+> the data that exists" is withdrawn. It set the prison population by
+> nationality against the nationalities most common among people claiming
+> asylum, and cited research on asylum dispersal and crime. That implied a link
+> between nationality and crime which the data cannot support: prison statistics
+> by nationality say nothing about whether anyone claimed asylum, and this site
+> does not publish claims of that kind. A sentence in the criminal justice cost
+> line above, which named nationalities in the same way, is removed for the same
+> reason. No cost figure on this page changes.
 
 *Demographic projections for all 320 local authorities (including ethnic composition, religion, and nativity) are published on [UK Demographics](https://ukdemographics.co.uk).*
 
@@ -398,7 +385,6 @@ All source documents are listed below and linked where available online. We welc
 - Migration Observatory, "The Fiscal Impact of Immigration in the UK," 2024
 - Oxford Economics, "The Fiscal Impact of Immigration on the UK," 2018
 - OBR, "Impact of Migration on the Fiscal Forecast"
-- Bell et al., "Crime and Immigration: Evidence from Large Immigrant Waves," 2013
 - University of York / University of Liverpool, border security contracts research, April 2025
 - Detention Action briefing paper, October 2024
 - Salvation Army Modern Slavery Victim Care Contract
