@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T19:45:11.719Z",
+  "generatedAt": "2026-10-19T15:31:24.215Z",
   "datasetId": "regional_sources",
   "mediaUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/media?per_page=100&search=North%20West%20Public&_fields=id,date,date_gmt,title,mime_type,source_url,media_details",
   "pageUrl": "https://northwestrsmp.org.uk/wp-json/wp/v2/pages?slug=data-and-insights&per_page=1&_fields=id,modified,slug,link,title,content",
@@ -21,37 +21,37 @@
       "fileName": "migration-yorkshire-statistics.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics",
       "sizeBytes": 104635,
-      "fileSha256": "33cae3d580f8d6032ed0af779bf11c1e3ffbf9afb61543f9cd0b3c04cb8e8e13"
+      "fileSha256": "8207ef5efb3d95dfab433353af501f4e4c6f41d17291635dd5ff7c5b1a25f695"
     },
     {
       "fileName": "migration-yorkshire-refugee-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/refugee-and-asylum-seeker-dashboard",
       "sizeBytes": 101483,
-      "fileSha256": "e79bd5e291657ed01ee347405ba9701fd3336ac162ed4c5df02c2608f8202cb5"
+      "fileSha256": "0e9da9cbf3ecb1b7b3ae400f722a218b1725a0e478fa2738cb17272722503511"
     },
     {
       "fileName": "migration-yorkshire-ukraine-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/ukraine-data-dashboard",
       "sizeBytes": 103696,
-      "fileSha256": "58d2da8ceefb29ead531ab2c7c49b2c2d9dbad31cf1562eed8af08ff44d46056"
+      "fileSha256": "3dd67bb29c393391a7dcfd080194830cbf75ad630357053c4e248289bd362e6f"
     },
     {
       "fileName": "migration-yorkshire-euss-dashboard.html",
       "sourceUrl": "https://www.migrationyorkshire.org.uk/statistics/european-union-settlement-scheme-dashboard",
       "sizeBytes": 100212,
-      "fileSha256": "600b664e6101ed0bd328f819200b370bf57cda9d40d0eb292454d2a83a835e97"
+      "fileSha256": "bcfbd7e6b15ccb873983ad4b2acc69b565cf5e5c6111864f6dec751f8dc4a67b"
     },
     {
       "fileName": "nemp-data-page.html",
       "sourceUrl": "https://www.nemp.org.uk/data/",
       "sizeBytes": 87289,
-      "fileSha256": "52468f1e2d9ed177eb7998d224f58c9bd9d052026bbdf2147783abcdde2002ac"
+      "fileSha256": "9339d0d978ee792f42b285eca9be30a62b1f737cef57a5f60039ec997a935056"
     },
     {
       "fileName": "migration-observatory-local-data-guide.html",
       "sourceUrl": "https://migrationobservatory.ox.ac.uk/projects/local-data-guide/",
       "sizeBytes": 140761,
-      "fileSha256": "1a66d908a25ba1c9e386b1d9e878453f22e0756d73e665c77444be1de32db623"
+      "fileSha256": "4004a0759e8d80333fe43ff89669fc8a4bf20b0769acd2e7ccf8059c770f1906"
     },
     {
       "fileName": "nwrsmp-workbook-2026-09-16.xlsx",
