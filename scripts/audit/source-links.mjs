@@ -116,6 +116,16 @@ const BOT_BLOCKED = [
     url: "https://commonslibrary.parliament.uk/research-briefings/cdp-2025-0184/",
     checked: "2026-08-29",
     note: "Commons Library debate pack. Same parliament.uk bot policy."
+  },
+  {
+    url: "https://www.eppingforestdc.gov.uk/open-joint-letter-to-the-home-secretary/",
+    checked: "2026-10-21",
+    note: "Epping Forest District Council news item, 30 July 2025. Answers 403 to GitHub Actions runners (refresh of 19 October 2026) and 200 from a home connection and in a browser."
+  },
+  {
+    url: "https://www.pkc.gov.uk/article/24758/Asylum-seekers",
+    checked: "2026-10-21",
+    note: "Perth and Kinross Council page, last modified 3 August 2026; still says two local hotels. Answers 403 to GitHub Actions runners (refresh of 19 October 2026) and 200 from a home connection and in a browser."
   }
 ];
 
