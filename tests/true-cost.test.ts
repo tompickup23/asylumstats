@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
+import * as XLSX from "xlsx";
 import { describe, expect, it } from "vitest";
 import {
   ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
@@ -15,9 +17,11 @@ import {
   BY_KIND,
   TRACEABLE_TO_ACCOUNTS_PCT,
   UK_TAXPAYERS,
+  UK_TAXPAYERS_SOURCE,
   assertNoDoubleCount
 } from "../src/lib/true-cost";
 import araCosts from "../data/marts/home_office_ara/asylum-costs.json";
+import { parseCorrections } from "../src/lib/corrections-parse";
 
 /**
  * True Cost had one job to fix: stop the same quantity being written down in five
@@ -36,6 +40,42 @@ const finding = readFileSync(
 );
 
 describe("the finding agrees with the derived constant", () => {
+  it("keeps the headline, summary and SEO fields on the shared figure", () => {
+    for (const field of ["headline", "summary", "seo_title", "seo_description"]) {
+      const line = finding.split("\n").find((line) => line.startsWith(`${field}:`));
+      expect(line, field).toContain(`£${PER_TAXPAYER_GBP.central}`);
+      if (field !== "summary") {
+        expect(line, field).toContain(`£${PER_TAXPAYER_GBP.conservative} to £${PER_TAXPAYER_GBP.upper}`);
+      }
+    }
+    expect(finding).toContain(`stat_value: "£${(TOTAL_GBP_M.central / 1000).toFixed(1)}B"`);
+    expect(finding).toContain('stat_label: "Annual cost (central estimate)"');
+  });
+
+  it("feeds the OG cards from the checked finding fields", () => {
+    const og = readFileSync(join(process.cwd(), "src/pages/og/[...slug].png.ts"), "utf8");
+    for (const field of ["headline", "stat_value", "stat_label"]) {
+      expect(og).toContain(`f.data.${field}`);
+    }
+  });
+
+  it("derives the homepage denominator and keeps the old figure out of navigation", () => {
+    const home = readFileSync(join(process.cwd(), "src/pages/index.astro"), "utf8");
+    expect(home).toContain("UK_TAXPAYERS / 1_000_000");
+    expect(home).toContain("PER_TAXPAYER_GBP.central");
+    expect(home).not.toMatch(/34\.1(?:M| million)/);
+    const nav = readFileSync(join(process.cwd(), "src/components/SiteHeader.astro"), "utf8");
+    expect(nav).not.toMatch(/£229|34\.1(?:M| million)/);
+  });
+
+  it("records the denominator correction for the corrections page", () => {
+    const correction = parseCorrections(finding).find((row) => row.date === "2026-10-24");
+    expect(correction?.text).toContain("denominator is corrected");
+    expect(correction?.text).toContain("£229");
+    expect(correction?.text).toContain("Table 2.1");
+    expect(correction?.text).toContain("every other figure are unchanged");
+  });
+
   it("states the central per-taxpayer figure in its headline and summary", () => {
     expect(finding).toContain(`£${PER_TAXPAYER_GBP.central} per income taxpayer`);
     expect(finding).toMatch(
@@ -91,7 +131,7 @@ describe("the finding agrees with the derived constant", () => {
       .filter((line) => !supersessionMarker.test(line))
       .join("\n");
 
-    for (const stale of ["£207", "£230", "£236", "£266", "£8.1 billion", "£9,075M", "£8,050M", "£234", "£8.0 billion", "£7,973M", "£212", "£257"]) {
+    for (const stale of ["£207", "£230", "£236", "£266", "£8.1 billion", "£9,075M", "£8,050M", "£234", "£8.0 billion", "£7,973M", "£212", "£257", "£229", "£208", "£251", "34.1 million"]) {
       expect(
         currentClaims,
         `the finding states the superseded figure ${stale} outside an edition note`
@@ -208,7 +248,26 @@ describe("arithmetic", () => {
     expect(PER_TAXPAYER_GBP.central).toBe(
       Math.round((TOTAL_GBP_M.central * 1_000_000) / UK_TAXPAYERS)
     );
-    expect(UK_TAXPAYERS).toBe(34_100_000);
+  });
+
+  it("uses the same year's all-taxpayer column in the banked HMRC edition", () => {
+    const bytes = readFileSync(join(process.cwd(), UK_TAXPAYERS_SOURCE.file));
+    expect(createHash("sha256").update(bytes).digest("hex")).toBe(UK_TAXPAYERS_SOURCE.sha256);
+    const workbook = XLSX.read(bytes);
+    const sheet = workbook.Sheets[UK_TAXPAYERS_SOURCE.sheet];
+    expect(sheet.B3.v).toBe("All Income Tax payers");
+    expect(sheet.A2.v).toBe("Numbers are in thousands.");
+    const [start, end] = araCosts._provenance.financialYear.split("-");
+    const yearLabel = `${start} to ${start.slice(0, 2)}${end}`;
+    const rows = XLSX.utils.sheet_to_json<Array<string | number>>(sheet, { header: 1 });
+    const row = rows.find((row) => String(row[0]).startsWith(yearLabel));
+    expect(row).toBeDefined();
+    expect(Number(row?.[1]) * 1000).toBe(UK_TAXPAYERS);
+    expect(sheet[UK_TAXPAYERS_SOURCE.cell].v * 1000).toBe(UK_TAXPAYERS);
+    expect(UK_TAXPAYERS_SOURCE.financialYear).toBe(araCosts._provenance.financialYear);
+    expect(String(row?.[0])).toContain("[note 10]");
+    expect(UK_TAXPAYERS_SOURCE.status).toBe("projection");
+    expect(JSON.stringify(workbook.Sheets["2_1_Footnotes"])).toContain("March 2026");
   });
 
   it("ties the ARA figures to the exact banked file", () => {

@@ -47,10 +47,32 @@ import routeDashboard from "../data/live/route-dashboard.json";
 
 const THOUSAND = 1_000;
 
-/** HMRC projected individual income taxpayers 2024-25, Table 2.1 (Nov 2024 forecast). */
-export const UK_TAXPAYERS = 34_100_000;
-export const UK_TAXPAYERS_SOURCE =
-  "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics";
+/**
+ * HMRC Table 2.1, July 2026 edition, 2025 to 2026 projection (thousands, cell B39).
+ * Matches the accounts year. Note 10 uses OBR March 2026 assumptions, so this is
+ * a projection, not outturn. The latest outturn is 2023 to 2024, a different year.
+ */
+export const UK_TAXPAYERS = 39_800_000;
+export const UK_TAXPAYERS_SOURCE = {
+  edition: "Income Tax liabilities statistics: tax year 2023 to 2024 to tax year 2026 to 2027",
+  published: "2026-07-15",
+  retrieved: "2026-10-24",
+  financialYear: "2025-26",
+  status: "projection",
+  table: "2.1",
+  sheet: "2_1_IT_payers_by_demographic",
+  cell: "B39",
+  unit: "thousands",
+  url: "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
+  workbookUrl: "https://assets.publishing.service.gov.uk/media/6a5a49b47eb057103bd946a4/Collated_Income_Tax_liabilities_statistics_tables_-_2.1_to_2.6.ods",
+  file: "data/raw/hmrc_income_tax/Collated_Income_Tax_liabilities_statistics_tables_-_2.1_to_2.6.ods",
+  sha256: "40e1c7bb75d484132e8329fcac75f16e1a96305302fc422ee446a688d52bdbc2",
+  note: "Table 2.1 note 10: projections use the 2023 to 2024 Survey of Personal Incomes and OBR March 2026 assumptions."
+} as const;
+
+if (UK_TAXPAYERS_SOURCE.financialYear !== araCosts._provenance.financialYear) {
+  throw new Error("True Cost: update the HMRC taxpayer denominator to match the accounts year.");
+}
 
 /**
  * People on asylum support at the latest published quarter end.
