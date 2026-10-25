@@ -28,7 +28,10 @@ describe.skipIf(!existsSync(DIST))("sitemap lastmod", () => {
     // this morning legitimately moves /corrections/ to today, and the guard called that a
     // build stamp. What a build stamp actually looks like is today's date on everything,
     // so that is what is asserted. A handful of same-day edits is publishing working.
-    const today = new Date().toISOString().slice(0, 10);
+    // Editorial dates use the British calendar. UTC is still yesterday just
+    // after midnight during BST, so it would reject a valid correction date.
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London",
+      year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
     const dated = entries.filter((e) => e.lastmod);
     const stampedToday = dated.filter((e) => e.lastmod === today);
     const share = stampedToday.length / Math.max(dated.length, 1);
@@ -42,7 +45,8 @@ describe.skipIf(!existsSync(DIST))("sitemap lastmod", () => {
   });
 
   it("never dates a page in the future", () => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London",
+      year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
     const ahead = entries.filter((e) => e.lastmod && e.lastmod > today);
     expect(ahead.map((e) => `${e.loc} ${e.lastmod}`)).toEqual([]);
   });

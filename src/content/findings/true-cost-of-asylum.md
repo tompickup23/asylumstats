@@ -1,7 +1,7 @@
 ---
-headline: "What asylum costs: £229 per income taxpayer a year, in a range of £208 to £251"
+headline: "What asylum costs: £197 per income taxpayer a year, in a range of £178 to £215"
 date: "2026-08-13"
-updated: "2026-10-12"
+updated: "2026-10-24"
 category: spending
 content_type: "article"
 stat_value: "£7.8B"
@@ -9,12 +9,24 @@ stat_label: "Annual cost (central estimate)"
 verdict: critical
 source_url: "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026"
 source_label: "Home Office Annual Report and Accounts 2025-26, NAO, MoJ, HMCTS, DfE"
-summary: "The total annual cost of the UK asylum system is around £7.8 billion, or £229 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
-seo_title: "What asylum costs per income taxpayer: £229 a year, £208 to £251"
-seo_description: "About £7.8 billion a year, or £229 per income taxpayer in a range of £208 to £251. An audited £4,181 million of that is Home Office spend."
+summary: "The total annual cost of the UK asylum system is around £7.8 billion, or £197 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
+seo_title: "What asylum costs per income taxpayer: £197 a year, £178 to £215"
+seo_description: "About £7.8 billion a year, or £197 per income taxpayer in a range of £178 to £215. An audited £4,181 million of that is Home Office spend."
 video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/og/findings/true-cost-of-asylum.png"
 ---
+
+> **Correction, 24 October 2026.** This page stated £229 per income taxpayer,
+> in a range of £208 to £251, using 34.1 million taxpayers described as a 2024-25
+> projection. The denominator is corrected to 39.8 million, HMRC's 2025-26
+> projection in Table 2.1 of the [Income Tax liabilities statistics published
+> 15 July 2026](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027),
+> sheet `2_1_IT_payers_by_demographic`, cell B39 (in thousands).
+> This matches the 2025-26 cost year. Note 10 uses OBR March 2026 assumptions;
+> the [bulletin, sections 1.2 and 2.1](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary)
+> distinguishes the projections from the 2023-24 outturn.
+> The central figure becomes **£197**, in a range of **£178 to £215**.
+> The £7,821M central total, every cost component and every other figure are unchanged.
 
 > **Correction, 12 October 2026.** This was headlined "What asylum costs: £234 per
 > income taxpayer a year, in a range of £212 to £257", on a central total of **£8.0
@@ -44,7 +56,7 @@ video_poster: "/og/findings/true-cost-of-asylum.png"
 
 **£4,181 million.** That is what the Home Office spent on asylum support, resettlement and accommodation in the year to March 2026, signed off by the Comptroller and Auditor General. It is the single biggest number in the asylum system, it is down from £4,513 million the year before, and it is roughly half the true bill.
 
-The total annual cost of the UK asylum system is around **£7.8 billion**, or **£229 per income taxpayer**. The defensible range is £7.1 billion to £8.6 billion, and the width of that range is itself the finding: 56% of the total is an audited outturn, a further 8% is attributed from an audited total, and the 34% that is estimated is estimated because no government body publishes it.
+The total annual cost of the UK asylum system is around **£7.8 billion**, or **£197 per income taxpayer**. The defensible range is £7.1 billion to £8.6 billion, and the width of that range is itself the finding: 56% of the total is an audited outturn, a further 8% is attributed from an audited total, and the 34% that is estimated is estimated because no government body publishes it.
 
 No official body publishes the complete total. The Home Office publishes its own accounts. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did, and we show which parts are audited and which are not.
 
@@ -289,11 +301,11 @@ The conservative column uses the lowest defensible assumption in each estimated 
 | | Conservative | Central | Upper |
 |--|-------------|---------|-------|
 | **Annual cost** | £7.1 billion | £7.8 billion | £8.6 billion |
-| **Per income taxpayer** | £208 | £229 | £251 |
+| **Per income taxpayer** | £178 | £197 | £215 |
 | **Per household** | £255 | £281 | £308 |
 | **Per day nationally** | £19.4M | £21.4M | £23.5M |
 
-**The central estimate is £229 per income taxpayer per year**, on a range of £208 to £251. Taxpayers: 34.1 million, HMRC projected 2024-25. Households: 27.8 million, ONS.
+**The central estimate is £197 per income taxpayer per year**, on a range of £178 to £215. Taxpayers: 39.8 million, HMRC projection for 2025-26, matching the cost year. Source: [HMRC Income Tax liabilities statistics, published 15 July 2026](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027), Table 2.1, sheet `2_1_IT_payers_by_demographic`, cell B39 (39,800 thousand). Note 10 uses OBR March 2026 assumptions. This is a projection, not outturn. Households: 27.8 million, ONS.
 
 56% of that is an audited outturn, and 64% is either audited or attributed from an audited total. The remainder is estimated because the departments that incur it, principally DWP, NHS and DfE, do not record spending by immigration status. If any of them published asylum-specific figures, this article would be shorter and its range narrower.
 
@@ -386,4 +398,4 @@ All source documents are listed below and linked where available online. We welc
 - Detention Action briefing paper, October 2024
 - Salvation Army Modern Slavery Victim Care Contract
 
-Around £7.8 billion. £229 per income taxpayer. Every year. The biggest single component is falling and is now audited; the parts nobody audits are the parts nobody publishes.
+Around £7.8 billion. £197 per income taxpayer. Every year. The biggest single component is falling and is now audited; the parts nobody audits are the parts nobody publishes.

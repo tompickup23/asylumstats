@@ -115,6 +115,12 @@ test.describe("mobile place pages", () => {
       const overflowWidth = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflowWidth).toBeLessThanOrEqual(2);
 
+      await expect(page.locator(".cost-sum")).toBeVisible();
+      await page.getByText("Full sources, exclusions and uncertainty", { exact: true }).click();
+      await expect(page.locator("details.cost-data[open]")).toBeVisible();
+      const expandedOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(expandedOverflow).toBeLessThanOrEqual(2);
+
       const screenshot = await page.screenshot({ fullPage: false });
       await testInfo.attach(`${pageConfig.name}-place-mobile`, {
         body: screenshot,

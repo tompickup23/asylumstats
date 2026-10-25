@@ -1,0 +1,31 @@
+---
+import { type AreaCost, AREA_COST_SOURCES as sources, AREA_COST_NOTES as notes,
+  formatAreaCost, formatCostDate } from "../lib/area-cost";
+interface Props { cost: AreaCost }
+const { cost } = Astro.props;
+const tax = cost.inputs.taxpayers;
+---
+<details class="cost-data">
+  <summary>Full sources, exclusions and uncertainty</summary>
+  <p>{notes.basis}</p>
+  <p><a href={sources.counts.attachment_url}>Home Office {sources.counts.table}</a>, {sources.counts.period_label}, published {formatCostDate(sources.counts.release_date)}. Area code {cost.areaCode}; accommodation definitions: {sources.counts.accommodationNotes}. Nightly rates {cost.dates.rate}, published {formatCostDate(sources.rates.dispersal2026.published)}. Allowance {cost.dates.allowance}.</p>
+  {cost.m2.contingencyNote && <p>{cost.m2.contingencyNote}</p>}
+  <p>{notes.allowance} <a href={sources.support.standard.url}>Standard support</a> is £{sources.support.standard.value} a week; <a href={sources.support.catered.url}>catered support</a> is £{sources.support.catered.value} a week ({sources.support.catered.appliesTo}).</p>
+  <p>Adding the ordinary standard allowance for every accommodated person would add {formatAreaCost(cost.m2.standardAllowanceSensitivity)} annually. This is a sensitivity calculation, not a claim about payments or an upper bound on all costs. Extra family payments are unpriced.</p>
+  <p><a href={sources.grant.url}>Grant instruction, {sources.grant.appliesTo}</a>, published {formatCostDate(sources.grant.published)}: {notes.grant}</p>
+  {cost.m2.grantEquivalent === null
+    ? <p>Northern Ireland grant arrangements are not established here.</p>
+    : <p>For comparison only, applying £{sources.grant.value.toLocaleString("en-GB")} to the current dispersal and contingency counts gives {formatAreaCost(cost.m2.grantEquivalent)}. This excludes initial and other accommodation and is not a grant entitlement or payment. The actual baseline is {formatCostDate(sources.grant.baselineDate)}; monthly growth payments of £{sources.grant.additionalBedMonthly} per additional eligible occupied bed are unpriced.</p>}
+  <p>The same priced components at <a href={sources.rates.dispersal2025.url}>{cost.dates.lowerRate} nightly rates</a> (£{sources.rates.dispersal2025.value} dispersal, £{sources.rates.hotel2025.value} hotel) give {formatAreaCost(cost.m2.lowerRateSubtotal)}. This is a lower-rate scenario, not a confidence bound.</p>
+  <p><a href={sources.taxpayers.url}>HMRC Tables 3.14 and 3.14a</a>, tax year {cost.dates.taxpayers}, published {formatCostDate(sources.taxpayers.publishedAt)}. {tax ? `${tax.source.sheet}, row ${tax.source.row}, cell ${tax.source.cells.taxpayers}; ${tax.source.confidenceInterval.sheet}, row ${tax.source.confidenceInterval.row}.` : "No source row available."} Taxpayers: {tax?.taxpayers?.toLocaleString("en-GB") ?? "unavailable"}. {tax && tax.taxpayersLower95 !== null && tax.taxpayersUpper95 !== null && `95% interval: ${tax.taxpayersLower95.toLocaleString("en-GB")} to ${tax.taxpayersUpper95.toLocaleString("en-GB")}.`}</p>
+  {cost.m3.perTaxpayer95 && <p>Cost equivalent using those bounds: {formatAreaCost(cost.m3.perTaxpayer95.lower)} to {formatAreaCost(cost.m3.perTaxpayer95.upper)} per taxpayer. Rounded to the nearest £10. {notes.interval}</p>}
+  {tax?.notes.map(note => <p>{note}</p>)}
+  <p>{notes.burden}</p>
+  <p><a href={sources.dwellings.url}>Chargeable dwellings, Table 1.07</a>: {cost.inputs.dwellings?.chargeableDwellings.toLocaleString("en-GB") ?? "unavailable"}. {cost.inputs.dwellings?.locator} Revised {formatCostDate(sources.dwellings.updated)}.</p>
+  <p><a href={sources.population.sourceUrl}>ONS population</a>: {cost.inputs.population?.population.toLocaleString("en-GB") ?? "unavailable"}. {cost.inputs.population?.locators.population} {sources.population.published}</p>
+</details>
+<style>
+  summary { cursor: pointer; font-weight: 600; padding: .5rem 0; }
+  .cost-data { margin-top: 1rem; font-size: .9rem; overflow-wrap: anywhere; }
+  p { margin: .85rem 0; }
+</style>

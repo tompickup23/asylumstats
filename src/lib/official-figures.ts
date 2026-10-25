@@ -4,7 +4,8 @@
  * applies to, the date it was published, the source and its basis, and read from here by
  * every page that prints it.
  *
- * Every value was read off the primary source on 27 Sep 2026. Three press-reported
+ * Initial values were read off primary sources on 27 Sep 2026. Later additions
+ * record their own retrieval dates. Three press-reported
  * versions were wrong and are recorded so they are not reintroduced:
  *   - the catered support rate is £9.95, not £8.86 (raised 2 June 2025);
  *   - the Home Office's £144 hotel figure, repeated undated in its 30 June 2026 press
@@ -80,6 +81,42 @@ export const SUPPORT_RATES = {
   oneToThree: { value: 5.25, label: "Extra weekly payment, child aged 1 to 3", appliesTo: "since 15 January 2024", ...SUPPORT_PAGE },
   maternity: { value: 300, label: "One-off maternity payment", appliesTo: "since 15 January 2024", ...SUPPORT_PAGE }
 } satisfies Record<string, OfficialFigure>;
+
+/**
+ * Home Office funding instructions, read on GOV.UK on 25 October 2026.
+ * Schedule 1 paragraphs 1.2 to 1.4, verbatim below. Crown copyright, reused
+ * under the Open Government Licence v3.0. URLs are in ASYLUM_DISPERSAL_GRANT.
+ *
+ * 2025 to 2026:
+ * 1.2. This payment is intended to recognise the existing contribution and longstanding support from local authorities. Each Recipient accommodating Asylum Seekers determined by a report run by the Authority on 30 March 2025 will receive a £1200 payment per Asylum Seeker in all accommodation types across Dispersal Accommodation (DA), Overflow Dispersal Accommodation (ODA), Initial Accommodation (IA), and Contingency Accommodation (CA). This Funding will be paid by 30 June 2025.
+ * 1.3. A payment of £100 per Month, for each additional occupied bed space between 01 April 2025 and 31 March 2026 (should occupancy increase above the 31 March 2025 figure).
+ * 1.4. This Funding is payable for all Asylum Accommodation types (DA, ODA, IA, CA, Medium Sites and in LA-led asylum accommodation through pilots). For Medium Sites and LA-led accommodation, payments will be calculated for additional bedspaces over the occupancy figure of zero. Funding eligibility will be assessed Monthly, and the Funding will be paid quarterly in arrears throughout the Financial Year.
+ *
+ * 2026 to 2027:
+ * 1.2 This payment is intended to recognise the existing contribution and longstanding support from local authorities. Each Recipient accommodating Asylum Seekers determined by a report run by the Authority on 30 March 2026 will receive a £1200 payment per Asylum Seeker in all accommodation types across Dispersal Accommodation (DA), Overflow Dispersal Accommodation (ODA), Initial Accommodation (IA), and Contingency Accommodation (CA). This Funding will be paid by 30 June 2026.
+ * 1.3 A payment of £100 per Month, for each additional occupied bed space between 01 April 2026 and 31 March 2027 (should occupancy increase above the 30 March 2026 figure).
+ * 1.4 This Funding is payable for all Asylum Accommodation types (DA, ODA, IA, CA). Funding eligibility will be assessed Monthly, and the Funding will be paid quarterly in arrears throughout the Financial Year.
+ *
+ * The older instruction has conflicting 30/31 March baseline wording. Do not
+ * resolve that by guessing. The current instruction uses 30 March throughout.
+ * Definition 1.2 excludes Large Sites CA; clause 3.2 covers England, Scotland
+ * and Wales. Current quarterly stocks cannot establish the actual grant paid.
+ */
+export const ASYLUM_DISPERSAL_GRANT = {
+  value: 1200,
+  label: "Annual grant per eligible person at the baseline",
+  appliesTo: "2026 to 2027",
+  baselineDate: "2026-03-30",
+  published: "2026-03-31",
+  retrieved: "2026-10-25",
+  additionalBedMonthly: 100,
+  source: "Home Office, Asylum Dispersal Grant funding instruction, Schedule 1 paragraphs 1.2 to 1.4",
+  url: "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-dispersal-grant-2026-2027-accessible-version",
+  previousUrl: "https://www.gov.uk/government/publications/asylum-dispersal-grant-funding-instruction/funding-instruction-for-local-authorities-asylum-grant-2025-2026",
+  previousIssued: "2025-03-31",
+  previousPageUpdated: "2026-03-31",
+  licence: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+} satisfies OfficialFigure & Record<string, string | number>;
 
 /** Hotels in use: sites, not people. Mixed sources, so each carries its own. */
 export const HOTEL_SITE_COUNTS: Array<OfficialFigure & { qualifier: string }> = [

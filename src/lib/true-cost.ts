@@ -2,7 +2,7 @@ import araCosts from "../../data/marts/home_office_ara/asylum-costs.json";
 import routeDashboard from "../data/live/route-dashboard.json";
 
 /**
- * True Cost v3. The one place an asylum cost figure is derived.
+ * True Cost v3. National system costs. Local figures are derived in area-cost.ts.
  *
  * ── Why v3 exists ────────────────────────────────────────────────────────────
  *
@@ -37,20 +37,39 @@ import routeDashboard from "../data/live/route-dashboard.json";
  * 2. MIXING BASES. £150 per person per day was not arbitrary: it was £5.3bn / 97,519 /
  *    365, total-system cost expressed per supported person. That conflates costs
  *    incurred for people who are NOT on asylum support (post-decision welfare and family
- *    reunion) with the population on support. So the
- *    per-area figure here is deliberately NOT the system total. It is the audited
- *    accommodation and support cost, which is the cost that actually scales with the
- *    number of people supported in an area. The two are exported under names that make
- *    the basis unmissable, and `perSupportedPersonPerDay` is the only one a place page
- *    may use.
+ *    reunion) with the population on support. National averages also hide the local
+ *    accommodation mix. Place and regional pages must use area-cost.ts, which prices
+ *    each accommodation type separately and leaves unsupported components unpriced.
  */
 
 const THOUSAND = 1_000;
 
-/** HMRC projected individual income taxpayers 2024-25, Table 2.1 (Nov 2024 forecast). */
-export const UK_TAXPAYERS = 34_100_000;
-export const UK_TAXPAYERS_SOURCE =
-  "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics";
+/**
+ * HMRC Table 2.1, July 2026 edition, 2025 to 2026 projection (thousands, cell B39).
+ * Matches the accounts year. Note 10 uses OBR March 2026 assumptions, so this is
+ * a projection, not outturn. The latest outturn is 2023 to 2024, a different year.
+ */
+export const UK_TAXPAYERS = 39_800_000;
+export const UK_TAXPAYERS_SOURCE = {
+  edition: "Income Tax liabilities statistics: tax year 2023 to 2024 to tax year 2026 to 2027",
+  published: "2026-07-15",
+  retrieved: "2026-10-24",
+  financialYear: "2025-26",
+  status: "projection",
+  table: "2.1",
+  sheet: "2_1_IT_payers_by_demographic",
+  cell: "B39",
+  unit: "thousands",
+  url: "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
+  workbookUrl: "https://assets.publishing.service.gov.uk/media/6a5a49b47eb057103bd946a4/Collated_Income_Tax_liabilities_statistics_tables_-_2.1_to_2.6.ods",
+  file: "data/raw/hmrc_income_tax/Collated_Income_Tax_liabilities_statistics_tables_-_2.1_to_2.6.ods",
+  sha256: "40e1c7bb75d484132e8329fcac75f16e1a96305302fc422ee446a688d52bdbc2",
+  note: "Table 2.1 note 10: projections use the 2023 to 2024 Survey of Personal Incomes and OBR March 2026 assumptions."
+} as const;
+
+if (UK_TAXPAYERS_SOURCE.financialYear !== araCosts._provenance.financialYear) {
+  throw new Error("True Cost: update the HMRC taxpayer denominator to match the accounts year.");
+}
 
 /**
  * People on asylum support at the latest published quarter end.
@@ -426,12 +445,10 @@ export const PER_TAXPAYER_GBP = {
 /**
  * Accommodation and support cost per supported person per day.
  *
- * THE ONLY per-person figure a place or region page may use. It is the audited ASRA
- * outturn over the mean supported population of the SAME financial year, so numerator
- * and denominator describe the same people over the same period. Roughly £107, which
- * sits sensibly against the roughly £170 a night the Migration Observatory publishes
- * for hotels in the same year: hotels are the expensive end of a mix that is mostly
- * dispersal housing.
+ * National comparison only. The audited ASRA outturn is divided by the mean
+ * supported population of the same financial year. It includes schemes and grants
+ * that cannot be assigned to an area from its current supported population.
+ * Local costs must use area-cost.ts and the local accommodation mix.
  *
  * This comment used to compare it to "the £119 a night the Home Office publishes".
  * That figure was withdrawn from the True Cost article, which now says in as many words
@@ -459,11 +476,6 @@ export const ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR =
 export const SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA = Math.round(
   (TOTAL_GBP_M.central * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365
 );
-
-/** Cost of a named area's supported population, on the accommodation and support basis. */
-export function accommodationCostForArea(supportedAsylum: number): number {
-  return supportedAsylum * ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR;
-}
 
 export const TRUE_COST_SOURCE = {
   release: araCosts._provenance.source,

@@ -1,0 +1,13 @@
+{
+  "description": "Provenance of src/data/live/council-tax-spd.json: a byte-for-byte copy of the UK Demographics file at the commit below. Written by scripts/sync/sync-from-ukd.mjs; checked by its --check mode and tests/ukd-sync.test.ts.",
+  "source": {
+    "repository": "tompickup23/ukdemographics",
+    "commit": "2b6a2b83941f804409a731b66c64fb586946f7f6",
+    "committedAt": "2026-10-24T23:41:30+01:00",
+    "path": "src/data/live/council-tax-spd.json"
+  },
+  "sha256": "a0fe814805ec6c65c5ddd30f696f6bed2744d866c44ab9381042966a471a9a70",
+  "bytes": 104167,
+  "areas": 296,
+  "syncedAt": "2026-10-24"
+}
