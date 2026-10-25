@@ -1,0 +1,13 @@
+{
+  "description": "Provenance of src/data/live/population-estimates.json: a byte-for-byte copy of the UK Demographics file at the commit below. Written by scripts/sync/sync-from-ukd.mjs; checked by its --check mode and tests/ukd-sync.test.ts.",
+  "source": {
+    "repository": "tompickup23/ukdemographics",
+    "commit": "2b6a2b83941f804409a731b66c64fb586946f7f6",
+    "committedAt": "2026-10-24T23:41:30+01:00",
+    "path": "src/data/live/population-estimates.json"
+  },
+  "sha256": "b1826edd4de396f2a1d791bc3aa9097bab3f82b4c0c886e2b49716c08d2df553",
+  "bytes": 438934,
+  "areas": 318,
+  "syncedAt": "2026-10-24"
+}

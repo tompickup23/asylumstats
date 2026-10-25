@@ -27,6 +27,7 @@ function makeArea(overrides: Partial<LocalRouteAreaSummary>): LocalRouteAreaSumm
     contingencyAccommodation: 20,
     contingencyAccommodationRate: 2,
     initialAccommodation: 5,
+    otherAccommodation: 0,
     dispersalAccommodation: 75,
     subsistenceOnly: 20,
     allThreePathwaysTotal: 115,

@@ -2,7 +2,7 @@ import araCosts from "../../data/marts/home_office_ara/asylum-costs.json";
 import routeDashboard from "../data/live/route-dashboard.json";
 
 /**
- * True Cost v3. The one place an asylum cost figure is derived.
+ * True Cost v3. National system costs. Local figures are derived in area-cost.ts.
  *
  * ── Why v3 exists ────────────────────────────────────────────────────────────
  *
@@ -37,12 +37,9 @@ import routeDashboard from "../data/live/route-dashboard.json";
  * 2. MIXING BASES. £150 per person per day was not arbitrary: it was £5.3bn / 97,519 /
  *    365, total-system cost expressed per supported person. That conflates costs
  *    incurred for people who are NOT on asylum support (post-decision welfare and family
- *    reunion) with the population on support. So the
- *    per-area figure here is deliberately NOT the system total. It is the audited
- *    accommodation and support cost, which is the cost that actually scales with the
- *    number of people supported in an area. The two are exported under names that make
- *    the basis unmissable, and `perSupportedPersonPerDay` is the only one a place page
- *    may use.
+ *    reunion) with the population on support. National averages also hide the local
+ *    accommodation mix. Place and regional pages must use area-cost.ts, which prices
+ *    each accommodation type separately and leaves unsupported components unpriced.
  */
 
 const THOUSAND = 1_000;
@@ -448,12 +445,10 @@ export const PER_TAXPAYER_GBP = {
 /**
  * Accommodation and support cost per supported person per day.
  *
- * THE ONLY per-person figure a place or region page may use. It is the audited ASRA
- * outturn over the mean supported population of the SAME financial year, so numerator
- * and denominator describe the same people over the same period. Roughly £107, which
- * sits sensibly against the roughly £170 a night the Migration Observatory publishes
- * for hotels in the same year: hotels are the expensive end of a mix that is mostly
- * dispersal housing.
+ * National comparison only. The audited ASRA outturn is divided by the mean
+ * supported population of the same financial year. It includes schemes and grants
+ * that cannot be assigned to an area from its current supported population.
+ * Local costs must use area-cost.ts and the local accommodation mix.
  *
  * This comment used to compare it to "the £119 a night the Home Office publishes".
  * That figure was withdrawn from the True Cost article, which now says in as many words
@@ -481,11 +476,6 @@ export const ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR =
 export const SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA = Math.round(
   (TOTAL_GBP_M.central * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365
 );
-
-/** Cost of a named area's supported population, on the accommodation and support basis. */
-export function accommodationCostForArea(supportedAsylum: number): number {
-  return supportedAsylum * ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_YEAR;
-}
 
 export const TRUE_COST_SOURCE = {
   release: araCosts._provenance.source,
