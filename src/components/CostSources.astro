@@ -1,0 +1,18 @@
+---
+import { AREA_COST_DATES as dates, AREA_COST_SOURCES as sources, AREA_COST_NOTES as notes, formatCostDate } from "../lib/area-cost";
+---
+<div class="cost-sources">
+  <p><a href={sources.counts.source_url}>Home Office regional and local authority data, Reg_02</a>. Count: {formatCostDate(dates.count)}. Published: {formatCostDate(sources.counts.release_date)}.</p>
+  <p><a href={sources.rates.dispersal2026.url}>Home Office nightly rates: {dates.rate}</a>. <a href={sources.support.standard.url}>Subsistence only allowance: {dates.allowance}</a>.</p>
+  <p><a href={sources.taxpayers.landingPage}>HMRC Personal Incomes Statistics, Tables 3.14 and 3.14a</a>. Tax year: {dates.taxpayers}. Published: {formatCostDate(sources.taxpayers.publishedAt)}. Sample estimates, with 95% intervals in the CSV and each area's source drawer.</p>
+  <details><summary>How to read the comparison</summary>
+    <p>{notes.basis}</p><p>{notes.contingency}</p><p>{notes.burden}</p><p>{notes.allowance}</p><p>{notes.grant}</p>
+    <p>Hotel-rate share is the share of the priced subtotal from contingency accommodation. It is not the share of people confirmed to be in hotels. Where the subtotal is zero, the share is unavailable.</p>
+    <p>Initial and other accommodation have no current comparable rate. A row with complete rate coverage prices every person in the listed categories, but still excludes grants and any separate accommodated cash allowance. Every full expenditure total remains unavailable.</p>
+  </details>
+</div>
+<style>
+  .cost-sources { padding: 1rem; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius); font-size: .9rem; }
+  a { text-decoration: underline; text-underline-offset: 3px; }
+  p { margin: .5rem 0; } summary { cursor: pointer; font-weight: 600; }
+</style>

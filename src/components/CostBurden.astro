@@ -1,0 +1,23 @@
+---
+import { type AreaCost, AREA_COST_SOURCES, formatBurden, formatSupportRate, formatCostDate } from "../lib/area-cost";
+interface Props { cost: AreaCost }
+const { cost } = Astro.props;
+---
+<div class="cost-burden">
+  <h4>People on support compared with income taxpayers</h4>
+  <dl>
+    <div><dt>{cost.areaName}, per 1,000 taxpayers</dt><dd>{formatSupportRate(cost.m1.per1000Taxpayers)}</dd></div>
+    <div><dt>UK, per 1,000 taxpayers</dt><dd>{formatSupportRate(cost.m1.ukPer1000Taxpayers)}</dd></div>
+    <div><dt>Burden share against the UK</dt><dd>{formatBurden(cost.m1.burdenShare)}</dd></div>
+  </dl>
+  <p class="tiny">{cost.m1.note}</p>
+  <p class="tiny">{cost.counts.supported.toLocaleString("en-GB")} people on support. <a href={AREA_COST_SOURCES.counts.source_url}>Home Office, Reg_02, {formatCostDate(cost.dates.count)}</a>. <a href={AREA_COST_SOURCES.taxpayers.landingPage}>HMRC Personal Incomes Statistics, Tables 3.14 and 3.14a, tax year {cost.dates.taxpayers}</a>. Taxpayer counts are sample estimates.</p>
+</div>
+<style>
+  .cost-burden { margin: 1rem 0; padding: 1rem; border-radius: var(--radius-sm); background: var(--accent-wash); }
+  h4 { margin: 0 0 .75rem; font-size: 1rem; }
+  dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin: 0; }
+  dt { font-size: .85rem; color: var(--text-muted); }
+  dd { margin: .2rem 0; font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; }
+  p { margin: .6rem 0 0; }
+</style>

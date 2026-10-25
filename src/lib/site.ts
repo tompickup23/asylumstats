@@ -44,6 +44,7 @@ const INDEXABLE_STATIC_PATHS = [
   // its noIndex, so listing it here would ask search engines to index a page that tells
   // them not to. Individual /councils/<body>/ pages are noIndex for the same reason.
   "/spending/",
+  "/cost/",
   "/what-the-home-office-publishes/",
   "/entities/",
   "/compare/",

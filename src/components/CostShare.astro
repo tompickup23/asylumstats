@@ -1,0 +1,17 @@
+---
+import ShareButton from "./ShareButton.astro";
+import { type AreaCost, areaCostCard } from "../lib/area-cost";
+import { SITE_URL, buildPlacePath, slugifyAreaName } from "../lib/site-identity";
+interface Props { cost: AreaCost }
+const { cost } = Astro.props;
+const card = areaCostCard(cost);
+---
+<div class="cost-share">
+  <ShareButton url={`${SITE_URL}${buildPlacePath(cost)}#cost-calc-title`} title={`${cost.areaName}: asylum support costs`} text={`${card.stat} annualised priced subtotal. ${cost.m2.status}. Not recorded expenditure.`} />
+  <a class="cta-btn cta-btn--secondary" href={`/og/cost/${slugifyAreaName(cost.areaName)}.png`} download>Download cost card</a>
+  <a href="/cost/">Compare all areas and download the data</a>
+</div>
+<style>
+  .cost-share :global(.cta-btn) { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: .6rem .9rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text); cursor: pointer; }
+  .cost-share { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 1rem 0; }
+</style>

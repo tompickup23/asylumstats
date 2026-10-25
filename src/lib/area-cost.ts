@@ -113,6 +113,7 @@ export function calculateAreaCost(area: LocalRouteAreaSummary) {
     !taxable ? "HMRC has no published taxpayer count for this area." : null);
   return {
     areaCode: area.areaCode, sourceCode: code, areaName: area.areaName, counts,
+    countryName: area.countryName, regionName: area.regionName,
     basis: "derived" as const, dates: { ...AREA_COST_DATES, count: area.snapshotDate },
     inputs: { taxpayers: tax, population: pop, dwellings: dwelling },
     m1: {
@@ -125,6 +126,12 @@ export function calculateAreaCost(area: LocalRouteAreaSummary) {
     },
     m2: {
       total: null, pricedSubtotal, lowerRateSubtotal, dispersal, contingency, subsistenceOnly,
+      hotelRateSharePct: pricedSubtotal > 0 ? contingency / pricedSubtotal * 100 : null,
+      includesHotelRateScenario: counts.contingency > 0,
+      allPeoplePriced: unpricedPeople === 0,
+      status: [unpricedPeople > 0
+        ? `Incomplete: ${unpricedPeople.toLocaleString("en-GB")} of ${counts.supported.toLocaleString("en-GB")} people have no published rate`
+        : "Complete rate coverage", counts.contingency > 0 ? "Includes a hotel-rate scenario" : null].filter(Boolean).join(". "),
       accommodatedAllowance: null, actualGrant: null,
       // A sensitivity ceiling for the ordinary allowance, not a total cost bound.
       standardAllowanceSensitivity: ACCOMMODATED_ALLOWANCE_BASIS === "unverified"
@@ -170,4 +177,33 @@ export function regionalCostSummary(codes: string[]): string {
   const subtotal = rows.reduce((n, a) => n + a.m2.pricedSubtotal, 0);
   const unpriced = rows.reduce((n, a) => n + a.m2.unpricedPeople, 0);
   return ` Priced components annualise to about ${formatAreaCostCompact(subtotal)}, paid by the Home Office. This partial subtotal excludes grants and any separate accommodated allowance.${unpriced > 0 ? ` ${unpriced.toLocaleString("en-GB")} people in initial or other accommodation, including large sites where present, remain unpriced.` : ""}${rows.some(a => a.counts.contingency > 0) ? ` ${AREA_COST_NOTES.contingency}` : ""} Count: ${formatCostDate(AREA_COST_DATES.count)}; nightly rates: ${AREA_COST_DATES.rate}; taxpayer edition: ${AREA_COST_DATES.taxpayers}.`;
+}
+
+/** Shared labels used on the table, download and cards. Never implies full expenditure. */
+export const formatBurden = (value: number | null) => value === null ? "Unavailable" : `${value.toFixed(1)} times`;
+export const formatSupportRate = (value: number | null) => value === null ? "Unavailable" : value.toFixed(1);
+export const formatHotelShare = (value: number | null) => value === null ? "Unavailable" : `${value.toFixed(1)}%`;
+export const AREA_COST_PERIODS = { nights: DAYS, weeklyPayments: WEEKS };
+export const AREA_COST_INPUT_RATES = {
+  dispersalPerNight: COST_PER_NIGHT.dispersal2026.value,
+  contingencyPerNight: COST_PER_NIGHT.hotel2026.value,
+  initialPerNight: null, otherPerNight: null,
+  subsistenceOnlyPerWeek: SUPPORT_RATES.standard.value
+};
+export function areaCostCard(cost: AreaCost) {
+  return {
+    title: cost.areaName,
+    stat: formatAreaCostCompact(cost.m2.pricedSubtotal),
+    statLabel: "Annualised priced subtotal, paid by the Home Office",
+    details: [
+      `${cost.counts.supported.toLocaleString("en-GB")} people on support. Burden share: ${formatBurden(cost.m1.burdenShare)}.`,
+      `Per 1,000 income taxpayers: local ${formatSupportRate(cost.m1.per1000Taxpayers)}, UK ${formatSupportRate(cost.m1.ukPer1000Taxpayers)}.`,
+      `${cost.m2.status}. Excludes grants and separate accommodated allowances.`,
+      cost.m1.burdenShare === null ? cost.m1.note : "Relative comparison, not an allocation target.",
+      `Home Office Reg_02 count: ${formatCostDate(cost.dates.count)}. Rates: ${cost.dates.rate}.`,
+      `HMRC Tables 3.14 and 3.14a: ${cost.dates.taxpayers}. Not recorded expenditure.`,
+      `Home Office rates letter published ${formatCostDate(AREA_COST_SOURCES.rates.dispersal2026.published)}.`
+    ],
+    verdict: "info"
+  };
 }

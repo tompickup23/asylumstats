@@ -1,0 +1,94 @@
+---
+import { getAllAreaCosts, formatAreaCost, formatBurden, formatSupportRate, formatHotelShare } from "../lib/area-cost";
+import { buildPlacePath } from "../lib/site-identity";
+const costs = getAllAreaCosts().sort((a, b) => a.areaName.localeCompare(b.areaName));
+---
+<section class="cost-table-section" aria-labelledby="cost-table-title">
+  <h2 id="cost-table-title">Find your town</h2>
+  <div class="cost-controls">
+    <label>Town or local authority<input id="cost-search" type="search" placeholder="Search by name or area code" /></label>
+    <label>Sort by<select id="cost-sort">
+      <option value="name">Area name</option>
+      <option value="supported">People on support</option>
+      <option value="subtotal">Priced subtotal</option>
+      <option value="hotel">Hotel-rate share</option>
+      <option value="burden">Burden share</option>
+    </select></label>
+    <label>Order<select id="cost-order"><option value="desc">Highest first</option><option value="asc">Lowest first</option></select></label>
+  </div>
+  <p id="cost-results" role="status">{costs.length} areas shown</p>
+  <p class="tiny" id="cost-sort-note">Sorting compares priced components only. Unpriced people stay visible in each row. Complete rate coverage does not mean complete expenditure. Unavailable ratios sort last in either order.</p>
+  <div class="cost-table-scroll" tabindex="0" role="region" aria-label="Area cost comparison" aria-describedby="cost-sort-note">
+    <table>
+      <caption>Annualised priced subtotals and relative burden by local authority</caption>
+      <thead><tr><th scope="col">Area</th><th scope="col">People on support</th><th scope="col">Priced subtotal per year</th><th scope="col">Rate coverage</th><th scope="col">Hotel-rate share of subtotal</th><th scope="col">People per 1,000 taxpayers</th><th scope="col">Burden share</th></tr></thead>
+      <tbody>{costs.map(c => <tr data-cost-row data-name={`${c.areaName} ${c.areaCode}`.toLowerCase()} data-supported={c.counts.supported} data-subtotal={c.m2.pricedSubtotal} data-hotel={c.m2.hotelRateSharePct ?? ""} data-burden={c.m1.burdenShare ?? ""}>
+        <th scope="row"><a href={`${buildPlacePath(c)}#cost-calc-title`}>{c.areaName}</a><small>{c.countryName}</small></th>
+        <td data-label="People on support">{c.counts.supported.toLocaleString("en-GB")}</td>
+        <td class="money" data-label="Priced subtotal per year">{formatAreaCost(c.m2.pricedSubtotal)}<small>Priced subtotal only</small></td>
+        <td class="coverage" data-label="Rate coverage">{c.m2.status}<small>Full expenditure unavailable</small></td>
+        <td data-label="Hotel-rate share">{formatHotelShare(c.m2.hotelRateSharePct)}</td>
+        <td data-label="People per 1,000 taxpayers">{formatSupportRate(c.m1.per1000Taxpayers)}</td>
+        <td data-label="Burden share">{formatBurden(c.m1.burdenShare)}{c.m1.burdenShare === null && <small>{c.m1.note}</small>}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+</section>
+<script>
+  const search = document.querySelector<HTMLInputElement>("#cost-search")!;
+  const sort = document.querySelector<HTMLSelectElement>("#cost-sort")!;
+  const order = document.querySelector<HTMLSelectElement>("#cost-order")!;
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>("[data-cost-row]")];
+  const body = rows[0]?.parentElement;
+  const update = () => {
+    const query = search.value.trim().toLocaleLowerCase("en-GB");
+    rows.sort((a, b) => {
+      const key = sort.value;
+      if (key === "name") return a.dataset.name!.localeCompare(b.dataset.name!);
+      const av = a.dataset[key], bv = b.dataset[key];
+      if (av === "" || bv === "") return av === bv ? a.dataset.name!.localeCompare(b.dataset.name!) : av === "" ? 1 : -1;
+      const diff = Number(av) - Number(bv);
+      return (order.value === "asc" ? diff : -diff) || a.dataset.name!.localeCompare(b.dataset.name!);
+    });
+    for (const row of rows) {
+      row.hidden = !row.dataset.name!.includes(query);
+      body?.append(row);
+    }
+    order.disabled = sort.value === "name";
+    document.querySelector("#cost-results")!.textContent = `${rows.filter(r => !r.hidden).length} of ${rows.length} areas shown`;
+  };
+  search.addEventListener("input", update);
+  sort.addEventListener("change", update);
+  order.addEventListener("change", update);
+  update();
+</script>
+<style>
+  .cost-table-section { min-width: 0; margin: 2rem 0; }
+  .cost-controls { display: flex; flex-wrap: wrap; gap: 1rem; }
+  label { display: grid; gap: .4rem; flex: 1 1 180px; }
+  input, select { width: 100%; min-width: 0; min-height: 44px; padding: .6rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text); background: var(--bg-card); font: inherit; }
+  .cost-table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .9rem; }
+  caption { text-align: left; padding: 1rem; font-weight: 600; }
+  th, td { padding: .8rem; text-align: left; vertical-align: top; border-top: 1px solid var(--border); }
+  thead { background: var(--accent-wash); }
+  tbody tr:nth-child(even) { background: var(--bg-subtle); }
+  th[scope="row"] { min-width: 150px; }
+  .coverage { min-width: 220px; }
+  .money { white-space: nowrap; }
+  small { display: block; color: var(--text-muted); margin-top: .3rem; font-size: .78rem; font-weight: 400; }
+  th a { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 680px) {
+    .cost-table-scroll { overflow: visible; }
+    table, tbody { display: block; }
+    caption { display: block; }
+    thead { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+    tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: .8rem; gap: .8rem; border-top: 1px solid var(--border-strong); }
+    th, td { padding: 0; border: 0; min-width: 0; }
+    th[scope="row"], .coverage { grid-column: 1 / -1; min-width: 0; }
+    th[scope="row"] { font-size: 1.15rem; }
+    td::before { content: attr(data-label); display: block; font-size: .75rem; color: var(--text-muted); margin-bottom: .2rem; }
+    .money { white-space: normal; }
+  }
+  [hidden] { display: none; }
+</style>

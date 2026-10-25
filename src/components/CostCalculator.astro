@@ -1,6 +1,8 @@
 ---
 import { getAreaCost, AREA_COST_SOURCES as sources, AREA_COST_NOTES as notes,
   formatAreaCost, formatAreaCostCompact, formatCostDate } from "../lib/area-cost";
+import CostBurden from "./CostBurden.astro";
+import CostShare from "./CostShare.astro";
 import CostDataDrawer from "./CostDataDrawer.astro";
 interface Props { areaCode: string }
 const cost = getAreaCost(Astro.props.areaCode);
@@ -9,7 +11,7 @@ const place = cost.areaName;
 const n = (value: number) => value.toLocaleString("en-GB");
 const people = (value: number) => `${n(value)} ${value === 1 ? "person" : "people"}`;
 const rates = sources.rates;
-const hotelShare = m2.pricedSubtotal > 0 ? Math.round(m2.contingency / m2.pricedSubtotal * 100) : 0;
+const hotelShare = m2.hotelRateSharePct?.toFixed(0) ?? "Unavailable";
 
 // The question most readers bring: is this a hotel bill? Answer it from the local mix.
 const hotelLine = counts.contingency === 0
@@ -39,6 +41,8 @@ const sum = [
   <p class="cost-eyebrow">Home Office accommodation and support</p>
   <h3 id="cost-calc-title">What housing and supporting people seeking asylum in {place} costs</h3>
 
+  <CostBurden cost={cost} />
+
   {/* "At least" only where no row is a hotel-rate scenario, which could overstate. */}
   <div class="cost-head">
     <p class="cost-figure"><span class="cost-value">{m2.unpricedPeople > 0 && counts.contingency === 0 && <span class="cost-floor">At least </span>}{formatAreaCostCompact(m2.pricedSubtotal)}</span>
@@ -66,7 +70,7 @@ const sum = [
       <span class="sum-working">{row.sourceUrl ? <>{people(row.count)} × <a href={row.sourceUrl}>{row.working}</a></> : `${people(row.count)}, ${row.working}`}</span>
       <span class="sum-value">{row.value === null ? "Not included" : formatAreaCost(row.value)}</span>
     </li>)}
-    <li class="sum-total"><span class="sum-label">Priced total</span><span class="sum-value">{formatAreaCost(m2.pricedSubtotal)}</span></li>
+    <li class="sum-total"><span class="sum-label">Priced subtotal</span><span class="sum-value">{formatAreaCost(m2.pricedSubtotal)}</span></li>
   </ol>
   <p class="tiny">Excludes the grant paid to councils and any cash allowance for people in accommodation, pending a check of what the nightly rates cover. At the earlier rates for the {cost.dates.lowerRate}, the same people come to {formatAreaCostCompact(m2.lowerRateSubtotal)}.</p>
 
@@ -82,6 +86,7 @@ const sum = [
   </dl>
   <p class="tiny">Not comparable with the <a href={cost.m4.costSource.finding}>national figure</a> of {formatAreaCost(cost.m4.perTaxpayer)} per UK income taxpayer for {cost.m4.year}, which divides the estimated cost of the whole asylum system, not just local housing and support, using <a href={cost.m4.source.url}>HMRC's matching-year projection</a>.</p>
   <p class="tiny cost-dates"><a href={sources.counts.source_url}>Count: {formatCostDate(cost.dates.count)}</a> · <a href={rates.dispersal2026.url}>Nightly rates: {cost.dates.rate}</a> · <a href={sources.taxpayers.landingPage}>Taxpayers: {cost.dates.taxpayers}</a> · <a href={sources.dwellings.url}>Dwellings: {formatCostDate(cost.dates.dwellings)}</a> · <a href={sources.population.sourceUrl}>Population: {formatCostDate(cost.dates.population)}</a></p>
+  <CostShare cost={cost} />
   <CostDataDrawer cost={cost} />
 </section>
 

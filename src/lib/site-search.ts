@@ -21,6 +21,9 @@ export interface SiteSearchEntry {
 }
 
 const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
+  { href: "/cost/", title: "Asylum costs by town", kind: "page", kicker: "Cost and burden share",
+    description: "Priced subtotals, missing costs and relative burden across every local authority.",
+    priority: 118, searchText: "asylum costs town burden share taxpayers priced subtotal hotel rates csv" },
   {
     href: "/",
     title: "Home",
