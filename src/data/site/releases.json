@@ -1,6 +1,12 @@
 [
   {
     "date": "2026-10-25",
+    "title": "New: homelessness and asylum housing on English place pages",
+    "summary": "Each English place page now shows council homelessness figures beside the Home Office asylum count: households in temporary accommodation at 31 March 2026, children in them, and people estimated to be sleeping rough on one night in autumn 2025. It also shows how many households came to the council as homeless or threatened with homelessness in January to March 2026 because they had to leave Home Office asylum accommodation, and the council's net spending on homelessness in 2025 to 2026. Households and people are shown side by side with their units and dates, never divided into one another. Figures are read cell by cell from MHCLG's published tables and checked by a separate reader. Values a council did not submit, or MHCLG suppressed, are left blank. Scotland, Wales and Northern Ireland are not yet included.",
+    "sourceUrl": "https://www.gov.uk/government/statistics/statutory-homelessness-in-england-january-to-march-2026"
+  },
+  {
+    "date": "2026-10-25",
     "title": "Correction: local asylum cost comparisons now use the accommodation mix",
     "summary": "Place and regional pages previously applied a national accommodation and support average to every person on support. A second calculator allocated national hotel spending by population share. Both hid the local mix of dispersal housing and hotels. They now use one calculation with the local counts and published rates. Contingency accommodation is priced at the hotel rate as an explicit scenario, because the category does not identify hotels exclusively. The result is an annualised priced subtotal paid by the Home Office, not local spending or a bill for local taxpayers. Initial and other accommodation remain unpriced, and grants and any separate accommodated allowances are excluded where the inputs cannot establish them. Per-taxpayer and per-dwelling figures are hypothetical local equivalents, with source dates and uncertainty shown. Missing taxpayer counts remain blank.",
     "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"

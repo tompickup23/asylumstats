@@ -29,6 +29,8 @@
     "ingest:annualreport": "npm run fetch:annualreport",
     "fetch:bordersecurity": "node scripts/fetch/fetch-border-security.mjs",
     "transform:bordersecurity": "node scripts/transform/transform-border-security.mjs",
+    "transform:housing": "node scripts/transform/transform-housing-pressure.mjs",
+    "audit:housing": "uv run --no-project python -I scripts/audit/verify-housing-pressure.py",
     "ingest:bordersecurity": "npm run fetch:bordersecurity && npm run transform:bordersecurity",
     "transform:asylumfinance": "node scripts/transform/transform-asylum-finance.mjs",
     "transform:asylumfinance:check": "node scripts/transform/transform-asylum-finance.mjs --check",

@@ -1,0 +1,59 @@
+{
+  "dataset": "mhclg_homelessness",
+  "publisher": "Ministry of Housing, Communities and Local Government",
+  "release": "Statutory homelessness detailed local authority tables, rough sleeping snapshot, and RO4 housing services outturn",
+  "cadence": "H-CLIC quarterly; rough sleeping annual (February); RO4 annual (September)",
+  "landing": "https://www.gov.uk/government/collections/homelessness-statistics",
+  "bank": "gov.uk",
+  "areaTier": "local authority (England)",
+  "licence": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "coverageEnd": "2026-03-31",
+  "maxAgeDays": 200,
+  "fileCount": 3,
+  "totalBytes": 1921394,
+  "files": [
+    {
+      "file": "Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
+      "releaseId": "hclic",
+      "label": "Statutory homelessness: detailed local authority-level tables, January to March 2026",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a82ee2c92ec93e1e0329a7f/Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
+      "landing": "https://www.gov.uk/government/statistics/statutory-homelessness-in-england-january-to-march-2026",
+      "released": "2026-08-13",
+      "period": "January to March 2026; temporary accommodation at 31 March 2026",
+      "statisticsStatus": "accredited official statistics, provisional",
+      "retrieved": "2026-10-25",
+      "sizeBytes": 1180681,
+      "sha256": "f77eebd761455169626dc04c70f45177b11704999a6094384b59f37fa56d1881",
+      "periodLabel": "January to March 2026",
+      "stockDate": "2026-03-31"
+    },
+    {
+      "file": "Rough_sleeping_snapshot_in_England__autumn_2025.ods",
+      "releaseId": "rough_sleeping",
+      "label": "Rough sleeping snapshot in England: autumn 2025, tables",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/699daac73e672177d0bc759b/Rough_sleeping_snapshot_in_England__autumn_2025.ods",
+      "landing": "https://www.gov.uk/government/statistical-data-sets/tables-on-rough-sleeping",
+      "released": "2026-02-26",
+      "period": "single night between 1 October and 30 November 2025",
+      "statisticsStatus": "accredited official statistics",
+      "retrieved": "2026-10-25",
+      "sizeBytes": 364483,
+      "sha256": "7b7ed536d0d51f837552be0207f76d0f62838ce4e72409370f6482543c710c89",
+      "periodLabel": "autumn 2025"
+    },
+    {
+      "file": "RO4_LA_Data_2025-26_data_by_LA.ods",
+      "releaseId": "ro4",
+      "label": "Revenue outturn housing services (RO4) 2025 to 2026",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6ab26f188cb3c0580e500fa7/RO4_LA_Data_2025-26_data_by_LA.ods",
+      "landing": "https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-2025-to-2026-individual-local-authority-data-outturn",
+      "released": "2026-09-17",
+      "period": "financial year 2025 to 2026",
+      "statisticsStatus": "accredited official statistics; local authority returns, not audited accounts",
+      "retrieved": "2026-10-25",
+      "sizeBytes": 376230,
+      "sha256": "3c4a8a04625f42a77e13486c38775655a693496fd0008f70811dea8946c798c4",
+      "periodLabel": "2025 to 2026"
+    }
+  ]
+}

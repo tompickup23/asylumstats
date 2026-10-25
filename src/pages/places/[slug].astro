@@ -10,6 +10,7 @@ import PageContents from "../../components/PageContents.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import ProjectionChart from "../../components/ProjectionChart.astro";
 import ScenarioSelector from "../../components/ScenarioSelector.astro";
+import HousingPressure from "../../components/HousingPressure.astro";
 import CostCalculator from "../../components/CostCalculator.astro";
 import ShiftShareChart from "../../components/ShiftShareChart.astro";
 import TrendChart from "../../components/TrendChart.astro";
@@ -274,6 +275,7 @@ const pageStructuredData = buildPlaceStructuredData(area, {
 
 const placeSections = [
   { id: "place-summary", label: "Summary" },
+  { id: "housing-pressure", label: "Housing" },
   ...(askedAndAnswered.length > 0 ? [{ id: "place-questions", label: "Questions" }] : []),
   ...(areaTrend ? [{ id: "recent-trend", label: "Trend" }] : []),
   { id: "local-numbers", label: "Local numbers" },
@@ -401,6 +403,8 @@ const areaCountyName =
     />
     <CostCalculator areaCode={area.areaCode} />
   </section>
+
+  <HousingPressure areaCode={area.areaCode} areaName={area.areaName} countryName={area.countryName} />
 
   <AskedAndAnswered id="place-questions" items={askedAndAnswered} label={`Common questions about asylum in ${area.areaName}`} />
 
