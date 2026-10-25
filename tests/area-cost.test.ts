@@ -5,7 +5,7 @@ import ts from "typescript";
 import {
   getAreaCost, getAllAreaCosts, calculateAreaCost, AREA_COST_UK, AREA_COST_DATES,
   AREA_COST_SOURCES, ACCOMMODATED_ALLOWANCE_BASIS, NATIONAL_COST_COMPARISON,
-  areaCostSummary, regionalCostSummary, roundTen
+  areaCostSummary, regionalCostSummary, roundTaxpayerCost
 } from "../src/lib/area-cost";
 import { COST_PER_NIGHT, SUPPORT_RATES, ASYLUM_DISPERSAL_GRANT } from "../src/lib/official-figures";
 import { loadLocalRouteLatest } from "../src/lib/route-data";
@@ -114,10 +114,10 @@ describe("local support burden and cost basis", () => {
     expect(at.m3.perTaxpayer).not.toBeNull();
     for (const c of costs.filter(c => c.m3.perTaxpayer95)) {
       const tax = c.inputs.taxpayers!;
-      expect(c.m3.perTaxpayer).toBe(roundTen(c.m2.pricedSubtotal / tax.taxpayers!));
-      expect(c.m3.perTaxpayer95).toEqual({ lower: roundTen(c.m2.pricedSubtotal / tax.taxpayersUpper95!),
-        upper: roundTen(c.m2.pricedSubtotal / tax.taxpayersLower95!) });
-      expect(c.m3.perTaxpayer! % 10).toBe(0);
+      expect(c.m3.perTaxpayer).toBe(roundTaxpayerCost(c.m2.pricedSubtotal / tax.taxpayers!));
+      expect(c.m3.perTaxpayer95).toEqual({ lower: roundTaxpayerCost(c.m2.pricedSubtotal / tax.taxpayersUpper95!),
+        upper: roundTaxpayerCost(c.m2.pricedSubtotal / tax.taxpayersLower95!) });
+      if (c.m3.perTaxpayer! >= 10) expect(c.m3.perTaxpayer! % 10).toBe(0);
     }
   });
 

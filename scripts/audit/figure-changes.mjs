@@ -97,3 +97,12 @@ if (shown.length > 0) {
   }
 }
 console.log(lines.join("\n"));
+
+// Load the same cost module against each revision, never duplicate its arithmetic.
+try {
+  const { areaCostChanges } = await import("./area-cost-changes.mjs");
+  console.log(areaCostChanges(base, thresholdPct));
+} catch (error) {
+  // Advisory must remain non-blocking, but a missing comparison is never a clean bill.
+  console.log(`\n### Per-area cost comparison unavailable\n\nReview required: ${error.message}`);
+}

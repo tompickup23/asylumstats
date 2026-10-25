@@ -53,7 +53,7 @@ describe("the finding agrees with the derived constant", () => {
   });
 
   it("feeds the OG cards from the checked finding fields", () => {
-    const og = readFileSync(join(process.cwd(), "src/pages/og/[...slug].png.ts"), "utf8");
+    const og = readFileSync(join(process.cwd(), "src/lib/og/endpoint.ts"), "utf8");
     for (const field of ["headline", "stat_value", "stat_label"]) {
       expect(og).toContain(`f.data.${field}`);
     }
