@@ -1,0 +1,112 @@
+---
+import { getHousingPressure, leavingAsylumSupport, HOUSING_ENGLAND, HOUSING_SOURCES as src,
+  STATUS_NOTE, type SourceCell } from "../lib/housing-pressure";
+import { getAreaCost, AREA_COST_SOURCES, formatAreaCostCompact, formatCostDate } from "../lib/area-cost";
+interface Props { areaCode: string; areaName: string; countryName: string }
+const { areaCode, areaName: place, countryName } = Astro.props;
+const h = getHousingPressure(areaCode);
+const cost = getAreaCost(areaCode);
+const n = (v: number) => v.toLocaleString("en-GB");
+const show = (c: SourceCell) => c.value === null ? "Not available" : n(c.value);
+const why = (c: SourceCell) => c.status === "published" ? null : STATUS_NOTE[c.status];
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const bridge = h ? leavingAsylumSupport(h) : null;
+const englandBridge = leavingAsylumSupport(HOUSING_ENGLAND)!;
+const spend = h?.homelessnessNetSpend ?? null;
+const spendText = spend?.value == null ? null : spend.value < 0
+  ? `income exceeded spending by ${formatAreaCostCompact(-spend.value)}` : formatAreaCostCompact(spend.value);
+const ta = h?.temporaryAccommodation;
+const quarter = src.hclic.periodLabel;
+const taDate = formatCostDate(src.hclic.stockDate!);
+---
+
+<section id="housing-pressure" class="section section-anchor housing" aria-labelledby="housing-title">
+  <p class="hp-eyebrow">Two housing systems, side by side</p>
+  <h2 id="housing-title">Homelessness and asylum housing in {place}</h2>
+  {!h ? (
+    <p class="lede">Homelessness statistics for {countryName} are published separately by its own government and are not included here yet. This section covers English councils only.</p>
+  ) : (<>
+  <p class="lede">The council houses homeless households; the Home Office houses people seeking asylum. The counts use different units and dates, so they sit side by side and are never divided into one another.</p>
+
+  <div class="hp-tiles">
+    <div class="hp-tile is-ho">
+      <p class="hp-label">On Home Office asylum support</p>
+      <p class="hp-value">{n(cost.counts.supported)}</p>
+      <p class="hp-unit">people, {formatCostDate(cost.dates.count)}</p>
+    </div>
+    <div class="hp-tile is-council">
+      <p class="hp-label">In council temporary accommodation</p>
+      <p class="hp-value">{show(ta!.households)}</p>
+      <p class="hp-unit">households, {taDate}</p>
+      {why(ta!.households) ? <p class="hp-note">{why(ta!.households)}</p> :
+        <p class="hp-note">{show(ta!.householdsWithChildren)} with children, {show(ta!.children)} children in all</p>}
+    </div>
+    <div class="hp-tile is-council">
+      <p class="hp-label">Sleeping rough</p>
+      <p class="hp-value">{show(h.roughSleeping)}</p>
+      <p class="hp-unit">people, estimate for one night in {src.roughSleeping.periodLabel}</p>
+      {why(h.roughSleeping) && <p class="hp-note">{why(h.roughSleeping)}</p>}
+    </div>
+  </div>
+
+  <div class="hp-bridge">
+    <h3>Leaving Home Office accommodation</h3>
+    {bridge === null ? (
+      <p>The council's figures for {quarter} are not available ({why(h.duties.preventionLeavingAsylumSupport) ?? why(h.duties.prevention) ?? "incomplete"}).</p>
+    ) : bridge.leaving === 0 ? (
+      <p>In {quarter}, none of the {n(bridge.owed)} households the council assessed as homeless or threatened with homelessness had lost their home because they had to leave Home Office asylum accommodation.</p>
+    ) : (<>
+      <p class="hp-bridge-lede"><strong>{n(bridge.leaving)} {bridge.leaving === 1 ? "household" : "households"}</strong> came to the council in {place} as homeless or threatened with homelessness in {quarter} because they had to leave Home Office asylum accommodation.</p>
+      <p>{n(bridge.relief)} were already homeless (relief duty) and {n(bridge.prevention)} were threatened with it (prevention duty). That is {bridge.share === null ? "not a share that can be calculated" : pct(bridge.share)} of the {n(bridge.owed)} households owed either duty here, against {pct(englandBridge.share!)} across England.</p>
+    </>)}
+    <p class="tiny">Councils record this as the reason the household lost, or was about to lose, its last settled home. England: {n(englandBridge.leaving)} households in the quarter, from totals MHCLG rounds to the nearest 10.</p>
+  </div>
+
+  <h3>Who pays</h3>
+  <dl class="hp-pay">
+    <div><dt>Home Office, asylum accommodation and support</dt>
+      <dd>{cost.m2.unpricedPeople > 0 && cost.counts.contingency === 0 ? "At least " : "About "}{formatAreaCostCompact(cost.m2.pricedSubtotal)} a year</dd>
+      <p class="tiny">Priced from published rates and the local mix{cost.m2.unpricedPeople > 0 ? `, excluding ${n(cost.m2.unpricedPeople)} people with no published rate` : ""}. <a href="#place-summary">How it is worked out</a>.</p></div>
+    <div><dt>Council, homelessness services</dt>
+      <dd>{spendText ?? "Not available"}{spend?.value != null && spend.value >= 0 ? ` in ${src.ro4.periodLabel}` : ""}</dd>
+      <p class="tiny">{spend?.value == null ? `Return ${spend ? STATUS_NOTE[spend.status as "not_submitted"] : "not available"}.` : "Net spending after income such as housing benefit, from the council's own return. Covers all homelessness services, not only temporary accommodation."}</p></div>
+  </dl>
+  <p class="tiny">Different years, bases and budgets: a guide to who carries which cost, not a like-for-like comparison. Homelessness duties sit with the district or unitary council.</p>
+
+  <details class="hp-sources">
+    <summary>Sources and cells</summary>
+    <ul>
+      <li><a href={src.hclic.url}>{src.hclic.title}</a>, MHCLG, released {formatCostDate(src.hclic.released)} ({src.hclic.status}). Temporary accommodation: {ta!.households.cell}, {ta!.householdsWithChildren.cell}, {ta!.children.cell}. Duties: {h.duties.prevention.cell}, {h.duties.relief.cell}; leaving asylum support, reason "Required to leave accommodation provided by Home Office as asylum support": {h.duties.preventionLeavingAsylumSupport.cell}, {h.duties.reliefLeavingAsylumSupport.cell}.</li>
+      <li><a href={src.roughSleeping.url}>{src.roughSleeping.title}</a>, MHCLG, released {formatCostDate(src.roughSleeping.released)}: {h.roughSleeping.cell}. Councils estimate one night between 1 October and 30 November.</li>
+      <li><a href={src.ro4.url}>{src.ro4.title}</a>, MHCLG, released {formatCostDate(src.ro4.released)}: {h.homelessnessNetSpend.cell}, £ thousand. Council returns, not audited accounts.</li>
+      <li><a href={AREA_COST_SOURCES.counts.attachment_url}>Home Office {AREA_COST_SOURCES.counts.table}</a>, people on asylum support at {formatCostDate(cost.dates.count)}.</li>
+    </ul>
+  </details>
+  </>)}
+</section>
+
+<style>
+  .housing { min-width: 0; }
+  .hp-eyebrow { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); margin: 0 0 .35rem; }
+  .housing h2 { font-family: var(--font-display); margin: 0 0 .5rem; }
+  .housing h3 { font-size: 1.05rem; margin: 1.5rem 0 .4rem; }
+  .hp-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .75rem; margin: 1rem 0; }
+  .hp-tile { min-width: 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-top: 3px solid var(--series-1); border-radius: var(--radius-sm); }
+  .hp-tile.is-council { border-top-color: var(--series-2); }
+  .hp-tile p { margin: 0; }
+  .hp-label { font-size: .85rem; color: var(--text-muted); }
+  .hp-value { font-family: var(--font-display); font-size: 2rem; font-weight: 600; line-height: 1.15; margin-top: .25rem !important; font-variant-numeric: tabular-nums; }
+  .hp-unit { font-size: .85rem; color: var(--text-muted); }
+  .hp-note { font-size: .8rem; color: var(--text-faint); margin-top: .4rem !important; }
+  .hp-bridge { margin: 1.25rem 0; padding: 1rem 1.15rem; background: var(--accent-wash); border-radius: var(--radius-sm); }
+  .hp-bridge h3 { margin-top: 0; }
+  .hp-bridge p { margin: .5rem 0; }
+  .hp-bridge-lede { font-size: 1.05rem; }
+  .hp-pay { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .75rem; margin: .5rem 0; }
+  .hp-pay div { min-width: 0; padding: .9rem; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .hp-pay dt { font-size: .85rem; color: var(--text-muted); }
+  .hp-pay dd { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; margin: .2rem 0; font-variant-numeric: tabular-nums; }
+  .hp-sources { margin-top: 1rem; font-size: .88rem; overflow-wrap: anywhere; }
+  .hp-sources summary { cursor: pointer; font-weight: 600; }
+  .hp-sources li { margin: .4rem 0; }
+</style>

@@ -71,6 +71,7 @@ src/data/live/hotel-area-sightings.json
 src/data/live/hotel-archive-queue.json
 src/data/live/small-boats.json
 src/data/live/border-security.json
+src/data/live/housing-pressure.json
 src/data/live/ho-asylum-entities.json
 src/data/live/ho-asylum-by-year.json
 src/data/live/asylum-cost-reconciliation.json
