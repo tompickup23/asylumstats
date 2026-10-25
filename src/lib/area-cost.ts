@@ -159,7 +159,11 @@ export function getAreaCost(code: string): AreaCost {
   return result;
 }
 export function areaCostSummary(cost: AreaCost): string {
-  return ` The priced accommodation and support components annualise to about ${formatAreaCostCompact(cost.m2.pricedSubtotal)}, paid by the Home Office. This is a partial subtotal, excluding grants and any separate accommodated allowance.${cost.m2.unpricedNote ? ` ${cost.m2.unpricedNote}` : ""}${cost.m2.contingencyNote ? ` ${cost.m2.contingencyNote}` : ""} Count: ${formatCostDate(cost.dates.count)}; nightly rates: ${cost.dates.rate}; taxpayer edition: ${cost.dates.taxpayers}.`;
+  const contingency = cost.counts.contingency, unpriced = cost.m2.unpricedPeople;
+  const hotels = contingency > 0
+    ? " Contingency places are priced at the hotel rate as a scenario."
+    : " None are in contingency accommodation, the category that includes hotels.";
+  return ` Priced from the local accommodation mix, housing and support come to about ${formatAreaCostCompact(cost.m2.pricedSubtotal)} a year, paid by the Home Office.${hotels}${unpriced > 0 ? ` ${unpriced.toLocaleString("en-GB")} people in initial or other accommodation are unpriced, so this is a partial figure.` : ""} The working is shown below.`;
 }
 export function regionalCostSummary(codes: string[]): string {
   const rows = [...new Set(codes)].map(getAreaCost);

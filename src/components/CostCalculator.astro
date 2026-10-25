@@ -4,35 +4,123 @@ import { getAreaCost, AREA_COST_SOURCES as sources, AREA_COST_NOTES as notes,
 import CostDataDrawer from "./CostDataDrawer.astro";
 interface Props { areaCode: string }
 const cost = getAreaCost(Astro.props.areaCode);
+const { counts, m2 } = cost;
+const place = cost.areaName;
+const n = (value: number) => value.toLocaleString("en-GB");
+const people = (value: number) => `${n(value)} ${value === 1 ? "person" : "people"}`;
+const rates = sources.rates;
+const hotelShare = m2.pricedSubtotal > 0 ? Math.round(m2.contingency / m2.pricedSubtotal * 100) : 0;
+
+// The question most readers bring: is this a hotel bill? Answer it from the local mix.
+const hotelLine = counts.contingency === 0
+  ? `No one in ${place} is in contingency accommodation, the Home Office category that includes hotels, so no hotel cost is in this figure.${counts.dispersal > 0 ? ` It is driven by ${people(counts.dispersal)} in dispersal accommodation, longer-term housing in the community, at £${rates.dispersal2026.value} a night.` : ""}`
+  : `${people(counts.contingency)} in ${place} ${counts.contingency === 1 ? "is" : "are"} in contingency accommodation, the Home Office category that includes hotels. It does not publish how many are in hotels, so all are priced at the £${rates.hotel2026.value} hotel rate as a scenario, ${hotelShare}% of the figure. Where some are in other temporary housing at a different rate, the true cost will differ.`;
+
+const mix = [
+  { key: "dispersal", label: "Dispersal housing", value: counts.dispersal },
+  { key: "contingency", label: "Contingency, incl. hotels", value: counts.contingency },
+  { key: "unpriced", label: "Initial or other, not priced", value: m2.unpricedPeople },
+  { key: "subsistence", label: "Subsistence only", value: counts.subsistenceOnly }
+].filter(s => s.value > 0);
+
+const sum = [
+  { label: "Dispersal housing", count: counts.dispersal, sourceUrl: rates.dispersal2026.url,
+    working: `£${rates.dispersal2026.value} a night × 365 nights`, value: m2.dispersal },
+  { label: "Contingency, priced at the hotel rate", count: counts.contingency, sourceUrl: rates.hotel2026.url,
+    working: `£${rates.hotel2026.value} a night × 365 nights`, value: m2.contingency },
+  { label: "Subsistence only, no accommodation", count: counts.subsistenceOnly, sourceUrl: sources.support.standard.url,
+    working: `£${sources.support.standard.value} a week × 52 weeks`, value: m2.subsistenceOnly },
+  { label: "Initial and other accommodation", count: m2.unpricedPeople, sourceUrl: null,
+    working: "no current published rate", value: null }
+].filter(row => row.count > 0);
 ---
 
-<section class="cost-calc" aria-label={`Asylum cost comparison for ${cost.areaName}`}>
-  <h3>What can be priced in {cost.areaName}</h3>
-  <p class="cost-value">About {formatAreaCostCompact(cost.m2.pricedSubtotal)} a year</p>
-  <p><strong>Partial subtotal, paid by the Home Office.</strong> Based on the local accommodation mix, holding the count constant for a year. Grants and any separate accommodated allowance are excluded.</p>
-  {cost.m2.unpricedNote && <p class="unpriced"><strong>{cost.m2.unpricedNote}</strong></p>}
-  {cost.m2.contingencyNote && <p>{cost.m2.contingencyNote}</p>}
-  <p>{notes.hypothetical}</p>
+<section class="cost-calc" aria-labelledby="cost-calc-title">
+  <p class="cost-eyebrow">Home Office accommodation and support</p>
+  <h3 id="cost-calc-title">What housing and supporting people seeking asylum in {place} costs</h3>
+
+  {/* "At least" only where no row is a hotel-rate scenario, which could overstate. */}
+  <div class="cost-head">
+    <p class="cost-figure"><span class="cost-value">{m2.unpricedPeople > 0 && counts.contingency === 0 && <span class="cost-floor">At least </span>}{formatAreaCostCompact(m2.pricedSubtotal)}</span>
+      <span class="cost-unit">a year, paid by the Home Office</span></p>
+    <p class="cost-flag">{m2.unpricedPeople > 0 ? `Incomplete: ${n(m2.unpricedPeople)} of ${n(counts.supported)} people have no published rate` : "Estimate from published rates, not a spending record"}</p>
+  </div>
+
+  <p class="cost-hotels">{hotelLine}</p>
+  {m2.unpricedNote && <p class="cost-unpriced">{people(m2.unpricedPeople)} in initial or other accommodation, which includes large sites, have no current published rate. They are left out, so this figure is incomplete for {place}.</p>}
+
+  {mix.length > 0 && <div class="cost-mix">
+    <div class="cost-mix-track" role="img" aria-label={`Accommodation mix in ${place}: ${mix.map(s => `${s.label} ${n(s.value)}`).join(", ")}`}>
+      {mix.map(s => <span class={`seg seg-${s.key}`} style={`flex-grow: ${s.value}`}></span>)}
+    </div>
+    <ul class="cost-mix-legend">
+      {mix.map(s => <li><span class={`sw seg-${s.key}`}></span>{s.label} <strong>{n(s.value)}</strong></li>)}
+    </ul>
+  </div>}
+
+  <h4>How the figure is worked out</h4>
+  <p class="tiny">People on support at {formatCostDate(cost.dates.count)}, multiplied by the Home Office's {cost.dates.rate} rate for their type of accommodation, held constant for a year.</p>
+  <ol class="cost-sum">
+    {sum.map(row => <li class={row.value === null ? "is-unpriced" : ""}>
+      <span class="sum-label">{row.label}</span>
+      <span class="sum-working">{row.sourceUrl ? <>{people(row.count)} × <a href={row.sourceUrl}>{row.working}</a></> : `${people(row.count)}, ${row.working}`}</span>
+      <span class="sum-value">{row.value === null ? "Not included" : formatAreaCost(row.value)}</span>
+    </li>)}
+    <li class="sum-total"><span class="sum-label">Priced total</span><span class="sum-value">{formatAreaCost(m2.pricedSubtotal)}</span></li>
+  </ol>
+  <p class="tiny">Excludes the grant paid to councils and any cash allowance for people in accommodation, pending a check of what the nightly rates cover. At the earlier rates for the {cost.dates.lowerRate}, the same people come to {formatAreaCostCompact(m2.lowerRateSubtotal)}.</p>
+
+  <h4>If it were shared out locally</h4>
+  <p class="tiny">{notes.hypothetical}</p>
   <dl class="cost-grid">
-    <div><dt>Per income taxpayer (nearest £10)</dt><dd>{formatAreaCost(cost.m3.perTaxpayer)}</dd>
-      {cost.m3.perTaxpayerNote && <p class="tiny">{cost.m3.perTaxpayerNote}</p>}</div>
+    <div><dt>Per local income taxpayer</dt><dd>{formatAreaCost(cost.m3.perTaxpayer)}</dd>
+      <p class="tiny">{cost.m3.perTaxpayerNote ?? "Rounded to the nearest £10."}</p></div>
     <div><dt>Per chargeable dwelling</dt><dd>{formatAreaCost(cost.m3.perDwelling)}</dd>
       {cost.m3.dwellingNote && <p class="tiny">{cost.m3.dwellingNote}</p>}</div>
     <div><dt>Per resident</dt><dd>{formatAreaCost(cost.m3.perResident)}</dd>
       {cost.m3.residentNote && <p class="tiny">{cost.m3.residentNote}</p>}</div>
   </dl>
-  <p class="tiny"> <a href={sources.counts.source_url}>Count: {formatCostDate(cost.dates.count)}</a>. <a href={sources.rates.dispersal2026.url}>Nightly rates: {cost.dates.rate}</a>. <a href={sources.taxpayers.landingPage}>Taxpayers: {cost.dates.taxpayers}</a>. <a href={sources.dwellings.url}>Dwellings: {formatCostDate(cost.dates.dwellings)}</a>. <a href={sources.population.sourceUrl}>Population: {formatCostDate(cost.dates.population)}</a>. </p>
-  <p class="tiny">The separate <a href={cost.m4.costSource.finding}>national system estimate</a> is {formatAreaCost(cost.m4.perTaxpayer)} per UK income taxpayer for {cost.m4.year}, using <a href={cost.m4.source.url}>HMRC's matching-year projection</a>. {cost.m4.note}</p>
+  <p class="tiny">Not comparable with the <a href={cost.m4.costSource.finding}>national figure</a> of {formatAreaCost(cost.m4.perTaxpayer)} per UK income taxpayer for {cost.m4.year}, which divides the estimated cost of the whole asylum system, not just local housing and support, using <a href={cost.m4.source.url}>HMRC's matching-year projection</a>.</p>
+  <p class="tiny cost-dates"><a href={sources.counts.source_url}>Count: {formatCostDate(cost.dates.count)}</a> · <a href={rates.dispersal2026.url}>Nightly rates: {cost.dates.rate}</a> · <a href={sources.taxpayers.landingPage}>Taxpayers: {cost.dates.taxpayers}</a> · <a href={sources.dwellings.url}>Dwellings: {formatCostDate(cost.dates.dwellings)}</a> · <a href={sources.population.sourceUrl}>Population: {formatCostDate(cost.dates.population)}</a></p>
   <CostDataDrawer cost={cost} />
 </section>
 
 <style>
-  .cost-calc { min-width: 0; border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-top: 1.25rem; }
-  .cost-calc h3 { font-size: 1.2rem; }
-  .cost-value { font-size: 1.7rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1rem 0; }
-  .cost-grid div { min-width: 0; padding: .75rem; background: var(--bg-subtle); border-radius: 6px; }
-  dt { font-size: .85rem; } dd { font-size: 1.4rem; margin: .25rem 0; font-weight: 600; }
-  .unpriced { padding: .75rem; border-left: 3px solid var(--warning); }
-  p { margin: .75rem 0; }
+  .cost-calc { min-width: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); padding: 1.5rem; margin-top: 1.25rem; }
+  .cost-eyebrow { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); margin: 0 0 .35rem; }
+  .cost-calc h3 { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.25; margin: 0; }
+  .cost-calc h4 { font-size: 1rem; margin: 1.5rem 0 .25rem; }
+  .cost-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem 1.5rem; margin: 1rem 0 .5rem; }
+  .cost-figure { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .6rem; margin: 0; }
+  .cost-value { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 600; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .cost-floor { font-size: .55em; font-weight: 500; }
+  .cost-unit { color: var(--text-muted); }
+  .cost-flag { margin: 0; font-size: .8rem; padding: .25rem .6rem; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--text-muted); }
+  .cost-hotels { font-size: 1.02rem; margin: .75rem 0; }
+  .cost-unpriced { padding: .6rem .8rem; border-left: 3px solid var(--warning); background: var(--bg-subtle); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  .cost-mix { margin: 1rem 0 .5rem; }
+  .cost-mix-track { display: flex; gap: 2px; height: 14px; border-radius: 999px; overflow: hidden; background: var(--bg-subtle); }
+  .seg { min-width: 4px; flex-basis: 0; }
+  .seg-dispersal { background: var(--series-1); }
+  .seg-contingency { background: var(--series-2); }
+  .seg-subsistence { background: var(--series-neutral-soft); }
+  .seg-unpriced { background: repeating-linear-gradient(135deg, var(--series-neutral) 0 4px, transparent 4px 8px); }
+  .cost-mix-legend { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; list-style: none; padding: 0; margin: .6rem 0 0; font-size: .85rem; color: var(--text-muted); }
+  .cost-mix-legend li { display: flex; align-items: center; gap: .4rem; }
+  .cost-mix-legend strong { color: var(--text); font-variant-numeric: tabular-nums; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+  .cost-sum { list-style: none; padding: 0; margin: .75rem 0; border-top: 1px solid var(--border); }
+  .cost-sum li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem 1rem; padding: .6rem 0; border-bottom: 1px solid var(--border); }
+  .sum-label { font-weight: 600; }
+  .sum-working { grid-column: 1; font-size: .85rem; color: var(--text-muted); }
+  .sum-value { grid-column: 2; grid-row: 1 / span 2; align-self: center; text-align: right; font-variant-numeric: tabular-nums; }
+  .is-unpriced .sum-value { color: var(--text-faint); font-style: italic; }
+  .cost-sum .sum-total { border-bottom: 2px solid var(--border-strong); }
+  .sum-total .sum-label, .sum-total .sum-value { font-weight: 700; grid-row: auto; }
+  .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; margin: .75rem 0; }
+  .cost-grid div { min-width: 0; padding: .85rem; background: var(--accent-wash); border-radius: var(--radius-sm); }
+  .cost-grid .tiny { margin: .25rem 0 0; }
+  dt { font-size: .85rem; color: var(--text-muted); } dd { font-family: var(--font-display); font-size: 1.5rem; margin: .2rem 0 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cost-dates { color: var(--text-faint); }
+  p { margin: .6rem 0; }
 </style>
