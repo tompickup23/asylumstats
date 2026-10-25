@@ -67,11 +67,13 @@ export const AREA_COST_NOTES = {
   contingency: "Contingency accommodation is priced at the published hotel rate as a scenario. The source category includes hotels and may include other temporary accommodation.",
   allowance: "Accommodated cash allowances are excluded pending verification of what the nightly rates include. Meal coverage is unknown. The standard and catered allowances differ.",
   grant: "Actual grant payments are unavailable. The annual grant uses the March baseline, excludes Large Sites CA and covers England, Scotland and Wales. Monthly growth payments and local eligibility cannot be calculated from this snapshot.",
-  burden: "The UK comparison uses the sum of published local taxpayer counts, not Table 2.1. Two local counts are unavailable. Ratios are relative comparisons, not a statutory allocation target.",
+  burden: "The UK figure divides everyone on support by the sum of HMRC's local income taxpayer counts, two of which are unpublished. It is a relative comparison, not a target for how many people an area should support.",
   interval: "The interval reverses the HMRC 95% taxpayer bounds, holding the cost subtotal fixed. It is not a confidence interval for costs and excludes uncertainty in rates, allowances and grants.",
   hypothetical: "Local equivalents show what the priced subtotal would be if divided locally. They are not bills charged to local taxpayers or households."
 };
 export const roundTen = (value: number) => Math.round(value / 10) * 10;
+/** Nearest £10, but nearest £1 below £10 so a small equivalent never prints as £0. */
+export const roundTaxpayerCost = (value: number) => value < 10 ? Math.round(value) : roundTen(value);
 export const formatAreaCost = (value: number | null) => value === null ? "Unavailable" :
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(value);
 export const formatAreaCostCompact = (value: number) => value >= 1_000_000
@@ -129,9 +131,10 @@ export function calculateAreaCost(area: LocalRouteAreaSummary) {
       hotelRateSharePct: pricedSubtotal > 0 ? contingency / pricedSubtotal * 100 : null,
       includesHotelRateScenario: counts.contingency > 0,
       allPeoplePriced: unpricedPeople === 0,
-      status: [unpricedPeople > 0
+      // The scenario leads: it moves the subtotal more than anything else in the row.
+      status: [counts.contingency > 0 ? "Includes a hotel-rate scenario" : null, unpricedPeople > 0
         ? `Incomplete: ${unpricedPeople.toLocaleString("en-GB")} of ${counts.supported.toLocaleString("en-GB")} people have no published rate`
-        : "Complete rate coverage", counts.contingency > 0 ? "Includes a hotel-rate scenario" : null].filter(Boolean).join(". "),
+        : "All people priced"].filter(Boolean).join(". "),
       accommodatedAllowance: null, actualGrant: null,
       // A sensitivity ceiling for the ordinary allowance, not a total cost bound.
       standardAllowanceSensitivity: ACCOMMODATED_ALLOWANCE_BASIS === "unverified"
@@ -144,9 +147,9 @@ export function calculateAreaCost(area: LocalRouteAreaSummary) {
       note: AREA_COST_NOTES.basis
     },
     m3: {
-      perTaxpayer: publishPerTaxpayer ? roundTen(pricedSubtotal / taxpayerCount) : null,
+      perTaxpayer: publishPerTaxpayer ? roundTaxpayerCost(pricedSubtotal / taxpayerCount) : null,
       perTaxpayer95: publishPerTaxpayer && tax?.taxpayersLower95 && tax?.taxpayersUpper95
-        ? { lower: roundTen(pricedSubtotal / tax.taxpayersUpper95), upper: roundTen(pricedSubtotal / tax.taxpayersLower95) } : null,
+        ? { lower: roundTaxpayerCost(pricedSubtotal / tax.taxpayersUpper95), upper: roundTaxpayerCost(pricedSubtotal / tax.taxpayersLower95) } : null,
       perTaxpayerNote,
       perDwelling: unpricedPeople === 0 && dwelling && dwelling.chargeableDwellings > 0 ? Math.round(pricedSubtotal / dwelling.chargeableDwellings) : null,
       dwellingNote: dwelling ? unpricedEquivalentNote : "Chargeable dwellings are available for England only; no denominator is substituted.",
@@ -190,19 +193,17 @@ export const AREA_COST_INPUT_RATES = {
   initialPerNight: null, otherPerNight: null,
   subsistenceOnlyPerWeek: SUPPORT_RATES.standard.value
 };
+/** "At least" only where people are unpriced and no hotel-rate scenario could overstate. */
+export const isLowerBound = (cost: AreaCost) => cost.m2.unpricedPeople > 0 && cost.counts.contingency === 0;
 export function areaCostCard(cost: AreaCost) {
   return {
     title: cost.areaName,
-    stat: formatAreaCostCompact(cost.m2.pricedSubtotal),
-    statLabel: "Annualised priced subtotal, paid by the Home Office",
+    stat: `${isLowerBound(cost) ? "At least " : ""}${formatAreaCostCompact(cost.m2.pricedSubtotal)}`,
+    statLabel: "A year for asylum housing and support, paid by the Home Office",
     details: [
-      `${cost.counts.supported.toLocaleString("en-GB")} people on support. Burden share: ${formatBurden(cost.m1.burdenShare)}.`,
-      `Per 1,000 income taxpayers: local ${formatSupportRate(cost.m1.per1000Taxpayers)}, UK ${formatSupportRate(cost.m1.ukPer1000Taxpayers)}.`,
-      `${cost.m2.status}. Excludes grants and separate accommodated allowances.`,
-      cost.m1.burdenShare === null ? cost.m1.note : "Relative comparison, not an allocation target.",
-      `Home Office Reg_02 count: ${formatCostDate(cost.dates.count)}. Rates: ${cost.dates.rate}.`,
-      `HMRC Tables 3.14 and 3.14a: ${cost.dates.taxpayers}. Not recorded expenditure.`,
-      `Home Office rates letter published ${formatCostDate(AREA_COST_SOURCES.rates.dispersal2026.published)}.`
+      `${cost.counts.supported.toLocaleString("en-GB")} people on support. ${cost.m2.status}.`,
+      `Priced from published rates, not recorded expenditure. ${cost.m1.burdenShare === null ? cost.m1.note : `Burden share against the UK: ${formatBurden(cost.m1.burdenShare)}.`}`,
+      `Home Office count ${formatCostDate(cost.dates.count)}, rates ${cost.dates.rate}. HMRC taxpayers ${cost.dates.taxpayers}.`
     ],
     verdict: "info"
   };

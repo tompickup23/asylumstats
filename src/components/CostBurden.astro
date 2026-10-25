@@ -14,7 +14,7 @@ const { cost } = Astro.props;
   <p class="tiny">{cost.counts.supported.toLocaleString("en-GB")} people on support. <a href={AREA_COST_SOURCES.counts.source_url}>Home Office, Reg_02, {formatCostDate(cost.dates.count)}</a>. <a href={AREA_COST_SOURCES.taxpayers.landingPage}>HMRC Personal Incomes Statistics, Tables 3.14 and 3.14a, tax year {cost.dates.taxpayers}</a>. Taxpayer counts are sample estimates.</p>
 </div>
 <style>
-  .cost-burden { margin: 1rem 0; padding: 1rem; border-radius: var(--radius-sm); background: var(--accent-wash); }
+  .cost-burden { margin: 1.5rem 0 1rem; padding: 1rem; border-radius: var(--radius-sm); background: var(--accent-wash); }
   h4 { margin: 0 0 .75rem; font-size: 1rem; }
   dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin: 0; }
   dt { font-size: .85rem; color: var(--text-muted); }

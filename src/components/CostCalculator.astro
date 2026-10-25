@@ -11,6 +11,8 @@ const place = cost.areaName;
 const n = (value: number) => value.toLocaleString("en-GB");
 const people = (value: number) => `${n(value)} ${value === 1 ? "person" : "people"}`;
 const rates = sources.rates;
+// A positive cost that rounds to nothing prints as "Under £1", never £0.
+const local = (value: number | null) => value === 0 && m2.pricedSubtotal > 0 ? "Under £1" : formatAreaCost(value);
 const hotelShare = m2.hotelRateSharePct?.toFixed(0) ?? "Unavailable";
 
 // The question most readers bring: is this a hotel bill? Answer it from the local mix.
@@ -40,8 +42,6 @@ const sum = [
 <section class="cost-calc" aria-labelledby="cost-calc-title">
   <p class="cost-eyebrow">Home Office accommodation and support</p>
   <h3 id="cost-calc-title">What housing and supporting people seeking asylum in {place} costs</h3>
-
-  <CostBurden cost={cost} />
 
   {/* "At least" only where no row is a hotel-rate scenario, which could overstate. */}
   <div class="cost-head">
@@ -74,14 +74,16 @@ const sum = [
   </ol>
   <p class="tiny">Excludes the grant paid to councils and any cash allowance for people in accommodation, pending a check of what the nightly rates cover. At the earlier rates for the {cost.dates.lowerRate}, the same people come to {formatAreaCostCompact(m2.lowerRateSubtotal)}.</p>
 
+  <CostBurden cost={cost} />
+
   <h4>If it were shared out locally</h4>
   <p class="tiny">{notes.hypothetical}</p>
   <dl class="cost-grid">
-    <div><dt>Per local income taxpayer</dt><dd>{formatAreaCost(cost.m3.perTaxpayer)}</dd>
-      <p class="tiny">{cost.m3.perTaxpayerNote ?? "Rounded to the nearest £10."}</p></div>
-    <div><dt>Per chargeable dwelling</dt><dd>{formatAreaCost(cost.m3.perDwelling)}</dd>
+    <div><dt>Per local income taxpayer</dt><dd>{local(cost.m3.perTaxpayer)}</dd>
+      <p class="tiny">{cost.m3.perTaxpayerNote ?? "Rounded to the nearest £10, or £1 below £10."}</p></div>
+    <div><dt>Per chargeable dwelling</dt><dd>{local(cost.m3.perDwelling)}</dd>
       {cost.m3.dwellingNote && <p class="tiny">{cost.m3.dwellingNote}</p>}</div>
-    <div><dt>Per resident</dt><dd>{formatAreaCost(cost.m3.perResident)}</dd>
+    <div><dt>Per resident</dt><dd>{local(cost.m3.perResident)}</dd>
       {cost.m3.residentNote && <p class="tiny">{cost.m3.residentNote}</p>}</div>
   </dl>
   <p class="tiny">Not comparable with the <a href={cost.m4.costSource.finding}>national figure</a> of {formatAreaCost(cost.m4.perTaxpayer)} per UK income taxpayer for {cost.m4.year}, which divides the estimated cost of the whole asylum system, not just local housing and support, using <a href={cost.m4.source.url}>HMRC's matching-year projection</a>.</p>

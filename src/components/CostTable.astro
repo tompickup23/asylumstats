@@ -1,5 +1,5 @@
 ---
-import { getAllAreaCosts, formatAreaCost, formatBurden, formatSupportRate, formatHotelShare } from "../lib/area-cost";
+import { getAllAreaCosts, formatAreaCostCompact, formatBurden, formatSupportRate, formatHotelShare, isLowerBound } from "../lib/area-cost";
 import { buildPlacePath } from "../lib/site-identity";
 const costs = getAllAreaCosts().sort((a, b) => a.areaName.localeCompare(b.areaName));
 ---
@@ -10,23 +10,23 @@ const costs = getAllAreaCosts().sort((a, b) => a.areaName.localeCompare(b.areaNa
     <label>Sort by<select id="cost-sort">
       <option value="name">Area name</option>
       <option value="supported">People on support</option>
-      <option value="subtotal">Priced subtotal</option>
+      <option value="subtotal">Priced cost</option>
       <option value="hotel">Hotel-rate share</option>
       <option value="burden">Burden share</option>
     </select></label>
     <label>Order<select id="cost-order"><option value="desc">Highest first</option><option value="asc">Lowest first</option></select></label>
   </div>
   <p id="cost-results" role="status">{costs.length} areas shown</p>
-  <p class="tiny" id="cost-sort-note">Sorting compares priced components only. Unpriced people stay visible in each row. Complete rate coverage does not mean complete expenditure. Unavailable ratios sort last in either order.</p>
+  <p class="tiny" id="cost-sort-note">Costs are priced from published rates for a year at the current count: they are not spending records, and none is a full expenditure total. Where a row includes a hotel-rate scenario, all contingency places are priced at the hotel rate. Sorting uses the priced figure; unpriced people are flagged in each row. Unavailable ratios sort last.</p>
   <div class="cost-table-scroll" tabindex="0" role="region" aria-label="Area cost comparison" aria-describedby="cost-sort-note">
     <table>
-      <caption>Annualised priced subtotals and relative burden by local authority</caption>
-      <thead><tr><th scope="col">Area</th><th scope="col">People on support</th><th scope="col">Priced subtotal per year</th><th scope="col">Rate coverage</th><th scope="col">Hotel-rate share of subtotal</th><th scope="col">People per 1,000 taxpayers</th><th scope="col">Burden share</th></tr></thead>
+      <caption>Priced cost per year and relative burden by local authority</caption>
+      <thead><tr><th scope="col">Area</th><th scope="col">People on support</th><th scope="col">Priced cost per year</th><th scope="col">Coverage</th><th scope="col">Hotel-rate share of cost</th><th scope="col">People per 1,000 taxpayers</th><th scope="col">Burden share</th></tr></thead>
       <tbody>{costs.map(c => <tr data-cost-row data-name={`${c.areaName} ${c.areaCode}`.toLowerCase()} data-supported={c.counts.supported} data-subtotal={c.m2.pricedSubtotal} data-hotel={c.m2.hotelRateSharePct ?? ""} data-burden={c.m1.burdenShare ?? ""}>
         <th scope="row"><a href={`${buildPlacePath(c)}#cost-calc-title`}>{c.areaName}</a><small>{c.countryName}</small></th>
         <td data-label="People on support">{c.counts.supported.toLocaleString("en-GB")}</td>
-        <td class="money" data-label="Priced subtotal per year">{formatAreaCost(c.m2.pricedSubtotal)}<small>Priced subtotal only</small></td>
-        <td class="coverage" data-label="Rate coverage">{c.m2.status}<small>Full expenditure unavailable</small></td>
+        <td class="money" data-label="Priced cost per year">{isLowerBound(c) ? "At least " : ""}{formatAreaCostCompact(c.m2.pricedSubtotal)}</td>
+        <td class="coverage" data-label="Coverage">{c.m2.status}</td>
         <td data-label="Hotel-rate share">{formatHotelShare(c.m2.hotelRateSharePct)}</td>
         <td data-label="People per 1,000 taxpayers">{formatSupportRate(c.m1.per1000Taxpayers)}</td>
         <td data-label="Burden share">{formatBurden(c.m1.burdenShare)}{c.m1.burdenShare === null && <small>{c.m1.note}</small>}</td>

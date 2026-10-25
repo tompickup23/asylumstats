@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import CostTable from "../components/CostTable.astro";
 import CostSources from "../components/CostSources.astro";
 import ShareButton from "../components/ShareButton.astro";
-import { buildAreaCostDataset, AREA_COST_CSV_PATH } from "../lib/area-cost-dataset";
+import { buildAreaCostDataset, AREA_COST_CSV_PATH, AREA_COST_METADATA_PATH } from "../lib/area-cost-dataset";
 import { getAllAreaCosts } from "../lib/area-cost";
 const description = "Compare asylum support, annualised priced subtotals and relative burden across UK local authorities. See missing costs, hotel-rate scenarios and source dates.";
 ---
@@ -15,6 +15,7 @@ const description = "Compare asylum support, annualised priced subtotals and rel
     <p>The Home Office pays for asylum support from national funds. These figures show a year at the current count and published rates. They are not spending records or local taxpayer bills. Areas with unpriced accommodation cannot be ranked by complete cost.</p>
     <div class="cost-actions">
       <a class="cta-btn" href={AREA_COST_CSV_PATH} download>Download all inputs and results as CSV</a>
+      <a href={AREA_COST_METADATA_PATH}>Sources and notes for the CSV</a>
       <ShareButton url="https://asylumstats.co.uk/cost/" title="Asylum costs by town" text="Compare priced components, hotel-rate scenarios and relative burden. Every figure dated and sourced." />
     </div>
     <CostSources />

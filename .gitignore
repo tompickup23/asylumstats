@@ -86,3 +86,6 @@ public/data/ho-asylum-entities.json
 # security HTML is a provenance artefact rather than something the site reads.
 data/raw/home_office_ara/
 data/raw/border_security/
+
+# Local Playwright captures for PR descriptions; attach them to the PR, not the repo.
+output/

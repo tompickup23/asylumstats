@@ -22,7 +22,7 @@ import { getPublicPlaceAreas, slugifyAreaName } from "../site";
 import { loadAsylumCostReconciliation } from "../ho-spend";
 import { getExplainers } from "../explainers";
 
-import { getAllAreaCosts, getAreaCost, areaCostCard, AREA_COST_DATES, formatCostDate } from "../area-cost";
+import { getAllAreaCosts, areaCostCard, AREA_COST_DATES, formatCostDate } from "../area-cost";
 
 const BUILD_OG = process.env.BUILD_OG === "1";
 
@@ -113,10 +113,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const latestQuarter = routeDashboard.nationalSystemDynamics.latestQuarter;
   const localRouteLatest = loadLocalRouteLatest();
 
-  // Existing place links and explicit cost downloads use the same dated card.
-  const placePaths = getPublicPlaceAreas().map(area => ({
+  const rankedAreas = [...localRouteLatest.areas].sort((a, b) => b.supportedAsylum - a.supportedAsylum);
+  const rankMap = new Map(rankedAreas.map((a, i) => [a.areaCode, i + 1]));
+
+  // Place link previews keep the count card. The cost card is only for the explicit
+  // download, where the reader has chosen the priced subtotal and its caveats.
+  const placePaths = getPublicPlaceAreas().map((area) => ({
     params: { slug: `places/${slugifyAreaName(area.areaName)}` },
-    props: areaCostCard(getAreaCost(area.areaCode))
+    props: {
+      title: area.areaName,
+      stat: area.supportedAsylum.toLocaleString(),
+      statLabel: `On asylum support. Rank ${rankMap.get(area.areaCode) ?? "?"} of ${localRouteLatest.areas.length}, ${area.supportedAsylumRate?.toFixed(1) ?? "?"} per 10,000`,
+      verdict: (area.supportedAsylumRate ?? 0) > 30 ? "critical" : (area.supportedAsylumRate ?? 0) > 10 ? "alert" : "info"
+    }
   }));
 
   const supported = latestQuarter.supportedAsylum;
@@ -237,11 +246,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     ...getAllAreaCosts().map(cost => ({ params: { slug: `cost/${slugifyAreaName(cost.areaName)}` }, props: areaCostCard(cost) })),
     { params: { slug: "cost" }, props: {
       title: "Asylum costs by town", stat: `${areaCount} areas`, statLabel: "Priced components and relative burden", verdict: "info",
-      details: ["Annualised subtotals, not recorded expenditure. Paid by the Home Office.",
-        "Unpriced accommodation and hotel-rate scenarios labelled in every row.",
-        "Excludes grants and separate accommodated allowances.",
-        `Home Office Reg_02 count: ${formatCostDate(AREA_COST_DATES.count)}. Rates: ${AREA_COST_DATES.rate}.`,
-        `HMRC Tables 3.14 and 3.14a: ${AREA_COST_DATES.taxpayers}.`]
+      details: ["Priced from published rates, not recorded expenditure. Paid by the Home Office.",
+        "Hotel-rate scenarios and unpriced people flagged in every row.",
+        `Home Office count ${formatCostDate(AREA_COST_DATES.count)}, rates ${AREA_COST_DATES.rate}. HMRC taxpayers ${AREA_COST_DATES.taxpayers}.`]
     } }
   ];
 };
