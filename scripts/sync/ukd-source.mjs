@@ -35,6 +35,12 @@ export const RECORD_PATH = "data/sync/ukd-ethnic-projections.json";
  * sync did not copy an empty or truncated file.
  */
 export const SYNCED_FILES = [
+  { key: "income-taxpayers-la", path: "src/data/live/income-taxpayers-la.json", record: "data/sync/ukd-income-taxpayers-la.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "population-estimates", path: "src/data/live/population-estimates.json", record: "data/sync/ukd-population-estimates.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
+  { key: "council-tax-spd", path: "src/data/live/council-tax-spd.json", record: "data/sync/ukd-council-tax-spd.json",
+    count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
   { key: "ethnic-projections", path: PROJECTION_PATH, record: RECORD_PATH,
     count: (d) => Object.keys(d.areas ?? {}).length, unit: "areas" },
   { key: "send-dashboard", path: "src/data/live/send-dashboard.json", record: "data/sync/ukd-send-dashboard.json",

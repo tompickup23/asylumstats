@@ -40,10 +40,7 @@ import schoolValidationData from "../../data/live/school-validation.json";
 import scenarioSummaries from "../../data/live/scenario-summaries.json";
 import migrationEthnicity from "../../data/live/migration-ethnicity.json";
 import schoolFertilityProxy from "../../data/live/school-fertility-proxy.json";
-import {
-  ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY,
-  accommodationCostForArea
-} from "../../lib/true-cost";
+import { getAreaCost, areaCostSummary } from "../../lib/area-cost";
 import {
   formatOrdinal,
   getDistributionStats,
@@ -219,25 +216,7 @@ const sendPercentile = sendFor ? getSendGrowthPercentile(sendFor.councilCode) : 
 const ascFor = getAscForArea(area.areaCode);
 const ascProfile = ascFor?.profile ?? null;
 const ascPercentile = ascFor ? getAscSpendPercentile(ascFor.councilCode) : null;
-// Per-area cost, reinstated on the True Cost v3 constant.
-//
-// Withheld since PR #36 because the base was disputed. It is settled now, but the fix
-// was not simply to swap in the new total. The £150/person/day this used to assert was
-// £5.3bn / 97,519 supported / 365: a TOTAL-SYSTEM numerator over a SUPPORTED-POPULATION
-// denominator. The system total includes post-decision welfare, family reunion and
-// offender costs, incurred for people who are not on asylum support, so that division
-// overstates what an area costs by roughly twice.
-//
-// So this uses the accommodation and support figure instead: audited ASRA outturn over
-// the MEAN supported population of the same financial year, which has the same people
-// top and bottom over the same period. Around £107 per person per day, which sits
-// sensibly against the £119 a night the Home Office publishes for hotels. Dividing by
-// the latest quarter instead would read £117, because supported numbers fell through
-// 2025-26 and the closing stock is the lowest point in the year. See the basis warning
-// in lib/true-cost.ts.
-const estimatedAnnualCostLabel = area.supportedAsylum > 0
-  ? ` Accommodation and support for ${area.supportedAsylum.toLocaleString()} people at £${ACCOMMODATION_AND_SUPPORT_PER_PERSON_PER_DAY} per person per day is about £${(accommodationCostForArea(area.supportedAsylum) / 1_000_000).toFixed(1)}M a year.`
-  : "";
+const estimatedAnnualCostLabel = areaCostSummary(getAreaCost(area.areaCode));
 
 const pressureScore = computePressureScore(
   area.areaCode,
@@ -417,14 +396,10 @@ const areaCountyName =
     */}
     <PlainEnglish
       headline={`${area.supportedAsylum.toLocaleString()} people on asylum support in ${area.areaName}`}
-      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 70 ? `this area carries more asylum seekers per head than ${ratePercentile}% of the country` : ratePercentile >= 30 ? "a moderate load compared to the national picture" : `fewer than ${100 - ratePercentile}% of areas`}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.subsistenceOnly > 0 ? ` ${area.subsistenceOnly.toLocaleString()} of them receive subsistence only and are not in Home Office accommodation.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation (hotels, not housing).` : ""}${estimatedAnnualCostLabel}`}
+      body={`Rank ${areaRank} of ${localRouteLatest.areas.length} councils nationally. The rate of ${area.supportedAsylumRate ?? "n/a"} per 10,000 puts ${area.areaName} in the ${ratePercentileLabel} percentile. That means ${ratePercentile >= 70 ? `this area carries more asylum seekers per head than ${ratePercentile}% of the country` : ratePercentile >= 30 ? "a moderate load compared to the national picture" : `fewer than ${100 - ratePercentile}% of areas`}.${wbThreshold ? ` White British projected to be a minority by approximately ${wbThreshold.year}.` : ""}${area.subsistenceOnly > 0 ? ` ${area.subsistenceOnly.toLocaleString()} of them receive subsistence only and are not in Home Office accommodation.` : ""}${area.contingencyAccommodation > 0 ? ` ${area.contingencyAccommodation.toLocaleString()} in contingency accommodation, a category that includes hotels.` : ""}${estimatedAnnualCostLabel}`}
       tone={ratePercentile >= 80 ? "alert" : ratePercentile >= 50 ? "info" : "success"}
     />
-    <CostCalculator
-      areaName={area.areaName}
-      supportedAsylum={area.supportedAsylum}
-      hotelSites={namedSiteCount + unnamedSiteCount}
-    />
+    <CostCalculator areaCode={area.areaCode} />
   </section>
 
   <AskedAndAnswered id="place-questions" items={askedAndAnswered} label={`Common questions about asylum in ${area.areaName}`} />

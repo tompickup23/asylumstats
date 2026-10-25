@@ -225,6 +225,7 @@ export interface LocalRouteAreaSummary {
   contingencyAccommodation: number;
   contingencyAccommodationRate: number | null;
   initialAccommodation: number;
+  otherAccommodation: number;
   dispersalAccommodation: number;
   subsistenceOnly: number;
   allThreePathwaysTotal: number;

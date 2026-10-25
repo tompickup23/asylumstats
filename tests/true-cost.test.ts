@@ -165,7 +165,7 @@ describe("the double-count guard", () => {
 });
 
 describe("the per-person basis", () => {
-  it("derives the per-area figure from ASRA, not the system total", () => {
+  it("derives the national support average from ASRA", () => {
     const asraMillions = Math.round(
       araCosts.directorates.asylumSupportResettlementAccommodation.resourceOutturn / 1000
     );
