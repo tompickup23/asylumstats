@@ -4,27 +4,11 @@ import { type AreaCost, AREA_COST_SOURCES as sources, AREA_COST_NOTES as notes,
 interface Props { cost: AreaCost }
 const { cost } = Astro.props;
 const tax = cost.inputs.taxpayers;
-const rows = [
-  ["Dispersal accommodation", cost.counts.dispersal, cost.m2.dispersal, sources.rates.dispersal2026],
-  ["Contingency at hotel rate", cost.counts.contingency, cost.m2.contingency, sources.rates.hotel2026],
-  ["Subsistence only", cost.counts.subsistenceOnly, cost.m2.subsistenceOnly, sources.support.standard]
-] as const;
 ---
 <details class="cost-data">
-  <summary>Inputs, uncertainty and sources</summary>
+  <summary>Full sources, exclusions and uncertainty</summary>
   <p>{notes.basis}</p>
-  <div class="table-wrap" tabindex="0" role="region" aria-label="Cost inputs">
-    <table>
-      <thead><tr><th>Component</th><th>People</th><th>Rate</th><th>Annualised</th></tr></thead>
-      <tbody>{rows.map(([label, count, value, source]) => <tr>
-        <th scope="row">{label}</th><td>{count.toLocaleString("en-GB")}</td>
-        <td><a href={source.url}>£{source.value} {label === "Subsistence only" ? "weekly" : "nightly"}</a></td>
-        <td>{formatAreaCost(value)}</td>
-      </tr>)}</tbody>
-    </table>
-  </div>
   <p><a href={sources.counts.attachment_url}>Home Office {sources.counts.table}</a>, {sources.counts.period_label}, published {formatCostDate(sources.counts.release_date)}. Area code {cost.areaCode}; accommodation definitions: {sources.counts.accommodationNotes}. Nightly rates {cost.dates.rate}, published {formatCostDate(sources.rates.dispersal2026.published)}. Allowance {cost.dates.allowance}.</p>
-  {cost.m2.unpricedNote && <p><strong>{cost.m2.unpricedNote}</strong></p>}
   {cost.m2.contingencyNote && <p>{cost.m2.contingencyNote}</p>}
   <p>{notes.allowance} <a href={sources.support.standard.url}>Standard support</a> is £{sources.support.standard.value} a week; <a href={sources.support.catered.url}>catered support</a> is £{sources.support.catered.value} a week ({sources.support.catered.appliesTo}).</p>
   <p>Adding the ordinary standard allowance for every accommodated person would add {formatAreaCost(cost.m2.standardAllowanceSensitivity)} annually. This is a sensitivity calculation, not a claim about payments or an upper bound on all costs. Extra family payments are unpriced.</p>
@@ -44,8 +28,4 @@ const rows = [
   summary { cursor: pointer; font-weight: 600; padding: .5rem 0; }
   .cost-data { margin-top: 1rem; font-size: .9rem; overflow-wrap: anywhere; }
   p { margin: .85rem 0; }
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; min-width: 420px; border-collapse: collapse; overflow-wrap: normal; }
-  th, td { text-align: left; padding: .6rem; border-bottom: 1px solid var(--border); }
-  td { white-space: nowrap; }
 </style>
