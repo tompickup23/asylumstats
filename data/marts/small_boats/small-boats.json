@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "16_October_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "23_October_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-10-15",
-  "latestWeekEnding": "2026-10-11",
+  "coverageEnd": "2026-10-22",
+  "latestWeekEnding": "2026-10-18",
   "yearToDate": {
-    "asAt": "2026-10-15",
+    "asAt": "2026-10-22",
     "year": 2026,
     "arrivals": 20935,
     "priorYear": 2025,
-    "priorYearArrivals": 36365,
-    "changePct": -42.4
+    "priorYearArrivals": 36954,
+    "changePct": -43.3
   },
   "latestWeek": {
-    "weekEnding": "2026-10-11",
-    "arrivals": 1066,
-    "boats": 15,
-    "migrantsPrevented": 245,
-    "eventsPrevented": 12
+    "weekEnding": "2026-10-18",
+    "arrivals": 0,
+    "boats": 0,
+    "migrantsPrevented": 0,
+    "eventsPrevented": 3
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3194,7 +3194,7 @@
       "arrivals": 616,
       "boats": 10,
       "migrantsPrevented": 339,
-      "eventsPrevented": 13
+      "eventsPrevented": 14
     },
     {
       "weekEnding": "2026-09-06",
@@ -3229,7 +3229,7 @@
       "arrivals": 734,
       "boats": 9,
       "migrantsPrevented": 475,
-      "eventsPrevented": 17
+      "eventsPrevented": 18
     },
     {
       "weekEnding": "2026-10-11",
@@ -3237,6 +3237,13 @@
       "boats": 15,
       "migrantsPrevented": 245,
       "eventsPrevented": 12
+    },
+    {
+      "weekEnding": "2026-10-18",
+      "arrivals": 0,
+      "boats": 0,
+      "migrantsPrevented": 0,
+      "eventsPrevented": 3
     }
   ],
   "daily": [
@@ -19287,6 +19294,41 @@
     },
     {
       "date": "2026-10-15",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-16",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-17",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-18",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-19",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-20",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-21",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-10-22",
       "arrivals": 0,
       "boats": 0
     }
