@@ -1,0 +1,88 @@
+---
+/**
+ * The short answer at the top of the true-cost finding.
+ *
+ * People search for the cost "per year" and "per day", and the page put about 770 words
+ * of correction notes between its H1 and the answer. Every figure here comes from
+ * src/lib/true-cost.ts, the module the article body is tested against, so the answer
+ * cannot drift from the breakdown below it. The per-day figure is the annual total over
+ * the days in the same financial year (TOTAL_GBP_M_PER_DAY), never typed in.
+ */
+import {
+  COST_CATEGORIES,
+  PER_TAXPAYER_GBP,
+  TOTAL_GBP_M,
+  TOTAL_GBP_M_PER_DAY,
+  TRUE_COST_SOURCE,
+  UK_TAXPAYERS,
+  UK_TAXPAYERS_SOURCE
+} from "../lib/true-cost";
+import { parseCorrections } from "../lib/corrections-parse";
+import { formatFindingDate } from "../lib/finding-dates";
+
+interface Props {
+  /** The finding's markdown, read for its latest correction date. */
+  body: string;
+  /** In-page anchor of the correction notes. */
+  correctionsAnchor: string;
+}
+
+const { body, correctionsAnchor } = Astro.props;
+
+const billions = (gbpM: number) => `£${(gbpM / 1000).toFixed(1)} billion`;
+const millions = (gbpM: number) => `£${gbpM.toFixed(1)} million`;
+
+const asra = COST_CATEGORIES.find((category) => category.id === "asra");
+if (!asra) throw new Error("TrueCostAnswer: no ASRA category in src/lib/true-cost.ts.");
+
+const latestCorrection = parseCorrections(body)
+  .map((row) => row.date)
+  .sort()
+  .at(-1);
+---
+
+<section class="true-cost-answer" aria-label="Short answer">
+  <p class="tca-lead">
+    <strong>The UK asylum system cost about {billions(TOTAL_GBP_M.central)} a year</strong> in {TRUE_COST_SOURCE.financialYear}, a central estimate in a range of {billions(TOTAL_GBP_M.conservative)} to {billions(TOTAL_GBP_M.upper)}.
+    That is about {millions(TOTAL_GBP_M_PER_DAY.central)} a day, or £{PER_TAXPAYER_GBP.central} a year for each income taxpayer (range £{PER_TAXPAYER_GBP.conservative} to £{PER_TAXPAYER_GBP.upper}).
+  </p>
+  <p class="tca-meta">
+    Financial year {TRUE_COST_SOURCE.financialYear}. The largest part, £{asra.central.toLocaleString("en-GB")} million, is audited Home Office spending from the <a href={TRUE_COST_SOURCE.url} target="_blank" rel="noopener">{TRUE_COST_SOURCE.release}</a>.
+    The rest is drawn from National Audit Office, Ministry of Justice, HMCTS, Department for Education and other published figures, partly attributed and partly estimated, with the method set out below.
+    Taxpayers: {(UK_TAXPAYERS / 1_000_000).toFixed(1)} million, the {UK_TAXPAYERS_SOURCE.financialYear} {UK_TAXPAYERS_SOURCE.status} in HMRC <a href={UK_TAXPAYERS_SOURCE.url} target="_blank" rel="noopener">Income Tax liabilities statistics</a>, published {formatFindingDate(UK_TAXPAYERS_SOURCE.published)}.
+    This is the cost of the asylum system, not of immigration as a whole.
+  </p>
+  {latestCorrection && (
+    <p class="tca-meta">
+      Corrected {formatFindingDate(latestCorrection)}: see the <a href={`#${correctionsAnchor}`}>correction notes</a> below.
+    </p>
+  )}
+</section>
+
+<style>
+  .true-cost-answer {
+    margin: 0 0 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+  .tca-lead {
+    font-size: 1.08rem;
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+  .tca-meta {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .tca-meta:last-child {
+    margin-bottom: 0;
+  }
+  .true-cost-answer a {
+    color: var(--accent);
+  }
+</style>

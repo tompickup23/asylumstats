@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatFindingDate, findingIsRevised } from "../../lib/finding-dates";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ShareButton from "../../components/ShareButton.astro";
+import TrueCostAnswer from "../../components/TrueCostAnswer.astro";
 import { getCollection, render } from "astro:content";
 import { buildAbsoluteUrl } from "../../lib/site";
 
@@ -120,6 +121,10 @@ const verdictLabel: Record<string, string> = {
     </div>
 
     <h1 class="finding-detail-headline">{finding.data.headline}</h1>
+
+    {findingSlug === "true-cost-of-asylum" && (
+      <TrueCostAnswer body={finding.body ?? ""} correctionsAnchor="corrections-and-earlier-editions" />
+    )}
 
     <div class="finding-detail-stat">
       <span class="fds-value" style={`color: ${verdictColor[finding.data.verdict]};`}>

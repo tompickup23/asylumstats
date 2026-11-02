@@ -477,6 +477,27 @@ export const SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA = Mat
   (TOTAL_GBP_M.central * 1_000_000) / SUPPORTED_ASYLUM_MEAN_OVER_ASRA_YEAR / 365
 );
 
+/**
+ * Days in the financial year the totals cover, counted from the accounts' own window
+ * (31 March to 31 March) rather than written down, so a leap year is handled.
+ */
+export const DAYS_IN_COST_YEAR = Math.round(
+  (Date.parse(ASRA_FY_CLOSES) - Date.parse(ASRA_FY_OPENS)) / 86_400_000
+);
+
+/**
+ * The system total expressed per day, in £ million, for the answer block on the finding.
+ *
+ * The same annual totals divided by the days in the same financial year, nothing more:
+ * the same year and the same basis. It is a restatement of the annual figure, not a
+ * per-person rate, and must never be divided by a population.
+ */
+export const TOTAL_GBP_M_PER_DAY = {
+  conservative: TOTAL_GBP_M.conservative / DAYS_IN_COST_YEAR,
+  central: TOTAL_GBP_M.central / DAYS_IN_COST_YEAR,
+  upper: TOTAL_GBP_M.upper / DAYS_IN_COST_YEAR
+};
+
 export const TRUE_COST_SOURCE = {
   release: araCosts._provenance.source,
   url: araCosts._provenance.sourceUrl,
