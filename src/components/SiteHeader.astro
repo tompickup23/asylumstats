@@ -10,9 +10,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Explore",
     items: [
-      { href: "/places", label: "Places", desc: "Every UK local authority" },
-      { href: "/national", label: "National", desc: "UK-wide totals" },
-      { href: "/regional", label: "Regional", desc: "9 English regions + nations" },
+      { href: "/places/", label: "Places", desc: "Every UK local authority" },
+      { href: "/national/", label: "National", desc: "UK-wide totals" },
+      { href: "/regional/", label: "Regional", desc: "9 English regions + nations" },
       // /councils is not linked here on purpose. It is noIndex research infrastructure
       // that describes itself as "context only", and its headline £3.6bn is Lancashire
       // County Council's entire spend corpus rather than asylum spend. Putting it in the
@@ -26,28 +26,28 @@ const NAV_GROUPS: NavGroup[] = [
       // First in the group on purpose. It is the only page that states the whole cost and
       // how little of it is itemised, so a reader who lands on /spending or /entities
       // without it can mistake a starter ledger for the total.
-      { href: "/what-the-home-office-publishes", label: "What gets published", desc: "£4.9bn spent, £540m itemised" },
+      { href: "/what-the-home-office-publishes/", label: "What gets published", desc: "£4.9bn spent, £540m itemised" },
       { href: "/cost/", label: "Costs by town", desc: "Priced components and relative burden" },
-      { href: "/spending", label: "Spending", desc: "Contracts, suppliers, public money rows" },
-      { href: "/entities", label: "Entities", desc: "Suppliers & contractors" },
-      { href: "/routes", label: "Routes", desc: "Small-boat & resettlement" },
-      { href: "/compare", label: "Compare", desc: "Side-by-side any place" },
+      { href: "/spending/", label: "Spending", desc: "Contracts, suppliers, public money rows" },
+      { href: "/entities/", label: "Entities", desc: "Suppliers & contractors" },
+      { href: "/routes/", label: "Routes", desc: "Small-boat & resettlement" },
+      { href: "/compare/", label: "Compare", desc: "Side-by-side any place" },
     ],
   },
   {
     label: "Research",
     items: [
-      { href: "/explained", label: "Explained", desc: "Asylum questions, answered" },
-      { href: "/findings", label: "Findings", desc: "Investigations and latest" },
-      { href: "/releases", label: "Releases", desc: "Version history" },
+      { href: "/explained/", label: "Explained", desc: "Asylum questions, answered" },
+      { href: "/findings/", label: "Findings", desc: "Investigations and latest" },
+      { href: "/releases/", label: "Releases", desc: "Version history" },
     ],
   },
   {
     label: "About",
     items: [
-      { href: "/methodology", label: "Methodology", desc: "How we follow the money" },
-      { href: "/sources", label: "Sources", desc: "Data provenance" },
-      { href: "/glossary", label: "Glossary", desc: "Terms & definitions" },
+      { href: "/methodology/", label: "Methodology", desc: "How we follow the money" },
+      { href: "/sources/", label: "Sources", desc: "Data provenance" },
+      { href: "/glossary/", label: "Glossary", desc: "Terms & definitions" },
     ],
   },
 ];
@@ -56,7 +56,9 @@ const pathname = Astro.url.pathname;
 
 function isActiveItem(href: string): boolean {
   if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
+  // Hrefs carry the trailing slash GitHub Pages serves, so compare on the bare section.
+  const section = href.replace(/\/$/, "");
+  return pathname === section || pathname.startsWith(`${section}/`);
 }
 function isActiveGroup(group: NavGroup): boolean {
   return group.items.some((item) => isActiveItem(item.href));
