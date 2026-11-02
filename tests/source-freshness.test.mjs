@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -19,7 +20,8 @@ const CYCLICAL = [
   "small_boats",
   "home_office_ara",
   "border_security",
-  "asylum_finance"
+  "asylum_finance",
+  "mhclg_homelessness"
 ];
 
 // The same rule scripts/audit/source-freshness.mjs applies: either a next-edition date, or
@@ -57,5 +59,25 @@ describe("source freshness manifests", () => {
       expect(file.releaseDate, file.fileName).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(file.periodSlug, file.fileName).toMatch(/^[a-z]+-\d{4}$/);
     }
+  });
+});
+
+
+describe("housing release calendar", () => {
+  const housing = manifests.mhclg_homelessness;
+  it("records the publisher and access date for the next edition", () => {
+    expect(new URL(housing.nextEditionSource).hostname).toBe("www.gov.uk");
+    expect(housing.nextEditionSource).toContain("/statistics/announcements/");
+    expect(housing.nextEditionCheckedAt <= housing.nextEdition).toBe(true);
+    expect(housing.coverageEnd).toBe(housing.files.find((file) => file.releaseId === "hclic").stockDate);
+  });
+
+  it("uses the announced release and still reports an overdue edition afterwards", () => {
+    const audit = (day) => spawnSync(process.execPath, ["scripts/audit/source-freshness.mjs", day], { encoding: "utf8" });
+    const current = audit(housing.nextEditionCheckedAt);
+    expect(current.status).toBe(0);
+    expect(current.stdout).toMatch(/mhclg_homelessness\s+current/);
+    const tomorrow = new Date(Date.parse(housing.nextEdition) + 86400000).toISOString().slice(0, 10);
+    expect(audit(tomorrow).stdout).toMatch(/mhclg_homelessness\s+OVERDUE/);
   });
 });

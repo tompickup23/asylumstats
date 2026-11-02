@@ -55,5 +55,9 @@
       "sha256": "3c4a8a04625f42a77e13486c38775655a693496fd0008f70811dea8946c798c4",
       "periodLabel": "2025 to 2026"
     }
-  ]
+  ],
+  "nextEdition": "2026-11-26",
+  "nextEditionSource": "https://www.gov.uk/government/statistics/announcements/statutory-homelessness-in-england-april-to-june-2026",
+  "nextEditionCheckedAt": "2026-11-02",
+  "nextEditionNote": "MHCLG confirms the April to June 2026 release for 26 November 2026 at 09:30. The official tables page still lists January to March 2026 as the latest detailed local authority edition. Coverage remains 31 March 2026; the release calendar takes precedence over the fallback age limit."
 }
