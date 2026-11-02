@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// GitHub Pages serves dist/404.html for any path it cannot find. Before this page existed
+// it served its own "Page not found · GitHub Pages", with no way back into the site and no
+// analytics beacon, so broken-link arrivals were neither helped nor counted. BaseLayout
+// supplies the header, footer and beacon.
+const destinations = [
+  { href: "/places/", label: "Places", desc: "Every UK local authority, by name" },
+  { href: "/explained/", label: "Explained", desc: "Asylum questions, answered" },
+  { href: "/findings/true-cost-of-asylum/", label: "What asylum costs", desc: "The annual cost of the UK asylum system" },
+  { href: "/findings/", label: "Findings", desc: "Investigations and latest" },
+  { href: "/national/", label: "National", desc: "UK-wide totals" }
+];
+---
+
+<BaseLayout
+  title="Page not found | asylumstats"
+  description="This page does not exist on asylumstats.co.uk. Find places, explainers and findings from here."
+  noIndex
+>
+  <article class="legal-page shell">
+    <h1>Page not found</h1>
+    <p class="legal-intro">
+      There is no page at this address. It may have moved, or the link may be mistyped.
+    </p>
+    <p>
+      Place pages are now at the area's name, for example <a href="/places/blackpool/">/places/blackpool/</a>,
+      rather than its area code. The <a href="/places/">places directory</a> lists every local authority.
+    </p>
+
+    <section class="legal-section">
+      <h2>Where to go next</h2>
+      <ul>
+        {destinations.map((item) => (
+          <li><a href={item.href}>{item.label}</a>: {item.desc}</li>
+        ))}
+      </ul>
+      <p>Or start from the <a href="/">homepage</a>.</p>
+    </section>
+  </article>
+</BaseLayout>

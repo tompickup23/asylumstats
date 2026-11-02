@@ -1,5 +1,33 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import { readFileSync } from "node:fs";
+import { buildPlacePath } from "./src/lib/site-identity.ts";
+
+// Place pages were served at /places/<area code>/ until 11 April 2026 (commit 4dded5f),
+// and internal links kept pointing at code URLs until October 2026, so Google still
+// holds them and Search Console reports them as 404. One static redirect per area code,
+// built from the routes mart (the same data the place pages are built from) and pointed
+// through buildPlacePath, so the target is always the page that exists. Every area code
+// in the mart's history up to April 2026 is present in the current mart.
+const routeAreas = JSON.parse(
+  readFileSync(new URL("./data/marts/uk_routes/local-route-latest.json", import.meta.url), "utf8")
+).areas;
+const areaCodeRedirects = Object.fromEntries(
+  routeAreas.map((area) => [`/places/${area.areaCode}`, buildPlacePath(area)])
+);
+
+// Pages removed in April 2026 that Search Console still reports as 404. Each points at
+// the nearest current page on the same subject. /hotels went on 10 April 2026; its
+// question is now answered by the hotels explainer. The five demographic findings were
+// deleted on 11 April 2026 (commit 5774d91).
+const removedPageRedirects = {
+  "/hotels": "/explained/how-many-asylum-hotels-are-there/",
+  "/findings/blackburn-minority-white-british-2028": "/findings/blackburn-minority-wb-2027/",
+  "/findings/five-councils-minority-wb-by-2050": "/findings/86-areas-minority-wbi-2051/",
+  "/findings/cohort-component-projections-318-areas": "/findings/86-areas-minority-wbi-2051/",
+  "/findings/census-decade-white-british-decline": "/findings/shift-share-what-drives-change/",
+  "/findings/stochastic-projections-confidence": "/methodology/"
+};
 
 export default defineConfig({
   site: "https://asylumstats.co.uk",
@@ -25,7 +53,9 @@ export default defineConfig({
     "/findings/blackburn-minority-wb-2028": "/findings/blackburn-minority-wb-2027/",
     "/findings/backlog-64k-awaiting-decision": "/findings/backlog-awaiting-decision/",
     "/findings/small-boats-41k-2025": "/findings/small-boats-arrivals/",
-    "/findings/daily-hotel-cost-5-77m": "/findings/daily-hotel-cost/"
+    "/findings/daily-hotel-cost-5-77m": "/findings/daily-hotel-cost/",
+    ...removedPageRedirects,
+    ...areaCodeRedirects
   },
   vite: {
     plugins: [tailwindcss()],
