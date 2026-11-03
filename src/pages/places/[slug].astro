@@ -3,6 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import PlainEnglish from "../../components/PlainEnglish.astro";
 import DataFreshness from "../../components/DataFreshness.astro";
+import ukRoutesManifest from "../../../data/raw/manifests/uk_routes.json";
+import { loadPlaceAnnouncement, placeFreshness } from "../../lib/place-freshness";
 import ShareButton from "../../components/ShareButton.astro";
 import MpCard from "../../components/MpCard.astro";
 import EthnicityTimeline from "../../components/EthnicityTimeline.astro";
@@ -52,6 +54,7 @@ import { buildPlaceQuestions } from "../../lib/place-questions";
 import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
 
 const localRouteLatest = loadLocalRouteLatest();
+const freshness = placeFreshness(ukRoutesManifest, localRouteLatest.snapshotDate, await loadPlaceAnnouncement(ukRoutesManifest));
 const hotelLedger = loadHotelEntityLedger();
 
 export function getStaticPaths() {
@@ -325,9 +328,8 @@ const areaCountyName =
       <h1>{area.areaName}</h1>
       <div class="page-head-meta">
         <DataFreshness
-          updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
+          {...freshness}
           source="Home Office"
-          sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
         />
         <ShareButton
           url={buildAbsoluteUrl(Astro.url.pathname)}
