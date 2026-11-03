@@ -1,4 +1,5 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, mkdtempSync, mkdirSync, copyFileSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -79,5 +80,46 @@ describe("housing release calendar", () => {
     expect(current.stdout).toMatch(/mhclg_homelessness\s+current/);
     const tomorrow = new Date(Date.parse(housing.nextEdition) + 86400000).toISOString().slice(0, 10);
     expect(audit(tomorrow).stdout).toMatch(/mhclg_homelessness\s+OVERDUE/);
+  });
+
+  it("passes the strict gate with the confirmed calendar and fails when that edition is overdue", () => {
+    // Freeze the dates from the November failure, not a published figure. A later
+    // release may be younger than the fallback limit and must not break this test.
+    const fixture = {
+      dataset: "mhclg_homelessness",
+      coverageEnd: "2026-03-31",
+      maxAgeDays: 200,
+      nextEdition: "2026-11-26"
+    };
+    const checkedAt = "2026-11-02";
+    // Isolate the CLI so other release cycles cannot mask this manifest's exit status.
+    const root = mkdtempSync(join(tmpdir(), "asylumstats-freshness-"));
+    try {
+      mkdirSync(join(root, "scripts/audit"), { recursive: true });
+      mkdirSync(join(root, "data/raw/manifests"), { recursive: true });
+      const script = join(root, "scripts/audit/source-freshness.mjs");
+      copyFileSync("scripts/audit/source-freshness.mjs", script);
+      const manifest = join(root, "data/raw/manifests/mhclg_homelessness.json");
+      const audit = (day, strict = true) => spawnSync(process.execPath,
+        [script, day, ...(strict ? ["--strict"] : [])], { encoding: "utf8" });
+
+      writeFileSync(manifest, JSON.stringify(fixture));
+      expect(audit(checkedAt).status).toBe(0);
+      const tomorrow = new Date(Date.parse(fixture.nextEdition) + 86400000).toISOString().slice(0, 10);
+      const overdue = audit(tomorrow);
+      expect(overdue.stdout).toMatch(/mhclg_homelessness\s+OVERDUE/);
+      expect(overdue.status).toBe(1);
+      expect(audit(tomorrow, false).status).toBe(0);
+
+      // Reproduce the original failure without changing the coverage date or limit.
+      const withoutCalendar = { ...fixture };
+      delete withoutCalendar.nextEdition;
+      writeFileSync(manifest, JSON.stringify(withoutCalendar));
+      const fallback = audit(checkedAt);
+      expect(fallback.stdout).toMatch(/mhclg_homelessness\s+OVERDUE/);
+      expect(fallback.status).toBe(1);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
