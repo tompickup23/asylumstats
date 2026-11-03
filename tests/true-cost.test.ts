@@ -13,6 +13,8 @@ import {
   ASRA_FY_CLOSES,
   SYSTEM_TOTAL_PER_SUPPORTED_PERSON_PER_DAY_DO_NOT_USE_PER_AREA,
   TOTAL_GBP_M,
+  TOTAL_GBP_M_PER_DAY,
+  DAYS_IN_COST_YEAR,
   BY_BASIS,
   BY_KIND,
   TRACEABLE_TO_ACCOUNTS_PCT,
@@ -376,5 +378,43 @@ describe("no cost is attributed by nationality", () => {
       expect(c.id, c.id).not.toMatch(/criminal|offender|prison/i);
       expect(`${c.label} ${c.note}`, c.id).not.toMatch(/offender|prison|nationalit/i);
     }
+  });
+});
+
+/**
+ * The answer block under the H1 (src/components/TrueCostAnswer.astro) states the total
+ * per day. It must be the annual total over the days of the same financial year, and
+ * the correction notes it points to must sit below the body, not above it.
+ */
+describe("the answer block and the correction notes", () => {
+  it("derives the per-day total from the annual total over the financial year", () => {
+    expect(araCosts._provenance.coverage).toBe("1 April 2025 to 31 March 2026");
+    expect(DAYS_IN_COST_YEAR).toBe(365);
+    for (const column of ["conservative", "central", "upper"] as const) {
+      expect(TOTAL_GBP_M_PER_DAY[column] * DAYS_IN_COST_YEAR).toBeCloseTo(TOTAL_GBP_M[column], 6);
+    }
+  });
+
+  it("keeps every correction note, under a heading after the body", () => {
+    const body = finding.split("\n---\n").slice(1).join("\n---\n");
+    const heading = body.indexOf("## Corrections and earlier editions");
+    expect(heading).toBeGreaterThan(body.indexOf("## Sources"));
+    expect(body.indexOf("**£4,181 million.**")).toBeLessThan(heading);
+    const corrections = parseCorrections(body);
+    expect(corrections.map((row) => row.date)).toEqual(["2026-10-24", "2026-10-12", "2026-10-12", "2026-09-27"]);
+    for (const lead of ["**Correction, ", "**Third edition, 13 August 2026.**"]) {
+      expect(body.indexOf(lead)).toBeGreaterThan(heading);
+    }
+  });
+
+  it("is rendered under the H1 of the finding, from the module", () => {
+    const template = readFileSync(join(process.cwd(), "src/pages/findings/[...slug].astro"), "utf8");
+    const h1 = template.indexOf('<h1 class="finding-detail-headline">');
+    const answer = template.indexOf("<TrueCostAnswer");
+    expect(answer).toBeGreaterThan(h1);
+    expect(answer).toBeLessThan(template.indexOf('class="finding-detail-stat"'));
+    const component = readFileSync(join(process.cwd(), "src/components/TrueCostAnswer.astro"), "utf8");
+    expect(component).toContain("TOTAL_GBP_M_PER_DAY.central");
+    expect(component).not.toMatch(/£\d/);
   });
 });

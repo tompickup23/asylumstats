@@ -10,49 +10,11 @@ verdict: critical
 source_url: "https://www.gov.uk/government/publications/home-office-annual-report-and-accounts-2025-to-2026"
 source_label: "Home Office Annual Report and Accounts 2025-26, NAO, MoJ, HMCTS, DfE"
 summary: "The total annual cost of the UK asylum system is around £7.8 billion, or £197 per income taxpayer per year. The largest component is now an audited figure rather than an estimate: the Home Office spent £4,181 million on asylum support, resettlement and accommodation in 2025-26, down from £4,513 million. Detention is the one line moving the other way, up 21.3%."
-seo_title: "What asylum costs per income taxpayer: £197 a year, £178 to £215"
+seo_title: "UK asylum cost: £197 a year per income taxpayer, £178 to £215"
 seo_description: "About £7.8 billion a year, or £197 per income taxpayer in a range of £178 to £215. An audited £4,181 million of that is Home Office spend."
 video_url: "/videos/true_cost_reel.mp4"
 video_poster: "/og/findings/true-cost-of-asylum.png"
 ---
-
-> **Correction, 24 October 2026.** This page stated £229 per income taxpayer,
-> in a range of £208 to £251, using 34.1 million taxpayers described as a 2024-25
-> projection. The denominator is corrected to 39.8 million, HMRC's 2025-26
-> projection in Table 2.1 of the [Income Tax liabilities statistics published
-> 15 July 2026](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027),
-> sheet `2_1_IT_payers_by_demographic`, cell B39 (in thousands).
-> This matches the 2025-26 cost year. Note 10 uses OBR March 2026 assumptions;
-> the [bulletin, sections 1.2 and 2.1](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary)
-> distinguishes the projections from the 2023-24 outturn.
-> The central figure becomes **£197**, in a range of **£178 to £215**.
-> The £7,821M central total, every cost component and every other figure are unchanged.
-
-> **Correction, 12 October 2026.** This was headlined "What asylum costs: £234 per
-> income taxpayer a year, in a range of £212 to £257", on a central total of **£8.0
-> billion** (£7,973M; range £7,225M to £8,773M). That total included a criminal
-> justice line of £152M (range £127M to £203M): a share of foreign national offender
-> prison costs, attributed to the asylum system from nationality overlap. It is
-> removed, because attributing offending by nationality is a link the data cannot
-> support and this site does not publish. Without it the central total is **£7.8
-> billion** (£7,821M; range £7,098M to £8,570M), and the cost per income taxpayer is
-> **£229**, in a range of **£208 to £251**, not £234 in a range of £212 to £257. The
-> audited share rises from 55% to 56%, the audited or attributed share from 63% to 64%,
-> and the average-attributed part of the total falls from £1,014M to £862M. The
-> calculation now has 14 categories, not 15. Every other line is unchanged.
-
-> **Correction, 27 September 2026.** This was headlined "The true cost of asylum" and is
-> not that. The central figure sits in a defensible range £1.6 billion wide, and 8% of the
-> total is attributed from an audited total rather than measured directly, so what the
-> piece produces is a comprehensive central estimate and the headline claimed a settled
-> number. "True" also invited the counterfactual reading the article itself rejects
-> further down: this is what the system costs divided by taxpayers, not a sum that would
-> be saved. The headline now carries the range. No figure has changed, and the URL is
-> unchanged so existing links still work.
-
-> **Third edition, 13 August 2026.** Rebuilt on the Home Office Annual Report and Accounts 2025-26 (HC 440), published 14 July 2026, which this site did not previously use. The departmental costs are now audited outturn rather than our estimates. The central total moves from £8.05 billion to £7.97 billion, and £236 per taxpayer to £234.
->
-> The second edition's figures were not wrong so much as unverifiable: they estimated from NAO reports and factsheets what the accounts now state directly. Where the two disagree, the accounts win.
 
 **£4,181 million.** That is what the Home Office spent on asylum support, resettlement and accommodation in the year to March 2026, signed off by the Comptroller and Auditor General. It is the single biggest number in the asylum system, it is down from £4,513 million the year before, and it is roughly half the true bill.
 
@@ -329,16 +291,6 @@ These figures use the static fiscal model. The dynamic model (which accounts for
 
 Source: Migration Observatory, "The Fiscal Impact of Immigration in the UK" (2024). Oxford Economics, "The Fiscal Impact of Immigration on the UK" (2018). OBR, "Impact of Migration on the Fiscal Forecast."
 
-> **Correction, 12 October 2026.** A section headed "Foreign National Offenders:
-> the data that exists" is withdrawn. It set the prison population by
-> nationality against the nationalities most common among people claiming
-> asylum, and cited research on asylum dispersal and crime. That implied a link
-> between nationality and crime which the data cannot support: prison statistics
-> by nationality say nothing about whether anyone claimed asylum, and this site
-> does not publish claims of that kind. A sentence in the criminal justice cost
-> line above, which named nationalities in the same way, is removed for the same
-> reason. No cost figure on this page changes.
-
 *Demographic projections for all 320 local authorities (including ethnic composition, religion, and nativity) are published on [UK Demographics](https://ukdemographics.co.uk).*
 
 ## The aid budget
@@ -399,3 +351,55 @@ All source documents are listed below and linked where available online. We welc
 - Salvation Army Modern Slavery Victim Care Contract
 
 Around £7.8 billion. £197 per income taxpayer. Every year. The biggest single component is falling and is now audited; the parts nobody audits are the parts nobody publishes.
+
+## Corrections and earlier editions
+
+Every correction to this page, and the note on its rebuild from the Home Office accounts, is kept here in full, newest first. The [corrections page](/corrections/) lists them alongside those for the rest of the site.
+
+> **Correction, 24 October 2026.** This page stated £229 per income taxpayer,
+> in a range of £208 to £251, using 34.1 million taxpayers described as a 2024-25
+> projection. The denominator is corrected to 39.8 million, HMRC's 2025-26
+> projection in Table 2.1 of the [Income Tax liabilities statistics published
+> 15 July 2026](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027),
+> sheet `2_1_IT_payers_by_demographic`, cell B39 (in thousands).
+> This matches the 2025-26 cost year. Note 10 uses OBR March 2026 assumptions;
+> the [bulletin, sections 1.2 and 2.1](https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary)
+> distinguishes the projections from the 2023-24 outturn.
+> The central figure becomes **£197**, in a range of **£178 to £215**.
+> The £7,821M central total, every cost component and every other figure are unchanged.
+
+> **Correction, 12 October 2026.** This was headlined "What asylum costs: £234 per
+> income taxpayer a year, in a range of £212 to £257", on a central total of **£8.0
+> billion** (£7,973M; range £7,225M to £8,773M). That total included a criminal
+> justice line of £152M (range £127M to £203M): a share of foreign national offender
+> prison costs, attributed to the asylum system from nationality overlap. It is
+> removed, because attributing offending by nationality is a link the data cannot
+> support and this site does not publish. Without it the central total is **£7.8
+> billion** (£7,821M; range £7,098M to £8,570M), and the cost per income taxpayer is
+> **£229**, in a range of **£208 to £251**, not £234 in a range of £212 to £257. The
+> audited share rises from 55% to 56%, the audited or attributed share from 63% to 64%,
+> and the average-attributed part of the total falls from £1,014M to £862M. The
+> calculation now has 14 categories, not 15. Every other line is unchanged.
+
+> **Correction, 12 October 2026.** A section headed "Foreign National Offenders:
+> the data that exists" is withdrawn. It set the prison population by
+> nationality against the nationalities most common among people claiming
+> asylum, and cited research on asylum dispersal and crime. That implied a link
+> between nationality and crime which the data cannot support: prison statistics
+> by nationality say nothing about whether anyone claimed asylum, and this site
+> does not publish claims of that kind. A sentence in the criminal justice cost
+> line above, which named nationalities in the same way, is removed for the same
+> reason. No cost figure on this page changes.
+
+> **Correction, 27 September 2026.** This was headlined "The true cost of asylum" and is
+> not that. The central figure sits in a defensible range £1.6 billion wide, and 8% of the
+> total is attributed from an audited total rather than measured directly, so what the
+> piece produces is a comprehensive central estimate and the headline claimed a settled
+> number. "True" also invited the counterfactual reading the article itself rejects
+> further down: this is what the system costs divided by taxpayers, not a sum that would
+> be saved. The headline now carries the range. No figure has changed, and the URL is
+> unchanged so existing links still work.
+
+> **Third edition, 13 August 2026.** Rebuilt on the Home Office Annual Report and Accounts 2025-26 (HC 440), published 14 July 2026, which this site did not previously use. The departmental costs are now audited outturn rather than our estimates. The central total moves from £8.05 billion to £7.97 billion, and £236 per taxpayer to £234.
+>
+> The second edition's figures were not wrong so much as unverifiable: they estimated from NAO reports and factsheets what the accounts now state directly. Where the two disagree, the accounts win.
