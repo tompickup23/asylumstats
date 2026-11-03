@@ -2,17 +2,19 @@
 interface Props {
   updated: string;
   nextUpdate?: string;
+  nextUpdateLabel?: "Next:" | "Next: due by";
+  nextUpdateExpiresAt?: string;
   source: string;
   sourceUrl?: string;
   /** Set false on a page where the corrections link would be redundant, e.g. /corrections/. */
   showCorrections?: boolean;
 }
 
-const { updated, nextUpdate, source, sourceUrl, showCorrections = true } = Astro.props;
+const { updated, nextUpdate, nextUpdateLabel = "Next:", nextUpdateExpiresAt, source, sourceUrl, showCorrections = true } = Astro.props;
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 }
 
 function daysAgo(iso: string): number {
@@ -26,7 +28,7 @@ const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "agi
 <span class={`freshness-badge freshness-${freshness}`}>
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
   <span>Updated {formatDate(updated)}</span>
-  {nextUpdate && <span class="freshness-next"> · Next: {formatDate(nextUpdate)}</span>}
+  {nextUpdate && <span class="freshness-next" data-expires-at={nextUpdateExpiresAt} hidden={!!nextUpdateExpiresAt}> · {nextUpdateLabel} {formatDate(nextUpdate)}</span>}
   <span class="freshness-sep"> · </span>
   {sourceUrl ? (
     <a href={sourceUrl} target="_blank" rel="noopener" class="freshness-source">{source}</a>
@@ -47,6 +49,27 @@ const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "agi
     </>
   )}
 </span>
+
+<script>
+  // Start hidden so an old date cannot flash or persist with JavaScript disabled.
+  let expiryTimer: number | undefined;
+  function hideExpiredUpdates() {
+    window.clearTimeout(expiryTimer);
+    let nextExpiry = Infinity;
+    document.querySelectorAll<HTMLElement>(".freshness-next[data-expires-at]").forEach((line) => {
+      const remaining = Date.parse(line.dataset.expiresAt!) - Date.now();
+      if (remaining <= 0) line.remove();
+      else if (Number.isFinite(remaining)) {
+        line.hidden = false;
+        nextExpiry = Math.min(nextExpiry, remaining);
+      }
+    });
+    if (Number.isFinite(nextExpiry)) expiryTimer = window.setTimeout(hideExpiredUpdates, Math.min(nextExpiry, 2147483647));
+  }
+  hideExpiredUpdates();
+  document.addEventListener("astro:page-load", hideExpiredUpdates);
+  document.addEventListener("visibilitychange", hideExpiredUpdates);
+</script>
 
 <style>
   .freshness-badge {
