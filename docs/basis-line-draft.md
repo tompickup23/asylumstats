@@ -1,12 +1,12 @@
 # Draft: basis line under the true-cost headline
 
-Status: **draft for Tom's sign-off. Not on the site.** Nothing in this file is built or deployed. Drafted 3 November 2026 through the fact-check protocol (`/fact-check`); every figure below is quoted from the document itself, with its page.
+Status: **wording chosen by Tom on 3 November 2026: the recommended version below. Still not on the site.** It goes live only after PR 147 lands and `/present-check` has run, in a separate PR that waits for Tom's yes. The optional like-for-like clause is still undecided and is not part of the chosen text. Drafted 3 November 2026 through the fact-check protocol (`/fact-check`); every figure below is quoted from the document itself, with its page.
 
 Where it would go: `src/content/findings/true-cost-of-asylum.md`, as the first paragraph under the H1 "What asylum costs: £197 per income taxpayer a year, in a range of £178 to £215", above the dated correction notes (PR 147 moves those notes below the answer; this line should land after PR 147 to avoid a conflict).
 
 ## The line
 
-**Recommended (two sentences):**
+**Recommended (two sentences), chosen by Tom on 3 November 2026:**
 
 > The audited Home Office figure is £4,181 million, its 2025-26 outturn for asylum support, resettlement and accommodation (Home Office Annual Report and Accounts 2025-26, HC 440, page 207). The £7.8 billion adds £182 million of other audited Home Office spending, £657 million attributed from Border Force and Immigration Enforcement, £175 million of published tribunal and legal aid costs and £2,626 million of our own estimates, chiefly post-decision welfare and family reunion; Full Fact's "about £105 per taxpayer" (16 February 2026) is a different year and a narrower measure: £4 billion of Home Office asylum support spend in 2024/25 over that year's projected income taxpayers.
 
@@ -78,7 +78,7 @@ The line attributes each figure to its source rather than asserting it, which is
 
 ## Checks before it goes live
 
-1. Tom signs off the wording (recommended, shorter, with or without the like-for-like clause).
+1. Wording: the recommended version, chosen by Tom on 3 November 2026. Still open: whether to add the like-for-like clause.
 2. Land after PR 147, as the first paragraph under the H1.
 3. Run `/present-check` on the line; the page is the site's most read.
 4. Build, then `tests/rendered-text-dashes` (the line has no dashes).
