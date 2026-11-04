@@ -88,15 +88,19 @@ function formatValue(value: number): string {
 function getFill(value: number): string {
   const ratio = (value - minValue) / range;
 
+  // Token tints, not rgba literals, so the ramp follows the theme. Same 18 to 74 per
+  // cent range as before.
+  const share = `${((0.18 + ratio * 0.56) * 100).toFixed(1)}%`;
+
   if (tone === "teal") {
-    return `rgba(78, 228, 195, ${0.18 + ratio * 0.56})`;
+    return `color-mix(in srgb, var(--positive) ${share}, transparent)`;
   }
 
   if (tone === "warm") {
-    return `rgba(255, 139, 97, ${0.18 + ratio * 0.56})`;
+    return `color-mix(in srgb, var(--critical) ${share}, transparent)`;
   }
 
-  return `rgba(125, 211, 252, ${0.18 + ratio * 0.56})`;
+  return `color-mix(in srgb, var(--series-1) ${share}, transparent)`;
 }
 
 function buildDefaultSummary(item: RegionMapValue): RegionMapSummary {
@@ -228,7 +232,7 @@ const mapInteractionCaption =
                   class="region-map-region"
                   d={geometry.path}
                   fill={getFill(item.value)}
-                  stroke={active ? "#F5F7FB" : "rgba(255,255,255,0.16)"}
+                  stroke={active ? "var(--text)" : "var(--bg)"}
                   stroke-width={active ? "3" : "1.4"}
                 ></path>
                 {interactionMode === "select" && (
