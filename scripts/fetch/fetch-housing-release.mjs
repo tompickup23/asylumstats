@@ -59,8 +59,17 @@ async function main() {
     return;
   }
 
-  const body = Buffer.from(await (await fetch(attachment.url, { headers: { "user-agent": "asylumstats-data-fetch" } })).arrayBuffer());
-  const file = attachment.filename;
+  // The name and URL come from a remote API: take only a plain .ods file name, and only
+  // from GOV.UK's asset host, so nothing can be written outside the raw folder.
+  const file = String(attachment.filename ?? "");
+  if (!/^[A-Za-z0-9._-]+\.ods$/.test(file)) throw new Error(`Refusing attachment file name "${file}".`);
+  const assetUrl = new URL(attachment.url);
+  if (assetUrl.protocol !== "https:" || assetUrl.hostname !== "assets.publishing.service.gov.uk") {
+    throw new Error(`Refusing to download from ${assetUrl.origin}.`);
+  }
+  const download = await fetch(assetUrl, { headers: { "user-agent": "asylumstats-data-fetch" } });
+  if (!download.ok) throw new Error(`${assetUrl} returned ${download.status}.`);
+  const body = Buffer.from(await download.arrayBuffer());
   writeFileSync(resolve(ROOT, "data/raw/mhclg_homelessness", file), body);
   const sha256 = createHash("sha256").update(body).digest("hex");
   console.log(`Saved data/raw/mhclg_homelessness/${file}, ${body.length} bytes, sha256 ${sha256}`);
