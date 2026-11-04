@@ -31,6 +31,7 @@
     "transform:bordersecurity": "node scripts/transform/transform-border-security.mjs",
     "transform:housing": "node scripts/transform/transform-housing-pressure.mjs",
     "audit:housing": "uv run --no-project python -I scripts/audit/verify-housing-pressure.py",
+    "audit:headlines": "uv run --no-project python -I scripts/audit/verify-headline-counts.py",
     "ingest:bordersecurity": "npm run fetch:bordersecurity && npm run transform:bordersecurity",
     "transform:asylumfinance": "node scripts/transform/transform-asylum-finance.mjs",
     "transform:asylumfinance:check": "node scripts/transform/transform-asylum-finance.mjs --check",
@@ -65,7 +66,8 @@
     "audit:projections": "node scripts/audit/projection-integrity.mjs",
     "audit:projections:check": "node scripts/audit/projection-integrity.mjs --check",
     "sync:ukd": "node scripts/sync/sync-from-ukd.mjs",
-    "sync:ukd:check": "node scripts/sync/sync-from-ukd.mjs --check"
+    "sync:ukd:check": "node scripts/sync/sync-from-ukd.mjs --check",
+    "release-day": "node scripts/release/release-day.mjs"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.0",

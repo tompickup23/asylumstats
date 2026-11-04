@@ -182,11 +182,21 @@ jobs:
       # 28 September build for nine days while three refreshes piled up behind it. Nobody
       # was told. Now refreshed data that fails the tests goes to a branch and an issue,
       # and main keeps the last data that passed. No GitHub event data is interpolated here.
+      #
+      # The headline check runs in the same step, so it parks data exactly as a failed
+      # test does: if the people on support, in hotels or awaiting a decision, or any
+      # place page's count, differs from the Home Office table it was read from, nothing
+      # is committed or deployed. It reads the fetched files with the standard library
+      # and shares no code with the transform, so the runner's own python3 is enough.
+      # Steps run under bash -e, so a test failure stops before the check.
+      # No GitHub event data is interpolated here.
       - name: Test the refreshed data
         id: datatests
         if: steps.changes.outputs.changed == 'true'
         continue-on-error: true
-        run: npm test
+        run: |
+          npm test
+          python3 -I scripts/audit/verify-headline-counts.py
 
       - name: Park refreshed data that failed the tests
         if: steps.changes.outputs.changed == 'true' && steps.datatests.outcome == 'failure'
@@ -204,7 +214,7 @@ jobs:
           gh label create refresh-failed --color B60205 --description "Refreshed data failed the tests" --force
           gh issue create --label refresh-failed \
             --title "Data refresh failed the tests ($(date -u +%Y-%m-%d))" \
-            --body "The refreshed data failed \`npm test\` and was not committed to main. The live site keeps the last data that passed.
+            --body "The refreshed data failed \`npm test\` or the headline check against the Home Office tables, and was not committed to main. The live site keeps the last data that passed.
 
           Run: $RUN_URL
           Data: branch \`$branch\`

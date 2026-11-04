@@ -59,5 +59,61 @@
   "nextEdition": "2026-11-26",
   "nextEditionSource": "https://www.gov.uk/government/statistics/announcements/statutory-homelessness-in-england-april-to-june-2026",
   "nextEditionCheckedAt": "2026-11-02",
-  "nextEditionNote": "MHCLG confirms the April to June 2026 release for 26 November 2026 at 09:30. The official tables page still lists January to March 2026 as the latest detailed local authority edition. Coverage remains 31 March 2026; the release calendar takes precedence over the fallback age limit."
+  "nextEditionNote": "MHCLG confirms the April to June 2026 release for 26 November 2026 at 09:30. The official tables page still lists January to March 2026 as the latest detailed local authority edition. Coverage remains 31 March 2026; the release calendar takes precedence over the fallback age limit.",
+  "releaseDay": {
+    "checkedAt": "2026-11-04T00:03:33Z",
+    "checkedVia": "GOV.UK Content API, https://www.gov.uk/api/content/<page path>, one read per page on 4 November 2026",
+    "note": "Read once so that release day is a fetch, not a search: scripts/fetch/fetch-housing-release.mjs asks tablesPage for attachmentTitle and stops if it is not there. Titles, states and dates below are GOV.UK's own fields as read. publicationPage and attachmentTitle for April to June 2026 do not exist yet and were not fetched; each says what it is based on.",
+    "collection": {
+      "title": "Homelessness statistics",
+      "url": "https://www.gov.uk/government/collections/homelessness-statistics"
+    },
+    "sources": [
+      {
+        "releaseId": "hclic",
+        "title": "Statutory homelessness in England: April to June 2026",
+        "announcement": "https://www.gov.uk/government/statistics/announcements/statutory-homelessness-in-england-april-to-june-2026",
+        "statedDate": "26 November 2026 9:30am",
+        "state": "confirmed",
+        "releaseTimestamp": "2026-11-26T09:30:00.000+00:00",
+        "publicationPage": "https://www.gov.uk/government/statistics/statutory-homelessness-in-england-april-to-june-2026",
+        "publicationPageBasis": "Not yet published. The announcement's path without /announcements: the January to March 2026 announcement redirects to /government/statistics/statutory-homelessness-in-england-january-to-march-2026 (read 4 November 2026).",
+        "tablesPage": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-homelessness",
+        "tablesPageTitle": "Tables on homelessness",
+        "attachmentTitle": "Detailed local authority level tables: April to June 2026",
+        "attachmentTitleBasis": "The held edition is attached to both its release page and Tables on homelessness as \"Detailed local authority level tables: January to March 2026\" (read 4 November 2026). The fetch stops if the April to June title differs.",
+        "heldEditionAttachments": {
+          "releasePage": "https://assets.publishing.service.gov.uk/media/6a82ee2c92ec93e1e0329a7f/Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
+          "tablesPage": "https://assets.publishing.service.gov.uk/media/6a82eeb83bd75b81e2329a7a/Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods"
+        },
+        "period": "April to June 2026; temporary accommodation at 30 June 2026",
+        "periodLabel": "April to June 2026",
+        "stockDate": "2026-06-30",
+        "onReleaseDay": "fetch"
+      },
+      {
+        "releaseId": "hclic_annual",
+        "title": "Statutory homelessness in England: Financial Year 2025-26",
+        "announcement": "https://www.gov.uk/government/statistics/announcements/statutory-homelessness-in-england-financial-year-2025-26",
+        "statedDate": "26 November 2026 9:30am",
+        "state": "provisional",
+        "releaseTimestamp": "2026-11-26T09:30:00.000+00:00",
+        "onReleaseDay": "not read by the panel; listed because it shares the 26 November slot"
+      },
+      {
+        "releaseId": "rough_sleeping",
+        "title": "Rough sleeping snapshot in England: autumn 2026",
+        "announcement": "https://www.gov.uk/government/statistics/announcements/rough-sleeping-snapshot-in-england-autumn-2025--2",
+        "announcementNote": "GOV.UK's slug says autumn 2025; the page title says autumn 2026.",
+        "statedDate": "February 2027",
+        "state": "provisional",
+        "releaseTimestamp": "2027-02-25T09:30:00.000+00:00",
+        "releaseTimestampNote": "GOV.UK states the month only; this timestamp is its placeholder.",
+        "tablesPage": "https://www.gov.uk/government/statistical-data-sets/tables-on-rough-sleeping",
+        "tablesPageTitle": "Tables on rough sleeping",
+        "heldAttachmentTitle": "Rough sleeping snapshot in England: autumn 2025 - tables",
+        "onReleaseDay": "no change on 26 November 2026; check on 25 February 2027"
+      }
+    ]
+  }
 }

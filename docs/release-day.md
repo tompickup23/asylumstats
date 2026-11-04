@@ -4,6 +4,28 @@ Written 3 November 2026 for the release of **Thursday 26 November 2026 at 09:30*
 
 The aim on each release day: every place page, explainer and headline figure on the site shows the new quarter the same day, with nothing estimated and every figure naming its table and edition.
 
+## 0. The one command
+
+Rehearsed on 4 November 2026 (section 9). It runs the refresh job's steps locally in the workflow's order, then the housing panel, the build and the headline check, and prints a timed table:
+
+```bash
+npm run release-day -- --expect september-2026 --date 2026-11-26 --summary release-day-summary.md
+```
+
+`--expect` is the period the Home Office files must carry. If GOV.UK has not swapped the files yet, the run stops after the routes fetch and says so, rather than refreshing June again and reporting success. `--from "<step name>"` restarts from a step. It commits, pushes and deploys nothing. **Do not commit its output**: a local run writes this machine's absolute paths into `data/canonical/regional_sources/manifest.json`. The data that goes live is the refresh job's commit (section 6); the local run is the check on it.
+
+**The check that stops a publish** is `scripts/audit/verify-headline-counts.py` (`npm run audit:headlines`). It reads the fetched Home Office files with the Python standard library, sharing no code with the transform, and compares, to the person:
+
+| Count | Table | Site value |
+|---|---|---|
+| People on asylum support | Asy_D09, all rows at the latest date | `latestQuarter.supportedAsylum` |
+| People in hotels | Asy_D09, "Contingency Accommodation - Hotel" | `latestQuarter.hotelAccommodation` |
+| Claims awaiting an initial decision | Asy_D03, "Pending initial decision" | `latestQuarter.awaitingInitialDecision` |
+| Every place page's support and contingency count | Reg_02, columns I and L | `local-route-latest.json` |
+| Reg_02 summed | against Asy_D09's total | |
+
+With `--dist` it also reads the built homepage, the asylum seekers explainer and all place page titles. Any difference exits 1. The refresh job runs it in "Test the refreshed data", so a mismatch parks the data on a `data/refresh-failed-*` branch exactly as a failed test does: nothing is committed or deployed.
+
 ## 1. The release calendar
 
 All read live from the GOV.UK Content API (`https://www.gov.uk/api/content/government/statistics/announcements/<slug>`) on 3 November 2026 at 12:26 UTC. "State" is GOV.UK's own field: `confirmed` means the date is fixed; `provisional` means it may move.
@@ -46,7 +68,23 @@ Times: 09:30 is UK time. In November and February that is 09:30 UTC; on 27 May 2
 
 ## 3. The housing panel files
 
-The refresh job does **not** fetch these. They are downloaded by hand into `data/raw/mhclg_homelessness/`, then `npm run transform:housing` and `npm run audit:housing` (the independent Python reader, run with `uv`). Method and rules: `Asylumstats_Housing_Pressure_Design_2026-10-25.md` in Reports.
+The refresh job does **not** fetch these. Since 4 November 2026 the H-CLIC file is a fetch, not a search: `releaseDay` in `data/raw/manifests/mhclg_homelessness.json` holds the exact pages, titles and stated dates, read once from GOV.UK's Content API, and
+
+```bash
+node scripts/fetch/fetch-housing-release.mjs
+```
+
+asks "Tables on homelessness" (`/government/statistical-data-sets/live-tables-on-homelessness`) for the attachment titled exactly "Detailed local authority level tables: April to June 2026". Not there, it stops and lists the latest titles on the page. There, it downloads the file and prints its SHA-256; `--write` also replaces the H-CLIC entry and `coverageEnd`. Then `npm run transform:housing` and `npm run audit:housing` (the independent Python reader, run with `uv`; it now reads file names from the manifest, where until 4 November it named the `202603` file and would have checked the old edition). Method and rules: `Asylumstats_Housing_Pressure_Design_2026-10-25.md` in Reports.
+
+What GOV.UK said on 4 November 2026 (Content API, 00:03 UTC):
+
+| Source | Title, as GOV.UK gives it | Stated date | State | Where the file will be |
+|---|---|---|---|---|
+| H-CLIC quarterly | Statutory homelessness in England: April to June 2026 | 26 November 2026 9:30am | confirmed | Attachment "Detailed local authority level tables: April to June 2026" on [Tables on homelessness](https://www.gov.uk/government/statistical-data-sets/live-tables-on-homelessness); release page expected at `/government/statistics/statutory-homelessness-in-england-april-to-june-2026` (not yet published; the January to March announcement redirects to the same pattern) |
+| H-CLIC annual | Statutory homelessness in England: Financial Year 2025-26 | 26 November 2026 9:30am | provisional | Not read by the panel |
+| Rough sleeping | Rough sleeping snapshot in England: autumn 2026 | February 2027 | provisional | [Tables on rough sleeping](https://www.gov.uk/government/statistical-data-sets/tables-on-rough-sleeping); held edition attached as "Rough sleeping snapshot in England: autumn 2025 - tables" |
+
+The January to March 2026 file is attached twice with different media hashes: on its release page (`6a82ee2c...`, the one banked) and on Tables on homelessness (`6a82eeb8...`). The fetch takes the Tables on homelessness copy; `audit:housing` checks content, not the URL.
 
 | File | Edition held (manifest, 3 Nov 2026) | Next edition | On 26 Nov 2026 |
 |---|---|---|---|
@@ -64,6 +102,8 @@ Then `npm test` (the cyclical source tests in `tests/source-freshness.test.mjs` 
 The England totals in the design note (135,580 households in temporary accommodation and the rest) are the January to March 2026 edition. Re-read the new ones from MHCLG's release text, not from a summary; local values are never summed to make them.
 
 ## 4. The "next update" line
+
+**Built since this was written** (PR 150): place pages print "Next: 26 Nov 2026", read from the confirmed announcement at build time, and `sourceUrl` reads `releasePage` from the manifest. Seen in the rehearsal build of 4 November 2026 on `/places/burnley/`. The text below is the 3 November state, kept for the reasoning.
 
 `src/components/DataFreshness.astro` already takes an optional `nextUpdate` and prints "Next: 26 Nov 2026" after "Updated". Place pages do not pass it: `src/pages/places/[slug].astro` line 328 gives only `updated` (the data date, falling back to a hard-coded `"2026-06-30"`) and a `sourceUrl` that still points at the **year ending December 2025** release page. Explainers already print "Home Office quarterly statistics, next edition due by 30 Nov 2026" from the manifest.
 
@@ -83,9 +123,10 @@ Rewrite themselves (read the live page, compare with the GOV.UK summary page of 
 |---|---|---|
 | `/explained/how-many-asylum-seekers-are-in-the-uk/` and the homepage | People on asylum support at the quarter end; in hotels | "How many people are in the UK asylum system?", new release |
 | `/explained/how-many-asylum-seekers-are-waiting-for-a-decision/` | Claims awaiting an initial decision | Same release, asylum section |
-| `/explained/uk-asylum-grant-rate/` | Initial grant rate, main applicants, grants over grants plus refusals | Same release. A test pins the 38% (year ending June 2026) and 48% (year ending June 2025) published rates: the new quarter will need the test's expected values moved by hand, from the published figure |
+| `/explained/uk-asylum-grant-rate/` | Initial grant rate, main applicants, grants over grants plus refusals | Same release. Until 4 November 2026 a test pinned the window "2025 Q3 to 2026 Q2" and 38%, so the September data would have failed it and parked the whole refresh. It now checks the method on every window and the published rate where one is on record (`PUBLISHED` in `tests/explainers.test.ts`). **Hand step on the day**: add the new window and its published rate, quoted from the release text |
 | `/explained/how-many-small-boats-have-crossed-this-year/` | Year to date | The weekly time series; unchanged by the quarterly |
-| Every place page, `/cost/`, county and region pages | People on support, rate per 10,000, rank, contingency count, priced subtotal | `regional-and-local-authority-dataset` for the new quarter (Asy_D11, Reg_02) |
+| Every place page, `/cost/`, county and region pages | People on support, rate per 10,000, rank, contingency count, priced subtotal | `regional-and-local-authority-dataset` for the new quarter (Asy_D11, Reg_02). Checked by `audit:headlines` for every area |
+| Every place page's title and first line | Change since the last release: "up 16 since March" in the title, and "471 on asylum support at 30 June 2026, up 16 from 455 at 31 March 2026." under the heading, with the table and both releases named | Rewrites itself: the routes transform moves the held release into second place in `data/marts/uk_routes/local-route-releases.json` when a newer Reg_02 arrives. An area missing from either release, or withheld in either, says "not comparable" and prints no change. No work on the day beyond reading two pages |
 
 Written by hand in `src/lib/official-figures.ts` (do not refresh themselves):
 
@@ -131,9 +172,10 @@ No repository secrets were set on 3 November 2026; the job uses only the built-i
 | When | Who | Step |
 |---|---|---|
 | By 20 Nov | Claude | The Monday and Thursday runs after PR 148: confirm all three outcomes green |
-| By 20 Nov | Claude builds, Tom merges | The "next update" line and the place-page `sourceUrl` (section 4) |
+| By 20 Nov | Claude builds, Tom merges | The "next update" line and the place-page `sourceUrl` (section 4). Done in PR 150 |
+| By 20 Nov | Tom | Merge the rehearsal PR (`release-rehearsal-2026-11-04`): the headline check, the change line, the housing fetch and the grant-rate test fix. Without it the 26 November refresh parks itself on the grant-rate pin |
 | 25 Nov | Claude | Re-read every row of section 1; a moved date changes this runbook first |
-| 25 Nov | Claude | Local dry run: `npm ci`, `npm test`, `node scripts/audit/source-freshness.mjs 2026-11-26 --strict` |
+| 25 Nov | Claude | Local dry run: `npm ci`, then `npm run release-day -- --expect june-2026 --date 2026-11-25` (section 0), which should finish green in about 13 minutes. Throw its data changes away |
 | 25 Nov | Tom | Say in chat whether Claude may dispatch the refresh on the day, or whether Tom will |
 
 ### On the day (times UK)
@@ -142,9 +184,11 @@ No repository secrets were set on 3 November 2026; the job uses only the built-i
 |---|---|---|
 | 09:30 | Claude | Confirm the release is up: the release page `immigration-system-statistics-year-ending-september-2026` and the regional and local authority dataset for September 2026 on the data tables page (June's file was `regional-and-local-authority-dataset-jun-2026.ods`) |
 | 09:35 | Tom, or Claude on Tom's yes given that morning | Dispatch the refresh: `gh workflow run refresh-data.yml --repo tompickup23/asylumstats --ref main`. The 12:00 UTC cron is the fallback, then 16:00 UTC; schedules run late |
-| 09:35 | Claude | Download the H-CLIC April to June 2026 tables, bank them, update the manifest (section 3), `npm run transform:housing`, `npm run audit:housing`, `npm test`; open a PR |
+| 09:35 | Claude | Housing: `node scripts/fetch/fetch-housing-release.mjs --write`, then by hand `statisticsStatus` and `nextEdition` (section 3), `npm run transform:housing`, `npm run audit:housing`, `npm test`; open a PR |
+| 09:40 | Claude | Grant rate: read the published rate for the new window from the release text and add it to `PUBLISHED` in `tests/explainers.test.ts`, in the housing PR. Re-read the Blackburn finding (`blackburn-minority-wb-2027`): its test fails once the area series passes 30 June 2026, and that failure parks a refresh |
+| 09:45 | Claude | Local check of the same data: `npm run release-day -- --expect september-2026 --date 2026-11-26`. A stop at "Routes files carry september-2026" means GOV.UK has not swapped every file; re-run, do not dispatch |
 | 10:00 to 10:30 | Claude | Read the three outcomes (section 6) and report each separately |
-| After deploy | Claude | Re-read the section 5 figures on the live site against GOV.UK; spot-check five place pages (Glasgow, Birmingham, Burnley, Hillingdon, Middlesbrough) against the local authority table |
+| After deploy | Claude | Re-read the section 5 figures on the live site against GOV.UK. `audit:headlines` has already compared every place page with Reg_02; spot-check five by eye anyway (Glasgow, Birmingham, Burnley, Hillingdon, Middlesbrough), including the change line |
 | After deploy | Tom | Merge the housing PR, which deploys it |
 | After deploy | Claude | If any figure on the live site differs from the source: record it in the corrections log only with the primary table quoted, then tell Tom; never edit a figure on an agent's say-so |
 | End of day | Claude | Release-day note in Reports: `Website_Audits/log/`, with the three outcomes, timings and anything left |
@@ -154,10 +198,62 @@ Tom alone: the go-ahead to dispatch, merges, and anything said publicly about th
 ### After the day
 
 - Monday 30 November: the scheduled run should be green on all three outcomes. Red on outcome 3 with `mhclg_homelessness` named means section 3's manifest step was missed.
-- 10 December: tribunals and the revenue outturn second release (sections 1 and 3).
+- 10 December: tribunals and the revenue outturn second release (sections 1 and 3). **`tests/tribunal-appeals.test.ts` pins the April to June 2026 edition** (its title, dates and "Q1 2026/27"), so the first refresh to fetch the July to September tribunal tables will fail it and park. Fix it before 10 December.
 
 ## 8. Reuse
 
 For 25 February 2027 and 27 May 2027, replace: the period (`year-ending-september-2026` to `december-2026`, then `march-2027`), the file suffix (`-sep-2026`), the H-CLIC quarter, and the dates in sections 1 and 7. Re-read section 1 live and record the new access date; do not carry these dates forward. In February, also check the rough sleeping snapshot (section 3). On 27 May the release is at 08:30 UTC.
 
-Sources for this runbook: the GOV.UK Content API announcements listed in section 1 (accessed 3 November 2026, 12:26 UTC); `data/raw/manifests/*.json` and `node scripts/audit/source-freshness.mjs 2026-11-03` at main `5fcef0a`; GitHub Actions runs 40345186332, 40926919200, 40952132262 and 41496925178; [PR 148](https://github.com/tompickup23/asylumstats/pull/148).
+## 9. Rehearsal, 4 November 2026
+
+Run in a worktree from main `ec75cbe` against the published year ending June 2026 release (`--expect june-2026`), on this Mac, Node 25 (CI uses 22). Every live fetch was of a page that exists; nothing for 26 November was fetched. The data it produced was thrown away (section 0).
+
+**Headline counts reconciled to the person** against the files GOV.UK serves for the June release (`audit:headlines`, all three runs):
+
+| Count | Table, as at 30 June 2026 | Table | Site |
+|---|---|---|---|
+| People on asylum support | Asy_D09 | 93,293 | 93,293 |
+| People in contingency hotels | Asy_D09 | 16,021 | 16,021 |
+| Claims awaiting an initial decision | Asy_D03 | 40,168 | 40,168 |
+| Place pages, support and contingency | Reg_02, 361 areas | all equal | all equal |
+| Reg_02 summed | against Asy_D09 | 93,293 | 93,293 |
+
+Source: Home Office, Immigration system statistics, year ending June 2026 (published 27 August 2026): `asylum-seekers-receipt-support-datasets-jun-2026.xlsx`, `asylum-claims-awaiting-decision-datasets-jun-2026.xlsx`, `regional-and-local-authority-dataset-jun-2026.ods` (SHA-256 `5d857c6d...`, the hash on main).
+
+**Timed steps.** Run 1 started from an empty `data/raw`, as CI does; run 3 is the final command with every fix in, its raw files already on disk.
+
+| Step | Run 1, fresh | Run 3, final |
+|---|---|---|
+| MOJ tribunals | 0m 13s | 0m 06s |
+| Routes (13 Home Office files) | 5m 06s | 3m 02s |
+| Files carry the expected period | 0m 00s | 0m 00s |
+| Small boats, asylum finance, hotels, money | 0m 07s | 0m 04s |
+| Home Office spend (402 files fresh; cached in run 3) | 2m 41s | 0m 04s |
+| Regional sources | 1m 47s | 0m 45s |
+| Freshness, links, figure moves (advisory) | 0m 59s | 0m 43s |
+| `npm test` | 0m 16s | 0m 10s |
+| Headline check against the tables | 0m 16s | 0m 10s |
+| Housing transform and independent check | 0m 09s | 0m 07s |
+| Type check | not in run 1 | 0m 24s |
+| Build | 0m 38s, no social cards | 8m 14s, with social cards as deploy builds |
+| Built-site guards, as deploy runs them | not in run 1 | 0m 03s |
+| Built pages carry the table's counts | 0m 17s (failed: see below) | 0m 07s |
+| Strict freshness | | 0m 00s |
+| **Total** | 12m 29s | 14m 33s |
+
+From a fresh checkout with social cards, the measured steps add up to about 21 minutes. Routes is the one that varies (1m 22s to 5m 06s across three runs): it is thirteen downloads from `assets.publishing.service.gov.uk`.
+
+**What the rehearsal found, and what was done:**
+
+1. The grant-rate test pinned "2025 Q3 to 2026 Q2" and 38%. The September data would have failed it and parked the whole 26 November refresh. Now keyed by window (section 5); adding the new window is a hand step.
+2. `audit:housing` named the `202603` H-CLIC file in its code, so on the day it would have checked the old edition against the new mart. It now reads file names from the manifest.
+3. A stale `dist/` from an earlier build made `npm test` run the built-site guards against old pages (run 2 stopped there). The command now clears `dist/` first and runs deploy's own guard list after a `BUILD_OG=1` build.
+4. The first version of the built-page check read the `/places/<code>/` redirect stubs as place pages. Fixed in the check; the site was right.
+5. A local run writes absolute paths into the regional sources manifest. Never commit a local run's data.
+6. `tests/findings-figures.test.ts` requires the Blackburn finding's "at 30 June 2026" sentence to be the latest quarter. When the area series moves on, that test fails and parks a refresh until the prose is rewritten. Hand step, section 7.
+7. `tests/tribunal-appeals.test.ts` pins the April to June 2026 tribunal edition. Not a 26 November problem; it will park the first refresh after 10 December (section 7, after the day).
+8. Built place pages already print "Next: 26 Nov 2026" (section 4, PR 150).
+
+**Hand steps left on the day:** the go-ahead to dispatch (Tom); the published grant rate for the new window; `statisticsStatus` and `nextEdition` in the housing manifest after the fetch; the Blackburn finding; re-reading the hand-written figures in section 5; merges (Tom).
+
+Sources for this runbook: the GOV.UK Content API announcements listed in section 1 (accessed 3 November 2026, 12:26 UTC); `data/raw/manifests/*.json` and `node scripts/audit/source-freshness.mjs 2026-11-03` at main `5fcef0a`; GitHub Actions runs 40345186332, 40926919200, 40952132262 and 41496925178; [PR 148](https://github.com/tompickup23/asylumstats/pull/148). Section 0, 3 and 9 additions: the rehearsal of 4 November 2026 and the GOV.UK Content API reads of 4 November 2026, 00:03 UTC.
