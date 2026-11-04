@@ -467,15 +467,18 @@ const payload = JSON.stringify({
       const ratio = (value - minValue) / range;
       const alpha = clampOpacity(ratio);
 
+      // Token tints, so the ramp follows the theme.
+      const share = `${(alpha * 100).toFixed(1)}%`;
+
       if (tone === "teal") {
-        return `rgba(78, 228, 195, ${alpha})`;
+        return `color-mix(in srgb, var(--positive) ${share}, transparent)`;
       }
 
       if (tone === "warm") {
-        return `rgba(255, 139, 97, ${alpha})`;
+        return `color-mix(in srgb, var(--critical) ${share}, transparent)`;
       }
 
-      return `rgba(125, 211, 252, ${alpha})`;
+      return `color-mix(in srgb, var(--series-1) ${share}, transparent)`;
     };
 
     const clampNumber = (value: number, minimum: number, maximum: number) =>
@@ -1643,7 +1646,7 @@ const payload = JSON.stringify({
           path.setAttribute("fill", getFill(metricValue, minValue, maxValue, metric.tone));
           path.setAttribute(
             "stroke",
-            selected ? "#F5F7FB" : inSelectedSubregion ? "rgba(255,255,255,0.44)" : "rgba(255,255,255,0.16)"
+            selected ? "var(--text)" : inSelectedSubregion ? "var(--border-strong)" : "var(--bg)"
           );
           path.setAttribute("stroke-width", selected ? "3.2" : inSelectedSubregion ? "1.9" : "1.2");
           if (selectedSubregionId && !inSelectedSubregion) {
