@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import xlsx from "../lib/xlsx.mjs";
 import { buildAppealsBlock, readTribunalAppeals } from "../lib/tribunal-appeals.mjs";
-import { readRoutesManifest, releaseSectionUrl, resolveSource } from "../lib/route-release.mjs";
+import { readRoutesManifest, releasePageUrl, releaseSectionUrl, resolveSource } from "../lib/route-release.mjs";
+import { advanceHeldReleases, heldReleaseFromReg02 } from "../lib/held-releases.mjs";
 
 const rawDir = path.resolve("data/raw/uk_routes");
 const canonicalDir = path.resolve("data/canonical/uk_routes");
@@ -470,6 +471,11 @@ function combineSeries(seriesList) {
 
   return [...byPeriod.values()].sort((a, b) => a.periodLabel.localeCompare(b.periodLabel));
 }
+
+// Read before the marts directory is wiped below. The previous release's local counts
+// exist only in this file: Reg_02 is a snapshot and carries no earlier quarter.
+const heldReleasesPath = path.join(martsDir, "local-route-releases.json");
+const previouslyHeld = existsSync(heldReleasesPath) ? JSON.parse(readFileSync(heldReleasesPath, "utf8")) : null;
 
 ensureCleanDir(canonicalDir);
 ensureCleanDir(martsDir);
@@ -2382,6 +2388,30 @@ writeJson(path.join(canonicalDir, "manifest.json"), canonicalManifest);
 writeJson(path.join(martsDir, "national-route-dashboard.json"), routeDashboard);
 writeJson(path.join(martsDir, "local-route-latest.json"), localRouteLatest);
 writeJson(path.join(martsDir, "area-route-summaries.json"), localAreaSummaries);
+
+// The release now on the site and the one before it, for "change since the last release"
+// on place pages. Read raw, not formatted, so a withheld "*" stays a marker and is never
+// the 0 that safeNumber() would make of it.
+const localImmigrationSource = resolveSource(routesManifest, "local_immigration_groups");
+const reg02RawRows = xlsx.utils.sheet_to_json(xlsx.readFile(sourceFiles.localImmigration).Sheets.Reg_02, {
+  header: 1,
+  raw: true
+});
+writeJson(
+  heldReleasesPath,
+  advanceHeldReleases(
+    previouslyHeld,
+    heldReleaseFromReg02(reg02RawRows.slice(2), {
+      snapshotDate: localSnapshotDate,
+      release: `Immigration system statistics, ${localImmigrationSource.period.label.replace(/^Year/, "year")}`,
+      releaseDate: localImmigrationSource.releaseDate,
+      releasePage: releasePageUrl(localImmigrationSource.period.slug),
+      fileName: localImmigrationSource.fileName,
+      sourceUrl: localImmigrationSource.sourceUrl,
+      fileSha256: localImmigrationHash
+    })
+  )
+);
 
 copyFileSync(path.join(martsDir, "national-route-dashboard.json"), path.join(liveDir, "route-dashboard.json"));
 copyFileSync(path.join(martsDir, "local-route-latest.json"), path.join(liveDir, "local-route-latest.json"));

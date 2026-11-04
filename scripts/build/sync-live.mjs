@@ -26,6 +26,7 @@ const ROOT = resolve(HERE, "../..");
 /** mart path (relative to data/marts) -> live filename. */
 const SYNCED = {
   "uk_routes/local-route-latest.json": "local-route-latest.json",
+  "uk_routes/local-route-releases.json": "local-route-releases.json",
   // Renamed on the way through: the mart is national-route-dashboard, the site has
   // always imported it as route-dashboard.
   "uk_routes/national-route-dashboard.json": "route-dashboard.json",
