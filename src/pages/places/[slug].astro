@@ -319,9 +319,9 @@ const areaCountyName =
     { label: area.areaName }
   ]} />
 
-  <section class="page-top">
-    <section class="page-head">
-      <span class="kicker">{area.regionName}</span>
+  <section class="page-top place-top">
+    <section class="page-head place-head">
+      <span class="kicker place-region">{area.regionName}</span>
       <h1>{area.areaName}</h1>
       <div class="page-head-meta">
         <DataFreshness
@@ -337,9 +337,7 @@ const areaCountyName =
       </div>
     </section>
 
-    <aside class="page-rail">
-      <article class="panel panel-pad">
-        <div class="stat-strip">
+        <div class="stat-strip place-stats">
           <article class="stat-tile">
             <span class="tiny">UK rank</span>
             <strong>{areaRank.toLocaleString()}</strong>
@@ -363,8 +361,6 @@ const areaCountyName =
             </article>
           )}
         </div>
-      </article>
-    </aside>
   </section>
 
   <!-- MP -->
@@ -382,7 +378,9 @@ const areaCountyName =
     </section>
   )}
 
-  <PageContents title="Sections" sections={placeSections} />
+  <div class="place-sections">
+    <PageContents title="Sections" sections={placeSections} />
+  </div>
 
   <!-- SUMMARY -->
   <section id="place-summary" class="section section-anchor">
@@ -1148,5 +1146,117 @@ const areaCountyName =
       });
     });
   </script>
+
+  <style>
+    /* The answer band: an open page top, one row of identical stat tiles, then the
+       section links as a quiet row of chips. No card round the heading and no card
+       inside a card. The new classes sit beside the global ones, so other selectors
+       keep working, and each rule pairs two classes so it outranks the global rule. */
+    .page-top.place-top {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .page-head.place-head {
+      gap: 0.6rem;
+      padding: 0.25rem 0 0;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+    }
+
+    .page-head.place-head::after {
+      content: none;
+      animation: none;
+    }
+
+    .kicker.place-region {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+    }
+
+    .page-head.place-head h1 {
+      max-width: none;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .place-head :global(.share-icon-btn) {
+      width: 40px;
+      height: 40px;
+    }
+
+    .stat-strip.place-stats {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .place-stats .stat-tile {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      min-width: 0;
+      padding: 0.9rem 1rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--accent-wash);
+    }
+
+    .place-stats .stat-tile .tiny {
+      display: block;
+      color: var(--text-muted);
+    }
+
+    .place-stats .stat-tile strong {
+      margin-top: 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .place-sections :global(.page-contents) {
+      gap: 0.6rem;
+      margin-top: 0.25rem;
+      padding: 1rem 0 0;
+      border: 0;
+      border-top: 1px solid var(--border);
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+    }
+
+    .place-sections :global(.page-contents-links) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      overflow: visible;
+      padding-bottom: 0;
+    }
+
+    .place-sections :global(.page-contents-links a) {
+      min-height: 40px;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      border-color: var(--border);
+      background: var(--bg-card);
+      font-size: 0.86rem;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .place-sections :global(.page-contents-links a:hover),
+    .place-sections :global(.page-contents-links a:focus-visible) {
+      border-color: var(--accent);
+      background: var(--accent-wash);
+    }
+  </style>
 
 </BaseLayout>
