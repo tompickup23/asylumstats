@@ -257,13 +257,10 @@ const pageDescription = buildPlaceDescription({
   areaCount: localRouteLatest.areas.length,
   ratePer10k: area.supportedAsylumRate,
   contingencyAccommodation: area.contingencyAccommodation,
-  // Only where the area has one. Birmingham has ten constituencies and Leeds five, and
-  // naming areaMPs[0] in the description asserted, to anyone who only ever saw the search
-  // result, that the city has a single MP. The page body has always been honest about
-  // this: it prints the card and then "10 MPs cover constituencies in or overlapping
-  // Birmingham." The description had no room for the qualifier and so dropped it instead
-  // of the claim. The freed pixels go to the tail clause, which is more use anyway.
-  mp: areaMPs.length === 1 ? `${areaMPs[0].mpName} (${areaMPs[0].party})` : null
+  // Never named here. The search result shows the support count, and a named individual
+  // and a headline figure never share an asset (house rule; Tom, 4 November 2026). The
+  // MP card stays in the page body, where it sits as the area's representative.
+  mp: null
 });
 const pageStructuredData = buildPlaceStructuredData(area, {
   canonicalUrl: buildAbsoluteUrl(Astro.url.pathname),
