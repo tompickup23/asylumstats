@@ -36,12 +36,14 @@ HEADERS = {
     "Table_1_Total": (4, 0, {"T": "2025"}),
     "RO4_LA_Data_202526": (6, 1, {"DO": "TOTAL HOMELESSNESS - Net Current Expenditure (C7 = C3 - C6)"}),
 }
+# Sheet -> the manifest's releaseId for the file it sits in. File names are read from the
+# manifest, as the transform reads them, so a new H-CLIC quarter is checked against the
+# file that was banked rather than the one this script was written against.
+RELEASE_OF_SHEET = {"TA1": "hclic", "A2P": "hclic", "A2R": "hclic", "Table_1_Total": "rough_sleeping", "RO4_LA_Data_202526": "ro4"}
+MANIFEST = json.loads((ROOT / "data/raw/manifests/mhclg_homelessness.json").read_text())
 FILES = {
-    "TA1": "Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
-    "A2P": "Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
-    "A2R": "Statutory_Homelessness_Detailed_Local_Authority_Data_202603.ods",
-    "Table_1_Total": "Rough_sleeping_snapshot_in_England__autumn_2025.ods",
-    "RO4_LA_Data_202526": "RO4_LA_Data_2025-26_data_by_LA.ods",
+    sheet: next(f["file"] for f in MANIFEST["files"] if f["releaseId"] == release)
+    for sheet, release in RELEASE_OF_SHEET.items()
 }
 
 

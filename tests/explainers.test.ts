@@ -66,14 +66,28 @@ describe("explainers", () => {
 describe("the grant rate", () => {
   const rate = initialGrantRate();
 
-  // The Home Office published 38% for the year ending June 2026 ("the grant rate was 38% in
-  // YE June 2026") and 48% the year before, main applicants only, withdrawals excluded.
-  // The homepage printed 31.5% for the same year, dividing by every decision instead.
-  it("reproduces the Home Office's published rate", () => {
+  // The Home Office's published rates, by window, read from each release's own text. The
+  // homepage once printed 31.5% for the year ending June 2026, dividing by every decision,
+  // beside a published 38%. Keyed by window rather than asserted for the latest one: a
+  // pin on the latest window fails on the next release and parks the refresh, which is
+  // what two pinned tests did for nine days in October 2026. On release day, add the new
+  // window from the release text (docs/release-day.md, section 7).
+  const PUBLISHED: Record<string, { pct: number; previousPct: number }> = {
+    // Immigration system statistics, year ending June 2026 (Home Office, 27 August 2026):
+    // "the grant rate was 38% in YE June 2026", 48% the year before.
+    "2025 Q3 to 2026 Q2": { pct: 38, previousPct: 48 }
+  };
+
+  it("is grants over grants plus refusals, main applicants, for the latest four quarters", () => {
     expect(rate).not.toBeNull();
-    expect(rate!.windowLabel).toBe("2025 Q3 to 2026 Q2");
-    expect(Math.round(rate!.pct)).toBe(38);
-    expect(Math.round(rate!.previousPct!)).toBe(48);
+    expect(rate!.windowLabel).toMatch(/^\d{4} Q[1-4] to \d{4} Q[1-4]$/);
+    expect(rate!.pct).toBeCloseTo((rate!.grants / (rate!.grants + rate!.refusals)) * 100, 1);
+  });
+
+  it.skipIf(!PUBLISHED[rate?.windowLabel ?? ""])("reproduces the Home Office's published rate for that window", () => {
+    const published = PUBLISHED[rate!.windowLabel];
+    expect(Math.round(rate!.pct)).toBe(published.pct);
+    expect(Math.round(rate!.previousPct!)).toBe(published.previousPct);
   });
 
   it("is the figure the explainer and its chart publish", () => {

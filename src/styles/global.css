@@ -568,6 +568,17 @@ main {
   background: var(--bg-card);
 }
 
+.release-change {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.release-change-source {
+  margin: 0.15rem 0 0;
+  color: var(--text-muted);
+}
+
 .page-head-meta {
   display: flex;
   align-items: center;

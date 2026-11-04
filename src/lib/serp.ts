@@ -89,6 +89,8 @@ function ordinal(value: number): string {
 export interface PlaceTitleInput {
   areaName: string;
   supportedAsylum: number;
+  /** "up 16 since March", from changeTitleClause() in release-change.ts; null when not comparable. */
+  change?: string | null;
 }
 
 /**
@@ -114,13 +116,23 @@ export interface PlaceTitleInput {
  * Degrading drops the question frame before the count: an area whose name is long enough
  * to break the frame still gets its number, because the number is what the page is for.
  */
-export function buildPlaceTitle({ areaName, supportedAsylum }: PlaceTitleInput): string {
-  const figure =
-    supportedAsylum === 1
-      ? "1 person on support"
-      : `${supportedAsylum.toLocaleString("en-GB")} on support`;
+export function buildPlaceTitle({ areaName, supportedAsylum, change = null }: PlaceTitleInput): string {
+  const count = supportedAsylum.toLocaleString("en-GB");
+  const figure = supportedAsylum === 1 ? "1 person on support" : `${count} on support`;
+
+  // The change since the last release leads, as the regional press frames each quarter.
+  // It is dropped before the count is: every frame below it still carries the number.
+  const withChange = change
+    ? [
+        `How many asylum seekers in ${areaName}? ${figure}, ${change}`,
+        `How many asylum seekers in ${areaName}? ${count}, ${change}`,
+        `${areaName}: ${count} on asylum support, ${change}`,
+        `${areaName}: ${figure}, ${change}`
+      ]
+    : [];
 
   return firstThatFits([
+    ...withChange,
     `How many asylum seekers in ${areaName}? ${figure}`,
     `Asylum seekers in ${areaName}: ${figure}`,
     // Two areas are named too long for either frame. Leading with the place still spends
