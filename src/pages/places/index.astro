@@ -442,23 +442,28 @@ const datasetStructuredData = [
   description={pageDescription}
   structuredData={datasetStructuredData}
 >
-  <!-- SEARCH-FIRST: Find your area -->
-  <section id="place-search" class="section section-anchor priority-section" style="padding: 2.5rem 0;">
-    <div style="max-width: 700px; margin: 0 auto; text-align: center;">
-      <h1 style="font-family: var(--font-display); font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem;">Find your area</h1>
-      <p class="lede" style="margin-bottom: 1.5rem;">{placeCount} local authorities. Asylum support for every one; demographic, religion and socioeconomic data where the source covers it.</p>
+  <!-- SEARCH-FIRST: Find your area. The heading and one line, then the search band. -->
+  <section id="place-search" class="section section-anchor priority-section places-finder">
+    <div class="places-finder-head">
+      <h1>Find your area</h1>
+      <p class="lede">{placeCount} local authorities. Asylum support for every one; demographic, religion and socioeconomic data where the source covers it.</p>
+    </div>
+    <div class="places-finder-band">
       <div class="lookup-field">
+        <svg class="places-finder-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+          <path d="M20 20l-3.6-3.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
         <input
           type="search"
           id="place-search-input"
           placeholder="Type a council name, for example Birmingham, Burnley or Glasgow"
           autocomplete="off"
           spellcheck="false"
-          style="width: 100%; padding: 0.9rem 1.2rem; font-size: 1rem; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);"
         />
         <div class="lookup-results" id="place-search-results"></div>
       </div>
-      <div class="chip-row" style="margin-top: 1rem; justify-content: center;">
+      <div class="chip-row places-finder-links">
         <a href="/regional/" class="source-pill">Browse by region</a>
         <a href="/national/" class="source-pill">National overview</a>
       </div>
@@ -467,21 +472,21 @@ const datasetStructuredData = [
 
   <PageContents title="Start here" sections={placeSections} variant="priority" />
 
-  <section id="featured-places" class="section section-anchor">
+  <section id="featured-places" class="section section-anchor places-top">
     <div class="section-head">
       <div>
         <h2>Top areas by asylum support</h2>
       </div>
-      <a class="chip accent" href="/compare#compare-findings">Open the advanced compare surface</a>
+      <a class="places-text-link" href="/compare#compare-findings">Open the advanced compare surface</a>
     </div>
     <div class="place-grid">
       {featuredPlaces.map((row) => (
         <article class="place-card">
-          <div class="chip-row">
+          <div class="chip-row place-card-meta">
+            <span class="chip">UK rank {row.nationalRank.toLocaleString()}</span>
             <span class="chip">{row.area.regionName}</span>
-            <span class="chip teal">UK rank {row.nationalRank.toLocaleString()}</span>
             {row.hotelSignal !== "none" && (
-              <span class:list={["chip", row.hotelSignal === "named" ? "accent" : "warm"]}>
+              <span class="chip place-card-signal">
                 {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
               </span>
             )}
@@ -489,8 +494,8 @@ const datasetStructuredData = [
           <h3>
             <a href={buildPlacePath(row.area)}>{row.area.areaName}</a>
           </h3>
-          <p class="lede">
-            {row.area.supportedAsylum.toLocaleString()} people on asylum support at quarter end, with{" "}
+          <p class="place-card-figure">
+            <strong>{row.area.supportedAsylum.toLocaleString()}</strong> people on asylum support at quarter end, with{" "}
             {row.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.
           </p>
           <p class="tiny">
@@ -501,12 +506,12 @@ const datasetStructuredData = [
     </div>
   </section>
 
-  <section id="download" class="section section-anchor">
+  <section id="download" class="section section-anchor places-download">
     <div class="section-head">
       <div>
         <h2>Download the data</h2>
       </div>
-      <a class="chip accent" href={LOCAL_AUTHORITY_CSV_PATH} download>Download CSV</a>
+      <a class="places-button" href={LOCAL_AUTHORITY_CSV_PATH} download>Download CSV</a>
     </div>
     <p class="lede">
       People on asylum support in every local authority at {datasetSnapshotLabel}: one row per
@@ -522,8 +527,8 @@ const datasetStructuredData = [
     </p>
   </section>
 
-  <section class="section shell" style="padding-bottom: 3rem;">
-    <div class="chip-row" style="flex-wrap: wrap; gap: 0.5rem;">
+  <section class="section places-links">
+    <div class="chip-row">
       <a class="source-pill" href="/regional/">Browse by region</a>
       <a class="source-pill" href="/national/">National overview</a>
       <a class="source-pill" href="/compare/">Compare places</a>
@@ -566,3 +571,425 @@ const datasetStructuredData = [
     });
   }
 </script>
+
+<style>
+  /* The finder is flat: a heading, one line, then one search band. The section keeps its
+     priority-section class for the layout specs, so the global panel treatment is undone
+     here rather than renamed away. */
+  section.priority-section.places-finder {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  section.priority-section.places-finder::before {
+    display: none;
+  }
+
+  .places-finder-head {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .places-finder-head h1 {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+
+  .places-finder-head .lede {
+    max-width: 65ch;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* One quiet band: the input and two neutral chips, no panel inside it. */
+  .places-finder-band {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-subtle);
+  }
+
+  .places-finder-band .lookup-field {
+    position: relative;
+    flex: 1 1 26rem;
+    min-width: 0;
+  }
+
+  .places-finder-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.95rem;
+    color: var(--text-faint);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .places-finder-band input {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.8rem 1rem 0.8rem 2.75rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .places-finder-band input::placeholder {
+    color: var(--text-faint);
+  }
+
+  .places-finder-band input:focus,
+  .places-finder-band input:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
+  .places-finder-band .lookup-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    left: 0;
+    z-index: 50;
+    display: grid;
+    max-height: 22rem;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+
+  .places-finder-band .lookup-results:empty,
+  .places-finder-band .lookup-results[hidden] {
+    display: none;
+  }
+
+  /* Result rows are written by the inline script, so they carry no scope attribute. */
+  .places-finder-band :global(.lookup-result) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .places-finder-band :global(.lookup-result:last-child) {
+    border-bottom: 0;
+  }
+
+  .places-finder-band :global(.lookup-result:hover),
+  .places-finder-band :global(.lookup-result:focus-visible) {
+    background: var(--accent-wash);
+    outline-offset: -3px;
+  }
+
+  .places-finder-band :global(.lookup-result strong) {
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+
+  .places-finder-band :global(.lookup-result span) {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  /* Neutral chips: a hairline and muted text, never a tint. */
+  .places-finder-links {
+    flex: 0 0 auto;
+    gap: 0.5rem;
+  }
+
+  .places-finder-links .source-pill,
+  .places-links .source-pill {
+    min-height: 40px;
+    padding: 0 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transform: none;
+  }
+
+  .places-finder-links .source-pill:hover,
+  .places-finder-links .source-pill:focus-visible,
+  .places-links .source-pill:hover,
+  .places-links .source-pill:focus-visible {
+    border-color: var(--border-strong);
+    background: var(--accent-wash);
+    color: var(--text);
+    transform: none;
+  }
+
+  /* The jump links sit under the band as one quiet line, not a second panel. The nav
+     comes from PageContents, which other pages share, so it is reached as a sibling. */
+  .places-finder + :global(nav.page-contents) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1.25rem;
+    margin-top: 0.6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .places-finder + :global(nav.page-contents) > :global(.tiny) {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .places-finder + :global(nav.page-contents) :global(.page-contents-links) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .places-finder + :global(nav.page-contents.priority) :global(.page-contents-links) :global(a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .places-finder + :global(nav.page-contents.priority) :global(.page-contents-links) :global(a:hover),
+  .places-finder + :global(nav.page-contents.priority) :global(.page-contents-links) :global(a:focus-visible) {
+    background: none;
+    color: var(--accent);
+  }
+
+  .places-finder + :global(nav.page-contents.priority) :global(.page-contents-links) :global(a) :global(.page-contents-step) {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-text-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    text-underline-offset: 4px;
+  }
+
+  .places-text-link:hover,
+  .places-text-link:focus-visible {
+    text-decoration-color: currentColor;
+  }
+
+  /* Top areas: each card is one link (the area name stretched over the card), with the
+     support figure as the hero number and the footnote on a hairline. */
+  .places-top .place-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+    gap: 1rem;
+  }
+
+  .places-top .place-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.15rem 1.2rem 1.1rem;
+    overflow: visible;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-soft);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transform: none;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .places-top .place-card:hover,
+  .places-top .place-card:focus-within {
+    border-color: var(--border-strong);
+    background: var(--accent-wash);
+    box-shadow: var(--shadow-soft);
+    transform: none;
+  }
+
+  .places-top .place-card-meta {
+    gap: 0.3rem 0.6rem;
+  }
+
+  .places-top .place-card-meta .chip {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-top .place-card-meta .chip + .chip {
+    padding-left: 0.6rem;
+    border-left: 1px solid var(--border-strong);
+  }
+
+  .places-top .place-card-meta .place-card-signal {
+    color: var(--text);
+  }
+
+  .places-top .place-card h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .places-top .place-card h3 a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .places-top .place-card h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .places-top .place-card:hover h3 a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .places-top .place-card h3 a:focus-visible {
+    outline: none;
+  }
+
+  .places-top .place-card h3 a:focus-visible::after {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .places-top .place-card-figure {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .places-top .place-card-figure strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 2.3vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-top .place-card .tiny {
+    margin-top: auto;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 1.1rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .places-button:hover,
+  .places-button:focus-visible {
+    background: var(--accent-wash);
+  }
+
+  .places-download .lede {
+    max-width: 65ch;
+  }
+
+  .places-links .chip-row {
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    section.priority-section.places-finder {
+      margin-top: 0.25rem;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .places-finder-band {
+      padding: 0.85rem;
+    }
+
+    .places-top .place-card {
+      padding: 1rem 1.05rem;
+    }
+  }
+</style>
