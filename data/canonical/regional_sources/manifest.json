@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-11-05T19:39:19.204Z",
+  "generatedAt": "2026-11-05T21:53:54.291Z",
   "inputs": [
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/manual/regional-source-watch.csv",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/src/data/live/local-route-latest.json",
-      "fileSha256": "e8ce80c03f012505603cb1fb5bfab117dbd49144f181ca3faeb3a075502acfca"
+      "fileSha256": "c687371c83676be7829dbf4f228488ed0ab52e7e59f293f37130d874d52978a9"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-ukraine-dashboard.html",
-      "fileSha256": "c87e39746a4847d7726cc802bbc66a41b496319ccb527a88cba7a3adffea65bb"
+      "fileSha256": "df4cfaa4e04ce82d0e724e1a5792dd4118878e226e3dc212e8ac8b1ac47c9d3e"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-euss-dashboard.html",
