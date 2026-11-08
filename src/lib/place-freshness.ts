@@ -1,5 +1,6 @@
 export interface RoutesManifest {
   periodSlug?: string | null;
+  releaseDate?: string | null;
   releasePage?: string | null;
   nextEdition?: string | null;
 }
@@ -73,11 +74,15 @@ export function placeFreshness(
 
   const result: {
     updated: string;
+    published?: string;
     sourceUrl: string;
     nextUpdate?: string;
     nextUpdateLabel?: "Next:" | "Next: due by";
     nextUpdateExpiresAt?: string;
   } = { updated, sourceUrl: manifest.releasePage };
+  // The data date is the end of the period covered; publication comes about two months later.
+  // Showing only the first made a current page read as four months old.
+  if (validDate(manifest.releaseDate)) result.published = manifest.releaseDate;
 
   // GOV.UK may redirect an announcement to the statistics once they are published.
   const publicationPath = announcementUrl(manifest)?.replace("https://www.gov.uk/api/content", "").replace("/announcements/", "/");

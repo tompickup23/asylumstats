@@ -9,6 +9,7 @@ verdict: info
 source_url: "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice"
 source_label: "ONS Crime Statistics"
 summary: "Corrected 12 October 2026. This piece reported a correlation of 0.68 between asylum dispersal and recorded crime across 25 areas. The crime figures it used could not be traced to ONS tables, so the correlation is not supported by published data and should not be cited."
+withdrawn: true
 seo_title: "Withdrawn: the asylum dispersal and crime correlation"
 seo_description: "Corrected: the crime figures and the 0.68 correlation in this piece matched no published table and should not be cited."
 ---

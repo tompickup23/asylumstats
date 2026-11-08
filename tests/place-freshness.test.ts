@@ -96,3 +96,16 @@ describe("place freshness with fixture manifests and GOV.UK responses", () => {
     expect(placeFreshness(manifest, undefined, announcement, now).nextUpdateLabel).toBe("Next: due by");
   });
 });
+
+describe("place freshness publication date", () => {
+  it("carries the release date so the badge can say when the data was published", () => {
+    const result = placeFreshness({ ...manifest, releaseDate: "2026-08-27" }, "2026-06-30", undefined, now);
+    expect(result.updated).toBe("2026-06-30");
+    expect(result.published).toBe("2026-08-27");
+  });
+
+  it("omits a publication date it cannot read rather than guessing one", () => {
+    expect(placeFreshness({ ...manifest, releaseDate: "27 Aug 2026" }, "2026-06-30", undefined, now).published).toBeUndefined();
+    expect(placeFreshness(manifest, "2026-06-30", undefined, now).published).toBeUndefined();
+  });
+});

@@ -1,6 +1,9 @@
 ---
 interface Props {
+  /** End of the period the data covers, or the update date when no publication date is given. */
   updated: string;
+  /** Publication day of the release. When set, the badge reads "Data to … · published …". */
+  published?: string;
   nextUpdate?: string;
   nextUpdateLabel?: "Next:" | "Next: due by";
   nextUpdateExpiresAt?: string;
@@ -10,7 +13,7 @@ interface Props {
   showCorrections?: boolean;
 }
 
-const { updated, nextUpdate, nextUpdateLabel = "Next:", nextUpdateExpiresAt, source, sourceUrl, showCorrections = true } = Astro.props;
+const { updated, published, nextUpdate, nextUpdateLabel = "Next:", nextUpdateExpiresAt, source, sourceUrl, showCorrections = true } = Astro.props;
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -21,13 +24,17 @@ function daysAgo(iso: string): number {
   return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
 }
 
-const age = daysAgo(updated);
+const age = daysAgo(published ?? updated);
 const freshness = age <= 30 ? "fresh" : age <= 90 ? "recent" : age <= 180 ? "aging" : "stale";
 ---
 
 <span class={`freshness-badge freshness-${freshness}`}>
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-  <span>Updated {formatDate(updated)}</span>
+  {published ? (
+    <span>Data to {formatDate(updated)} · published {formatDate(published)}</span>
+  ) : (
+    <span>Updated {formatDate(updated)}</span>
+  )}
   {nextUpdate && <span class="freshness-next" data-expires-at={nextUpdateExpiresAt} hidden={!!nextUpdateExpiresAt}> · {nextUpdateLabel} {formatDate(nextUpdate)}</span>}
   <span class="freshness-sep"> · </span>
   {sourceUrl ? (

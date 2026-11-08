@@ -37,3 +37,13 @@ export function newestDate(...dates: Array<string | null | undefined>): string |
   const valid = dates.filter((d): d is string => typeof d === "string" && ISO_DATE.test(d));
   return valid.length ? valid.sort().at(-1)! : null;
 }
+
+/**
+ * The GOV.UK landing page of that same release, so freshness badges link the edition they
+ * date rather than a hard-coded one. Two regional pages linked year ending March 2026 and
+ * December 2025 while showing June 2026 figures.
+ */
+export const ROUTES_RELEASE_PAGE: string | null =
+  typeof ukRoutes.releasePage === "string" && ukRoutes.releasePage.startsWith("https://www.gov.uk/")
+    ? ukRoutes.releasePage
+    : null;

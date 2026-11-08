@@ -2,6 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
+import { ROUTES_RELEASE_DATE } from "../../../lib/data-releases";
 import { getCounties } from "../../../lib/county-directory";
 import { countyCanonicalPath } from "../../../lib/site";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
@@ -29,6 +30,7 @@ const pageDescription =
       <h1>Asylum seekers by county</h1>
       <DataFreshness
         updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
+        published={ROUTES_RELEASE_DATE ?? undefined}
         source="Home Office"
         sourceUrl="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
       />

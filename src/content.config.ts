@@ -58,6 +58,12 @@ const findings = defineCollection({
      * It also drops out of the listings, the sitemap and the search index.
      */
     superseded_by: z.string().optional(),
+    /**
+     * The claim has been withdrawn under the corrections policy. The page stays at its URL
+     * with the correction on it and stays linked from /corrections/, but it is noindex and
+     * left out of the sitemap: a withdrawn result serves no searcher.
+     */
+    withdrawn: z.boolean().default(false),
         // SR integration
     sr_article_id: z.string().optional(),
     sr_published: z.boolean().default(false),

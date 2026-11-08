@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DataFreshness from "../components/DataFreshness.astro";
+import { ROUTES_RELEASE_DATE, ROUTES_RELEASE_PAGE } from "../lib/data-releases";
 import { meanWhiteBritishShare } from "../lib/ethnic-projections";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { getRegionPressureSummaries } from "../lib/route-analytics";
@@ -51,8 +52,9 @@ const totalAsylum = localRouteLatest.areas.reduce((sum, a) => sum + a.supportedA
       </p>
       <DataFreshness
         updated={localRouteLatest.snapshotDate}
+        published={ROUTES_RELEASE_DATE ?? undefined}
         source="Home Office"
-        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026"
+        sourceUrl={ROUTES_RELEASE_PAGE ?? "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"}
       />
     </section>
   </section>

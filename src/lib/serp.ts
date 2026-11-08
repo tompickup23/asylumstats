@@ -1,3 +1,4 @@
+import { formatRatePer10k } from "./rate-format";
 /**
  * How wide a title or description actually renders in a Google result.
  *
@@ -165,7 +166,7 @@ export function buildPlaceDescription({
 }: PlaceDescriptionInput): string {
   const people = supportedAsylum === 1 ? "1 person" : `${supportedAsylum.toLocaleString("en-GB")} people`;
   const rate = typeof ratePer10k === "number" && ratePer10k > 0
-    ? `, ${ratePer10k.toLocaleString("en-GB")} per 10,000 residents`
+    ? `, ${formatRatePer10k(ratePer10k)} per 10,000 residents`
     : "";
   const position = rank === 1 ? "Highest" : `${ordinal(rank)} highest`;
   const core =
