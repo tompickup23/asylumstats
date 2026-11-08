@@ -71,6 +71,7 @@ const verdictLabel: Record<string, string> = {
   description={finding.data.seo_description ?? finding.data.summary}
   image={ogImage}
   canonicalOverride={replacementHref}
+  noIndex={finding.data.withdrawn}
   structuredData={[{
     "@context": "https://schema.org",
     "@type": "Article",

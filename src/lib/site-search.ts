@@ -1,6 +1,7 @@
 import { getPlaceDirectory } from "./place-directory";
 import { getPublicPlaceAreas } from "./site";
 import { getEthnicProjection } from "./ethnic-projections";
+import { formatRatePer10k } from "./rate-format";
 
 export interface SiteSearchEntry {
   href: string;
@@ -159,7 +160,7 @@ function buildPlaceDescription(
   supportedAsylumRate: number | null,
   contingencyAccommodation: number
 ): string {
-  const rateLabel = supportedAsylumRate !== null ? `${supportedAsylumRate} per 10,000` : "rate not published";
+  const rateLabel = supportedAsylumRate !== null ? `${formatRatePer10k(supportedAsylumRate)} per 10,000` : "rate not published";
   return `${supportedAsylum.toLocaleString()} on supported asylum, ${rateLabel}, ${contingencyAccommodation.toLocaleString()} in contingency accommodation.`;
 }
 

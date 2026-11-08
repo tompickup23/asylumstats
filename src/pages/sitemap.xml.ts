@@ -51,7 +51,8 @@ export const GET: APIRoute = async () => {
   // A superseded article declares another page canonical, so listing it here would ask
   // search engines to index a URL we have just told them is not the canonical one.
   const findings = (await getCollection("findings")).filter((f) => !f.data.superseded_by);
-  for (const finding of findings) {
+  // A withdrawn finding is noindex, so it is not offered for indexing here either.
+  for (const finding of findings.filter((f) => !f.data.withdrawn)) {
     const path = `/findings/${finding.id.replace(/\.md$/, "")}/`;
     paths.push(path);
     const changed = finding.data.updated ?? finding.data.date;

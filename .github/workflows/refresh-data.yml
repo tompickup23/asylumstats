@@ -20,6 +20,13 @@ on:
     # content and skips the commit when only run timestamps moved, so if the earlier run
     # did land this one costs a few minutes of runner time and commits nothing.
     - cron: "0 16 * * 4"
+    # Saturday midday, for small boats. The Home Office time series file is replaced once
+    # a week, and in November 2026 it landed on Saturday mornings (the 06_November_2026
+    # file at 08:43 UTC on 7 Nov; the 31_October_2026 file on 1 Nov). Monday was the first
+    # run to see it, so the year-to-date figure was always two days behind the press,
+    # which quotes the same series. Every other source finds nothing new and commits
+    # nothing, as on the second Thursday run.
+    - cron: "0 12 * * 6"
   workflow_dispatch:
 
 # The job commits and pushes refreshed data back to main, so the workflow

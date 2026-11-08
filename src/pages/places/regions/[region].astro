@@ -2,6 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
+import { ROUTES_RELEASE_DATE, ROUTES_RELEASE_PAGE } from "../../../lib/data-releases";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
 import { slugifyAreaName, regionNameInSentence, buildPublicPlaceRegionSlug } from "../../../lib/site";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
@@ -67,8 +68,9 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
       <h1>{region.regionName}</h1>
       <DataFreshness
         updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
+        published={ROUTES_RELEASE_DATE ?? undefined}
         source="Home Office"
-        sourceUrl="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-december-2025"
+        sourceUrl={ROUTES_RELEASE_PAGE ?? "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"}
       />
     </section>
     <aside class="page-rail">

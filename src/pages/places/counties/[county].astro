@@ -135,6 +135,7 @@ const pageStructuredData = [
       <h1>Asylum seekers in {county.countyName}</h1>
       <DataFreshness
         updated={localRouteLatest.snapshotDate ?? "2026-06-30"}
+        published={ROUTES_RELEASE_DATE ?? undefined}
         source="Home Office"
         sourceUrl="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
       />
