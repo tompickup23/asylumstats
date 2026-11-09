@@ -50,6 +50,8 @@ jobs:
       # The run-on guard belongs here for the same reason: it reads dist and the defect
       # it looks for is created by the compiler, so it cannot be seen before the build.
       # No GitHub event data is interpolated here.
+      - name: Check rendered figure agreement
+        run: npx vitest run tests/figures-manifest.test.ts
       - name: Guards that need the built site
         run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts tests/datasets.test.ts tests/internal-links.test.ts tests/legacy-redirects.test.ts tests/release-change.test.ts tests/rendered-rate-format.test.ts
       - run: npx playwright install --with-deps chromium
