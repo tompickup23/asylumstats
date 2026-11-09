@@ -12,7 +12,7 @@ import { buildPlacePath, getPublicPlaceAreas } from "../../lib/site";
 import { buildLocalAuthorityDataset, HOME_OFFICE_LOCAL_AUTHORITY_SOURCE, LOCAL_AUTHORITY_CSV_PATH } from "../../lib/datasets";
 import { ROUTES_RELEASE_DATE } from "../../lib/data-releases";
 import { formatFindingDate } from "../../lib/finding-dates";
-
+import { formatRatePer10k } from "../../lib/rate-format";
 const localRouteLatest = loadLocalRouteLatest();
 const routeDashboard = loadRouteDashboard();
 // Derived: this line previously claimed 307 while 152 pages built.
@@ -173,7 +173,7 @@ const placeDeckEntries: Record<string, PlaceDeckEntry> = {
     links: placeDirectory.regions.map((region) => ({
       label: region.regionName,
       href: region.regionPath,
-      meta: `${formatInteger(region.supportedAsylum)} on support · ${formatNumber(region.supportedAsylumRate)} per 10,000`,
+      meta: `${formatInteger(region.supportedAsylum)} on support · ${formatRatePer10k(region.supportedAsylumRate)} per 10,000`,
       scopeId: region.regionName,
       actionLabel: "Preview region"
     })),
@@ -233,7 +233,7 @@ for (const region of placeDirectory.regions) {
       },
       {
         label: "Regional rate",
-        value: formatNumber(region.supportedAsylumRate),
+        value: formatRatePer10k(region.supportedAsylumRate),
         context: "Supported asylum per 10,000 residents"
       },
       {
@@ -315,7 +315,7 @@ for (const region of placeDirectory.regions) {
         },
         {
           label: "Cluster rate",
-          value: subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate),
+          value: subregion.supportedAsylumRate === null ? "n/a" : formatRatePer10k(subregion.supportedAsylumRate),
           context: "Supported asylum per 10,000 residents"
         },
         {
@@ -373,7 +373,7 @@ for (const region of placeDirectory.regions) {
         },
         {
           label: "Local rate",
-          value: area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate),
+          value: area.supportedAsylumRate === null ? "n/a" : formatRatePer10k(area.supportedAsylumRate),
           context: "Per 10,000"
         },
         {
@@ -494,7 +494,7 @@ const datasetStructuredData = [
             {row.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.
           </p>
           <p class="tiny">
-            Rate {row.area.supportedAsylumRate ?? "n/a"} per 10,000 residents. Hotels: {row.hotelSummary}.
+            Rate {formatRatePer10k(row.area.supportedAsylumRate)} per 10,000 residents. Hotels: {row.hotelSummary}.
           </p>
         </article>
       ))}

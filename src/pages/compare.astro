@@ -23,7 +23,7 @@ import {
   getRegionPressureSummaries
 } from "../lib/route-analytics";
 import { getEthnicProjection } from "../lib/ethnic-projections";
-
+import { formatRatePer10k } from "../lib/rate-format";
 const localRouteLatest = loadLocalRouteLatest();
 const hotelLedger = loadHotelEntityLedger();
 type ComparePlace = (typeof localRouteLatest.areas)[number];
@@ -189,7 +189,7 @@ const compareMatrixRows = [
     label: "Supported asylum rate",
     note: "Per 10,000 residents",
     format: (place: ComparePlace) =>
-      place.supportedAsylumRate !== null ? place.supportedAsylumRate.toLocaleString() : "n/a"
+      formatRatePer10k(place.supportedAsylumRate)
   },
   {
     label: "Contingency accommodation",
@@ -372,7 +372,7 @@ const compareSections = [
           {supportedRateLeader && (
             <article class="stat-tile">
               <span class="tiny">Highest supported asylum rate</span>
-              <strong>{supportedRateLeader.supportedAsylumRate?.toLocaleString() ?? "n/a"}</strong>
+              <strong>{formatRatePer10k(supportedRateLeader.supportedAsylumRate)}</strong>
               <p class="tiny">{supportedRateLeader.areaName}</p>
             </article>
           )}
@@ -481,7 +481,7 @@ const compareSections = [
           <div class="data-list">
             <div class="data-row">
               <span>Supported asylum rate</span>
-              <span class="data-row-value">{place.supportedAsylumRate ?? "n/a"} per 10,000</span>
+              <span class="data-row-value">{formatRatePer10k(place.supportedAsylumRate)} per 10,000</span>
             </div>
             <div class="data-row">
               <span>Contingency accommodation</span>
@@ -579,19 +579,19 @@ const compareSections = [
               label: "Supported asylum",
               value: profile.place.supportedAsylum,
               tone: "accent",
-              detail: `${profile.place.supportedAsylumRate ?? "n/a"} per 10,000`
+              detail: `${formatRatePer10k(profile.place.supportedAsylumRate)} per 10,000`
             },
             {
               label: "Homes for Ukraine",
               value: profile.place.homesForUkraineArrivals,
               tone: "teal",
-              detail: `${profile.place.homesForUkraineRate ?? "n/a"} per 10,000`
+              detail: `${formatRatePer10k(profile.place.homesForUkraineRate)} per 10,000`
             },
             {
               label: "Afghan programme",
               value: profile.place.afghanProgrammePopulation,
               tone: "warm",
-              detail: `${profile.place.afghanProgrammeRate ?? "n/a"} per 10,000`
+              detail: `${formatRatePer10k(profile.place.afghanProgrammeRate)} per 10,000`
             }
           ]}
           note={
@@ -643,7 +643,7 @@ const compareSections = [
               median={supportedRateStats.median}
               p90={supportedRateStats.p90}
               max={supportedRateStats.max}
-              valueLabel={profile.place.supportedAsylumRate !== null ? `${profile.place.supportedAsylumRate}` : "n/a"}
+              valueLabel={formatRatePer10k(profile.place.supportedAsylumRate)}
               tone="teal"
             />
             <BenchmarkStrip
@@ -937,7 +937,7 @@ const compareSections = [
           </div>
           <h3>{item.place.areaName}</h3>
           <p class="lede">
-            Supported asylum: {item.place.supportedAsylum.toLocaleString()} | rate {item.place.supportedAsylumRate ?? "n/a"} per 10,000
+            Supported asylum: {item.place.supportedAsylum.toLocaleString()} | rate {formatRatePer10k(item.place.supportedAsylumRate)} per 10,000
           </p>
           <div class="data-list">
             <div class="data-row">

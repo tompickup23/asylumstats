@@ -15,7 +15,7 @@ import { loadMoneyLedger } from "../../lib/money-data";
 import { getSiteInvestigationTrailMap } from "../../lib/investigations";
 import { loadLocalRouteLatest } from "../../lib/route-data";
 import { buildAbsoluteUrl, buildEntityStructuredData } from "../../lib/site";
-
+import { formatRatePer10k } from "../../lib/rate-format";
 const hotelLedger = loadHotelEntityLedger();
 const moneyLedger = loadMoneyLedger();
 const localRouteLatest = loadLocalRouteLatest();
@@ -512,7 +512,7 @@ function formatSourceKind(kind: string): string {
             <div class="data-list">
               <div class="data-row">
                 <span>Supported asylum rate</span>
-                <span class="data-row-value">{area.supportedAsylumRate?.toLocaleString() ?? "n/a"} per 10,000</span>
+                <span class="data-row-value">{formatRatePer10k(area.supportedAsylumRate)} per 10,000</span>
               </div>
               <div class="data-row">
                 <span>Historical linked sites</span>
