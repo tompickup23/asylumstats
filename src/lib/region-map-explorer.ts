@@ -1,3 +1,4 @@
+import { formatRatePer10k } from "./rate-format";
 import type { PlaceDirectory } from "./place-directory";
 import { getRegionLocalEvidenceTimeline } from "./local-evidence";
 import type { RegionPressureSummary } from "./route-analytics";
@@ -62,7 +63,7 @@ function formatInteger(value: number): string {
 }
 
 function formatRate(value: number): string {
-  return `${value} per 10,000`;
+  return `${formatRatePer10k(value)} per 10,000`;
 }
 
 function buildTopVolumeLinks(placeDirectory: PlaceDirectory, regionName: string): RegionMapSummaryLink[] {
@@ -98,7 +99,7 @@ function buildTopRateLinks(placeDirectory: PlaceDirectory, regionName: string): 
     .map((row) => ({
       label: row.area.areaName,
       href: buildPlacePath(row.area),
-      meta: `${row.area.supportedAsylumRate ?? "n/a"} per 10,000`,
+      meta: `${formatRatePer10k(row.area.supportedAsylumRate)} per 10,000`,
       scopeId: row.area.areaCode,
       actionLabel: "Preview authority"
     }));
@@ -144,7 +145,7 @@ function buildTotalSummaries(placeDirectory: PlaceDirectory): Record<string, Reg
         cta: `Open ${region.regionName}`,
         chips: [
           `${region.supportedAsylum.toLocaleString()} supported asylum`,
-          `${region.supportedAsylumRate} per 10,000`,
+          `${formatRatePer10k(region.supportedAsylumRate)} per 10,000`,
           `${region.publicPlaceCount.toLocaleString()} place pages`
         ],
         stats: [
@@ -165,11 +166,11 @@ function buildRateSummaries(placeDirectory: PlaceDirectory): Record<string, Regi
       region.regionName,
       {
         title: `${region.regionName} rate frame`,
-        body: `${region.supportedAsylumRate} people per 10,000 residents are on supported asylum in this weighted regional view. Use this mode to separate intensity from the bigger raw totals elsewhere.`,
+        body: `${formatRatePer10k(region.supportedAsylumRate)} people per 10,000 residents are on supported asylum in this weighted regional view. Use this mode to separate intensity from the bigger raw totals elsewhere.`,
         href: region.regionPath,
         cta: `Open ${region.regionName}`,
         chips: [
-          `${region.supportedAsylumRate} per 10,000`,
+          `${formatRatePer10k(region.supportedAsylumRate)} per 10,000`,
           `${region.supportedAsylum.toLocaleString()} supported asylum`,
           `${region.contingencyAccommodation.toLocaleString()} contingency`
         ],
