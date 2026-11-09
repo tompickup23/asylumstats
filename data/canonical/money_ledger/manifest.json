@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T21:45:57.074Z",
+  "generated_at": "2026-11-09T18:36:15.322Z",
   "dataset_id": "money_ledger",
   "source_files": [
     {
@@ -10,7 +10,7 @@
     {
       "name": "hotelEntityLedger",
       "path": "data/marts/hotel_entities/hotel-entity-ledger.json",
-      "sha256": "547b6371c540ef173569c636662dbde4adfe285ed47317a5e4c8d0a38d61a36f"
+      "sha256": "151f23307efdde26c987d885044894b35589e835abf41819ca56a6e205d10bde"
     },
     {
       "name": "followMoney",

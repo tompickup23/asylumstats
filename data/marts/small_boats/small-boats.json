@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "31_October_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "06_November_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-10-30",
-  "latestWeekEnding": "2026-10-25",
+  "coverageEnd": "2026-11-05",
+  "latestWeekEnding": "2026-11-01",
   "yearToDate": {
-    "asAt": "2026-10-30",
+    "asAt": "2026-11-05",
     "year": 2026,
-    "arrivals": 21869,
+    "arrivals": 22605,
     "priorYear": 2025,
     "priorYearArrivals": 36954,
-    "changePct": -40.8
+    "changePct": -38.8
   },
   "latestWeek": {
-    "weekEnding": "2026-10-25",
-    "arrivals": 0,
-    "boats": 0,
-    "migrantsPrevented": 0,
-    "eventsPrevented": 0
+    "weekEnding": "2026-11-01",
+    "arrivals": 1670,
+    "boats": 23,
+    "migrantsPrevented": 1578,
+    "eventsPrevented": 34
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3251,6 +3251,13 @@
       "boats": 0,
       "migrantsPrevented": 0,
       "eventsPrevented": 0
+    },
+    {
+      "weekEnding": "2026-11-01",
+      "arrivals": 1670,
+      "boats": 23,
+      "migrantsPrevented": 1578,
+      "eventsPrevented": 34
     }
   ],
   "daily": [
@@ -19378,6 +19385,36 @@
       "date": "2026-10-30",
       "arrivals": 671,
       "boats": 9
+    },
+    {
+      "date": "2026-10-31",
+      "arrivals": 259,
+      "boats": 4
+    },
+    {
+      "date": "2026-11-01",
+      "arrivals": 477,
+      "boats": 7
+    },
+    {
+      "date": "2026-11-02",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-03",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-04",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-05",
+      "arrivals": 0,
+      "boats": 0
     }
   ]
 }
