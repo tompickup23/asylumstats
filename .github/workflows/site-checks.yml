@@ -36,6 +36,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop
+      - run: npm run test:search
       - uses: actions/upload-artifact@v6
         if: failure()
         with:
