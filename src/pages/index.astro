@@ -16,7 +16,7 @@ import { findingDisplayDate, findingIsRevised, formatFindingDate } from "../lib/
 import { arrangeResearch } from "../lib/research-sections";
 import { PER_TAXPAYER_GBP, TOTAL_GBP_M, UK_TAXPAYERS, UK_TAXPAYERS_SOURCE } from "../lib/true-cost";
 import { loadAsylumCostReconciliation, formatGbpShort } from "../lib/ho-spend";
-
+import { figureAttrs } from "../lib/figure-manifest";
 const routeDashboard = loadRouteDashboard();
 const localRouteLatest = loadLocalRouteLatest();
 const moneyLedger = loadMoneyLedger();
@@ -434,7 +434,7 @@ const heroStats = [
     </div>
     <div class="system-grid">
       <a class="sys-card sys-card-link" href="/explained/how-many-asylum-seekers-are-in-the-uk/">
-        <span class="sys-value sys-accent">{fmtInt(latestQuarter.supportedAsylum)}</span>
+        <span class="sys-value sys-accent" {...figureAttrs("supported-asylum", latestQuarter.supportedAsylum)}>{fmtInt(latestQuarter.supportedAsylum)}</span>
         <span class="sys-label">On asylum support</span>
         <span class="sys-context">Receiving Home Office accommodation, subsistence, or both. As at {snapshotDate}.</span>
         <span class="sys-more">How many asylum seekers are in the UK &rarr;</span>
@@ -446,13 +446,13 @@ const heroStats = [
         <span class="sys-more">The asylum backlog explained &rarr;</span>
       </a>
       <a class="sys-card sys-card-link" href="/explained/how-many-small-boats-have-crossed-this-year/">
-        <span class="sys-value sys-coral">{fmtInt(sbYtd.arrivals)}</span>
+        <span class="sys-value sys-coral" {...figureAttrs("small-boats-ytd", sbYtd.arrivals)}>{fmtInt(sbYtd.arrivals)}</span>
         <span class="sys-label">Small boat arrivals, {sbYtd.year} so far</span>
         <span class="sys-context">{smallBoatsCardContext}</span>
         <span class="sys-more">Small boat crossings this year &rarr;</span>
       </a>
       <a class="sys-card sys-card-link" href="/explained/uk-asylum-grant-rate/">
-        <span class="sys-value sys-coral">{grantRate.pct.toFixed(0)}%</span>
+        <span class="sys-value sys-coral" {...figureAttrs("initial-grant-rate", grantRate.pct)}>{grantRate.pct.toFixed(0)}%</span>
         <span class="sys-label">Initial grant rate</span>
         <span class="sys-context">Main applicants granted at first decision, {grantRate.windowLabel}, withdrawals excluded: the Home Office's own measure. After appeals the final grant rate is on average 14.6pp higher, across the 101 of 105 nationalities whose rate rises (Asy_D04).</span>
         <span class="sys-more">The grant rate explained &rarr;</span>
@@ -620,8 +620,8 @@ const heroStats = [
         <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="area-row">
           <span class="area-rank">{i + 1}</span>
           <span class="area-name">{area.areaName}</span>
-          <span class="area-rate">{area.supportedAsylumRate?.toFixed(1)}</span>
-          <span class="area-total">{fmtInt(area.supportedAsylum)}</span>
+          <span class="area-rate" {...figureAttrs("place-rate", area.supportedAsylumRate, area.areaCode)}>{area.supportedAsylumRate?.toFixed(1)}</span>
+          <span class="area-total" {...figureAttrs("place-supported", area.supportedAsylum, area.areaCode)}>{fmtInt(area.supportedAsylum)}</span>
         </a>
       ))}
     </div>

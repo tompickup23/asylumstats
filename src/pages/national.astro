@@ -9,7 +9,7 @@ import { getCollection } from "astro:content";
 import { getSignificantDemographicShifts, areasBelowFiftyBy, nationalGroupShare } from "../lib/ethnic-projections";
 import grantRateData from "../data/live/grant-rates-nationality.json";
 import schoolValidationData from "../data/live/school-validation.json";
-
+import { figureAttrs } from "../lib/figure-manifest";
 const routeDashboard = loadRouteDashboard();
 const moneyLedger = loadMoneyLedger();
 const findings = (await getCollection("findings"))
@@ -134,7 +134,7 @@ const sections = [
     </div>
     <div class="stats-grid">
       <article class="stat-card stat-card--accent">
-        <span class="stat-value">{latestQuarter.supportedAsylum.toLocaleString()}</span>
+        <span class="stat-value" {...figureAttrs("supported-asylum", latestQuarter.supportedAsylum)}>{latestQuarter.supportedAsylum.toLocaleString()}</span>
         <span class="stat-label">On asylum support</span>
       </article>
       <article class="stat-card stat-card--warn">
@@ -142,7 +142,7 @@ const sections = [
         <span class="stat-label">Awaiting decision</span>
       </article>
       <article class="stat-card stat-card--critical">
-        <span class="stat-value">{latestQuarter.hotelAccommodation.toLocaleString()}</span>
+        <span class="stat-value" {...figureAttrs("people-in-hotels", latestQuarter.hotelAccommodation)}>{latestQuarter.hotelAccommodation.toLocaleString()}</span>
         <span class="stat-label">In hotels</span>
       </article>
       <article class="stat-card">

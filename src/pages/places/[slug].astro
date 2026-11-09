@@ -53,7 +53,7 @@ import {
 import { buildPlaceDescription, buildPlaceTitle } from "../../lib/serp";
 import { buildPlaceQuestions } from "../../lib/place-questions";
 import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
-
+import { figureAttrs } from "../../lib/figure-manifest";
 const localRouteLatest = loadLocalRouteLatest();
 const freshness = placeFreshness(ukRoutesManifest, localRouteLatest.snapshotDate, await loadPlaceAnnouncement(ukRoutesManifest));
 const hotelLedger = loadHotelEntityLedger();
@@ -347,11 +347,11 @@ const areaCountyName =
           </article>
           <article class="stat-tile">
             <span class="tiny">On support</span>
-            <strong>{area.supportedAsylum.toLocaleString()}</strong>
+            <strong {...figureAttrs("place-supported", area.supportedAsylum, area.areaCode)}>{area.supportedAsylum.toLocaleString()}</strong>
           </article>
           <article class="stat-tile">
             <span class="tiny">Rate /10k</span>
-            <strong>{formatRatePer10k(area.supportedAsylumRate)}</strong>
+            <strong {...figureAttrs("place-rate", area.supportedAsylumRate, area.areaCode)}>{formatRatePer10k(area.supportedAsylumRate)}</strong>
           </article>
           <article class="stat-tile">
             <span class="tiny">Contingency</span>
