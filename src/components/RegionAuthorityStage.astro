@@ -241,6 +241,8 @@ const payload = JSON.stringify({
 </section>
 
 <script>
+  import { formatRatePer10k } from "../lib/rate-format";
+
   type ScopeMeta = {
     scopeId: string;
     scopeKind: "region" | "subregion" | "place";
@@ -333,11 +335,6 @@ const payload = JSON.stringify({
     };
 
     const formatInteger = (value: number) => value.toLocaleString("en-GB");
-    const formatNumber = (value: number) =>
-      new Intl.NumberFormat("en-GB", {
-        minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
-        maximumFractionDigits: Number.isInteger(value) ? 0 : 2
-      }).format(value);
 
     const clampOpacity = (ratio: number) => Math.max(0.18, Math.min(0.84, 0.18 + ratio * 0.58));
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -426,7 +423,7 @@ const payload = JSON.stringify({
     };
 
     const formatRateText = (value: number | null) =>
-      value === null ? "Rate not published" : `${formatNumber(value)} per 10,000`;
+      value === null ? "Rate not published" : `${formatRatePer10k(value)} per 10,000`;
 
     type AuthorityFocusProfile = {
       biasX?: number;
@@ -833,7 +830,7 @@ const payload = JSON.stringify({
 
       const formatSubregionMetricValue = (subregion: SubregionPayload) => {
         if (currentMetric === "rate") {
-          return subregion.supportedAsylumRate === null ? "n/a" : formatNumber(subregion.supportedAsylumRate);
+          return subregion.supportedAsylumRate === null ? "n/a" : formatRatePer10k(subregion.supportedAsylumRate);
         }
 
         if (currentMetric === "hotel") {
@@ -923,7 +920,7 @@ const payload = JSON.stringify({
       const buildAreaMetricChip = (area: AreaPayload) => {
         if (currentMetric === "rate") {
           return {
-            text: area.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(area.supportedAsylumRate)} / 10k`,
+            text: area.supportedAsylumRate === null ? "Rate n/a" : `${formatRatePer10k(area.supportedAsylumRate)} / 10k`,
             tone: "teal" as const
           };
         }
@@ -949,7 +946,7 @@ const payload = JSON.stringify({
       const buildSubregionMetricChip = (subregion: SubregionPayload) => {
         if (currentMetric === "rate") {
           return {
-            text: subregion.supportedAsylumRate === null ? "Rate n/a" : `${formatNumber(subregion.supportedAsylumRate)} / 10k`,
+            text: subregion.supportedAsylumRate === null ? "Rate n/a" : `${formatRatePer10k(subregion.supportedAsylumRate)} / 10k`,
             tone: "teal" as const
           };
         }
@@ -986,7 +983,7 @@ const payload = JSON.stringify({
 
       const formatMetricValue = (area: AreaPayload) => {
         if (currentMetric === "rate") {
-          return area.supportedAsylumRate === null ? "n/a" : formatNumber(area.supportedAsylumRate);
+          return area.supportedAsylumRate === null ? "n/a" : formatRatePer10k(area.supportedAsylumRate);
         }
 
         if (currentMetric === "hotel") {
@@ -1174,7 +1171,7 @@ const payload = JSON.stringify({
                   : "None"
               : subregion.supportedAsylumRate === null
                 ? "n/a"
-                : formatNumber(subregion.supportedAsylumRate),
+                : formatRatePer10k(subregion.supportedAsylumRate),
             currentMetric === "hotel" ? subregion.hotelSignalLabel : "per 10,000 residents"
           );
           return;
@@ -1209,7 +1206,7 @@ const payload = JSON.stringify({
                 : "None"
             : area.supportedAsylumRate === null
               ? "n/a"
-              : formatNumber(area.supportedAsylumRate),
+              : formatRatePer10k(area.supportedAsylumRate),
           currentMetric === "hotel" ? area.hotelSignalLabel : "per 10,000 residents"
         );
       };
@@ -1426,7 +1423,7 @@ const payload = JSON.stringify({
           const titleNode = document.createElementNS(SVG_NS, "title");
           const valueLabel =
             currentMetric === "rate"
-              ? `${formatNumber(metricValue)} per 10,000`
+              ? `${formatRatePer10k(metricValue)} per 10,000`
               : currentMetric === "hotel"
                 ? areaMeta.hotelSignalLabel
                 : `${formatInteger(metricValue)} on support`;

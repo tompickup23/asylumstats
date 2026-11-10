@@ -1,3 +1,4 @@
+import { formatRatePer10k } from "./rate-format";
 import { getPercentileRank } from "./route-analytics";
 import type { LocalRouteAreaSummary } from "./route-data";
 import { buildPlacePath } from "./site-identity";
@@ -60,7 +61,7 @@ function toPeople(value: number): string {
 }
 
 function toRate(value: number): string {
-  return `${value.toFixed(2).replace(/\.00$/, "")} per 10,000`;
+  return `${formatRatePer10k(value)} per 10,000`;
 }
 
 function buildRows(

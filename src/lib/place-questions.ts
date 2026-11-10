@@ -1,3 +1,4 @@
+import { formatRatePer10k } from "./rate-format";
 /**
  * The questions a place page answers, in the words people search.
  *
@@ -69,7 +70,7 @@ export function buildPlaceQuestions(input: PlaceQuestionInput): AskedAndAnswered
     items.push({
       question: `How many asylum seekers per 10,000 people are in ${areaName}?`,
       answer:
-        `${ratePer10k.toLocaleString("en-GB")} per 10,000 residents, which places ${areaName} ` +
+        `${formatRatePer10k(ratePer10k)} per 10,000 residents, which places ${areaName} ` +
         `in the ${formatOrdinal(ratePercentile)} percentile of UK local authorities. ` +
         `${heavier
           ? `It carries more people on asylum support per head than ${ratePercentile}% of the country.`
