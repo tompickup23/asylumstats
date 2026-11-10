@@ -540,7 +540,7 @@ const datasetStructuredData = [
 
     fetch("/search-index.json")
       .then((r) => r.json())
-      .then((data) => { areas = Array.isArray(data) ? data : data.areas || []; })
+      .then((list) => { areas = list.filter((e: { kind?: string; areaName?: unknown }) => e.kind === "place" && typeof e.areaName === "string"); })
       .catch(() => {});
 
     searchInput.addEventListener("input", () => {
