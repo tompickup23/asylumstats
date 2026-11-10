@@ -51,6 +51,7 @@ import {
   getPercentileRank
 } from "../../lib/route-analytics";
 import { buildPlaceDescription, buildPlaceTitle } from "../../lib/serp";
+import { changeFirstLine, changeSourceLine, changeTitleClause, releaseChange } from "../../lib/release-change";
 import { buildPlaceQuestions } from "../../lib/place-questions";
 import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
 
@@ -107,6 +108,8 @@ const pathwayBreakdown = [
 const maxPathwayValue = Math.max(...pathwayBreakdown.map((item) => item.value), 1);
 
 const areaTrend = getAreaTrendSummary(area.areaCode);
+// Change since the previous Home Office release, both counts from Reg_02 (R505).
+const sinceLastRelease = releaseChange(area.areaCode);
 const schoolValidation = (schoolValidationData as any).areas?.find((a: any) => a.areaCode === area.areaCode);
 
 const regionalPrimeProviderCoverage = getAreaRegionalPrimeProviderCoverage(
@@ -306,7 +309,7 @@ const areaCountyName =
 ---
 
 <BaseLayout
-  title={buildPlaceTitle({ areaName: area.areaName, supportedAsylum: area.supportedAsylum })}
+  title={buildPlaceTitle({ areaName: area.areaName, supportedAsylum: area.supportedAsylum, change: changeTitleClause(sinceLastRelease) })}
   brandTitle={false}
   description={pageDescription}
   image={`/og/places/${slugifyAreaName(area.areaName)}.png`}
@@ -324,6 +327,8 @@ const areaCountyName =
     <section class="page-head">
       <span class="kicker">{area.regionName}</span>
       <h1>{area.areaName}</h1>
+      <p class="release-change">{changeFirstLine(sinceLastRelease)}</p>
+      <p class="release-change-source tiny">{changeSourceLine(sinceLastRelease)}</p>
       <div class="page-head-meta">
         <DataFreshness
           {...freshness}
