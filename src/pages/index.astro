@@ -6,6 +6,7 @@ import ShareButton from "../components/ShareButton.astro";
 import SisterSiteTeaser from "../components/SisterSiteTeaser.astro";
 import { getPlaceDirectory } from "../lib/place-directory";
 import { loadLocalRouteLatest, loadRouteDashboard } from "../lib/route-data";
+import { formatRatePer10k } from "../lib/rate-format";
 import { loadMoneyLedger } from "../lib/money-data";
 import { getSignificantDemographicShifts, getEthnicProjection, areasBelowFiftyBy, nationalWhiteBritishShare, distinctAreaCodes, countAreasAbove } from "../lib/ethnic-projections";
 import { getLikeForLikeQuarter, getYearEndingComparison } from "../lib/route-analytics";
@@ -620,7 +621,7 @@ const heroStats = [
         <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="area-row">
           <span class="area-rank">{i + 1}</span>
           <span class="area-name">{area.areaName}</span>
-          <span class="area-rate">{area.supportedAsylumRate?.toFixed(1)}</span>
+          <span class="area-rate">{formatRatePer10k(area.supportedAsylumRate)}</span>
           <span class="area-total">{fmtInt(area.supportedAsylum)}</span>
         </a>
       ))}
@@ -640,7 +641,7 @@ const heroStats = [
         <a href={region.regionPath} class="region-card">
           <span class="region-name">{region.regionName}</span>
           <span class="region-stat">{fmtInt(region.supportedAsylum)}</span>
-          <span class="region-rate">{region.supportedAsylumRate?.toFixed(1) ?? "-"} per 10,000</span>
+          <span class="region-rate">{formatRatePer10k(region.supportedAsylumRate)} per 10,000</span>
         </a>
       ))}
     </div>

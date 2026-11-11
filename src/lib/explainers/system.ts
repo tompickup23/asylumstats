@@ -4,6 +4,7 @@
  * composed from the marts, so the next refresh rewrites it.
  */
 import { loadRouteDashboard, loadLocalRouteLatest, type RouteSeriesPoint } from "../route-data";
+import { formatRatePer10k } from "../rate-format";
 import { buildPlacePath } from "../site";
 import {
   fmtInt,
@@ -124,7 +125,7 @@ function howManyAsylumSeekers(): Explainer {
         name: area.areaName,
         href: buildPlacePath(area),
         value: fmtInt(area.supportedAsylum),
-        detail: area.supportedAsylumRate !== null ? `${area.supportedAsylumRate.toFixed(1)} per 10,000` : undefined
+        detail: area.supportedAsylumRate !== null ? `${formatRatePer10k(area.supportedAsylumRate)} per 10,000` : undefined
       }))
     },
     relatedFindings: ["concentration-top-10-areas", "north-west-one-in-five", "hotel-budget-share"],
