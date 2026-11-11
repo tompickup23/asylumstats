@@ -7,7 +7,7 @@ import { buildAreaCostDataset, AREA_COST_CSV_PATH, AREA_COST_METADATA_PATH } fro
 import { getAllAreaCosts } from "../lib/area-cost";
 const description = "Compare asylum support, annualised priced subtotals and relative burden across UK local authorities. See missing costs, hotel-rate scenarios and source dates.";
 ---
-<BaseLayout title="Asylum costs by town" description={description} image="/og/cost.png" structuredData={[buildAreaCostDataset(description)]}>
+<BaseLayout title="Asylum costs by council: every UK local authority" description={description} image="/og/cost.png" structuredData={[buildAreaCostDataset(description)]}>
   <section class="section" id="cost-overview">
     <p class="eyebrow">Home Office accommodation and support</p>
     <h1>Asylum costs by town</h1>
@@ -16,7 +16,7 @@ const description = "Compare asylum support, annualised priced subtotals and rel
     <div class="cost-actions">
       <a class="cta-btn" href={AREA_COST_CSV_PATH} download>Download all inputs and results as CSV</a>
       <a href={AREA_COST_METADATA_PATH}>Sources and notes for the CSV</a>
-      <ShareButton url="https://asylumstats.co.uk/cost/" title="Asylum costs by town" text="Compare priced components, hotel-rate scenarios and relative burden. Every figure dated and sourced." />
+      <ShareButton url="https://asylumstats.co.uk/cost/" title="Asylum costs by council: every UK local authority" text="Compare priced components, hotel-rate scenarios and relative burden. Every figure dated and sourced." />
     </div>
     <CostSources />
     <CostTable />

@@ -50,7 +50,7 @@ import {
   getDistributionStats,
   getPercentileRank
 } from "../../lib/route-analytics";
-import { buildPlaceDescription, buildPlaceTitle } from "../../lib/serp";
+import { buildPlaceDescription, buildPlaceTitle, longDate, shortPeriod } from "../../lib/serp";
 import { changeFirstLine, changeSourceLine, changeTitleClause, releaseChange } from "../../lib/release-change";
 import { buildPlaceQuestions } from "../../lib/place-questions";
 import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
@@ -261,6 +261,7 @@ const pageDescription = buildPlaceDescription({
   areaCount: localRouteLatest.areas.length,
   ratePer10k: area.supportedAsylumRate,
   contingencyAccommodation: area.contingencyAccommodation,
+  asAt: localRouteLatest.snapshotDate ? longDate(localRouteLatest.snapshotDate) : null,
   // Never named here. The search result shows the support count, and a named individual
   // and a headline figure never share an asset (house rule; Tom, 4 November 2026). The
   // MP card stays in the page body, where it sits as the area's representative.
@@ -310,7 +311,7 @@ const areaCountyName =
 ---
 
 <BaseLayout
-  title={buildPlaceTitle({ areaName: area.areaName, supportedAsylum: area.supportedAsylum, change: changeTitleClause(sinceLastRelease) })}
+  title={buildPlaceTitle({ areaName: area.areaName, supportedAsylum: area.supportedAsylum, change: changeTitleClause(sinceLastRelease), period: localRouteLatest.snapshotDate ? shortPeriod(localRouteLatest.snapshotDate) : null })}
   brandTitle={false}
   description={pageDescription}
   image={`/og/places/${slugifyAreaName(area.areaName)}.png`}

@@ -1,8 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
-  pixelWidth, titleWidth, descriptionWidth, firstThatFits,
-  buildPlaceTitle, buildPlaceDescription,
-  TITLE_LIMIT_PX, DESCRIPTION_LIMIT_PX, BRAND_SUFFIX
+  pixelWidth, titleWidth, descriptionWidth, firstThatFits, buildPlaceTitle, buildPlaceDescription, TITLE_LIMIT_PX, DESCRIPTION_LIMIT_PX, BRAND_SUFFIX, commonAreaName, shortPeriod, longDate
 } from "../src/lib/serp";
 import { loadLocalRouteLatest } from "../src/lib/route-data";
 
@@ -101,5 +99,69 @@ describe("place descriptions", () => {
     });
     expect(d).toContain("333 people");
     expect(d).toContain("93rd highest");
+  });
+});
+
+describe("common names and the data date", () => {
+  const data = loadLocalRouteLatest();
+  const period = shortPeriod(data.snapshotDate ?? "2026-06-30");
+  const asAt = longDate(data.snapshotDate ?? "2026-06-30");
+
+  it("writes the name people type, and leaves ambiguous names alone", () => {
+    expect(commonAreaName("Glasgow City")).toBe("Glasgow");
+    expect(commonAreaName("Kingston upon Hull, City of")).toBe("Hull");
+    expect(commonAreaName("Bristol, City of")).toBe("Bristol");
+    expect(commonAreaName("City of Edinburgh")).toBe("Edinburgh");
+    // Two Newcastles are in the data, and the City of London is not London.
+    expect(commonAreaName("Newcastle upon Tyne")).toBe("Newcastle upon Tyne");
+    expect(commonAreaName("City of London")).toBe("City of London");
+  });
+
+  it("never maps two areas in the data to one name", () => {
+    const names = data.areas.map((a) => commonAreaName(a.areaName));
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it("formats the period and the date from an ISO date", () => {
+    expect(shortPeriod("2026-06-30")).toBe("Jun 2026");
+    expect(longDate("2026-09-30")).toBe("30 September 2026");
+  });
+
+  it("fits every dated title, keeps the count, and dates most of them", () => {
+    for (const change of ["up 16 since March", "down 1,204 since December", "unchanged since September", null]) {
+      const titles = data.areas.map((a) =>
+        buildPlaceTitle({ areaName: a.areaName, supportedAsylum: a.supportedAsylum, change, period })
+      );
+      expect(titles.filter((t) => titleWidth(t) > TITLE_LIMIT_PX)).toEqual([]);
+      expect(titles.filter((t) => !/\d/.test(t))).toEqual([]);
+    }
+    // A long clause ("down 1,204 since December") rightly pushes the date out; the
+    // everyday ones must not.
+    for (const change of ["up 16 since March", null]) {
+      const dated = data.areas
+        .map((a) => buildPlaceTitle({ areaName: a.areaName, supportedAsylum: a.supportedAsylum, change, period }))
+        .filter((t) => t.includes(period));
+      expect(dated.length / data.areas.length).toBeGreaterThan(0.6);
+    }
+  });
+
+  it("uses the common name in the title and the description", () => {
+    const title = buildPlaceTitle({ areaName: "Glasgow City", supportedAsylum: 3938, change: "up 68 since March", period });
+    expect(title).toContain("Glasgow?");
+    expect(title).not.toContain("Glasgow City");
+    const description = buildPlaceDescription({
+      areaName: "Kingston upon Hull, City of", supportedAsylum: 522, rank: 57, areaCount: 361, ratePer10k: 19.1, asAt
+    });
+    expect(description).toContain(`in Hull at ${asAt}`);
+  });
+
+  it("fits every dated description", () => {
+    const over = data.areas
+      .map((a, i) => buildPlaceDescription({
+        areaName: a.areaName, supportedAsylum: a.supportedAsylum, rank: i + 1, areaCount: data.areas.length,
+        ratePer10k: a.supportedAsylumRate, contingencyAccommodation: a.contingencyAccommodation, asAt
+      }))
+      .filter((d) => descriptionWidth(d) > DESCRIPTION_LIMIT_PX);
+    expect(over).toEqual([]);
   });
 });
