@@ -1,0 +1,326 @@
+---
+// The search band at the top of /places/: heading, one line, the lookup and two links.
+// The lookup reads /search-index.json, which holds four kinds of entry; only places carry
+// areaName, so the script narrows on kind first.
+interface Props {
+  placeCount: number;
+}
+const { placeCount } = Astro.props;
+---
+
+<!-- SEARCH-FIRST: Find your area. The heading and one line, then the search band. -->
+<section id="place-search" class="section section-anchor priority-section places-finder">
+  <div class="places-finder-head">
+    <h1>Find your area</h1>
+    <p class="lede">{placeCount} local authorities. Asylum support for every one; demographic, religion and socioeconomic data where the source covers it.</p>
+  </div>
+  <div class="places-finder-band">
+    <div class="lookup-field">
+      <svg class="places-finder-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+        <path d="M20 20l-3.6-3.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      <input
+        type="search"
+        id="place-search-input"
+        placeholder="Type a council name, for example Birmingham, Burnley or Glasgow"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <div class="lookup-results" id="place-search-results"></div>
+    </div>
+    <div class="chip-row places-finder-links">
+      <a href="/regional/" class="source-pill">Browse by region</a>
+      <a href="/national/" class="source-pill">National overview</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const searchInput = document.getElementById("place-search-input") as HTMLInputElement | null;
+  const resultsContainer = document.getElementById("place-search-results");
+
+  if (searchInput && resultsContainer) {
+    let areas: Array<{ areaCode: string; areaName: string; regionName: string; supportedAsylum: number }> = [];
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((list) => { areas = list.filter((e: { kind?: string; areaName?: unknown }) => e.kind === "place" && typeof e.areaName === "string"); })
+      .catch(() => {});
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      resultsContainer.innerHTML = "";
+      if (query.length < 2) { resultsContainer.hidden = true; return; }
+
+      const matches = areas.filter((a) => a.areaName.toLowerCase().includes(query)).slice(0, 8);
+      if (matches.length === 0) { resultsContainer.hidden = true; return; }
+
+      resultsContainer.hidden = false;
+      for (const area of matches) {
+        const link = document.createElement("a");
+        link.href = `/places/${area.areaName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}/`;
+        link.className = "lookup-result";
+        link.innerHTML = `<strong>${area.areaName}</strong><span>${area.regionName} · ${area.supportedAsylum.toLocaleString()} on support</span>`;
+        resultsContainer.appendChild(link);
+      }
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { resultsContainer.hidden = true; searchInput.value = ""; }
+    });
+  }
+</script>
+
+<style>
+  /* The finder is flat: a heading, one line, then one search band. The section keeps its
+     priority-section class for the layout specs, so the global panel treatment is undone
+     here rather than renamed away. */
+  section.priority-section.places-finder {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  section.priority-section.places-finder::before {
+    display: none;
+  }
+
+  .places-finder-head {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .places-finder-head h1 {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+
+  .places-finder-head .lede {
+    max-width: 65ch;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* One quiet band: the input and two neutral chips, no panel inside it. */
+  .places-finder-band {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-subtle);
+  }
+
+  .places-finder-band .lookup-field {
+    position: relative;
+    flex: 1 1 26rem;
+    min-width: 0;
+  }
+
+  .places-finder-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.95rem;
+    color: var(--text-faint);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .places-finder-band input {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.8rem 1rem 0.8rem 2.75rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .places-finder-band input::placeholder {
+    color: var(--text-faint);
+  }
+
+  .places-finder-band input:focus,
+  .places-finder-band input:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
+  .places-finder-band .lookup-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    left: 0;
+    z-index: 50;
+    display: grid;
+    max-height: 22rem;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+
+  .places-finder-band .lookup-results:empty,
+  .places-finder-band .lookup-results[hidden] {
+    display: none;
+  }
+
+  /* Result rows are written by the inline script, so they carry no scope attribute. */
+  .places-finder-band :global(.lookup-result) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .places-finder-band :global(.lookup-result:last-child) {
+    border-bottom: 0;
+  }
+
+  .places-finder-band :global(.lookup-result:hover),
+  .places-finder-band :global(.lookup-result:focus-visible) {
+    background: var(--accent-wash);
+    outline-offset: -3px;
+  }
+
+  .places-finder-band :global(.lookup-result strong) {
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+
+  .places-finder-band :global(.lookup-result span) {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  /* Neutral chips: a hairline and muted text, never a tint. */
+  .places-finder-links {
+    flex: 0 0 auto;
+    gap: 0.5rem;
+  }
+
+  .places-finder-links .source-pill {
+    min-height: 40px;
+    padding: 0 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transform: none;
+  }
+
+  .places-finder-links .source-pill:hover,
+  .places-finder-links .source-pill:focus-visible {
+    border-color: var(--border-strong);
+    background: var(--accent-wash);
+    color: var(--text);
+    transform: none;
+  }
+
+  /* The jump links sit under the band as one quiet line, not a second panel. The nav
+     comes from PageContents, which other pages share, so it is reached as a later sibling
+     (the lookup script renders between the two, so the adjacent combinator would miss). */
+  .places-finder ~ :global(nav.page-contents) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1.25rem;
+    margin-top: 0.6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .places-finder ~ :global(nav.page-contents) > :global(.tiny) {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .places-finder ~ :global(nav.page-contents) :global(.page-contents-links) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .places-finder ~ :global(nav.page-contents.priority) :global(.page-contents-links) :global(a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .places-finder ~ :global(nav.page-contents.priority) :global(.page-contents-links) :global(a:hover),
+  .places-finder ~ :global(nav.page-contents.priority) :global(.page-contents-links) :global(a:focus-visible) {
+    background: none;
+    color: var(--accent);
+  }
+
+  .places-finder ~ :global(nav.page-contents.priority) :global(.page-contents-links) :global(a) :global(.page-contents-step) {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  @media (max-width: 640px) {
+    section.priority-section.places-finder {
+      margin-top: 0.25rem;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .places-finder-band {
+      padding: 0.85rem;
+    }
+
+    .places-finder-band input {
+      font-size: 1rem;
+    }
+  }
+</style>

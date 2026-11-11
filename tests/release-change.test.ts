@@ -215,8 +215,9 @@ describe.skipIf(!built)("built place pages", () => {
     let read = 0;
     for (const name of pages) {
       const html = readFileSync(join(DIST, name, "index.html"), "utf8");
-      const head = /<section class="page-head">([\s\S]*?)<\/section>/.exec(html)?.[1];
-      if (!head || !html.includes("<h1>")) continue;
+      const head = /<section class="page-head(?: [^"]*)?"[^>]*>([\s\S]*?)<\/section>/.exec(html)?.[1];
+      // Place pages only: /places/counties/ and the finder share the folder.
+      if (!head || !html.includes('id="place-summary"')) continue;
       const first = /<p class="release-change"[^>]*>([\s\S]*?)<\/p>/.exec(head)?.[1]?.replace(/<[^>]+>/g, "");
       expect(first, name).toBeTruthy();
       expect(first, name).toMatch(/on asylum support at|No published count/);

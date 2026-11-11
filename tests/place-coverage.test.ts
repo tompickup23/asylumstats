@@ -35,7 +35,7 @@ describe("place page coverage", () => {
   it("advertises the built count rather than a hardcoded one", () => {
     // A bare three-digit number next to "areas" or "local authorit..." is how the stale
     // 361 and 307 survived. Catch the pattern, not the specific values.
-    const pages = ["src/pages/index.astro", "src/pages/places/index.astro"];
+    const pages = ["src/pages/index.astro", "src/pages/places/index.astro", "src/components/PlacesFinder.astro"];
     for (const page of pages) {
       const source = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
       const hardcoded = source.match(/\b\d{3}\s+(?:areas|local authorit)/gi) ?? [];

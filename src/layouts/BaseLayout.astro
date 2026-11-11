@@ -1,6 +1,12 @@
 ---
 import SiteHeader from "../components/SiteHeader.astro";
 import "../styles/global.css";
+// The three faces every first screen uses. Preloaded so they arrive before first paint:
+// found by CSS alone they started about 1.4 seconds in on a place page, and the swap
+// re-wrapped the heading and contents and shifted the layout (CLS 0.45 at 1440).
+import serif600Url from "@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url";
+import sans400Url from "@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url";
+import sans600Url from "@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2?url";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SOCIAL_IMAGE_PATH,
@@ -140,6 +146,9 @@ const structuredData = [
     <meta name="twitter:image" content={socialImageUrl} />
     <meta name="twitter:image:alt" content={`${pageTitle}. asylumstats.co.uk`} />
     <title>{pageTitle}</title>
+    {[serif600Url, sans400Url, sans600Url].map((href) => (
+      <link rel="preload" as="font" type="font/woff2" href={href} crossorigin="anonymous" />
+    ))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="asylumstats: findings and data releases" href="/feed.xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />

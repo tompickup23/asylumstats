@@ -114,7 +114,7 @@ const sections = [
   title="UK asylum statistics: the national picture"
   description={`UK asylum system: ${latestQuarter.supportedAsylum.toLocaleString()} on support, ${latestQuarter.awaitingInitialDecision.toLocaleString()} awaiting decision, ${fmtGbp(dailyCostGbp)}/day on hotels.`}
 >
-  <section class="page-top">
+  <section class="page-top national-top">
     <section class="page-head">
       <span class="kicker">National</span>
       <h1>The national asylum picture</h1>
@@ -133,15 +133,15 @@ const sections = [
       </div>
     </div>
     <div class="stats-grid">
-      <article class="stat-card stat-card--accent">
+      <article class="stat-card">
         <span class="stat-value">{latestQuarter.supportedAsylum.toLocaleString()}</span>
         <span class="stat-label">On asylum support</span>
       </article>
-      <article class="stat-card stat-card--warn">
+      <article class="stat-card">
         <span class="stat-value">{latestQuarter.awaitingInitialDecision.toLocaleString()}</span>
         <span class="stat-label">Awaiting decision</span>
       </article>
-      <article class="stat-card stat-card--critical">
+      <article class="stat-card">
         <span class="stat-value">{latestQuarter.hotelAccommodation.toLocaleString()}</span>
         <span class="stat-label">In hotels</span>
       </article>
@@ -151,12 +151,12 @@ const sections = [
       </article>
     </div>
 
-    <div class="story-grid" style="margin-top: 1.5rem;">
+    <div class="stats-grid">
       {stockFlowCards.slice(0, 4).map((card) => (
-        <article class="story-card">
-          <span class="tiny">{card.label}</span>
-          <strong style="font-size: 1.4rem;">{card.value.toLocaleString()}{card.valueSuffix ?? ""}</strong>
-          <p class="tiny" style="opacity: 0.6;">{card.period}</p>
+        <article class="stat-card">
+          <span class="stat-value">{card.value.toLocaleString()}{card.valueSuffix ?? ""}</span>
+          <span class="stat-label">{card.label}</span>
+          <span class="stat-meta">{card.period}</span>
         </article>
       ))}
     </div>
@@ -483,33 +483,155 @@ const sections = [
   </section>
 </BaseLayout>
 
+<style is:global>
+  /* The sections list on this page only: one quiet row of neutral chips under a
+     hairline, not a tinted panel. Keyed to .national-top so no other page changes. */
+  .national-top + .page-contents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: 1.25rem;
+    padding: 0 0 1.25rem;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .national-top + .page-contents > .tiny {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .national-top + .page-contents .page-contents-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    overflow: visible;
+    padding: 0;
+  }
+  .national-top + .page-contents .page-contents-links a {
+    min-height: 40px;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  .national-top + .page-contents .page-contents-links a:hover,
+  .national-top + .page-contents .page-contents-links a:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
+  .national-top + .page-contents .page-contents-step {
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+</style>
+
 <style>
+  /* Open page top: the heading sits on the page ground, not in a card. */
+  .national-top .page-head {
+    gap: 0.75rem;
+    padding: 0.5rem 0 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .national-top .page-head::after {
+    display: none;
+  }
+  .national-top .kicker {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    letter-spacing: 0.14em;
+  }
+  .national-top .page-head h1 {
+    max-width: 30ch;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  .national-top .page-head p {
+    max-width: 65ch;
+  }
+
+  /* One stat tile for both rows of the overview: value, label, then date, stacked. */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
   }
   .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.3rem;
+    padding: 1.1rem 1.25rem 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--accent-wash);
   }
   .stat-value {
+    color: var(--text);
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
     font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums lining-nums;
   }
   .stat-label {
-    font-size: 0.8rem;
     color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.35;
   }
-  .stat-card--accent { border-left: 3px solid var(--accent); }
-  .stat-card--warn { border-left: 3px solid var(--warning); }
-  .stat-card--critical { border-left: 3px solid var(--critical); }
+  .stat-meta {
+    color: var(--text-faint);
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  @media (max-width: 760px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    .stat-card {
+      padding: 0.9rem 1rem;
+    }
+  }
+
+  /* The grant rate toggle had no styles here, so its two labels ran together. */
+  .grant-rate-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .grant-rate-toggle .tab-btn {
+    min-height: 40px;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .grant-rate-toggle .tab-btn.active {
+    border-color: var(--accent);
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
 
   .findings-grid {
     display: grid;
