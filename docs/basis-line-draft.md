@@ -1,6 +1,6 @@
 # Draft: basis line under the true-cost headline
 
-Status: **wording chosen by Tom on 3 November 2026: the recommended version below. Still not on the site.** It goes live only after PR 147 lands and `/present-check` has run, in a separate PR that waits for Tom's yes. Tom decided on 3 November 2026 to leave the like-for-like clause out. Drafted 3 November 2026 through the fact-check protocol (`/fact-check`); every figure below is quoted from the document itself, with its page.
+Status: **on the page since 11 November 2026**, as the third paragraph of `src/content/findings/true-cost-of-asylum.md`, after the paragraph that states the £7.8 billion (the opening paragraph already leads with the £4,181 million). Wording chosen by Tom on 3 November 2026: the recommended version below, unchanged. What follows is the record as drafted. It goes live only after PR 147 lands and `/present-check` has run, in a separate PR that waits for Tom's yes. Tom decided on 3 November 2026 to leave the like-for-like clause out. Drafted 3 November 2026 through the fact-check protocol (`/fact-check`); every figure below is quoted from the document itself, with its page.
 
 Where it would go: `src/content/findings/true-cost-of-asylum.md`, as the first paragraph under the H1 "What asylum costs: £197 per income taxpayer a year, in a range of £178 to £215", above the dated correction notes (PR 147 moves those notes below the answer; this line should land after PR 147 to avoid a conflict).
 
