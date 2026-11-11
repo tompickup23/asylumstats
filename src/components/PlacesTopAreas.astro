@@ -1,0 +1,194 @@
+---
+// "Top areas by asylum support" on /places/: one link card per area, the support figure
+// as the hero number and the rate and hotel line on a hairline below.
+import type { getPlaceDirectory } from "../lib/place-directory";
+import { formatRatePer10k } from "../lib/rate-format";
+import { buildPlacePath } from "../lib/site";
+
+interface Props {
+  places: ReturnType<typeof getPlaceDirectory>["featuredAreas"];
+}
+const { places } = Astro.props;
+---
+
+<section id="featured-places" class="section section-anchor places-top">
+  <div class="section-head">
+    <div>
+      <h2>Top areas by asylum support</h2>
+    </div>
+    <a class="places-text-link" href="/compare#compare-findings">Open the advanced compare surface</a>
+  </div>
+  <div class="place-grid">
+    {places.map((row) => (
+      <article class="place-card">
+        <div class="chip-row place-card-meta">
+          <span class="chip">UK rank {row.nationalRank.toLocaleString()}</span>
+          <span class="chip">{row.area.regionName}</span>
+          {row.hotelSignal !== "none" && (
+            <span class="chip place-card-signal">
+              {row.hotelSignal === "named" ? "Named hotel evidence" : "Unnamed hotel evidence"}
+            </span>
+          )}
+        </div>
+        <h3>
+          <a href={buildPlacePath(row.area)}>{row.area.areaName}</a>
+        </h3>
+        <p class="place-card-figure">
+          <strong>{row.area.supportedAsylum.toLocaleString()}</strong> people on asylum support at quarter end, with{" "}
+          {row.area.contingencyAccommodation.toLocaleString()} in contingency accommodation.
+        </p>
+        <p class="tiny">
+          Rate {formatRatePer10k(row.area.supportedAsylumRate)} per 10,000 residents. Hotels: {row.hotelSummary}.
+        </p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .places-text-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    text-underline-offset: 4px;
+  }
+
+  .places-text-link:hover,
+  .places-text-link:focus-visible {
+    text-decoration-color: currentColor;
+  }
+
+  /* Top areas: each card is one link (the area name stretched over the card), with the
+     support figure as the hero number and the footnote on a hairline. */
+  .places-top .place-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+    gap: 1rem;
+  }
+
+  .places-top .place-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.15rem 1.2rem 1.1rem;
+    overflow: visible;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-soft);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transform: none;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .places-top .place-card:hover,
+  .places-top .place-card:focus-within {
+    border-color: var(--border-strong);
+    background: var(--accent-wash);
+    box-shadow: var(--shadow-soft);
+    transform: none;
+  }
+
+  .places-top .place-card-meta {
+    gap: 0.3rem 0.6rem;
+  }
+
+  .places-top .place-card-meta .chip {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-top .place-card-meta .chip + .chip {
+    padding-left: 0.6rem;
+    border-left: 1px solid var(--border-strong);
+  }
+
+  .places-top .place-card-meta .place-card-signal {
+    color: var(--text);
+  }
+
+  .places-top .place-card h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .places-top .place-card h3 a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .places-top .place-card h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .places-top .place-card:hover h3 a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .places-top .place-card h3 a:focus-visible {
+    outline: none;
+  }
+
+  .places-top .place-card h3 a:focus-visible::after {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .places-top .place-card-figure {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .places-top .place-card-figure strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 2.3vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .places-top .place-card .tiny {
+    margin-top: auto;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  @media (max-width: 640px) {
+    .places-top .place-card {
+      padding: 1rem 1.05rem;
+    }
+  }
+</style>
