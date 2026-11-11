@@ -148,7 +148,7 @@ The true-cost page (`src/content/findings/true-cost-of-asylum.md`, `src/lib/true
 |---|---|---|---|
 | 1. Data committed | "Test the refreshed data" then "Commit and push updated data" | Both `success`. A commit on main titled `data: refresh tribunal + route + small boats + hotel + money data <date>` | Tests failed: data parked on a `data/refresh-failed-*` branch and a `refresh-failed` issue opened; live keeps the last data that passed. "Only run timestamps moved" in "Check for data changes" means the release was not yet found, and nothing is committed |
 | 2. Deploy dispatched | "Deploy the refreshed data", then a separate `deploy.yml` run | Step `success`, and a `deploy.yml` run started by `workflow_dispatch` that ends `success` | Deploy failed: a `deploy-failed` issue. Live is behind main |
-| 3. Strict audit | "Fail if a source is past its next edition", and "Fail if a secondary source was skipped" | Both `success` | A source is past its next edition (read the step log for its name), or hotels, regional sources, Home Office spend or asylum finance did not run. Data from outcome 1 is already live; this is a warning, not a lost release |
+| 3. Strict audit | "Fail if a source is past its next edition", and "Fail if a secondary source was skipped" | Both `success` | A source is past its next edition (read the step log for its name), or tribunals, hotels, regional sources, Home Office spend or asylum finance did not run. Data from outcome 1 is already live; this is a warning, not a lost release. A parked tribunal edition also opens a `tribunals-parked` issue (section 7) |
 
 Commands:
 
@@ -200,7 +200,7 @@ Tom alone: the go-ahead to dispatch, merges, and anything said publicly about th
 ### After the day
 
 - Monday 30 November: the scheduled run should be green on all three outcomes. Red on outcome 3 with `mhclg_homelessness` named means section 3's manifest step was missed.
-- 10 December: tribunals and the revenue outturn second release (sections 1 and 3). **`tests/tribunal-appeals.test.ts` pins the April to June 2026 edition** (its title, dates and "Q1 2026/27"), so the first refresh to fetch the July to September tribunal tables will fail it and park. Fix it before 10 December.
+- 10 December: tribunals and the revenue outturn second release (sections 1 and 3). The tribunal tests no longer pin an edition (PR 162). The transform still does, on purpose: its reconciliation anchors in `scripts/transform/transform-tribunals.mjs` are figures a person read off the April to June 2026 MOJ tables, and it refuses the July to September edition until they are re-read. Since 10 November 2026 that refusal parks tribunals alone: the refresh puts back the held edition, commits and deploys everything else, opens a `tribunals-parked` issue and ends red. **Hand step on 10 December**: read the new figures off the MOJ main tables (FIA_1 to FIA_4, T_1, T_2), replace the expected values, move `ANCHORS_RECORDED_FOR` to Q2 2026/27, run `npm run ingest:tribunals` and `npm test`, open a PR, close the issue. Never copy the figures from the parse output.
 
 ## 8. Reuse
 
@@ -253,7 +253,7 @@ From a fresh checkout with social cards, the measured steps add up to about 21 m
 4. The first version of the built-page check read the `/places/<code>/` redirect stubs as place pages. Fixed in the check; the site was right.
 5. A local run writes absolute paths into the regional sources manifest. Never commit a local run's data.
 6. `tests/findings-figures.test.ts` requires the Blackburn finding's "at 30 June 2026" sentence to be the latest quarter. When the area series moves on, that test fails and parks a refresh until the prose is rewritten. Hand step, section 7.
-7. `tests/tribunal-appeals.test.ts` pins the April to June 2026 tribunal edition. Not a 26 November problem; it will park the first refresh after 10 December (section 7, after the day).
+7. `tests/tribunal-appeals.test.ts` pinned the April to June 2026 tribunal edition. Replaced with shape checks in PR 162 (10 November 2026); the transform's anchors still need a hand update on 10 December, and now park tribunals alone (section 7, after the day).
 8. Built place pages already print "Next: 26 Nov 2026" (section 4, PR 150).
 
 **Hand steps left on the day:** the go-ahead to dispatch (Tom); the published grant rate for the new window; `statisticsStatus` and `nextEdition` in the housing manifest after the fetch; the Blackburn finding; re-reading the hand-written figures in section 5; merges (Tom).

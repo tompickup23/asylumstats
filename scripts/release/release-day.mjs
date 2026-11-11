@@ -64,7 +64,9 @@ function clearDist() {
 }
 
 const steps = [
-  { name: "Fetch and transform MOJ tribunals", kind: "core", cmd: ["npm", "run", "ingest:tribunals"] },
+  // Secondary since 10 Nov 2026, as in the workflow: a new MOJ edition fails the anchors by
+  // design and should park tribunals, not the Home Office release.
+  { name: "Fetch and transform MOJ tribunals", kind: "secondary", cmd: ["npm", "run", "ingest:tribunals"] },
   { name: "Fetch and transform routes", kind: "core", cmd: ["npm", "run", "ingest:routes"] },
   { name: `Routes files carry ${expect}`, kind: "core", fn: expectPeriod },
   { name: "Fetch and transform small boats", kind: "core", cmd: ["npm", "run", "ingest:smallboats"] },

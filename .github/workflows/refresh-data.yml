@@ -51,8 +51,31 @@ jobs:
       - run: npm ci
       # Tribunals must run before routes: the route dashboard's appeals block is built from
       # src/data/live/tribunal-appeals.json, so routes needs the refreshed file already on disk.
+      #
+      # continue-on-error, because this step is EXPECTED to fail once a quarter. The
+      # transform checks its parse against figures a person read off the MOJ tables for one
+      # edition (ANCHORS_RECORDED_FOR in scripts/transform/transform-tribunals.mjs) and
+      # refuses a new edition until someone re-reads them. That refusal is right, but it
+      # sat first in the job, so on 10 December 2026 it would have stopped routes, small
+      # boats and money too. Now it parks tribunals alone: the next step puts back the
+      # edition already held, and the gate at the bottom opens an issue and ends the run red.
+      # No GitHub event data is interpolated here.
       - name: Fetch and transform MOJ tribunals
+        id: tribunals
+        continue-on-error: true
         run: npm run ingest:tribunals
+      # The transform throws before it writes anything, so the held mart is intact. The
+      # fetch has already rewritten the tracked manifest to name the new edition, and the
+      # live copy routes reads is gitignored and only made by the transform. Without this
+      # the commit would claim an edition the site does not show, and routes would find no
+      # tribunal file and drop the appeals block from the route dashboard.
+      # No GitHub event data is interpolated here.
+      - name: Keep the held tribunal edition
+        if: steps.tribunals.outcome == 'failure'
+        run: |
+          git checkout -- data/raw/manifests/moj_tribunals.json
+          cp data/marts/moj_tribunals/tribunal-appeals.json src/data/live/tribunal-appeals.json
+          echo "Tribunals parked: the site keeps $(node -p "require('./data/marts/moj_tribunals/tribunal-appeals.json').release.title")."
       - name: Fetch and transform routes
         run: npm run ingest:routes
       # Small boats was missing from this workflow entirely, which is why the site's most
@@ -273,6 +296,32 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy.yml --ref main -f announce=true
 
+      # Tribunals parked: say so where someone will see it. One open issue, not one a run:
+      # a parked edition stays parked across every run until the anchors are re-read, and
+      # this workflow runs four times a week. Later runs add a comment with their link.
+      # No GitHub event data is interpolated here.
+      - name: Open an issue for parked tribunals
+        if: always() && steps.tribunals.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create tribunals-parked --color D93F0B --description "MOJ tribunal refresh waiting on a hand check" --force
+          open="$(gh issue list --label tribunals-parked --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "Still parked in $RUN_URL"
+            exit 0
+          fi
+          gh issue create --label tribunals-parked \
+            --title "MOJ tribunal refresh parked ($(date -u +%Y-%m-%d))" \
+            --body "The tribunal step failed, so the site keeps the edition it already held. Everything else in the run refreshed as normal.
+
+          Run: $RUN_URL
+
+          If the log says \"the expected failure on a new edition\": read the new figures off the MOJ main tables (the log names the page), replace the expected values in \`scripts/transform/transform-tribunals.mjs\`, move \`ANCHORS_RECORDED_FOR\` to the new quarter, run \`npm run ingest:tribunals\` and \`npm test\`, and open a PR. Do not copy the figures from the parse output: the point of them is that a person checked them against what MOJ published.
+
+          If it says the parse changed on the same edition, or the fetch failed, the parse or the network is the problem, not the release. See docs/release-day.md, section 7."
+
       # Last, and strict: the data above has already been committed, so this only
       # decides whether the run ends loudly. Every stale item found on 13 Aug 2026 had
       # slipped past this cron precisely because nothing compared next-edition dates
@@ -291,6 +340,7 @@ jobs:
           HOTELS_OUTCOME: ${{ steps.hotels.outcome }}
           HOSPEND_OUTCOME: ${{ steps.hospend.outcome }}
           ASYLUMFINANCE_OUTCOME: ${{ steps.asylumfinance.outcome }}
+          TRIBUNALS_OUTCOME: ${{ steps.tribunals.outcome }}
           DATATESTS_OUTCOME: ${{ steps.datatests.outcome }}
         run: |
           if [ "$DATATESTS_OUTCOME" = "failure" ]; then
@@ -309,6 +359,10 @@ jobs:
           fi
           if [ "$ASYLUMFINANCE_OUTCOME" = "failure" ]; then
             skipped="$skipped asylum-finance"
+          fi
+          if [ "$TRIBUNALS_OUTCOME" = "failure" ]; then
+            skipped="$skipped tribunals"
+            echo "Tribunals did NOT refresh. The site keeps the edition already held; see the tribunals-parked issue."
           fi
           if [ -n "$skipped" ]; then
             echo "Ingest failed:$skipped"
