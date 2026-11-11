@@ -191,7 +191,15 @@ export const SUPPORT_CHARGE = {
   bill: "https://bills.parliament.uk/bills/4254"
 };
 
-/** UK-France returns agreement, 6 August 2025 to 30 June 2026. */
+/**
+ * UK-France returns agreement, 6 August 2025 to 30 June 2026.
+ *
+ * The extension ran to 1 October 2026 and was not renewed. Home Office written answer
+ * HL4426, answered 3 November 2026: "The UK-France Treaty has ended and there are no
+ * current plans for the scheme to resume once operational activity has concluded."
+ * Written answer 32156 (19 October 2026) gives "Over 1,500" returned over the whole
+ * pilot: rounded and undated, so it is not held here as a figure.
+ */
 export const UK_FRANCE = {
   returned: 1087,
   transferredToUk: 1117,
@@ -205,6 +213,9 @@ export const UK_FRANCE = {
   url: "https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30",
   published: "2026-07-16",
   extensionEnds: "1 October 2026",
+  ended: true,
+  endedSource: "Home Office, written answer HL4426, answered 3 November 2026",
+  endedUrl: "https://questions-statements.parliament.uk/written-questions/detail/2026-10-22/HL4426",
   extensionUrl:
     "https://www.gov.uk/government/publications/ukfrance-exchange-of-letters-amending-and-extending-the-agreement-on-the-prevention-of-dangerous-journeys-ts-no252026"
 };
