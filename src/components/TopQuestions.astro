@@ -1,0 +1,102 @@
+---
+/**
+ * The site's most-searched answers, linked from pages that had no way to them.
+ *
+ * Counted in the build of 11 November 2026: the small boats explainer was linked from 4
+ * pages, the UK total from 5 and the hotels count from 6, while /explained/ in the menu
+ * had over a thousand. /national/ linked to none of them. Each card carries the live
+ * figure from getExplainers(), so the block refreshes with the data. The cost card reads
+ * src/lib/true-cost.ts, the same module the cost page does.
+ */
+import QuestionCard from "./QuestionCard.astro";
+import { getExplainer, type Explainer } from "../lib/explainers";
+import { PER_TAXPAYER_GBP, TOTAL_GBP_M } from "../lib/true-cost";
+
+interface Props {
+  id: string;
+  heading?: string;
+  lede?: string;
+}
+
+const {
+  id,
+  heading = "Questions answered",
+  lede = "The national figures people look up most, each with its source and date."
+} = Astro.props;
+
+const SLUGS = [
+  "how-many-asylum-seekers-are-in-the-uk",
+  "how-many-small-boats-have-crossed-this-year",
+  "how-many-asylum-hotels-are-there",
+  "asylum-hotel-cost-per-night"
+];
+const explainers = SLUGS.map((slug) => getExplainer(slug)).filter((item): item is Explainer => item !== undefined);
+---
+
+<section id={id} class="section section-anchor">
+  <div class="section-head">
+    <div>
+      <h2>{heading}</h2>
+      <p class="lede">{lede}</p>
+    </div>
+  </div>
+  <div class="top-questions">
+    {explainers.map((explainer) => <QuestionCard explainer={explainer} />)}
+    <a class="top-questions-cost" href="/findings/true-cost-of-asylum/">
+      <span class="tq-question">What does asylum cost the UK?</span>
+      <span class="tq-figure">£{(TOTAL_GBP_M.central / 1000).toFixed(1)}bn a year</span>
+      <span class="tq-label">
+        £{PER_TAXPAYER_GBP.central} per income taxpayer, in a range of £{PER_TAXPAYER_GBP.conservative} to £{PER_TAXPAYER_GBP.upper}. Central estimate.
+      </span>
+      <span class="tq-cta">Read the breakdown &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .top-questions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+    gap: 0.75rem;
+  }
+  .top-questions-cost {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .top-questions-cost:hover,
+  .top-questions-cost:focus-visible {
+    border-color: var(--accent);
+  }
+  .tq-question {
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .tq-figure {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 0.3rem;
+  }
+  .tq-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .tq-cta {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>
