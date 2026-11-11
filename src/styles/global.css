@@ -629,11 +629,11 @@ main {
 .mp-section {
   margin-bottom: 1.5rem;
 }
+/* Faint by colour, not opacity: 0.6 over --text-muted fell under AA. */
 .mp-note {
   font-size: 0.78rem;
-  color: var(--text-muted);
+  color: var(--text-faint);
   margin-top: 0.5rem;
-  opacity: 0.6;
 }
 
 .page-head::after {
@@ -4153,15 +4153,16 @@ button.region-map-shortlist-link {
   color: var(--accent);
 }
 
+/* Status chips carry their meaning in the text and hairline, never a tinted fill. */
 .chip.teal {
-  border-color: color-mix(in srgb, var(--positive) 18%, transparent);
-  background: color-mix(in srgb, var(--positive) 12%, transparent);
+  border-color: color-mix(in srgb, var(--positive) 45%, transparent);
+  background: transparent;
   color: var(--positive);
 }
 
 .chip.warm {
-  border-color: color-mix(in srgb, var(--warning) 18%, transparent);
-  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  border-color: color-mix(in srgb, var(--warning) 45%, transparent);
+  background: transparent;
   color: var(--warning);
 }
 
@@ -4295,8 +4296,9 @@ tr:last-child td {
   --ukd-bright: #7b74f2;
   margin-top: 2rem;
   padding: 1.25rem;
-  background: color-mix(in srgb, var(--ukd) 6%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ukd) 22%, transparent);
+  /* A neutral panel: the sister site's accent stays on the label and button only. */
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
 :root[data-theme="dark"] .ukd-cross-link { --ukd: var(--ukd-bright); }
@@ -5296,8 +5298,8 @@ tr:last-child td {
 }
 
 .chip.coral {
-  border-color: color-mix(in srgb, var(--critical) 30%, transparent);
-  background: color-mix(in srgb, var(--critical) 20%, transparent);
+  border-color: color-mix(in srgb, var(--critical) 45%, transparent);
+  background: transparent;
   color: var(--critical);
 }
 
