@@ -10,6 +10,7 @@ import ShareButton from "../../components/ShareButton.astro";
 import MpCard from "../../components/MpCard.astro";
 import EthnicityTimeline from "../../components/EthnicityTimeline.astro";
 import PageContents from "../../components/PageContents.astro";
+import TopQuestions from "../../components/TopQuestions.astro";
 import BenchmarkStrip from "../../components/BenchmarkStrip.astro";
 import ProjectionChart from "../../components/ProjectionChart.astro";
 import ScenarioSelector from "../../components/ScenarioSelector.astro";
@@ -288,6 +289,7 @@ const placeSections = [
   ...(socioData?.economicActivity ? [{ id: "tabpanel-economy", label: "Economy" }] : []),
   ...((sendProfile || ascProfile) ? [{ id: "tabpanel-services", label: "Services" }] : []),
   { id: "tabpanel-benchmarks", label: "Benchmarks" },
+  { id: "national-picture", label: "National" },
   ...(primaryMP ? [{ id: "local-mp", label: "MP" }] : [])
 ];
 
@@ -1105,6 +1107,12 @@ const areaCountyName =
     House rule: a named individual and a headline statistic never share an asset, and
     the card used to sit directly under the stat tiles.
   */}
+  <TopQuestions
+    id="national-picture"
+    heading="The national picture"
+    lede={`How ${area.areaName} fits into the UK figures people look up most.`}
+  />
+
   {primaryMP && (
     <section id="local-mp" class="section section-anchor mp-section">
       <div class="section-head">
