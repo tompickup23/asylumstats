@@ -20,6 +20,8 @@ video_poster: "/og/findings/true-cost-of-asylum.png"
 
 The total annual cost of the UK asylum system is around **£7.8 billion**, or **£197 per income taxpayer**. The defensible range is £7.1 billion to £8.6 billion, and the width of that range is itself the finding: 56% of the total is an audited outturn, a further 8% is attributed from an audited total, and the 34% that is estimated is estimated because no government body publishes it.
 
+The audited Home Office figure is £4,181 million, its 2025-26 outturn for asylum support, resettlement and accommodation ([Home Office Annual Report and Accounts 2025-26, HC 440, page 207](https://assets.publishing.service.gov.uk/media/6a58e9953ae256c99b702f50/36.54_HO_ARA_25-26_WEB.pdf)). The £7.8 billion adds £182 million of other audited Home Office spending, £657 million attributed from Border Force and Immigration Enforcement, £175 million of published tribunal and legal aid costs and £2,626 million of our own estimates, chiefly post-decision welfare and family reunion. [Full Fact's "about £105 per taxpayer"](https://fullfact.org/economy/asylum-seeker-benefits-tax-avoidance-comparison/) (16 February 2026) is a different year and a narrower measure: £4 billion of Home Office asylum support spend in 2024/25 over that year's projected income taxpayers.
+
 No official body publishes the complete total. The Home Office publishes its own accounts. The NAO publishes accommodation contracts. The MoJ publishes legal aid. The DWP publishes benefit payments. Nobody adds them all up. So we did, and we show which parts are audited and which are not.
 
 ## What is audited and what is not
