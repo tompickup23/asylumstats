@@ -1,5 +1,6 @@
 ---
 /** A question with its live answer figure, for the /explained/ and /findings/ hubs. */
+import { explainerFigureAttrs } from "../lib/figure-manifest";
 import type { Explainer } from "../lib/explainers";
 import { explainerPath } from "../lib/explainers";
 
@@ -12,7 +13,7 @@ const { explainer } = Astro.props;
 
 <a class="question-card" href={explainerPath(explainer.slug)}>
   <span class="qc-question">{explainer.question}</span>
-  <span class="qc-figure">{explainer.figure}</span>
+  <span class="qc-figure" {...explainerFigureAttrs(explainer)}>{explainer.figure}</span>
   <span class="qc-label">{explainer.figureLabel}</span>
   <span class="qc-cta">Read the answer &rarr;</span>
 </a>

@@ -31,6 +31,8 @@ jobs:
       # The same built-site guards deploy.yml runs. `npm test` above runs before the build,
       # so they skip there; without this step a pull request could only fail them after
       # merge, at deploy time. No GitHub event data is interpolated here.
+      - name: Check rendered figure agreement
+        run: npx vitest run tests/figures-manifest.test.ts
       - name: Guards that need the built site
         run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts tests/datasets.test.ts tests/internal-links.test.ts tests/rendered-rate-format.test.ts
       - run: npx playwright install --with-deps chromium
