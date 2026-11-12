@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-11-12T19:40:18.789Z",
+  "generatedAt": "2026-11-12T22:07:46.212Z",
   "inputs": [
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/manual/regional-source-watch.csv",
@@ -16,11 +16,11 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/src/data/live/local-route-latest.json",
-      "fileSha256": "5f0ee08879ca51fff2cd11ebec4e6197715717cefe05423e025b62df4771d074"
+      "fileSha256": "3e17973962dd5ff694c6d8c8153ea832785fa46fcc49efc848a413860cf8486f"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
-      "fileSha256": "7fe28064d9afe387dff7cb85a7154885e4c15ed957ab50fba4e40a7b5fc10b16"
+      "fileSha256": "ff7a288aff0ce71e3acf7e9a2ccecb67a5947b2e4097c38c05663fdbe9d25cc4"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-refugee-dashboard.html",
