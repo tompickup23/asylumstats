@@ -1,25 +1,25 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "06_November_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "13_November_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-11-05",
-  "latestWeekEnding": "2026-11-01",
+  "coverageEnd": "2026-11-12",
+  "latestWeekEnding": "2026-11-08",
   "yearToDate": {
-    "asAt": "2026-11-05",
+    "asAt": "2026-11-12",
     "year": 2026,
-    "arrivals": 22605,
+    "arrivals": 23529,
     "priorYear": 2025,
-    "priorYearArrivals": 36954,
-    "changePct": -38.8
+    "priorYearArrivals": 39075,
+    "changePct": -39.8
   },
   "latestWeek": {
-    "weekEnding": "2026-11-01",
-    "arrivals": 1670,
-    "boats": 23,
-    "migrantsPrevented": 1578,
-    "eventsPrevented": 34
+    "weekEnding": "2026-11-08",
+    "arrivals": 903,
+    "boats": 14,
+    "migrantsPrevented": 624,
+    "eventsPrevented": 19
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3258,6 +3258,13 @@
       "boats": 23,
       "migrantsPrevented": 1578,
       "eventsPrevented": 34
+    },
+    {
+      "weekEnding": "2026-11-08",
+      "arrivals": 903,
+      "boats": 14,
+      "migrantsPrevented": 624,
+      "eventsPrevented": 19
     }
   ],
   "daily": [
@@ -19413,6 +19420,41 @@
     },
     {
       "date": "2026-11-05",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-06",
+      "arrivals": 161,
+      "boats": 3
+    },
+    {
+      "date": "2026-11-07",
+      "arrivals": 364,
+      "boats": 5
+    },
+    {
+      "date": "2026-11-08",
+      "arrivals": 378,
+      "boats": 6
+    },
+    {
+      "date": "2026-11-09",
+      "arrivals": 21,
+      "boats": 1
+    },
+    {
+      "date": "2026-11-10",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-11",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-12",
       "arrivals": 0,
       "boats": 0
     }
