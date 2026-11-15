@@ -4,6 +4,7 @@ import { getCounties, type County } from "./county-directory";
 import { HOME_OFFICE_LOCAL_AUTHORITY_SOURCE, LOCAL_AUTHORITY_DATASET_ID, OGL_V3, SITE_ORGANIZATION } from "./datasets";
 import { ROUTES_RELEASE_DATE } from "./data-releases";
 import { SITE_NAME, SITE_URL, buildPlacePath, slugifyAreaName } from "./site-identity";
+import { citationSubjectOf } from "./citations";
 
 export { SITE_NAME, SITE_URL, buildPlacePath, slugifyAreaName };
 export const DEFAULT_DESCRIPTION =
@@ -24,6 +25,34 @@ export const SOCIAL_PROFILES = {
 } as const;
 
 export type StructuredDataNode = Record<string, unknown>;
+
+/**
+ * The homepage Organization node. alternateName holds the spellings other publications
+ * use for the site ("Asylumstats" in the Daily Express), so a search engine joins those
+ * mentions to this entity; subjectOf lists the articles that cite it
+ * (src/data/site/citations.json, shown on /cited-by/).
+ */
+export function organizationNode(siteOrigin: URL | string = SITE_URL): StructuredDataNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    alternateName: ["Asylumstats", "Asylum Stats", "asylumstats.co.uk"],
+    url: SITE_URL,
+    // Raster, not the SVG favicon. Google's Organization logo has to be a
+    // PNG, JPG or GIF and is ignored as an SVG, so the logo this site declared
+    // was never eligible for the rich result it was there to earn.
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/apple-touch-icon.png", siteOrigin).toString(),
+      width: 180,
+      height: 180
+    },
+    sameAs: Object.values(SOCIAL_PROFILES),
+    subjectOf: citationSubjectOf(SITE_URL)
+  };
+}
 
 export interface ReleaseEntry {
   date: string;
@@ -52,6 +81,7 @@ const INDEXABLE_STATIC_PATHS = [
   "/findings/",
   "/releases/",
   "/corrections/",
+  "/cited-by/",
   "/sources/",
   "/methodology/",
   "/glossary/"

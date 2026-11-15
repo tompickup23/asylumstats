@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { CITATIONS, citationDay } from "../lib/citations";
+
+const outlets = new Set(CITATIONS.flatMap((c) => [c.publisher, ...c.alsoIn.map((copy) => copy.publisher)]));
+---
+
+<BaseLayout
+  title="Cited by: where asylumstats figures have been used"
+  description="News outlets and other bodies that have cited asylumstats as a source, with the figures they used and our check of each one against the data."
+>
+  <article class="legal-page shell">
+    <h1>Cited by</h1>
+    <p class="legal-intro">
+      Publications by other bodies that cite this site as a source. Each entry gives the
+      figures used and where they appear, so the use can be checked against the
+      publication itself, and records our own check of those figures against the data.
+    </p>
+    <p class="corrections-tally">
+      <strong>{CITATIONS.length}</strong> {CITATIONS.length === 1 ? "citation" : "citations"} &middot; <strong>{outlets.size}</strong> {outlets.size === 1 ? "outlet" : "outlets"}
+    </p>
+
+    <section class="legal-section" id="citations">
+      {CITATIONS.map((c) => (
+        <div class="correction-row" id={c.id}>
+          <p class="correction-meta">
+            <time datetime={c.datePublished}>{citationDay(c.datePublished)}</time>
+            <span class="correction-where">{c.publisher}</span>
+          </p>
+          <h2><a href={c.url} rel="noopener"><cite>{c.title}</cite></a></h2>
+          <p>
+            The article uses {c.used}, from our <a href={c.asPath}>{c.asLabel}</a>. The
+            citation is in {c.location}, and names the site as "{c.nameUsed}"{c.linked ? " with a link." : " without a link."}
+          </p>
+          {c.alsoIn.map((copy) => (
+            <p>{copy.publisher} {copy.note}: <a href={copy.url} rel="noopener">{copy.publisher} copy</a>.</p>
+          ))}
+          <p>Checked {citationDay(c.checked)}: {c.checkedNote}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="legal-section">
+      <h2>How this list is kept</h2>
+      <p>
+        An entry is added only after the publication has been read in full and the
+        figures it attributes to this site have been compared with our data. A copy of
+        the same piece on another outlet is listed under the original rather than
+        counted again. Citation is not endorsement in either direction: an outlet using
+        our figures does not mean we share its framing, or it ours. To tell us about a
+        use we have missed: <a href="mailto:info@asylumstats.co.uk">info@asylumstats.co.uk</a>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

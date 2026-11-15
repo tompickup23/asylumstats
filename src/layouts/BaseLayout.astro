@@ -14,6 +14,7 @@ import {
   SITE_URL,
   SOCIAL_PROFILES,
   normalisePageTitle,
+  organizationNode,
   type StructuredDataNode
 } from "../lib/site";
 
@@ -94,23 +95,7 @@ const structuredData = [
             "@id": `${SITE_URL}/#organization`
           }
         },
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "@id": `${SITE_URL}/#organization`,
-          name: SITE_NAME,
-          url: SITE_URL,
-          // Raster, not the SVG favicon. Google's Organization logo has to be a
-          // PNG, JPG or GIF and is ignored as an SVG, so the logo this site declared
-          // was never eligible for the rich result it was there to earn.
-          logo: {
-            "@type": "ImageObject",
-            url: new URL("/apple-touch-icon.png", siteOrigin).toString(),
-            width: 180,
-            height: 180
-          },
-          sameAs: Object.values(SOCIAL_PROFILES)
-        }
+        organizationNode(siteOrigin)
       ]
     : []),
   ...pageStructuredData
@@ -199,6 +184,7 @@ const structuredData = [
           <a href="/methodology/">Methodology</a> &middot;
           <a href="/findings/">Findings</a> &middot;
           <a href="/corrections/">Corrections</a> &middot;
+          <a href="/cited-by/">Cited by</a> &middot;
           <a href="/glossary/">Glossary</a>
         </div>
         <div class="footer-legal-links">
