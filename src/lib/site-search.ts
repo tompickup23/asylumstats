@@ -145,6 +145,15 @@ const STATIC_PAGE_ENTRIES: SiteSearchEntry[] = [
     searchText: "methodology scope rules route specificity local relevance publishability"
   },
   {
+    href: "/cited-by/",
+    title: "Cited by",
+    kind: "page",
+    kicker: "Where our figures are used",
+    description: "News outlets and other bodies that have cited asylumstats as a source, with the figures they used and our check of each.",
+    priority: 104,
+    searchText: "cited by citations press media coverage daily express aol news used our figures source"
+  },
+  {
     href: "/glossary/",
     title: "Glossary",
     kind: "page",
