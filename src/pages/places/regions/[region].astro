@@ -4,11 +4,12 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import { ROUTES_RELEASE_DATE, ROUTES_RELEASE_PAGE } from "../../../lib/data-releases";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
-import { slugifyAreaName, regionNameInSentence, buildPublicPlaceRegionSlug } from "../../../lib/site";
+import RegionAuthorityList from "../../../components/RegionAuthorityList.astro";
+import { buildAbsoluteUrl, breadcrumbListNode, regionNameInSentence, buildPublicPlaceRegionSlug } from "../../../lib/site";
 import { getPlaceDirectory, type PlaceDirectoryRegion } from "../../../lib/place-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { buildPlaceTitle } from "../../../lib/serp";
-import { getEthnicProjection, meanWhiteBritishShare } from "../../../lib/ethnic-projections";
+import { meanWhiteBritishShare } from "../../../lib/ethnic-projections";
 import { regionalCostSummary, AREA_COST_SOURCES } from "../../../lib/area-cost";
 
 const localRouteLatest = loadLocalRouteLatest();
@@ -24,7 +25,6 @@ const { region } = Astro.props as { region: PlaceDirectoryRegion };
 
 // Sort areas by asylum support (descending)
 const areasSorted = [...region.areas].sort((a, b) => b.area.supportedAsylum - a.area.supportedAsylum);
-const maxAreaAsylum = areasSorted[0]?.area.supportedAsylum ?? 1;
 const totalRegional = region.supportedAsylum;
 const regionalAccommodationCostLabel = regionalCostSummary(region.areas.map(row => row.area.areaCode));
 
@@ -46,6 +46,11 @@ const demographicsRegionPath = DEMOGRAPHICS_REGIONS.has(region.regionName)
   : null;
 
 const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()} asylum seekers on support across ${region.areas.length} local authorities. Rate: ${region.supportedAsylumRate?.toFixed(1)} per 10,000.`;
+const crumbs = [
+  { label: "Places", href: "/places/" },
+  { label: "Regional", href: "/regional/" },
+  { label: region.regionName }
+];
 ---
 
 <BaseLayout
@@ -55,12 +60,9 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
   })}
   brandTitle={false}
   description={pageDescription}
+  structuredData={[breadcrumbListNode(crumbs, buildAbsoluteUrl(Astro.url.pathname))]}
 >
-  <Breadcrumbs items={[
-    { label: "Places", href: "/places/" },
-    { label: "Regional", href: "/regional/" },
-    { label: region.regionName }
-  ]} />
+  <Breadcrumbs items={crumbs} />
 
   <section class="page-top">
     <section class="page-head">
@@ -120,34 +122,7 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
   <!-- AREA RANKING -->
   <section class="section shell">
     <h2 class="reg-section-title">Local authorities ranked by asylum seekers on support</h2>
-    <div class="reg-area-list">
-      {areasSorted.map((row, i) => {
-        const a = row.area;
-        const pct = (a.supportedAsylum / maxAreaAsylum) * 100;
-        const proj = getEthnicProjection(a.areaCode);
-        const wbiNow = proj?.current?.groups?.white_british;
-        const wbi51 = proj?.projections?.["2051"]?.white_british;
-        return (
-          <a href={`/places/${slugifyAreaName(a.areaName)}/`} class="reg-area-row">
-            <span class="reg-area-rank">{i + 1}</span>
-            <div class="reg-area-info">
-              <span class="reg-area-name">{a.areaName}</span>
-              <span class="reg-area-bar-track">
-                <span class="reg-area-bar-fill" style={`width: ${pct}%`}></span>
-              </span>
-            </div>
-            <span class="reg-area-count">{a.supportedAsylum.toLocaleString()}</span>
-            <span class="reg-area-rate">{a.supportedAsylumRate?.toFixed(1) ?? "-"}</span>
-            {wbiNow !== undefined && (
-              <span class="reg-area-wbi">{wbiNow.toFixed(0)}% → {wbi51?.toFixed(0) ?? "?"}%</span>
-            )}
-          </a>
-        );
-      })}
-    </div>
-    <p class="reg-area-caption">
-      Click any area for the full profile. Rate = per 10,000 residents. WBI = White British Index (2021 → 2051 projected).
-    </p>
+    <RegionAuthorityList rows={areasSorted} />
   </section>
 </BaseLayout>
 
@@ -166,92 +141,5 @@ const pageDescription = `${region.regionName}: ${totalRegional.toLocaleString()}
     font-weight: 600;
     color: var(--text);
     margin: 0 0 1rem;
-  }
-  .reg-area-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .reg-area-row {
-    display: grid;
-    grid-template-columns: 28px 1fr 70px 55px 90px;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 0;
-    text-decoration: none;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    transition: background 120ms;
-  }
-  .reg-area-row:hover {
-    background: color-mix(in srgb, var(--accent) 4%, transparent);
-  }
-  .reg-area-rank {
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-align: center;
-  }
-  .reg-area-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0;
-  }
-  .reg-area-name {
-    font-size: 0.88rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .reg-area-bar-track {
-    display: block;
-    height: 8px;
-    background: var(--bg-subtle);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .reg-area-bar-fill {
-    display: block;
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent));
-    border-radius: 4px;
-    min-width: 2px;
-  }
-  .reg-area-count {
-    font-family: var(--font-display);
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--accent);
-    text-align: right;
-  }
-  .reg-area-rate {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    text-align: right;
-  }
-  .reg-area-wbi {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    text-align: right;
-    white-space: nowrap;
-  }
-  .reg-area-caption {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    opacity: 0.5;
-    margin-top: 0.75rem;
-  }
-
-  @media (max-width: 640px) {
-    .reg-area-row {
-      grid-template-columns: 24px 1fr 55px 45px;
-      gap: 0.3rem;
-    }
-    .reg-area-wbi { display: none; }
-    .reg-area-name { font-size: 0.82rem; }
-    .reg-area-count { font-size: 0.82rem; }
   }
 </style>

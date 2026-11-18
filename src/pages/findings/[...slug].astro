@@ -4,8 +4,9 @@ import { formatFindingDate, findingIsRevised } from "../../lib/finding-dates";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ShareButton from "../../components/ShareButton.astro";
 import TrueCostAnswer from "../../components/TrueCostAnswer.astro";
+import RelatedFindings from "../../components/RelatedFindings.astro";
 import { getCollection, render } from "astro:content";
-import { buildAbsoluteUrl } from "../../lib/site";
+import { buildAbsoluteUrl, breadcrumbListNode } from "../../lib/site";
 
 export async function getStaticPaths() {
   const findings = await getCollection("findings");
@@ -23,6 +24,7 @@ const { Content } = await render(finding);
 const findingSlug = finding.id.replace(/\.md$/, "");
 const ogImage = `/og/findings/${findingSlug}.png`;
 const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
+const crumbs = [{ label: "Findings", href: "/findings/" }, { label: finding.data.headline }];
 
 // Get related findings (same category)
 const allFindings = await getCollection("findings");
@@ -72,7 +74,7 @@ const verdictLabel: Record<string, string> = {
   image={ogImage}
   canonicalOverride={replacementHref}
   noIndex={finding.data.withdrawn}
-  structuredData={[{
+  structuredData={[breadcrumbListNode(crumbs, pageUrl), {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": finding.data.headline,
@@ -85,10 +87,7 @@ const verdictLabel: Record<string, string> = {
     "publisher": { "@type": "Organization", "name": "asylumstats", "url": "https://asylumstats.co.uk" }
   }]}
 >
-  <Breadcrumbs items={[
-    { label: "Findings", href: "/findings/" },
-    { label: finding.data.headline }
-  ]} />
+  <Breadcrumbs items={crumbs} />
 
   <article class="finding-detail shell">
     {replacementHref && replacement && (
@@ -171,20 +170,7 @@ const verdictLabel: Record<string, string> = {
       <a href="/findings/" class="finding-back">&larr; All findings</a>
     </footer>
 
-    <!-- RELATED -->
-    {relatedFindings.length > 0 && (
-      <div class="finding-related">
-        <h3>Related findings</h3>
-        <div class="finding-related-grid">
-          {relatedFindings.map((related) => (
-            <a href={`/findings/${related.id.replace(/\.md$/, "")}/`} class="finding-related-card">
-              <span class="frc-stat" style={`color: ${verdictColor[related.data.verdict]}`}>{related.data.stat_value}</span>
-              <span class="frc-headline">{related.data.headline}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+    <RelatedFindings findings={relatedFindings} verdictColor={verdictColor} />
   </article>
 </BaseLayout>
 
@@ -319,45 +305,5 @@ const verdictLabel: Record<string, string> = {
     font-weight: 600;
     margin: 0 0 0.75rem;
     color: var(--text);
-  }
-  .finding-related {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-  .finding-related h3 {
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 600;
-    margin: 0 0 0.75rem;
-    color: var(--text);
-  }
-  .finding-related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.75rem;
-  }
-  .finding-related-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1rem;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    transition: border-color 180ms;
-  }
-  .finding-related-card:hover { border-color: var(--accent); }
-  .frc-stat {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .frc-headline {
-    font-size: 0.82rem;
-    color: var(--text);
-    line-height: 1.4;
   }
 </style>

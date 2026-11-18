@@ -4,7 +4,7 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import { ROUTES_RELEASE_DATE } from "../../../lib/data-releases";
 import { getCounties } from "../../../lib/county-directory";
-import { countyCanonicalPath } from "../../../lib/site";
+import { buildAbsoluteUrl, breadcrumbListNode, countyCanonicalPath } from "../../../lib/site";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { formatFindingDate } from "../../../lib/finding-dates";
 
@@ -19,10 +19,11 @@ const pageTitle = `Asylum seekers by county: all ${counties.length} English coun
 const pageDescription =
   `Asylum seekers on support in every English county, from ${counties[0]?.countyName} down. ` +
   `${englandTotal.toLocaleString()} people across ${counties.length} counties as at ${snapshotLabel}.`;
+const crumbs = [{ label: "Places", href: "/places/" }, { label: "Counties" }];
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
-  <Breadcrumbs items={[{ label: "Places", href: "/places/" }, { label: "Counties" }]} />
+<BaseLayout title={pageTitle} description={pageDescription} structuredData={[breadcrumbListNode(crumbs, buildAbsoluteUrl(Astro.url.pathname))]}>
+  <Breadcrumbs items={crumbs} />
 
   <section class="page-top">
     <section class="page-head">

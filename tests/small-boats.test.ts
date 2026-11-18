@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import smallBoats from "../src/data/live/small-boats.json";
+import { smallBoats as smallBoatsHeadline, smallBoatsRunningTotals } from "../src/lib/headline-figures";
+import { getExplainers } from "../src/lib/explainers";
 
 /**
  * The small boats series is the most newsworthy number on the site and the one that
@@ -74,5 +76,53 @@ describe("small boats series", () => {
     expect(data.latestWeek.weekEnding).toBe(data.latestWeekEnding);
     expect(data.latestWeekEnding).toBe(data.weekly[data.weekly.length - 1].weekEnding);
     expect(data.latestWeekEnding <= data.coverageEnd).toBe(true);
+  });
+});
+
+/**
+ * The running total chart on the small boats explainer (R182). Its last two points are
+ * the headline year to date figures, so the chart and the answer above it can never
+ * print different numbers; the rest of the shape follows from a running total read every
+ * seven days.
+ */
+describe("small boats running totals", () => {
+  const points = smallBoatsRunningTotals();
+  const headline = smallBoatsHeadline();
+
+  it("ends on the latest day in the series, at the published year to date figures", () => {
+    const last = points.at(-1)!;
+    expect(last.date).toBe(data.coverageEnd);
+    expect(last.current).toBe(data.yearToDate.arrivals);
+    expect(last.prior).toBe(data.yearToDate.priorYearArrivals);
+  });
+
+  it("is read every seven days within the current year, and never falls", () => {
+    expect(points[0].date.startsWith(`${data.yearToDate.year}-01-`)).toBe(true);
+    for (let i = 1; i < points.length; i += 1) {
+      const gap = (Date.parse(points[i].date) - Date.parse(points[i - 1].date)) / 86_400_000;
+      expect(gap).toBe(7);
+      expect(points[i].current).toBeGreaterThanOrEqual(points[i - 1].current);
+      expect(points[i].prior).toBeGreaterThanOrEqual(points[i - 1].prior);
+    }
+  });
+
+  it("counts boats over the same days as people, and fewer boats than people", () => {
+    const cut = data.coverageEnd.slice(5);
+    const daily = data.daily as Array<{ date: string; arrivals: number; boats: number }>;
+    const boatsTo = (year: number) =>
+      daily.filter((day) => day.date.startsWith(`${year}-`) && day.date.slice(5) <= cut).reduce((sum, day) => sum + day.boats, 0);
+    expect(headline.boats).toBe(boatsTo(data.yearToDate.year));
+    expect(headline.priorYearBoats).toBe(boatsTo(data.yearToDate.priorYear));
+    expect(headline.boats).toBeLessThan(headline.arrivals);
+    expect(headline.priorYearBoats).toBeLessThan(headline.priorYearArrivals);
+  });
+
+  it("draws the explainer's answer chart from these points, dated in its title", () => {
+    const explainer = getExplainers().find((entry) => entry.slug === "how-many-small-boats-have-crossed-this-year")!;
+    const chart = explainer.answerChart!;
+    expect(chart.points.map((point) => point.value)).toEqual(points.map((point) => point.current));
+    expect(chart.comparison!.points.map((point) => point.value)).toEqual(points.map((point) => point.prior));
+    const dayMonth = new Date(`${data.coverageEnd}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "UTC" });
+    expect(chart.title).toContain(`to ${dayMonth}`);
   });
 });

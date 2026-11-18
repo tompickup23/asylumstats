@@ -7,6 +7,8 @@
  * areas behind the national number. Every string is built from the data at build time, so
  * a refresh moves the answer without anyone editing prose.
  */
+import type { QuotedItem } from "../official-figures";
+
 export type ExplainerTopic = "numbers" | "accommodation" | "arrivals" | "decisions";
 
 export const TOPIC_LABELS: Record<ExplainerTopic, string> = {
@@ -22,6 +24,22 @@ export const TOPIC_ORDER: ExplainerTopic[] = ["numbers", "accommodation", "arriv
 export interface ExplainerSource {
   label: string;
   url: string;
+}
+
+/** A chart on an explainer, drawn by TrendChart. */
+export interface ExplainerChart {
+  title: string;
+  description: string;
+  points: Array<{ label: string; value: number }>;
+  valueSuffix?: string;
+  source: string;
+  sourceUrl: string;
+  /** The same measure on the same dates in another period, drawn dashed beside points. */
+  comparison?: { label: string; points: Array<{ label: string; value: number }> };
+  /** Names points in the legend when there is a comparison. */
+  seriesLabel?: string;
+  /** A running total: no peak annotation, and a marker on the last point only. */
+  runningTotal?: boolean;
 }
 
 export interface Explainer {
@@ -47,15 +65,26 @@ export interface Explainer {
   /** ISO date the next edition is due, where the publisher states one. */
   nextUpdate?: { date: string; label: string };
   sources: ExplainerSource[];
-  keyFigures?: Array<{ label: string; value: string; note?: string }>;
-  chart?: {
-    title: string;
-    description: string;
-    points: Array<{ label: string; value: number }>;
-    valueSuffix?: string;
+  /**
+   * Who the publisher's count includes and leaves out, in its own words, shown beside the
+   * figure. Every item is quoted, never reworded, with the day the words were read.
+   */
+  scope?: {
+    publisher: string;
+    includes: QuotedItem[];
+    excludes: QuotedItem[];
+    note?: string;
     source: string;
-    sourceUrl: string;
+    url: string;
+    read: string;
   };
+  keyFigures?: Array<{ label: string; value: string; note?: string }>;
+  /**
+   * Drawn straight under the answer: the question as asked, such as this year so far
+   * against last year to the same date. `chart` gives the longer view below it.
+   */
+  answerChart?: ExplainerChart;
+  chart?: ExplainerChart;
   /** Paragraphs on what the figure counts and what it leaves out. */
   basis: string[];
   questions: Array<{ question: string; answer: string }>;

@@ -12,8 +12,10 @@ import {
   grantRateSeries,
   initialGrantRate,
   routesRelease,
-  smallBoats
+  smallBoats,
+  smallBoatsRunningTotals
 } from "../headline-figures";
+import { SMALL_BOATS_COUNT_SCOPE } from "../official-figures";
 import type { Explainer } from "./types";
 
 const pct = (value: number, digits = 0) => `${value.toFixed(digits)}%`;
@@ -221,6 +223,10 @@ function smallBoatCrossings(): Explainer {
     .map((row) => `${row.method.toLowerCase()} (${fmtInt(row.value)})`)
     .join(", ")
     .replace(/, ([^,]*)$/, " and $1");
+  const dayMonth = asAt.replace(/ \d{4}$/, "");
+  const running = smallBoatsRunningTotals();
+  const shortDate = (iso: string) =>
+    new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 
   return {
     slug: "how-many-small-boats-have-crossed-this-year",
@@ -243,12 +249,34 @@ function smallBoatCrossings(): Explainer {
       ...(yearEnding ? [{ label: "Home Office, immigration system statistics: irregular migration", url: yearEnding.sourceUrl }] : [])
     ],
     keyFigures: [
-      { label: `${boats.year}, 1 January to ${asAt}`, value: fmtInt(boats.arrivals) },
-      { label: `${boats.priorYear}, same period`, value: fmtInt(boats.priorYearArrivals) },
+      { label: `${boats.year}, 1 January to ${asAt}`, value: fmtInt(boats.arrivals), note: `people, in ${fmtInt(boats.boats)} boats` },
+      { label: `${boats.priorYear}, same period`, value: fmtInt(boats.priorYearArrivals), note: `people, in ${fmtInt(boats.priorYearBoats)} boats` },
       { label: `Week ending ${formatLongDate(week.weekEnding)}`, value: fmtInt(week.arrivals), note: `${fmtInt(week.boats)} boats` },
       ...(yearEnding ? [{ label: yearEnding.period, value: fmtInt(yearEnding.value), note: "official quarterly total" }] : []),
       { label: `Record year, ${peakYear}`, value: fmtInt(peakValue) }
     ],
+    scope: {
+      publisher: "the Home Office",
+      includes: SMALL_BOATS_COUNT_SCOPE.includes,
+      excludes: SMALL_BOATS_COUNT_SCOPE.excludes,
+      note: SMALL_BOATS_COUNT_SCOPE.uncontrolledLandings,
+      source: SMALL_BOATS_COUNT_SCOPE.source,
+      url: SMALL_BOATS_COUNT_SCOPE.url,
+      read: SMALL_BOATS_COUNT_SCOPE.read
+    },
+    answerChart: {
+      title: `Small boat arrivals to ${dayMonth}: ${boats.year} against ${boats.priorYear}`,
+      description: `Running total of people from 1 January, plotted every seven days to the latest day in the Home Office series. The ${boats.priorYear} line covers the same calendar days.`,
+      points: running.map((point) => ({ label: shortDate(point.date), value: point.current })),
+      comparison: {
+        label: `${boats.priorYear}, same dates`,
+        points: running.map((point) => ({ label: shortDate(point.date), value: point.prior }))
+      },
+      seriesLabel: String(boats.year),
+      runningTotal: true,
+      source: "Home Office, small boats time series",
+      sourceUrl: boats.sourceUrl
+    },
     chart: {
       title: "Small boat arrivals by calendar year",
       description: `Complete years only, ${years[0][0]} to ${lastFullYear[0]}. ${boats.year} is not plotted because it is not finished.`,

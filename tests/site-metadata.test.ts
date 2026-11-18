@@ -6,10 +6,12 @@ import {
   DEFAULT_SOCIAL_IMAGE_PATH,
   SITE_URL,
   buildAbsoluteUrl,
+  breadcrumbListNode,
   buildEntityStructuredData,
   buildPlaceStructuredData,
   buildReleaseCollectionStructuredData,
   getIndexableSitePaths,
+  placeBreadcrumbs,
   regionNameInSentence,
   getPublicPlaceRegions,
   normalisePageTitle
@@ -80,6 +82,24 @@ describe("site metadata helpers", () => {
     expect(nodes).toHaveLength(3);
     expect(nodes[1]["@type"]).toBe("AdministrativeArea");
     expect(nodes[2]["@type"]).toBe("Dataset");
+    // The trail in the markup is the trail on the page, region and all.
+    const names = (nodes[0].itemListElement as Array<{ name: string }>).map((item) => item.name);
+    expect(names).toEqual(["Home", ...placeBreadcrumbs(area).map((step) => step.label)]);
+    expect(names).toContain(area.regionName);
+  });
+
+  it("builds a breadcrumb list from the visible trail, ending at the page itself", () => {
+    const node = breadcrumbListNode(
+      [{ label: "Findings", href: "/findings/" }, { label: "A finding" }],
+      buildAbsoluteUrl("/findings/a-finding/")
+    );
+    expect(node.itemListElement).toEqual([
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Findings", item: `${SITE_URL}/findings/` },
+      { "@type": "ListItem", position: 3, name: "A finding", item: `${SITE_URL}/findings/a-finding/` }
+    ]);
+    // Google rejects a step with no URL unless it is the last one.
+    expect(() => breadcrumbListNode([{ label: "Nowhere" }, { label: "Page" }], SITE_URL)).toThrow(/links nowhere/);
   });
 
   it("builds release collection structured data with an item list", () => {

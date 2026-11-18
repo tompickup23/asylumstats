@@ -2,13 +2,14 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ExplainerAnswer from "../../components/ExplainerAnswer.astro";
+import ExplainerScope from "../../components/ExplainerScope.astro";
 import ExplainerFigures from "../../components/ExplainerFigures.astro";
 import ExplainerRelated from "../../components/ExplainerRelated.astro";
 import AskedAndAnswered from "../../components/AskedAndAnswered.astro";
 import TrendChart from "../../components/TrendChart.astro";
 import ShareButton from "../../components/ShareButton.astro";
 import { getExplainers, TOPIC_LABELS, type Explainer } from "../../lib/explainers";
-import { SITE_NAME, SITE_URL, buildAbsoluteUrl } from "../../lib/site";
+import { SITE_NAME, SITE_URL, buildAbsoluteUrl, breadcrumbListNode } from "../../lib/site";
 
 export function getStaticPaths() {
   return getExplainers().map((explainer) => ({ params: { slug: explainer.slug }, props: { explainer } }));
@@ -21,6 +22,9 @@ interface Props {
 const { explainer } = Astro.props;
 const pageUrl = buildAbsoluteUrl(Astro.url.pathname);
 const ogImage = `/og/explained/${explainer.slug}.png`;
+const crumbs = [{ label: "Explained", href: "/explained/" }, { label: explainer.question }];
+// The question as asked first (this year against last), then the longer view.
+const charts = [explainer.answerChart, explainer.chart].filter((chart) => chart !== undefined);
 ---
 
 <BaseLayout
@@ -29,6 +33,7 @@ const ogImage = `/og/explained/${explainer.slug}.png`;
   description={explainer.seoDescription}
   image={ogImage}
   structuredData={[
+    breadcrumbListNode(crumbs, pageUrl),
     {
       "@context": "https://schema.org",
       "@type": "Article",
@@ -44,22 +49,27 @@ const ogImage = `/og/explained/${explainer.slug}.png`;
     }
   ]}
 >
-  <Breadcrumbs items={[{ label: "Explained", href: "/explained/" }, { label: explainer.question }]} />
+  <Breadcrumbs items={crumbs} />
   <article class="explainer shell">
     <p class="explainer-kicker">{TOPIC_LABELS[explainer.topic]}</p>
     <h1 class="explainer-question">{explainer.question}</h1>
     <ExplainerAnswer explainer={explainer} />
+    {explainer.scope && <ExplainerScope scope={explainer.scope} />}
 
-    {explainer.chart && (
+    {charts.map((chart) => (
       <TrendChart
-        points={explainer.chart.points}
-        title={explainer.chart.title}
-        description={explainer.chart.description}
-        valueSuffix={explainer.chart.valueSuffix}
-        source={explainer.chart.source}
-        sourceUrl={explainer.chart.sourceUrl}
+        points={chart.points}
+        title={chart.title}
+        description={chart.description}
+        valueSuffix={chart.valueSuffix}
+        source={chart.source}
+        sourceUrl={chart.sourceUrl}
+        comparison={chart.comparison}
+        seriesLabel={chart.seriesLabel}
+        markers={chart.runningTotal ? "last" : "all"}
+        showPeak={!chart.runningTotal}
       />
-    )}
+    ))}
 
     <section class="explainer-basis" aria-labelledby="what-it-counts">
       <h2 id="what-it-counts">What the figure counts</h2>
@@ -99,6 +109,9 @@ const ogImage = `/og/explained/${explainer.slug}.png`;
     font-size: clamp(1.8rem, 4.5vw, 2.4rem);
     line-height: 1.15;
     margin: 0;
+  }
+  .explainer :global(.viz-card + .viz-card) {
+    margin-top: 1.5rem;
   }
   .explainer-basis {
     margin: 2rem 0;
