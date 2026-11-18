@@ -4,6 +4,7 @@
  * the date, source and next update underneath it. This is the paragraph a search engine
  * lifts into a snippet, so it stands alone and leads with the number.
  */
+import { explainerFigureAttrs } from "../lib/figure-manifest";
 import type { Explainer } from "../lib/explainers";
 import { formatLongDate } from "../lib/headline-figures";
 
@@ -16,7 +17,7 @@ const { explainer } = Astro.props;
 
 <section class="explainer-answer" aria-label="The short answer">
   <p class="ea-figure">
-    <span class="ea-value">{explainer.figure}</span>
+    <span class="ea-value" {...explainerFigureAttrs(explainer)}>{explainer.figure}</span>
     <span class="ea-label">{explainer.figureLabel}</span>
   </p>
   <p class="ea-text">{explainer.answer}</p>

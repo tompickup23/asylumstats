@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/build/sync-live.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/build/figures.mjs",
     "preview": "astro preview",
     "precheck": "node scripts/build/sync-live.mjs",
     "check": "astro check",
