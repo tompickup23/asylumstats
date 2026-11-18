@@ -35,11 +35,10 @@ const grab = (text: string, re: RegExp, label: string): string[] => {
 };
 
 const areas = (rawProjections as any).areas as Record<string, any>;
-const series = areaSeries as Array<{ areaCode: string; periodEnd: string; value: number }>;
-const supported = (code: string, periodEnd: string) =>
-  series.find((p) => p.areaCode === code && p.periodEnd === periodEnd)?.value;
-const latest = (code: string) =>
-  series.filter((p) => p.areaCode === code).sort((a, b) => a.periodEnd.localeCompare(b.periodEnd)).at(-1)!;
+type SeriesPoint = { areaCode: string; periodEnd: string; value: number };
+const series = areaSeries as SeriesPoint[];
+const supportedIn = (points: SeriesPoint[], code: string, periodEnd: string) =>
+  points.find((p) => p.areaCode === code && p.periodEnd === periodEnd)?.value;
 
 const WORDS: Record<string, number> = { four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 
@@ -91,18 +90,40 @@ describe("Blackburn finding", () => {
     expect(share).toBe(areas.E06000008.baseline.groups.white_british.toFixed(1));
   });
 
-  it("quotes Preston's and Burnley's asylum support from the Home Office series", () => {
+  /**
+   * The sentence names its two quarters ("at 31 December 2025", "at 30 June 2026"),
+   * so it is dated history and stays true when a later quarter is published. The
+   * check is that each quoted count matches the series for the quarter named. It
+   * used to require 30 June 2026 to be the latest quarter as well, which failed on
+   * every new release and parked the refresh on release morning.
+   */
+  const checkLancashireSupport = (points: SeriesPoint[]) => {
     for (const [name, code] of [["Preston", "E07000123"], ["Burnley", "E07000117"]] as const) {
       const [dec, jun] = grab(
         text,
         new RegExp(`${name}\\.[^]*?(\\d+) on asylum support at 31 December 2025, (\\d+) at 30 June 2026`),
         name
       );
-      expect(Number(dec)).toBe(supported(code, "2025-12-31"));
-      expect(Number(jun)).toBe(supported(code, "2026-06-30"));
-      // "at 30 June 2026" must stay the latest quarter, or the sentence is stale.
-      expect(latest(code).periodEnd).toBe("2026-06-30");
+      expect(Number(dec)).toBe(supportedIn(points, code, "2025-12-31"));
+      expect(Number(jun)).toBe(supportedIn(points, code, "2026-06-30"));
     }
+  };
+
+  it("quotes Preston's and Burnley's asylum support from the Home Office series", () => {
+    checkLancashireSupport(series);
+  });
+
+  it("still holds when the series gains a later quarter", () => {
+    const lastPeriod = series.map((p) => p.periodEnd).sort().at(-1)!;
+    const next = new Date(`${lastPeriod}T00:00:00Z`);
+    next.setUTCMonth(next.getUTCMonth() + 4, 0); // last day of the month three months on
+    const nextPeriod = next.toISOString().slice(0, 10);
+    expect(nextPeriod > lastPeriod).toBe(true);
+    const withNextQuarter = [
+      ...series,
+      ...series.filter((p) => p.periodEnd === lastPeriod).map((p) => ({ ...p, periodEnd: nextPeriod, value: p.value + 1 }))
+    ];
+    checkLancashireSupport(withNextQuarter);
   });
 });
 
