@@ -1,3 +1,5 @@
+> **Superseded, 18 November 2026.** This document dates from March 2026 and is kept as history. It is not the plan. Forward work is tracked in GitHub issues and pull requests and in the estate register kept outside this repository; the current plan is dated 18 November 2026. Do not start work from this file.
+
 # Roadmap
 
 ## Current state as of 2026-03-14

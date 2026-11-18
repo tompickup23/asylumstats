@@ -127,7 +127,7 @@ Not written here, because they rot (this section said 147 place pages when there
 
 ## Open work
 
-Tracked in GitHub issues and `docs/`. Decisions waiting on Tom are in the `audit-corrections-open-items` memory: provenance badges, splitting the demographic and asylum products, the privacy-page controller identity, the author byline.
+Tracked in GitHub issues and in the estate register (`Website_Audits/roadmap.csv` in the Reports repository, rows for asylumstats.co.uk). The current plan and the session prompts are `Website_Audits/asylumstats_plan_2026-11-18.md` and `Asylumstats_Opus_Prompts_2026-11-18.md` there. `docs/product/roadmap.md` and `docs/research/competitors.md` are history, not plans. Decisions waiting on Tom are in the `audit-corrections-open-items` memory: provenance badges, splitting the demographic and asylum products, the privacy-page controller identity, the author byline.
 
 ## Editorial Position
 

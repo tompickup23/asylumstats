@@ -1,3 +1,5 @@
+> **Superseded, 18 November 2026.** This document dates from August 2026 or earlier and is kept as history. It is not the plan. Forward work is tracked in GitHub issues and pull requests and in the estate register kept outside this repository; the current plan is dated 18 November 2026. Do not start work from this file.
+
 # Competitors and adjacent products
 
 This is not a normal winner-takes-all market. The site will compete with government pages, regional dashboards, think-tank explainers, and generic migration data tools.
