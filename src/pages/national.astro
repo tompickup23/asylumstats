@@ -2,6 +2,7 @@
 import TopQuestions from "../components/TopQuestions.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageContents from "../components/PageContents.astro";
+import NationalFindingsGrid from "../components/NationalFindingsGrid.astro";
 import ProjectionChart from "../components/ProjectionChart.astro";
 import { loadRouteDashboard } from "../lib/route-data";
 import { loadMoneyLedger } from "../lib/money-data";
@@ -11,6 +12,7 @@ import { getSignificantDemographicShifts, areasBelowFiftyBy, nationalGroupShare 
 import grantRateData from "../data/live/grant-rates-nationality.json";
 import schoolValidationData from "../data/live/school-validation.json";
 import { figureAttrs } from "../lib/figure-manifest";
+import { buildNationalDataset } from "../lib/datasets";
 const routeDashboard = loadRouteDashboard();
 const moneyLedger = loadMoneyLedger();
 const findings = (await getCollection("findings"))
@@ -47,13 +49,6 @@ function fmtGbp(n: number) {
   if (n >= 1_000_000) return `£${(n / 1_000_000).toFixed(1)}M`;
   return `£${n.toLocaleString("en-GB")}`;
 }
-
-const verdictColor: Record<string, string> = {
-  alert: "var(--warning)",
-  critical: "var(--critical)",
-  resolved: "var(--positive)",
-  info: "var(--accent)"
-};
 
 // Aggregate national demographic projections
 const projYears = [2021, 2031, 2041, 2051];
@@ -115,6 +110,7 @@ const sections = [
   image="/og/national.png"
   title="UK asylum statistics: the national picture"
   description={`UK asylum system: ${latestQuarter.supportedAsylum.toLocaleString()} on support, ${latestQuarter.awaitingInitialDecision.toLocaleString()} awaiting decision, ${fmtGbp(dailyCostGbp)}/day on hotels.`}
+  structuredData={[buildNationalDataset()]}
 >
   <section class="page-top national-top">
     <section class="page-head">
@@ -454,23 +450,7 @@ const sections = [
       <a class="source-pill" href="/findings/">All findings &rarr;</a>
     </div>
 
-    <div class="findings-grid">
-      {findings.slice(0, 6).map((finding) => (
-        <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-card">
-          <div class="finding-meta">
-            <span class="finding-category">{finding.data.category}</span>
-            <span class="finding-date">{finding.data.date}</span>
-          </div>
-          <h3 class="finding-headline">{finding.data.headline}</h3>
-          <div class="finding-stat-row">
-            <span class="finding-stat" style={`color: ${verdictColor[finding.data.verdict]}`}>
-              {finding.data.stat_value}
-            </span>
-            <span class="finding-stat-label">{finding.data.stat_label}</span>
-          </div>
-        </a>
-      ))}
-    </div>
+    <NationalFindingsGrid findings={findings.slice(0, 6)} />
   </section>
 
   <!-- FOOTER LINKS to secondary pages -->
@@ -635,58 +615,5 @@ const sections = [
     border-color: var(--accent);
     background: var(--accent-wash);
     color: var(--accent);
-  }
-
-  .findings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-  .finding-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1.25rem;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: border-color 180ms, transform 120ms;
-  }
-  .finding-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .finding-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.7rem;
-  }
-  .finding-category {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-  }
-  .finding-date { color: var(--text-muted); }
-  .finding-headline {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  .finding-stat-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-  }
-  .finding-stat {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-  .finding-stat-label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
   }
 </style>

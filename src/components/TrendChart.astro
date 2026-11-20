@@ -20,17 +20,41 @@ interface Props {
   /** Rendered under the chart. Every public chart carries a source line (JCOM 2018). */
   source?: string;
   sourceUrl?: string;
+  /**
+   * A second series of the same measure on the same dates, drawn dashed: the same days a
+   * year earlier, say. Never a second measure: two bases are not drawn as one chart.
+   */
+  comparison?: { label: string; points: Point[] };
+  /** Names the main series in the legend and the table when there is a comparison. */
+  seriesLabel?: string;
+  /** "last" marks only the final point, for a dense series such as a weekly running total. */
+  markers?: "all" | "last";
+  /** Off for a running total, whose highest point is always its last. */
+  showPeak?: boolean;
 }
 
-const { points, title, description, tone = "accent", valueSuffix = "", annotations = [], source, sourceUrl } = Astro.props;
+const {
+  points, title, description, tone = "accent", valueSuffix = "", annotations = [], source, sourceUrl,
+  comparison, seriesLabel = "This series", markers = "all", showPeak = true
+} = Astro.props;
+if (comparison && comparison.points.length !== points.length) {
+  throw new Error(`TrendChart "${title}": the comparison needs one point for each point of the main series.`);
+}
 
 const width = 560;
 const height = 230;
 const padding = { top: 18, right: 20, bottom: 38, left: 18 };
 const usableWidth = width - padding.left - padding.right;
 const usableHeight = height - padding.top - padding.bottom;
-const values = points.map((point) => point.value);
-const maxValue = Math.max(...values, 1);
+const values = [...points, ...(comparison?.points ?? [])].map((point) => point.value);
+// With a comparison both lines end at the right edge, under the top tick label, which on
+// a phone renders at double size on top of the higher line's last marker. So the scale
+// gets headroom and round ticks: the highest value sits below the top gridline.
+function roundStep(value: number): number {
+  const power = 10 ** Math.floor(Math.log10(Math.max(value, 1)));
+  return [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].map((multiple) => multiple * power).find((step) => step >= value)!;
+}
+const maxValue = comparison ? roundStep((Math.max(...values, 1) * 1.08) / 3) * 3 : Math.max(...values, 1);
 const minValue = Math.min(...values, 0);
 const range = Math.max(maxValue - minValue, 1);
 const tickValues = Array.from({ length: 4 }, (_, index) => minValue + (range / 3) * index).reverse();
@@ -62,14 +86,23 @@ const direction =
     : lastPoint.value > firstPoint.value
       ? "higher at the end of the period than the start"
       : "lower at the end of the period than the start";
-const altText = points.length
-  ? `Line chart. ${title}. ${firstPoint.label} ${formatValue(firstPoint.value)} to ${lastPoint.label} ${formatValue(lastPoint.value)}, ${direction}.`
-  : `Line chart. ${title}. No data available.`;
+const comparisonLast = comparison?.points.at(-1);
+const comparisonText = comparisonLast && lastPoint
+  ? ` ${seriesLabel}: ${formatValue(lastPoint.value)} by ${lastPoint.label}. ${comparison!.label}: ${formatValue(comparisonLast.value)} by the same date. ` +
+    `${seriesLabel} ends ${lastPoint.value === comparisonLast.value ? "level with" : lastPoint.value > comparisonLast.value ? "higher than" : "lower than"} ${comparison!.label}.`
+  : null;
+const altText = !points.length
+  ? `Line chart. ${title}. No data available.`
+  : comparisonText
+    ? `Line chart. ${title}.${comparisonText}`
+    : `Line chart. ${title}. ${firstPoint.label} ${formatValue(firstPoint.value)} to ${lastPoint.label} ${formatValue(lastPoint.value)}, ${direction}.`;
 
-const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${getX(index)} ${getY(point.value)}`).join(" ");
+const pathOf = (series: Point[]) => series.map((point, index) => `${index === 0 ? "M" : "L"} ${getX(index)} ${getY(point.value)}`).join(" ");
+const linePath = pathOf(points);
+const comparisonPath = comparison ? pathOf(comparison.points) : null;
 const areaPath = `${linePath} L ${getX(points.length - 1)} ${padding.top + usableHeight} L ${getX(0)} ${padding.top + usableHeight} Z`;
-const peak = points.reduce((current, point) => (point.value > current.value ? point : current), points[0]);
-const peakIndex = points.findIndex((point) => point === peak);
+const peak = showPeak ? points.reduce((current, point) => (point.value > current.value ? point : current), points[0]) : undefined;
+const peakIndex = peak ? points.findIndex((point) => point === peak) : -1;
 
 // The peak annotation is centred on its point, so a peak near either end runs off the
 // plot: "Peak 2023 Q4" was clipped mid-word at the right edge. Clamp it back inside
@@ -106,6 +139,12 @@ const colors =
     <div>
       <h3>{title}</h3>
       {description && <p class="tiny">{description}</p>}
+      {comparison && (
+        <p class="tiny trend-legend">
+          <span class="trend-key" aria-hidden="true"></span>{seriesLabel}
+          <span class="trend-key trend-key--comparison" aria-hidden="true"></span>{comparison.label}
+        </p>
+      )}
     </div>
     <span class="chip">{formatValue(points[points.length - 1]?.value ?? 0)}</span>
   </div>
@@ -141,8 +180,14 @@ const colors =
       </>
     ))}
     <path d={areaPath} fill={colors.fill}></path>
+    {comparisonPath && comparisonLast && (
+      <>
+        <path d={comparisonPath} fill="none" stroke="var(--text-muted)" stroke-width="3" stroke-dasharray="8 6" stroke-linejoin="round" stroke-linecap="round"></path>
+        <circle cx={getX(points.length - 1)} cy={getY(comparisonLast.value)} r="4" fill="var(--text-muted)" />
+      </>
+    )}
     <path d={linePath} fill="none" stroke={colors.stroke} stroke-width="4" stroke-linejoin="round" stroke-linecap="round"></path>
-    {points.map((point, index) => (
+    {points.map((point, index) => (markers === "last" && index !== points.length - 1) ? null : (
       <circle
         cx={getX(index)}
         cy={getY(point.value)}
@@ -193,13 +238,17 @@ const colors =
     <div class="trend-table-scroll">
       <table class="trend-table">
         <thead>
-          <tr><th scope="col">Period</th><th scope="col" class="num">Value</th></tr>
+          <tr>
+            <th scope="col">Period</th><th scope="col" class="num">{comparison ? seriesLabel : "Value"}</th>
+            {comparison && <th scope="col" class="num">{comparison.label}</th>}
+          </tr>
         </thead>
         <tbody>
-          {points.map((point) => (
+          {points.map((point, index) => (
             <tr>
               <th scope="row">{point.label}</th>
               <td class="num">{formatValue(point.value)}</td>
+              {comparison && <td class="num">{formatValue(comparison.points[index].value)}</td>}
             </tr>
           ))}
         </tbody>
@@ -232,4 +281,9 @@ const colors =
   .trend-table .num { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
   .trend-source { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; }
   .trend-source a { color: inherit; }
+  .trend-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; }
+  .trend-key { display: inline-block; width: 1.6rem; border-top: 3px solid var(--accent); }
+  .trend-key--comparison { margin-left: 0.6rem; border-top: 3px dashed var(--text-muted); }
+  .tone-teal .trend-key:not(.trend-key--comparison) { border-top-color: var(--positive); }
+  .tone-warm .trend-key:not(.trend-key--comparison) { border-top-color: var(--critical); }
 </style>

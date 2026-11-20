@@ -3,10 +3,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import QuestionCard from "../../components/QuestionCard.astro";
 import { explainersByTopic, explainerPath, getExplainers, TOPIC_LABELS } from "../../lib/explainers";
-import { SITE_URL } from "../../lib/site";
+import { SITE_URL, buildAbsoluteUrl, breadcrumbListNode } from "../../lib/site";
 
 const groups = explainersByTopic();
 const all = getExplainers();
+const crumbs = [{ label: "Explained" }];
 ---
 
 <BaseLayout
@@ -15,6 +16,7 @@ const all = getExplainers();
   description="How many asylum seekers are in the UK, what hotels cost, how long appeals take, how many small boats cross. Updated with the official data."
   image="/og/explained.png"
   structuredData={[
+    breadcrumbListNode(crumbs, buildAbsoluteUrl(Astro.url.pathname)),
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -28,7 +30,7 @@ const all = getExplainers();
     }
   ]}
 >
-  <Breadcrumbs items={[{ label: "Explained" }]} />
+  <Breadcrumbs items={crumbs} />
   <section class="shell explained-head">
     <h1>Asylum questions, answered</h1>
     <p>

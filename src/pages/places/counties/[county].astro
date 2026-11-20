@@ -4,7 +4,8 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import AskedAndAnswered from "../../../components/AskedAndAnswered.astro";
 import DataFreshness from "../../../components/DataFreshness.astro";
 import PlainEnglish from "../../../components/PlainEnglish.astro";
-import { countyCanonicalPath, slugifyAreaName } from "../../../lib/site";
+import CountyAuthorityList from "../../../components/CountyAuthorityList.astro";
+import { buildAbsoluteUrl, breadcrumbListNode, countyCanonicalPath } from "../../../lib/site";
 import { getCounties, type County } from "../../../lib/county-directory";
 import { loadLocalRouteLatest } from "../../../lib/route-data";
 import { buildPlaceTitle } from "../../../lib/serp";
@@ -25,7 +26,6 @@ const { county } = Astro.props as { county: County };
 // A single-authority county defers to that authority's place page. See countyCanonicalPath.
 const canonicalPath = countyCanonicalPath(county);
 
-const maxAreaAsylum = county.areas[0]?.supportedAsylum || 1;
 
 // The query as typed, answered in the title. See src/lib/serp.ts for why the frame is a
 // question and why there is no rank clause: at 600px there is room for the question and
@@ -103,7 +103,14 @@ const askedAndAnswered = [
   }
 ];
 
+const crumbs = [
+  { label: "Places", href: "/places/" },
+  { label: "Counties", href: "/places/counties/" },
+  { label: county.countyName }
+];
+
 const pageStructuredData = [
+  breadcrumbListNode(crumbs, buildAbsoluteUrl(Astro.url.pathname)),
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -123,11 +130,7 @@ const pageStructuredData = [
   structuredData={pageStructuredData}
   canonicalOverride={canonicalPath === county.countyPath ? undefined : canonicalPath}
 >
-  <Breadcrumbs items={[
-    { label: "Places", href: "/places/" },
-    { label: "Counties", href: "/places/counties/" },
-    { label: county.countyName }
-  ]} />
+  <Breadcrumbs items={crumbs} />
 
   <section class="page-top">
     <section class="page-head">
@@ -206,27 +209,7 @@ const pageStructuredData = [
   <!-- AUTHORITY RANKING -->
   <section class="section shell">
     <h2 class="cty-section-title">Local authorities in {county.countyName}, by asylum seekers on support</h2>
-    <div class="cty-area-list">
-      {county.areas.map((area, i) => (
-        <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="cty-area-row">
-          <span class="cty-area-rank">{i + 1}</span>
-          <div class="cty-area-info">
-            <span class="cty-area-name">{area.areaName}</span>
-            <span class="cty-area-bar-track">
-              <span
-                class="cty-area-bar-fill"
-                style={`width: ${(area.supportedAsylum / maxAreaAsylum) * 100}%`}
-              ></span>
-            </span>
-          </div>
-          <span class="cty-area-count">{area.supportedAsylum.toLocaleString()}</span>
-        </a>
-      ))}
-    </div>
-    <p class="cty-area-caption">
-      Click any authority for its full profile. Figures are people on asylum support at
-      {snapshotLabel}.
-    </p>
+    <CountyAuthorityList areas={county.areas} snapshotLabel={snapshotLabel} />
   </section>
 
   <!-- THE QUESTIONS PEOPLE ACTUALLY ASK -->
@@ -295,73 +278,5 @@ const pageStructuredData = [
     font-size: 0.8rem;
     opacity: 0.75;
     max-width: 70ch;
-  }
-  .cty-area-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .cty-area-row {
-    display: grid;
-    grid-template-columns: 2rem 1fr 4.5rem;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.4rem 0.5rem;
-    border-radius: 6px;
-    text-decoration: none;
-    color: inherit;
-  }
-  .cty-area-row:hover {
-    background: rgba(127, 127, 127, 0.12);
-  }
-  .cty-area-rank {
-    font-size: 0.75rem;
-    opacity: 0.6;
-    text-align: right;
-  }
-  .cty-area-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-  }
-  .cty-area-name {
-    font-size: 0.85rem;
-  }
-  .cty-area-bar-track {
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(127, 127, 127, 0.2);
-    overflow: hidden;
-  }
-  .cty-area-bar-fill {
-    display: block;
-    height: 100%;
-    background: currentColor;
-    opacity: 0.55;
-  }
-  .cty-area-count {
-    font-variant-numeric: lining-nums tabular-nums;
-    text-align: right;
-    font-size: 0.85rem;
-  }
-  .cty-qa {
-    margin-bottom: 0.9rem;
-    max-width: 70ch;
-  }
-  .cty-q {
-    font-size: 0.92rem;
-    margin: 0 0 0.25rem;
-  }
-  .cty-a {
-    font-size: 0.87rem;
-    line-height: 1.55;
-    opacity: 0.82;
-    margin: 0;
-  }
-  .cty-area-caption {
-    font-size: 0.78rem;
-    opacity: 0.7;
-    margin-top: 0.6rem;
   }
 </style>

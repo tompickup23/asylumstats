@@ -1,8 +1,28 @@
 /** Lossless scalar export of the shared model, including nulls and source locators. */
 import { getAllAreaCosts, AREA_COST_SOURCES, AREA_COST_UK, AREA_COST_DATES, AREA_COST_NOTES, AREA_COST_PERIODS, AREA_COST_INPUT_RATES, ACCOMMODATED_ALLOWANCE_BASIS } from "./area-cost";
 import { OGL_V3, SITE_ORGANIZATION, HOME_OFFICE_LOCAL_AUTHORITY_SOURCE } from "./datasets";
+import { newestDate } from "./data-releases";
 import { SITE_URL } from "./site-identity";
 export const AREA_COST_CSV_PATH = "/data/area-cost.csv";
+/**
+ * The day the newest input to /cost/ was published: the Home Office count, a rate letter,
+ * the support rates, the grant instruction, the HMRC tables or the council taxbase. Used
+ * for the Dataset's dateModified and the sitemap lastmod, so the two agree, and it moves
+ * only when an input does, never at build time (see src/lib/data-releases.ts). The ONS
+ * population estimates give their publication date as a sentence, not a date, and are
+ * left out; they were published on 29 July 2026, before every input above.
+ */
+export function areaCostDateModified(): string | null {
+  const { counts, rates, support, grant, taxpayers, dwellings } = AREA_COST_SOURCES;
+  return newestDate(
+    counts.release_date,
+    ...Object.values(rates).map((rate) => rate.published),
+    ...Object.values(support).map((rate) => rate.published),
+    grant.published,
+    taxpayers.publishedAt,
+    dwellings.updated
+  );
+}
 type Scalar = string | number | boolean | null;
 function flatten(value: unknown, prefix = "", out: Record<string, Scalar> = {}): Record<string, Scalar> {
   if (value === null || typeof value !== "object") out[prefix] = value as Scalar;
@@ -40,10 +60,12 @@ export function buildAreaCostCsv() {
   return [columns.map(cell).join(","), ...rows.map(row => columns.map(key => cell(row[key])).join(","))].join("\r\n") + "\r\n";
 }
 export function buildAreaCostDataset(description: string) {
+  const dateModified = areaCostDateModified();
   return {
     "@context": "https://schema.org", "@type": "Dataset", "@id": `${SITE_URL}/cost/#dataset`,
     name: "Asylum support costs and relative burden by local authority", description,
     url: `${SITE_URL}/cost/`, creator: SITE_ORGANIZATION, publisher: SITE_ORGANIZATION,
+    ...(dateModified ? { dateModified } : {}),
     license: OGL_V3, isAccessibleForFree: true, temporalCoverage: AREA_COST_DATES.count,
     spatialCoverage: { "@type": "Country", name: "United Kingdom" },
     isBasedOn: [HOME_OFFICE_LOCAL_AUTHORITY_SOURCE,

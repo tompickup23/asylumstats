@@ -1,0 +1,89 @@
+---
+/** The newest findings as cards on /national/. Taken out of national.astro. */
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  findings: CollectionEntry<"findings">[];
+}
+
+const { findings } = Astro.props;
+const verdictColor: Record<string, string> = {
+  alert: "var(--warning)",
+  critical: "var(--critical)",
+  resolved: "var(--positive)",
+  info: "var(--accent)"
+};
+---
+
+<div class="findings-grid">
+  {findings.map((finding) => (
+    <a href={`/findings/${finding.id.replace(/\.md$/, "")}/`} class="finding-card">
+      <div class="finding-meta">
+        <span class="finding-category">{finding.data.category}</span>
+        <span class="finding-date">{finding.data.date}</span>
+      </div>
+      <h3 class="finding-headline">{finding.data.headline}</h3>
+      <div class="finding-stat-row">
+        <span class="finding-stat" style={`color: ${verdictColor[finding.data.verdict]}`}>
+          {finding.data.stat_value}
+        </span>
+        <span class="finding-stat-label">{finding.data.stat_label}</span>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  .finding-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color 180ms, transform 120ms;
+  }
+  .finding-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .finding-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+  }
+  .finding-category {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .finding-date { color: var(--text-muted); }
+  .finding-headline {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .finding-stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .finding-stat {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .finding-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+</style>

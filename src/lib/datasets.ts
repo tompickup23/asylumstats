@@ -17,7 +17,7 @@
 import ukRoutes from "../../data/raw/manifests/uk_routes.json";
 import { ROUTES_RELEASE_DATE } from "./data-releases";
 import { formatFindingDate } from "./finding-dates";
-import { loadLocalRouteLatest } from "./route-data";
+import { loadLocalRouteLatest, loadRouteDashboard } from "./route-data";
 import { SITE_NAME, SITE_URL } from "./site-identity";
 
 export const OGL_V3 = "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
@@ -36,19 +36,82 @@ const HOME_OFFICE = {
   url: "https://www.gov.uk/government/organisations/home-office"
 } as const;
 
-const localAuthorityFile = ukRoutes.files.find((file) => file.sourceId === "local_immigration_groups");
+/** One file of the Home Office quarterly release, as a source a Dataset is based on. */
+function homeOfficeReleaseFile(sourceId: string, contents: string) {
+  const file = ukRoutes.files.find((entry) => entry.sourceId === sourceId);
+  return {
+    "@type": "Dataset",
+    name: `${ukRoutes.release}: ${contents}`,
+    url: ukRoutes.releasePage,
+    ...(file ? { sameAs: file.sourceUrl } : {}),
+    creator: HOME_OFFICE,
+    publisher: HOME_OFFICE,
+    license: OGL_V3,
+    ...(ROUTES_RELEASE_DATE ? { datePublished: ROUTES_RELEASE_DATE } : {})
+  };
+}
 
 /** The Home Office release every local authority figure on the site comes from. */
-export const HOME_OFFICE_LOCAL_AUTHORITY_SOURCE = {
-  "@type": "Dataset",
-  name: `${ukRoutes.release}: regional and local authority data`,
-  url: ukRoutes.releasePage,
-  ...(localAuthorityFile ? { sameAs: localAuthorityFile.sourceUrl } : {}),
-  creator: HOME_OFFICE,
-  publisher: HOME_OFFICE,
-  license: OGL_V3,
-  ...(ROUTES_RELEASE_DATE ? { datePublished: ROUTES_RELEASE_DATE } : {})
-};
+export const HOME_OFFICE_LOCAL_AUTHORITY_SOURCE = homeOfficeReleaseFile(
+  "local_immigration_groups",
+  "regional and local authority data"
+);
+
+/**
+ * The national figures on /national/, declared as the Dataset they are.
+ *
+ * Until November 2026 the page carried a WebPage node and nothing else, so the figures a
+ * search engine could read on it had no source, no licence and no date. They come from
+ * three files of the same Home Office release, named here by the tables the routes
+ * transform reads: claims and initial decisions (Asy_D01, Asy_D02), people awaiting an
+ * initial decision (Asy_D03) and people on asylum support with their accommodation
+ * (Asy_D09). dateModified is the day that release was published, from the fetch manifest,
+ * which is also the page's lastmod in the sitemap.
+ */
+export function buildNationalDataset() {
+  const dynamics = loadRouteDashboard().nationalSystemDynamics;
+  const quarter = {
+    quarterLabel: dynamics.latestQuarter.quarterLabel ?? "the latest quarter",
+    stockPeriodLabel: dynamics.latestQuarter.stockPeriodLabel ?? "the last day of that quarter"
+  };
+  const quarterEnd = dynamics.stockSeries.supportedAsylum.at(-1)?.periodEnd ?? null;
+  const end = quarterEnd ? new Date(`${quarterEnd}T00:00:00Z`) : null;
+  const quarterStart = end
+    ? new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() - 2, 1)).toISOString().slice(0, 10)
+    : null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "@id": `${SITE_URL}/national/#dataset`,
+    name: `UK asylum claims, decisions, backlog and support: national figures, ${quarter.quarterLabel}`,
+    description:
+      `National figures for the UK asylum system from the Home Office's ${ukRoutes.release}: ` +
+      `asylum claims and initial decisions in ${quarter.quarterLabel}, and the number of people ` +
+      `awaiting an initial decision, on asylum support and in hotel accommodation on ` +
+      `${quarter.stockPeriodLabel}.`,
+    url: `${SITE_URL}/national/`,
+    isAccessibleForFree: true,
+    license: OGL_V3,
+    creator: SITE_ORGANIZATION,
+    publisher: SITE_ORGANIZATION,
+    isBasedOn: [
+      homeOfficeReleaseFile("asylum_claims", "asylum claims and initial decisions (Asy_D01, Asy_D02)"),
+      homeOfficeReleaseFile("asylum_awaiting_decision", "asylum claims awaiting an initial decision (Asy_D03)"),
+      homeOfficeReleaseFile("asylum_support", "asylum seekers in receipt of support (Asy_D09)")
+    ],
+    ...(ROUTES_RELEASE_DATE ? { dateModified: ROUTES_RELEASE_DATE } : {}),
+    ...(quarterStart && quarterEnd ? { temporalCoverage: `${quarterStart}/${quarterEnd}` } : {}),
+    spatialCoverage: { "@type": "Country", name: "United Kingdom" },
+    keywords: ["asylum claims", "asylum decisions", "asylum backlog", "asylum support", "asylum hotels"],
+    variableMeasured: [
+      "Asylum claims in the quarter",
+      "Initial decisions on asylum claims in the quarter",
+      "People awaiting an initial decision at the quarter end",
+      "People on asylum support at the quarter end",
+      "People on asylum support in hotel accommodation at the quarter end"
+    ]
+  };
+}
 
 export const LOCAL_AUTHORITY_CSV_PATH = "/data/local-authority-asylum-support.csv";
 export const LOCAL_AUTHORITY_DATASET_ID = `${SITE_URL}/places/#dataset`;
