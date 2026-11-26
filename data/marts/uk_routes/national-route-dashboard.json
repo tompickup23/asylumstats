@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-23T20:00:35.241Z",
-  "localSnapshotDate": "2026-06-30",
+  "generatedAt": "2026-11-26T20:57:38.516Z",
+  "localSnapshotDate": "2026-09-30",
   "routeFamilies": [
     {
       "id": "safe_legal_total",
@@ -8,12 +8,12 @@
       "group": "Humanitarian routes",
       "schemeStatus": "Mixed route family",
       "localBreakdown": "No single local authority split",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
-      "note": "Includes refugee resettlement, refugee family reunion, Ukraine and BN(O) routes. Do not present as a refugee total, and do not read it as arrivals: 86,663 of the 124,930 in Year ending June 2026 were granted in country, which the Home Office defines as extensions for people already in the UK.",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
+      "note": "Includes refugee resettlement, refugee family reunion, Ukraine and BN(O) routes. Do not present as a refugee total, and do not read it as arrivals: 99,390 of the 132,949 in Year ending September 2026 were granted in country, which the Home Office defines as extensions for people already in the UK.",
       "split": {
-        "periodLabel": "Year ending June 2026",
-        "outOfCountry": 38267,
-        "inCountry": 86663,
+        "periodLabel": "Year ending September 2026",
+        "outOfCountry": 33559,
+        "inCountry": 99390,
         "outOfCountryLabel": "Granted out of country",
         "inCountryLabel": "Extensions granted in country"
       },
@@ -99,23 +99,23 @@
           "value": 189544
         },
         {
-          "periodLabel": "2026 (Q1 - Q2 only)",
+          "periodLabel": "2026 (Q1 - Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 45546
+          "value": 98784
         },
         {
-          "periodLabel": "Year ending June 2025",
+          "periodLabel": "Year ending September 2025",
           "periodEnd": null,
-          "value": 142418
+          "value": 170363
         },
         {
-          "periodLabel": "Year ending June 2026",
+          "periodLabel": "Year ending September 2026",
           "periodEnd": null,
-          "value": 124930
+          "value": 132949
         }
       ],
-      "latestValue": 124930,
-      "latestPeriod": "Year ending June 2026",
+      "latestValue": 132949,
+      "latestPeriod": "Year ending September 2026",
       "firstPeriod": "2010"
     },
     {
@@ -124,7 +124,7 @@
       "group": "Irregular asylum route",
       "schemeStatus": "Not a refugee scheme",
       "localBreakdown": "No standard local authority split",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "Detected arrivals via small boat across the UK.",
       "series": [
         {
@@ -176,14 +176,14 @@
           "isPartialYear": false
         },
         {
-          "periodLabel": "2026 (Q1 to Q2 only)",
+          "periodLabel": "2026 (Q1 to Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 11884,
+          "value": 19196,
           "isPartialYear": true
         }
       ],
-      "latestValue": 11884,
-      "latestPeriod": "2026 (Q1 to Q2 only)",
+      "latestValue": 19196,
+      "latestPeriod": "2026 (Q1 to Q3 only)",
       "firstPeriod": "2018"
     },
     {
@@ -196,14 +196,14 @@
       "note": "Quarter-end stock of people receiving asylum support. Changes reflect net movement onto and off support, not the number of distinct people who passed through the system.",
       "series": [
         {
-          "periodLabel": "2026-06-30",
-          "periodEnd": "2026-06-30",
-          "value": 93293
+          "periodLabel": "2026-09-30",
+          "periodEnd": "2026-09-30",
+          "value": 93453
         }
       ],
-      "latestValue": 93293,
-      "latestPeriod": "2026-06-30",
-      "firstPeriod": "2026-06-30"
+      "latestValue": 93453,
+      "latestPeriod": "2026-09-30",
+      "firstPeriod": "2026-09-30"
     },
     {
       "id": "afghan_resettlement_programme",
@@ -211,7 +211,7 @@
       "group": "Refugee resettlement and relocation",
       "schemeStatus": "Scheme family",
       "localBreakdown": "Latest local population snapshot and local quarterly arrivals available",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "National yearly arrivals from summary tables; local stock from immigration group tables; quarterly local arrival history from resettlement tables.",
       "series": [
         {
@@ -240,23 +240,23 @@
           "value": 5874
         },
         {
-          "periodLabel": "2026 (Q1 - Q2 only)",
+          "periodLabel": "2026 (Q1 - Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 1108
+          "value": 2369
         },
         {
-          "periodLabel": "Year ending June 2025",
+          "periodLabel": "Year ending September 2025",
           "periodEnd": null,
-          "value": 6573
+          "value": 6437
         },
         {
-          "periodLabel": "Year ending June 2026",
+          "periodLabel": "Year ending September 2026",
           "periodEnd": null,
-          "value": 3352
+          "value": 3101
         }
       ],
-      "latestValue": 3352,
-      "latestPeriod": "Year ending June 2026",
+      "latestValue": 3101,
+      "latestPeriod": "Year ending September 2026",
       "firstPeriod": "2021"
     },
     {
@@ -265,7 +265,7 @@
       "group": "Refugee resettlement",
       "schemeStatus": "Scheme family",
       "localBreakdown": "Quarterly local authority arrivals available",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "This build groups UKRS, Mandate, VPRS, VCRS, and Gateway to avoid pretending the current local stock table publishes them separately.",
       "series": [
         {
@@ -349,23 +349,23 @@
           "value": 543
         },
         {
-          "periodLabel": "2026 (Q1 - Q2 only)",
+          "periodLabel": "2026 (Q1 - Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 301
+          "value": 349
         },
         {
-          "periodLabel": "Year ending June 2025",
+          "periodLabel": "Year ending September 2025",
           "periodEnd": null,
-          "value": 872
+          "value": 834
         },
         {
-          "periodLabel": "Year ending June 2026",
+          "periodLabel": "Year ending September 2026",
           "periodEnd": null,
-          "value": 488
+          "value": 418
         }
       ],
-      "latestValue": 488,
-      "latestPeriod": "Year ending June 2026",
+      "latestValue": 418,
+      "latestPeriod": "Year ending September 2026",
       "firstPeriod": "2010"
     },
     {
@@ -374,7 +374,7 @@
       "group": "Refugee resettlement support model",
       "schemeStatus": "Scheme support channel",
       "localBreakdown": "Quarterly local authority arrivals available",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "Separate from core resettlement totals because this is a sponsorship mechanism rather than a separate national asylum route.",
       "series": [
         {
@@ -413,7 +413,7 @@
       "group": "Protection-linked family route",
       "schemeStatus": "Not a refugee resettlement scheme",
       "localBreakdown": "No local authority split",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "Family route connected to existing protection status in the UK.",
       "series": [
         {
@@ -497,23 +497,23 @@
           "value": 18577
         },
         {
-          "periodLabel": "2026 (Q1 - Q2 only)",
+          "periodLabel": "2026 (Q1 - Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 4928
+          "value": 6460
         },
         {
-          "periodLabel": "Year ending June 2025",
+          "periodLabel": "Year ending September 2025",
           "periodEnd": null,
-          "value": 20643
+          "value": 20626
         },
         {
-          "periodLabel": "Year ending June 2026",
+          "periodLabel": "Year ending September 2026",
           "periodEnd": null,
-          "value": 12888
+          "value": 9183
         }
       ],
-      "latestValue": 12888,
-      "latestPeriod": "Year ending June 2026",
+      "latestValue": 9183,
+      "latestPeriod": "Year ending September 2026",
       "firstPeriod": "2010"
     },
     {
@@ -522,7 +522,7 @@
       "group": "Humanitarian route",
       "schemeStatus": "Not a refugee resettlement scheme",
       "localBreakdown": "Latest local authority arrivals snapshot available",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "note": "Use arrivals rather than grants when comparing to local authority placement counts.",
       "series": [
         {
@@ -546,23 +546,23 @@
           "value": 14900
         },
         {
-          "periodLabel": "2026 (Q1 - Q2 only)",
+          "periodLabel": "2026 (Q1 - Q3 only)",
           "periodEnd": "2026-12-31",
-          "value": 5800
+          "value": 9500
         },
         {
-          "periodLabel": "Year ending June 2025",
+          "periodLabel": "Year ending September 2025",
           "periodEnd": null,
-          "value": 17200
+          "value": 15400
         },
         {
-          "periodLabel": "Year ending June 2026",
+          "periodLabel": "Year ending September 2026",
           "periodEnd": null,
-          "value": 13600
+          "value": 14000
         }
       ],
-      "latestValue": 13600,
-      "latestPeriod": "Year ending June 2026",
+      "latestValue": 14000,
+      "latestPeriod": "Year ending September 2026",
       "firstPeriod": "2022"
     }
   ],
@@ -570,88 +570,88 @@
     {
       "id": "small_boat_arrivals",
       "label": "Small boat arrivals",
-      "value": 33374,
-      "period": "Year ending June 2026",
+      "value": 26581,
+      "period": "Year ending September 2026",
       "detail": "Detected arrivals via small boat across the UK, over the latest four published quarters.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics"
     },
     {
       "id": "small_boat_share",
       "label": "Small boat share of illegal entry routes",
-      "value": 87.6,
-      "period": "Year ending June 2026",
+      "value": 85.5,
+      "period": "Year ending September 2026",
       "detail": "Derived from the illegal entry routes dataset.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
       "valueSuffix": "%"
     },
     {
       "id": "supported_asylum",
       "label": "Supported asylum population",
-      "value": 93293,
-      "period": "As at 2026-06-30",
+      "value": 93453,
+      "period": "As at 2026-09-30",
       "detail": "Latest official UK quarter-end stock snapshot from the immigration groups table, not an arrivals or throughput count.",
       "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
     },
     {
       "id": "contingency_accommodation",
       "label": "Contingency accommodation population",
-      "value": 17276,
-      "period": "As at 2026-06-30",
+      "value": 14202,
+      "period": "As at 2026-09-30",
       "detail": "Proxy for the most visible temporary accommodation pressure.",
       "sourceUrl": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
     },
     {
       "id": "afghan_arrivals",
       "label": "Afghan Resettlement Programme arrivals",
-      "value": 3352,
-      "period": "Year ending June 2026",
+      "value": 3101,
+      "period": "Year ending September 2026",
       "detail": "National yearly arrivals through Afghan resettlement and relocation pathways.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics"
     },
     {
       "id": "resettled_total",
       "label": "Total resettled arrivals",
-      "value": 3840,
-      "period": "Year ending June 2026",
+      "value": 3519,
+      "period": "Year ending September 2026",
       "detail": "Separate from the UKRS-family line because the total includes Afghan arrivals.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics"
     },
     {
       "id": "ukraine_arrivals",
       "label": "Ukraine arrivals",
-      "value": 13600,
-      "period": "Year ending June 2026",
+      "value": 14000,
+      "period": "Year ending September 2026",
       "detail": "Do not mix this humanitarian route into refugee resettlement totals.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics"
     },
     {
       "id": "family_reunion",
       "label": "Refugee Family Reunion grants",
-      "value": 12888,
-      "period": "Year ending June 2026",
+      "value": 9183,
+      "period": "Year ending September 2026",
       "detail": "Protection-linked family route, not a resettlement scheme.",
-      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics"
+      "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics"
     }
   ],
   "illegalEntryMethodsLatestYear": [
     {
       "method": "Small boat arrivals",
-      "value": 33374
+      "value": 26581
     },
     {
       "method": "Inadequately documented air arrivals",
-      "value": 2492
+      "value": 2107
     },
     {
       "method": "Recorded detections in the UK",
-      "value": 1962
+      "value": 2098
     },
     {
       "method": "Recorded detections at UK ports",
-      "value": 258
+      "value": 291
     }
   ],
-  "illegalEntryMethodsPeriodLabel": "Year ending June 2026",
+  "illegalEntryMethodsPeriodLabel": "Year ending September 2026",
   "smallBoatDecisionGroupsLatestYear": {
     "year": "2025",
     "rows": [
@@ -686,34 +686,34 @@
       {
         "id": "asylum_claims",
         "label": "Asylum claims",
-        "value": 17233,
-        "period": "2026 Q2",
+        "value": 18000,
+        "period": "2026 Q3",
         "detail": "Quarterly inflow into the asylum system.",
-        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-claim-asylum-in-the-uk"
+        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-claim-asylum-in-the-uk"
       },
       {
         "id": "asylum_initial_decisions",
         "label": "Initial decisions",
-        "value": 22176,
-        "period": "2026 Q2",
+        "value": 17558,
+        "period": "2026 Q3",
         "detail": "Quarterly operational output. This is not the same thing as latest cohort outcomes.",
-        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-claim-asylum-in-the-uk"
+        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-claim-asylum-in-the-uk"
       },
       {
         "id": "awaiting_initial_decision",
         "label": "Awaiting initial decision",
-        "value": 40168,
-        "period": "As at 30 Jun 2026",
+        "value": 40887,
+        "period": "As at 30 Sep 2026",
         "detail": "Quarter-end stock awaiting an initial decision.",
-        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system"
+        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system"
       },
       {
         "id": "supported_asylum_stock",
         "label": "Supported asylum stock",
-        "value": 93293,
-        "period": "As at 30 Jun 2026",
+        "value": 93453,
+        "period": "As at 30 Sep 2026",
         "detail": "Quarter-end stock of people receiving asylum support, which overlaps with but is not identical to the awaiting-decision backlog.",
-        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system"
+        "sourceUrl": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system"
       }
     ],
     "flowSeries": {
@@ -1227,6 +1227,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 17233
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 18000
         }
       ],
       "initialDecisions": [
@@ -1739,6 +1744,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 22176
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 17558
         }
       ],
       "initialGrants": [
@@ -2251,6 +2261,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 6109
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 5791
         }
       ],
       "initialRefusals": [
@@ -2763,6 +2778,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 12970
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 9184
         }
       ],
       "initialWithdrawals": [
@@ -3275,6 +3295,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 2750
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 2157
         }
       ],
       "mainApplicantGrants": [
@@ -3787,6 +3812,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 5050
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 4911
         }
       ],
       "mainApplicantRefusals": [
@@ -4299,6 +4329,11 @@
           "periodLabel": "2026 Q2",
           "periodEnd": "2026-06-30",
           "value": 10080
+        },
+        {
+          "periodLabel": "2026 Q3",
+          "periodEnd": "2026-09-30",
+          "value": 7187
         }
       ]
     },
@@ -4628,6 +4663,11 @@
           "periodLabel": "30 Jun 2026",
           "periodEnd": "2026-06-30",
           "value": 40168
+        },
+        {
+          "periodLabel": "30 Sep 2026",
+          "periodEnd": "2026-09-30",
+          "value": 40887
         }
       ],
       "supportedAsylum": [
@@ -4880,6 +4920,11 @@
           "periodLabel": "30 Jun 2026",
           "periodEnd": "2026-06-30",
           "value": 93293
+        },
+        {
+          "periodLabel": "30 Sep 2026",
+          "periodEnd": "2026-09-30",
+          "value": 93453
         }
       ],
       "hotelAccommodation": [
@@ -4957,85 +5002,90 @@
           "periodLabel": "30 Jun 2026",
           "periodEnd": "2026-06-30",
           "value": 16021
+        },
+        {
+          "periodLabel": "30 Sep 2026",
+          "periodEnd": "2026-09-30",
+          "value": 13185
         }
       ]
     },
     "latestQuarter": {
-      "quarterLabel": "2026 Q2",
-      "stockPeriodLabel": "30 Jun 2026",
-      "claims": 17233,
-      "initialDecisions": 22176,
-      "initialGrants": 6109,
-      "initialRefusals": 12970,
-      "initialWithdrawals": 2750,
-      "initialAdministrativeOutcomes": 347,
-      "awaitingInitialDecision": 40168,
-      "supportedAsylum": 93293,
-      "hotelAccommodation": 16021,
-      "hotelShareOfSupportPct": 17.2,
-      "decisionMinusClaims": 4943
+      "quarterLabel": "2026 Q3",
+      "stockPeriodLabel": "30 Sep 2026",
+      "claims": 18000,
+      "initialDecisions": 17558,
+      "initialGrants": 5791,
+      "initialRefusals": 9184,
+      "initialWithdrawals": 2157,
+      "initialAdministrativeOutcomes": 426,
+      "awaitingInitialDecision": 40887,
+      "supportedAsylum": 93453,
+      "hotelAccommodation": 13185,
+      "hotelShareOfSupportPct": 14.1,
+      "decisionMinusClaims": -442
     },
     "latestQuarterDecisionBreakdown": [
       {
         "label": "Claims lodged",
-        "value": 17233,
+        "value": 18000,
         "metricId": "claims"
       },
       {
         "label": "Initial decisions",
-        "value": 22176,
+        "value": 17558,
         "metricId": "initial_decisions"
       },
       {
         "label": "Grants at initial decision",
-        "value": 6109,
+        "value": 5791,
         "metricId": "initial_grants"
       },
       {
         "label": "Refusals",
-        "value": 12970,
+        "value": 9184,
         "metricId": "initial_refusals"
       },
       {
         "label": "Withdrawals",
-        "value": 2750,
+        "value": 2157,
         "metricId": "initial_withdrawals"
       },
       {
         "label": "Administrative outcomes",
-        "value": 347,
+        "value": 426,
         "metricId": "initial_administrative"
       }
     ],
     "latestSupportBreakdown": [
       {
         "label": "Contingency hotel",
-        "value": 16021,
+        "value": 13185,
         "metricId": "hotel"
       },
       {
         "label": "Contingency other",
-        "value": 1255,
+        "value": 1017,
         "metricId": "contingency_other"
       },
       {
         "label": "Dispersal accommodation",
-        "value": 69038,
+        "value": 72194,
         "metricId": "dispersal"
       },
       {
         "label": "Initial accommodation",
-        "value": 1613,
+        "value": 1541,
         "metricId": "initial"
       },
       {
         "label": "Other accommodation",
-        "value": 1162,
+        "value": 1195,
         "metricId": "other"
       },
       {
         "label": "Subsistence only",
-        "value": 4204,
+        "value": 4321,
         "metricId": "subsistence_only"
       }
     ],
@@ -5043,22 +5093,22 @@
       {
         "claimYear": "2007",
         "totalClaims": 23432,
-        "initialDecisions": 20677,
+        "initialDecisions": 20676,
         "initialGrantCount": 6131,
-        "initialRefusalCount": 14546,
-        "initialWithdrawalCount": 1956,
+        "initialRefusalCount": 14545,
+        "initialWithdrawalCount": 1955,
         "initialAdministrativeCount": 244,
         "latestGrantCount": 10164,
-        "latestRefusalCount": 10037,
-        "latestWithdrawalCount": 2068,
+        "latestRefusalCount": 10036,
+        "latestWithdrawalCount": 2067,
         "latestAdministrativeCount": 608,
         "initialGrantRatePct": 29.7,
         "latestGrantRatePct": 50.3,
         "latestOutcomeKnownPct": 97.6,
-        "enforcedReturns": 4572,
-        "voluntaryReturns": 2248,
-        "returnsCount": 6820,
-        "returnableOutcomeCount": 12105,
+        "enforcedReturns": 4573,
+        "voluntaryReturns": 2246,
+        "returnsCount": 6819,
+        "returnableOutcomeCount": 12103,
         "returnRatePct": 56.3,
         "cohortAgeYears": 19,
         "returnsSettled": true
@@ -5066,22 +5116,22 @@
       {
         "claimYear": "2008",
         "totalClaims": 25933,
-        "initialDecisions": 21758,
-        "initialGrantCount": 6857,
+        "initialDecisions": 21759,
+        "initialGrantCount": 6858,
         "initialRefusalCount": 14901,
-        "initialWithdrawalCount": 3409,
+        "initialWithdrawalCount": 3408,
         "initialAdministrativeCount": 217,
-        "latestGrantCount": 11571,
+        "latestGrantCount": 11572,
         "latestRefusalCount": 10257,
-        "latestWithdrawalCount": 3301,
+        "latestWithdrawalCount": 3300,
         "latestAdministrativeCount": 255,
         "initialGrantRatePct": 31.5,
         "latestGrantRatePct": 53,
         "latestOutcomeKnownPct": 97.9,
-        "enforcedReturns": 5114,
+        "enforcedReturns": 5116,
         "voluntaryReturns": 2421,
-        "returnsCount": 7535,
-        "returnableOutcomeCount": 13558,
+        "returnsCount": 7537,
+        "returnableOutcomeCount": 13557,
         "returnRatePct": 55.6,
         "cohortAgeYears": 18,
         "returnsSettled": true
@@ -5089,22 +5139,22 @@
       {
         "claimYear": "2009",
         "totalClaims": 24487,
-        "initialDecisions": 20741,
+        "initialDecisions": 20744,
         "initialGrantCount": 5607,
-        "initialRefusalCount": 15134,
+        "initialRefusalCount": 15137,
         "initialWithdrawalCount": 3005,
-        "initialAdministrativeCount": 178,
-        "latestGrantCount": 10945,
-        "latestRefusalCount": 9827,
-        "latestWithdrawalCount": 2930,
-        "latestAdministrativeCount": 222,
+        "initialAdministrativeCount": 177,
+        "latestGrantCount": 10946,
+        "latestRefusalCount": 9828,
+        "latestWithdrawalCount": 2931,
+        "latestAdministrativeCount": 221,
         "initialGrantRatePct": 27,
         "latestGrantRatePct": 52.7,
         "latestOutcomeKnownPct": 97.7,
         "enforcedReturns": 4885,
-        "voluntaryReturns": 2052,
-        "returnsCount": 6937,
-        "returnableOutcomeCount": 12757,
+        "voluntaryReturns": 2058,
+        "returnsCount": 6943,
+        "returnableOutcomeCount": 12759,
         "returnRatePct": 54.4,
         "cohortAgeYears": 17,
         "returnsSettled": true
@@ -5112,44 +5162,44 @@
       {
         "claimYear": "2010",
         "totalClaims": 17916,
-        "initialDecisions": 15507,
+        "initialDecisions": 15506,
         "initialGrantCount": 4215,
-        "initialRefusalCount": 11292,
-        "initialWithdrawalCount": 1830,
+        "initialRefusalCount": 11291,
+        "initialWithdrawalCount": 1829,
         "initialAdministrativeCount": 182,
         "latestGrantCount": 7725,
         "latestRefusalCount": 7734,
-        "latestWithdrawalCount": 1840,
+        "latestWithdrawalCount": 1838,
         "latestAdministrativeCount": 220,
         "initialGrantRatePct": 27.2,
         "latestGrantRatePct": 50,
         "latestOutcomeKnownPct": 97.8,
-        "enforcedReturns": 4247,
-        "voluntaryReturns": 1339,
-        "returnsCount": 5586,
-        "returnableOutcomeCount": 9574,
-        "returnRatePct": 58.3,
+        "enforcedReturns": 4251,
+        "voluntaryReturns": 1341,
+        "returnsCount": 5592,
+        "returnableOutcomeCount": 9572,
+        "returnRatePct": 58.4,
         "cohortAgeYears": 16,
         "returnsSettled": true
       },
       {
         "claimYear": "2011",
         "totalClaims": 19865,
-        "initialDecisions": 17346,
-        "initialGrantCount": 6025,
-        "initialRefusalCount": 11321,
-        "initialWithdrawalCount": 1957,
+        "initialDecisions": 17349,
+        "initialGrantCount": 6027,
+        "initialRefusalCount": 11322,
+        "initialWithdrawalCount": 1956,
         "initialAdministrativeCount": 170,
-        "latestGrantCount": 9187,
-        "latestRefusalCount": 8082,
-        "latestWithdrawalCount": 1999,
+        "latestGrantCount": 9189,
+        "latestRefusalCount": 8083,
+        "latestWithdrawalCount": 1998,
         "latestAdministrativeCount": 205,
         "initialGrantRatePct": 34.7,
         "latestGrantRatePct": 53.2,
         "latestOutcomeKnownPct": 98,
-        "enforcedReturns": 4143,
-        "voluntaryReturns": 1449,
-        "returnsCount": 5592,
+        "enforcedReturns": 4144,
+        "voluntaryReturns": 1451,
+        "returnsCount": 5595,
         "returnableOutcomeCount": 10081,
         "returnRatePct": 55.5,
         "cohortAgeYears": 15,
@@ -5158,92 +5208,92 @@
       {
         "claimYear": "2012",
         "totalClaims": 21843,
-        "initialDecisions": 19061,
+        "initialDecisions": 19060,
         "initialGrantCount": 6977,
-        "initialRefusalCount": 12084,
+        "initialRefusalCount": 12083,
         "initialWithdrawalCount": 2488,
         "initialAdministrativeCount": 148,
         "latestGrantCount": 10177,
-        "latestRefusalCount": 8789,
+        "latestRefusalCount": 8788,
         "latestWithdrawalCount": 2539,
         "latestAdministrativeCount": 192,
         "initialGrantRatePct": 36.6,
         "latestGrantRatePct": 53.7,
         "latestOutcomeKnownPct": 99.3,
-        "enforcedReturns": 4650,
-        "voluntaryReturns": 1481,
-        "returnsCount": 6131,
-        "returnableOutcomeCount": 11328,
-        "returnRatePct": 54.1,
+        "enforcedReturns": 4651,
+        "voluntaryReturns": 1487,
+        "returnsCount": 6138,
+        "returnableOutcomeCount": 11327,
+        "returnRatePct": 54.2,
         "cohortAgeYears": 14,
         "returnsSettled": true
       },
       {
         "claimYear": "2013",
         "totalClaims": 23584,
-        "initialDecisions": 20702,
-        "initialGrantCount": 7787,
-        "initialRefusalCount": 12915,
-        "initialWithdrawalCount": 2450,
+        "initialDecisions": 20706,
+        "initialGrantCount": 7790,
+        "initialRefusalCount": 12916,
+        "initialWithdrawalCount": 2449,
         "initialAdministrativeCount": 213,
-        "latestGrantCount": 11253,
-        "latestRefusalCount": 9298,
+        "latestGrantCount": 11258,
+        "latestRefusalCount": 9297,
         "latestWithdrawalCount": 2536,
-        "latestAdministrativeCount": 278,
+        "latestAdministrativeCount": 277,
         "initialGrantRatePct": 37.6,
         "latestGrantRatePct": 54.8,
         "latestOutcomeKnownPct": 99.1,
-        "enforcedReturns": 5185,
-        "voluntaryReturns": 1173,
-        "returnsCount": 6358,
-        "returnableOutcomeCount": 11834,
-        "returnRatePct": 53.7,
+        "enforcedReturns": 5190,
+        "voluntaryReturns": 1179,
+        "returnsCount": 6369,
+        "returnableOutcomeCount": 11833,
+        "returnRatePct": 53.8,
         "cohortAgeYears": 13,
         "returnsSettled": true
       },
       {
         "claimYear": "2014",
         "totalClaims": 25033,
-        "initialDecisions": 22481,
-        "initialGrantCount": 9964,
+        "initialDecisions": 22485,
+        "initialGrantCount": 9968,
         "initialRefusalCount": 12517,
-        "initialWithdrawalCount": 2065,
+        "initialWithdrawalCount": 2064,
         "initialAdministrativeCount": 191,
-        "latestGrantCount": 14238,
+        "latestGrantCount": 14242,
         "latestRefusalCount": 8092,
         "latestWithdrawalCount": 2185,
-        "latestAdministrativeCount": 222,
+        "latestAdministrativeCount": 221,
         "initialGrantRatePct": 44.3,
         "latestGrantRatePct": 63.8,
         "latestOutcomeKnownPct": 98.8,
-        "enforcedReturns": 3726,
-        "voluntaryReturns": 1131,
-        "returnsCount": 4857,
+        "enforcedReturns": 3731,
+        "voluntaryReturns": 1136,
+        "returnsCount": 4867,
         "returnableOutcomeCount": 10277,
-        "returnRatePct": 47.3,
+        "returnRatePct": 47.4,
         "cohortAgeYears": 12,
         "returnsSettled": true
       },
       {
         "claimYear": "2015",
         "totalClaims": 32733,
-        "initialDecisions": 29337,
-        "initialGrantCount": 11899,
-        "initialRefusalCount": 17438,
+        "initialDecisions": 29339,
+        "initialGrantCount": 11900,
+        "initialRefusalCount": 17439,
         "initialWithdrawalCount": 2649,
-        "initialAdministrativeCount": 308,
-        "latestGrantCount": 18683,
-        "latestRefusalCount": 10405,
-        "latestWithdrawalCount": 2940,
-        "latestAdministrativeCount": 266,
+        "initialAdministrativeCount": 307,
+        "latestGrantCount": 18685,
+        "latestRefusalCount": 10406,
+        "latestWithdrawalCount": 2939,
+        "latestAdministrativeCount": 265,
         "initialGrantRatePct": 40.6,
         "latestGrantRatePct": 64.2,
         "latestOutcomeKnownPct": 98.7,
-        "enforcedReturns": 2614,
-        "voluntaryReturns": 1532,
-        "returnsCount": 4146,
+        "enforcedReturns": 2617,
+        "voluntaryReturns": 1550,
+        "returnsCount": 4167,
         "returnableOutcomeCount": 13345,
-        "returnRatePct": 31.1,
+        "returnRatePct": 31.2,
         "cohortAgeYears": 11,
         "returnsSettled": true
       },
@@ -5254,226 +5304,226 @@
         "initialGrantCount": 8496,
         "initialRefusalCount": 17625,
         "initialWithdrawalCount": 3241,
-        "initialAdministrativeCount": 852,
-        "latestGrantCount": 15450,
+        "initialAdministrativeCount": 851,
+        "latestGrantCount": 15451,
         "latestRefusalCount": 11066,
-        "latestWithdrawalCount": 3438,
-        "latestAdministrativeCount": 260,
+        "latestWithdrawalCount": 3439,
+        "latestAdministrativeCount": 257,
         "initialGrantRatePct": 32.5,
         "latestGrantRatePct": 58.3,
         "latestOutcomeKnownPct": 98.3,
-        "enforcedReturns": 2412,
-        "voluntaryReturns": 1657,
-        "returnsCount": 4069,
-        "returnableOutcomeCount": 14504,
-        "returnRatePct": 28.1,
+        "enforcedReturns": 2417,
+        "voluntaryReturns": 1673,
+        "returnsCount": 4090,
+        "returnableOutcomeCount": 14505,
+        "returnRatePct": 28.2,
         "cohortAgeYears": 10,
         "returnsSettled": true
       },
       {
         "claimYear": "2017",
         "totalClaims": 26547,
-        "initialDecisions": 22104,
-        "initialGrantCount": 7200,
-        "initialRefusalCount": 14904,
-        "initialWithdrawalCount": 3478,
-        "initialAdministrativeCount": 492,
-        "latestGrantCount": 13652,
-        "latestRefusalCount": 8547,
-        "latestWithdrawalCount": 3577,
-        "latestAdministrativeCount": 298,
+        "initialDecisions": 22107,
+        "initialGrantCount": 7202,
+        "initialRefusalCount": 14905,
+        "initialWithdrawalCount": 3477,
+        "initialAdministrativeCount": 491,
+        "latestGrantCount": 13655,
+        "latestRefusalCount": 8551,
+        "latestWithdrawalCount": 3574,
+        "latestAdministrativeCount": 295,
         "initialGrantRatePct": 32.6,
         "latestGrantRatePct": 61.5,
         "latestOutcomeKnownPct": 98.2,
-        "enforcedReturns": 1648,
-        "voluntaryReturns": 1286,
-        "returnsCount": 2934,
-        "returnableOutcomeCount": 12124,
-        "returnRatePct": 24.2,
+        "enforcedReturns": 1661,
+        "voluntaryReturns": 1312,
+        "returnsCount": 2973,
+        "returnableOutcomeCount": 12125,
+        "returnRatePct": 24.5,
         "cohortAgeYears": 9,
         "returnsSettled": true
       },
       {
         "claimYear": "2018",
         "totalClaims": 29504,
-        "initialDecisions": 24260,
+        "initialDecisions": 24261,
         "initialGrantCount": 11781,
-        "initialRefusalCount": 12479,
-        "initialWithdrawalCount": 4276,
-        "initialAdministrativeCount": 400,
-        "latestGrantCount": 17428,
-        "latestRefusalCount": 6900,
-        "latestWithdrawalCount": 4277,
-        "latestAdministrativeCount": 331,
+        "initialRefusalCount": 12480,
+        "initialWithdrawalCount": 4275,
+        "initialAdministrativeCount": 398,
+        "latestGrantCount": 17438,
+        "latestRefusalCount": 6898,
+        "latestWithdrawalCount": 4275,
+        "latestAdministrativeCount": 323,
         "initialGrantRatePct": 48.6,
-        "latestGrantRatePct": 71.6,
+        "latestGrantRatePct": 71.7,
         "latestOutcomeKnownPct": 98.1,
-        "enforcedReturns": 1044,
-        "voluntaryReturns": 1319,
-        "returnsCount": 2363,
-        "returnableOutcomeCount": 11177,
-        "returnRatePct": 21.1,
+        "enforcedReturns": 1056,
+        "voluntaryReturns": 1355,
+        "returnsCount": 2411,
+        "returnableOutcomeCount": 11173,
+        "returnRatePct": 21.6,
         "cohortAgeYears": 8,
         "returnsSettled": true
       },
       {
         "claimYear": "2019",
         "totalClaims": 35737,
-        "initialDecisions": 28000,
-        "initialGrantCount": 16128,
-        "initialRefusalCount": 11872,
-        "initialWithdrawalCount": 6491,
+        "initialDecisions": 28004,
+        "initialGrantCount": 16125,
+        "initialRefusalCount": 11879,
+        "initialWithdrawalCount": 6485,
         "initialAdministrativeCount": 466,
-        "latestGrantCount": 21117,
-        "latestRefusalCount": 6999,
-        "latestWithdrawalCount": 6414,
-        "latestAdministrativeCount": 427,
+        "latestGrantCount": 21157,
+        "latestRefusalCount": 6968,
+        "latestWithdrawalCount": 6409,
+        "latestAdministrativeCount": 421,
         "initialGrantRatePct": 57.6,
-        "latestGrantRatePct": 75.1,
+        "latestGrantRatePct": 75.2,
         "latestOutcomeKnownPct": 97.8,
-        "enforcedReturns": 979,
-        "voluntaryReturns": 1980,
-        "returnsCount": 2959,
-        "returnableOutcomeCount": 13413,
-        "returnRatePct": 22.1,
+        "enforcedReturns": 996,
+        "voluntaryReturns": 2027,
+        "returnsCount": 3023,
+        "returnableOutcomeCount": 13377,
+        "returnRatePct": 22.6,
         "cohortAgeYears": 7,
         "returnsSettled": false
       },
       {
         "claimYear": "2020",
         "totalClaims": 29440,
-        "initialDecisions": 23629,
-        "initialGrantCount": 14269,
-        "initialRefusalCount": 9360,
-        "initialWithdrawalCount": 4454,
-        "initialAdministrativeCount": 1123,
-        "latestGrantCount": 18998,
-        "latestRefusalCount": 4661,
-        "latestWithdrawalCount": 4548,
-        "latestAdministrativeCount": 999,
+        "initialDecisions": 23639,
+        "initialGrantCount": 14285,
+        "initialRefusalCount": 9354,
+        "initialWithdrawalCount": 4450,
+        "initialAdministrativeCount": 1121,
+        "latestGrantCount": 19036,
+        "latestRefusalCount": 4644,
+        "latestWithdrawalCount": 4544,
+        "latestAdministrativeCount": 986,
         "initialGrantRatePct": 60.4,
-        "latestGrantRatePct": 80.3,
+        "latestGrantRatePct": 80.4,
         "latestOutcomeKnownPct": 99.2,
-        "enforcedReturns": 674,
-        "voluntaryReturns": 1448,
-        "returnsCount": 2122,
-        "returnableOutcomeCount": 9209,
-        "returnRatePct": 23,
+        "enforcedReturns": 692,
+        "voluntaryReturns": 1506,
+        "returnsCount": 2198,
+        "returnableOutcomeCount": 9188,
+        "returnRatePct": 23.9,
         "cohortAgeYears": 6,
         "returnsSettled": false
       },
       {
         "claimYear": "2021",
         "totalClaims": 48182,
-        "initialDecisions": 36754,
-        "initialGrantCount": 26066,
-        "initialRefusalCount": 10688,
-        "initialWithdrawalCount": 8151,
-        "initialAdministrativeCount": 3069,
-        "latestGrantCount": 29779,
-        "latestRefusalCount": 7329,
-        "latestWithdrawalCount": 7825,
-        "latestAdministrativeCount": 3041,
-        "initialGrantRatePct": 70.9,
-        "latestGrantRatePct": 80.2,
+        "initialDecisions": 36788,
+        "initialGrantCount": 26169,
+        "initialRefusalCount": 10619,
+        "initialWithdrawalCount": 8148,
+        "initialAdministrativeCount": 3058,
+        "latestGrantCount": 29850,
+        "latestRefusalCount": 7316,
+        "latestWithdrawalCount": 7820,
+        "latestAdministrativeCount": 3008,
+        "initialGrantRatePct": 71.1,
+        "latestGrantRatePct": 80.3,
         "latestOutcomeKnownPct": 99.6,
-        "enforcedReturns": 1074,
-        "voluntaryReturns": 2257,
-        "returnsCount": 3331,
-        "returnableOutcomeCount": 15154,
-        "returnRatePct": 22,
+        "enforcedReturns": 1097,
+        "voluntaryReturns": 2363,
+        "returnsCount": 3460,
+        "returnableOutcomeCount": 15136,
+        "returnRatePct": 22.9,
         "cohortAgeYears": 5,
         "returnsSettled": false
       },
       {
         "claimYear": "2022",
         "totalClaims": 76948,
-        "initialDecisions": 51791,
-        "initialGrantCount": 31246,
-        "initialRefusalCount": 20545,
-        "initialWithdrawalCount": 17862,
-        "initialAdministrativeCount": 6010,
-        "latestGrantCount": 35936,
-        "latestRefusalCount": 16937,
-        "latestWithdrawalCount": 17382,
-        "latestAdministrativeCount": 5408,
-        "initialGrantRatePct": 60.3,
-        "latestGrantRatePct": 68,
-        "latestOutcomeKnownPct": 98.3,
-        "enforcedReturns": 2920,
-        "voluntaryReturns": 6416,
-        "returnsCount": 9336,
-        "returnableOutcomeCount": 34319,
-        "returnRatePct": 27.2,
+        "initialDecisions": 51789,
+        "initialGrantCount": 31286,
+        "initialRefusalCount": 20503,
+        "initialWithdrawalCount": 17738,
+        "initialAdministrativeCount": 5975,
+        "latestGrantCount": 36192,
+        "latestRefusalCount": 16798,
+        "latestWithdrawalCount": 17231,
+        "latestAdministrativeCount": 5281,
+        "initialGrantRatePct": 60.4,
+        "latestGrantRatePct": 68.3,
+        "latestOutcomeKnownPct": 98.1,
+        "enforcedReturns": 2988,
+        "voluntaryReturns": 6845,
+        "returnsCount": 9833,
+        "returnableOutcomeCount": 34029,
+        "returnRatePct": 28.9,
         "cohortAgeYears": 4,
         "returnsSettled": false
       },
       {
         "claimYear": "2023",
         "totalClaims": 68462,
-        "initialDecisions": 50699,
-        "initialGrantCount": 21840,
-        "initialRefusalCount": 28859,
-        "initialWithdrawalCount": 12386,
-        "initialAdministrativeCount": 2966,
-        "latestGrantCount": 25107,
-        "latestRefusalCount": 26267,
-        "latestWithdrawalCount": 12050,
-        "latestAdministrativeCount": 2627,
-        "initialGrantRatePct": 43.1,
-        "latestGrantRatePct": 48.9,
-        "latestOutcomeKnownPct": 96.5,
-        "enforcedReturns": 1437,
-        "voluntaryReturns": 4328,
-        "returnsCount": 5765,
-        "returnableOutcomeCount": 38317,
-        "returnRatePct": 15,
+        "initialDecisions": 51161,
+        "initialGrantCount": 21921,
+        "initialRefusalCount": 29240,
+        "initialWithdrawalCount": 12319,
+        "initialAdministrativeCount": 3018,
+        "latestGrantCount": 26196,
+        "latestRefusalCount": 25769,
+        "latestWithdrawalCount": 11921,
+        "latestAdministrativeCount": 2612,
+        "initialGrantRatePct": 42.8,
+        "latestGrantRatePct": 50.4,
+        "latestOutcomeKnownPct": 97.1,
+        "enforcedReturns": 1496,
+        "voluntaryReturns": 4711,
+        "returnsCount": 6207,
+        "returnableOutcomeCount": 37690,
+        "returnRatePct": 16.5,
         "cohortAgeYears": 3,
         "returnsSettled": false
       },
       {
         "claimYear": "2024",
         "totalClaims": 82368,
-        "initialDecisions": 64350,
-        "initialGrantCount": 26619,
-        "initialRefusalCount": 37731,
-        "initialWithdrawalCount": 11561,
-        "initialAdministrativeCount": 2010,
-        "latestGrantCount": 29255,
-        "latestRefusalCount": 35605,
-        "latestWithdrawalCount": 11215,
-        "latestAdministrativeCount": 1846,
-        "initialGrantRatePct": 41.4,
-        "latestGrantRatePct": 45.1,
-        "latestOutcomeKnownPct": 94.6,
-        "enforcedReturns": 1169,
-        "voluntaryReturns": 3623,
-        "returnsCount": 4792,
-        "returnableOutcomeCount": 46820,
-        "returnRatePct": 10.2,
+        "initialDecisions": 65559,
+        "initialGrantCount": 26916,
+        "initialRefusalCount": 38643,
+        "initialWithdrawalCount": 11672,
+        "initialAdministrativeCount": 2078,
+        "latestGrantCount": 31010,
+        "latestRefusalCount": 35214,
+        "latestWithdrawalCount": 11233,
+        "latestAdministrativeCount": 1852,
+        "initialGrantRatePct": 41.1,
+        "latestGrantRatePct": 46.8,
+        "latestOutcomeKnownPct": 96.3,
+        "enforcedReturns": 1249,
+        "voluntaryReturns": 4046,
+        "returnsCount": 5295,
+        "returnableOutcomeCount": 46447,
+        "returnRatePct": 11.4,
         "cohortAgeYears": 2,
         "returnsSettled": false
       },
       {
         "claimYear": "2025",
         "totalClaims": 82559,
-        "initialDecisions": 64115,
-        "initialGrantCount": 28508,
-        "initialRefusalCount": 35607,
-        "initialWithdrawalCount": 8412,
-        "initialAdministrativeCount": 1023,
-        "latestGrantCount": 30022,
-        "latestRefusalCount": 34332,
-        "latestWithdrawalCount": 8271,
-        "latestAdministrativeCount": 925,
-        "initialGrantRatePct": 44.5,
-        "latestGrantRatePct": 46.7,
-        "latestOutcomeKnownPct": 89.1,
-        "enforcedReturns": 1160,
-        "voluntaryReturns": 2157,
-        "returnsCount": 3317,
-        "returnableOutcomeCount": 42603,
-        "returnRatePct": 7.8,
+        "initialDecisions": 66623,
+        "initialGrantCount": 29451,
+        "initialRefusalCount": 37172,
+        "initialWithdrawalCount": 8893,
+        "initialAdministrativeCount": 1048,
+        "latestGrantCount": 31990,
+        "latestRefusalCount": 34980,
+        "latestWithdrawalCount": 8656,
+        "latestAdministrativeCount": 938,
+        "initialGrantRatePct": 44.2,
+        "latestGrantRatePct": 47.8,
+        "latestOutcomeKnownPct": 92.7,
+        "enforcedReturns": 1301,
+        "voluntaryReturns": 2593,
+        "returnsCount": 3894,
+        "returnableOutcomeCount": 43636,
+        "returnRatePct": 8.9,
         "cohortAgeYears": 1,
         "returnsSettled": false
       }
@@ -5482,92 +5532,92 @@
       {
         "claimYear": "2022",
         "totalClaims": 76948,
-        "initialDecisions": 51791,
-        "initialGrantCount": 31246,
-        "initialRefusalCount": 20545,
-        "initialWithdrawalCount": 17862,
-        "initialAdministrativeCount": 6010,
-        "latestGrantCount": 35936,
-        "latestRefusalCount": 16937,
-        "latestWithdrawalCount": 17382,
-        "latestAdministrativeCount": 5408,
-        "initialGrantRatePct": 60.3,
-        "latestGrantRatePct": 68,
-        "latestOutcomeKnownPct": 98.3,
-        "enforcedReturns": 2920,
-        "voluntaryReturns": 6416,
-        "returnsCount": 9336,
-        "returnableOutcomeCount": 34319,
-        "returnRatePct": 27.2,
+        "initialDecisions": 51789,
+        "initialGrantCount": 31286,
+        "initialRefusalCount": 20503,
+        "initialWithdrawalCount": 17738,
+        "initialAdministrativeCount": 5975,
+        "latestGrantCount": 36192,
+        "latestRefusalCount": 16798,
+        "latestWithdrawalCount": 17231,
+        "latestAdministrativeCount": 5281,
+        "initialGrantRatePct": 60.4,
+        "latestGrantRatePct": 68.3,
+        "latestOutcomeKnownPct": 98.1,
+        "enforcedReturns": 2988,
+        "voluntaryReturns": 6845,
+        "returnsCount": 9833,
+        "returnableOutcomeCount": 34029,
+        "returnRatePct": 28.9,
         "cohortAgeYears": 4,
         "returnsSettled": false
       },
       {
         "claimYear": "2023",
         "totalClaims": 68462,
-        "initialDecisions": 50699,
-        "initialGrantCount": 21840,
-        "initialRefusalCount": 28859,
-        "initialWithdrawalCount": 12386,
-        "initialAdministrativeCount": 2966,
-        "latestGrantCount": 25107,
-        "latestRefusalCount": 26267,
-        "latestWithdrawalCount": 12050,
-        "latestAdministrativeCount": 2627,
-        "initialGrantRatePct": 43.1,
-        "latestGrantRatePct": 48.9,
-        "latestOutcomeKnownPct": 96.5,
-        "enforcedReturns": 1437,
-        "voluntaryReturns": 4328,
-        "returnsCount": 5765,
-        "returnableOutcomeCount": 38317,
-        "returnRatePct": 15,
+        "initialDecisions": 51161,
+        "initialGrantCount": 21921,
+        "initialRefusalCount": 29240,
+        "initialWithdrawalCount": 12319,
+        "initialAdministrativeCount": 3018,
+        "latestGrantCount": 26196,
+        "latestRefusalCount": 25769,
+        "latestWithdrawalCount": 11921,
+        "latestAdministrativeCount": 2612,
+        "initialGrantRatePct": 42.8,
+        "latestGrantRatePct": 50.4,
+        "latestOutcomeKnownPct": 97.1,
+        "enforcedReturns": 1496,
+        "voluntaryReturns": 4711,
+        "returnsCount": 6207,
+        "returnableOutcomeCount": 37690,
+        "returnRatePct": 16.5,
         "cohortAgeYears": 3,
         "returnsSettled": false
       },
       {
         "claimYear": "2024",
         "totalClaims": 82368,
-        "initialDecisions": 64350,
-        "initialGrantCount": 26619,
-        "initialRefusalCount": 37731,
-        "initialWithdrawalCount": 11561,
-        "initialAdministrativeCount": 2010,
-        "latestGrantCount": 29255,
-        "latestRefusalCount": 35605,
-        "latestWithdrawalCount": 11215,
-        "latestAdministrativeCount": 1846,
-        "initialGrantRatePct": 41.4,
-        "latestGrantRatePct": 45.1,
-        "latestOutcomeKnownPct": 94.6,
-        "enforcedReturns": 1169,
-        "voluntaryReturns": 3623,
-        "returnsCount": 4792,
-        "returnableOutcomeCount": 46820,
-        "returnRatePct": 10.2,
+        "initialDecisions": 65559,
+        "initialGrantCount": 26916,
+        "initialRefusalCount": 38643,
+        "initialWithdrawalCount": 11672,
+        "initialAdministrativeCount": 2078,
+        "latestGrantCount": 31010,
+        "latestRefusalCount": 35214,
+        "latestWithdrawalCount": 11233,
+        "latestAdministrativeCount": 1852,
+        "initialGrantRatePct": 41.1,
+        "latestGrantRatePct": 46.8,
+        "latestOutcomeKnownPct": 96.3,
+        "enforcedReturns": 1249,
+        "voluntaryReturns": 4046,
+        "returnsCount": 5295,
+        "returnableOutcomeCount": 46447,
+        "returnRatePct": 11.4,
         "cohortAgeYears": 2,
         "returnsSettled": false
       },
       {
         "claimYear": "2025",
         "totalClaims": 82559,
-        "initialDecisions": 64115,
-        "initialGrantCount": 28508,
-        "initialRefusalCount": 35607,
-        "initialWithdrawalCount": 8412,
-        "initialAdministrativeCount": 1023,
-        "latestGrantCount": 30022,
-        "latestRefusalCount": 34332,
-        "latestWithdrawalCount": 8271,
-        "latestAdministrativeCount": 925,
-        "initialGrantRatePct": 44.5,
-        "latestGrantRatePct": 46.7,
-        "latestOutcomeKnownPct": 89.1,
-        "enforcedReturns": 1160,
-        "voluntaryReturns": 2157,
-        "returnsCount": 3317,
-        "returnableOutcomeCount": 42603,
-        "returnRatePct": 7.8,
+        "initialDecisions": 66623,
+        "initialGrantCount": 29451,
+        "initialRefusalCount": 37172,
+        "initialWithdrawalCount": 8893,
+        "initialAdministrativeCount": 1048,
+        "latestGrantCount": 31990,
+        "latestRefusalCount": 34980,
+        "latestWithdrawalCount": 8656,
+        "latestAdministrativeCount": 938,
+        "initialGrantRatePct": 44.2,
+        "latestGrantRatePct": 47.8,
+        "latestOutcomeKnownPct": 92.7,
+        "enforcedReturns": 1301,
+        "voluntaryReturns": 2593,
+        "returnsCount": 3894,
+        "returnableOutcomeCount": 43636,
+        "returnRatePct": 8.9,
         "cohortAgeYears": 1,
         "returnsSettled": false
       }
@@ -7307,7 +7357,7 @@
         ]
       },
       "returns": {
-        "latestQuarterLabel": "2026 Q2",
+        "latestQuarterLabel": "2026 Q3",
         "scopeLabel": "All returns from the UK",
         "scopeNote": "This current quarterly returns series is broader than asylum-only exits. It includes enforced returns, voluntary returns, and refused-entry departures.",
         "series": {
@@ -7730,37 +7780,42 @@
             {
               "periodLabel": "2024 Q4",
               "periodEnd": "2024-12-31",
-              "value": 15184
+              "value": 15258
             },
             {
               "periodLabel": "2025 Q1",
               "periodEnd": "2025-03-31",
-              "value": 14644
+              "value": 14706
             },
             {
               "periodLabel": "2025 Q2",
               "periodEnd": "2025-06-30",
-              "value": 13309
+              "value": 13360
             },
             {
               "periodLabel": "2025 Q3",
               "periodEnd": "2025-09-30",
-              "value": 14863
+              "value": 14934
             },
             {
               "periodLabel": "2025 Q4",
               "periodEnd": "2025-12-31",
-              "value": 15253
+              "value": 15365
             },
             {
               "periodLabel": "2026 Q1",
               "periodEnd": "2026-03-31",
-              "value": 14541
+              "value": 14694
             },
             {
               "periodLabel": "2026 Q2",
               "periodEnd": "2026-06-30",
-              "value": 14594
+              "value": 15329
+            },
+            {
+              "periodLabel": "2026 Q3",
+              "periodEnd": "2026-09-30",
+              "value": 14142
             }
           ],
           "voluntary": [
@@ -8182,37 +8237,42 @@
             {
               "periodLabel": "2024 Q4",
               "periodEnd": "2024-12-31",
-              "value": 7038
+              "value": 7118
             },
             {
               "periodLabel": "2025 Q1",
               "periodEnd": "2025-03-31",
-              "value": 7342
+              "value": 7403
             },
             {
               "periodLabel": "2025 Q2",
               "periodEnd": "2025-06-30",
-              "value": 6849
+              "value": 6903
             },
             {
               "periodLabel": "2025 Q3",
               "periodEnd": "2025-09-30",
-              "value": 7577
+              "value": 7643
             },
             {
               "periodLabel": "2025 Q4",
               "periodEnd": "2025-12-31",
-              "value": 8039
+              "value": 8148
             },
             {
               "periodLabel": "2026 Q1",
               "periodEnd": "2026-03-31",
-              "value": 8002
+              "value": 8145
             },
             {
               "periodLabel": "2026 Q2",
               "periodEnd": "2026-06-30",
-              "value": 7318
+              "value": 8027
+            },
+            {
+              "periodLabel": "2026 Q3",
+              "periodEnd": "2026-09-30",
+              "value": 7337
             }
           ],
           "enforced": [
@@ -8634,37 +8694,42 @@
             {
               "periodLabel": "2024 Q4",
               "periodEnd": "2024-12-31",
-              "value": 2370
+              "value": 2365
             },
             {
               "periodLabel": "2025 Q1",
               "periodEnd": "2025-03-31",
-              "value": 2313
+              "value": 2315
             },
             {
               "periodLabel": "2025 Q2",
               "periodEnd": "2025-06-30",
-              "value": 2325
+              "value": 2323
             },
             {
               "periodLabel": "2025 Q3",
               "periodEnd": "2025-09-30",
-              "value": 2381
+              "value": 2383
             },
             {
               "periodLabel": "2025 Q4",
               "periodEnd": "2025-12-31",
-              "value": 2889
+              "value": 2890
             },
             {
               "periodLabel": "2026 Q1",
               "periodEnd": "2026-03-31",
-              "value": 2140
+              "value": 2143
             },
             {
               "periodLabel": "2026 Q2",
               "periodEnd": "2026-06-30",
-              "value": 2259
+              "value": 2266
+            },
+            {
+              "periodLabel": "2026 Q3",
+              "periodEnd": "2026-09-30",
+              "value": 2165
             }
           ],
           "refusedEntryDeparted": [
@@ -9086,59 +9151,64 @@
             {
               "periodLabel": "2024 Q4",
               "periodEnd": "2024-12-31",
-              "value": 5776
+              "value": 5775
             },
             {
               "periodLabel": "2025 Q1",
               "periodEnd": "2025-03-31",
-              "value": 4989
+              "value": 4988
             },
             {
               "periodLabel": "2025 Q2",
               "periodEnd": "2025-06-30",
-              "value": 4135
+              "value": 4134
             },
             {
               "periodLabel": "2025 Q3",
               "periodEnd": "2025-09-30",
-              "value": 4905
+              "value": 4908
             },
             {
               "periodLabel": "2025 Q4",
               "periodEnd": "2025-12-31",
-              "value": 4325
+              "value": 4327
             },
             {
               "periodLabel": "2026 Q1",
               "periodEnd": "2026-03-31",
-              "value": 4399
+              "value": 4406
             },
             {
               "periodLabel": "2026 Q2",
               "periodEnd": "2026-06-30",
-              "value": 5017
+              "value": 5036
+            },
+            {
+              "periodLabel": "2026 Q3",
+              "periodEnd": "2026-09-30",
+              "value": 4640
             }
           ]
         },
         "latestBreakdown": [
           {
             "label": "All returns",
-            "value": 14594,
+            "value": 14142,
             "metricId": "returns_total"
           },
           {
             "label": "Voluntary",
-            "value": 7318,
+            "value": 7337,
             "metricId": "returns_voluntary"
           },
           {
             "label": "Enforced",
-            "value": 2259,
+            "value": 2165,
             "metricId": "returns_enforced"
           },
           {
             "label": "Refused entry and departed",
-            "value": 5017,
+            "value": 4640,
             "metricId": "returns_refused_entry"
           }
         ]
@@ -9169,69 +9239,69 @@
         {
           "periodLabel": "2021",
           "periodEnd": "2021-12-31",
-          "value": 70.9
+          "value": 71.1
         },
         {
           "periodLabel": "2022",
           "periodEnd": "2022-12-31",
-          "value": 60.3
+          "value": 60.4
         },
         {
           "periodLabel": "2023",
           "periodEnd": "2023-12-31",
-          "value": 43.1
+          "value": 42.8
         },
         {
           "periodLabel": "2024",
           "periodEnd": "2024-12-31",
-          "value": 41.4
+          "value": 41.1
         },
         {
           "periodLabel": "2025",
           "periodEnd": "2025-12-31",
-          "value": 44.5
+          "value": 44.2
         }
       ],
       "latestGrantRate": [
         {
           "periodLabel": "2018",
           "periodEnd": "2018-12-31",
-          "value": 71.6
+          "value": 71.7
         },
         {
           "periodLabel": "2019",
           "periodEnd": "2019-12-31",
-          "value": 75.1
+          "value": 75.2
         },
         {
           "periodLabel": "2020",
           "periodEnd": "2020-12-31",
-          "value": 80.3
+          "value": 80.4
         },
         {
           "periodLabel": "2021",
           "periodEnd": "2021-12-31",
-          "value": 80.2
+          "value": 80.3
         },
         {
           "periodLabel": "2022",
           "periodEnd": "2022-12-31",
-          "value": 68
+          "value": 68.3
         },
         {
           "periodLabel": "2023",
           "periodEnd": "2023-12-31",
-          "value": 48.9
+          "value": 50.4
         },
         {
           "periodLabel": "2024",
           "periodEnd": "2024-12-31",
-          "value": 45.1
+          "value": 46.8
         },
         {
           "periodLabel": "2025",
           "periodEnd": "2025-12-31",
-          "value": 46.7
+          "value": 47.8
         }
       ]
     },
@@ -9251,61 +9321,61 @@
           "areaCode": "S12000049",
           "areaName": "Glasgow City",
           "regionName": "Scotland",
-          "value": 3938
+          "value": 4114
         },
         {
           "areaCode": "E08000025",
           "areaName": "Birmingham",
           "regionName": "West Midlands",
-          "value": 2136
+          "value": 2158
         },
         {
           "areaCode": "E08000012",
           "areaName": "Liverpool",
           "regionName": "North West",
-          "value": 1961
-        },
-        {
-          "areaCode": "E08000026",
-          "areaName": "Coventry",
-          "regionName": "West Midlands",
-          "value": 1700
-        },
-        {
-          "areaCode": "N09000003",
-          "areaName": "Belfast",
-          "regionName": "Northern Ireland",
-          "value": 1540
+          "value": 2071
         },
         {
           "areaCode": "E08000003",
           "areaName": "Manchester",
           "regionName": "North West",
-          "value": 1509
+          "value": 1715
+        },
+        {
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
+          "regionName": "West Midlands",
+          "value": 1677
+        },
+        {
+          "areaCode": "N09000003",
+          "areaName": "Belfast",
+          "regionName": "Northern Ireland",
+          "value": 1653
         },
         {
           "areaCode": "E08000028",
           "areaName": "Sandwell",
           "regionName": "West Midlands",
-          "value": 1467
+          "value": 1514
         },
         {
-          "areaCode": "E08000035",
-          "areaName": "Leeds",
-          "regionName": "Yorkshire and The Humber",
-          "value": 1365
-        },
-        {
-          "areaCode": "E06000018",
-          "areaName": "Nottingham",
-          "regionName": "East Midlands",
-          "value": 1352
+          "areaCode": "W06000015",
+          "areaName": "Cardiff",
+          "regionName": "Wales",
+          "value": 1379
         },
         {
           "areaCode": "E06000016",
           "areaName": "Leicester",
           "regionName": "East Midlands",
-          "value": 1333
+          "value": 1339
+        },
+        {
+          "areaCode": "E06000018",
+          "areaName": "Nottingham",
+          "regionName": "East Midlands",
+          "value": 1330
         }
       ]
     },
@@ -9317,61 +9387,61 @@
           "areaCode": "S12000049",
           "areaName": "Glasgow City",
           "regionName": "Scotland",
-          "value": 60.18
+          "value": 62.87
         },
         {
           "areaCode": "E07000120",
           "areaName": "Hyndburn",
           "regionName": "North West",
-          "value": 49.02
+          "value": 48.79
         },
         {
           "areaCode": "E07000067",
           "areaName": "Braintree",
           "regionName": "East of England",
-          "value": 47.52
+          "value": 47.1
         },
         {
-          "areaCode": "E07000117",
-          "areaName": "Burnley",
-          "regionName": "North West",
-          "value": 46.66
-        },
-        {
-          "areaCode": "E08000026",
-          "areaName": "Coventry",
-          "regionName": "West Midlands",
-          "value": 46.61
+          "areaCode": "N09000003",
+          "areaName": "Belfast",
+          "regionName": "Northern Ireland",
+          "value": 46.97
         },
         {
           "areaCode": "E06000008",
           "areaName": "Blackburn with Darwen",
           "regionName": "North West",
-          "value": 46.4
+          "value": 46.83
         },
         {
           "areaCode": "E06000006",
           "areaName": "Halton",
           "regionName": "North West",
-          "value": 45.79
+          "value": 46.17
         },
         {
-          "areaCode": "E07000220",
-          "areaName": "Rugby",
+          "areaCode": "E08000026",
+          "areaName": "Coventry",
           "regionName": "West Midlands",
-          "value": 45.15
-        },
-        {
-          "areaCode": "E07000122",
-          "areaName": "Pendle",
-          "regionName": "North West",
-          "value": 44.01
+          "value": 45.97
         },
         {
           "areaCode": "E06000002",
           "areaName": "Middlesbrough",
           "regionName": "North East",
-          "value": 43.92
+          "value": 45.81
+        },
+        {
+          "areaCode": "E07000117",
+          "areaName": "Burnley",
+          "regionName": "North West",
+          "value": 45.67
+        },
+        {
+          "areaCode": "E07000122",
+          "areaName": "Pendle",
+          "regionName": "North West",
+          "value": 45.01
         }
       ]
     },
@@ -9380,64 +9450,64 @@
       "label": "Contingency accommodation population",
       "rows": [
         {
-          "areaCode": "E09000017",
-          "areaName": "Hillingdon",
-          "regionName": "London",
-          "value": 965
+          "areaCode": "E08000003",
+          "areaName": "Manchester",
+          "regionName": "North West",
+          "value": 884
         },
         {
           "areaCode": "E09000018",
           "areaName": "Hounslow",
           "regionName": "London",
-          "value": 924
+          "value": 820
+        },
+        {
+          "areaCode": "E09000017",
+          "areaName": "Hillingdon",
+          "regionName": "London",
+          "value": 686
         },
         {
           "areaCode": "E09000003",
           "areaName": "Barnet",
           "regionName": "London",
-          "value": 731
-        },
-        {
-          "areaCode": "E08000003",
-          "areaName": "Manchester",
-          "regionName": "North West",
-          "value": 708
+          "value": 534
         },
         {
           "areaCode": "E08000025",
           "areaName": "Birmingham",
           "regionName": "West Midlands",
-          "value": 589
-        },
-        {
-          "areaCode": "E09000008",
-          "areaName": "Croydon",
-          "regionName": "London",
-          "value": 557
+          "value": 492
         },
         {
           "areaCode": "E09000025",
           "areaName": "Newham",
           "regionName": "London",
-          "value": 541
+          "value": 492
+        },
+        {
+          "areaCode": "E09000008",
+          "areaName": "Croydon",
+          "regionName": "London",
+          "value": 484
+        },
+        {
+          "areaCode": "E06000014",
+          "areaName": "York",
+          "regionName": "Yorkshire and The Humber",
+          "value": 393
+        },
+        {
+          "areaCode": "E06000040",
+          "areaName": "Windsor and Maidenhead",
+          "regionName": "South East",
+          "value": 341
         },
         {
           "areaCode": "E08000007",
           "areaName": "Stockport",
           "regionName": "North West",
-          "value": 485
-        },
-        {
-          "areaCode": "E07000220",
-          "areaName": "Rugby",
-          "regionName": "West Midlands",
-          "value": 433
-        },
-        {
-          "areaCode": "E09000005",
-          "areaName": "Brent",
-          "regionName": "London",
-          "value": 427
+          "value": 328
         }
       ]
     },
@@ -9449,61 +9519,61 @@
           "areaCode": "E06000060",
           "areaName": "Buckinghamshire",
           "regionName": "South East",
-          "value": 2256
+          "value": 2301
         },
         {
           "areaCode": "E06000066",
           "areaName": "Somerset",
           "regionName": "South West",
-          "value": 2016
+          "value": 2042
         },
         {
           "areaCode": "E09000003",
           "areaName": "Barnet",
           "regionName": "London",
-          "value": 1988
+          "value": 2028
         },
         {
           "areaCode": "E09000009",
           "areaName": "Ealing",
           "regionName": "London",
-          "value": 1826
+          "value": 1899
         },
         {
           "areaCode": "E06000054",
           "areaName": "Wiltshire",
           "regionName": "South West",
-          "value": 1777
+          "value": 1801
         },
         {
           "areaCode": "E06000065",
           "areaName": "North Yorkshire",
           "regionName": "Yorkshire and The Humber",
-          "value": 1712
+          "value": 1725
         },
         {
           "areaCode": "E09000024",
           "areaName": "Merton",
           "regionName": "London",
-          "value": 1654
+          "value": 1714
         },
         {
           "areaCode": "E09000011",
           "areaName": "Greenwich",
           "regionName": "London",
-          "value": 1443
-        },
-        {
-          "areaCode": "E09000032",
-          "areaName": "Wandsworth",
-          "regionName": "London",
-          "value": 1410
+          "value": 1469
         },
         {
           "areaCode": "E08000025",
           "areaName": "Birmingham",
           "regionName": "West Midlands",
-          "value": 1396
+          "value": 1432
+        },
+        {
+          "areaCode": "E09000032",
+          "areaName": "Wandsworth",
+          "regionName": "London",
+          "value": 1423
         }
       ]
     },
@@ -9515,61 +9585,61 @@
           "areaCode": "E08000035",
           "areaName": "Leeds",
           "regionName": "Yorkshire and The Humber",
-          "value": 685
+          "value": 692
         },
         {
           "areaCode": "E08000025",
           "areaName": "Birmingham",
           "regionName": "West Midlands",
-          "value": 643
+          "value": 673
         },
         {
           "areaCode": "E09000019",
           "areaName": "Islington",
           "regionName": "London",
-          "value": 611
+          "value": 635
         },
         {
-          "areaCode": "E08000032",
-          "areaName": "Bradford",
-          "regionName": "Yorkshire and The Humber",
-          "value": 573
+          "areaCode": "E07000226",
+          "areaName": "Crawley",
+          "regionName": "South East",
+          "value": 631
         },
         {
           "areaCode": "S12000036",
           "areaName": "City of Edinburgh",
           "regionName": "Scotland",
-          "value": 572
+          "value": 589
+        },
+        {
+          "areaCode": "E08000032",
+          "areaName": "Bradford",
+          "regionName": "Yorkshire and The Humber",
+          "value": 582
         },
         {
           "areaCode": "E08000026",
           "areaName": "Coventry",
           "regionName": "West Midlands",
-          "value": 556
+          "value": 581
         },
         {
           "areaCode": "E06000023",
           "areaName": "Bristol, City of",
           "regionName": "South West",
-          "value": 491
+          "value": 518
         },
         {
           "areaCode": "E06000054",
           "areaName": "Wiltshire",
           "regionName": "South West",
-          "value": 458
+          "value": 469
         },
         {
           "areaCode": "E06000065",
           "areaName": "North Yorkshire",
           "regionName": "Yorkshire and The Humber",
-          "value": 453
-        },
-        {
-          "areaCode": "E08000003",
-          "areaName": "Manchester",
-          "regionName": "North West",
-          "value": 410
+          "value": 463
         }
       ]
     },
@@ -9593,7 +9663,7 @@
           "areaCode": "S12000036",
           "areaName": "City of Edinburgh",
           "regionName": "Scotland",
-          "value": 712
+          "value": 719
         },
         {
           "areaCode": "E08000025",
@@ -9611,7 +9681,7 @@
           "areaCode": "E06000023",
           "areaName": "Bristol, City of",
           "regionName": "South West",
-          "value": 499
+          "value": 505
         },
         {
           "areaCode": "N09000003",
@@ -9642,7 +9712,7 @@
   ],
   "limitations": [
     "Small boat arrivals are a national arrival-route series. The published local asylum-support tables do not tell you which supported people arrived by small boat.",
-    "The latest local immigration groups table is a stock snapshot as at 30 June 2026, while resettlement local authority data is a quarterly arrivals series.",
+    "The latest local immigration groups table is a stock snapshot as at 30 September 2026, while resettlement local authority data is a quarterly arrivals series.",
     "Awaiting an initial decision and receiving asylum support overlap, but they are not identical published populations. Support is not a synonym for the backlog.",
     "Appeals now come from the MOJ tribunal statistics rather than the discontinued Home Office appeals dataset. MOJ counts every First-tier Tribunal immigration and asylum appeal on financial-year quarters, so the volumes are much larger than the old asylum-only series and the periods do not line up with the Home Office calendar quarters.",
     "A rise or fall in supported asylum stock is net change after both inflows and exits. Grants, refusals, withdrawals, departures, and other case progression can all change the published support count.",
@@ -9655,74 +9725,74 @@
     {
       "source_id": "local_immigration_groups",
       "source_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a8c6c3ca8f84a582b842859/regional-and-local-authority-dataset-jun-2026.ods",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6b04824b992d28898996bcb4/regional-and-local-authority-dataset-sep-2026.ods",
       "methodology_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "local_resettlement_routes",
       "source_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c4c854bcee010d514571/resettlement-local-authority-datasets-jun-2026.xlsx",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7f26df17de35d3a44e66/resettlement-local-authority-datasets-sep-2026.xlsx",
       "methodology_url": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "illegal_entry_routes",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7e47f24e0dfc46aa7f75/illegal-entry-routes-to-the-uk-dataset-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "safe_legal_routes_summary",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c59054bcee010d514573/safe-legal-routes-summary-tables-jun-2026.ods",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/summary-of-latest-statistics",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6b0473e0129747e2b52cc299/safe-legal-routes-summary-tables-sep-2026.ods",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/summary-of-latest-statistics",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "asylum_claims",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-claim-asylum-in-the-uk",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c2d7c9205b515d421eeb/asylum-claims-datasets-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-claim-asylum-in-the-uk",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-claim-asylum-in-the-uk",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7a71f24e0dfc46aa7f73/asylum-claims-datasets-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-claim-asylum-in-the-uk",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "asylum_awaiting_decision",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c2bcb0504df9f2c897ff/asylum-claims-awaiting-decision-datasets-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7a512ee8ec8187b57007/asylum-claims-awaiting-decision-datasets-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "asylum_outcome_analysis",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-granted-asylum-in-the-uk",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c49e1b45e4e555421ede/outcome-analysis-asylum-claims-datasets-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-granted-asylum-in-the-uk",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-granted-asylum-in-the-uk",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7ed32ee8ec8187b57011/outcome-analysis-asylum-claims-datasets-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-granted-asylum-in-the-uk",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "asylum_support",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c2f1c9205b515d421eec/asylum-seekers-receipt-support-datasets-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7a892a4ad73f14aa7f75/asylum-seekers-receipt-support-datasets-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-in-the-uk-asylum-system",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "returns",
-      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-returned-from-the-uk",
-      "attachment_url": "https://assets.publishing.service.gov.uk/media/6a85c4f754bcee010d514572/returns-datasets-jun-2026.xlsx",
-      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-returned-from-the-uk",
-      "release_date": "2026-08-27",
-      "period_label": "Year ending June 2026"
+      "source_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-returned-from-the-uk",
+      "attachment_url": "https://assets.publishing.service.gov.uk/media/6afd7f5160771543f4a44e5f/returns-datasets-sep-2026.xlsx",
+      "methodology_url": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026/how-many-people-are-returned-from-the-uk",
+      "release_date": "2026-11-26",
+      "period_label": "Year ending September 2026"
     },
     {
       "source_id": "moj_tribunals",
