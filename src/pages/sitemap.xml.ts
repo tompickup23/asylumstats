@@ -5,6 +5,7 @@ import { ROUTES_RELEASE_DATE, newestDate } from "../lib/data-releases";
 import { parseCorrections } from "../lib/corrections-parse";
 import releases from "../data/site/releases.json";
 import { explainerPath, getExplainers } from "../lib/explainers";
+import { areaCostDateModified } from "../lib/area-cost-dataset";
 
 export const prerender = true;
 
@@ -47,6 +48,11 @@ export const GET: APIRoute = async () => {
       }
     }
   }
+
+  // /cost/ prices the Home Office count at published rates, so it changes when any of its
+  // inputs is republished: the date its Dataset carries as dateModified.
+  const costChanged = areaCostDateModified();
+  if (costChanged && paths.includes("/cost/")) lastmod.set("/cost/", costChanged);
 
   // A superseded article declares another page canonical, so listing it here would ask
   // search engines to index a URL we have just told them is not the canonical one.

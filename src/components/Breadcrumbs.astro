@@ -1,8 +1,7 @@
 ---
-interface BreadcrumbItem {
-  label: string;
-  href?: string;
-}
+// The same items go to breadcrumbListNode() in the page's structured data, so the trail
+// a search engine shows is this one. tests/structured-data.test.ts holds them together.
+import type { BreadcrumbItem } from "../lib/site";
 
 interface Props {
   items: BreadcrumbItem[];

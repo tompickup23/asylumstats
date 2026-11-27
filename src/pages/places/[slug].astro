@@ -23,9 +23,8 @@ import { getAreaTrendSummary } from "../../lib/area-series";
 import { getAreaRegionalPrimeProviderCoverage } from "../../lib/entity-analytics";
 import { getEntityProfileByReference, getEntityProfiles } from "../../lib/entities";
 import { loadLocalRouteLatest } from "../../lib/route-data";
-import { countyForAreaCode, buildCountyPath, getCounties } from "../../lib/county-directory";
 import { loadHotelEntityLedger } from "../../lib/hotel-data";
-import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, slugifyAreaName } from "../../lib/site";
+import { buildAbsoluteUrl, buildPlaceStructuredData, getPublicPlaceAreas, placeBreadcrumbs, slugifyAreaName } from "../../lib/site";
 import { getUkPlacesRecord, ukPlacesUrl } from "../../lib/ukplaces-registry";
 import {
   getEthnicProjection, getEthnicCompositionTimeline,
@@ -300,15 +299,6 @@ function getSiteEntityProfiles(site: (typeof hotelSites)[number]) {
   ].filter((profile): profile is NonNullable<typeof profile> => profile !== null && profile !== undefined);
   return [...new Map(matches.map((profile) => [profile.entityId, profile])).values()];
 }
-// County the area sits in, for the breadcrumb link up to the county page. Null outside
-// England, where this site has no county tier.
-// A county that is this authority alone has no page of its own (see countyCanonicalPath),
-// so the crumb would only lead back here.
-const countyOfArea = countyForAreaCode(area.areaCode);
-const areaCountyName =
-  countyOfArea && getCounties().find((county) => county.countyName === countyOfArea)?.areaCount !== 1
-    ? countyOfArea
-    : null;
 
 ---
 
@@ -320,12 +310,7 @@ const areaCountyName =
   structuredData={pageStructuredData}
 >
   <!-- HEADER -->
-  <Breadcrumbs items={[
-    { label: "Places", href: "/places/" },
-    { label: area.regionName, href: `/places/regions/${area.regionName.toLowerCase().replace(/\s+/g, "-")}/` },
-    ...(areaCountyName ? [{ label: areaCountyName, href: buildCountyPath(areaCountyName) }] : []),
-    { label: area.areaName }
-  ]} />
+  <Breadcrumbs items={placeBreadcrumbs(area)} />
 
   <section class="page-top place-top">
     <section class="page-head place-head">

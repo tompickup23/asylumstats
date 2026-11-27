@@ -53,7 +53,7 @@ jobs:
       - name: Check rendered figure agreement
         run: npx vitest run tests/figures-manifest.test.ts
       - name: Guards that need the built site
-        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts tests/datasets.test.ts tests/internal-links.test.ts tests/legacy-redirects.test.ts tests/release-change.test.ts tests/rendered-rate-format.test.ts
+        run: npx vitest run tests/support-vs-accommodation.test.ts tests/rendered-text-runons.test.ts tests/rendered-text-dashes.test.ts tests/datasets.test.ts tests/internal-links.test.ts tests/legacy-redirects.test.ts tests/release-change.test.ts tests/rendered-rate-format.test.ts tests/structured-data.test.ts tests/svg-names.test.ts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:mobile
       - run: npm run test:desktop

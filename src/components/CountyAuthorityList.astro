@@ -1,0 +1,95 @@
+---
+/**
+ * The authorities in a county, highest count first, each with a bar scaled to the
+ * highest and a link to its place page. Taken out of places/counties/[county].astro.
+ */
+import { slugifyAreaName } from "../lib/site";
+import type { County } from "../lib/county-directory";
+
+interface Props {
+  areas: County["areas"];
+  snapshotLabel: string;
+}
+
+const { areas, snapshotLabel } = Astro.props;
+const maxAreaAsylum = areas[0]?.supportedAsylum || 1;
+---
+
+<div class="cty-area-list">
+  {areas.map((area, i) => (
+    <a href={`/places/${slugifyAreaName(area.areaName)}/`} class="cty-area-row">
+      <span class="cty-area-rank">{i + 1}</span>
+      <div class="cty-area-info">
+        <span class="cty-area-name">{area.areaName}</span>
+        <span class="cty-area-bar-track">
+          <span
+            class="cty-area-bar-fill"
+            style={`width: ${(area.supportedAsylum / maxAreaAsylum) * 100}%`}
+          ></span>
+        </span>
+      </div>
+      <span class="cty-area-count">{area.supportedAsylum.toLocaleString()}</span>
+    </a>
+  ))}
+</div>
+<p class="cty-area-caption">
+  Click any authority for its full profile. Figures are people on asylum support at
+  {snapshotLabel}.
+</p>
+
+<style>
+  .cty-area-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cty-area-row {
+    display: grid;
+    grid-template-columns: 2rem 1fr 4.5rem;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .cty-area-row:hover {
+    background: rgba(127, 127, 127, 0.12);
+  }
+  .cty-area-rank {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: right;
+  }
+  .cty-area-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .cty-area-name {
+    font-size: 0.85rem;
+  }
+  .cty-area-bar-track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(127, 127, 127, 0.2);
+    overflow: hidden;
+  }
+  .cty-area-bar-fill {
+    display: block;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.55;
+  }
+  .cty-area-count {
+    font-variant-numeric: lining-nums tabular-nums;
+    text-align: right;
+    font-size: 0.85rem;
+  }
+  .cty-area-caption {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    margin-top: 0.6rem;
+  }
+</style>

@@ -1,6 +1,6 @@
 import { loadLocalRouteLatest, type LocalRouteAreaSummary } from "./route-data";
 import { getEntityProfiles, type EntityProfile } from "./entities";
-import { getCounties, type County } from "./county-directory";
+import { buildCountyPath, countyForAreaCode, getCounties, type County } from "./county-directory";
 import { HOME_OFFICE_LOCAL_AUTHORITY_SOURCE, LOCAL_AUTHORITY_DATASET_ID, OGL_V3, SITE_ORGANIZATION } from "./datasets";
 import { ROUTES_RELEASE_DATE } from "./data-releases";
 import { SITE_NAME, SITE_URL, buildPlacePath, slugifyAreaName } from "./site-identity";
@@ -206,6 +206,44 @@ export function getPublicEntityProfiles(): EntityProfile[] {
   return getEntityProfiles();
 }
 
+/** One step of a page's trail, as the visible Breadcrumbs component takes it. */
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+/**
+ * The BreadcrumbList for a page, built from the same items as its visible trail
+ * (src/components/Breadcrumbs.astro), so the path a search engine prints is the path a
+ * reader sees. Home is implied, as it is in the component. The last item is the page
+ * itself and takes its URL; every earlier item must link somewhere, because Google
+ * rejects a ListItem with no item unless it is the last one.
+ *
+ * Until November 2026 only place pages, the release diary and the entity profiles
+ * declared a trail, each with its own copy of this block, and the place page's copy
+ * skipped the region and county its visible trail shows. tests/structured-data.test.ts
+ * reads every built page and fails where the two trails differ.
+ */
+export function breadcrumbListNode(items: BreadcrumbItem[], pageUrl: string): StructuredDataNode {
+  const trail: BreadcrumbItem[] = [{ label: "Home", href: "/" }, ...items];
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((step, index) => {
+      const last = index === trail.length - 1;
+      if (!last && !step.href) {
+        throw new Error(`Breadcrumb "${step.label}" links nowhere. Only the last step may.`);
+      }
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        name: step.label,
+        item: last ? pageUrl : step.href === "/" ? SITE_URL : buildAbsoluteUrl(step.href!)
+      };
+    })
+  };
+}
+
 interface PlaceStructuredDataOptions {
   canonicalUrl: string;
   description: string;
@@ -217,6 +255,24 @@ interface PlaceStructuredDataOptions {
   unnamedSiteCount: number;
 }
 
+/**
+ * A place page's trail: Places, its region, its county where it has one, then the place.
+ * The county step is left out outside England, where the site has no county tier, and
+ * for a county that is this authority alone, whose page defers to this one (see
+ * countyCanonicalPath), so the step would only lead back here.
+ */
+export function placeBreadcrumbs(area: LocalRouteAreaSummary): BreadcrumbItem[] {
+  const countyName = countyForAreaCode(area.areaCode);
+  const countyHasOwnPage =
+    countyName !== null && getCounties().find((county) => county.countyName === countyName)?.areaCount !== 1;
+  return [
+    { label: "Places", href: "/places/" },
+    { label: area.regionName, href: buildPublicPlaceRegionPath(area.regionName) },
+    ...(countyName && countyHasOwnPage ? [{ label: countyName, href: buildCountyPath(countyName) }] : []),
+    { label: area.areaName }
+  ];
+}
+
 export function buildPlaceStructuredData(
   area: LocalRouteAreaSummary,
   options: PlaceStructuredDataOptions
@@ -225,24 +281,7 @@ export function buildPlaceStructuredData(
   const datasetId = `${options.canonicalUrl}#dataset`;
 
   return [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: area.areaName,
-          item: options.canonicalUrl
-        }
-      ]
-    },
+    breadcrumbListNode(placeBreadcrumbs(area), options.canonicalUrl),
     {
       "@context": "https://schema.org",
       "@type": "AdministrativeArea",
@@ -366,24 +405,7 @@ export function buildReleaseCollectionStructuredData(
   const listId = `${options.canonicalUrl}#release-list`;
 
   return [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Releases",
-          item: options.canonicalUrl
-        }
-      ]
-    },
+    breadcrumbListNode([{ label: "Releases" }], options.canonicalUrl),
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -431,30 +453,7 @@ export function buildEntityStructuredData(
   const organizationId = `${options.canonicalUrl}#organization`;
 
   return [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Entities",
-          item: `${SITE_URL}/entities/`
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: profile.entityName,
-          item: options.canonicalUrl
-        }
-      ]
-    },
+    breadcrumbListNode([{ label: "Entities", href: "/entities/" }, { label: profile.entityName }], options.canonicalUrl),
     {
       "@context": "https://schema.org",
       "@type": "ProfilePage",

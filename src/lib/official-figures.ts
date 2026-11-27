@@ -220,5 +220,58 @@ export const UK_FRANCE = {
     "https://www.gov.uk/government/publications/ukfrance-exchange-of-letters-amending-and-extending-the-agreement-on-the-prevention-of-dangerous-journeys-ts-no252026"
 };
 
+/**
+ * What the small boats arrivals count includes and leaves out, in the Home Office's words.
+ *
+ * Copied character for character from the "About the data" section of the GOV.UK page,
+ * read on 18 November 2026 (the page said "Updated 18 November 2026"). The time series
+ * file's Notes sheet (edition of 25 September 2026, note 4) gives the first, second and
+ * fourth exclusions in the same words; the third, people stopped in France, is on the
+ * page only. The page is updated daily, so `read` is the day these words were checked,
+ * not the day they were written. Crown copyright, reused under the Open Government
+ * Licence v3.0.
+ *
+ * In the source, the first exclusion joins its two clauses with a dash, which the house
+ * style does not print. It is held as two quotations with the three words between them
+ * ("although these are") outside the marks, so every quoted word is the Home Office's
+ * and in its order, and nothing is reworded.
+ */
+export interface QuotedItem {
+  quote: string;
+  /** Where the source's own dash joined a second clause: plain words, then that clause quoted. */
+  then?: { joiner: string; quote: string };
+}
+
+export const SMALL_BOATS_COUNT_SCOPE: {
+  includes: QuotedItem[];
+  excludes: QuotedItem[];
+  uncontrolledLandings: string;
+  source: string;
+  url: string;
+  read: string;
+  licence: string;
+} = {
+  includes: [
+    { quote: "are detected on arrival in the UK" },
+    { quote: "are detected in the Channel by UK authorities and subsequently brought to the UK" }
+  ],
+  excludes: [
+    {
+      quote:
+        "arrive in the UK on larger vessels, such as go-fast craft, yachts (except those arriving in the area of operations of small boats), motor cruisers, tugs and fishing vessels",
+      then: { joiner: "although these are", quote: "rarely used by people arriving via illegal routes at present" }
+    },
+    { quote: "arrive in the UK clandestinely on larger vessels not referenced above, including where hidden in a vehicle on a ferry" },
+    { quote: "are prevented from departing France, or those intercepted by French authorities and returned to France" },
+    { quote: "arrive in the UK undetected, or where there have been reports of people making the crossing, but no actual encounters" }
+  ],
+  uncontrolledLandings:
+    "Uncontrolled landings are boats which have been recorded as arriving in the UK without interception. Any people detected in uncontrolled landings are counted in ‘migrants arrived’.",
+  source: "Home Office, Small boat arrivals: last 7 days, About the data",
+  url: "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats/migrants-detected-crossing-the-english-channel-in-small-boats-last-7-days",
+  read: "2026-11-18",
+  licence: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+};
+
 export const gbp = (value: number) =>
   `£${value.toLocaleString("en-GB", { minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2 })}`;

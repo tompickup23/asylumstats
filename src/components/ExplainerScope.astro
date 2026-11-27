@@ -1,0 +1,63 @@
+---
+/**
+ * Who a count includes and leaves out, in the publisher's own words, under the answer.
+ * Each item is a quotation, so it is printed inside quotation marks and never reworded;
+ * the reader sees exactly what the publisher says its figure covers. Where the source
+ * joined two clauses with a dash, the plain joining words sit between two quotations.
+ */
+import type { Explainer } from "../lib/explainers";
+import type { QuotedItem } from "../lib/official-figures";
+import { formatLongDate } from "../lib/headline-figures";
+
+interface Props {
+  scope: NonNullable<Explainer["scope"]>;
+}
+
+const { scope } = Astro.props;
+const quoted = (item: QuotedItem) =>
+  item.then ? `“${item.quote}”, ${item.then.joiner} “${item.then.quote}”` : `“${item.quote}”`;
+---
+
+<section class="explainer-scope" aria-labelledby="who-is-counted">
+  <h2 id="who-is-counted">Who the count includes and leaves out</h2>
+  <p>In the words of {scope.publisher}, the figure includes people who:</p>
+  <ul>{scope.includes.map((item) => <li>{quoted(item)}</li>)}</ul>
+  <p>It does not include people who:</p>
+  <ul>{scope.excludes.map((item) => <li>{quoted(item)}</li>)}</ul>
+  {scope.note && <p>“{scope.note}”</p>}
+  <p class="es-source">
+    Source: <a href={scope.url} target="_blank" rel="noopener">{scope.source}</a>, read {formatLongDate(scope.read)}.
+  </p>
+</section>
+
+<style>
+  .explainer-scope {
+    margin: 0 0 2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .explainer-scope h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    margin: 0 0 0.5rem;
+  }
+  .explainer-scope p {
+    margin: 0 0 0.4rem;
+    max-width: 68ch;
+  }
+  .explainer-scope ul {
+    margin: 0 0 0.8rem;
+    padding-left: 1.2rem;
+    max-width: 68ch;
+  }
+  .explainer-scope li {
+    margin: 0 0 0.25rem;
+  }
+  .es-source {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .es-source a {
+    color: var(--accent);
+  }
+</style>

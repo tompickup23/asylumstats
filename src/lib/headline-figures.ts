@@ -111,6 +111,20 @@ export interface SmallBoats {
   completeCalendarYears: Record<string, number>;
   sourceUrl: string;
   cadence: string;
+  /** Boats detected arriving over the same days as `arrivals`, from the daily series. */
+  boats: number;
+  priorYearBoats: number;
+}
+
+/**
+ * A year's daily small boats series added up from 1 January to a month and day ("11-12"),
+ * the cut the transform uses for the year to date (scripts/transform/transform-small-boats.mjs).
+ */
+function smallBoatsTotalTo(field: "arrivals" | "boats", year: number, monthDay: string): number {
+  return smallBoatsData.daily.reduce(
+    (sum, day) => (day.date.startsWith(`${year}-`) && day.date.slice(5) <= monthDay ? sum + day[field] : sum),
+    0
+  );
 }
 
 /** Year-to-date small boat arrivals against the same point last year. */
@@ -119,6 +133,7 @@ export function smallBoats(): SmallBoats {
   const named = /^(\d{1,2})_([A-Za-z]+)_(\d{4})_/.exec(data.sourceFile);
   const parsed = named ? new Date(`${named[1]} ${named[2]} ${named[3]} UTC`) : null;
   const published = parsed && !Number.isNaN(parsed.getTime()) ? parsed.toISOString().slice(0, 10) : data.coverageEnd;
+  const cut = data.coverageEnd.slice(5);
   return {
     asAt: data.coverageEnd,
     published,
@@ -126,10 +141,43 @@ export function smallBoats(): SmallBoats {
     arrivals: data.yearToDate.arrivals,
     priorYear: data.yearToDate.priorYear,
     priorYearArrivals: data.yearToDate.priorYearArrivals,
+    boats: smallBoatsTotalTo("boats", data.yearToDate.year, cut),
+    priorYearBoats: smallBoatsTotalTo("boats", data.yearToDate.priorYear, cut),
     changePct: data.yearToDate.changePct,
     latestWeek: data.latestWeek,
     completeCalendarYears: data.completeCalendarYears,
     sourceUrl: data.landing,
     cadence: data.cadence
   };
+}
+
+export interface RunningTotalPoint {
+  /** ISO date in the current year. */
+  date: string;
+  /** Arrivals from 1 January to this month and day, current year. */
+  current: number;
+  /** The same, in the year before. */
+  prior: number;
+}
+
+/**
+ * Small boat arrivals added up from 1 January, in this year and the last, read every seven
+ * days back from the latest day in the series, so the last point is that day. The prior
+ * year is cut at the same month and day, by the rule the transform uses for the year to
+ * date figure (scripts/transform/transform-small-boats.mjs), so the two final points are
+ * exactly `arrivals` and `priorYearArrivals`; tests/small-boats.test.ts holds them equal.
+ */
+export function smallBoatsRunningTotals(): RunningTotalPoint[] {
+  const { yearToDate, coverageEnd } = smallBoatsData;
+  const points: RunningTotalPoint[] = [];
+  const end = new Date(`${coverageEnd}T00:00:00Z`);
+  for (let at = end; at.getUTCFullYear() === yearToDate.year; at = new Date(at.getTime() - 7 * 86_400_000)) {
+    const date = at.toISOString().slice(0, 10);
+    points.unshift({
+      date,
+      current: smallBoatsTotalTo("arrivals", yearToDate.year, date.slice(5)),
+      prior: smallBoatsTotalTo("arrivals", yearToDate.priorYear, date.slice(5))
+    });
+  }
+  return points;
 }
