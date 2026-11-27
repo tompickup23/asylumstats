@@ -206,15 +206,18 @@ describe("asylum return rate cohorts", () => {
         );
     const early = sum([2007, 2008, 2009, 2010, 2011, 2012, 2013]);
     const late = sum([2015, 2016, 2017, 2018]);
-    // The early cohorts are closed and their rate is settled, so it is pinned.
-    // The 2015 to 2018 cohorts are not: people are still being returned against those
+    // The early cohorts are closed, but the Home Office still revises them by a handful of
+    // returns each quarter: the rate read 55.3 against June 2026 and 55.4 against
+    // September 2026, and pinning it parked that refresh. It is held to a band instead.
+    // The 2015 to 2018 cohorts are less settled still: people are still being returned against those
     // claim years, so the rate creeps up with every release. It read 26.2 against the
     // March 2026 data and 26.4 against June 2026, which is the series working, not a
     // regression. Pinning it to one decimal place broke the deploy on release day.
     // The finding this guards is the gap between the two, so that is what is asserted.
     const earlyRate = Math.round((early.r / early.d) * 1000) / 10;
     const lateRate = Math.round((late.r / late.d) * 1000) / 10;
-    expect(earlyRate).toBe(55.3);
+    expect(earlyRate).toBeGreaterThan(50);
+    expect(earlyRate).toBeLessThan(60);
     expect(lateRate).toBeGreaterThan(20);
     expect(lateRate).toBeLessThan(35);
     expect(earlyRate - lateRate).toBeGreaterThan(20);
