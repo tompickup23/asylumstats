@@ -49,4 +49,4 @@ The UK total fell by 30,305 over those three years. London fell by 13,261 and th
 
 **Why here.** The prime accommodation provider for the North West is Serco, on a contract that runs to 2029. One company handles placement across the whole region. The Home Office contract decides where people go, and the council is told rather than asked.
 
-Within the region the load is not spread evenly either. Four Lancashire authorities are among the nine highest in the country once you count per head of population, and none of them is Manchester or Liverpool. That list is in [Four Lancashire authorities are in the national top nine](/findings/lancashire-rate-table-top-nine/).
+Within the region the load is not spread evenly either. Four Lancashire authorities are among the ten highest in the country once you count per head of population, and none of them is Manchester or Liverpool. That list is in [Four Lancashire authorities are in the national top ten](/findings/lancashire-rate-table-top-nine/).

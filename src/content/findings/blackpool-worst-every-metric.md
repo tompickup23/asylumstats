@@ -48,4 +48,4 @@ Blackpool remains the most deprived local authority in England on IMD 2019, and 
 
 **In the composite.** On the four-domain pressure index, recomputed on published data, Blackpool scores 67.9 and ranks 42nd of the 285 English authorities with all four domains. The full table is in [the recomputed pressure index](/findings/combined-pressure-top-councils/).
 
-Where the asylum load actually sits in Lancashire now is in [Four Lancashire authorities are in the national top nine](/findings/lancashire-rate-table-top-nine/).
+Where the asylum load actually sits in Lancashire now is in [Four Lancashire authorities are in the national top ten](/findings/lancashire-rate-table-top-nine/).
