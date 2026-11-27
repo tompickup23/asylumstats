@@ -1,6 +1,1463 @@
 {
   "releases": [
     {
+      "snapshotDate": "2026-09-30",
+      "release": "Immigration system statistics, year ending September 2026",
+      "releaseDate": "2026-11-26",
+      "releasePage": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-september-2026",
+      "table": "Reg_02",
+      "column": "Supported Asylum (population)",
+      "fileName": "regional-and-local-authority-dataset-sep-2026.ods",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6b04824b992d28898996bcb4/regional-and-local-authority-dataset-sep-2026.ods",
+      "fileSha256": "2654fac76d5ad823eb89d798f88e9466d3946b5563a0fe145d824601083d7036",
+      "areas": {
+        "S12000033": {
+          "areaName": "Aberdeen City",
+          "supportedAsylum": 851
+        },
+        "S12000034": {
+          "areaName": "Aberdeenshire",
+          "supportedAsylum": 233
+        },
+        "E07000223": {
+          "areaName": "Adur",
+          "supportedAsylum": 1
+        },
+        "E07000032": {
+          "areaName": "Amber Valley",
+          "supportedAsylum": 179
+        },
+        "S12000041": {
+          "areaName": "Angus",
+          "supportedAsylum": 97
+        },
+        "N09000001": {
+          "areaName": "Antrim and Newtownabbey",
+          "supportedAsylum": 192
+        },
+        "N09000011": {
+          "areaName": "Ards and North Down",
+          "supportedAsylum": 0
+        },
+        "S12000035": {
+          "areaName": "Argyll and Bute",
+          "supportedAsylum": 1
+        },
+        "N09000002": {
+          "areaName": "Armagh City, Banbridge and Craigavon",
+          "supportedAsylum": 79
+        },
+        "E07000224": {
+          "areaName": "Arun",
+          "supportedAsylum": 2
+        },
+        "E07000170": {
+          "areaName": "Ashfield",
+          "supportedAsylum": 252
+        },
+        "E07000105": {
+          "areaName": "Ashford",
+          "supportedAsylum": 35
+        },
+        "E07000200": {
+          "areaName": "Babergh",
+          "supportedAsylum": 6
+        },
+        "E09000002": {
+          "areaName": "Barking and Dagenham",
+          "supportedAsylum": 283
+        },
+        "E09000003": {
+          "areaName": "Barnet",
+          "supportedAsylum": 673
+        },
+        "E08000038": {
+          "areaName": "Barnsley",
+          "supportedAsylum": 263
+        },
+        "E07000066": {
+          "areaName": "Basildon",
+          "supportedAsylum": 370
+        },
+        "E07000084": {
+          "areaName": "Basingstoke and Deane",
+          "supportedAsylum": 27
+        },
+        "E07000171": {
+          "areaName": "Bassetlaw",
+          "supportedAsylum": 197
+        },
+        "E06000022": {
+          "areaName": "Bath and North East Somerset",
+          "supportedAsylum": 4
+        },
+        "E06000055": {
+          "areaName": "Bedford",
+          "supportedAsylum": 136
+        },
+        "N09000003": {
+          "areaName": "Belfast",
+          "supportedAsylum": 1653
+        },
+        "E09000004": {
+          "areaName": "Bexley",
+          "supportedAsylum": 120
+        },
+        "E08000025": {
+          "areaName": "Birmingham",
+          "supportedAsylum": 2158
+        },
+        "E07000129": {
+          "areaName": "Blaby",
+          "supportedAsylum": 40
+        },
+        "E06000008": {
+          "areaName": "Blackburn with Darwen",
+          "supportedAsylum": 767
+        },
+        "E06000009": {
+          "areaName": "Blackpool",
+          "supportedAsylum": 237
+        },
+        "W06000019": {
+          "areaName": "Blaenau Gwent",
+          "supportedAsylum": 45
+        },
+        "E07000033": {
+          "areaName": "Bolsover",
+          "supportedAsylum": 139
+        },
+        "E08000001": {
+          "areaName": "Bolton",
+          "supportedAsylum": 1019
+        },
+        "E07000136": {
+          "areaName": "Boston",
+          "supportedAsylum": 108
+        },
+        "E06000058": {
+          "areaName": "Bournemouth, Christchurch and Poole",
+          "supportedAsylum": 369
+        },
+        "E06000036": {
+          "areaName": "Bracknell Forest",
+          "supportedAsylum": 12
+        },
+        "E08000032": {
+          "areaName": "Bradford",
+          "supportedAsylum": 1028
+        },
+        "E07000067": {
+          "areaName": "Braintree",
+          "supportedAsylum": 784
+        },
+        "E07000143": {
+          "areaName": "Breckland",
+          "supportedAsylum": 52
+        },
+        "E09000005": {
+          "areaName": "Brent",
+          "supportedAsylum": 720
+        },
+        "E07000068": {
+          "areaName": "Brentwood",
+          "supportedAsylum": 13
+        },
+        "W06000013": {
+          "areaName": "Bridgend",
+          "supportedAsylum": 47
+        },
+        "E06000043": {
+          "areaName": "Brighton and Hove",
+          "supportedAsylum": 133
+        },
+        "E06000023": {
+          "areaName": "Bristol, City of",
+          "supportedAsylum": 505
+        },
+        "E07000144": {
+          "areaName": "Broadland",
+          "supportedAsylum": 11
+        },
+        "E09000006": {
+          "areaName": "Bromley",
+          "supportedAsylum": 142
+        },
+        "E07000234": {
+          "areaName": "Bromsgrove",
+          "supportedAsylum": 4
+        },
+        "E07000095": {
+          "areaName": "Broxbourne",
+          "supportedAsylum": 41
+        },
+        "E07000172": {
+          "areaName": "Broxtowe",
+          "supportedAsylum": 271
+        },
+        "E06000060": {
+          "areaName": "Buckinghamshire",
+          "supportedAsylum": 201
+        },
+        "E07000117": {
+          "areaName": "Burnley",
+          "supportedAsylum": 461
+        },
+        "E08000002": {
+          "areaName": "Bury",
+          "supportedAsylum": 375
+        },
+        "W06000018": {
+          "areaName": "Caerphilly",
+          "supportedAsylum": 89
+        },
+        "E08000033": {
+          "areaName": "Calderdale",
+          "supportedAsylum": 449
+        },
+        "E07000008": {
+          "areaName": "Cambridge",
+          "supportedAsylum": 15
+        },
+        "E09000007": {
+          "areaName": "Camden",
+          "supportedAsylum": 144
+        },
+        "E07000192": {
+          "areaName": "Cannock Chase",
+          "supportedAsylum": 39
+        },
+        "E07000106": {
+          "areaName": "Canterbury",
+          "supportedAsylum": 214
+        },
+        "W06000015": {
+          "areaName": "Cardiff",
+          "supportedAsylum": 1379
+        },
+        "W06000010": {
+          "areaName": "Carmarthenshire",
+          "supportedAsylum": 67
+        },
+        "E07000069": {
+          "areaName": "Castle Point",
+          "supportedAsylum": 29
+        },
+        "N09000004": {
+          "areaName": "Causeway Coast and Glens",
+          "supportedAsylum": 179
+        },
+        "E06000056": {
+          "areaName": "Central Bedfordshire",
+          "supportedAsylum": 50
+        },
+        "W06000008": {
+          "areaName": "Ceredigion",
+          "supportedAsylum": 0
+        },
+        "E07000130": {
+          "areaName": "Charnwood",
+          "supportedAsylum": 124
+        },
+        "E07000070": {
+          "areaName": "Chelmsford",
+          "supportedAsylum": 112
+        },
+        "E07000078": {
+          "areaName": "Cheltenham",
+          "supportedAsylum": 176
+        },
+        "E07000177": {
+          "areaName": "Cherwell",
+          "supportedAsylum": 82
+        },
+        "E06000049": {
+          "areaName": "Cheshire East",
+          "supportedAsylum": 396
+        },
+        "E06000050": {
+          "areaName": "Cheshire West and Chester",
+          "supportedAsylum": 662
+        },
+        "E07000034": {
+          "areaName": "Chesterfield",
+          "supportedAsylum": 72
+        },
+        "E07000225": {
+          "areaName": "Chichester",
+          "supportedAsylum": 51
+        },
+        "E07000118": {
+          "areaName": "Chorley",
+          "supportedAsylum": 243
+        },
+        "S12000036": {
+          "areaName": "City of Edinburgh",
+          "supportedAsylum": 260
+        },
+        "E09000001": {
+          "areaName": "City of London",
+          "supportedAsylum": 2
+        },
+        "S12000005": {
+          "areaName": "Clackmannanshire",
+          "supportedAsylum": 20
+        },
+        "E07000071": {
+          "areaName": "Colchester",
+          "supportedAsylum": 322
+        },
+        "W06000003": {
+          "areaName": "Conwy",
+          "supportedAsylum": 25
+        },
+        "E06000052": {
+          "areaName": "Cornwall",
+          "supportedAsylum": 19
+        },
+        "E07000079": {
+          "areaName": "Cotswold",
+          "supportedAsylum": 0
+        },
+        "E06000047": {
+          "areaName": "County Durham",
+          "supportedAsylum": 626
+        },
+        "E08000026": {
+          "areaName": "Coventry",
+          "supportedAsylum": 1677
+        },
+        "E07000226": {
+          "areaName": "Crawley",
+          "supportedAsylum": 209
+        },
+        "E09000008": {
+          "areaName": "Croydon",
+          "supportedAsylum": 991
+        },
+        "E06000063": {
+          "areaName": "Cumberland",
+          "supportedAsylum": 513
+        },
+        "E07000096": {
+          "areaName": "Dacorum",
+          "supportedAsylum": 202
+        },
+        "E06000005": {
+          "areaName": "Darlington",
+          "supportedAsylum": 216
+        },
+        "E07000107": {
+          "areaName": "Dartford",
+          "supportedAsylum": 41
+        },
+        "W06000004": {
+          "areaName": "Denbighshire",
+          "supportedAsylum": 76
+        },
+        "E06000015": {
+          "areaName": "Derby",
+          "supportedAsylum": 1130
+        },
+        "E07000035": {
+          "areaName": "Derbyshire Dales",
+          "supportedAsylum": 6
+        },
+        "N09000005": {
+          "areaName": "Derry City and Strabane",
+          "supportedAsylum": 195
+        },
+        "E08000017": {
+          "areaName": "Doncaster",
+          "supportedAsylum": 465
+        },
+        "E06000059": {
+          "areaName": "Dorset",
+          "supportedAsylum": 6
+        },
+        "E07000108": {
+          "areaName": "Dover",
+          "supportedAsylum": 91
+        },
+        "E08000027": {
+          "areaName": "Dudley",
+          "supportedAsylum": 618
+        },
+        "S12000006": {
+          "areaName": "Dumfries and Galloway",
+          "supportedAsylum": 59
+        },
+        "S12000042": {
+          "areaName": "Dundee City",
+          "supportedAsylum": 90
+        },
+        "E09000009": {
+          "areaName": "Ealing",
+          "supportedAsylum": 1020
+        },
+        "S12000008": {
+          "areaName": "East Ayrshire",
+          "supportedAsylum": 74
+        },
+        "E07000009": {
+          "areaName": "East Cambridgeshire",
+          "supportedAsylum": 21
+        },
+        "E07000040": {
+          "areaName": "East Devon",
+          "supportedAsylum": 101
+        },
+        "S12000045": {
+          "areaName": "East Dunbartonshire",
+          "supportedAsylum": 37
+        },
+        "E07000085": {
+          "areaName": "East Hampshire",
+          "supportedAsylum": 8
+        },
+        "E07000242": {
+          "areaName": "East Hertfordshire",
+          "supportedAsylum": 5
+        },
+        "E07000137": {
+          "areaName": "East Lindsey",
+          "supportedAsylum": 133
+        },
+        "S12000010": {
+          "areaName": "East Lothian",
+          "supportedAsylum": 111
+        },
+        "S12000011": {
+          "areaName": "East Renfrewshire",
+          "supportedAsylum": 6
+        },
+        "E06000011": {
+          "areaName": "East Riding of Yorkshire",
+          "supportedAsylum": 78
+        },
+        "E07000193": {
+          "areaName": "East Staffordshire",
+          "supportedAsylum": 178
+        },
+        "E07000244": {
+          "areaName": "East Suffolk",
+          "supportedAsylum": 71
+        },
+        "E07000061": {
+          "areaName": "Eastbourne",
+          "supportedAsylum": 39
+        },
+        "E07000086": {
+          "areaName": "Eastleigh",
+          "supportedAsylum": 10
+        },
+        "E07000207": {
+          "areaName": "Elmbridge",
+          "supportedAsylum": 13
+        },
+        "E09000010": {
+          "areaName": "Enfield",
+          "supportedAsylum": 368
+        },
+        "E07000072": {
+          "areaName": "Epping Forest",
+          "supportedAsylum": 33
+        },
+        "E07000208": {
+          "areaName": "Epsom and Ewell",
+          "supportedAsylum": 2
+        },
+        "E07000036": {
+          "areaName": "Erewash",
+          "supportedAsylum": 106
+        },
+        "E07000041": {
+          "areaName": "Exeter",
+          "supportedAsylum": 32
+        },
+        "S12000014": {
+          "areaName": "Falkirk",
+          "supportedAsylum": 53
+        },
+        "E07000087": {
+          "areaName": "Fareham",
+          "supportedAsylum": 26
+        },
+        "E07000010": {
+          "areaName": "Fenland",
+          "supportedAsylum": 3
+        },
+        "N09000006": {
+          "areaName": "Fermanagh and Omagh",
+          "supportedAsylum": 2
+        },
+        "S12000047": {
+          "areaName": "Fife",
+          "supportedAsylum": 54
+        },
+        "W06000005": {
+          "areaName": "Flintshire",
+          "supportedAsylum": 81
+        },
+        "E07000112": {
+          "areaName": "Folkestone and Hythe",
+          "supportedAsylum": 42
+        },
+        "E07000080": {
+          "areaName": "Forest of Dean",
+          "supportedAsylum": 11
+        },
+        "E07000119": {
+          "areaName": "Fylde",
+          "supportedAsylum": 96
+        },
+        "E08000037": {
+          "areaName": "Gateshead",
+          "supportedAsylum": 631
+        },
+        "E07000173": {
+          "areaName": "Gedling",
+          "supportedAsylum": 147
+        },
+        "S12000049": {
+          "areaName": "Glasgow City",
+          "supportedAsylum": 4114
+        },
+        "E07000081": {
+          "areaName": "Gloucester",
+          "supportedAsylum": 282
+        },
+        "E07000088": {
+          "areaName": "Gosport",
+          "supportedAsylum": 25
+        },
+        "E07000109": {
+          "areaName": "Gravesham",
+          "supportedAsylum": 80
+        },
+        "E07000145": {
+          "areaName": "Great Yarmouth",
+          "supportedAsylum": 15
+        },
+        "E09000011": {
+          "areaName": "Greenwich",
+          "supportedAsylum": 188
+        },
+        "E07000209": {
+          "areaName": "Guildford",
+          "supportedAsylum": 1
+        },
+        "W06000002": {
+          "areaName": "Gwynedd",
+          "supportedAsylum": 92
+        },
+        "E09000012": {
+          "areaName": "Hackney",
+          "supportedAsylum": 321
+        },
+        "E06000006": {
+          "areaName": "Halton",
+          "supportedAsylum": 609
+        },
+        "E09000013": {
+          "areaName": "Hammersmith and Fulham",
+          "supportedAsylum": 197
+        },
+        "E07000131": {
+          "areaName": "Harborough",
+          "supportedAsylum": 11
+        },
+        "E09000014": {
+          "areaName": "Haringey",
+          "supportedAsylum": 145
+        },
+        "E07000073": {
+          "areaName": "Harlow",
+          "supportedAsylum": 54
+        },
+        "E09000015": {
+          "areaName": "Harrow",
+          "supportedAsylum": 352
+        },
+        "E07000089": {
+          "areaName": "Hart",
+          "supportedAsylum": 0
+        },
+        "E06000001": {
+          "areaName": "Hartlepool",
+          "supportedAsylum": 406
+        },
+        "E07000062": {
+          "areaName": "Hastings",
+          "supportedAsylum": 102
+        },
+        "E07000090": {
+          "areaName": "Havant",
+          "supportedAsylum": 9
+        },
+        "E09000016": {
+          "areaName": "Havering",
+          "supportedAsylum": 204
+        },
+        "E06000019": {
+          "areaName": "Herefordshire, County of",
+          "supportedAsylum": 43
+        },
+        "E07000098": {
+          "areaName": "Hertsmere",
+          "supportedAsylum": 69
+        },
+        "E07000037": {
+          "areaName": "High Peak",
+          "supportedAsylum": 18
+        },
+        "S12000017": {
+          "areaName": "Highland",
+          "supportedAsylum": 1
+        },
+        "E09000017": {
+          "areaName": "Hillingdon",
+          "supportedAsylum": 912
+        },
+        "E07000132": {
+          "areaName": "Hinckley and Bosworth",
+          "supportedAsylum": 163
+        },
+        "E07000227": {
+          "areaName": "Horsham",
+          "supportedAsylum": 6
+        },
+        "E09000018": {
+          "areaName": "Hounslow",
+          "supportedAsylum": 1040
+        },
+        "E07000011": {
+          "areaName": "Huntingdonshire",
+          "supportedAsylum": 41
+        },
+        "E07000120": {
+          "areaName": "Hyndburn",
+          "supportedAsylum": 424
+        },
+        "S12000018": {
+          "areaName": "Inverclyde",
+          "supportedAsylum": 288
+        },
+        "E07000202": {
+          "areaName": "Ipswich",
+          "supportedAsylum": 143
+        },
+        "W06000001": {
+          "areaName": "Isle of Anglesey",
+          "supportedAsylum": 14
+        },
+        "E06000046": {
+          "areaName": "Isle of Wight",
+          "supportedAsylum": 0
+        },
+        "E06000053": {
+          "areaName": "Isles of Scilly",
+          "supportedAsylum": 0
+        },
+        "E09000019": {
+          "areaName": "Islington",
+          "supportedAsylum": 76
+        },
+        "E09000020": {
+          "areaName": "Kensington and Chelsea",
+          "supportedAsylum": 138
+        },
+        "E07000146": {
+          "areaName": "King's Lynn and West Norfolk",
+          "supportedAsylum": 81
+        },
+        "E06000010": {
+          "areaName": "Kingston upon Hull, City of",
+          "supportedAsylum": 412
+        },
+        "E09000021": {
+          "areaName": "Kingston upon Thames",
+          "supportedAsylum": 59
+        },
+        "E08000034": {
+          "areaName": "Kirklees",
+          "supportedAsylum": 646
+        },
+        "E08000011": {
+          "areaName": "Knowsley",
+          "supportedAsylum": 294
+        },
+        "E09000022": {
+          "areaName": "Lambeth",
+          "supportedAsylum": 259
+        },
+        "E07000121": {
+          "areaName": "Lancaster",
+          "supportedAsylum": 251
+        },
+        "E08000035": {
+          "areaName": "Leeds",
+          "supportedAsylum": 1292
+        },
+        "E06000016": {
+          "areaName": "Leicester",
+          "supportedAsylum": 1339
+        },
+        "E07000063": {
+          "areaName": "Lewes",
+          "supportedAsylum": 6
+        },
+        "E09000023": {
+          "areaName": "Lewisham",
+          "supportedAsylum": 129
+        },
+        "E07000194": {
+          "areaName": "Lichfield",
+          "supportedAsylum": 5
+        },
+        "E07000138": {
+          "areaName": "Lincoln",
+          "supportedAsylum": 70
+        },
+        "N09000007": {
+          "areaName": "Lisburn and Castlereagh",
+          "supportedAsylum": 30
+        },
+        "E08000012": {
+          "areaName": "Liverpool",
+          "supportedAsylum": 2071
+        },
+        "E06000032": {
+          "areaName": "Luton",
+          "supportedAsylum": 314
+        },
+        "E07000110": {
+          "areaName": "Maidstone",
+          "supportedAsylum": 48
+        },
+        "E07000074": {
+          "areaName": "Maldon",
+          "supportedAsylum": 1
+        },
+        "E07000235": {
+          "areaName": "Malvern Hills",
+          "supportedAsylum": 7
+        },
+        "E08000003": {
+          "areaName": "Manchester",
+          "supportedAsylum": 1715
+        },
+        "E07000174": {
+          "areaName": "Mansfield",
+          "supportedAsylum": 197
+        },
+        "E06000035": {
+          "areaName": "Medway",
+          "supportedAsylum": 372
+        },
+        "E07000133": {
+          "areaName": "Melton",
+          "supportedAsylum": 37
+        },
+        "W06000024": {
+          "areaName": "Merthyr Tydfil",
+          "supportedAsylum": 41
+        },
+        "E09000024": {
+          "areaName": "Merton",
+          "supportedAsylum": 193
+        },
+        "N09000008": {
+          "areaName": "Mid and East Antrim",
+          "supportedAsylum": 0
+        },
+        "E07000042": {
+          "areaName": "Mid Devon",
+          "supportedAsylum": 0
+        },
+        "E07000203": {
+          "areaName": "Mid Suffolk",
+          "supportedAsylum": 26
+        },
+        "E07000228": {
+          "areaName": "Mid Sussex",
+          "supportedAsylum": 214
+        },
+        "N09000009": {
+          "areaName": "Mid Ulster",
+          "supportedAsylum": 0
+        },
+        "E06000002": {
+          "areaName": "Middlesbrough",
+          "supportedAsylum": 700
+        },
+        "S12000019": {
+          "areaName": "Midlothian",
+          "supportedAsylum": 118
+        },
+        "E06000042": {
+          "areaName": "Milton Keynes",
+          "supportedAsylum": 488
+        },
+        "E07000210": {
+          "areaName": "Mole Valley",
+          "supportedAsylum": 0
+        },
+        "W06000021": {
+          "areaName": "Monmouthshire",
+          "supportedAsylum": 1
+        },
+        "S12000020": {
+          "areaName": "Moray",
+          "supportedAsylum": 3
+        },
+        "S12000013": {
+          "areaName": "Na h-Eileanan Siar",
+          "supportedAsylum": 0
+        },
+        "W06000012": {
+          "areaName": "Neath Port Talbot",
+          "supportedAsylum": 70
+        },
+        "E07000091": {
+          "areaName": "New Forest",
+          "supportedAsylum": 7
+        },
+        "E07000175": {
+          "areaName": "Newark and Sherwood",
+          "supportedAsylum": 147
+        },
+        "E08000021": {
+          "areaName": "Newcastle upon Tyne",
+          "supportedAsylum": 866
+        },
+        "E07000195": {
+          "areaName": "Newcastle-under-Lyme",
+          "supportedAsylum": 206
+        },
+        "E09000025": {
+          "areaName": "Newham",
+          "supportedAsylum": 836
+        },
+        "W06000022": {
+          "areaName": "Newport",
+          "supportedAsylum": 312
+        },
+        "N09000010": {
+          "areaName": "Newry, Mourne and Down",
+          "supportedAsylum": 29
+        },
+        "S12000021": {
+          "areaName": "North Ayrshire",
+          "supportedAsylum": 76
+        },
+        "E07000043": {
+          "areaName": "North Devon",
+          "supportedAsylum": 11
+        },
+        "E07000038": {
+          "areaName": "North East Derbyshire",
+          "supportedAsylum": 67
+        },
+        "E06000012": {
+          "areaName": "North East Lincolnshire",
+          "supportedAsylum": 255
+        },
+        "E07000099": {
+          "areaName": "North Hertfordshire",
+          "supportedAsylum": 4
+        },
+        "E07000139": {
+          "areaName": "North Kesteven",
+          "supportedAsylum": 39
+        },
+        "S12000050": {
+          "areaName": "North Lanarkshire",
+          "supportedAsylum": 300
+        },
+        "E06000013": {
+          "areaName": "North Lincolnshire",
+          "supportedAsylum": 86
+        },
+        "E07000147": {
+          "areaName": "North Norfolk",
+          "supportedAsylum": 13
+        },
+        "E06000061": {
+          "areaName": "North Northamptonshire",
+          "supportedAsylum": 709
+        },
+        "E06000024": {
+          "areaName": "North Somerset",
+          "supportedAsylum": 88
+        },
+        "E08000022": {
+          "areaName": "North Tyneside",
+          "supportedAsylum": 441
+        },
+        "E07000218": {
+          "areaName": "North Warwickshire",
+          "supportedAsylum": 72
+        },
+        "E07000134": {
+          "areaName": "North West Leicestershire",
+          "supportedAsylum": 103
+        },
+        "E06000065": {
+          "areaName": "North Yorkshire",
+          "supportedAsylum": 303
+        },
+        "E06000057": {
+          "areaName": "Northumberland",
+          "supportedAsylum": 691
+        },
+        "E07000148": {
+          "areaName": "Norwich",
+          "supportedAsylum": 214
+        },
+        "E06000018": {
+          "areaName": "Nottingham",
+          "supportedAsylum": 1330
+        },
+        "E07000219": {
+          "areaName": "Nuneaton and Bedworth",
+          "supportedAsylum": 315
+        },
+        "E07000135": {
+          "areaName": "Oadby and Wigston",
+          "supportedAsylum": 41
+        },
+        "E08000004": {
+          "areaName": "Oldham",
+          "supportedAsylum": 775
+        },
+        "S12000023": {
+          "areaName": "Orkney Islands",
+          "supportedAsylum": 0
+        },
+        "E07000178": {
+          "areaName": "Oxford",
+          "supportedAsylum": 198
+        },
+        "W06000009": {
+          "areaName": "Pembrokeshire",
+          "supportedAsylum": 6
+        },
+        "E07000122": {
+          "areaName": "Pendle",
+          "supportedAsylum": 451
+        },
+        "S12000048": {
+          "areaName": "Perth and Kinross",
+          "supportedAsylum": 117
+        },
+        "E06000031": {
+          "areaName": "Peterborough",
+          "supportedAsylum": 429
+        },
+        "E06000026": {
+          "areaName": "Plymouth",
+          "supportedAsylum": 502
+        },
+        "E06000044": {
+          "areaName": "Portsmouth",
+          "supportedAsylum": 590
+        },
+        "W06000023": {
+          "areaName": "Powys",
+          "supportedAsylum": 5
+        },
+        "E07000123": {
+          "areaName": "Preston",
+          "supportedAsylum": 409
+        },
+        "E06000038": {
+          "areaName": "Reading",
+          "supportedAsylum": 503
+        },
+        "E09000026": {
+          "areaName": "Redbridge",
+          "supportedAsylum": 369
+        },
+        "E06000003": {
+          "areaName": "Redcar and Cleveland",
+          "supportedAsylum": 245
+        },
+        "E07000236": {
+          "areaName": "Redditch",
+          "supportedAsylum": 19
+        },
+        "E07000211": {
+          "areaName": "Reigate and Banstead",
+          "supportedAsylum": 217
+        },
+        "S12000038": {
+          "areaName": "Renfrewshire",
+          "supportedAsylum": 149
+        },
+        "W06000016": {
+          "areaName": "Rhondda Cynon Taf",
+          "supportedAsylum": 220
+        },
+        "E07000124": {
+          "areaName": "Ribble Valley",
+          "supportedAsylum": 32
+        },
+        "E09000027": {
+          "areaName": "Richmond upon Thames",
+          "supportedAsylum": 19
+        },
+        "E08000005": {
+          "areaName": "Rochdale",
+          "supportedAsylum": 757
+        },
+        "E07000075": {
+          "areaName": "Rochford",
+          "supportedAsylum": 115
+        },
+        "E07000125": {
+          "areaName": "Rossendale",
+          "supportedAsylum": 226
+        },
+        "E07000064": {
+          "areaName": "Rother",
+          "supportedAsylum": 1
+        },
+        "E08000018": {
+          "areaName": "Rotherham",
+          "supportedAsylum": 377
+        },
+        "E07000220": {
+          "areaName": "Rugby",
+          "supportedAsylum": 458
+        },
+        "E07000212": {
+          "areaName": "Runnymede",
+          "supportedAsylum": 50
+        },
+        "E07000176": {
+          "areaName": "Rushcliffe",
+          "supportedAsylum": 85
+        },
+        "E07000092": {
+          "areaName": "Rushmoor",
+          "supportedAsylum": 29
+        },
+        "E06000017": {
+          "areaName": "Rutland",
+          "supportedAsylum": 7
+        },
+        "E08000006": {
+          "areaName": "Salford",
+          "supportedAsylum": 685
+        },
+        "E08000028": {
+          "areaName": "Sandwell",
+          "supportedAsylum": 1514
+        },
+        "S12000026": {
+          "areaName": "Scottish Borders",
+          "supportedAsylum": 44
+        },
+        "E08000014": {
+          "areaName": "Sefton",
+          "supportedAsylum": 444
+        },
+        "E07000111": {
+          "areaName": "Sevenoaks",
+          "supportedAsylum": 7
+        },
+        "E08000039": {
+          "areaName": "Sheffield",
+          "supportedAsylum": 931
+        },
+        "S12000027": {
+          "areaName": "Shetland Islands",
+          "supportedAsylum": 0
+        },
+        "E06000051": {
+          "areaName": "Shropshire",
+          "supportedAsylum": 155
+        },
+        "E06000039": {
+          "areaName": "Slough",
+          "supportedAsylum": 319
+        },
+        "E08000029": {
+          "areaName": "Solihull",
+          "supportedAsylum": 266
+        },
+        "E06000066": {
+          "areaName": "Somerset",
+          "supportedAsylum": 242
+        },
+        "S12000028": {
+          "areaName": "South Ayrshire",
+          "supportedAsylum": 27
+        },
+        "E07000012": {
+          "areaName": "South Cambridgeshire",
+          "supportedAsylum": 1
+        },
+        "E07000039": {
+          "areaName": "South Derbyshire",
+          "supportedAsylum": 52
+        },
+        "E06000025": {
+          "areaName": "South Gloucestershire",
+          "supportedAsylum": 195
+        },
+        "E07000044": {
+          "areaName": "South Hams",
+          "supportedAsylum": 19
+        },
+        "E07000140": {
+          "areaName": "South Holland",
+          "supportedAsylum": 107
+        },
+        "E07000141": {
+          "areaName": "South Kesteven",
+          "supportedAsylum": 289
+        },
+        "S12000029": {
+          "areaName": "South Lanarkshire",
+          "supportedAsylum": 299
+        },
+        "E07000149": {
+          "areaName": "South Norfolk",
+          "supportedAsylum": 23
+        },
+        "E07000179": {
+          "areaName": "South Oxfordshire",
+          "supportedAsylum": 23
+        },
+        "E07000126": {
+          "areaName": "South Ribble",
+          "supportedAsylum": 333
+        },
+        "E07000196": {
+          "areaName": "South Staffordshire",
+          "supportedAsylum": 13
+        },
+        "E08000023": {
+          "areaName": "South Tyneside",
+          "supportedAsylum": 630
+        },
+        "E06000045": {
+          "areaName": "Southampton",
+          "supportedAsylum": 343
+        },
+        "E06000033": {
+          "areaName": "Southend-on-Sea",
+          "supportedAsylum": 272
+        },
+        "E09000028": {
+          "areaName": "Southwark",
+          "supportedAsylum": 413
+        },
+        "E07000213": {
+          "areaName": "Spelthorne",
+          "supportedAsylum": 83
+        },
+        "E07000240": {
+          "areaName": "St Albans",
+          "supportedAsylum": 22
+        },
+        "E08000013": {
+          "areaName": "St. Helens",
+          "supportedAsylum": 574
+        },
+        "E07000197": {
+          "areaName": "Stafford",
+          "supportedAsylum": 122
+        },
+        "E07000198": {
+          "areaName": "Staffordshire Moorlands",
+          "supportedAsylum": 43
+        },
+        "E07000243": {
+          "areaName": "Stevenage",
+          "supportedAsylum": 192
+        },
+        "S12000030": {
+          "areaName": "Stirling",
+          "supportedAsylum": 6
+        },
+        "E08000007": {
+          "areaName": "Stockport",
+          "supportedAsylum": 513
+        },
+        "E06000004": {
+          "areaName": "Stockton-on-Tees",
+          "supportedAsylum": 827
+        },
+        "E06000021": {
+          "areaName": "Stoke-on-Trent",
+          "supportedAsylum": 1030
+        },
+        "E07000221": {
+          "areaName": "Stratford-on-Avon",
+          "supportedAsylum": 3
+        },
+        "E07000082": {
+          "areaName": "Stroud",
+          "supportedAsylum": 8
+        },
+        "E08000024": {
+          "areaName": "Sunderland",
+          "supportedAsylum": 804
+        },
+        "E07000214": {
+          "areaName": "Surrey Heath",
+          "supportedAsylum": 112
+        },
+        "E09000029": {
+          "areaName": "Sutton",
+          "supportedAsylum": 28
+        },
+        "E07000113": {
+          "areaName": "Swale",
+          "supportedAsylum": 71
+        },
+        "W06000011": {
+          "areaName": "Swansea",
+          "supportedAsylum": 640
+        },
+        "E06000030": {
+          "areaName": "Swindon",
+          "supportedAsylum": 505
+        },
+        "E08000008": {
+          "areaName": "Tameside",
+          "supportedAsylum": 519
+        },
+        "E07000199": {
+          "areaName": "Tamworth",
+          "supportedAsylum": 129
+        },
+        "E07000215": {
+          "areaName": "Tandridge",
+          "supportedAsylum": 20
+        },
+        "E07000045": {
+          "areaName": "Teignbridge",
+          "supportedAsylum": 48
+        },
+        "E06000020": {
+          "areaName": "Telford and Wrekin",
+          "supportedAsylum": 523
+        },
+        "E07000076": {
+          "areaName": "Tendring",
+          "supportedAsylum": 218
+        },
+        "E07000093": {
+          "areaName": "Test Valley",
+          "supportedAsylum": 21
+        },
+        "E07000083": {
+          "areaName": "Tewkesbury",
+          "supportedAsylum": 4
+        },
+        "E07000114": {
+          "areaName": "Thanet",
+          "supportedAsylum": 74
+        },
+        "E07000102": {
+          "areaName": "Three Rivers",
+          "supportedAsylum": 20
+        },
+        "E06000034": {
+          "areaName": "Thurrock",
+          "supportedAsylum": 152
+        },
+        "E07000115": {
+          "areaName": "Tonbridge and Malling",
+          "supportedAsylum": 16
+        },
+        "E06000027": {
+          "areaName": "Torbay",
+          "supportedAsylum": 54
+        },
+        "W06000020": {
+          "areaName": "Torfaen",
+          "supportedAsylum": 10
+        },
+        "E07000046": {
+          "areaName": "Torridge",
+          "supportedAsylum": 6
+        },
+        "E09000030": {
+          "areaName": "Tower Hamlets",
+          "supportedAsylum": 466
+        },
+        "E08000009": {
+          "areaName": "Trafford",
+          "supportedAsylum": 205
+        },
+        "E07000116": {
+          "areaName": "Tunbridge Wells",
+          "supportedAsylum": 0
+        },
+        "E07000077": {
+          "areaName": "Uttlesford",
+          "supportedAsylum": 45
+        },
+        "W06000014": {
+          "areaName": "Vale of Glamorgan",
+          "supportedAsylum": 27
+        },
+        "E07000180": {
+          "areaName": "Vale of White Horse",
+          "supportedAsylum": 87
+        },
+        "E08000036": {
+          "areaName": "Wakefield",
+          "supportedAsylum": 622
+        },
+        "E08000030": {
+          "areaName": "Walsall",
+          "supportedAsylum": 668
+        },
+        "E09000031": {
+          "areaName": "Waltham Forest",
+          "supportedAsylum": 177
+        },
+        "E09000032": {
+          "areaName": "Wandsworth",
+          "supportedAsylum": 93
+        },
+        "E06000007": {
+          "areaName": "Warrington",
+          "supportedAsylum": 407
+        },
+        "E07000222": {
+          "areaName": "Warwick",
+          "supportedAsylum": 284
+        },
+        "E07000103": {
+          "areaName": "Watford",
+          "supportedAsylum": 24
+        },
+        "E07000216": {
+          "areaName": "Waverley",
+          "supportedAsylum": 7
+        },
+        "E07000065": {
+          "areaName": "Wealden",
+          "supportedAsylum": 468
+        },
+        "E07000241": {
+          "areaName": "Welwyn Hatfield",
+          "supportedAsylum": 157
+        },
+        "E06000037": {
+          "areaName": "West Berkshire",
+          "supportedAsylum": 54
+        },
+        "E07000047": {
+          "areaName": "West Devon",
+          "supportedAsylum": 1
+        },
+        "S12000039": {
+          "areaName": "West Dunbartonshire",
+          "supportedAsylum": 65
+        },
+        "E07000127": {
+          "areaName": "West Lancashire",
+          "supportedAsylum": 403
+        },
+        "E07000142": {
+          "areaName": "West Lindsey",
+          "supportedAsylum": 67
+        },
+        "S12000040": {
+          "areaName": "West Lothian",
+          "supportedAsylum": 74
+        },
+        "E06000062": {
+          "areaName": "West Northamptonshire",
+          "supportedAsylum": 451
+        },
+        "E07000181": {
+          "areaName": "West Oxfordshire",
+          "supportedAsylum": 7
+        },
+        "E07000245": {
+          "areaName": "West Suffolk",
+          "supportedAsylum": 47
+        },
+        "E09000033": {
+          "areaName": "Westminster",
+          "supportedAsylum": 45
+        },
+        "E06000064": {
+          "areaName": "Westmorland and Furness",
+          "supportedAsylum": 261
+        },
+        "E08000010": {
+          "areaName": "Wigan",
+          "supportedAsylum": 1248
+        },
+        "E06000054": {
+          "areaName": "Wiltshire",
+          "supportedAsylum": 230
+        },
+        "E07000094": {
+          "areaName": "Winchester",
+          "supportedAsylum": 75
+        },
+        "E06000040": {
+          "areaName": "Windsor and Maidenhead",
+          "supportedAsylum": 369
+        },
+        "E08000015": {
+          "areaName": "Wirral",
+          "supportedAsylum": 671
+        },
+        "E07000217": {
+          "areaName": "Woking",
+          "supportedAsylum": 11
+        },
+        "E06000041": {
+          "areaName": "Wokingham",
+          "supportedAsylum": 110
+        },
+        "E08000031": {
+          "areaName": "Wolverhampton",
+          "supportedAsylum": 989
+        },
+        "E07000237": {
+          "areaName": "Worcester",
+          "supportedAsylum": 76
+        },
+        "E07000229": {
+          "areaName": "Worthing",
+          "supportedAsylum": 17
+        },
+        "W06000006": {
+          "areaName": "Wrexham",
+          "supportedAsylum": 139
+        },
+        "E07000238": {
+          "areaName": "Wychavon",
+          "supportedAsylum": 43
+        },
+        "E07000128": {
+          "areaName": "Wyre",
+          "supportedAsylum": 379
+        },
+        "E07000239": {
+          "areaName": "Wyre Forest",
+          "supportedAsylum": 91
+        },
+        "E06000014": {
+          "areaName": "York",
+          "supportedAsylum": 398
+        }
+      }
+    },
+    {
       "snapshotDate": "2026-06-30",
       "release": "Immigration system statistics, year ending June 2026",
       "releaseDate": "2026-08-27",
@@ -1454,1463 +2911,6 @@
         "E06000014": {
           "areaName": "York",
           "supportedAsylum": 366
-        }
-      }
-    },
-    {
-      "snapshotDate": "2026-03-31",
-      "release": "Immigration system statistics, year ending March 2026",
-      "releaseDate": "2026-05-21",
-      "releasePage": "https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-march-2026",
-      "table": "Reg_02",
-      "column": "Supported Asylum (population)",
-      "fileName": "regional-and-local-authority-dataset-mar-2026.ods",
-      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
-      "fileSha256": "1dd0e75630e1531ade660944ff02b608344efa1e00809f0fee92fb727b299bc2",
-      "areas": {
-        "S12000033": {
-          "areaName": "Aberdeen City",
-          "supportedAsylum": 679
-        },
-        "S12000034": {
-          "areaName": "Aberdeenshire",
-          "supportedAsylum": 237
-        },
-        "E07000223": {
-          "areaName": "Adur",
-          "supportedAsylum": 1
-        },
-        "E07000032": {
-          "areaName": "Amber Valley",
-          "supportedAsylum": 109
-        },
-        "S12000041": {
-          "areaName": "Angus",
-          "supportedAsylum": 55
-        },
-        "N09000001": {
-          "areaName": "Antrim and Newtownabbey",
-          "supportedAsylum": 212
-        },
-        "N09000011": {
-          "areaName": "Ards and North Down",
-          "supportedAsylum": 1
-        },
-        "S12000035": {
-          "areaName": "Argyll and Bute",
-          "supportedAsylum": 1
-        },
-        "N09000002": {
-          "areaName": "Armagh City, Banbridge and Craigavon",
-          "supportedAsylum": 87
-        },
-        "E07000224": {
-          "areaName": "Arun",
-          "supportedAsylum": 3
-        },
-        "E07000170": {
-          "areaName": "Ashfield",
-          "supportedAsylum": 157
-        },
-        "E07000105": {
-          "areaName": "Ashford",
-          "supportedAsylum": 104
-        },
-        "E07000200": {
-          "areaName": "Babergh",
-          "supportedAsylum": 6
-        },
-        "E09000002": {
-          "areaName": "Barking and Dagenham",
-          "supportedAsylum": 301
-        },
-        "E09000003": {
-          "areaName": "Barnet",
-          "supportedAsylum": 1137
-        },
-        "E08000016": {
-          "areaName": "Barnsley",
-          "supportedAsylum": 269
-        },
-        "E07000066": {
-          "areaName": "Basildon",
-          "supportedAsylum": 354
-        },
-        "E07000084": {
-          "areaName": "Basingstoke and Deane",
-          "supportedAsylum": 24
-        },
-        "E07000171": {
-          "areaName": "Bassetlaw",
-          "supportedAsylum": 203
-        },
-        "E06000022": {
-          "areaName": "Bath and North East Somerset",
-          "supportedAsylum": 8
-        },
-        "E06000055": {
-          "areaName": "Bedford",
-          "supportedAsylum": 178
-        },
-        "N09000003": {
-          "areaName": "Belfast",
-          "supportedAsylum": 1607
-        },
-        "E09000004": {
-          "areaName": "Bexley",
-          "supportedAsylum": 109
-        },
-        "E08000025": {
-          "areaName": "Birmingham",
-          "supportedAsylum": 2142
-        },
-        "E07000129": {
-          "areaName": "Blaby",
-          "supportedAsylum": 32
-        },
-        "E06000008": {
-          "areaName": "Blackburn with Darwen",
-          "supportedAsylum": 765
-        },
-        "E06000009": {
-          "areaName": "Blackpool",
-          "supportedAsylum": 496
-        },
-        "W06000019": {
-          "areaName": "Blaenau Gwent",
-          "supportedAsylum": 40
-        },
-        "E07000033": {
-          "areaName": "Bolsover",
-          "supportedAsylum": 141
-        },
-        "E08000001": {
-          "areaName": "Bolton",
-          "supportedAsylum": 1059
-        },
-        "E07000136": {
-          "areaName": "Boston",
-          "supportedAsylum": 113
-        },
-        "E06000058": {
-          "areaName": "Bournemouth, Christchurch and Poole",
-          "supportedAsylum": 450
-        },
-        "E06000036": {
-          "areaName": "Bracknell Forest",
-          "supportedAsylum": 12
-        },
-        "E08000032": {
-          "areaName": "Bradford",
-          "supportedAsylum": 1266
-        },
-        "E07000067": {
-          "areaName": "Braintree",
-          "supportedAsylum": 767
-        },
-        "E07000143": {
-          "areaName": "Breckland",
-          "supportedAsylum": 41
-        },
-        "E09000005": {
-          "areaName": "Brent",
-          "supportedAsylum": 902
-        },
-        "E07000068": {
-          "areaName": "Brentwood",
-          "supportedAsylum": 19
-        },
-        "W06000013": {
-          "areaName": "Bridgend",
-          "supportedAsylum": 42
-        },
-        "E06000043": {
-          "areaName": "Brighton and Hove",
-          "supportedAsylum": 179
-        },
-        "E06000023": {
-          "areaName": "Bristol, City of",
-          "supportedAsylum": 879
-        },
-        "E07000144": {
-          "areaName": "Broadland",
-          "supportedAsylum": 9
-        },
-        "E09000006": {
-          "areaName": "Bromley",
-          "supportedAsylum": 148
-        },
-        "E07000234": {
-          "areaName": "Bromsgrove",
-          "supportedAsylum": 4
-        },
-        "E07000095": {
-          "areaName": "Broxbourne",
-          "supportedAsylum": 194
-        },
-        "E07000172": {
-          "areaName": "Broxtowe",
-          "supportedAsylum": 234
-        },
-        "E06000060": {
-          "areaName": "Buckinghamshire",
-          "supportedAsylum": 210
-        },
-        "E07000117": {
-          "areaName": "Burnley",
-          "supportedAsylum": 455
-        },
-        "E08000002": {
-          "areaName": "Bury",
-          "supportedAsylum": 389
-        },
-        "W06000018": {
-          "areaName": "Caerphilly",
-          "supportedAsylum": 89
-        },
-        "E08000033": {
-          "areaName": "Calderdale",
-          "supportedAsylum": 509
-        },
-        "E07000008": {
-          "areaName": "Cambridge",
-          "supportedAsylum": 14
-        },
-        "E09000007": {
-          "areaName": "Camden",
-          "supportedAsylum": 223
-        },
-        "E07000192": {
-          "areaName": "Cannock Chase",
-          "supportedAsylum": 28
-        },
-        "E07000106": {
-          "areaName": "Canterbury",
-          "supportedAsylum": 222
-        },
-        "W06000015": {
-          "areaName": "Cardiff",
-          "supportedAsylum": 1418
-        },
-        "W06000010": {
-          "areaName": "Carmarthenshire",
-          "supportedAsylum": 58
-        },
-        "E07000069": {
-          "areaName": "Castle Point",
-          "supportedAsylum": 26
-        },
-        "N09000004": {
-          "areaName": "Causeway Coast and Glens",
-          "supportedAsylum": 200
-        },
-        "E06000056": {
-          "areaName": "Central Bedfordshire",
-          "supportedAsylum": 144
-        },
-        "W06000008": {
-          "areaName": "Ceredigion",
-          "supportedAsylum": 0
-        },
-        "E07000130": {
-          "areaName": "Charnwood",
-          "supportedAsylum": 210
-        },
-        "E07000070": {
-          "areaName": "Chelmsford",
-          "supportedAsylum": 246
-        },
-        "E07000078": {
-          "areaName": "Cheltenham",
-          "supportedAsylum": 69
-        },
-        "E07000177": {
-          "areaName": "Cherwell",
-          "supportedAsylum": 80
-        },
-        "E06000049": {
-          "areaName": "Cheshire East",
-          "supportedAsylum": 385
-        },
-        "E06000050": {
-          "areaName": "Cheshire West and Chester",
-          "supportedAsylum": 659
-        },
-        "E07000034": {
-          "areaName": "Chesterfield",
-          "supportedAsylum": 30
-        },
-        "E07000225": {
-          "areaName": "Chichester",
-          "supportedAsylum": 110
-        },
-        "E07000118": {
-          "areaName": "Chorley",
-          "supportedAsylum": 242
-        },
-        "S12000036": {
-          "areaName": "City of Edinburgh",
-          "supportedAsylum": 167
-        },
-        "E09000001": {
-          "areaName": "City of London",
-          "supportedAsylum": 1
-        },
-        "S12000005": {
-          "areaName": "Clackmannanshire",
-          "supportedAsylum": 14
-        },
-        "E07000071": {
-          "areaName": "Colchester",
-          "supportedAsylum": 317
-        },
-        "W06000003": {
-          "areaName": "Conwy",
-          "supportedAsylum": 20
-        },
-        "E06000052": {
-          "areaName": "Cornwall",
-          "supportedAsylum": 18
-        },
-        "E07000079": {
-          "areaName": "Cotswold",
-          "supportedAsylum": 0
-        },
-        "E06000047": {
-          "areaName": "County Durham",
-          "supportedAsylum": 592
-        },
-        "E08000026": {
-          "areaName": "Coventry",
-          "supportedAsylum": 1712
-        },
-        "E07000226": {
-          "areaName": "Crawley",
-          "supportedAsylum": 304
-        },
-        "E09000008": {
-          "areaName": "Croydon",
-          "supportedAsylum": 974
-        },
-        "E06000063": {
-          "areaName": "Cumberland",
-          "supportedAsylum": 518
-        },
-        "E07000096": {
-          "areaName": "Dacorum",
-          "supportedAsylum": 365
-        },
-        "E06000005": {
-          "areaName": "Darlington",
-          "supportedAsylum": 228
-        },
-        "E07000107": {
-          "areaName": "Dartford",
-          "supportedAsylum": 24
-        },
-        "W06000004": {
-          "areaName": "Denbighshire",
-          "supportedAsylum": 62
-        },
-        "E06000015": {
-          "areaName": "Derby",
-          "supportedAsylum": 1106
-        },
-        "E07000035": {
-          "areaName": "Derbyshire Dales",
-          "supportedAsylum": 0
-        },
-        "N09000005": {
-          "areaName": "Derry City and Strabane",
-          "supportedAsylum": 228
-        },
-        "E08000017": {
-          "areaName": "Doncaster",
-          "supportedAsylum": 561
-        },
-        "E06000059": {
-          "areaName": "Dorset",
-          "supportedAsylum": 5
-        },
-        "E07000108": {
-          "areaName": "Dover",
-          "supportedAsylum": 74
-        },
-        "E08000027": {
-          "areaName": "Dudley",
-          "supportedAsylum": 663
-        },
-        "S12000006": {
-          "areaName": "Dumfries and Galloway",
-          "supportedAsylum": 47
-        },
-        "S12000042": {
-          "areaName": "Dundee City",
-          "supportedAsylum": 52
-        },
-        "E09000009": {
-          "areaName": "Ealing",
-          "supportedAsylum": 1163
-        },
-        "S12000008": {
-          "areaName": "East Ayrshire",
-          "supportedAsylum": 76
-        },
-        "E07000009": {
-          "areaName": "East Cambridgeshire",
-          "supportedAsylum": 6
-        },
-        "E07000040": {
-          "areaName": "East Devon",
-          "supportedAsylum": 120
-        },
-        "S12000045": {
-          "areaName": "East Dunbartonshire",
-          "supportedAsylum": 14
-        },
-        "E07000085": {
-          "areaName": "East Hampshire",
-          "supportedAsylum": 8
-        },
-        "E07000242": {
-          "areaName": "East Hertfordshire",
-          "supportedAsylum": 0
-        },
-        "E07000137": {
-          "areaName": "East Lindsey",
-          "supportedAsylum": 95
-        },
-        "S12000010": {
-          "areaName": "East Lothian",
-          "supportedAsylum": 71
-        },
-        "S12000011": {
-          "areaName": "East Renfrewshire",
-          "supportedAsylum": 4
-        },
-        "E06000011": {
-          "areaName": "East Riding of Yorkshire",
-          "supportedAsylum": 73
-        },
-        "E07000193": {
-          "areaName": "East Staffordshire",
-          "supportedAsylum": 147
-        },
-        "E07000244": {
-          "areaName": "East Suffolk",
-          "supportedAsylum": 66
-        },
-        "E07000061": {
-          "areaName": "Eastbourne",
-          "supportedAsylum": 44
-        },
-        "E07000086": {
-          "areaName": "Eastleigh",
-          "supportedAsylum": 3
-        },
-        "E07000207": {
-          "areaName": "Elmbridge",
-          "supportedAsylum": 22
-        },
-        "E09000010": {
-          "areaName": "Enfield",
-          "supportedAsylum": 361
-        },
-        "E07000072": {
-          "areaName": "Epping Forest",
-          "supportedAsylum": 128
-        },
-        "E07000208": {
-          "areaName": "Epsom and Ewell",
-          "supportedAsylum": 4
-        },
-        "E07000036": {
-          "areaName": "Erewash",
-          "supportedAsylum": 87
-        },
-        "E07000041": {
-          "areaName": "Exeter",
-          "supportedAsylum": 21
-        },
-        "S12000014": {
-          "areaName": "Falkirk",
-          "supportedAsylum": 71
-        },
-        "E07000087": {
-          "areaName": "Fareham",
-          "supportedAsylum": 23
-        },
-        "E07000010": {
-          "areaName": "Fenland",
-          "supportedAsylum": 3
-        },
-        "N09000006": {
-          "areaName": "Fermanagh and Omagh",
-          "supportedAsylum": 2
-        },
-        "S12000047": {
-          "areaName": "Fife",
-          "supportedAsylum": 33
-        },
-        "W06000005": {
-          "areaName": "Flintshire",
-          "supportedAsylum": 59
-        },
-        "E07000112": {
-          "areaName": "Folkestone and Hythe",
-          "supportedAsylum": 38
-        },
-        "E07000080": {
-          "areaName": "Forest of Dean",
-          "supportedAsylum": 11
-        },
-        "E07000119": {
-          "areaName": "Fylde",
-          "supportedAsylum": 76
-        },
-        "E08000037": {
-          "areaName": "Gateshead",
-          "supportedAsylum": 639
-        },
-        "E07000173": {
-          "areaName": "Gedling",
-          "supportedAsylum": 90
-        },
-        "S12000049": {
-          "areaName": "Glasgow City",
-          "supportedAsylum": 3870
-        },
-        "E07000081": {
-          "areaName": "Gloucester",
-          "supportedAsylum": 316
-        },
-        "E07000088": {
-          "areaName": "Gosport",
-          "supportedAsylum": 21
-        },
-        "E07000109": {
-          "areaName": "Gravesham",
-          "supportedAsylum": 101
-        },
-        "E07000145": {
-          "areaName": "Great Yarmouth",
-          "supportedAsylum": 14
-        },
-        "E09000011": {
-          "areaName": "Greenwich",
-          "supportedAsylum": 144
-        },
-        "E07000209": {
-          "areaName": "Guildford",
-          "supportedAsylum": 1
-        },
-        "W06000002": {
-          "areaName": "Gwynedd",
-          "supportedAsylum": 77
-        },
-        "E09000012": {
-          "areaName": "Hackney",
-          "supportedAsylum": 458
-        },
-        "E06000006": {
-          "areaName": "Halton",
-          "supportedAsylum": 604
-        },
-        "E09000013": {
-          "areaName": "Hammersmith and Fulham",
-          "supportedAsylum": 286
-        },
-        "E07000131": {
-          "areaName": "Harborough",
-          "supportedAsylum": 1
-        },
-        "E09000014": {
-          "areaName": "Haringey",
-          "supportedAsylum": 161
-        },
-        "E07000073": {
-          "areaName": "Harlow",
-          "supportedAsylum": 45
-        },
-        "E09000015": {
-          "areaName": "Harrow",
-          "supportedAsylum": 327
-        },
-        "E07000089": {
-          "areaName": "Hart",
-          "supportedAsylum": 0
-        },
-        "E06000001": {
-          "areaName": "Hartlepool",
-          "supportedAsylum": 403
-        },
-        "E07000062": {
-          "areaName": "Hastings",
-          "supportedAsylum": 61
-        },
-        "E07000090": {
-          "areaName": "Havant",
-          "supportedAsylum": 16
-        },
-        "E09000016": {
-          "areaName": "Havering",
-          "supportedAsylum": 176
-        },
-        "E06000019": {
-          "areaName": "Herefordshire, County of",
-          "supportedAsylum": 17
-        },
-        "E07000098": {
-          "areaName": "Hertsmere",
-          "supportedAsylum": 39
-        },
-        "E07000037": {
-          "areaName": "High Peak",
-          "supportedAsylum": 7
-        },
-        "S12000017": {
-          "areaName": "Highland",
-          "supportedAsylum": 0
-        },
-        "E09000017": {
-          "areaName": "Hillingdon",
-          "supportedAsylum": 1532
-        },
-        "E07000132": {
-          "areaName": "Hinckley and Bosworth",
-          "supportedAsylum": 95
-        },
-        "E07000227": {
-          "areaName": "Horsham",
-          "supportedAsylum": 45
-        },
-        "E09000018": {
-          "areaName": "Hounslow",
-          "supportedAsylum": 1298
-        },
-        "E07000011": {
-          "areaName": "Huntingdonshire",
-          "supportedAsylum": 14
-        },
-        "E07000120": {
-          "areaName": "Hyndburn",
-          "supportedAsylum": 412
-        },
-        "S12000018": {
-          "areaName": "Inverclyde",
-          "supportedAsylum": 212
-        },
-        "E07000202": {
-          "areaName": "Ipswich",
-          "supportedAsylum": 114
-        },
-        "W06000001": {
-          "areaName": "Isle of Anglesey",
-          "supportedAsylum": 26
-        },
-        "E06000046": {
-          "areaName": "Isle of Wight",
-          "supportedAsylum": 0
-        },
-        "E06000053": {
-          "areaName": "Isles of Scilly",
-          "supportedAsylum": 0
-        },
-        "E09000019": {
-          "areaName": "Islington",
-          "supportedAsylum": 56
-        },
-        "E09000020": {
-          "areaName": "Kensington and Chelsea",
-          "supportedAsylum": 205
-        },
-        "E07000146": {
-          "areaName": "King's Lynn and West Norfolk",
-          "supportedAsylum": 50
-        },
-        "E06000010": {
-          "areaName": "Kingston upon Hull, City of",
-          "supportedAsylum": 608
-        },
-        "E09000021": {
-          "areaName": "Kingston upon Thames",
-          "supportedAsylum": 84
-        },
-        "E08000034": {
-          "areaName": "Kirklees",
-          "supportedAsylum": 707
-        },
-        "E08000011": {
-          "areaName": "Knowsley",
-          "supportedAsylum": 312
-        },
-        "E09000022": {
-          "areaName": "Lambeth",
-          "supportedAsylum": 346
-        },
-        "E07000121": {
-          "areaName": "Lancaster",
-          "supportedAsylum": 245
-        },
-        "E08000035": {
-          "areaName": "Leeds",
-          "supportedAsylum": 1416
-        },
-        "E06000016": {
-          "areaName": "Leicester",
-          "supportedAsylum": 1370
-        },
-        "E07000063": {
-          "areaName": "Lewes",
-          "supportedAsylum": 2
-        },
-        "E09000023": {
-          "areaName": "Lewisham",
-          "supportedAsylum": 245
-        },
-        "E07000194": {
-          "areaName": "Lichfield",
-          "supportedAsylum": 3
-        },
-        "E07000138": {
-          "areaName": "Lincoln",
-          "supportedAsylum": 14
-        },
-        "N09000007": {
-          "areaName": "Lisburn and Castlereagh",
-          "supportedAsylum": 9
-        },
-        "E08000012": {
-          "areaName": "Liverpool",
-          "supportedAsylum": 2053
-        },
-        "E06000032": {
-          "areaName": "Luton",
-          "supportedAsylum": 461
-        },
-        "E07000110": {
-          "areaName": "Maidstone",
-          "supportedAsylum": 54
-        },
-        "E07000074": {
-          "areaName": "Maldon",
-          "supportedAsylum": 1
-        },
-        "E07000235": {
-          "areaName": "Malvern Hills",
-          "supportedAsylum": 0
-        },
-        "E08000003": {
-          "areaName": "Manchester",
-          "supportedAsylum": 1606
-        },
-        "E07000174": {
-          "areaName": "Mansfield",
-          "supportedAsylum": 193
-        },
-        "E06000035": {
-          "areaName": "Medway",
-          "supportedAsylum": 316
-        },
-        "E07000133": {
-          "areaName": "Melton",
-          "supportedAsylum": 15
-        },
-        "W06000024": {
-          "areaName": "Merthyr Tydfil",
-          "supportedAsylum": 45
-        },
-        "E09000024": {
-          "areaName": "Merton",
-          "supportedAsylum": 253
-        },
-        "N09000008": {
-          "areaName": "Mid and East Antrim",
-          "supportedAsylum": 0
-        },
-        "E07000042": {
-          "areaName": "Mid Devon",
-          "supportedAsylum": 0
-        },
-        "E07000203": {
-          "areaName": "Mid Suffolk",
-          "supportedAsylum": 26
-        },
-        "E07000228": {
-          "areaName": "Mid Sussex",
-          "supportedAsylum": 366
-        },
-        "N09000009": {
-          "areaName": "Mid Ulster",
-          "supportedAsylum": 0
-        },
-        "E06000002": {
-          "areaName": "Middlesbrough",
-          "supportedAsylum": 677
-        },
-        "S12000019": {
-          "areaName": "Midlothian",
-          "supportedAsylum": 54
-        },
-        "E06000042": {
-          "areaName": "Milton Keynes",
-          "supportedAsylum": 450
-        },
-        "E07000210": {
-          "areaName": "Mole Valley",
-          "supportedAsylum": 1
-        },
-        "W06000021": {
-          "areaName": "Monmouthshire",
-          "supportedAsylum": 1
-        },
-        "S12000020": {
-          "areaName": "Moray",
-          "supportedAsylum": 2
-        },
-        "S12000013": {
-          "areaName": "Na h-Eileanan Siar",
-          "supportedAsylum": 0
-        },
-        "W06000012": {
-          "areaName": "Neath Port Talbot",
-          "supportedAsylum": 63
-        },
-        "E07000091": {
-          "areaName": "New Forest",
-          "supportedAsylum": 0
-        },
-        "E07000175": {
-          "areaName": "Newark and Sherwood",
-          "supportedAsylum": 94
-        },
-        "E08000021": {
-          "areaName": "Newcastle upon Tyne",
-          "supportedAsylum": 1005
-        },
-        "E07000195": {
-          "areaName": "Newcastle-under-Lyme",
-          "supportedAsylum": 181
-        },
-        "E09000025": {
-          "areaName": "Newham",
-          "supportedAsylum": 1030
-        },
-        "W06000022": {
-          "areaName": "Newport",
-          "supportedAsylum": 344
-        },
-        "N09000010": {
-          "areaName": "Newry, Mourne and Down",
-          "supportedAsylum": 33
-        },
-        "S12000021": {
-          "areaName": "North Ayrshire",
-          "supportedAsylum": 67
-        },
-        "E07000043": {
-          "areaName": "North Devon",
-          "supportedAsylum": 4
-        },
-        "E07000038": {
-          "areaName": "North East Derbyshire",
-          "supportedAsylum": 58
-        },
-        "E06000012": {
-          "areaName": "North East Lincolnshire",
-          "supportedAsylum": 282
-        },
-        "E07000099": {
-          "areaName": "North Hertfordshire",
-          "supportedAsylum": 68
-        },
-        "E07000139": {
-          "areaName": "North Kesteven",
-          "supportedAsylum": 17
-        },
-        "S12000050": {
-          "areaName": "North Lanarkshire",
-          "supportedAsylum": 215
-        },
-        "E06000013": {
-          "areaName": "North Lincolnshire",
-          "supportedAsylum": 74
-        },
-        "E07000147": {
-          "areaName": "North Norfolk",
-          "supportedAsylum": 3
-        },
-        "E06000061": {
-          "areaName": "North Northamptonshire",
-          "supportedAsylum": 613
-        },
-        "E06000024": {
-          "areaName": "North Somerset",
-          "supportedAsylum": 77
-        },
-        "E08000022": {
-          "areaName": "North Tyneside",
-          "supportedAsylum": 447
-        },
-        "E07000218": {
-          "areaName": "North Warwickshire",
-          "supportedAsylum": 65
-        },
-        "E07000134": {
-          "areaName": "North West Leicestershire",
-          "supportedAsylum": 98
-        },
-        "E06000065": {
-          "areaName": "North Yorkshire",
-          "supportedAsylum": 352
-        },
-        "E06000057": {
-          "areaName": "Northumberland",
-          "supportedAsylum": 703
-        },
-        "E07000148": {
-          "areaName": "Norwich",
-          "supportedAsylum": 266
-        },
-        "E06000018": {
-          "areaName": "Nottingham",
-          "supportedAsylum": 1538
-        },
-        "E07000219": {
-          "areaName": "Nuneaton and Bedworth",
-          "supportedAsylum": 310
-        },
-        "E07000135": {
-          "areaName": "Oadby and Wigston",
-          "supportedAsylum": 34
-        },
-        "E08000004": {
-          "areaName": "Oldham",
-          "supportedAsylum": 781
-        },
-        "S12000023": {
-          "areaName": "Orkney Islands",
-          "supportedAsylum": 0
-        },
-        "E07000178": {
-          "areaName": "Oxford",
-          "supportedAsylum": 230
-        },
-        "W06000009": {
-          "areaName": "Pembrokeshire",
-          "supportedAsylum": 17
-        },
-        "E07000122": {
-          "areaName": "Pendle",
-          "supportedAsylum": 434
-        },
-        "S12000048": {
-          "areaName": "Perth and Kinross",
-          "supportedAsylum": 122
-        },
-        "E06000031": {
-          "areaName": "Peterborough",
-          "supportedAsylum": 414
-        },
-        "E06000026": {
-          "areaName": "Plymouth",
-          "supportedAsylum": 495
-        },
-        "E06000044": {
-          "areaName": "Portsmouth",
-          "supportedAsylum": 699
-        },
-        "W06000023": {
-          "areaName": "Powys",
-          "supportedAsylum": 10
-        },
-        "E07000123": {
-          "areaName": "Preston",
-          "supportedAsylum": 429
-        },
-        "E06000038": {
-          "areaName": "Reading",
-          "supportedAsylum": 578
-        },
-        "E09000026": {
-          "areaName": "Redbridge",
-          "supportedAsylum": 459
-        },
-        "E06000003": {
-          "areaName": "Redcar and Cleveland",
-          "supportedAsylum": 275
-        },
-        "E07000236": {
-          "areaName": "Redditch",
-          "supportedAsylum": 14
-        },
-        "E07000211": {
-          "areaName": "Reigate and Banstead",
-          "supportedAsylum": 288
-        },
-        "S12000038": {
-          "areaName": "Renfrewshire",
-          "supportedAsylum": 114
-        },
-        "W06000016": {
-          "areaName": "Rhondda Cynon Taf",
-          "supportedAsylum": 189
-        },
-        "E07000124": {
-          "areaName": "Ribble Valley",
-          "supportedAsylum": 32
-        },
-        "E09000027": {
-          "areaName": "Richmond upon Thames",
-          "supportedAsylum": 14
-        },
-        "E08000005": {
-          "areaName": "Rochdale",
-          "supportedAsylum": 715
-        },
-        "E07000075": {
-          "areaName": "Rochford",
-          "supportedAsylum": 73
-        },
-        "E07000125": {
-          "areaName": "Rossendale",
-          "supportedAsylum": 244
-        },
-        "E07000064": {
-          "areaName": "Rother",
-          "supportedAsylum": 1
-        },
-        "E08000018": {
-          "areaName": "Rotherham",
-          "supportedAsylum": 403
-        },
-        "E07000220": {
-          "areaName": "Rugby",
-          "supportedAsylum": 506
-        },
-        "E07000212": {
-          "areaName": "Runnymede",
-          "supportedAsylum": 15
-        },
-        "E07000176": {
-          "areaName": "Rushcliffe",
-          "supportedAsylum": 46
-        },
-        "E07000092": {
-          "areaName": "Rushmoor",
-          "supportedAsylum": 111
-        },
-        "E06000017": {
-          "areaName": "Rutland",
-          "supportedAsylum": 8
-        },
-        "E08000006": {
-          "areaName": "Salford",
-          "supportedAsylum": 681
-        },
-        "E08000028": {
-          "areaName": "Sandwell",
-          "supportedAsylum": 1500
-        },
-        "S12000026": {
-          "areaName": "Scottish Borders",
-          "supportedAsylum": 30
-        },
-        "E08000014": {
-          "areaName": "Sefton",
-          "supportedAsylum": 417
-        },
-        "E07000111": {
-          "areaName": "Sevenoaks",
-          "supportedAsylum": 4
-        },
-        "E08000019": {
-          "areaName": "Sheffield",
-          "supportedAsylum": 1126
-        },
-        "S12000027": {
-          "areaName": "Shetland Islands",
-          "supportedAsylum": 0
-        },
-        "E06000051": {
-          "areaName": "Shropshire",
-          "supportedAsylum": 51
-        },
-        "E06000039": {
-          "areaName": "Slough",
-          "supportedAsylum": 289
-        },
-        "E08000029": {
-          "areaName": "Solihull",
-          "supportedAsylum": 207
-        },
-        "E06000066": {
-          "areaName": "Somerset",
-          "supportedAsylum": 310
-        },
-        "S12000028": {
-          "areaName": "South Ayrshire",
-          "supportedAsylum": 17
-        },
-        "E07000012": {
-          "areaName": "South Cambridgeshire",
-          "supportedAsylum": 1
-        },
-        "E07000039": {
-          "areaName": "South Derbyshire",
-          "supportedAsylum": 24
-        },
-        "E06000025": {
-          "areaName": "South Gloucestershire",
-          "supportedAsylum": 165
-        },
-        "E07000044": {
-          "areaName": "South Hams",
-          "supportedAsylum": 15
-        },
-        "E07000140": {
-          "areaName": "South Holland",
-          "supportedAsylum": 79
-        },
-        "E07000141": {
-          "areaName": "South Kesteven",
-          "supportedAsylum": 270
-        },
-        "S12000029": {
-          "areaName": "South Lanarkshire",
-          "supportedAsylum": 261
-        },
-        "E07000149": {
-          "areaName": "South Norfolk",
-          "supportedAsylum": 21
-        },
-        "E07000179": {
-          "areaName": "South Oxfordshire",
-          "supportedAsylum": 24
-        },
-        "E07000126": {
-          "areaName": "South Ribble",
-          "supportedAsylum": 337
-        },
-        "E07000196": {
-          "areaName": "South Staffordshire",
-          "supportedAsylum": 24
-        },
-        "E08000023": {
-          "areaName": "South Tyneside",
-          "supportedAsylum": 631
-        },
-        "E06000045": {
-          "areaName": "Southampton",
-          "supportedAsylum": 336
-        },
-        "E06000033": {
-          "areaName": "Southend-on-Sea",
-          "supportedAsylum": 257
-        },
-        "E09000028": {
-          "areaName": "Southwark",
-          "supportedAsylum": 502
-        },
-        "E07000213": {
-          "areaName": "Spelthorne",
-          "supportedAsylum": 78
-        },
-        "E07000240": {
-          "areaName": "St Albans",
-          "supportedAsylum": 40
-        },
-        "E08000013": {
-          "areaName": "St. Helens",
-          "supportedAsylum": 576
-        },
-        "E07000197": {
-          "areaName": "Stafford",
-          "supportedAsylum": 53
-        },
-        "E07000198": {
-          "areaName": "Staffordshire Moorlands",
-          "supportedAsylum": 35
-        },
-        "E07000243": {
-          "areaName": "Stevenage",
-          "supportedAsylum": 261
-        },
-        "S12000030": {
-          "areaName": "Stirling",
-          "supportedAsylum": 5
-        },
-        "E08000007": {
-          "areaName": "Stockport",
-          "supportedAsylum": 609
-        },
-        "E06000004": {
-          "areaName": "Stockton-on-Tees",
-          "supportedAsylum": 837
-        },
-        "E06000021": {
-          "areaName": "Stoke-on-Trent",
-          "supportedAsylum": 1189
-        },
-        "E07000221": {
-          "areaName": "Stratford-on-Avon",
-          "supportedAsylum": 123
-        },
-        "E07000082": {
-          "areaName": "Stroud",
-          "supportedAsylum": 7
-        },
-        "E08000024": {
-          "areaName": "Sunderland",
-          "supportedAsylum": 805
-        },
-        "E07000214": {
-          "areaName": "Surrey Heath",
-          "supportedAsylum": 68
-        },
-        "E09000029": {
-          "areaName": "Sutton",
-          "supportedAsylum": 29
-        },
-        "E07000113": {
-          "areaName": "Swale",
-          "supportedAsylum": 72
-        },
-        "W06000011": {
-          "areaName": "Swansea",
-          "supportedAsylum": 677
-        },
-        "E06000030": {
-          "areaName": "Swindon",
-          "supportedAsylum": 515
-        },
-        "E08000008": {
-          "areaName": "Tameside",
-          "supportedAsylum": 506
-        },
-        "E07000199": {
-          "areaName": "Tamworth",
-          "supportedAsylum": 95
-        },
-        "E07000215": {
-          "areaName": "Tandridge",
-          "supportedAsylum": 17
-        },
-        "E07000045": {
-          "areaName": "Teignbridge",
-          "supportedAsylum": 35
-        },
-        "E06000020": {
-          "areaName": "Telford and Wrekin",
-          "supportedAsylum": 566
-        },
-        "E07000076": {
-          "areaName": "Tendring",
-          "supportedAsylum": 214
-        },
-        "E07000093": {
-          "areaName": "Test Valley",
-          "supportedAsylum": 14
-        },
-        "E07000083": {
-          "areaName": "Tewkesbury",
-          "supportedAsylum": 0
-        },
-        "E07000114": {
-          "areaName": "Thanet",
-          "supportedAsylum": 106
-        },
-        "E07000102": {
-          "areaName": "Three Rivers",
-          "supportedAsylum": 4
-        },
-        "E06000034": {
-          "areaName": "Thurrock",
-          "supportedAsylum": 145
-        },
-        "E07000115": {
-          "areaName": "Tonbridge and Malling",
-          "supportedAsylum": 7
-        },
-        "E06000027": {
-          "areaName": "Torbay",
-          "supportedAsylum": 57
-        },
-        "W06000020": {
-          "areaName": "Torfaen",
-          "supportedAsylum": 10
-        },
-        "E07000046": {
-          "areaName": "Torridge",
-          "supportedAsylum": 6
-        },
-        "E09000030": {
-          "areaName": "Tower Hamlets",
-          "supportedAsylum": 488
-        },
-        "E08000009": {
-          "areaName": "Trafford",
-          "supportedAsylum": 258
-        },
-        "E07000116": {
-          "areaName": "Tunbridge Wells",
-          "supportedAsylum": 1
-        },
-        "E07000077": {
-          "areaName": "Uttlesford",
-          "supportedAsylum": 44
-        },
-        "W06000014": {
-          "areaName": "Vale of Glamorgan",
-          "supportedAsylum": 17
-        },
-        "E07000180": {
-          "areaName": "Vale of White Horse",
-          "supportedAsylum": 92
-        },
-        "E08000036": {
-          "areaName": "Wakefield",
-          "supportedAsylum": 648
-        },
-        "E08000030": {
-          "areaName": "Walsall",
-          "supportedAsylum": 650
-        },
-        "E09000031": {
-          "areaName": "Waltham Forest",
-          "supportedAsylum": 158
-        },
-        "E09000032": {
-          "areaName": "Wandsworth",
-          "supportedAsylum": 84
-        },
-        "E06000007": {
-          "areaName": "Warrington",
-          "supportedAsylum": 375
-        },
-        "E07000222": {
-          "areaName": "Warwick",
-          "supportedAsylum": 360
-        },
-        "E07000103": {
-          "areaName": "Watford",
-          "supportedAsylum": 18
-        },
-        "E07000216": {
-          "areaName": "Waverley",
-          "supportedAsylum": 7
-        },
-        "E07000065": {
-          "areaName": "Wealden",
-          "supportedAsylum": 265
-        },
-        "E07000241": {
-          "areaName": "Welwyn Hatfield",
-          "supportedAsylum": 153
-        },
-        "E06000037": {
-          "areaName": "West Berkshire",
-          "supportedAsylum": 46
-        },
-        "E07000047": {
-          "areaName": "West Devon",
-          "supportedAsylum": 1
-        },
-        "S12000039": {
-          "areaName": "West Dunbartonshire",
-          "supportedAsylum": 41
-        },
-        "E07000127": {
-          "areaName": "West Lancashire",
-          "supportedAsylum": 420
-        },
-        "E07000142": {
-          "areaName": "West Lindsey",
-          "supportedAsylum": 55
-        },
-        "S12000040": {
-          "areaName": "West Lothian",
-          "supportedAsylum": 56
-        },
-        "E06000062": {
-          "areaName": "West Northamptonshire",
-          "supportedAsylum": 436
-        },
-        "E07000181": {
-          "areaName": "West Oxfordshire",
-          "supportedAsylum": 81
-        },
-        "E07000245": {
-          "areaName": "West Suffolk",
-          "supportedAsylum": 32
-        },
-        "E09000033": {
-          "areaName": "Westminster",
-          "supportedAsylum": 33
-        },
-        "E06000064": {
-          "areaName": "Westmorland and Furness",
-          "supportedAsylum": 235
-        },
-        "E08000010": {
-          "areaName": "Wigan",
-          "supportedAsylum": 1188
-        },
-        "E06000054": {
-          "areaName": "Wiltshire",
-          "supportedAsylum": 205
-        },
-        "E07000094": {
-          "areaName": "Winchester",
-          "supportedAsylum": 70
-        },
-        "E06000040": {
-          "areaName": "Windsor and Maidenhead",
-          "supportedAsylum": 302
-        },
-        "E08000015": {
-          "areaName": "Wirral",
-          "supportedAsylum": 705
-        },
-        "E07000217": {
-          "areaName": "Woking",
-          "supportedAsylum": 2
-        },
-        "E06000041": {
-          "areaName": "Wokingham",
-          "supportedAsylum": 188
-        },
-        "E08000031": {
-          "areaName": "Wolverhampton",
-          "supportedAsylum": 1094
-        },
-        "E07000237": {
-          "areaName": "Worcester",
-          "supportedAsylum": 72
-        },
-        "E07000229": {
-          "areaName": "Worthing",
-          "supportedAsylum": 15
-        },
-        "W06000006": {
-          "areaName": "Wrexham",
-          "supportedAsylum": 127
-        },
-        "E07000238": {
-          "areaName": "Wychavon",
-          "supportedAsylum": 111
-        },
-        "E07000128": {
-          "areaName": "Wyre",
-          "supportedAsylum": 360
-        },
-        "E07000239": {
-          "areaName": "Wyre Forest",
-          "supportedAsylum": 47
-        },
-        "E06000014": {
-          "areaName": "York",
-          "supportedAsylum": 341
         }
       }
     }

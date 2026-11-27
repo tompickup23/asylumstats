@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23T20:00:37.377Z",
+  "generated_at": "2026-11-27T00:16:29.940Z",
   "dataset_id": "hotel_entities",
   "source_files": [
     {
@@ -30,12 +30,12 @@
     {
       "name": "archiveLeads",
       "path": "data/raw/hotel_entities/archive-hotel-leads.json",
-      "sha256": "e95f459a57882f0b87b09b06d8d05a22270752729ce72a04edaa2b881244dac0"
+      "sha256": "178c9fe8bce74cb71c7081337315d2a74765181ae5328f7333efc785cb880442"
     },
     {
       "name": "asylumFinance",
       "path": "src/data/live/asylum-finance.json",
-      "sha256": "7e15444f92d43040b43afb4d732738728880f65dbd7cad38b0eda8c263c4d1b5"
+      "sha256": "536bdc05decb68c9a607ca7a7bc4c38b631a42d79b6fedaa8724ae5e0d0911d3"
     }
   ],
   "counts": {
