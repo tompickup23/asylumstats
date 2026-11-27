@@ -90,3 +90,4 @@ data/raw/border_security/
 
 # Local Playwright captures for PR descriptions; attach them to the PR, not the repo.
 output/
+src/data/live/regional-support-history.json

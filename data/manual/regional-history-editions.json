@@ -1,0 +1,19 @@
+{
+  "note": "Earlier editions of the Home Office regional and local authority dataset, as listed on the dataset page on 27 November 2026. Read once by `node scripts/transform/transform-regional-history.mjs --backfill`, which records each file's SHA-256 in the mart. The current edition is not listed here: every routes refresh adds it from the file the routes fetch already holds. June 2024 and March 2025 were not listed on the page under this file name pattern on that date and are absent, not estimated.",
+  "landing": "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data",
+  "checkedAt": "2026-11-27",
+  "editions": [
+    "https://assets.publishing.service.gov.uk/media/64e49cb3bc2b520014a0045c/regional-and-local-authority-dataset-mar-2023.ods",
+    "https://assets.publishing.service.gov.uk/media/655b39ce544aea000dfb301b/regional-and-local-authority-dataset-jun-2023.ods",
+    "https://assets.publishing.service.gov.uk/media/65ddda05cf7eb10011f57fbd/regional-and-local-authority-dataset-sep-2023.ods",
+    "https://assets.publishing.service.gov.uk/media/65ddd9ebf1cab3001afc4795/regional-and-local-authority-dataset-dec-2023.ods",
+    "https://assets.publishing.service.gov.uk/media/691db17c2c6b98ecdbc5006e/regional-and-local-authority-dataset-mar-2024.ods",
+    "https://assets.publishing.service.gov.uk/media/69248038367485ea116a56ba/regional-and-local-authority-dataset-sep-2024.ods",
+    "https://assets.publishing.service.gov.uk/media/67bc89984ad141d90835347b/regional-and-local-authority-dataset-dec-2024.ods",
+    "https://assets.publishing.service.gov.uk/media/68a6ecc6bceafd8d0d96a086/regional-and-local-authority-dataset-jun-2025.ods",
+    "https://assets.publishing.service.gov.uk/media/691c5c1f84a267da57d706a1/regional-and-local-authority-dataset-sep-2025.ods",
+    "https://assets.publishing.service.gov.uk/media/69959e60a58a315dbe72bf10/regional-and-local-authority-dataset-dec-2025.ods",
+    "https://assets.publishing.service.gov.uk/media/6a0f1367f71ef78abbd59dbf/regional-and-local-authority-dataset-mar-2026.ods",
+    "https://assets.publishing.service.gov.uk/media/6a8c6c3ca8f84a582b842859/regional-and-local-authority-dataset-jun-2026.ods"
+  ]
+}
