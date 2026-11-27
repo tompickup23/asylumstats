@@ -1,14 +1,14 @@
 ---
 headline: "Recomputed on published data: Manchester, Liverpool and Middlesbrough carry the highest combined pressure"
 date: "2026-04-10"
-updated: "2026-10-12"
+updated: "2026-11-27"
 category: pressure-index
-stat_value: "87.3"
-stat_label: "Manchester, top composite pressure score of 285 English authorities, recomputed 12 October 2026"
+stat_value: "87.9"
+stat_label: "Manchester, top composite pressure score of 285 English authorities, recomputed 27 November 2026"
 verdict: alert
 source_url: "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data"
 source_label: "Home Office local authority data, DfE SEND, DHSC adult social care finance, ONS Census 2011 and 2021"
-summary: "Corrected 12 October 2026. The index is recomputed on four published domains, asylum support, demographic change, SEND growth and adult social care spend, across the 285 English authorities that hold all four. Manchester is first on 87.3, Liverpool second on 85.9 and Middlesbrough third on 83.6. Pendle is the highest in Lancashire, fourth."
+summary: "Corrected 12 October 2026 and recomputed 27 November 2026 on the Home Office asylum support figures for 30 September 2026. The index covers four published domains, asylum support, demographic change, SEND growth and adult social care spend, across the 285 English authorities that hold all four. Manchester is first on 87.9, Liverpool second on 86.0 and Middlesbrough third on 83.7. Pendle is the highest in Lancashire, fourth."
 seo_title: "Manchester, Liverpool and Middlesbrough top the pressure index"
 seo_description: "Corrected: recomputed on four published domains for 285 English authorities, Manchester, Liverpool and Middlesbrough carry the most pressure."
 ---
@@ -36,29 +36,31 @@ seo_description: "Corrected: recomputed on four published domains for 285 Englis
 > Burnley sixth, Preston tenth, Hyndburn sixteenth, Blackpool forty-sixth and
 > Doncaster sixty-sixth.
 
+**Updated 27 November 2026.** The table below is recomputed on the Home Office asylum support figures as at 30 September 2026, published on 26 November 2026. The other three domains have not changed. The first five places are the same as at 30 June 2026. Sandwell and Nottingham are now sixth and seventh; Newcastle upon Tyne moves from seventh to eighth and Burnley from sixth to tenth. The scores in the correction above are those of 12 October 2026, on the 30 June 2026 figures.
+
 The composite index combines four domains at local authority level. Each is converted to a percentile rank against every authority holding that dataset, then averaged, with equal weights, across the domains an area has:
 
-1. Asylum support rate per 10,000 residents, against all 361 UK local authorities (Home Office local authority data, 30 June 2026)
+1. Asylum support rate per 10,000 residents, against all 361 UK local authorities (Home Office local authority data, 30 September 2026)
 2. Demographic change, the absolute annual percentage-point move in White British share between the 2011 and 2021 Censuses
 3. Five-year growth in pupils with an EHC plan, 2020/21 to 2025/26 (DfE, Special educational needs in England)
 4. Adult social care gross spend per resident aged 18 and over, 2024-25 (DHSC, Adult social care finance report, Table 14)
 
 SEND and adult social care are run by upper-tier councils, so a two-tier district takes its county's figure and its county's percentile, and those two distributions hold one figure per council that runs the service.
 
-**Recomputed on 12 October 2026, the 285 English authorities with all four domains:**
+**Recomputed on 27 November 2026, the 285 English authorities with all four domains:**
 
 | Rank | Council | Score | ASC | SEND | Asylum | Demographic |
 |---|---|---|---|---|---|---|
-| 1 | Manchester | 87.3 | 80 | 91 | 88 | 91 |
-| 2 | Liverpool | 85.9 | 76 | 97 | 95 | 75 |
-| 3 | Middlesbrough | 83.6 | 87 | 84 | 97 | 66 |
-| 4 | Pendle | 83.4 | 72 | 72 | 98 | 93 |
-| 5 | Blackburn with Darwen | 80.5 | 75 | 62 | 98 | 86 |
-| 6 | Burnley | 79.5 | 72 | 72 | 99 | 76 |
-| 7 | Newcastle upon Tyne | 79.4 | 90 | 65 | 89 | 74 |
+| 1 | Manchester | 87.9 | 80 | 91 | 90 | 91 |
+| 2 | Liverpool | 86.0 | 76 | 97 | 96 | 75 |
+| 3 | Middlesbrough | 83.7 | 87 | 84 | 98 | 66 |
+| 4 | Pendle | 83.4 | 72 | 72 | 97 | 93 |
+| 5 | Blackburn with Darwen | 80.5 | 75 | 62 | 99 | 86 |
+| 6 | Sandwell | 79.5 | 47 | 76 | 97 | 97 |
+| 7 | Nottingham | 79.4 | 64 | 78 | 96 | 79 |
 
-Columns after the score are percentile ranks, where 100 is the most pressured. Pendle's and Burnley's social care and SEND columns are Lancashire County Council's.
+Columns after the score are percentile ranks, where 100 is the most pressured. Pendle's social care and SEND columns are Lancashire County Council's.
 
-**Caveats.** Authorities in Wales, Scotland and Northern Ireland score on fewer domains, because the SEND and social care figures cover England, and they are not ranked here. The domains are different vintages: SEND is the 2025/26 school year, social care 2024-25, the asylum figure 30 June 2026 and the demographic rate the Censuses of 2011 and 2021. The ranking will move whenever any of the four publishes, which is the point of dating it.
+**Caveats.** Authorities in Wales, Scotland and Northern Ireland score on fewer domains, because the SEND and social care figures cover England, and they are not ranked here. The domains are different vintages: SEND is the 2025/26 school year, social care 2024-25, the asylum figure 30 September 2026 and the demographic rate the Censuses of 2011 and 2021. The ranking will move whenever any of the four publishes, which is the point of dating it.
 
 This index measures the co-occurrence of pressures on councils and public services. It does not claim that any one domain causes another.

@@ -244,6 +244,14 @@ export interface LocalRouteLatest {
   generatedAt: string;
   snapshotDate: string;
   defaultCompareCodes: string[];
+  /** The England row of Reg_01 in the same edition, for reconciling summed authorities. */
+  publishedEnglandTotals: {
+    sourceTable: string;
+    snapshotDate: string;
+    supportedAsylum: number;
+    afghanProgrammePopulation: number;
+    homesForUkraineArrivals: number;
+  };
   areas: LocalRouteAreaSummary[];
   topAreasByMetric: TopMetricGroup[];
   routeMetricFamilies: Array<{

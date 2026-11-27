@@ -24,7 +24,8 @@
  *   Afghan programme   28,592 published, 28,592 summed here    exact
  *   Ukraine arrivals  137,386 published, 137,346 summed here   40 short
  *
- * The 40 are real and are not an error here: the source's local authority table carries
+ * The gap was 40 again at June 2026 and 41 at September 2026 (143,565 published, 143,524
+ * summed). It is real and is not an error here: the source's local authority table carries
  * an "Unknown" row whose Ukraine figure is suppressed, so those arrivals are not
  * attributable to any authority and cannot be attributed to any county either. Any page
  * quoting the Ukraine figure must say it excludes unallocated arrivals.

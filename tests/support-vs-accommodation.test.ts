@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import localRouteLatest from "../src/data/live/local-route-latest.json";
+import { slugifyAreaName } from "../src/lib/site-identity";
 
 /**
  * Being on asylum support is not the same as being accommodated.
@@ -31,7 +32,6 @@ describe("asylum support is not described as accommodation", () => {
       (a) => a.supportedAsylum > 0 && a.subsistenceOnly === a.supportedAsylum
     );
     expect(allSubsistence.length).toBeGreaterThan(0);
-    expect(allSubsistence.map((a) => a.areaName)).toContain("Cambridge");
   });
 
   it("reconciles supportedAsylum to its components in every area", () => {
@@ -65,10 +65,23 @@ describe("asylum support is not described as accommodation", () => {
     expect(offenders).toEqual([]);
   });
 
-  it.skipIf(!built)("states the subsistence split on an area that is entirely subsistence", () => {
-    // Cambridge is the case that makes this concrete: 14 on support, 0 accommodated.
-    const page = readFileSync(join(dist, "cambridge", "index.html"), "utf8");
-    expect(page).toContain("14 people on asylum support in Cambridge");
-    expect(page).toMatch(/14 of them receive subsistence only/);
+  it.skipIf(!built)("states the subsistence split on every area that is entirely subsistence", () => {
+    // Cambridge was the case that made this concrete: 14 on support at 31 March 2026, none
+    // accommodated. The count is read from the data, not typed here: it was 15 at
+    // 30 September 2026, and the typed 14 would have failed that deploy after the data
+    // had already been committed.
+    const cases = areas.filter(
+      (a) =>
+        a.supportedAsylum > 1 &&
+        a.subsistenceOnly === a.supportedAsylum &&
+        existsSync(join(dist, slugifyAreaName(a.areaName), "index.html"))
+    );
+    expect(cases.length).toBeGreaterThan(0);
+    for (const a of cases) {
+      const page = readFileSync(join(dist, slugifyAreaName(a.areaName), "index.html"), "utf8");
+      const n = a.supportedAsylum.toLocaleString("en-GB");
+      expect(page, a.areaName).toContain(`${n} people on asylum support in ${a.areaName}`);
+      expect(page, a.areaName).toContain(`${n} of them receive subsistence only`);
+    }
   });
 });

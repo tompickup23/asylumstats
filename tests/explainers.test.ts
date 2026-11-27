@@ -75,7 +75,11 @@ describe("the grant rate", () => {
   const PUBLISHED: Record<string, { pct: number; previousPct: number }> = {
     // Immigration system statistics, year ending June 2026 (Home Office, 27 August 2026):
     // "the grant rate was 38% in YE June 2026", 48% the year before.
-    "2025 Q3 to 2026 Q2": { pct: 38, previousPct: 48 }
+    "2025 Q3 to 2026 Q2": { pct: 38, previousPct: 48 },
+    // Immigration system statistics, year ending September 2026 (Home Office, 26 November
+    // 2026), "How many people are granted asylum in the UK?", section 2: "the grant rate
+    // was 38% in YE September 2026", "45% in YE September 2025".
+    "2025 Q4 to 2026 Q3": { pct: 38, previousPct: 45 }
   };
 
   it("is grants over grants plus refusals, main applicants, for the latest four quarters", () => {

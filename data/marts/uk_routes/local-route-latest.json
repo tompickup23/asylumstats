@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T00:16:26.249Z",
+  "generatedAt": "2026-11-27T00:38:10.196Z",
   "snapshotDate": "2026-09-30",
   "defaultCompareCodes": [
     "S12000049",
@@ -7,6 +7,13 @@
     "E08000012",
     "E08000003"
   ],
+  "publishedEnglandTotals": {
+    "sourceTable": "Reg_01",
+    "snapshotDate": "2026-09-30",
+    "supportedAsylum": 80081,
+    "afghanProgrammePopulation": 30299,
+    "homesForUkraineArrivals": 143565
+  },
   "areas": [
     {
       "areaCode": "S12000049",

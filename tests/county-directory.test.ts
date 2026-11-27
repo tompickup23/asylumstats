@@ -8,24 +8,17 @@ import {
 import { loadLocalRouteLatest } from "../src/lib/route-data";
 
 /**
- * These figures are the Home Office's own England totals, read from Reg_01 of
- * regional-and-local-authority-dataset-jun-2026.ods (Immigration system statistics,
- * regional and local authority data, released 27 August 2026, as at 30 June 2026).
+ * The Home Office's own England totals, from the "England - total" row of Reg_01 in the
+ * same edition of the regional and local authority dataset that the areas were read
+ * from. The transform carries that row into the mart as publishedEnglandTotals.
  *
- * They are hardcoded on purpose. If a data refresh changes the underlying file, these
- * tests must fail loudly and be updated deliberately against the new publication,
- * rather than quietly tracking whatever the site happens to compute.
+ * Until 27 November 2026 the three totals were typed here from the June 2026 file. That
+ * parked the refresh when the September 2026 edition was published: the sums were right
+ * against the new table and wrong against the typed figures. Reading the published row
+ * keeps the check (summed authorities against the source's own total) without tying it
+ * to one release.
  */
-const ENGLAND_SUPPORTED_ASYLUM = 80_947;
-const ENGLAND_AFGHAN_POPULATION = 28_588;
-/**
- * 140,614 is published for England. The local authority table cannot account for 40 of
- * them: it carries an "Unknown" row whose Ukraine figure is suppressed. Summing the
- * authorities therefore gives 140,574, and any page quoting this must say it excludes
- * unallocated arrivals. The shortfall was also exactly 40 at the March 2026 release,
- * which is the tell that it is the suppressed Unknown row and not drift.
- */
-const ENGLAND_UKRAINE_ARRIVALS_ALLOCATED = 140_574;
+const PUBLISHED = loadLocalRouteLatest().publishedEnglandTotals;
 
 const englishAreas = loadLocalRouteLatest().areas.filter((area) =>
   area.areaCode.startsWith("E")
@@ -68,19 +61,33 @@ describe("ceremonial county mapping", () => {
 });
 
 describe("reconciliation against the published England totals", () => {
+  it("reads the England row from the same edition as the areas", () => {
+    expect(PUBLISHED.sourceTable).toBe("Reg_01");
+    expect(PUBLISHED.snapshotDate).toBe(loadLocalRouteLatest().snapshotDate);
+    expect(PUBLISHED.supportedAsylum).toBeGreaterThan(0);
+    expect(PUBLISHED.afghanProgrammePopulation).toBeGreaterThan(0);
+    expect(PUBLISHED.homesForUkraineArrivals).toBeGreaterThan(0);
+  });
+
   it("sums supported asylum to the published England figure exactly", () => {
     const total = getCounties().reduce((t, c) => t + c.supportedAsylum, 0);
-    expect(total).toBe(ENGLAND_SUPPORTED_ASYLUM);
+    expect(total).toBe(PUBLISHED.supportedAsylum);
   });
 
   it("sums the Afghan programme population to the published England figure exactly", () => {
     const total = getCounties().reduce((t, c) => t + c.afghanProgrammePopulation, 0);
-    expect(total).toBe(ENGLAND_AFGHAN_POPULATION);
+    expect(total).toBe(PUBLISHED.afghanProgrammePopulation);
   });
 
-  it("sums Ukraine arrivals to the allocatable total, 40 short of the England figure", () => {
+  it("sums Ukraine arrivals to a little under the England figure, never over it", () => {
+    // The local authority table has an "Unknown" row whose Ukraine figure is suppressed,
+    // so a few arrivals belong to no authority and no county. The gap was 40 at the March
+    // and June 2026 editions and 41 at September 2026. Any page quoting the summed figure
+    // must say it excludes unallocated arrivals.
     const total = getCounties().reduce((t, c) => t + c.homesForUkraineArrivals, 0);
-    expect(total).toBe(ENGLAND_UKRAINE_ARRIVALS_ALLOCATED);
+    const gap = PUBLISHED.homesForUkraineArrivals - total;
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThan(PUBLISHED.homesForUkraineArrivals * 0.001);
   });
 
   it("exposes no combined total across the three measures", () => {

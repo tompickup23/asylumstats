@@ -78,7 +78,7 @@ function howManyAsylumSeekers(): Explainer {
     topic: "numbers",
     question: "How many asylum seekers are in the UK?",
     seoTitle: `How many asylum seekers are in the UK? ${fmtInt(last.value)} (${last.periodLabel.replace(/^\d+ /, "")})`,
-    seoDescription: `${fmtInt(last.value)} people were on Home Office asylum support at ${asAt}, ${direction(last.value, before.value)} than a year earlier. Where they live, and how many are in hotels.`,
+    seoDescription: `${fmtInt(last.value)} people were on asylum support at ${asAt}, ${direction(last.value, before.value)} than a year earlier. Where they live, and how many are in hotels.`,
     figure: fmtInt(last.value),
     figureLabel: `on asylum support, ${asAt}`,
     answer:
@@ -153,7 +153,7 @@ function waitingForADecision(): Explainer {
     topic: "numbers",
     question: "How many asylum seekers are waiting for a decision?",
     seoTitle: `Asylum backlog: ${fmtInt(last.value)} waiting for a decision (${last.periodLabel.replace(/^\d+ /, "")})`,
-    seoDescription: `${fmtInt(last.value)} people were waiting for an initial asylum decision at ${asAt}, ${direction(last.value, before.value)} than a year earlier. The peak, the trend, and why it moved.`,
+    seoDescription: `${fmtInt(last.value)} people were awaiting an initial asylum decision at ${asAt}, ${direction(last.value, before.value)} than a year earlier. The peak, the trend, and why it moved.`,
     figure: fmtInt(last.value),
     figureLabel: `waiting for a first decision, ${asAt}`,
     answer:

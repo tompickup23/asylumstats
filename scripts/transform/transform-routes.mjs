@@ -2321,6 +2321,21 @@ const localRouteLatest = {
   generatedAt: new Date().toISOString(),
   snapshotDate: localSnapshotDate,
   defaultCompareCodes,
+  // The Home Office's own England row in Reg_01, carried so that tests can reconcile the
+  // summed authorities against the published total of the same edition. Without it the
+  // only way to check the sum was a figure typed into a test, which parked the refresh
+  // on every release day.
+  publishedEnglandTotals: (() => {
+    const england = regionalRows.find((row) => row.areaCode === "country_england");
+    if (!england) throw new Error("Reg_01 has no 'England - total' row");
+    return {
+      sourceTable: "Reg_01",
+      snapshotDate: england.snapshotDate,
+      supportedAsylum: england.supportedAsylum,
+      afghanProgrammePopulation: england.afghanProgrammePopulation,
+      homesForUkraineArrivals: england.homesForUkraineArrivals
+    };
+  })(),
   areas: localAreaSummaries,
   topAreasByMetric,
   routeMetricFamilies: [
