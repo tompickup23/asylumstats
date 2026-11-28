@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T00:15:08.543Z",
+  "generatedAt": "2026-11-28T19:17:47.590Z",
   "datasetId": "moj_tribunals",
   "chamberLabel": "First-tier Tribunal, Immigration and Asylum Chamber",
   "chamberShortLabel": "FtTIAC",
@@ -6473,7 +6473,7 @@
     }
   ],
   "reconciliation": {
-    "checkedAt": "2026-11-27T00:15:08.543Z",
+    "checkedAt": "2026-11-28T19:17:47.590Z",
     "checkCount": 20,
     "allPassed": true
   }

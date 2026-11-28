@@ -1,13 +1,13 @@
 {
   "source": "Home Office, migrants detected crossing the English Channel in small boats",
-  "sourceFile": "20_November_2026_Small_boats_-_time_series.ods",
+  "sourceFile": "27_November_2026_Small_boats_-_time_series.ods",
   "landing": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "cadence": "weekly (Fridays)",
   "coverageStart": "2018-01-01",
-  "coverageEnd": "2026-11-19",
-  "latestWeekEnding": "2026-11-15",
+  "coverageEnd": "2026-11-26",
+  "latestWeekEnding": "2026-11-22",
   "yearToDate": {
-    "asAt": "2026-11-19",
+    "asAt": "2026-11-26",
     "year": 2026,
     "arrivals": 23983,
     "priorYear": 2025,
@@ -15,11 +15,11 @@
     "changePct": -39
   },
   "latestWeek": {
-    "weekEnding": "2026-11-15",
-    "arrivals": 475,
-    "boats": 9,
-    "migrantsPrevented": 743,
-    "eventsPrevented": 17
+    "weekEnding": "2026-11-22",
+    "arrivals": 0,
+    "boats": 0,
+    "migrantsPrevented": 0,
+    "eventsPrevented": 2
   },
   "completeCalendarYears": {
     "2018": 299,
@@ -3272,6 +3272,13 @@
       "boats": 9,
       "migrantsPrevented": 743,
       "eventsPrevented": 17
+    },
+    {
+      "weekEnding": "2026-11-22",
+      "arrivals": 0,
+      "boats": 0,
+      "migrantsPrevented": 0,
+      "eventsPrevented": 2
     }
   ],
   "daily": [
@@ -19497,6 +19504,41 @@
     },
     {
       "date": "2026-11-19",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-20",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-21",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-22",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-23",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-24",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-25",
+      "arrivals": 0,
+      "boats": 0
+    },
+    {
+      "date": "2026-11-26",
       "arrivals": 0,
       "boats": 0
     }

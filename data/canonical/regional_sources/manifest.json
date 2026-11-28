@@ -1,6 +1,6 @@
 {
   "datasetId": "regional_sources",
-  "generatedAt": "2026-11-27T00:25:05.239Z",
+  "generatedAt": "2026-11-28T19:26:30.206Z",
   "inputs": [
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/manual/regional-source-watch.csv",
@@ -16,27 +16,27 @@
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/src/data/live/local-route-latest.json",
-      "fileSha256": "207aac60836d4c4cbb5d315742555d8699591b8a5f862fee13402aff59bd6cbe"
+      "fileSha256": "d8f855bbdfd3cb800552a1a0c8ba9dc7339984763c30381f49aa85f87fd5e472"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-statistics.html",
-      "fileSha256": "acf3e85ad23e3c642be5f8709a37966e9393e51cb1b1df6f2c4428d145119352"
+      "fileSha256": "fe246bb8278a6a2e0f9bb66349fa0409ed3e7354bcea30d219e0e512e12af5d9"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-refugee-dashboard.html",
-      "fileSha256": "60249f4942e4ae85f2166cec7586a9e1e2a2443475be35f0cf2b7d290cabfcc9"
+      "fileSha256": "6ff70754f72900fbe7f777f375b5c1d50a61ec86e1e5de3afb5bf93868c13748"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-ukraine-dashboard.html",
-      "fileSha256": "3689888a597b755a6b035a8f0f99ef88c4998d26859246301a78d74e4ee1bd52"
+      "fileSha256": "fef9af7c6ed9cb0b80b86174361f39f84b907a2ec6930408682793846ab745a2"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-yorkshire-euss-dashboard.html",
-      "fileSha256": "ac8dff3a185c5ffd67e9b2c9ecacb26076da8ad8d8415365ee8ce02d7854b2a6"
+      "fileSha256": "4c9900ee45bee1c38431b1d337c5502b30e7e1a9d3a62d08b4fbf0c90dd4ddee"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/nemp-data-page.html",
-      "fileSha256": "1e1faabfff02b409cfb3a469c96ce3f8fd749de15bd9a7e35ebba81e5ff72752"
+      "fileSha256": "609d8bc19f1a07ef52eed9837633eb2064bf9faa39680e518ba691d7aa588c03"
     },
     {
       "path": "/home/runner/work/asylumstats/asylumstats/data/raw/regional_sources/migration-observatory-local-data-guide.html",
